@@ -1,4 +1,5 @@
 """Base econet entity class."""
+
 import logging
 
 from homeassistant.core import callback
@@ -21,8 +22,16 @@ _LOGGER = logging.getLogger(__name__)
 class EconetEntity(CoordinatorEntity):
     """Representes EconetEntity."""
 
-    api: Econet300Api
-    entity_description: EntityDescription
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        entity_description: EntityDescription,
+    ):
+        """Initialize the Econet entity."""
+        super().__init__(coordinator)
+        self.api = api
+        self.entity_description = entity_description
 
     @property
     def has_entity_name(self):
@@ -103,8 +112,7 @@ class MixerEntity(EconetEntity):
         idx: int,
     ):
         """Initialize the MixerEntity."""
-        super().__init__(description, coordinator, api)
-
+        super().__init__(coordinator, api, description)
         self._idx = idx
 
     @property
