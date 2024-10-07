@@ -227,9 +227,12 @@ ENTITY_DEVICE_CLASS_MAP = {
     "servoMixer1": "servo_mixer_1",
     "Status_wifi": "wifi_status",
     "main_server": "main_server",
-    #############################
-    ###### BINARY SENSORS #######
-    #############################
+}
+
+#############################
+###### BINARY SENSORS #######
+#############################
+ENTITY_DEVICE_BINARY_CLASS_MAP = {
     "lighter": BinarySensorDeviceClass.RUNNING,
     "weatherControl": BinarySensorDeviceClass.RUNNING,
     "unseal": BinarySensorDeviceClass.RUNNING,
