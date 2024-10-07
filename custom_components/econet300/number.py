@@ -115,11 +115,23 @@ def can_add(key: str, coordinator: EconetDataCoordinator):
     return coordinator.has_data(key) and coordinator.data[key]
 
 
-def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
-    """Set the native minimum and maximum values for the given entity description."""
-    desc.native_min_value = limits.min
-    desc.native_max_value = limits.max
-    _LOGGER.debug("Apply limits: %s", desc)
+def apply_limits(
+    desc: EconetNumberEntityDescription, limits: Limits
+) -> EconetNumberEntityDescription:
+    """Create a new EconetNumberEntityDescription with updated limits."""
+    updated_desc = EconetNumberEntityDescription(
+        key=desc.key,
+        translation_key=desc.translation_key,
+        icon=desc.icon,
+        device_class=desc.device_class,
+        native_unit_of_measurement=desc.native_unit_of_measurement,
+        entity_registry_visible_default=desc.entity_registry_visible_default,
+        min_value=limits.min,
+        max_value=limits.max,
+        native_step=desc.native_step,
+    )
+    _LOGGER.debug("Applied limits: %s", updated_desc)
+    return updated_desc
 
 
 def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
@@ -165,8 +177,9 @@ async def async_setup_entry(
 
         if can_add(key, coordinator):
             entity_description = create_number_entity_description(key)
+            updated_description = apply_limits(entity_description, number_limits)
             apply_limits(entity_description, number_limits)
-            entities.append(EconetNumber(entity_description, coordinator, api))
+            entities.append(EconetNumber(updated_description, coordinator, api))
         else:
             _LOGGER.warning(
                 "Cannot add number entity - availability key: %s does not exist",
