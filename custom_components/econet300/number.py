@@ -59,7 +59,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Sync state."""
         _LOGGER.debug("EconetNumber _sync_state: %s", value)
         self._attr_native_value = value
-        map_key = NUMBER_MAP.get(self.e= ENTITY_MAX_VALUE.get(map_key)
+        map_key = NUMBER_MAP.get(self.entity_description.key)
         self.async_write_ha_state()
         self.hass.async_create_task(self.async_set_limits_values())
 ntity_description.key)
