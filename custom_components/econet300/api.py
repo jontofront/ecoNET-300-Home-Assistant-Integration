@@ -36,7 +36,7 @@ def map_param(param_name):
 class Limits:
     """Class difining entity value set limits."""
 
-    def __init__(self, min_v: float, max_v: float):
+    def __init__(self, min_v: int | None, max_v: int | None):
         """Construct the necessary attributes for the Limits object."""
         self.min = min_v
         self.max = max_v

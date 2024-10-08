@@ -16,7 +16,7 @@ from .common_functions import camel_to_snake
 from .const import (
     BINARY_SENSOR_MAP,
     DOMAIN,
-    ENTITY_DEVICE_CLASS_MAP,
+    ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_ICON,
     ENTITY_ICON_OFF,
     SERVICE_API,
@@ -27,7 +27,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
@@ -80,7 +80,7 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(map_key),
-        device_class=ENTITY_DEVICE_CLASS_MAP.get(map_key, None),
+        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(map_key, None),
         icon=ENTITY_ICON.get(map_key, None),
         icon_off=ENTITY_ICON_OFF.get(map_key, None),
     )
