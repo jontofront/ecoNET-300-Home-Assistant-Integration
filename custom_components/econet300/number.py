@@ -59,12 +59,12 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Sync state."""
         _LOGGER.debug("EconetNumber _sync_state: %s", value)
         self._attr_native_value = value
-        map_key = NUMBER_MAP.get(self.entity_description.key)
-        self._attr_native_min_value = ENTITY_MIN_VALUE.get(map_key)
-        self._attr_native_max_value = ENTITY_MAX_VALUE.get(map_key)
+        map_key = NUMBER_MAP.get(self.e= ENTITY_MAX_VALUE.get(map_key)
         self.async_write_ha_state()
         self.hass.async_create_task(self.async_set_limits_values())
-
+ntity_description.key)
+        self._attr_native_min_value = ENTITY_MIN_VALUE.get(map_key)
+        self._attr_native_max_value 
     async def async_set_limits_values(self):
         """Async Sync number limits."""
         limits = await self.api.get_param_limits(self.entity_description.key)
@@ -115,23 +115,11 @@ def can_add(key: str, coordinator: EconetDataCoordinator):
     return coordinator.has_data(key) and coordinator.data[key]
 
 
-def apply_limits(
-    desc: EconetNumberEntityDescription, limits: Limits
-) -> EconetNumberEntityDescription:
-    """Create a new EconetNumberEntityDescription with updated limits."""
-    updated_desc = EconetNumberEntityDescription(
-        key=desc.key,
-        translation_key=desc.translation_key,
-        icon=desc.icon,
-        device_class=desc.device_class,
-        native_unit_of_measurement=desc.native_unit_of_measurement,
-        entity_registry_visible_default=desc.entity_registry_visible_default,
-        min_value=limits.min,
-        max_value=limits.max,
-        native_step=desc.native_step,
-    )
-    _LOGGER.debug("Applied limits: %s", updated_desc)
-    return updated_desc
+def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
+    """Set the native minimum and maximum values for the given entity description."""
+    desc.native_min_value = limits.min
+    desc.native_max_value = limits.max
+    _LOGGER.debug("Apply limits: %s", desc)
 
 
 def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
@@ -177,9 +165,8 @@ async def async_setup_entry(
 
         if can_add(key, coordinator):
             entity_description = create_number_entity_description(key)
-            updated_description = apply_limits(entity_description, number_limits)
             apply_limits(entity_description, number_limits)
-            entities.append(EconetNumber(updated_description, coordinator, api))
+            entities.append(EconetNumber(entity_description, coordinator, api))
         else:
             _LOGGER.warning(
                 "Cannot add number entity - availability key: %s does not exist",
