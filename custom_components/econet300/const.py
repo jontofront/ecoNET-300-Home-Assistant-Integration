@@ -232,7 +232,7 @@ ENTITY_DEVICE_CLASS_MAP = {
 #############################
 ###### BINARY SENSORS #######
 #############################
-ENTITY_DEVICE_BINARY_CLASS_MAP = {
+ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lighter": BinarySensorDeviceClass.RUNNING,
     "weatherControl": BinarySensorDeviceClass.RUNNING,
     "unseal": BinarySensorDeviceClass.RUNNING,
