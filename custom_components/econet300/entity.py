@@ -56,6 +56,10 @@ class EconetEntity(CoordinatorEntity):
             hw_version=self.api.hw_ver,
         )
 
+    def _sync_state(self, value):
+        """Sync state for the entity. This can be overridden in subclasses."""
+        _LOGGER.debug("EconetEntity _sync_state: %s", value)
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
