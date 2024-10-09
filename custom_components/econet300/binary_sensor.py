@@ -1,6 +1,5 @@
 """Econet binary sensor."""
 
-from dataclasses import dataclass
 import logging
 
 from homeassistant.components.binary_sensor import (
@@ -27,7 +26,6 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
@@ -50,7 +48,7 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         self.entity_description = entity_description
         self.api = api
         self._attr_is_on = None
-        super().__init__(coordinator)
+        super().__init__(coordinator, api, entity_description)
         _LOGGER.debug(
             "EconetBinarySensor initialized with unique_id: %s, entity_description: %s",
             self.unique_id,
