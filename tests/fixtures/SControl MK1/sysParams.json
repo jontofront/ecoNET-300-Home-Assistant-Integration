@@ -1270,7 +1270,7 @@
         }
     ],
     "remoteMenu": false,
-    "login": "admin",
+    "login": "login_name",
     "ecosrvAddr": "econet24.com",
     "etConfVer": null,
     "ecosrvHttps": true,
