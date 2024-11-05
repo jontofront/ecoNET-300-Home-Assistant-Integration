@@ -28,6 +28,18 @@ body:
     attributes:
       value: |
         ## Environment
+  - type: checkboxes
+    id: checkboxes-3
+    attributes:
+      label: Connected devices
+      description: I have the following devices connected. For more information, see
+        [ecoNET300_DTR_1.0_ENG](https://thermostahl.ro/wp-content/uploads/2020/08/ecoNET300_DTR_1.0_ENG.pdf)
+      options:
+        - ecoMAX800 series
+        - ecoMAX850 series
+        - ecoMAX860 series
+        - ecoSTER
+        - ecoNET 300
   - type: input
     id: econet300_version
     validations:
