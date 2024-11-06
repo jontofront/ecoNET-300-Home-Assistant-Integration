@@ -197,4 +197,5 @@ async def async_setup_entry(
     entities.extend(create_controller_sensors(coordinator, api))
     entities.extend(create_mixer_sensors(coordinator, api))
 
-    return async_add_entities(entities)
+    async_add_entities(entities)
+    return True
