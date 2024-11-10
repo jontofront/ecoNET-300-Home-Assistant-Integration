@@ -56,10 +56,10 @@ API_REG_PARAMS_DATA_PARAM_DATA = "data"
 ## Map names for params data in API_REG_PARAMS_DATA_URI
 API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
 
-## Mapunits for params data map API_RM_CURRENT_DATA_PARAMS_URI
+## Map units for params data map API_RM_CURRENT_DATA_PARAMS_URI
 API_RM_PARAMSUNITSNAMES_URI = "rmParamsUnitsNames"
 
-# Boiler staus keys map
+# Boiler status keys map
 # boiler mode names from  endpoint http://LocalIP/econet/rmParamsEnums?
 OPERATION_MODE_NAMES = {
     0: STATE_OFF,

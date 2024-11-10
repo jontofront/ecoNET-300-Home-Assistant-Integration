@@ -10,6 +10,8 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "cSpell.words": [
-        "homeassistant"
+        "homeassistant",
+        "MILLIWATT",
+        "PARAMSUNITSNAMES"
     ],
 }
