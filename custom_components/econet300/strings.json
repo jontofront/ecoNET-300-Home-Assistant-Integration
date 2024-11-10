@@ -139,7 +139,7 @@
         "name": "Mixer 1 servo position"
       },
       "status_wifi": {
-        "name": "Wireless network connected"
+        "name": "Wi-Fi"
       },
       "temp_co": {
         "name": "Heating temperature"

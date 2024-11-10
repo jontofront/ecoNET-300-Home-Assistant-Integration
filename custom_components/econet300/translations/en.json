@@ -39,7 +39,7 @@
         "name": "Fan"
       },
       "aditional_feeder": {
-        "name": "Aditional feeder"
+        "name": "Additional feeder"
       },
       "pump_fireplace_works": {
         "name": "Boiler Pump"
@@ -139,7 +139,7 @@
         "name": "Mixer 1 servo position"
       },
       "status_wifi": {
-        "name": "Wireless network connected"
+        "name": "Wi-Fi"
       },
       "temp_co": {
         "name": "Heating temperature"
