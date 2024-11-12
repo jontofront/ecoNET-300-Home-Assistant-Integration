@@ -15,6 +15,8 @@ from .const import (
     API_EDITABLE_PARAMS_LIMITS_URI,
     API_REG_PARAMS_DATA_PARAM_DATA,
     API_REG_PARAMS_DATA_URI,
+    API_REG_PARAMS_PARAM_DATA,
+    API_REG_PARAMS_URI,
     API_SYS_PARAMS_PARAM_HW_VER,
     API_SYS_PARAMS_PARAM_MODEL_ID,
     API_SYS_PARAMS_PARAM_SW_REV,
@@ -204,7 +206,7 @@ class Econet300Api:
         return self._hw_version
 
     async def init(self):
-        """Econet300 Api initilization."""
+        """Econet300 Api initialization."""
         sys_params = await self._client.get_params(API_SYS_PARAMS_URI)
 
         if API_SYS_PARAMS_PARAM_UID not in sys_params:
@@ -286,6 +288,24 @@ class Econet300Api:
 
         curr_limits = limits[param]
         return Limits(curr_limits["min"], curr_limits["max"])
+
+    async def fetch_reg_params(self) -> dict[str, Any]:
+        """Fetch and return the regParam data from ip/econet/regParams endpoint."""
+        _LOGGER.info("Calling fetch_reg_params method")
+        regParams = await self._client.get_params(API_REG_PARAMS_URI)
+        _LOGGER.debug("Fetched regParams data: %s", regParams)
+
+        if API_REG_PARAMS_PARAM_DATA in regParams:
+            _LOGGER.info(
+                "Response contains expected keys. API_REG_PARAMS_PARAM_DATA: %s",
+                regParams[API_REG_PARAMS_PARAM_DATA],
+            )
+        else:
+            _LOGGER.warning(
+                "Response does not contain expected keys. API_REG_PARAMS_PARAM_DATA is missing."
+            )
+
+        return regParams
 
     async def fetch_data(self) -> dict[str, Any]:
         """Fetch data from regParamsData."""

@@ -10,6 +10,9 @@
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "cSpell.words": [
+        "aiohttp",
+        "econet",
+        "hass",
         "homeassistant",
         "MILLIWATT",
         "PARAMSUNITSNAMES"
