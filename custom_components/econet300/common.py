@@ -1,4 +1,5 @@
 """Common code for econet300 integration."""
+
 import asyncio
 from datetime import timedelta
 import logging
@@ -43,7 +44,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                return await self._api.fetch_data()
+                data = await self._api.fetch_data()
+                reg_params = await self._api.fetch_reg_params()
+                return data, reg_params
         except AuthError as err:
             raise ConfigEntryAuthFailed from err
         except ApiError as err:
