@@ -29,7 +29,12 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
     def has_data(self, key: str):
         """Check if datakey is present in data."""
-        return key in self.data
+        if self.data is None:
+            return False
+
+        has_key = key in self.data["sysParams"] or self.data["regParams"]
+        _LOGGER.debug("has_data: %s=%s", key, has_key)
+        return has_key
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
