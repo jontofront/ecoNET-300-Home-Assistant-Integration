@@ -105,7 +105,7 @@ def create_entity_description(key: str) -> EconetSensorEntityDescription:
 def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
-    coordinator_data = coordinator.data
+    coordinator_data = coordinator.data["sysParams"]
     for data_key in SENSOR_MAP:
         if data_key in coordinator_data:
             entities.append(
@@ -127,9 +127,11 @@ def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300
 def can_add_mixer(key: str, coordinator: EconetDataCoordinator):
     """Check if a mixer can be added."""
     _LOGGER.debug(
-        "Checking if mixer can be added for key: %s, data %s", key, coordinator.data
+        "Checking if mixer can be added for key: %s, data %s",
+        key,
+        coordinator.data["sysParams"],
     )
-    return coordinator.has_data(key) and coordinator.data[key] is not None
+    return coordinator.has_data(key) and coordinator.data["sysParams"][key] is not None
 
 
 def create_mixer_sensor_entity_description(
