@@ -297,18 +297,6 @@ class Econet300Api:
         _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
         return regParamsData
 
-    async def get_alarms(self):
-        """Fetch and return the alarms data from sysParams."""
-        _LOGGER.info("Calling get_alarms method")
-        sys_params = await self._client.get_params(API_SYS_PARAMS_URI)
-        _LOGGER.debug("Fetched from sysParams alarms: %s", sys_params)
-
-        if "alarms" not in sys_params:
-            _LOGGER.warning("Alarms not found in system parameters")
-            return None
-        _LOGGER.debug("Fetched alarms: %s", sys_params["alarms"])
-        return sys_params["alarms"]
-
     async def _fetch_reg_key(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
         data = await self._client.get_params(reg)
