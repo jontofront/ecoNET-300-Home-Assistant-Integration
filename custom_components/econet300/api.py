@@ -290,12 +290,17 @@ class Econet300Api:
         return Limits(curr_limits["min"], curr_limits["max"])
 
     async def fetch_data(self) -> dict[str, Any]:
-        """Fetch data from regParamsData."""
-        regParamsData = await self._fetch_reg_key(
-            API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
-        )
-        _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
-        return regParamsData
+        """Fetch data from econet/regParamsData."""
+        try:
+            regParamsData = await self._fetch_reg_key(
+                API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
+            )
+        except DataError as e:
+            _LOGGER.error("Error fetching regParamsData: %s", e)
+            return {}
+        else:
+            _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
+            return regParamsData
 
     async def _fetch_reg_key(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
