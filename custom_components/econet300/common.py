@@ -49,7 +49,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                data = await self._api.fetch_data()
+                data = (
+                    await self._api.fetch_sys_params()
+                    if self._api.model_id == "MAX810P-L TOUCH"
+                    else {}
+                )
                 reg_params = await self._api.fetch_reg_params()
                 return {"sysParams": data, "regParams": reg_params}
         except AuthError as err:

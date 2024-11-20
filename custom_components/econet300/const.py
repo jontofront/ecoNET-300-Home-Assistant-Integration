@@ -110,6 +110,25 @@ MIXER_KEY = "mixerPumpWorks"
 #######################
 #    REG PARAM MAPS
 #######################
+
+SENSOR_MAP_KEY = {
+    "ecoster": {
+        "ecoSterTemp1",
+        "ecoSterTemp2",
+    },
+    "lambda": {
+        "lambdaStatus",
+        "lambdaSet",
+        "lambdaLevel",
+    },
+    "_default": {
+        "tempFeeder",
+        "tempExternalSensor",
+        "fuelLevel",
+    },
+}
+
+
 SENSOR_MAP = {
     "26": "tempFeeder",
     "28": "tempExternalSensor",
@@ -409,6 +428,15 @@ ENTITY_VISIBLE = {
 REG_PARAM_VISIBLE_DEFAULT = {
     "tempUpperBuffer": False,
     "tempLowerBuffer": False,
+}
+
+PRODUCT_MODEL = {
+    # Models name which known us connect with ecoNET300
+    "ecoMAX810P-L TOUCH"
+    "SControl MK1"
+    "ecoMAX860P2-N TOUCH"
+    "ecoMAX860P3-V"
+    "ecoSOL 301"
 }
 
 ALARMS_NAMES = {

@@ -59,7 +59,7 @@ class EconetEntity(CoordinatorEntity):
         if self.coordinator.data["sysParams"][self.entity_description.key] is None:
             return
 
-        value = self.self.coordinator.data["sysParams"][self.entity_description.key]
+        value = self.coordinator.data["sysParams"][self.entity_description.key]
 
         self._sync_state(value)
 
