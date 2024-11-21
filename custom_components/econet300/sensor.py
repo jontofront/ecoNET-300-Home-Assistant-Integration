@@ -22,7 +22,6 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     MIXER_MAP,
-    PRODUCT_MODEL,
     SENSOR_MAP,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -38,7 +37,6 @@ class EconetSensorEntityDescription(SensorEntityDescription):
     """Describes Econet sensor entity."""
 
     process_val: Callable[[Any], Any] = lambda x: x
-    device_keys: set[str] = PRODUCT_MODEL
 
 
 class EconetSensor(EconetEntity, SensorEntity):
