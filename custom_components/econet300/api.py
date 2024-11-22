@@ -94,10 +94,10 @@ class EconetClient:
             f"{self._host}/econet/rmCurrNewParam?newParamKey={key}&newParamValue={value}"
         )
 
-    async def get_params(self, reg: str):
+    async def fetch_sys_params(self, reg: str):
         """Call for getting api param."""
         _LOGGER.debug(
-            "get_params called: Fetching parameters for registry '%s' from host '%s'",
+            "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
             reg,
             self._host,
         )
@@ -207,7 +207,7 @@ class Econet300Api:
 
     async def init(self):
         """Econet300 Api initilization."""
-        sys_params = await self._client.get_params(API_SYS_PARAMS_URI)
+        sys_params = await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
 
         if API_SYS_PARAMS_PARAM_UID not in sys_params:
             _LOGGER.warning(
@@ -289,7 +289,7 @@ class Econet300Api:
         curr_limits = limits[param]
         return Limits(curr_limits["min"], curr_limits["max"])
 
-    async def fetch_data(self) -> dict[str, Any]:
+    async def fetch_reg_params_data(self) -> dict[str, Any]:
         """Fetch data from econet/regParamsData."""
         try:
             regParamsData = await self._fetch_reg_key(
@@ -304,7 +304,7 @@ class Econet300Api:
 
     async def _fetch_reg_key(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._client.get_params(reg)
+        data = await self._client.fetch_sys_params(reg)
 
         if data is None:
             raise DataError(f"Data fetched by API for reg: {reg} is None")
@@ -318,6 +318,9 @@ class Econet300Api:
 
         return data[data_key]
 
+    async def fetch_sys_params(self) -> dict[str, Any]:
+        return await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
+
     async def fetch_reg_params(self) -> dict[str, Any]:
         """Fetch and return the regParam data from ip/econet/regParams endpoint."""
         _LOGGER.info("Calling fetch_reg_params method")
@@ -325,23 +328,11 @@ class Econet300Api:
             API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
         )
         _LOGGER.debug("Fetched regParams data: %s", regParams)
-
-        if API_REG_PARAMS_PARAM_DATA in regParams:
-            _LOGGER.info(
-                "Response contains expected keys. API_REG_PARAMS_PARAM_DATA: %s",
-                regParams[API_REG_PARAMS_PARAM_DATA],
-            )
-        else:
-            _LOGGER.warning(
-                "Response does not contain expected keys. API_REG_PARAMS_PARAM_DATA is missing."
-            )
-            _LOGGER.debug("Full response data: %s", regParams)
-
         return regParams
 
     async def _fetch_reg_names(self, reg, data_key_key_name: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._client.get_params(reg)
+        data = await self._client.fetch_sys_params(reg)
 
         if data is None:
             raise DataError(f"Data fetched by API for reg: {reg} is None")

@@ -27,14 +27,18 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         )
         self._api = api
 
-    def has_data(self, key: str):
-        """Check if datakey is present in data."""
+    def has_sys_data(self, key: str):
+        """Check if datakey is present in sysParams."""
+        if self.data is None:
+            return False
+        return key in self.data["sysParams"]
+
+    def has_reg_data(self, key: str):
+        """Check if datakey is present in regParams."""
         if self.data is None:
             return False
 
-        has_key = key in self.data["sysParams"] or self.data["regParams"]
-        _LOGGER.debug("has_data: %s=%s", key, has_key)
-        return has_key
+        return key in self.data["regParams"]
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -51,8 +55,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             async with asyncio.timeout(10):
                 data = (
                     await self._api.fetch_sys_params()
-                    if self._api.model_id == "MAX810P-L TOUCH"
+                    if self._api.model_id == "ecoMAX810P-L TOUCH"
                     else {}
+                )
+                _LOGGER.debug(
+                    "Fetching system parameters for model: %s", self._api.model_id
                 )
                 reg_params = await self._api.fetch_reg_params()
                 return {"sysParams": data, "regParams": reg_params}

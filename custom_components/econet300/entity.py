@@ -76,7 +76,7 @@ class EconetEntity(CoordinatorEntity):
             return
 
         if (
-            not self.coordinator.has_data(self.entity_description.key)
+            not self.coordinator.has_sys_data(self.entity_description.key)
             or self.coordinator.data["sysParams"][self.entity_description.key] is None
         ):
             _LOGGER.warning(

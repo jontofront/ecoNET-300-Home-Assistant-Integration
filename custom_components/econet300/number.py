@@ -112,7 +112,7 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
-    return coordinator.has_data(key) and coordinator.data["sysParams"][key]
+    return coordinator.has_sys_data(key) and coordinator.data["sysParams"][key]
 
 
 def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
