@@ -83,7 +83,7 @@ class MixerSensor(MixerEntity, EconetSensor):
 
 
 def create_entity_description(key: str) -> EconetSensorEntityDescription:
-    """Create Econect300 sensor entity based on supplied key."""
+    """Create Econet300 sensor entity based on supplied key."""
     _LOGGER.debug("Creating entity description for key: %s", key)
     entity_description = EconetSensorEntityDescription(
         key=key,
@@ -127,17 +127,17 @@ def can_add_mixer(key: str, coordinator: EconetDataCoordinator):
     _LOGGER.debug(
         "Checking if mixer can be added for key: %s, data %s",
         key,
-        coordinator.data["sysParams"],
+        coordinator.data["regParams"],
     )
     return (
-        coordinator.has_sys_data(key) and coordinator.data["sysParams"][key] is not None
+        coordinator.has_sys_data(key) and coordinator.data["regParams"][key] is not None
     )
 
 
 def create_mixer_sensor_entity_description(
     key: str, map_key: str
 ) -> EconetSensorEntityDescription:
-    """Create Econect300 mixer sensor entity based on supplied key."""
+    """Create Econet300 mixer sensor entity based on supplied key."""
     _LOGGER.debug(
         "Creating Mixer entity sensor description for key: %s, and type : %s",
         key,
