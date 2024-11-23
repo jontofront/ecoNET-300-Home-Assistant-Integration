@@ -56,7 +56,7 @@ API_REG_PARAMS_DATA_PARAM_DATA = "data"
 ## Map names for params data in API_REG_PARAMS_DATA_URI
 API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
 
-## Mapunits for params data map API_RM_CURRENT_DATA_PARAMS_URI
+## Map units for params data map API_RM_CURRENT_DATA_PARAMS_URI
 API_RM_PARAMSUNITSNAMES_URI = "rmParamsUnitsNames"
 
 # Boiler staus keys map
@@ -125,6 +125,7 @@ SENSOR_MAP_KEY = {
         "tempFeeder",
         "tempExternalSensor",
         "fuelLevel",
+        "tempCO",
     },
 }
 
@@ -177,7 +178,7 @@ BINARY_SENSOR_MAP = {
     "117": "thermostat",
     "118": "pumpCOWorks",
     "1536": "fanWorks",
-    "1540": "aditionalFeeder",
+    "1540": "additionalFeeder",
     "1541": "pumpFireplaceWorks",
     "1542": "pumpCWUWorks",
 }
@@ -294,7 +295,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "thermostat": BinarySensorDeviceClass.RUNNING,
     "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
     "fanWorks": BinarySensorDeviceClass.RUNNING,
-    "aditionalFeeder": BinarySensorDeviceClass.RUNNING,
+    "additionalFeeder": BinarySensorDeviceClass.RUNNING,
     "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
     "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
     "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
@@ -342,7 +343,7 @@ ENTITY_ICON = {
     "quality": "mdi:signal",
     "pumpCOWorks": "mdi:pump",
     "fanWorks": "mdi:fan",
-    "aditionalFeeder": "mdi:screw-lag",
+    "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump",
     "pumpCWUWorks": "mdi:pump",
     "main_server": "mdi:server",
@@ -358,7 +359,7 @@ ENTITY_ICON = {
 ENTITY_ICON_OFF = {
     "pumpCOWorks": "mdi:pump-off",
     "fanWorks": "mdi:fan-off",
-    "aditionalFeeder": "mdi:screw-lag",
+    "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
 }

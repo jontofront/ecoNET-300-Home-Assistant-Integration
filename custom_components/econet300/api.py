@@ -1,4 +1,4 @@
-"""Econet300 API class class describint methods of getting and setting data."""
+"""Econet300 API class describing methods of getting and setting data."""
 
 import asyncio
 from http import HTTPStatus
@@ -38,7 +38,7 @@ def map_param(param_name):
 
 
 class Limits:
-    """Class difining entity value set limits."""
+    """Class defining entity value set limits."""
 
     def __init__(self, min_v: int | None, max_v: int | None):
         """Construct the necessary attributes for the Limits object."""
@@ -67,7 +67,7 @@ class EconetClient:
     def __init__(
         self, host: str, username: str, password: str, session: ClientSession
     ) -> None:
-        """Initializethe EconetClient."""
+        """Initialize the EconetClient."""
 
         proto = ["http://", "https://"]
 
@@ -163,15 +163,6 @@ class Econet300Api:
         self._sw_revision = "default-sw-revision"
         self._hw_version = "default-hw-version"
 
-        _LOGGER.debug("Econet300Api initialized with client: %s", client)
-        _LOGGER.debug("Econet300Api initialized with cache: %s", cache)
-        _LOGGER.debug("Econet300Api initialized with uid: %s", self._uid)
-        _LOGGER.debug("Econet300Api initialized with model_id: %s", self._model_id)
-        _LOGGER.debug(
-            "Econet300Api initialized with sw_revision: %s", self._sw_revision
-        )
-        _LOGGER.debug("Econet300Api initialized with hw_version: %s", self._hw_version)
-
     @classmethod
     async def create(cls, client: EconetClient, cache: MemCache):
         """Create and return initial object."""
@@ -206,7 +197,7 @@ class Econet300Api:
         return self._hw_version
 
     async def init(self):
-        """Econet300 Api initilization."""
+        """Econet300 Api initialization."""
         sys_params = await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
 
         if API_SYS_PARAMS_PARAM_UID not in sys_params:
@@ -319,10 +310,11 @@ class Econet300Api:
         return data[data_key]
 
     async def fetch_sys_params(self) -> dict[str, Any]:
+        """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
         return await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
 
     async def fetch_reg_params(self) -> dict[str, Any]:
-        """Fetch and return the regParam data from ip/econet/regParams endpoint."""
+        """Fetch and return the regParams data from ip/econet/regParams endpoint."""
         _LOGGER.info("Calling fetch_reg_params method")
         regParams = await self._fetch_reg_names(
             API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA

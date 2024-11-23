@@ -11,6 +11,7 @@
     },
     "cSpell.words": [
         "aiohttp",
+        "clientsession",
         "econet",
         "hass",
         "homeassistant",
