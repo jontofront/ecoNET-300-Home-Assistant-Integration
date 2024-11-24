@@ -20,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class EconetEntity(CoordinatorEntity):
-    """Representes EconetEntity."""
+    """Represents EconetEntity."""
 
     api: Econet300Api
     entity_description: EntityDescription

@@ -59,7 +59,7 @@ API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
 ## Map units for params data map API_RM_CURRENT_DATA_PARAMS_URI
 API_RM_PARAMSUNITSNAMES_URI = "rmParamsUnitsNames"
 
-# Boiler staus keys map
+# Boiler status keys map
 # boiler mode names from  endpoint http://LocalIP/econet/rmParamsEnums?
 OPERATION_MODE_NAMES = {
     0: STATE_OFF,
@@ -123,9 +123,15 @@ SENSOR_MAP_KEY = {
     },
     "_default": {
         "tempFeeder",
-        "tempExternalSensor",
         "fuelLevel",
         "tempCO",
+        "tempCOSet",
+        "tempCWUSet",
+        "tempFlueGas",
+        "mode",
+        "fanPower",
+        "tempCOSet",
+        "tempCWUSet",
     },
 }
 

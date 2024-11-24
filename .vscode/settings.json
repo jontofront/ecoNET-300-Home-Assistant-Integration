@@ -13,6 +13,7 @@
         "aiohttp",
         "clientsession",
         "econet",
+        "ecoster",
         "hass",
         "homeassistant",
         "MILLIWATT",
