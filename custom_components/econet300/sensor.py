@@ -61,6 +61,13 @@ class EconetSensor(EconetEntity, SensorEntity):
             self.entity_description,
         )
 
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        value = self.coordinator.data["regParams"].get(self.entity_description.key)
+        _LOGGER.debug("Sensor state for %s: %s", self.entity_description.key, value)
+        return value
+
     def _sync_state(self, value):
         """Sync state."""
         _LOGGER.debug("Update EconetSensor entity: %s", self.entity_description.name)

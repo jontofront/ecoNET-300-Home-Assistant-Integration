@@ -95,13 +95,15 @@ class EconetClient:
         )
 
     async def fetch_sys_params(self, reg: str):
-        """Call for getting api param."""
+        """Call for getting api param from IP/econet/sysParams."""
         _LOGGER.debug(
             "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
             reg,
             self._host,
         )
-        return await self._get(f"{self._host}/econet/{reg}")
+        data = await self._get(f"{self._host}/econet/{reg}")
+        _LOGGER.debug("Fetched data for registry '%s': %s", reg, data)
+        return data
 
     async def _get(self, url):
         attempt = 1
@@ -199,6 +201,10 @@ class Econet300Api:
     async def init(self):
         """Econet300 Api initialization."""
         sys_params = await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
+
+        if sys_params is None:
+            _LOGGER.error("Failed to fetch system parameters.")
+            return
 
         if API_SYS_PARAMS_PARAM_UID not in sys_params:
             _LOGGER.warning(
@@ -322,21 +328,22 @@ class Econet300Api:
         _LOGGER.debug("Fetched regParams data: %s", regParams)
         return regParams
 
-    async def _fetch_reg_names(self, reg, data_key_key_name: str | None = None):
+    async def _fetch_reg_names(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
         data = await self._client.fetch_sys_params(reg)
 
         if data is None:
             raise DataError(f"Data fetched by API for reg: {reg} is None")
 
-        if data_key_key_name is None:
+        if data_key is None:
             return data
 
-        if data_key_key_name not in data:
+        if data_key not in data:
             _LOGGER.debug(data)
-            raise DataError(f"Data for key: {data_key_key_name} does not exist")
-
-        return data[data_key_key_name]
+            raise DataError(f"Data for key: {data_key} does not exist")
+        value = data[data_key]
+        _LOGGER.debug("Processed value for key '%s': %s", data_key, value)
+        return value
 
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
