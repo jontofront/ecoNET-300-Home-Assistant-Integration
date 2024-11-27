@@ -8,7 +8,6 @@ from homeassistant.const import (
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     STATE_CLOSING,
     STATE_OFF,
-    STATE_ON,
     STATE_OPENING,
     STATE_PAUSED,
     STATE_PROBLEM,
@@ -78,12 +77,6 @@ OPERATION_MODE_NAMES = {
     13: "no_transmission",
 }
 
-# add constants to future
-PRODUCT_TYPE = {
-    0: "ECOMAX_850P_TYPE",  # regType 0
-    1: "ECOMAX_850i_TYPE",  # regType 1
-}
-
 ## Editable params limits
 API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
@@ -130,7 +123,6 @@ SENSOR_MAP_KEY = {
         "tempFlueGas",
         "mode",
         "fanPower",
-        "tempCOSet",
         "thermostat",
     },
 }
@@ -307,7 +299,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lighter": BinarySensorDeviceClass.RUNNING,
     "weatherControl": BinarySensorDeviceClass.RUNNING,
     "unseal": BinarySensorDeviceClass.RUNNING,
-    "thermostat": BinarySensorDeviceClass.RUNNING,
+    #    "thermostat": BinarySensorDeviceClass.RUNNING,
     "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
     "fanWorks": BinarySensorDeviceClass.RUNNING,
     "additionalFeeder": BinarySensorDeviceClass.RUNNING,
@@ -381,13 +373,6 @@ ENTITY_ICON_OFF = {
 
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    "thermostat": (
-        lambda x: (
-            STATE_ON
-            if str(x).strip() == "true"
-            else (STATE_OFF if str(x).strip() == "false" else None)
-        )
-    ),
     "lambdaStatus": (
         lambda x: (
             "stop"
@@ -453,64 +438,4 @@ PRODUCT_MODEL = {
     "ecoMAX860P2-N TOUCH"
     "ecoMAX860P3-V"
     "ecoSOL 301"
-}
-
-ALARMS_NAMES = {
-    0: "No power",
-    1: "Boiler sensor error",
-    2: "Exceeding the maximum temperature of the boiler",
-    3: "Sensor fault feeder",
-    4: "Exceeding the maximum temperature of the tray",
-    5: "Sensor fault system",
-    6: "Exceeding the maximum flue gas temperature",
-    7: "Firing up the boiler failed",
-    8: "No fuel",
-    9: "Loss of Containment",
-    10: "Pressure sensor failed",
-    11: "Faulty fan ",
-    12: "ID Fan Pressure can not be reached ",
-    13: "Burning off error ",
-    14: "Photocell sensor failed",
-    15: "Linear actuator blocked",
-    16: "Incorrect work parameters",
-    17: "Precaution of condensation ",
-    18: "STB is disabled . Manual reset is needed when TB <65 °C Boiler STB ",
-    19: "Opening the contact STB tray ",
-    20: "Minimum water pressure exceeded",
-    21: "Maximum water pressure exceeded",
-    22: "Fuel feeder locked",
-    23: "Extinguished flame ",
-    24: "Faulty exhaust fan",
-    25: "Error loading external feeder ",
-    26: "Error Sensor solar collector SH ",
-    27: "Error Sensor solar circuit SL ",
-    28: "Sensor fault circuit H1- S",
-    29: "Sensor fault circuit H2 - S",
-    30: "Sensor fault circuit H3 - S",
-    31: "Error weather sensor WS ",
-    32: "HUW sensor error ",
-    33: "Sensor error H0- S",
-    34: "It takes frost protection - heat source are not included ",
-    35: "It takes frost protection - the source of the attached ",
-    36: "Exceeded max. Temperature solar collector ",
-    37: "Exceeded max. Flow temperature of the floor ",
-    38: "Cooling preventive solid fuel boiler ",
-    39: "No communication with ecoLAMBDA ",
-    40: "Lock the primary air damper ",
-    41: "Lock the secondary air damper ",
-    42: "Feeder full",
-    43: "Furnace full",
-    44: "No communication with B module",
-    45: "Cleaning servomotor error",
-    46: "Minimum pressure exceeded",
-    47: "Maximum pressure exceeded",
-    48: "Pressure sensor damage",
-    49: "Maximum main heat source temperature exceeded",
-    50: "Maximum additional heat source temperature exceeded",
-    51: "Solar is OFF - temperature  is too high - wait for temperature drop",
-    52: "Alarm for auger control system malfunction",
-    53: "Clogged auger Alarm",
-    54: "Temperature above maximum for the thermocouple.",
-    55: "Thermocouple wired improperly.",
-    255: "Alarm unknown",
 }
