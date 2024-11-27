@@ -132,9 +132,19 @@ SENSOR_MAP_KEY = {
         "fanPower",
         "tempCOSet",
         "tempCWUSet",
+        "thermostat",
     },
 }
 
+BINARY_SENSOR_MAP_KEY = {
+    "_default": {
+        "lighter",
+        "pumpCOWorks",
+        "fanWorks",
+        "pumpFireplaceWorks",
+        "pumpCWUWorks",
+    },
+}
 
 SENSOR_MAP = {
     "26": "tempFeeder",

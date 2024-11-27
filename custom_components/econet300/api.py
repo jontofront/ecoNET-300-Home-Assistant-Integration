@@ -94,12 +94,13 @@ class EconetClient:
             f"{self._host}/econet/rmCurrNewParam?newParamKey={key}&newParamValue={value}"
         )
 
+    ##Check this method for possible changes its fetching data from regParams ???
     async def fetch_sys_params(self, reg: str):
         """Call for getting api param from IP/econet/sysParams."""
         _LOGGER.debug(
             "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
-            reg,
             self._host,
+            reg,
         )
         data = await self._get(f"{self._host}/econet/{reg}")
         _LOGGER.debug("Fetched data for registry '%s': %s", reg, data)

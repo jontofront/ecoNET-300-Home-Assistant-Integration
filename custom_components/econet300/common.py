@@ -28,13 +28,13 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         self._api = api
 
     def has_sys_data(self, key: str):
-        """Check if datakey is present in sysParams."""
+        """Check if data key is present in sysParams."""
         if self.data is None:
             return False
         return key in self.data["sysParams"]
 
     def has_reg_data(self, key: str):
-        """Check if datakey is present in regParams."""
+        """Check if data key is present in regParams."""
         if self.data is None:
             return False
 

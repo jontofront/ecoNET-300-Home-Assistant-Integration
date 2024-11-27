@@ -56,11 +56,10 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
-        if self.coordinator.data["sysParams"][self.entity_description.key] is None:
+        value = self.coordinator.data["sysParams"].get(self.entity_description.key)
+        if value is None:
+            _LOGGER.debug("Value for key %s is None", self.entity_description.key)
             return
-
-        value = self.coordinator.data["sysParams"][self.entity_description.key]
-
         self._sync_state(value)
 
     async def async_added_to_hass(self):
@@ -77,7 +76,8 @@ class EconetEntity(CoordinatorEntity):
 
         if (
             not self.coordinator.has_sys_data(self.entity_description.key)
-            or self.coordinator.data["sysParams"][self.entity_description.key] is None
+            or self.coordinator.data["sysParams"].get(self.entity_description.key)
+            is None
         ):
             _LOGGER.warning(
                 "Data key: %s was expected to exist but it doesn't",
@@ -90,7 +90,7 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.debug("Exiting async_added_to_hass method")
             return
 
-        value = self.coordinator.data["sysParams"][self.entity_description.key]
+        value = self.coordinator.data["sysParams"].get(self.entity_description.key)
 
         await super().async_added_to_hass()
         self._sync_state(value)
