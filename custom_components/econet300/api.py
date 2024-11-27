@@ -113,11 +113,7 @@ class EconetClient:
         while attempt <= max_attempts:
             try:
                 _LOGGER.debug("Fetching data from URL: %s (Attempt %d)", url, attempt)
-                _LOGGER.debug(
-                    "Using model_id: %s, sw_revision: %s",
-                    self._model_id,
-                    self._sw_revision,
-                )
+
                 async with await self._session.get(
                     url, auth=self._auth, timeout=10
                 ) as resp:
