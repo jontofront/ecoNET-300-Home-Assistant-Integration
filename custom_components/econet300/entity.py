@@ -79,7 +79,7 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.error("Coordinator object does not have a 'data' attribute")
             return
 
-        # Check the available keys in both sourcese
+        # Check the available keys in both sources
         sys_keys = sys_params.keys()
         reg_keys = reg_params.keys()
         _LOGGER.debug("Available keys in sysParams: %s", sys_keys)

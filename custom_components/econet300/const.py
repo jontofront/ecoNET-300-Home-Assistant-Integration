@@ -131,7 +131,6 @@ SENSOR_MAP_KEY = {
         "mode",
         "fanPower",
         "tempCOSet",
-        "tempCWUSet",
         "thermostat",
     },
 }
