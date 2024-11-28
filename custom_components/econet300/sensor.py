@@ -21,8 +21,8 @@ from .const import (
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
-    MIXER_MAP,
     SENSOR_MAP_KEY,
+    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
@@ -134,24 +134,18 @@ def can_add_mixer(key: str, coordinator: EconetDataCoordinator):
     )
 
 
-def create_mixer_sensor_entity_description(
-    key: str, map_key: str
-) -> EconetSensorEntityDescription:
-    """Create Econet300 mixer sensor entity based on supplied key."""
-    _LOGGER.debug(
-        "Creating Mixer entity sensor description for key: %s, and type : %s",
-        key,
-        map_key,
-    )
+def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
+    """Create a sensor entity description for a mixer."""
+    _LOGGER.debug("Creating Mixer entity sensor description for key: %s", key)
     entity_description = EconetSensorEntityDescription(
         key=key,
-        translation_key=camel_to_snake(map_key),
-        icon=ENTITY_ICON.get(map_key, None),
-        native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key, None),
-        state_class=STATE_CLASS_MAP.get(map_key, None),
-        device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(map_key, None),
-        suggested_display_precision=ENTITY_PRECISION.get(map_key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(map_key, lambda x: x),
+        translation_key=camel_to_snake(key),
+        icon=ENTITY_ICON.get(key, None),
+        native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, None),
+        device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
+        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
     _LOGGER.debug("Created Mixer entity description: %s", entity_description)
     return entity_description
@@ -163,23 +157,19 @@ def create_mixer_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
 
     for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
         string_mix = str(i)
-        mixer_map_value = MIXER_MAP.get(string_mix)
-        if mixer_map_value is not None:
-            for key, value in mixer_map_value.items():
+        mixer_keys = SENSOR_MIXER_KEY.get(string_mix, set())
+        if mixer_keys:
+            for key in mixer_keys:
                 if can_add_mixer(key, coordinator):
-                    mixer_sensor_entity = create_mixer_sensor_entity_description(
-                        key, value
-                    )
+                    mixer_sensor_entity = create_mixer_sensor_entity_description(key)
                     entities.append(
                         MixerSensor(mixer_sensor_entity, coordinator, api, i)
                     )
                 else:
-                    _LOGGER.warning(
-                        "Mixer: %s , Sensor: %s %s wont be added", i, key, value
-                    )
+                    _LOGGER.warning("Mixer: %s , Sensor: %s won't be added", i, key)
         else:
             _LOGGER.debug(
-                "Mixer: %s not defined in const, wont be added",
+                "Mixer: %s not defined in const, won't be added",
                 i,
             )
 

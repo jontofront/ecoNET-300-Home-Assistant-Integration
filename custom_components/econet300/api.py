@@ -255,7 +255,7 @@ class Econet300Api:
 
         return True
 
-    async def get_param_limits(self, param: str):
+    async def fetch_rm_current_data_params_edits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             limits = await self._fetch_reg_key(

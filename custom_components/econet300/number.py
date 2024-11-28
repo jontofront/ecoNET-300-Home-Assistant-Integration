@@ -45,7 +45,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
-        """Initialize a new ecoNET number entyti."""
+        """Initialize a new ecoNET number entity."""
         self.entity_description = entity_description
         self.api = api
         super().__init__(coordinator)
@@ -67,7 +67,9 @@ class EconetNumber(EconetEntity, NumberEntity):
 
     async def async_set_limits_values(self):
         """Async Sync number limits."""
-        limits = await self.api.get_param_limits(self.entity_description.key)
+        limits = await self.api.fetch_rm_current_data_params_edits(
+            self.entity_description.key
+        )
         _LOGGER.debug("Number limits retrieved: %s", limits)
         if limits is None:
             _LOGGER.warning(
@@ -123,7 +125,7 @@ def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
 
 
 def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
-    """Create Econect300 mixer sensor entity based on supplied key."""
+    """Create Econet300 mixer sensor entity based on supplied key."""
     map_key = NUMBER_MAP.get(str(key), str(key))
     _LOGGER.debug("Create number: %s", map_key)
     entity_description = EconetNumberEntityDescription(
@@ -154,7 +156,7 @@ async def async_setup_entry(
     entities: list[EconetNumber] = []
 
     for key in NUMBER_MAP:
-        number_limits = await api.get_param_limits(key)
+        number_limits = await api.fetch_rm_current_data_params_edits(key)
 
         if number_limits is None:
             _LOGGER.warning(
