@@ -67,9 +67,7 @@ class EconetNumber(EconetEntity, NumberEntity):
 
     async def async_set_limits_values(self):
         """Async Sync number limits."""
-        limits = await self.api.fetch_rm_current_data_params_edits(
-            self.entity_description.key
-        )
+        limits = await self.api.get_param_limits(self.entity_description.key)
         _LOGGER.debug("Number limits retrieved: %s", limits)
         if limits is None:
             _LOGGER.warning(
@@ -114,7 +112,7 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
-    return coordinator.has_sys_data(key) and coordinator.data["sysParams"][key]
+    return coordinator.has_param_edit_data(key) and coordinator.data["paramsEdits"][key]
 
 
 def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
@@ -156,7 +154,8 @@ async def async_setup_entry(
     entities: list[EconetNumber] = []
 
     for key in NUMBER_MAP:
-        number_limits = await api.fetch_rm_current_data_params_edits(key)
+        number_limits = await api.get_param_limits(key)
+        _LOGGER.debug("Number limits retrieved: %s", number_limits)
 
         if number_limits is None:
             _LOGGER.warning(

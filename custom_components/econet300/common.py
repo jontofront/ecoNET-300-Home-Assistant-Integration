@@ -40,6 +40,13 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
         return key in self.data["regParams"]
 
+    def has_param_edit_data(self, key: str):
+        """Check if ."""
+        if self.data is None:
+            return False
+
+        return key in self.data["paramsEdits"]
+
     async def _async_update_data(self):
         """Fetch data from API endpoint.
 
@@ -62,7 +69,12 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "Fetching system parameters for model: %s", self._api.model_id
                 )
                 reg_params = await self._api.fetch_reg_params()
-                return {"sysParams": data, "regParams": reg_params}
+                params_edits = await self._api.fetch_param_edit_data()
+                return {
+                    "sysParams": data,
+                    "regParams": reg_params,
+                    "paramsEdits": params_edits,
+                }
         except AuthError as err:
             raise ConfigEntryAuthFailed from err
         except ApiError as err:

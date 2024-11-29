@@ -255,7 +255,7 @@ class Econet300Api:
 
         return True
 
-    async def fetch_rm_current_data_params_edits(self, param: str):
+    async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             limits = await self._fetch_reg_key(
@@ -281,6 +281,8 @@ class Econet300Api:
             return None
 
         curr_limits = limits[param]
+        _LOGGER.debug("Limits '%s'", limits)
+        _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
         return Limits(curr_limits["min"], curr_limits["max"])
 
     async def fetch_reg_params_data(self) -> dict[str, Any]:
@@ -295,6 +297,16 @@ class Econet300Api:
         else:
             _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
             return regParamsData
+
+    async def fetch_param_edit_data(self):
+        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""  # Pakeisti
+        if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
+            limits = await self._fetch_reg_key(
+                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+            )
+            self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
+
+        return self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
     async def _fetch_reg_key(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
