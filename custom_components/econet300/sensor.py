@@ -130,7 +130,7 @@ def can_add_mixer(key: str, coordinator: EconetDataCoordinator):
         coordinator.data["regParams"],
     )
     return (
-        coordinator.has_sys_data(key) and coordinator.data["regParams"][key] is not None
+        coordinator.has_reg_data(key) and coordinator.data["regParams"][key] is not None
     )
 
 
@@ -154,10 +154,10 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
 def create_mixer_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
-
+    # TODO: Cleanup logic add mixer only which not null in endpoint
     for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
         string_mix = str(i)
-        mixer_keys = SENSOR_MIXER_KEY.get(string_mix, set())
+        mixer_keys = SENSOR_MIXER_KEY.get(string_mix)
         if mixer_keys:
             for key in mixer_keys:
                 if can_add_mixer(key, coordinator):
