@@ -56,7 +56,14 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
-        value = self.coordinator.data["sysParams"].get(self.entity_description.key)
+        value = (
+            self.coordinator.data["sysParams"].get(self.entity_description.key)
+            or self.coordinator.data["regParams"].get(self.entity_description.key)
+            or self.coordinator.data.get("paramsEdits", {}).get(
+                self.entity_description.key
+            )
+        )
+
         if value is None:
             _LOGGER.debug("Value for key %s is None", self.entity_description.key)
             return
@@ -68,45 +75,47 @@ class EconetEntity(CoordinatorEntity):
         _LOGGER.debug("Added to HASS: %s", self.entity_description)
         _LOGGER.debug("Coordinator: %s", self.coordinator)
 
-        # Retrieve sysParams and regParams data
+        # Retrieve sysParams and regParams paramsEdits data
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
+        params_edits = self.coordinator.data.get("paramsEdits", {})
         _LOGGER.debug("sysParams: %s", sys_params)
         _LOGGER.debug("regParams: %s", reg_params)
+        _LOGGER.debug("paramsEdits: %s", params_edits)
 
         # Check if the coordinator has a 'data' attributes
         if "data" not in dir(self.coordinator):
             _LOGGER.error("Coordinator object does not have a 'data' attribute")
             return
 
-        # Check the available keys in both sources
+        # Check the available keys in all sources
         sys_keys = sys_params.keys()
         reg_keys = reg_params.keys()
+        edit_keys = params_edits.keys()
         _LOGGER.debug("Available keys in sysParams: %s", sys_keys)
         _LOGGER.debug("Available keys in regParams: %s", reg_keys)
+        _LOGGER.debug("Available keys in paramsEdits: %s", edit_keys)
 
         # Expected key from entity_description
         expected_key = self.entity_description.key
         _LOGGER.debug("Expected key: %s", expected_key)
 
-        # Retrieve the value from sysParams or regParams
-        value = None
-        if expected_key in sys_params:
-            value = sys_params[expected_key]
-            _LOGGER.debug(
-                "Found key '%s' in sysParams with value: %s", expected_key, value
-            )
-        elif expected_key in reg_params:
-            value = reg_params[expected_key]
-            _LOGGER.debug(
-                "Found key '%s' in regParams with value: %s", expected_key, value
-            )
+        # Retrieve the value from sysParams or regParams  or paramsEdits
+        value = (
+            sys_params.get(expected_key)
+            or reg_params.get(expected_key)
+            or params_edits.get(expected_key)
+        )
+
+        if value is not None:
+            _LOGGER.debug("Found key '%s' with value: %s", expected_key, value)
         else:
             _LOGGER.warning(
-                "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s",
+                "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s",
                 expected_key,
                 sys_keys,
                 reg_keys,
+                edit_keys,
             )
             return
 
@@ -127,7 +136,6 @@ class MixerEntity(EconetEntity):
     ):
         """Initialize the MixerEntity."""
         super().__init__(description, coordinator, api)
-
         self._idx = idx
 
     @property
