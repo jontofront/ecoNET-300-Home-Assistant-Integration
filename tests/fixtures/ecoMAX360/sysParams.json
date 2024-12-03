@@ -1,0 +1,610 @@
+{
+    "regProd": 0,
+    "regAllowed": null,
+    "ecosrvPort": "443",
+    "mainSrv": true,
+    "modulePanelSoftVer": "S003.68_1.82",
+    "ecosrvSoftVer": "3.2.3842",
+    "moduleASoftVer": "S002.28",
+    "eth0": "0.0.0.0",
+    "tilesET": [
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": null,
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": null,
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_temp"
+        },
+        {
+            "edname": "HDWTSetPoint",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": null,
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit1BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit1BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit1ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit1EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit2BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit2ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit2EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit3BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit3ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit3EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit4BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit4ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit4EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit5BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit5ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit5EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit6BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit6ComfortTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit6EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        },
+        {
+            "edname": "Circuit7BaseTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "flowHeaterTimer1",
+            "type": "tile_temp"
+        },
+        {
+            "edname": "Circuit7EcoTemp",
+            "type": "tile_temp"
+        },
+        {
+            "edname": null,
+            "type": "tile_text"
+        }
+    ],
+    "etPasswords": {
+        "1": "rfwer",
+        "2": "dsfsdffsd",
+        "3": "dsfsdffsd",
+        "4": "sdferfgerg"
+    },
+    "encryption": "psk2",
+    "schemaID": 12,
+    "wlan0": "192.168.8.27",
+    "remoteMenu": false,
+    "regType": 0,
+    "schema": {},
+    "regRefresh": 5,
+    "tiles": null,
+    "protocolType": "gm3_pomp",
+    "controllerID": "ecoMAX360i",
+    "moduleEcoSTERSoftVer": null,
+    "schedules": {},
+    "econetConfVer": "1.00",
+    "password": "*****",
+    "prodLogo": 0,
+    "fuelConsumptionCalc": false,
+    "regImgID": 0,
+    "settingsVer": 85031,
+    "signal": "-36",
+    "logFl": 0,
+    "etConfDesc": {
+        "lang": "",
+        "client": "0",
+        "regname": "ecoMAX360i"
+    },
+    "history": [
+        "TempWthr",
+        "TempCWU",
+        "TempBuforDown",
+        "TempBuforUp",
+        "TempClutch",
+        "TempCircuit2",
+        "TempCircuit3",
+        "Circuit1thermostat",
+        "Circuit2thermostatTemp",
+        "Circuit3thermostatTemp",
+        "TempClutch",
+        "TempCircuit4",
+        "TempCircuit5",
+        "Circuit4thermostatTemp",
+        "Circuit5thermostatTemp",
+        "TempCircuit6",
+        "TempCircuit7",
+        "Circuit6thermostatTemp",
+        "Circuit7thermostatTemp"
+    ],
+    "uid": "UID",
+    "routerType": "mr3020-v3",
+    "etNewConfTrans": true,
+    "ecosrvAddr": "econet24.com",
+    "softVer": "3.2.3842",
+    "quality": 98,
+    "moduleCSoftVer": null,
+    "lan": false,
+    "moduleLambdaSoftVer": null,
+    "panelsNames": [],
+    "modulesVers": [
+        [
+            "lbModuleAVerCurr",
+            "S002.28",
+            1
+        ],
+        [
+            "lbPanelVer_100Curr",
+            "S003.68",
+            100
+        ]
+    ],
+    "key": "****",
+    "servicePassword": "servicePassword",
+    "ssid": "wifi_SID-FA718P",
+    "wifi": true,
+    "panelVer": "S003.68_1.82",
+    "alarms": [
+        {
+            "toDate": "2132-01-18 11:14:07",
+            "code": 0,
+            "fromDate": "2132-07-20 08:59:41",
+            "service": false
+        },
+        {
+            "toDate": "2115-11-19 01:55:11",
+            "code": 224,
+            "fromDate": "2132-04-02 00:34:07",
+            "service": false
+        },
+        {
+            "toDate": null,
+            "code": 1,
+            "fromDate": "2131-07-15 00:42:35",
+            "service": false
+        },
+        {
+            "toDate": "2133-08-18 06:27:59",
+            "code": 240,
+            "fromDate": "2131-05-05 03:50:23",
+            "service": false
+        },
+        {
+            "toDate": "2024-11-22 21:34:39",
+            "code": 184,
+            "fromDate": "2100-03-21 16:17:00",
+            "service": false
+        },
+        {
+            "toDate": "2012-07-15 21:24:24",
+            "code": 65,
+            "fromDate": "2098-02-28 07:45:37",
+            "service": false
+        },
+        {
+            "toDate": "2016-08-04 19:37:35",
+            "code": 71,
+            "fromDate": "2058-06-18 05:47:41",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-30 07:15:39",
+            "code": 2,
+            "fromDate": "2024-06-29 19:56:26",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-23 11:16:29",
+            "code": 98,
+            "fromDate": "2024-06-23 10:58:31",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-23 11:16:29",
+            "code": 1,
+            "fromDate": "2024-06-23 10:58:27",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-23 11:16:29",
+            "code": 8,
+            "fromDate": "2024-06-23 10:58:27",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-23 11:16:29",
+            "code": 9,
+            "fromDate": "2024-06-23 10:58:27",
+            "service": false
+        },
+        {
+            "toDate": "2024-06-23 11:16:29",
+            "code": 11,
+            "fromDate": "2024-06-23 10:58:27",
+            "service": false
+        },
+        {
+            "toDate": "2024-05-01 13:49:30",
+            "code": 2,
+            "fromDate": "2024-05-01 12:49:29",
+            "service": false
+        },
+        {
+            "toDate": "2024-01-22 13:17:51",
+            "code": 98,
+            "fromDate": "2024-01-06 14:19:02",
+            "service": false
+        },
+        {
+            "toDate": "2024-01-06 14:19:02",
+            "code": 2,
+            "fromDate": "2024-01-06 14:15:43",
+            "service": false
+        },
+        {
+            "toDate": "2023-10-07 19:44:14",
+            "code": 98,
+            "fromDate": "2023-09-24 13:45:53",
+            "service": false
+        },
+        {
+            "toDate": "2023-10-07 17:02:13",
+            "code": 1,
+            "fromDate": "2023-09-24 13:45:49",
+            "service": false
+        },
+        {
+            "toDate": "2023-09-24 13:45:49",
+            "code": 98,
+            "fromDate": "2023-09-23 17:47:30",
+            "service": false
+        },
+        {
+            "toDate": "2023-09-24 13:45:49",
+            "code": 1,
+            "fromDate": "2023-09-23 17:47:26",
+            "service": false
+        },
+        {
+            "toDate": "2023-09-23 17:47:26",
+            "code": 98,
+            "fromDate": "2023-09-14 17:08:46",
+            "service": false
+        },
+        {
+            "toDate": "2023-09-23 17:47:26",
+            "code": 1,
+            "fromDate": "2023-09-14 17:08:42",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-04 17:49:15",
+            "code": 8,
+            "fromDate": "2023-02-04 17:39:19",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-04 17:49:15",
+            "code": 11,
+            "fromDate": "2023-02-04 17:39:19",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-04 19:06:36",
+            "code": 98,
+            "fromDate": "2023-02-04 17:39:03",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-04 17:39:15",
+            "code": 8,
+            "fromDate": "2023-02-04 17:38:59",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-04 17:39:15",
+            "code": 11,
+            "fromDate": "2023-02-04 17:38:59",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 19:21:00",
+            "code": 98,
+            "fromDate": "2023-02-03 19:08:45",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 19:21:00",
+            "code": 8,
+            "fromDate": "2023-02-03 19:08:41",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 18:24:03",
+            "code": 10,
+            "fromDate": "2023-02-03 18:23:59",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 19:01:38",
+            "code": 98,
+            "fromDate": "2023-02-03 18:23:55",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 18:23:55",
+            "code": 10,
+            "fromDate": "2023-02-03 18:23:51",
+            "service": false
+        },
+        {
+            "toDate": "2023-02-03 18:21:07",
+            "code": 2,
+            "fromDate": "2023-02-03 17:51:14",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-22 17:16:19",
+            "code": 2,
+            "fromDate": "2023-01-21 14:29:59",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-20 08:47:54",
+            "code": 98,
+            "fromDate": "2023-01-20 08:39:18",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-20 08:39:18",
+            "code": 2,
+            "fromDate": "2023-01-20 08:34:25",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-15 08:40:55",
+            "code": 98,
+            "fromDate": "2023-01-08 10:30:59",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-08 10:31:07",
+            "code": 5,
+            "fromDate": "2023-01-08 10:30:55",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-07 11:27:03",
+            "code": 98,
+            "fromDate": "2023-01-07 11:11:54",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-07 11:11:54",
+            "code": 2,
+            "fromDate": "2023-01-07 11:09:23",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-05 15:39:11",
+            "code": 1,
+            "fromDate": "2023-01-05 15:39:03",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-05 15:38:55",
+            "code": 1,
+            "fromDate": "2023-01-05 15:38:47",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-05 15:27:39",
+            "code": 1,
+            "fromDate": "2023-01-05 15:26:51",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-07 10:43:02",
+            "code": 98,
+            "fromDate": "2023-01-05 14:58:39",
+            "service": false
+        },
+        {
+            "toDate": "2023-01-05 14:58:59",
+            "code": 1,
+            "fromDate": "2023-01-05 14:58:35",
+            "service": false
+        },
+        {
+            "toDate": "2022-12-15 16:48:09",
+            "code": 10,
+            "fromDate": "2022-06-01 13:56:32",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 13:51:08",
+            "code": 29,
+            "fromDate": "2022-06-01 13:51:00",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 13:51:00",
+            "code": 2,
+            "fromDate": "2022-06-01 13:50:08",
+            "service": false
+        },
+        {
+            "toDate": "2022-12-15 16:54:11",
+            "code": 98,
+            "fromDate": "2022-06-01 13:49:00",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 13:49:16",
+            "code": 29,
+            "fromDate": "2022-06-01 13:48:57",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:14:25",
+            "code": 2,
+            "fromDate": "2022-06-01 12:09:01",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:08:13",
+            "code": 29,
+            "fromDate": "2022-06-01 12:07:58",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:07:58",
+            "code": 2,
+            "fromDate": "2022-06-01 12:07:04",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:14:25",
+            "code": 98,
+            "fromDate": "2022-06-01 12:03:48",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:07:58",
+            "code": 10,
+            "fromDate": "2022-06-01 12:03:45",
+            "service": false
+        },
+        {
+            "toDate": "2022-06-01 12:06:00",
+            "code": 29,
+            "fromDate": "2022-06-01 12:03:45",
+            "service": false
+        },
+        {
+            "toDate": "2016-09-15 14:17:44",
+            "code": 33,
+            "fromDate": "2022-04-01 01:10:24",
+            "service": false
+        },
+        {
+            "toDate": "2050-02-12 17:26:56",
+            "code": 18,
+            "fromDate": "2000-07-09 04:20:16",
+            "service": false
+        },
+        {
+            "toDate": "2000-01-01 00:00:00",
+            "code": 9,
+            "fromDate": "2000-01-02 12:24:32",
+            "service": false
+        }
+    ],
+    "login": "admin",
+    "moduleBSoftVer": null,
+    "etConfVer": "S003.68_1.82"
+}
