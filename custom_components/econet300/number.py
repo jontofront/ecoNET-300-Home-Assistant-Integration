@@ -56,12 +56,20 @@ class EconetNumber(EconetEntity, NumberEntity):
         )
 
     def _sync_state(self, value):
-        """Sync state."""
+        """Sync the state of the Econet number entity."""
         _LOGGER.debug("EconetNumber _sync_state: %s", value)
         self._attr_native_value = value
         map_key = NUMBER_MAP.get(self.entity_description.key)
-        self._attr_native_min_value = ENTITY_MIN_VALUE.get(map_key)
-        self._attr_native_max_value = ENTITY_MAX_VALUE.get(map_key)
+
+        if map_key is not None:
+            self.set_native_min_value(ENTITY_MIN_VALUE.get(map_key))
+            self.set_native_max_value(ENTITY_MAX_VALUE.get(map_key))
+        else:
+            _LOGGER.error(
+                "EconetNumber _sync_state map_key %s not found in NUMBER_MAP",
+                self.entity_description.key,
+            )
+
         self.async_write_ha_state()
         self.hass.async_create_task(self.async_set_limits_values())
 
