@@ -103,8 +103,12 @@ class EconetEntity(CoordinatorEntity):
         # Retrieve the value from sysParams or regParams  or paramsEdits
         value = (
             sys_params.get(expected_key)
-            or reg_params.get(expected_key)
-            or params_edits.get(expected_key)
+            if sys_params.get(expected_key) is not None
+            else (
+                reg_params.get(expected_key)
+                if reg_params.get(expected_key) is not None
+                else params_edits.get(expected_key)
+            )
         )
 
         if value is not None:
