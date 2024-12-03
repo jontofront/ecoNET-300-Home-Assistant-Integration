@@ -1,4 +1,4 @@
-"""Econet300 API class class describint methods of getting and setting data."""
+"""Econet300 API class describing methods of getting and setting data."""
 
 import asyncio
 from http import HTTPStatus
@@ -15,6 +15,8 @@ from .const import (
     API_EDITABLE_PARAMS_LIMITS_URI,
     API_REG_PARAMS_DATA_PARAM_DATA,
     API_REG_PARAMS_DATA_URI,
+    API_REG_PARAMS_PARAM_DATA,
+    API_REG_PARAMS_URI,
     API_SYS_PARAMS_PARAM_HW_VER,
     API_SYS_PARAMS_PARAM_MODEL_ID,
     API_SYS_PARAMS_PARAM_SW_REV,
@@ -36,7 +38,7 @@ def map_param(param_name):
 
 
 class Limits:
-    """Class difining entity value set limits."""
+    """Class defining entity value set limits."""
 
     def __init__(self, min_v: int | None, max_v: int | None):
         """Construct the necessary attributes for the Limits object."""
@@ -65,7 +67,7 @@ class EconetClient:
     def __init__(
         self, host: str, username: str, password: str, session: ClientSession
     ) -> None:
-        """Initializethe EconetClient."""
+        """Initialize the EconetClient."""
 
         proto = ["http://", "https://"]
 
@@ -92,14 +94,17 @@ class EconetClient:
             f"{self._host}/econet/rmCurrNewParam?newParamKey={key}&newParamValue={value}"
         )
 
-    async def get_params(self, reg: str):
-        """Call for getting api param."""
+    ##Check this method for possible changes its fetching data from regParams ???
+    async def fetch_sys_params(self, reg: str):
+        """Call for getting api param from IP/econet/sysParams."""
         _LOGGER.debug(
-            "get_params called: Fetching parameters for registry '%s' from host '%s'",
-            reg,
+            "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
             self._host,
+            reg,
         )
-        return await self._get(f"{self._host}/econet/{reg}")
+        data = await self._get(f"{self._host}/econet/{reg}")
+        _LOGGER.debug("Fetched data for registry '%s': %s", reg, data)
+        return data
 
     async def _get(self, url):
         attempt = 1
@@ -108,11 +113,7 @@ class EconetClient:
         while attempt <= max_attempts:
             try:
                 _LOGGER.debug("Fetching data from URL: %s (Attempt %d)", url, attempt)
-                _LOGGER.debug(
-                    "Using model_id: %s, sw_revision: %s",
-                    self._model_id,
-                    self._sw_revision,
-                )
+
                 async with await self._session.get(
                     url, auth=self._auth, timeout=10
                 ) as resp:
@@ -161,15 +162,6 @@ class Econet300Api:
         self._sw_revision = "default-sw-revision"
         self._hw_version = "default-hw-version"
 
-        _LOGGER.debug("Econet300Api initialized with client: %s", client)
-        _LOGGER.debug("Econet300Api initialized with cache: %s", cache)
-        _LOGGER.debug("Econet300Api initialized with uid: %s", self._uid)
-        _LOGGER.debug("Econet300Api initialized with model_id: %s", self._model_id)
-        _LOGGER.debug(
-            "Econet300Api initialized with sw_revision: %s", self._sw_revision
-        )
-        _LOGGER.debug("Econet300Api initialized with hw_version: %s", self._hw_version)
-
     @classmethod
     async def create(cls, client: EconetClient, cache: MemCache):
         """Create and return initial object."""
@@ -204,8 +196,12 @@ class Econet300Api:
         return self._hw_version
 
     async def init(self):
-        """Econet300 Api initilization."""
-        sys_params = await self._client.get_params(API_SYS_PARAMS_URI)
+        """Econet300 Api initialization."""
+        sys_params = await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
+
+        if sys_params is None:
+            _LOGGER.error("Failed to fetch system parameters.")
+            return
 
         if API_SYS_PARAMS_PARAM_UID not in sys_params:
             _LOGGER.warning(
@@ -285,31 +281,36 @@ class Econet300Api:
             return None
 
         curr_limits = limits[param]
+        _LOGGER.debug("Limits '%s'", limits)
+        _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
         return Limits(curr_limits["min"], curr_limits["max"])
 
-    async def fetch_data(self) -> dict[str, Any]:
-        """Fetch data from regParamsData."""
-        regParamsData = await self._fetch_reg_key(
-            API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
-        )
-        _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
-        return regParamsData
+    async def fetch_reg_params_data(self) -> dict[str, Any]:
+        """Fetch data from econet/regParamsData."""
+        try:
+            regParamsData = await self._fetch_reg_key(
+                API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
+            )
+        except DataError as e:
+            _LOGGER.error("Error fetching regParamsData: %s", e)
+            return {}
+        else:
+            _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
+            return regParamsData
 
-    async def get_alarms(self):
-        """Fetch and return the alarms data from sysParams."""
-        _LOGGER.info("Calling get_alarms method")
-        sys_params = await self._client.get_params(API_SYS_PARAMS_URI)
-        _LOGGER.debug("Fetched from sysParams alarms: %s", sys_params)
+    async def fetch_param_edit_data(self):
+        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""  # Pakeisti
+        if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
+            limits = await self._fetch_reg_key(
+                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+            )
+            self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
 
-        if "alarms" not in sys_params:
-            _LOGGER.warning("Alarms not found in system parameters")
-            return None
-        _LOGGER.debug("Fetched alarms: %s", sys_params["alarms"])
-        return sys_params["alarms"]
+        return self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
     async def _fetch_reg_key(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._client.get_params(reg)
+        data = await self._client.fetch_sys_params(reg)
 
         if data is None:
             raise DataError(f"Data fetched by API for reg: {reg} is None")
@@ -322,6 +323,36 @@ class Econet300Api:
             raise DataError(f"Data for key: {data_key} does not exist")
 
         return data[data_key]
+
+    async def fetch_sys_params(self) -> dict[str, Any]:
+        """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
+        return await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
+
+    async def fetch_reg_params(self) -> dict[str, Any]:
+        """Fetch and return the regParams data from ip/econet/regParams endpoint."""
+        _LOGGER.info("Calling fetch_reg_params method")
+        regParams = await self._fetch_reg_names(
+            API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
+        )
+        _LOGGER.debug("Fetched regParams data: %s", regParams)
+        return regParams
+
+    async def _fetch_reg_names(self, reg, data_key: str | None = None):
+        """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
+        data = await self._client.fetch_sys_params(reg)
+
+        if data is None:
+            raise DataError(f"Data fetched by API for reg: {reg} is None")
+
+        if data_key is None:
+            return data
+
+        if data_key not in data:
+            _LOGGER.debug(data)
+            raise DataError(f"Data for key: {data_key} does not exist")
+        value = data[data_key]
+        _LOGGER.debug("Processed value for key '%s': %s", data_key, value)
+        return value
 
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):

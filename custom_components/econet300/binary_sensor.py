@@ -14,7 +14,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake
 from .const import (
-    BINARY_SENSOR_MAP,
+    BINARY_SENSOR_MAP_KEY,
     DOMAIN,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_ICON,
@@ -61,6 +61,11 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         """Sync state."""
         _LOGGER.debug("EconetBinarySensor _sync_state: %s", value)
         self._attr_is_on = value
+        _LOGGER.debug(
+            "Updated Binary sensor _attr_is_on for %s: %s",
+            self.entity_description.key,
+            self._attr_is_on,
+        )
         self.async_write_ha_state()
 
     @property
@@ -75,14 +80,13 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
 
 def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescription:
     """Create Econet300 binary entity description."""
-    map_key = BINARY_SENSOR_MAP.get(key, key)
-    _LOGGER.debug("create_binary_entity_description: %s", map_key)
+    _LOGGER.debug("create_binary_entity_description: %s", key)
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
-        translation_key=camel_to_snake(map_key),
-        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(map_key, None),
-        icon=ENTITY_ICON.get(map_key, None),
-        icon_off=ENTITY_ICON_OFF.get(map_key, None),
+        translation_key=camel_to_snake(key),
+        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
+        icon=ENTITY_ICON.get(key, None),
+        icon_off=ENTITY_ICON_OFF.get(key, None),
     )
     _LOGGER.debug("create_binary_entity_description: %s", entity_description)
     return entity_description
@@ -91,9 +95,9 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
 def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create binary sensors."""
     entities: list[EconetBinarySensor] = []
-    coordinator_data = coordinator.data
-    for data_key in BINARY_SENSOR_MAP:
-        _LOGGER.debug("Processing data_key: %s", data_key)
+    coordinator_data = coordinator.data["regParams"]
+    for data_key in BINARY_SENSOR_MAP_KEY["_default"]:
+        _LOGGER.debug("Processing binary sensor data_key: %s", data_key)
         if data_key in coordinator_data:
             entity = EconetBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api

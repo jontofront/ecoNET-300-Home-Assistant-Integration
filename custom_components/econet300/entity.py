@@ -20,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class EconetEntity(CoordinatorEntity):
-    """Representes EconetEntity."""
+    """Represents EconetEntity."""
 
     api: Econet300Api
     entity_description: EntityDescription
@@ -56,11 +56,17 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
-        if self.coordinator.data[self.entity_description.key] is None:
+        value = (
+            self.coordinator.data["sysParams"].get(self.entity_description.key)
+            or self.coordinator.data["regParams"].get(self.entity_description.key)
+            or self.coordinator.data.get("paramsEdits", {}).get(
+                self.entity_description.key
+            )
+        )
+
+        if value is None:
+            _LOGGER.debug("Value for key %s is None", self.entity_description.key)
             return
-
-        value = self.coordinator.data[self.entity_description.key]
-
         self._sync_state(value)
 
     async def async_added_to_hass(self):
@@ -69,27 +75,55 @@ class EconetEntity(CoordinatorEntity):
         _LOGGER.debug("Added to HASS: %s", self.entity_description)
         _LOGGER.debug("Coordinator: %s", self.coordinator)
 
-        _LOGGER.debug("Added to HASS: %s", self.entity_description.name)
+        # Retrieve sysParams and regParams paramsEdits data
+        sys_params = self.coordinator.data.get("sysParams", {})
+        reg_params = self.coordinator.data.get("regParams", {})
+        params_edits = self.coordinator.data.get("paramsEdits", {})
+        _LOGGER.debug("sysParams: %s", sys_params)
+        _LOGGER.debug("regParams: %s", reg_params)
+        _LOGGER.debug("paramsEdits: %s", params_edits)
 
+        # Check if the coordinator has a 'data' attributes
         if "data" not in dir(self.coordinator):
             _LOGGER.error("Coordinator object does not have a 'data' attribute")
             return
 
-        if (
-            not self.coordinator.has_data(self.entity_description.key)
-            or self.coordinator.data[self.entity_description.key] is None
-        ):
-            _LOGGER.warning(
-                "Data key: %s was expected to exist but it doesn't",
-                self.entity_description.key,
-            )
-            _LOGGER.debug("Coordinator available data: %s", self.coordinator.data)
+        # Check the available keys in all sources
+        sys_keys = sys_params.keys()
+        reg_keys = reg_params.keys()
+        edit_keys = params_edits.keys()
+        _LOGGER.debug("Available keys in sysParams: %s", sys_keys)
+        _LOGGER.debug("Available keys in regParams: %s", reg_keys)
+        _LOGGER.debug("Available keys in paramsEdits: %s", edit_keys)
 
-            _LOGGER.debug("Exiting async_added_to_hass method")
+        # Expected key from entity_description
+        expected_key = self.entity_description.key
+        _LOGGER.debug("Expected key: %s", expected_key)
+
+        # Retrieve the value from sysParams or regParams  or paramsEdits
+        value = (
+            sys_params.get(expected_key)
+            if sys_params.get(expected_key) is not None
+            else (
+                reg_params.get(expected_key)
+                if reg_params.get(expected_key) is not None
+                else params_edits.get(expected_key)
+            )
+        )
+
+        if value is not None:
+            _LOGGER.debug("Found key '%s' with value: %s", expected_key, value)
+        else:
+            _LOGGER.warning(
+                "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s",
+                expected_key,
+                sys_keys,
+                reg_keys,
+                edit_keys,
+            )
             return
 
-        value = self.coordinator.data[self.entity_description.key]
-
+        # Synchronize with HASS
         await super().async_added_to_hass()
         self._sync_state(value)
 
@@ -106,7 +140,6 @@ class MixerEntity(EconetEntity):
     ):
         """Initialize the MixerEntity."""
         super().__init__(description, coordinator, api)
-
         self._idx = idx
 
     @property

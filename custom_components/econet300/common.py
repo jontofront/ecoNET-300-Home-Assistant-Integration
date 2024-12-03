@@ -1,4 +1,5 @@
 """Common code for econet300 integration."""
+
 import asyncio
 from datetime import timedelta
 import logging
@@ -26,9 +27,25 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         )
         self._api = api
 
-    def has_data(self, key: str):
-        """Check if datakey is present in data."""
-        return key in self.data
+    def has_sys_data(self, key: str):
+        """Check if data key is present in sysParams."""
+        if self.data is None:
+            return False
+        return key in self.data["sysParams"]
+
+    def has_reg_data(self, key: str):
+        """Check if data key is present in regParams."""
+        if self.data is None:
+            return False
+
+        return key in self.data["regParams"]
+
+    def has_param_edit_data(self, key: str):
+        """Check if ."""
+        if self.data is None:
+            return False
+
+        return key in self.data["paramsEdits"]
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -43,7 +60,21 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                return await self._api.fetch_data()
+                data = (
+                    await self._api.fetch_sys_params()
+                    if self._api.model_id == "ecoMAX810P-L TOUCH"
+                    else {}
+                )
+                _LOGGER.debug(
+                    "Fetching system parameters for model: %s", self._api.model_id
+                )
+                reg_params = await self._api.fetch_reg_params()
+                params_edits = await self._api.fetch_param_edit_data()
+                return {
+                    "sysParams": data,
+                    "regParams": reg_params,
+                    "paramsEdits": params_edits,
+                }
         except AuthError as err:
             raise ConfigEntryAuthFailed from err
         except ApiError as err:

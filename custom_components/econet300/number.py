@@ -45,7 +45,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
-        """Initialize a new ecoNET number entyti."""
+        """Initialize a new ecoNET number entity."""
         self.entity_description = entity_description
         self.api = api
         super().__init__(coordinator)
@@ -56,12 +56,20 @@ class EconetNumber(EconetEntity, NumberEntity):
         )
 
     def _sync_state(self, value):
-        """Sync state."""
+        """Sync the state of the Econet number entity."""
         _LOGGER.debug("EconetNumber _sync_state: %s", value)
-        self._attr_native_value = value
+        self._attr_native_value = value["value"]
         map_key = NUMBER_MAP.get(self.entity_description.key)
-        self._attr_native_min_value = ENTITY_MIN_VALUE.get(map_key)
-        self._attr_native_max_value = ENTITY_MAX_VALUE.get(map_key)
+
+        if map_key is not None:
+            self._attr_native_min_value = value["min"]
+            self._attr_native_max_value = value["max"]
+        else:
+            _LOGGER.error(
+                "EconetNumber _sync_state map_key %s not found in NUMBER_MAP",
+                self.entity_description.key,
+            )
+
         self.async_write_ha_state()
         self.hass.async_create_task(self.async_set_limits_values())
 
@@ -112,7 +120,7 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
-    return coordinator.has_data(key) and coordinator.data[key]
+    return coordinator.has_param_edit_data(key) and coordinator.data["paramsEdits"][key]
 
 
 def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
@@ -123,7 +131,7 @@ def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
 
 
 def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
-    """Create Econect300 mixer sensor entity based on supplied key."""
+    """Create Econet300 mixer sensor entity based on supplied key."""
     map_key = NUMBER_MAP.get(str(key), str(key))
     _LOGGER.debug("Create number: %s", map_key)
     entity_description = EconetNumberEntityDescription(
@@ -155,6 +163,7 @@ async def async_setup_entry(
 
     for key in NUMBER_MAP:
         number_limits = await api.get_param_limits(key)
+        _LOGGER.debug("Number limits retrieved: %s", number_limits)
 
         if number_limits is None:
             _LOGGER.warning(

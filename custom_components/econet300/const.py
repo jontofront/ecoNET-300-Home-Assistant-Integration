@@ -8,7 +8,6 @@ from homeassistant.const import (
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     STATE_CLOSING,
     STATE_OFF,
-    STATE_ON,
     STATE_OPENING,
     STATE_PAUSED,
     STATE_PROBLEM,
@@ -56,10 +55,10 @@ API_REG_PARAMS_DATA_PARAM_DATA = "data"
 ## Map names for params data in API_REG_PARAMS_DATA_URI
 API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
 
-## Mapunits for params data map API_RM_CURRENT_DATA_PARAMS_URI
+## Map units for params data map API_RM_CURRENT_DATA_PARAMS_URI
 API_RM_PARAMSUNITSNAMES_URI = "rmParamsUnitsNames"
 
-# Boiler staus keys map
+# Boiler status keys map
 # boiler mode names from  endpoint http://LocalIP/econet/rmParamsEnums?
 OPERATION_MODE_NAMES = {
     0: STATE_OFF,
@@ -76,12 +75,6 @@ OPERATION_MODE_NAMES = {
     11: "chimney",
     12: "stabilization",
     13: "no_transmission",
-}
-
-# add constants to future
-PRODUCT_TYPE = {
-    0: "ECOMAX_850P_TYPE",  # regType 0
-    1: "ECOMAX_850i_TYPE",  # regType 1
 }
 
 ## Editable params limits
@@ -110,6 +103,47 @@ MIXER_KEY = "mixerPumpWorks"
 #######################
 #    REG PARAM MAPS
 #######################
+
+SENSOR_MAP_KEY = {
+    "ecoster": {
+        "ecoSterTemp1",
+        "ecoSterTemp2",
+    },
+    "lambda": {
+        "lambdaStatus",
+        "lambdaSet",
+        "lambdaLevel",
+    },
+    "_default": {
+        "tempFeeder",
+        "fuelLevel",
+        "tempCO",
+        "tempCOSet",
+        "tempCWUSet",
+        "tempFlueGas",
+        "mode",
+        "fanPower",
+        "thermostat",
+    },
+}
+
+SENSOR_MIXER_KEY = {
+    "1": {
+        "mixerTemp1",
+        "mixerSetTemp1",
+    }
+}
+
+BINARY_SENSOR_MAP_KEY = {
+    "_default": {
+        "lighter",
+        "pumpCOWorks",
+        "fanWorks",
+        "pumpFireplaceWorks",
+        "pumpCWUWorks",
+    },
+}
+
 SENSOR_MAP = {
     "26": "tempFeeder",
     "28": "tempExternalSensor",
@@ -158,7 +192,7 @@ BINARY_SENSOR_MAP = {
     "117": "thermostat",
     "118": "pumpCOWorks",
     "1536": "fanWorks",
-    "1540": "aditionalFeeder",
+    "1540": "additionalFeeder",
     "1541": "pumpFireplaceWorks",
     "1542": "pumpCWUWorks",
 }
@@ -272,10 +306,10 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lighter": BinarySensorDeviceClass.RUNNING,
     "weatherControl": BinarySensorDeviceClass.RUNNING,
     "unseal": BinarySensorDeviceClass.RUNNING,
-    "thermostat": BinarySensorDeviceClass.RUNNING,
+    #    "thermostat": BinarySensorDeviceClass.RUNNING,
     "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
     "fanWorks": BinarySensorDeviceClass.RUNNING,
-    "aditionalFeeder": BinarySensorDeviceClass.RUNNING,
+    "additionalFeeder": BinarySensorDeviceClass.RUNNING,
     "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
     "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
     "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
@@ -323,7 +357,7 @@ ENTITY_ICON = {
     "quality": "mdi:signal",
     "pumpCOWorks": "mdi:pump",
     "fanWorks": "mdi:fan",
-    "aditionalFeeder": "mdi:screw-lag",
+    "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump",
     "pumpCWUWorks": "mdi:pump",
     "main_server": "mdi:server",
@@ -339,20 +373,13 @@ ENTITY_ICON = {
 ENTITY_ICON_OFF = {
     "pumpCOWorks": "mdi:pump-off",
     "fanWorks": "mdi:fan-off",
-    "aditionalFeeder": "mdi:screw-lag",
+    "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
 }
 
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    "thermostat": (
-        lambda x: (
-            STATE_ON
-            if str(x).strip() == "true"
-            else (STATE_OFF if str(x).strip() == "false" else None)
-        )
-    ),
     "lambdaStatus": (
         lambda x: (
             "stop"
@@ -411,62 +438,11 @@ REG_PARAM_VISIBLE_DEFAULT = {
     "tempLowerBuffer": False,
 }
 
-ALARMS_NAMES = {
-    0: "No power",
-    1: "Boiler sensor error",
-    2: "Exceeding the maximum temperature of the boiler",
-    3: "Sensor fault feeder",
-    4: "Exceeding the maximum temperature of the tray",
-    5: "Sensor fault system",
-    6: "Exceeding the maximum flue gas temperature",
-    7: "Firing up the boiler failed",
-    8: "No fuel",
-    9: "Loss of Containment",
-    10: "Pressure sensor failed",
-    11: "Faulty fan ",
-    12: "ID Fan Pressure can not be reached ",
-    13: "Burning off error ",
-    14: "Photocell sensor failed",
-    15: "Linear actuator blocked",
-    16: "Incorrect work parameters",
-    17: "Precaution of condensation ",
-    18: "STB is disabled . Manual reset is needed when TB <65 °C Boiler STB ",
-    19: "Opening the contact STB tray ",
-    20: "Minimum water pressure exceeded",
-    21: "Maximum water pressure exceeded",
-    22: "Fuel feeder locked",
-    23: "Extinguished flame ",
-    24: "Faulty exhaust fan",
-    25: "Error loading external feeder ",
-    26: "Error Sensor solar collector SH ",
-    27: "Error Sensor solar circuit SL ",
-    28: "Sensor fault circuit H1- S",
-    29: "Sensor fault circuit H2 - S",
-    30: "Sensor fault circuit H3 - S",
-    31: "Error weather sensor WS ",
-    32: "HUW sensor error ",
-    33: "Sensor error H0- S",
-    34: "It takes frost protection - heat source are not included ",
-    35: "It takes frost protection - the source of the attached ",
-    36: "Exceeded max. Temperature solar collector ",
-    37: "Exceeded max. Flow temperature of the floor ",
-    38: "Cooling preventive solid fuel boiler ",
-    39: "No communication with ecoLAMBDA ",
-    40: "Lock the primary air damper ",
-    41: "Lock the secondary air damper ",
-    42: "Feeder full",
-    43: "Furnace full",
-    44: "No communication with B module",
-    45: "Cleaning servomotor error",
-    46: "Minimum pressure exceeded",
-    47: "Maximum pressure exceeded",
-    48: "Pressure sensor damage",
-    49: "Maximum main heat source temperature exceeded",
-    50: "Maximum additional heat source temperature exceeded",
-    51: "Solar is OFF - temperature  is too high - wait for temperature drop",
-    52: "Alarm for auger control system malfunction",
-    53: "Clogged auger Alarm",
-    54: "Temperature above maximum for the thermocouple.",
-    55: "Thermocouple wired improperly.",
-    255: "Alarm unknown",
+PRODUCT_MODEL = {
+    # Models name which known us connect with ecoNET300
+    "ecoMAX810P-L TOUCH"
+    "SControl MK1"
+    "ecoMAX860P2-N TOUCH"
+    "ecoMAX860P3-V"
+    "ecoSOL 301"
 }
