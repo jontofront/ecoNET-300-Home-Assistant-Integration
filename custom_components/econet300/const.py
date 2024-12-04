@@ -180,6 +180,15 @@ MIXER_MAP = {
     }
 }
 
+SENSOR_MIXER_KEY_TEST = {
+    "mixerTemp1",
+    "mixerTemp2",
+    "mixerTemp3",
+    "mixerTemp4",
+    "mixerSetTemp1",
+    "mixerSetTemp2",
+    "mixerSetTemp3",
+}
 NUMBER_MAP = {
     "1280": "tempCOSet",
     "1281": "tempCWUSet",
