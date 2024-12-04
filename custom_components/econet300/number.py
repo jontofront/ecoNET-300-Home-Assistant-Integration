@@ -31,11 +31,11 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class EconetNumberEntityDescription(NumberEntityDescription):
-    """Describes Econet number entity."""
+    """Describes ecoNET number entity."""
 
 
 class EconetNumber(EconetEntity, NumberEntity):
-    """Describes Econet binary sensor entity."""
+    """Describes ecoNET number sensor entity."""
 
     entity_description: EconetNumberEntityDescription
 
@@ -49,49 +49,58 @@ class EconetNumber(EconetEntity, NumberEntity):
         self.entity_description = entity_description
         self.api = api
         super().__init__(coordinator)
-        _LOGGER.debug(
-            "EconetNumberEntity initialized with unique_id: %s, entity_description: %s",
-            self.unique_id,
-            self.entity_description,
-        )
 
     def _sync_state(self, value):
-        """Sync the state of the Econet number entity."""
-        _LOGGER.debug("EconetNumber _sync_state: %s", value)
-        self._attr_native_value = value["value"]
+        """Sync the state of the ecoNET number entity."""
+        _LOGGER.debug("ecoNETNumber _sync_state: %s", value)
+        self._attr_native_value = value.get("value")
         map_key = NUMBER_MAP.get(self.entity_description.key)
 
-        if map_key is not None:
-            self._attr_native_min_value = value["min"]
-            self._attr_native_max_value = value["max"]
+        if map_key:
+            self._set_value_limits(value)
         else:
             _LOGGER.error(
-                "EconetNumber _sync_state map_key %s not found in NUMBER_MAP",
+                "ecoNETNumber _sync_state: map_key %s not found in NUMBER_MAP",
                 self.entity_description.key,
             )
-
+        # Ensure the state is updated in Home Assistant.
         self.async_write_ha_state()
+        # Create an asynchronous task for setting the limits.
         self.hass.async_create_task(self.async_set_limits_values())
+
+    def _set_value_limits(self, value):
+        """Set native min and max values for the entity."""
+        self._attr_native_min_value = value.get("min")
+        self._attr_native_max_value = value.get("max")
+        _LOGGER.debug(
+            "ecoNETNumber _set_value_limits: min=%s, max=%s",
+            self._attr_native_min_value,
+            self._attr_native_max_value,
+        )
 
     async def async_set_limits_values(self):
         """Async Sync number limits."""
-        limits = await self.api.get_param_limits(self.entity_description.key)
-        _LOGGER.debug("Number limits retrieved: %s", limits)
-        if limits is None:
+        number_limits = await self.api.get_param_limits(self.entity_description.key)
+        _LOGGER.debug("Number limits retrieved: %s", number_limits)
+
+        if not number_limits:
             _LOGGER.warning(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
                 self.entity_description.key,
             )
-        else:
-            self._attr_native_min_value = limits.min
-            self._attr_native_max_value = limits.max
-            _LOGGER.debug("Apply number limits: %s", self)
-            self.async_write_ha_state()
+            return
+
+        # Directly set min and max values based on fetched limits.
+        self._attr_native_min_value = number_limits.min
+        self._attr_native_max_value = number_limits.max
+        _LOGGER.debug("Apply number limits: %s", self)
+        self.async_write_ha_state()
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         _LOGGER.debug("Set value: %s", value)
 
+        # Skip processing if the value is unchanged.
         if value == self._attr_native_value:
             return
 
@@ -130,11 +139,11 @@ def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
     _LOGGER.debug("Apply limits: %s", desc)
 
 
-def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
-    """Create Econet300 mixer sensor entity based on supplied key."""
+def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
+    """Create ecoNET300 number entity description."""
     map_key = NUMBER_MAP.get(str(key), str(key))
-    _LOGGER.debug("Create number: %s", map_key)
-    entity_description = EconetNumberEntityDescription(
+    _LOGGER.debug("Creating number entity for key: %s", map_key)
+    return EconetNumberEntityDescription(
         key=key,
         translation_key=camel_to_snake(map_key),
         icon=ENTITY_ICON.get(map_key),
@@ -145,8 +154,6 @@ def create_number_entity_description(key: int) -> EconetNumberEntityDescription:
         max_value=ENTITY_MAX_VALUE.get(map_key),
         native_step=ENTITY_STEP.get(map_key, 1),
     )
-    _LOGGER.debug("Created number entity description: %s", entity_description)
-    return entity_description
 
 
 async def async_setup_entry(
@@ -163,8 +170,6 @@ async def async_setup_entry(
 
     for key in NUMBER_MAP:
         number_limits = await api.get_param_limits(key)
-        _LOGGER.debug("Number limits retrieved: %s", number_limits)
-
         if number_limits is None:
             _LOGGER.warning(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
