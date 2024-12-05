@@ -127,13 +127,6 @@ SENSOR_MAP_KEY = {
     },
 }
 
-SENSOR_MIXER_KEY = {
-    "1": {
-        "mixerTemp1",
-        "mixerSetTemp1",
-    }
-}
-
 BINARY_SENSOR_MAP_KEY = {
     "_default": {
         "lighter",
@@ -189,6 +182,19 @@ SENSOR_MIXER_KEY_TEST = {
     "mixerSetTemp2",
     "mixerSetTemp3",
 }
+
+SENSOR_MIXER_KEY = {
+    "1": {
+        "mixerTemp1",
+        "mixerSetTemp1",
+    },
+    "2": {
+        "mixerTemp2",
+        "mixerSetTemp2",
+    },
+}
+
+
 NUMBER_MAP = {
     "1280": "tempCOSet",
     "1281": "tempCWUSet",

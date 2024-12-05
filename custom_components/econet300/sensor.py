@@ -149,27 +149,36 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     return entity_description
 
 
-def create_mixer_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+def create_mixer_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[MixerSensor]:
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
-    # TODO: Cleanup logic add mixer only which not null in endpoint
+
     for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
         string_mix = str(i)
         mixer_keys = SENSOR_MIXER_KEY.get(string_mix)
-        if mixer_keys:
-            for key in mixer_keys:
-                if can_add_mixer(key, coordinator):
-                    mixer_sensor_entity = create_mixer_sensor_entity_description(key)
-                    entities.append(
-                        MixerSensor(mixer_sensor_entity, coordinator, api, i)
-                    )
-                else:
-                    _LOGGER.warning("Mixer: %s , Sensor: %s won't be added", i, key)
-        else:
+
+        if not mixer_keys:
             _LOGGER.debug(
-                "Mixer: %s not defined in const, won't be added",
-                i,
+                "Maišytuvas: %s nėra apibrėžtas konstantoje, nebus pridėtas.", i
             )
+            continue
+
+        # Check if all required mixer keys have valid (non-null) values
+        if any(
+            coordinator.data.get("regParams", {}).get(key) is None for key in mixer_keys
+        ):
+            _LOGGER.warning(
+                "Maišytuvas: %s nebus sukurtas dėl negaliojančių duomenų.", i
+            )
+            continue
+
+        # Create sensors for this mixer
+        for key in mixer_keys:
+            mixer_sensor_entity = create_mixer_sensor_entity_description(key)
+            entities.append(MixerSensor(mixer_sensor_entity, coordinator, api, i))
+            _LOGGER.debug("Pridėtas maišytuvas: %s, jutiklis: %s", i, key)
 
     return entities
 
