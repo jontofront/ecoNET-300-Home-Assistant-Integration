@@ -22,7 +22,6 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     SENSOR_MAP_KEY,
-    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
@@ -149,6 +148,13 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     return entity_description
 
 
+# Dynamically generate SENSOR_MIXER_KEY
+SENSOR_MIXER_KEY = {
+    str(i): {f"mixerTemp{i}", f"mixerSetTemp{i}"}
+    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+}
+
+
 def create_mixer_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[MixerSensor]:
@@ -161,7 +167,7 @@ def create_mixer_sensors(
 
         if not mixer_keys:
             _LOGGER.debug(
-                "Maišytuvas: %s nėra apibrėžtas konstantoje, nebus pridėtas.", i
+                "Mixer: %s is not defined in the constants and will not be added.", i
             )
             continue
 
@@ -169,16 +175,14 @@ def create_mixer_sensors(
         if any(
             coordinator.data.get("regParams", {}).get(key) is None for key in mixer_keys
         ):
-            _LOGGER.warning(
-                "Maišytuvas: %s nebus sukurtas dėl negaliojančių duomenų.", i
-            )
+            _LOGGER.warning("Mixer: %s will not be created due to invalid data.", i)
             continue
 
         # Create sensors for this mixer
         for key in mixer_keys:
             mixer_sensor_entity = create_mixer_sensor_entity_description(key)
             entities.append(MixerSensor(mixer_sensor_entity, coordinator, api, i))
-            _LOGGER.debug("Pridėtas maišytuvas: %s, jutiklis: %s", i, key)
+            _LOGGER.debug("Added Mixer: %s, Sensor: %s", i, key)
 
     return entities
 
