@@ -126,11 +126,13 @@ SENSOR_MAP_KEY = {
         "fuelLevel",
         "tempCO",
         "tempCOSet",
+        "statusCWU",
         "tempCWUSet",
         "tempFlueGas",
         "mode",
         "fanPower",
         "thermostat",
+        "tempExternalSensor",
     },
 }
 
@@ -274,6 +276,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "mixerSetTemp": SensorDeviceClass.TEMPERATURE,
     "tempBack": SensorDeviceClass.TEMPERATURE,
     "tempCWU": SensorDeviceClass.TEMPERATURE,
+    "statusCWU": None,
     "tempUpperBuffer": SensorDeviceClass.TEMPERATURE,
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
@@ -306,7 +309,6 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lighter": BinarySensorDeviceClass.RUNNING,
     "weatherControl": BinarySensorDeviceClass.RUNNING,
     "unseal": BinarySensorDeviceClass.RUNNING,
-    #    "thermostat": BinarySensorDeviceClass.RUNNING,
     "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
     "fanWorks": BinarySensorDeviceClass.RUNNING,
     "additionalFeeder": BinarySensorDeviceClass.RUNNING,
@@ -343,6 +345,7 @@ ENTITY_ICON = {
     "temCO": "mdi:thermometer-lines",
     "tempCOSet": "mdi:thermometer-chevron-up",
     "tempCWUSet": "mdi:thermometer-chevron-up",
+    "statusCWU": "mdi:water-boiler",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
     "fuelLevel": "mdi:gas-station",
@@ -376,7 +379,10 @@ ENTITY_ICON_OFF = {
     "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
+    "statusCWU": "mdi:water-boiler-off",
 }
+
+NO_CWU_TEMP_SET_STATUS_CODE = 128
 
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
@@ -390,6 +396,7 @@ ENTITY_VALUE_PROCESSOR = {
     "status_wifi": lambda x: "Connected" if x == 1 else "Disconnected",
     "main_server": lambda x: "Server available" if x == 1 else "Server not available",
     "servoMixer1": lambda x: SERVO_MIXER_VALVE_HA_STATE.get(x, STATE_UNKNOWN),
+    "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
 }
 
 
