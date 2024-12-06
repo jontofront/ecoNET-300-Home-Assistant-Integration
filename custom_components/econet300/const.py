@@ -6,9 +6,7 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    STATE_CLOSING,
     STATE_OFF,
-    STATE_OPENING,
     STATE_PAUSED,
     STATE_PROBLEM,
     STATE_UNKNOWN,
@@ -30,12 +28,6 @@ DEVICE_INFO_MIXER_NAME = "Mixer device"
 
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
-
-SERVO_MIXER_VALVE_HA_STATE: dict[int, str] = {
-    0: STATE_CLOSING,
-    1: STATE_OFF,
-    2: STATE_OPENING,
-}
 
 ## Sys params
 API_SYS_PARAMS_URI = "sysParams"
@@ -82,24 +74,12 @@ API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
-EDITABLE_PARAMS_MAPPING_TABLE = {
-    "tempCOSet": "1280",
-    "tempCWUSet": "1281",
-    "mixerSetTemp1": "1287",
-    "mixerSetTemp2": "1288",
-    "mixerSetTemp3": "1289",
-    "mixerSetTemp4": "1290",
-    "mixerSetTemp5": "1291",
-    "mixerSetTemp6": "1292",
-}
-
 ###################################
 #    NUMBER of AVAILABLE MIXERS
 ###################################
 AVAILABLE_NUMBER_OF_MIXERS = 6
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
-MIXER_KEY = "mixerPumpWorks"
 
 # Dynamically generate SENSOR_MIXER_KEY
 SENSOR_MIXER_KEY = {
@@ -146,57 +126,9 @@ BINARY_SENSOR_MAP_KEY = {
     },
 }
 
-SENSOR_MAP = {
-    "26": "tempFeeder",
-    "28": "tempExternalSensor",
-    "97": "fuelLevel",
-    "151": "lambdaStatus",
-    "153": "lambdaSet",
-    "154": "lambdaLevel",
-    "155": "workAt100",
-    "156": "workAt50",
-    "157": "workAt30",
-    "158": "FeederWork",
-    "159": "FiringUpCount",
-    "168": "main_server",
-    "170": "signal",
-    "171": "status_wifi",
-    "1024": "tempCO",
-    "1025": "tempCWU",
-    "1028": "tempUpperBuffer",
-    "1029": "tempLowerBuffer",
-    "1030": "tempFlueGas",
-    "1792": "mode",
-    "1794": "boilerPower",
-    "1795": "fanPower",
-    "1280": "tempCOSet",
-    "1281": "tempCWUSet",
-}
-
-MIXER_MAP = {
-    "1": {
-        "139": "valveMixer1",
-        "143": "servoMixer1",
-        "1031": "mixerTemp1",
-        "1287": "mixerSetTemp1",
-    }
-}
-
 NUMBER_MAP = {
     "1280": "tempCOSet",
     "1281": "tempCWUSet",
-}
-
-BINARY_SENSOR_MAP = {
-    "1": "lighter",
-    "111": "weatherControl",
-    "113": "unseal",
-    "117": "thermostat",
-    "118": "pumpCOWorks",
-    "1536": "fanWorks",
-    "1540": "additionalFeeder",
-    "1541": "pumpFireplaceWorks",
-    "1542": "pumpCWUWorks",
 }
 
 ENTITY_UNIT_MAP = {
@@ -321,22 +253,15 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
 ENTITY_PRECISION = {
     "tempFeeder": 1,
     "tempExternalSensor": 1,
-    "fuelLevel": 0,
     "lambdaLevel": 1,
     "lambdaSet": 1,
     "tempCO": 1,
-    "tempCOSet": 0,
-    "tempCWUSet": 0,
-    "fanPower": 0,
-    "mixerSetTemp1": 0,
     "mixerTemp1": 1,
     "tempBack": 2,
     "tempUpperBuffer": 1,
     "tempLowerBuffer": 1,
     "tempCWU": 1,
     "tempFlueGas": 1,
-    "mixerTemp": 0,
-    "mixerSetTemp": 0,
 }
 
 ENTITY_ICON = {
@@ -395,7 +320,6 @@ ENTITY_VALUE_PROCESSOR = {
     ),
     "status_wifi": lambda x: "Connected" if x == 1 else "Disconnected",
     "main_server": lambda x: "Server available" if x == 1 else "Server not available",
-    "servoMixer1": lambda x: SERVO_MIXER_VALVE_HA_STATE.get(x, STATE_UNKNOWN),
     "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
 }
 
@@ -437,19 +361,4 @@ ENTITY_STEP = {
 ENTITY_VISIBLE = {
     "tempCOSet": True,
     "tempCWUSet": True,
-}
-
-# Default values for visible 'entity_registry_visible_default=False,' in sensor.py
-REG_PARAM_VISIBLE_DEFAULT = {
-    "tempUpperBuffer": False,
-    "tempLowerBuffer": False,
-}
-
-PRODUCT_MODEL = {
-    # Models name which known us connect with ecoNET300
-    "ecoMAX810P-L TOUCH"
-    "SControl MK1"
-    "ecoMAX860P2-N TOUCH"
-    "ecoMAX860P3-V"
-    "ecoSOL 301"
 }
