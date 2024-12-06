@@ -238,13 +238,10 @@ class Econet300Api:
             return False
 
         data = await self._client.set_param(param, value)
-
         if data is None or "result" not in data:
             return False
-
         if data["result"] != "OK":
             return False
-
         self._cache.set(param, value)
 
         return True
@@ -257,23 +254,22 @@ class Econet300Api:
             )
             self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
 
+        # Retrieve limits from the cache
         limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
-        if param is None:
-            _LOGGER.warning(
-                "Requested param limits for: '%s' but mapping for this param does not exist",
-                param,
-            )
+        if not param:
+            _LOGGER.warning("Parameter name is None. Unable to fetch limits.")
             return None
 
         if param not in limits:
             _LOGGER.warning(
-                "Requested param limits for: '%s' but limits for this param do not exist. Limits: '%s' ",
+                "Limits for parameter '%s' do not exist. Available limits: %s",
                 param,
                 limits,
             )
             return None
 
+        # Extract and log the limits
         curr_limits = limits[param]
         _LOGGER.debug("Limits '%s'", limits)
         _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
