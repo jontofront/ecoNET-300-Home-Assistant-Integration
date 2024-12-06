@@ -153,8 +153,8 @@ def create_mixer_sensors(
 ) -> list[MixerSensor]:
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
-
-    for key, mixer_keys in SENSOR_MIXER_KEY.items():    
+      
+    for key, mixer_keys in SENSOR_MIXER_KEY.items(): 
 
         # Check if all required mixer keys have valid (non-null) values
         if any(
