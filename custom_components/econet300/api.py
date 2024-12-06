@@ -22,7 +22,6 @@ from .const import (
     API_SYS_PARAMS_PARAM_SW_REV,
     API_SYS_PARAMS_PARAM_UID,
     API_SYS_PARAMS_URI,
-    EDITABLE_PARAMS_MAPPING_TABLE,
 )
 from .mem_cache import MemCache
 
