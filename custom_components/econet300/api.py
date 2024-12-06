@@ -94,7 +94,6 @@ class EconetClient:
             f"{self._host}/econet/rmCurrNewParam?newParamKey={key}&newParamValue={value}"
         )
 
-    ##Check this method for possible changes its fetching data from regParams ???
     async def fetch_sys_params(self, reg: str):
         """Call for getting api param from IP/econet/sysParams."""
         _LOGGER.debug(
@@ -196,44 +195,39 @@ class Econet300Api:
         return self._hw_version
 
     async def init(self):
-        """Econet300 Api initialization."""
+        """Econet300 API initialization."""
         sys_params = await self._client.fetch_sys_params(API_SYS_PARAMS_URI)
 
         if sys_params is None:
             _LOGGER.error("Failed to fetch system parameters.")
             return
 
-        if API_SYS_PARAMS_PARAM_UID not in sys_params:
-            _LOGGER.warning(
-                "%s not in sys_params - cannot set proper UUID",
-                API_SYS_PARAMS_PARAM_UID,
-            )
-        else:
-            self._uid = sys_params[API_SYS_PARAMS_PARAM_UID]
+        # Set system parameters by HA device properties
+        self._set_device_property(sys_params, API_SYS_PARAMS_PARAM_UID, "_uid", "UUID")
+        self._set_device_property(
+            sys_params,
+            API_SYS_PARAMS_PARAM_MODEL_ID,
+            "_model_id",
+            "controller model name",
+        )
+        self._set_device_property(
+            sys_params, API_SYS_PARAMS_PARAM_SW_REV, "_sw_revision", "software revision"
+        )
+        self._set_device_property(
+            sys_params, API_SYS_PARAMS_PARAM_HW_VER, "_hw_version", "hardware version"
+        )
 
-        if API_SYS_PARAMS_PARAM_MODEL_ID not in sys_params:
+    def _set_device_property(
+        self, sys_params, param_key, attr_name, param_desc, default=None
+    ):
+        """Set an attribute from system parameters with logging if unavailable."""
+        if param_key not in sys_params:
             _LOGGER.warning(
-                "%s not in sys_params - cannot set proper controller model name",
-                API_SYS_PARAMS_PARAM_MODEL_ID,
+                "%s not in sys_params - cannot set proper %s", param_key, param_desc
             )
+            setattr(self, attr_name, default)
         else:
-            self._model_id = sys_params[API_SYS_PARAMS_PARAM_MODEL_ID]
-
-        if API_SYS_PARAMS_PARAM_SW_REV not in sys_params:
-            _LOGGER.warning(
-                "%s not in sys_params - cannot set proper sw_revision",
-                API_SYS_PARAMS_PARAM_SW_REV,
-            )
-        else:
-            self._sw_revision = sys_params[API_SYS_PARAMS_PARAM_SW_REV]
-
-        if API_SYS_PARAMS_PARAM_HW_VER not in sys_params:
-            _LOGGER.warning(
-                "%s not in sys_params - cannot set proper hw_version",
-                API_SYS_PARAMS_PARAM_HW_VER,
-            )
-        else:
-            self._hw_version = sys_params[API_SYS_PARAMS_PARAM_HW_VER]
+            setattr(self, attr_name, sys_params[param_key])
 
     async def set_param(self, param, value) -> bool:
         """Set param value in Econet300 API."""
@@ -299,7 +293,7 @@ class Econet300Api:
             return regParamsData
 
     async def fetch_param_edit_data(self):
-        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""  # Pakeisti
+        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             limits = await self._fetch_reg_key(
                 API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
