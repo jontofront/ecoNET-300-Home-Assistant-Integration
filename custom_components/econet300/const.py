@@ -98,7 +98,14 @@ EDITABLE_PARAMS_MAPPING_TABLE = {
 ###################################
 AVAILABLE_NUMBER_OF_MIXERS = 6
 MIXER_AVAILABILITY_KEY = "mixerTemp"
+MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 MIXER_KEY = "mixerPumpWorks"
+
+# Dynamically generate SENSOR_MIXER_KEY
+SENSOR_MIXER_KEY = {
+    str(i): {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
+    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+}
 
 #######################
 #    REG PARAM MAPS

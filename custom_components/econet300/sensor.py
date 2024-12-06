@@ -13,7 +13,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
     DOMAIN,
     ENTITY_CATEGORY,
     ENTITY_ICON,
@@ -22,6 +21,7 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     SENSOR_MAP_KEY,
+    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
@@ -148,42 +148,27 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     return entity_description
 
 
-# Dynamically generate AVAILABLE_SENSOR_MIXER_KEYS
-AVAILABLE_SENSOR_MIXER_KEYS = {
-    str(i): {f"mixerTemp{i}", f"mixerSetTemp{i}"}
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
-}
-
-
 def create_mixer_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[MixerSensor]:
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
 
-    for string_mix, mixer_keys in AVAILABLE_SENSOR_MIXER_KEYS.items():
-        i = int(string_mix)
-        string_mix = str(i)
-        mixer_keys = AVAILABLE_SENSOR_MIXER_KEYS.get(string_mix)
-
-        if not mixer_keys:
-            _LOGGER.debug(
-                "Mixer: %s is not defined in the constants and will not be added.", i
-            )
-            continue
+    for key, mixer_keys in SENSOR_MIXER_KEY.items():
 
         # Check if all required mixer keys have valid (non-null) values
         if any(
-            coordinator.data.get("regParams", {}).get(key) is None for key in mixer_keys
+            coordinator.data.get("regParams", {}).get(mixer_key) is None
+            for mixer_key in mixer_keys
         ):
-            _LOGGER.warning("Mixer: %s will not be created due to invalid data.", i)
+            _LOGGER.warning("Mixer: %s will not be created due to invalid data.", key)
             continue
 
         # Create sensors for this mixer
-        for key in mixer_keys:
-            mixer_sensor_entity = create_mixer_sensor_entity_description(key)
-            entities.append(MixerSensor(mixer_sensor_entity, coordinator, api, i))
-            _LOGGER.debug("Added Mixer: %s, Sensor: %s", i, key)
+        for mixer_key in mixer_keys:
+            mixer_sensor_entity = create_mixer_sensor_entity_description(mixer_key)
+            entities.append(MixerSensor(mixer_sensor_entity, coordinator, api, key))
+            _LOGGER.debug("Added Mixer: %s, Sensor: %s", key, mixer_key)
 
     return entities
 

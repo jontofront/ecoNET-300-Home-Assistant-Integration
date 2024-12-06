@@ -4,6 +4,7 @@ import asyncio
 from datetime import timedelta
 import logging
 
+from aiohttp import ClientError
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -60,14 +61,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                data = (
-                    await self._api.fetch_sys_params()
-                    if self._api.model_id == "ecoMAX810P-L TOUCH"
-                    else {}
-                )
-                _LOGGER.debug(
-                    "Fetching system parameters for model: %s", self._api.model_id
-                )
+                data = await self._api.fetch_sys_params()
                 reg_params = await self._api.fetch_reg_params()
                 params_edits = await self._api.fetch_param_edit_data()
                 return {
@@ -76,6 +70,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "paramsEdits": params_edits,
                 }
         except AuthError as err:
+            _LOGGER.error("Authentication error: %s", err)
             raise ConfigEntryAuthFailed from err
         except ApiError as err:
+            _LOGGER.error("API error: %s", err)
             raise UpdateFailed(f"Error communicating with API: {err}") from err
+        except (asyncio.TimeoutError, ClientError) as err:
+            _LOGGER.error("Timeout or client error: %s", err)
+            raise UpdateFailed(f"Timeout or client error: {err}") from err
