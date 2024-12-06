@@ -28,18 +28,6 @@ from .mem_cache import MemCache
 _LOGGER = logging.getLogger(__name__)
 
 
-class Limits:
-    """Class defining entity value set limits."""
-
-    def __init__(self, min_v: int | None, max_v: int | None):
-        """Construct the necessary attributes for the Limits object."""
-        self.min = min_v
-        self.max = max_v
-
-    class AuthError(Exception):
-        """Raised when authentication fails."""
-
-
 class AuthError(Exception):
     """Raised when authentication fails."""
 
@@ -50,6 +38,18 @@ class ApiError(Exception):
 
 class DataError(Exception):
     """Raised when there is an error with the data."""
+
+
+class Limits:
+    """Class defining entity value set limits."""
+
+    def __init__(self, min_v: int | None, max_v: int | None):
+        """Construct the necessary attributes for the Limits object."""
+        self.min = min_v
+        self.max = max_v
+
+    class AuthError(Exception):
+        """Raised when authentication fails."""
 
 
 class EconetClient:
