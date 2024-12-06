@@ -148,8 +148,8 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     return entity_description
 
 
-# Dynamically generate SENSOR_MIXER_KEY
-SENSOR_MIXER_KEY = {
+# Dynamically generate AVAILABLE_SENSOR_MIXER_KEYS
+AVAILABLE_SENSOR_MIXER_KEYS = {
     str(i): {f"mixerTemp{i}", f"mixerSetTemp{i}"}
     for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
 }
@@ -161,9 +161,10 @@ def create_mixer_sensors(
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
 
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
+    for string_mix, mixer_keys in AVAILABLE_SENSOR_MIXER_KEYS.items():
+        i = int(string_mix)
         string_mix = str(i)
-        mixer_keys = SENSOR_MIXER_KEY.get(string_mix)
+        mixer_keys = AVAILABLE_SENSOR_MIXER_KEYS.get(string_mix)
 
         if not mixer_keys:
             _LOGGER.debug(
