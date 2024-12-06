@@ -96,7 +96,6 @@ EDITABLE_PARAMS_MAPPING_TABLE = {
 ###################################
 #    NUMBER of AVAILABLE MIXERS
 ###################################
-AVAILABLE_NUMBER_OF_MIXERS = 6
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 MIXER_KEY = "mixerPumpWorks"
