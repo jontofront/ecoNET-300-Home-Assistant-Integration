@@ -13,7 +13,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
     DOMAIN,
     ENTITY_CATEGORY,
     ENTITY_ICON,
@@ -22,10 +21,10 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     SENSOR_MAP_KEY,
+    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
-    SENSOR_MIXER_KEY
 )
 from .entity import EconetEntity, MixerEntity
 
@@ -148,17 +147,18 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     _LOGGER.debug("Created Mixer entity description: %s", entity_description)
     return entity_description
 
+
 def create_mixer_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[MixerSensor]:
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
-      
-    for key, mixer_keys in SENSOR_MIXER_KEY.items(): 
+
+    for key, mixer_keys in SENSOR_MIXER_KEY.items():
 
         # Check if all required mixer keys have valid (non-null) values
         if any(
-            coordinator.data.get("regParams", {}).get(mixer_key) is None 
+            coordinator.data.get("regParams", {}).get(mixer_key) is None
             for mixer_key in mixer_keys
         ):
             _LOGGER.warning("Mixer: %s will not be created due to invalid data.", key)
