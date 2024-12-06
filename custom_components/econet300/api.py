@@ -22,31 +22,10 @@ from .const import (
     API_SYS_PARAMS_PARAM_SW_REV,
     API_SYS_PARAMS_PARAM_UID,
     API_SYS_PARAMS_URI,
-    EDITABLE_PARAMS_MAPPING_TABLE,
 )
 from .mem_cache import MemCache
 
 _LOGGER = logging.getLogger(__name__)
-
-
-def map_param(param_name):
-    """Check params mapping in const.py."""
-    if param_name not in EDITABLE_PARAMS_MAPPING_TABLE:
-        return None
-
-    return EDITABLE_PARAMS_MAPPING_TABLE[param_name]
-
-
-class Limits:
-    """Class defining entity value set limits."""
-
-    def __init__(self, min_v: int | None, max_v: int | None):
-        """Construct the necessary attributes for the Limits object."""
-        self.min = min_v
-        self.max = max_v
-
-    class AuthError(Exception):
-        """Raised when authentication fails."""
 
 
 class AuthError(Exception):
@@ -59,6 +38,18 @@ class ApiError(Exception):
 
 class DataError(Exception):
     """Raised when there is an error with the data."""
+
+
+class Limits:
+    """Class defining entity value set limits."""
+
+    def __init__(self, min_v: int | None, max_v: int | None):
+        """Construct the necessary attributes for the Limits object."""
+        self.min = min_v
+        self.max = max_v
+
+    class AuthError(Exception):
+        """Raised when authentication fails."""
 
 
 class EconetClient:

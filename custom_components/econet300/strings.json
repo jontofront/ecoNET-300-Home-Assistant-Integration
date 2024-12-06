@@ -129,6 +129,9 @@
       "pump_cwu_works": {
         "name": "HUW pump"
       },
+      "status_cwu": {
+        "name": "Water heater status"
+      },
       "pump_fireplace_works": {
         "name": "Boiler pump"
       },
