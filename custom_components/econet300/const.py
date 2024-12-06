@@ -127,13 +127,6 @@ SENSOR_MAP_KEY = {
     },
 }
 
-SENSOR_MIXER_KEY = {
-    "1": {
-        "mixerTemp1",
-        "mixerSetTemp1",
-    }
-}
-
 BINARY_SENSOR_MAP_KEY = {
     "_default": {
         "lighter",

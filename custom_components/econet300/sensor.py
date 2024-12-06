@@ -22,7 +22,6 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     SENSOR_MAP_KEY,
-    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
@@ -34,13 +33,13 @@ _LOGGER = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class EconetSensorEntityDescription(SensorEntityDescription):
-    """Describes Econet sensor entity."""
+    """Describes ecoNET sensor entity."""
 
     process_val: Callable[[Any], Any] = lambda x: x
 
 
 class EconetSensor(EconetEntity, SensorEntity):
-    """Econet Sensor."""
+    """Represents an ecoNET sensor entity."""
 
     entity_description: EconetSensorEntityDescription
 
@@ -50,24 +49,19 @@ class EconetSensor(EconetEntity, SensorEntity):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
-        """Initialize a new ecoNET sensor."""
+        """Initialize a new ecoNET sensor entity."""
         self.entity_description = entity_description
         self.api = api
         self._attr_native_value = None
         super().__init__(coordinator)
-        _LOGGER.debug(
-            "EconetSensor initialized with unique_id: %s, entity_description: %s",
-            self.unique_id,
-            self.entity_description,
-        )
 
     def _sync_state(self, value):
-        """Sync state."""
-        _LOGGER.debug("Update EconetSensor entity: %s", self.entity_description.name)
+        """Synchronize the state of the sensor entity."""
         self._attr_native_value = self.entity_description.process_val(value)
         self.async_write_ha_state()
 
 
+# TODO: Add MixerSensor check class
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 
@@ -82,9 +76,9 @@ class MixerSensor(MixerEntity, EconetSensor):
         super().__init__(description, coordinator, api, idx)
 
 
-def create_entity_description(key: str) -> EconetSensorEntityDescription:
-    """Create Econet300 sensor entity based on supplied key."""
-    _LOGGER.debug("Creating entity description for key: %s", key)
+def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
+    """Create ecoNET300 sensor entity based on supplied key."""
+    _LOGGER.debug("Creating sensor entity description for key: %s", key)
     entity_description = EconetSensorEntityDescription(
         key=key,
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
@@ -96,18 +90,20 @@ def create_entity_description(key: str) -> EconetSensorEntityDescription:
         suggested_display_precision=ENTITY_PRECISION.get(key, None),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
-    _LOGGER.debug("Created entity description: %s", entity_description)
+    _LOGGER.debug("Created sensor entity description: %s", entity_description)
     return entity_description
 
 
 def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
-    coordinator_data = coordinator.data["regParams"]
+    coordinator_data = coordinator.data.get("regParams", {})
     for data_key in SENSOR_MAP_KEY["_default"]:
         if data_key in coordinator_data:
             entities.append(
-                EconetSensor(create_entity_description(data_key), coordinator, api)
+                EconetSensor(
+                    create_sensor_entity_description(data_key), coordinator, api
+                )
             )
             _LOGGER.debug(
                 "Key: %s mapped, sensor entity will be added",
@@ -122,15 +118,16 @@ def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300
     return entities
 
 
-def can_add_mixer(key: str, coordinator: EconetDataCoordinator):
+def can_add_mixer(key: str, coordinator: EconetDataCoordinator) -> bool:
     """Check if a mixer can be added."""
     _LOGGER.debug(
         "Checking if mixer can be added for key: %s, data %s",
         key,
-        coordinator.data["regParams"],
+        coordinator.data.get("regParams", {}),
     )
     return (
-        coordinator.has_reg_data(key) and coordinator.data["regParams"][key] is not None
+        coordinator.has_reg_data(key)
+        and coordinator.data.get("regParams", {}).get(key) is not None
     )
 
 
@@ -151,27 +148,42 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     return entity_description
 
 
-def create_mixer_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+# Dynamically generate AVAILABLE_SENSOR_MIXER_KEYS
+AVAILABLE_SENSOR_MIXER_KEYS = {
+    str(i): {f"mixerTemp{i}", f"mixerSetTemp{i}"}
+    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+}
+
+
+def create_mixer_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[MixerSensor]:
     """Create individual sensor descriptions for mixer sensors."""
     entities: list[MixerSensor] = []
-    # TODO: Cleanup logic add mixer only which not null in endpoint
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
+
+    for string_mix, mixer_keys in AVAILABLE_SENSOR_MIXER_KEYS.items():
+        i = int(string_mix)
         string_mix = str(i)
-        mixer_keys = SENSOR_MIXER_KEY.get(string_mix)
-        if mixer_keys:
-            for key in mixer_keys:
-                if can_add_mixer(key, coordinator):
-                    mixer_sensor_entity = create_mixer_sensor_entity_description(key)
-                    entities.append(
-                        MixerSensor(mixer_sensor_entity, coordinator, api, i)
-                    )
-                else:
-                    _LOGGER.warning("Mixer: %s , Sensor: %s won't be added", i, key)
-        else:
+        mixer_keys = AVAILABLE_SENSOR_MIXER_KEYS.get(string_mix)
+
+        if not mixer_keys:
             _LOGGER.debug(
-                "Mixer: %s not defined in const, won't be added",
-                i,
+                "Mixer: %s is not defined in the constants and will not be added.", i
             )
+            continue
+
+        # Check if all required mixer keys have valid (non-null) values
+        if any(
+            coordinator.data.get("regParams", {}).get(key) is None for key in mixer_keys
+        ):
+            _LOGGER.warning("Mixer: %s will not be created due to invalid data.", i)
+            continue
+
+        # Create sensors for this mixer
+        for key in mixer_keys:
+            mixer_sensor_entity = create_mixer_sensor_entity_description(key)
+            entities.append(MixerSensor(mixer_sensor_entity, coordinator, api, i))
+            _LOGGER.debug("Added Mixer: %s, Sensor: %s", i, key)
 
     return entities
 
