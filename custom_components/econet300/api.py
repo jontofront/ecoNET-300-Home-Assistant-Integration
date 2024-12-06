@@ -29,14 +29,6 @@ from .mem_cache import MemCache
 _LOGGER = logging.getLogger(__name__)
 
 
-def map_param(param_name):
-    """Check params mapping in const.py."""
-    if param_name not in EDITABLE_PARAMS_MAPPING_TABLE:
-        return None
-
-    return EDITABLE_PARAMS_MAPPING_TABLE[param_name]
-
-
 class Limits:
     """Class defining entity value set limits."""
 
