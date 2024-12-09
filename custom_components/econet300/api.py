@@ -79,7 +79,8 @@ class EconetClient:
         """Get host address."""
         return self._host
 
-    async def _get(self, url):
+    async def get(self, url):
+        """Public method for fetching data."""
         attempt = 1
         max_attempts = 5
 
@@ -207,11 +208,14 @@ class Econet300Api:
         """Set param value in Econet300 API."""
         if param is None:
             _LOGGER.warning(
-                "Requested param set for: '{param}' but mapping for this param does not exist"
+                "Requested param set for: '%s' but mapping for this param does not exist",
+                param,
             )
             return False
 
-        data = await self._get(f"{self._host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}")
+        data = await self._client.get(
+            f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
+        )
         if data is None or "result" not in data:
             return False
         if data["result"] != "OK":
@@ -292,13 +296,11 @@ class Econet300Api:
         """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
         _LOGGER.debug(
             "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
-            self._host,
+            self.host,
             API_SYS_PARAMS_URI,
         )
 
-        data = await self._get(f"{self._host}/econet/{API_SYS_PARAMS_URI}")
-        _LOGGER.debug("Fetched data for registry '%s': %s", reg, data)
-        return data
+        return await self._client.get(f"{self.host}/econet/{API_SYS_PARAMS_URI}")
 
     async def fetch_reg_params(self) -> dict[str, Any]:
         """Fetch and return the regParams data from ip/econet/regParams endpoint."""
@@ -311,7 +313,7 @@ class Econet300Api:
 
     async def _fetch_reg_names(self, reg, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._get(f"{self._host}/econet/{reg}")
+        data = await self._client.get(f"{self.host}/econet/{reg}")
 
         if data is None:
             raise DataError(f"Data fetched by API for reg: {reg} is None")
