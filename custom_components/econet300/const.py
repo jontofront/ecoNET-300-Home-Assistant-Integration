@@ -262,6 +262,7 @@ ENTITY_PRECISION = {
     "tempLowerBuffer": 1,
     "tempCWU": 1,
     "tempFlueGas": 1,
+    "fanPower": 1,
 }
 
 ENTITY_ICON = {
