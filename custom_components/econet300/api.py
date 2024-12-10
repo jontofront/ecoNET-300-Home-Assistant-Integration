@@ -227,7 +227,7 @@ class Econet300Api:
     async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
-            limits = await self._fetch_reg_key(
+            limits = await self._fetch_api_data_by_key(
                 API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
             )
             self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
@@ -256,7 +256,7 @@ class Econet300Api:
     async def fetch_reg_params_data(self) -> dict[str, Any]:
         """Fetch data from econet/regParamsData."""
         try:
-            regParamsData = await self._fetch_reg_key(
+            regParamsData = await self._fetch_api_data_by_key(
                 API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
             )
         except DataError as e:
@@ -269,19 +269,39 @@ class Econet300Api:
     async def fetch_param_edit_data(self):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
-            limits = await self._fetch_reg_key(
+            limits = await self._fetch_api_data_by_key(
                 API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
             )
             self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
 
         return self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
-    async def _fetch_reg_key(self, reg, data_key: str | None = None):
+    async def fetch_reg_params(self) -> dict[str, Any]:
+        """Fetch and return the regParams data from ip/econet/regParams endpoint."""
+        _LOGGER.info("Calling fetch_reg_params method")
+        regParams = await self._fetch_api_data_by_key(
+            API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
+        )
+        _LOGGER.debug("Fetched regParams data: %s", regParams)
+        return regParams
+
+    async def fetch_sys_params(self) -> dict[str, Any]:
+        """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
+        _LOGGER.debug(
+            "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
+            self.host,
+            API_SYS_PARAMS_URI,
+        )
+        sysParams = await self._fetch_api_data_by_key(API_SYS_PARAMS_URI)
+        _LOGGER.debug("Fetched sysParams data: %s", sysParams)
+        return sysParams
+
+    async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self.fetch_sys_params()
+        data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
         if data is None:
-            raise DataError(f"Data fetched by API for reg: {reg} is None")
+            raise DataError(f"Data fetched by API for endpoint: {endpoint} is None")
 
         if data_key is None:
             return data
@@ -291,43 +311,6 @@ class Econet300Api:
             raise DataError(f"Data for key: {data_key} does not exist")
 
         return data[data_key]
-
-    async def fetch_sys_params(self) -> dict[str, Any]:
-        """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
-        _LOGGER.debug(
-            "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
-            self.host,
-            API_SYS_PARAMS_URI,
-        )
-
-        return await self._client.get(f"{self.host}/econet/{API_SYS_PARAMS_URI}")
-
-    async def fetch_reg_params(self) -> dict[str, Any]:
-        """Fetch and return the regParams data from ip/econet/regParams endpoint."""
-        _LOGGER.info("Calling fetch_reg_params method")
-        regParams = await self._fetch_reg_names(
-            API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
-        )
-        _LOGGER.debug("Fetched regParams data: %s", regParams)
-        return regParams
-
-    async def _fetch_reg_names(self, reg, data_key: str | None = None):
-        """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._client.get(f"{self.host}/econet/{reg}")
-
-        if data is None:
-            raise DataError(f"Data fetched by API for reg: {reg} is None")
-
-        if data_key is None:
-            return data
-
-        if data_key not in data:
-            _LOGGER.debug(data)
-            raise DataError(f"Data for key: {data_key} does not exist")
-        value = data[data_key]
-        _LOGGER.debug("Processed value for key '%s': %s", data_key, value)
-        return value
-
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
     """Create api object."""
