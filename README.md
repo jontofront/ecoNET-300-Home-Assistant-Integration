@@ -104,42 +104,47 @@ __Password__: Local password (NOT the password that you use to login to econet24
 
 ## Entities
 ### Sensors
-- Fan power (fanPower)
-- Feeder temperature (tempFeeder)
-- Exhaust (tempFlueGas)
-- Fireplace temperature (tempCO)
-- Fireplace set temperature (tempCOSet)
-- Feeder temperature (tempFeeder)
-- Water back temperature (tempBack)
-- Water temperature (tempCWU)
-- Outside temperature (tempExternalSensor)
-- Fuel level (fuelLevel)
-- Mixer 1 set temperature (mixerSetTemp1)
-- Oxygen set level (lambdaSet)
-- Oxygen level (lambdaLevel)
 
-### Binary sensors
-- Water pump (pumpCWUWorks)
-- Fireplace pump (pumpFireplaceWorks)
-- Circulation pump (pumpCirculationWorks)
-- Solar pump (pumpSolarWorks)
-- Fireplace pump (pumpCOWorks)
-- Lighter (lighterWorks)
-- Fan (fanWorks)
-- Feeder (fanWorks)
+These sensors are retrieved from the `../econet/regParams` endpoint. Below is the list of available entity keys and their descriptions:
+
+| sensor Key           | Description                              |
+|----------------------|------------------------------------------|
+| `tempFeeder`         | Temperature of the feeder mechanism      |
+| `fuelLevel`          | Current fuel level in the system         |
+| `tempCO`             | Current fireplace temperature            |
+| `tempCOSet`          | Desired fireplace set temperature        |
+| `statusCWU`          | Status of the hot water (CWU) system     |
+| `tempCWUSet`         | Desired hot water (CWU) temperature      |
+| `tempFlueGas`        | Exhaust temperature reading              |
+| `mode`               | Current operational mode of the device   |
+| `fanPower`           | Current fan power usage                  |
+| `thermostat`         | Thermostat status or set temperature     |
+| `tempExternalSensor` | Outside (external) temperature           |
+
+
+### Binary Sensors
+
+These binary sensors are retrieved from the `../econet/regParams` endpoint. Below is the list of available entity keys and their descriptions:
+| Entity Key           | Description                                 |
+|----------------------|---------------------------------------------|
+| `lighter`            | Indicates if the lighter is active          |
+| `pumpCOWorks`        | Indicates if the fireplace pump is working  |
+| `fanWorks`           | Indicates if the fan is currently active    |
+| `pumpFireplaceWorks` | Indicates if the fireplace pump is working  |
+| `pumpCWUWorks`       | Indicates if the hot water (CWU) pump is active |
+
 
 ## Contributing
 
-This is HA integration open-source project. We are always open to people who want to use the code or contribute to it.
+We welcome contributions to improve the ecoNET300 integration! Please follow these steps to ensure your contributions align with Home Assistant's development guidelines:
 
+1. Familiarize yourself with the [Home Assistant Contribution Guidelines](https://developers.home-assistant.io/docs/development_submitting/).
+2. Fork this repository and create a new branch for your changes.
+3. Write code that follows Home Assistant's [Coding Standards](https://developers.home-assistant.io/docs/development_guidelines/).
+4. Update documentation to reflect any changes or new functionality.
+5. Open a pull request with a clear description of your changes and reference any related issues.
 
-## Contributing
-
-We welcome contributions and suggestions:
-
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Submit a pull request describing your improvements.
+Thank you for contributing to the Home Assistant community!
 
 **Acknowledgments:**  
 - [@pblxpt](https://github.com/pblxpt) for the original integration code.  
