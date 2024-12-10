@@ -322,6 +322,7 @@ ENTITY_VALUE_PROCESSOR = {
     "status_wifi": lambda x: "Connected" if x == 1 else "Disconnected",
     "main_server": lambda x: "Server available" if x == 1 else "Server not available",
     "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
+    "thermostat": lambda x: "ON" if x == 1 else "OFF",
 }
 
 
