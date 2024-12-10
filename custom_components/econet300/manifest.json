@@ -2,7 +2,6 @@
   "domain": "econet300",
   "name": "ecoNET300",
   "codeowners": [
-    "@pblxptr",
     "@jontofront"
   ],
   "config_flow": true,
@@ -13,6 +12,6 @@
   "issue_tracker": "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues",
   "requirements": [],
   "ssdp": [],
-  "version": "v1.0.5",
+  "version": "v1.0.6",
   "zeroconf": []
 }
