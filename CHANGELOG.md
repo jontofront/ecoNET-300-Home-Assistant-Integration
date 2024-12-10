@@ -175,3 +175,5 @@ Thank for @pblxptr add new code line from him
 * @KirilKurkianec made their first contribution in [#100](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/100)
 
 **Full Changelog**: [https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/compare/v0.3.3...v1.0.5](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/compare/v0.3.3...v1.0.5)
+
+## [v1.0.5]
