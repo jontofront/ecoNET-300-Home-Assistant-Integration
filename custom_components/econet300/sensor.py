@@ -55,7 +55,7 @@ class EconetSensor(EconetEntity, SensorEntity):
         self._attr_native_value = None
         super().__init__(coordinator)
 
-    def _sync_state(self, value):
+    def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
         self._attr_native_value = self.entity_description.process_val(value)
         self.async_write_ha_state()
@@ -160,7 +160,6 @@ def create_mixer_sensors(
     entities: list[MixerSensor] = []
 
     for key, mixer_keys in SENSOR_MIXER_KEY.items():
-
         # Check if all required mixer keys have valid (non-null) values
         if any(
             coordinator.data.get("regParams", {}).get(mixer_key) is None
