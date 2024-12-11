@@ -139,7 +139,7 @@ def can_add(key: str, coordinator: EconetDataCoordinator):
         return False
 
 
-def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
+def apply_limits(desc: EconetNumberEntityDescription, limits: Limits) -> None:
     """Set the native minimum and maximum values for the given entity description."""
     desc.native_min_value = limits.min
     desc.native_max_value = limits.max
