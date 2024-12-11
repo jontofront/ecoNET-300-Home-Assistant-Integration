@@ -61,7 +61,9 @@ class EconetSensor(EconetEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-# TODO: Add MixerSensor check class
+# Add MixerSensor check class Mypy warning
+# Definition of "entity_description" in base class "EconetEntity" is incompatible with definition in base
+# class "SensorEntity"
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 
@@ -94,10 +96,13 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     return entity_description
 
 
-def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+def create_controller_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[EconetSensor]:
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
     coordinator_data = coordinator.data.get("regParams", {})
+
     for data_key in SENSOR_MAP_KEY["_default"]:
         if data_key in coordinator_data:
             entities.append(
@@ -109,11 +114,11 @@ def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300
                 "Key: %s mapped, sensor entity will be added",
                 data_key,
             )
-            continue
-        _LOGGER.warning(
-            "Key: %s is not mapped, sensor entity will not be added",
-            data_key,
-        )
+        else:
+            _LOGGER.warning(
+                "Key: %s is not mapped, sensor entity will not be added",
+                data_key,
+            )
 
     return entities
 
