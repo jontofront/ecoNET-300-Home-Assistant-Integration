@@ -226,32 +226,54 @@ class Econet300Api:
 
     async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
-        if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
-            limits = await self._fetch_api_data_by_key(
-                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+        try:
+            if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
+                limits = await self._fetch_api_data_by_key(
+                    API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+                )
+                if limits is not None:
+                    self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
+                else:
+                    _LOGGER.warning(
+                        "Failed to fetch limits data from API: %s",
+                        API_EDITABLE_PARAMS_LIMITS_URI,
+                    )
+                    return None
+
+            # Retrieve limits from the cache
+            limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
+            if not param:
+                _LOGGER.warning(
+                    "Parameter name is None. Unable to fetch limits for parameter: %s",
+                    param,
+                )
+                return None
+
+            if param not in limits:
+                _LOGGER.warning(
+                    "Limits for parameter '%s' do not exist. Available limits: %s",
+                    param,
+                    limits,
+                )
+                return None
+
+            # Extract and log the limits
+            curr_limits = limits[param]
+            _LOGGER.debug("Limits '%s'", limits)
+            _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
+            return Limits(curr_limits["min"], curr_limits["max"])
+
+        except KeyError as ke:
+            _LOGGER.error("KeyError occurred while fetching parameter limits: %s", ke)
+        except ValueError as ve:
+            _LOGGER.error("ValueError occurred while fetching parameter limits: %s", ve)
+        except TypeError as te:
+            _LOGGER.error("TypeError occurred while fetching parameter limits: %s", te)
+        except RuntimeError as re:
+            _LOGGER.error(
+                "RuntimeError occurred while fetching parameter limits: %s", re
             )
-            self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
-
-        # Retrieve limits from the cache
-        limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
-
-        if not param:
-            _LOGGER.warning("Parameter name is None. Unable to fetch limits.")
-            return None
-
-        if param not in limits:
-            _LOGGER.warning(
-                "Limits for parameter '%s' do not exist. Available limits: %s",
-                param,
-                limits,
-            )
-            return None
-
-        # Extract and log the limits
-        curr_limits = limits[param]
-        _LOGGER.debug("Limits '%s'", limits)
-        _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
-        return Limits(curr_limits["min"], curr_limits["max"])
+        return None
 
     async def fetch_reg_params_data(self) -> dict[str, Any]:
         """Fetch data from econet/regParamsData."""
@@ -311,6 +333,7 @@ class Econet300Api:
             raise DataError(f"Data for key: {data_key} does not exist")
 
         return data[data_key]
+
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
     """Create api object."""
