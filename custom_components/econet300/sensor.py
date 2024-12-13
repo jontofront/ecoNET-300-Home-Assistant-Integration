@@ -55,13 +55,15 @@ class EconetSensor(EconetEntity, SensorEntity):
         self._attr_native_value = None
         super().__init__(coordinator)
 
-    def _sync_state(self, value):
+    def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
         self._attr_native_value = self.entity_description.process_val(value)
         self.async_write_ha_state()
 
 
-# TODO: Add MixerSensor check class
+# Add MixerSensor check class Mypy warning
+# Definition of "entity_description" in base class "EconetEntity" is incompatible with definition in base
+# class "SensorEntity"
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 
@@ -94,9 +96,12 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     return entity_description
 
 
-def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+def create_controller_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[EconetSensor]:
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
+
     data_regParams = coordinator.data.get("regParams", {})
     data_sysParams = coordinator.data.get("sysParams", {})
 
@@ -166,7 +171,6 @@ def create_mixer_sensors(
     entities: list[MixerSensor] = []
 
     for key, mixer_keys in SENSOR_MIXER_KEY.items():
-
         # Check if all required mixer keys have valid (non-null) values
         if any(
             coordinator.data.get("regParams", {}).get(mixer_key) is None
@@ -197,4 +201,5 @@ async def async_setup_entry(
     entities.extend(create_controller_sensors(coordinator, api))
     entities.extend(create_mixer_sensors(coordinator, api))
 
-    return async_add_entities(entities)
+    async_add_entities(entities)
+    return True
