@@ -52,6 +52,12 @@
       },
       "boiler_pump": {
         "name": "Boiler pump"
+      },
+      "main_srv": {
+        "name": "Econet24.com server"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
       }
     },
     "sensor": {
@@ -140,9 +146,6 @@
       },
       "servo_mixer1": {
         "name": "Mixer 1 servo position"
-      },
-      "status_wifi": {
-        "name": "Wireless network connected"
       },
       "temp_co": {
         "name": "Heating temperature"

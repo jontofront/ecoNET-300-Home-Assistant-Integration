@@ -87,7 +87,7 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, None),
-        suggested_display_precision=ENTITY_PRECISION.get(key, None),
+        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
     _LOGGER.debug("Created sensor entity description: %s", entity_description)

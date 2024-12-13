@@ -95,20 +95,37 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
 def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create binary sensors."""
     entities: list[EconetBinarySensor] = []
-    coordinator_data = coordinator.data["regParams"]
+
+    # Log the contents of coordinator.data
+    _LOGGER.debug("Coordinator data: %s", coordinator.data)
+
+    data_regParams = coordinator.data.get("regParams", {})
+    _LOGGER.debug("data_regParams: %s", data_regParams)
+    data_sysParams = coordinator.data.get("sysParams", {})
+    _LOGGER.debug("data_sysParams: %s", data_sysParams)
+
     for data_key in BINARY_SENSOR_MAP_KEY["_default"]:
-        _LOGGER.debug("Processing binary sensor data_key: %s", data_key)
-        if data_key in coordinator_data:
+        _LOGGER.debug(
+            "Processing binary sensor data_key: %s from regParams & sysParams", data_key
+        )
+        if data_key in data_regParams:
             entity = EconetBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api
             )
             entities.append(entity)
-            _LOGGER.debug("Created and appended entity: %s", entity)
+            _LOGGER.debug("Created and appended entity from regParams: %s", entity)
+        elif data_key in data_sysParams:
+            entity = EconetBinarySensor(
+                create_binary_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug("Created and appended entity from sysParams: %s", entity)
         else:
             _LOGGER.warning(
-                "key: %s is not mapped, binary sensor entity will not be added",
+                "key: %s is not mapped in regParams, binary sensor entity will not be added",
                 data_key,
             )
+    _LOGGER.info("Total entities created: %d", len(entities))
     return entities
 
 

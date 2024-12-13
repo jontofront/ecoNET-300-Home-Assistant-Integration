@@ -123,6 +123,8 @@ BINARY_SENSOR_MAP_KEY = {
         "fanWorks",
         "pumpFireplaceWorks",
         "pumpCWUWorks",
+        "mainSrv",
+        "wifi",
     },
 }
 
@@ -221,7 +223,6 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "controllerID": None,
     "valveMixer1": None,
     "servoMixer1": SensorDeviceClass.ENUM,
-    "Status_wifi": None,
     "main_server": None,
 }
 
@@ -247,6 +248,8 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
     "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
     "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
+    "mainSrv": BinarySensorDeviceClass.RUNNING,
+    "wifi": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -263,6 +266,9 @@ ENTITY_PRECISION = {
     "tempCWU": 1,
     "tempFlueGas": 1,
     "fanPower": 0,
+    "statusCWU": None,
+    "thermostat": None,
+    "mode": None,
 }
 
 ENTITY_ICON = {
@@ -297,6 +303,7 @@ ENTITY_ICON = {
     "mixerSetTemp1": "mdi:thermometer-chevron-up",
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
+    "mainSrv": "mdi:server-network",
 }
 
 ENTITY_ICON_OFF = {
@@ -306,6 +313,7 @@ ENTITY_ICON_OFF = {
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
     "statusCWU": "mdi:water-boiler-off",
+    "mainSrv": "mdi:server-network-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
@@ -319,7 +327,6 @@ ENTITY_VALUE_PROCESSOR = {
             else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
         )
     ),
-    "status_wifi": lambda x: "Connected" if x == 1 else "Disconnected",
     "main_server": lambda x: "Server available" if x == 1 else "Server not available",
     "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
     "thermostat": lambda x: "ON" if x == 1 else "OFF",
@@ -336,13 +343,7 @@ ENTITY_CATEGORY = {
     "moduleLambdaSoftVer": EntityCategory.DIAGNOSTIC,
     "protocolType": EntityCategory.DIAGNOSTIC,
     "controllerID": EntityCategory.DIAGNOSTIC,
-    "status_wifi": EntityCategory.DIAGNOSTIC,
-    "main_server": EntityCategory.DIAGNOSTIC,
-    "workAt100": EntityCategory.DIAGNOSTIC,
-    "workAt50": EntityCategory.DIAGNOSTIC,
-    "workAt30": EntityCategory.DIAGNOSTIC,
-    "FeederWork": EntityCategory.DIAGNOSTIC,
-    "FiringUpCount": EntityCategory.DIAGNOSTIC,
+    "mainSrv": EntityCategory.DIAGNOSTIC,
 }
 
 ENTITY_MIN_VALUE = {
