@@ -97,24 +97,35 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
 def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
-    coordinator_data = coordinator.data.get("regParams", {})
+    data_regParams = coordinator.data.get("regParams", {})
+    data_sysParams = coordinator.data.get("sysParams", {})
+
     for data_key in SENSOR_MAP_KEY["_default"]:
-        if data_key in coordinator_data:
-            entities.append(
-                EconetSensor(
-                    create_sensor_entity_description(data_key), coordinator, api
-                )
+        _LOGGER.debug(
+            "Processing entity sensor data_key: %s from regParams & sysParams", data_key
+        )
+        if data_key in data_regParams:
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
             )
+            entities.append(entity)
             _LOGGER.debug(
-                "Key: %s mapped, sensor entity will be added",
+                "Created and appended sensor entity from regParams: %s", entity
+            )
+        elif data_key in data_sysParams:
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created and appended sensor entity from sysParams: %s", entity
+            )
+        else:
+            _LOGGER.warning(
+                "Key: %s is not mapped in regParams or sysParams, sensor entity will not be added.",
                 data_key,
             )
-            continue
-        _LOGGER.warning(
-            "Key: %s is not mapped, sensor entity will not be added",
-            data_key,
-        )
-
+    _LOGGER.info("Total sensor entities created: %d", len(entities))
     return entities
 
 

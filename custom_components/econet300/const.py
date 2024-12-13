@@ -248,7 +248,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
     "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
     "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
-    "mainSrv": BinarySensorDeviceClass.RUNNING,
+    "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
@@ -344,6 +344,7 @@ ENTITY_CATEGORY = {
     "protocolType": EntityCategory.DIAGNOSTIC,
     "controllerID": EntityCategory.DIAGNOSTIC,
     "mainSrv": EntityCategory.DIAGNOSTIC,
+    "wifi": EntityCategory.DIAGNOSTIC,
 }
 
 ENTITY_MIN_VALUE = {
