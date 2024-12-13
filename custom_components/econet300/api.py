@@ -227,10 +227,21 @@ class Econet300Api:
     async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
-            limits = await self._fetch_api_data_by_key(
-                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
-            )
-            self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
+            try:
+                # Attempt to fetch the API data
+                limits = await self._fetch_api_data_by_key(
+                    API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+                )
+                # Cache the fetched data
+                self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
+            except Exception as e:
+                # Log the error and return None if an exception occurs
+                _LOGGER.error(
+                    "An error occurred while fetching API data from %s: %s",
+                    API_EDITABLE_PARAMS_LIMITS_URI,
+                    e,
+                )
+                return None
 
         # Retrieve limits from the cache
         limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
@@ -311,6 +322,7 @@ class Econet300Api:
             raise DataError(f"Data for key: {data_key} does not exist")
 
         return data[data_key]
+
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
     """Create api object."""
