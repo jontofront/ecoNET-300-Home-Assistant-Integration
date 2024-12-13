@@ -129,10 +129,17 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
-    return coordinator.has_param_edit_data(key) and coordinator.data["paramsEdits"][key]
+    try:
+        return (
+            coordinator.has_param_edit_data(key)
+            and coordinator.data["paramsEdits"][key]
+        )
+    except KeyError as e:
+        _LOGGER.error("KeyError in can_add: %s", e)
+        return False
 
 
-def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
+def apply_limits(desc: EconetNumberEntityDescription, limits: Limits) -> None:
     """Set the native minimum and maximum values for the given entity description."""
     desc.native_min_value = limits.min
     desc.native_max_value = limits.max
