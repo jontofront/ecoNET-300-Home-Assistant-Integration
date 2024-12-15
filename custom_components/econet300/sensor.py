@@ -5,7 +5,11 @@ from dataclasses import dataclass
 import logging
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -15,13 +19,11 @@ from .common_functions import camel_to_snake
 from .const import (
     DOMAIN,
     ENTITY_CATEGORY,
-    ENTITY_ENABLED,
     ENTITY_ICON,
     ENTITY_PRECISION,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
-    ENTITY_VISIBALE,
     SENSOR_MAP_KEY,
     SENSOR_MIXER_KEY,
     SERVICE_API,
@@ -87,12 +89,10 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         key=key,
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         entity_category=ENTITY_CATEGORY.get(key, None),
-        entity_registry_enabled_default=ENTITY_ENABLED.get(key, True),
-        entity_registry_visible_default=ENTITY_VISIBALE.get(key, True),
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
@@ -159,7 +159,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),

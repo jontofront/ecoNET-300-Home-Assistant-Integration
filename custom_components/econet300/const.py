@@ -135,6 +135,7 @@ NUMBER_MAP = {
     "1281": "tempCWUSet",
 }
 
+# By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
     "tempCO": UnitOfTemperature.CELSIUS,
     "tempCOSet": UnitOfTemperature.CELSIUS,
@@ -147,7 +148,6 @@ ENTITY_UNIT_MAP = {
     "workAt50": UnitOfTime.HOURS,
     "workAt30": UnitOfTime.HOURS,
     "FeederWork": UnitOfTime.HOURS,
-    "FiringUpCount": None,
     "thermoTemp": UnitOfTemperature.CELSIUS,
     "fanPower": PERCENTAGE,
     "tempFlueGas": UnitOfTemperature.CELSIUS,
@@ -167,36 +167,14 @@ ENTITY_UNIT_MAP = {
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
 }
 
-STATE_CLASS_MAP: dict[str, SensorStateClass] = {
-    "tempFeeder": SensorStateClass.MEASUREMENT,
-    "tempExternalSensor": SensorStateClass.MEASUREMENT,
-    "lambdaSet": SensorStateClass.MEASUREMENT,
-    "lambdaLevel": SensorStateClass.MEASUREMENT,
-    "workAt100": SensorStateClass.MEASUREMENT,
-    "workAt50": SensorStateClass.MEASUREMENT,
-    "workAt30": SensorStateClass.MEASUREMENT,
-    "FeederWork": SensorStateClass.MEASUREMENT,
-    "FiringUpCount": SensorStateClass.MEASUREMENT,
-    "tempCO": SensorStateClass.MEASUREMENT,
-    "tempCOSet": SensorStateClass.MEASUREMENT,
-    "tempCWUSet": SensorStateClass.MEASUREMENT,
-    "boiler_power": SensorStateClass.MEASUREMENT,
-    "fanPower": SensorStateClass.MEASUREMENT,
-    "tempFlueGas": SensorStateClass.MEASUREMENT,
-    "mixerSetTemp1": SensorStateClass.MEASUREMENT,
-    "tempBack": SensorStateClass.MEASUREMENT,
-    "tempCWU": SensorStateClass.MEASUREMENT,
-    "fuelLevel": SensorStateClass.MEASUREMENT,
-    "tempUpperBuffer": SensorStateClass.MEASUREMENT,
-    "tempLowerBuffer": SensorStateClass.MEASUREMENT,
-    "signal": SensorStateClass.MEASUREMENT,
-    "quality": SensorStateClass.MEASUREMENT,
-    "valveMixer1": SensorStateClass.MEASUREMENT,
-    "burnerOutput": SensorStateClass.MEASUREMENT,
-    "mixerTemp": SensorStateClass.MEASUREMENT,
-    "mixerSetTemp": SensorStateClass.MEASUREMENT,
+# By default all sensors state_class are MEASUREMENT
+STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
+    "mode": None,
+    "thermostat": None,
+    "statusCWU": None,
 }
 
+# By default all sensors device_class are None
 ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     #############################
     #          SENSORS
@@ -216,14 +194,6 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempUpperBuffer": SensorDeviceClass.TEMPERATURE,
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
-    "softVer": None,
-    "moduleASoftVer": None,
-    "moduleBSoftVer": None,
-    "modulePanelSoftVer": None,
-    "moduleLambdaSoftVer": None,
-    "protocolType": None,
-    "controllerID": None,
-    "valveMixer1": None,
     "servoMixer1": SensorDeviceClass.ENUM,
     "main_server": None,
 }
@@ -241,15 +211,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     #############################
     #      BINARY SENSORS
     #############################
-    "lighter": BinarySensorDeviceClass.RUNNING,
-    "weatherControl": BinarySensorDeviceClass.RUNNING,
-    "unseal": BinarySensorDeviceClass.RUNNING,
-    "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
-    "fanWorks": BinarySensorDeviceClass.RUNNING,
-    "additionalFeeder": BinarySensorDeviceClass.RUNNING,
-    "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
-    "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
-    "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
+    # By default all binary sensors device_class are RUNNING
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
 }
@@ -277,8 +239,6 @@ ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
     "temCO": "mdi:thermometer-lines",
-    "tempCOSet": "mdi:thermometer-chevron-up",
-    "tempCWUSet": "mdi:thermometer-chevron-up",
     "statusCWU": "mdi:water-boiler",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
@@ -302,7 +262,6 @@ ENTITY_ICON = {
     "mixerTemp": "mdi:thermometer",
     "mixerSetTemp": "mdi:thermometer",
     "valveMixer1": "mdi:valve",
-    "mixerSetTemp1": "mdi:thermometer-chevron-up",
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
@@ -362,14 +321,4 @@ ENTITY_MAX_VALUE = {
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
-}
-
-ENTITY_VISIBALE = {
-    "tempLowerBuffer": False,
-    "tempUpperBuffer": False,
-}
-
-ENTITY_ENABLED = {
-    "tempLowerBuffer": False,
-    "tempUpperBuffer": False,
 }
