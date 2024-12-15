@@ -182,6 +182,12 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "mode": None,
     "thermostat": None,
     "statusCWU": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
 # By default all sensors device_class are None
@@ -243,6 +249,12 @@ ENTITY_PRECISION = {
     "statusCWU": None,
     "thermostat": None,
     "mode": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
 ENTITY_ICON = {
