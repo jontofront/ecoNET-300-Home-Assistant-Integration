@@ -58,6 +58,9 @@
       },
       "wifi": {
         "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
       }
     },
     "sensor": {

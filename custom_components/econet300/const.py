@@ -127,6 +127,7 @@ BINARY_SENSOR_MAP_KEY = {
         "pumpCWUWorks",
         "mainSrv",
         "wifi",
+        "lan",
     },
 }
 
@@ -214,6 +215,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     # By default all binary sensors device_class are RUNNING
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
+    "lan": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -265,6 +267,7 @@ ENTITY_ICON = {
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
+    "lan": "mdi:lan-connect",
 }
 
 ENTITY_ICON_OFF = {
@@ -275,6 +278,7 @@ ENTITY_ICON_OFF = {
     "pumpCWUWorks": "mdi:pump-off",
     "statusCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
+    "lan": "mdi:lan-disconnect",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
@@ -306,6 +310,7 @@ ENTITY_CATEGORY = {
     "controllerID": EntityCategory.DIAGNOSTIC,
     "mainSrv": EntityCategory.DIAGNOSTIC,
     "wifi": EntityCategory.DIAGNOSTIC,
+    "lan": EntityCategory.DIAGNOSTIC,
 }
 
 ENTITY_MIN_VALUE = {
