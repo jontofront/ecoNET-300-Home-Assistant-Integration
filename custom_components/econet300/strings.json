@@ -109,6 +109,9 @@
       "main_server": {
         "name": "Main server"
       },
+      "softVer": {
+        "name": "Module ecoNET version"
+      },
       "mode": {
         "name": "Boiler mode",
         "state": {
