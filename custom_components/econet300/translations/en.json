@@ -150,7 +150,7 @@
       "signal": {
         "name": "Signal strength"
       },
-      "softVer": {
+      "soft_ver": {
         "name": "Module ecoNET version"
       },
       "servo_mixer1": {

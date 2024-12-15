@@ -109,7 +109,7 @@
       "main_server": {
         "name": "Main server"
       },
-      "softVer": {
+      "soft_ver": {
         "name": "Module ecoNET version"
       },
       "mode": {
