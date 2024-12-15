@@ -115,6 +115,9 @@ SENSOR_MAP_KEY = {
         "tempExternalSensor",
         "tempLowerBuffer",
         "tempUpperBuffer",
+        "quality",
+        "signal",
+        "softVer",
     },
 }
 

@@ -144,8 +144,11 @@
       "pump_fireplace_works": {
         "name": "Boiler pump"
       },
-      "signal": {
+      "quality": {
         "name": "Signal quality"
+      },
+      "signal": {
+        "name": "Signal strength"
       },
       "servo_mixer1": {
         "name": "Mixer 1 servo position"
