@@ -91,9 +91,6 @@
       "lambda_level": {
         "name": "Lambda level"
       },
-      "main_server": {
-        "name": "Main server"
-      },
       "work_at100": {
         "name": "Work at 100%"
       },
@@ -152,6 +149,24 @@
       },
       "soft_ver": {
         "name": "Module ecoNET version"
+      },
+      "controller_i_d": {
+        "name": "Controller name"
+      },
+      "module_a_soft_ver": {
+        "name": "Module A version"
+      },
+      "module_b_soft_ver": {
+        "name": "Module B version"
+      },
+      "module_c_soft_ver": {
+        "name": "Module C version"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Module Lambda version"
+      },
+      "module_panel_soft_ver": {
+        "name": "Module Panel version"
       },
       "servo_mixer1": {
         "name": "Mixer 1 servo position"
