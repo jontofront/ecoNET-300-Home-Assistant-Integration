@@ -30,7 +30,7 @@ from .const import (
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
 )
-from .entity import EconetEntity, MixerEntity
+from .entity import EconetEntity, LambdaEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -80,6 +80,19 @@ class MixerSensor(MixerEntity, EconetSensor):
     ):
         """Initialize a new instance of the EconetSensor class."""
         super().__init__(description, coordinator, api, idx)
+
+
+class LambdaSensors(LambdaEntity, EconetSensor):
+    """Lambda sensor class."""
+
+    def __init__(
+        self,
+        description: EconetSensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ):
+        """Initialize a new instance of the EconetSensor class."""
+        super().__init__(description, coordinator, api)
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
@@ -192,6 +205,51 @@ def create_mixer_sensors(
     return entities
 
 
+# Create Lambda sensor entity description and Lambda sensor
+
+
+def create_lambda_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
+    """Create a sensor entity description for a Lambda."""
+    _LOGGER.debug("Creating Lambda entity sensor description for key: %s", key)
+    entity_description = EconetSensorEntityDescription(
+        key=key,
+        translation_key=camel_to_snake(key),
+        icon=ENTITY_ICON.get(key, None),
+        native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, None),
+        device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
+        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
+    )
+    _LOGGER.debug("Created LambdaSensors entity description: %s", entity_description)
+    return entity_description
+
+
+def create_lambda_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+    """Create controller sensor entities."""
+    entities: list[LambdaSensors] = []
+    coordinator_data = coordinator.data.get("regParams", {})
+
+    for data_key in SENSOR_MAP_KEY["lambda"]:
+        if data_key in coordinator_data:
+            entities.append(
+                LambdaSensors(
+                    create_lambda_sensor_entity_description(data_key), coordinator, api
+                )
+            )
+            _LOGGER.debug(
+                "Key: %s mapped, lamda sensor entity will be added",
+                data_key,
+            )
+            continue
+        _LOGGER.warning(
+            "Key: %s is not mapped, lamda sensor entity will not be added",
+            data_key,
+        )
+
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -204,6 +262,7 @@ async def async_setup_entry(
     entities: list[EconetSensor] = []
     entities.extend(create_controller_sensors(coordinator, api))
     entities.extend(create_mixer_sensors(coordinator, api))
+    entities.extend(create_lambda_sensors(coordinator, api))
 
     async_add_entities(entities)
     return True
