@@ -122,6 +122,11 @@ def create_controller_sensors(
                 "Created and appended sensor entity from regParams: %s", entity
             )
         elif data_key in data_sysParams:
+            if data_sysParams.get(data_key) is None:
+                _LOGGER.warning(
+                    "%s in sysParams is null, sensor will not be created.", data_key
+                )
+                continue
             entity = EconetSensor(
                 create_sensor_entity_description(data_key), coordinator, api
             )
