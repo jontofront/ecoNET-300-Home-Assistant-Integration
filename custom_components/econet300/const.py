@@ -107,6 +107,7 @@ SENSOR_MAP_KEY = {
         "tempCO",
         "tempCOSet",
         "statusCWU",
+        "tempCWU",
         "tempCWUSet",
         "tempFlueGas",
         "mode",
