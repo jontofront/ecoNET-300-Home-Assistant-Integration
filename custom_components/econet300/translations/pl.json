@@ -10,33 +10,69 @@
       }
     },
     "error": {
-        "cannot_connect": "Błąd połączenia",
-        "invalid_auth": "Błąd autoryzacji",
-        "unknown": "Niespodziewany błąd"
+      "cannot_connect": "Błąd połączenia",
+      "invalid_auth": "Błąd autoryzacji",
+      "unknown": "Niespodziewany błąd"
     },
     "abort": {
       "already_configured": "Urządzenie zostało już skonfigutowane"
     }
   },
-  "entity":{
+  "entity": {
     "binary_sensor": {
-      "weather_control": {"name": "Weather control the boiler"},
-      "unseal": { "name": "Unseal" },
-      "thermostat": { "name": "Boiler thermostat" },
-      "pump_co_works": { "name": "Pump CO" },
-      "fan_works": { "name": "Fan" },           
-      "aditional_feeder": { "name": "Aditional feeder" },
-      "pump_fireplace_works": { "name": "Boiler Pump" },
-      "pump_cwu_works": { "name": "Pump CWU" }, 
-      "mixer_pump1": { "name": "Mixer 1 pump" },
-      "boiler_pump": { "name": "Boiler pump" }
+      "weather_control": {
+        "name": "Weather control the boiler"
+      },
+      "unseal": {
+        "name": "Unseal"
+      },
+      "thermostat": {
+        "name": "Boiler thermostat"
+      },
+      "pump_co_works": {
+        "name": "Pump CO"
+      },
+      "fan_works": {
+        "name": "Fan"
+      },
+      "aditional_feeder": {
+        "name": "Aditional feeder"
+      },
+      "pump_fireplace_works": {
+        "name": "Boiler Pump"
+      },
+      "pump_cwu_works": {
+        "name": "Pump CWU"
+      },
+      "mixer_pump1": {
+        "name": "Mixer 1 pump"
+      },
+      "boiler_pump": {
+        "name": "Boiler pump"
+      },
+      "main_srv": {
+        "name": "Econet24.com server"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      }
     },
     "sensor": {
-      "boiler_power": { "name": "Moc kotła" },
-      "burner_power": { "name": "Burner output" },
-      "fuel_level": { "name": "Poziom paliwa" },
-      "fan_works": { "name": "Fan" },
-      "fan_power": { "name": "Moc nadmuchu" },
+      "boiler_power": {
+        "name": "Moc kotła"
+      },
+      "burner_power": {
+        "name": "Burner output"
+      },
+      "fuel_level": {
+        "name": "Poziom paliwa"
+      },
+      "fan_works": {
+        "name": "Fan"
+      },
+      "fan_power": {
+        "name": "Moc nadmuchu"
+      },
       "lambda_status": {
         "name": "Lambda status",
         "state": {
@@ -46,11 +82,21 @@
           "unknown": "Unknown"
         }
       },
-      "lambda_set": { "name": "Lambda set" },
-      "lambda_level": { "name": "Czujnik Lambda" },
-      "mixer_temp1": { "name": "Temp. mieszacza 1" },
-      "mixer_set_temp1": { "name": "Temp. zadana mieszacza 1" },
-      "main_server": { "name": "Główny serwer" },
+      "lambda_set": {
+        "name": "Lambda set"
+      },
+      "lambda_level": {
+        "name": "Czujnik Lambda"
+      },
+      "mixer_temp1": {
+        "name": "Temp. mieszacza 1"
+      },
+      "mixer_set_temp1": {
+        "name": "Temp. zadana mieszacza 1"
+      },
+      "main_server": {
+        "name": "Główny serwer"
+      },
       "mode": {
         "name": "Tryb pracy",
         "state": {
@@ -70,23 +116,54 @@
           "unknown": "Unknown"
         }
       },
-      "pump_cwu_works": { "name": "HUW pump" },
-      "pump_fireplace_works": { "name": "Boiler pump" },
-      "valve_mixer1": { "name": "Zawór mieszacza 1" },
-      "servo_Mixer1": { "name": "Siłownik mieszacza 1" },
-      "signal": { "name": "Siła sygnału" },
-      "status_wifi": { "name": "Połączenie z siecią bezprzewodową" },
-      "temp_co_set": { "name": "Heating target temperature" },
-      "temp_co": { "name": "Temperatura kotła" },
-      "temp_cwu": { "name": "Temperatura CWU" },
-      "temp_upper_buffer": { "name": "Temperatura bufora górna" },
-      "temp_lower_buffer": { "name": "Temperatura bufora dolna" },
-      "temp_flue_gas": { "name": "Temperatura spalin" },
-      "temp_external_sensor": { "name": "Temperatura zewnętrzna" },
-      "temp_feeder": {"name": "Temperatura podajnika"},
-      "unseal": { "name": "Unseal" },
-      "thermostat": { "name": "Thermostat" },
-      "weather_control": {"name": "Weather control the boiler"}
+      "pump_cwu_works": {
+        "name": "HUW pump"
+      },
+      "pump_fireplace_works": {
+        "name": "Boiler pump"
+      },
+      "valve_mixer1": {
+        "name": "Zawór mieszacza 1"
+      },
+      "servo_Mixer1": {
+        "name": "Siłownik mieszacza 1"
+      },
+      "signal": {
+        "name": "Siła sygnału"
+      },
+      "temp_co_set": {
+        "name": "Heating target temperature"
+      },
+      "temp_co": {
+        "name": "Temperatura kotła"
+      },
+      "temp_cwu": {
+        "name": "Temperatura CWU"
+      },
+      "temp_upper_buffer": {
+        "name": "Temperatura bufora górna"
+      },
+      "temp_lower_buffer": {
+        "name": "Temperatura bufora dolna"
+      },
+      "temp_flue_gas": {
+        "name": "Temperatura spalin"
+      },
+      "temp_external_sensor": {
+        "name": "Temperatura zewnętrzna"
+      },
+      "temp_feeder": {
+        "name": "Temperatura podajnika"
+      },
+      "unseal": {
+        "name": "Unseal"
+      },
+      "thermostat": {
+        "name": "Thermostat"
+      },
+      "weather_control": {
+        "name": "Weather control the boiler"
+      }
     }
   }
 }
