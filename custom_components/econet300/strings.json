@@ -109,7 +109,7 @@
       "soft_ver": {
         "name": "Module ecoNET version"
       },
-      "controller_i_d": {
+      "controller_id": {
         "name": "Controller name"
       },
       "module_a_soft_ver": {
