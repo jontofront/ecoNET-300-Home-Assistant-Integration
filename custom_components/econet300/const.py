@@ -113,6 +113,8 @@ SENSOR_MAP_KEY = {
         "fanPower",
         "thermostat",
         "tempExternalSensor",
+        "tempLowerBuffer",
+        "tempUpperBuffer",
     },
 }
 
@@ -362,7 +364,12 @@ ENTITY_STEP = {
     "tempCWUSet": 1,
 }
 
-ENTITY_VISIBLE = {
-    "tempCOSet": True,
-    "tempCWUSet": True,
+ENTITY_VISIBALE = {
+    "tempLowerBuffer": False,
+    "tempUpperBuffer": False,
+}
+
+ENTITY_ENABLED = {
+    "tempLowerBuffer": False,
+    "tempUpperBuffer": False,
 }
