@@ -228,6 +228,13 @@ def create_lambda_sensor_entity_description(key: str) -> EconetSensorEntityDescr
 def create_lambda_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create controller sensor entities."""
     entities: list[LambdaSensors] = []
+    sys_params = coordinator.data.get("sysParams", {})
+
+    # Check if moduleLambdaSoftVer is None
+    if sys_params.get("moduleLambdaSoftVer") is None:
+        _LOGGER.info("moduleLambdaSoftVer is None, no lambda sensors will be created")
+        return entities
+
     coordinator_data = coordinator.data.get("regParams", {})
 
     for data_key in SENSOR_MAP_KEY["lambda"]:
