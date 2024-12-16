@@ -96,11 +96,13 @@ SENSOR_MAP_KEY = {
         "lambdaLevel",
     },
     "_default": {
+        "boilerPower",
         "tempFeeder",
         "fuelLevel",
         "tempCO",
         "tempCOSet",
         "statusCWU",
+        "tempCWU",
         "tempCWUSet",
         "tempFlueGas",
         "mode",
@@ -112,6 +114,12 @@ SENSOR_MAP_KEY = {
         "quality",
         "signal",
         "softVer",
+        "controllerID",
+        "moduleASoftVer",
+        "moduleBSoftVer",
+        "moduleCSoftVer",
+        "moduleLambdaSoftVer",
+        "modulePanelSoftVer",
     },
 }
 
@@ -170,6 +178,13 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "mode": None,
     "thermostat": None,
     "statusCWU": None,
+    "softVer": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
 # By default all sensors device_class are None
@@ -193,7 +208,6 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
-    "main_server": None,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -232,6 +246,13 @@ ENTITY_PRECISION = {
     "statusCWU": None,
     "thermostat": None,
     "mode": None,
+    "softVer": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
 ENTITY_ICON = {
@@ -256,7 +277,6 @@ ENTITY_ICON = {
     "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump",
     "pumpCWUWorks": "mdi:pump",
-    "main_server": "mdi:server",
     "mixerPumpWorks": "mdi:pump",
     "mixerTemp": "mdi:thermometer",
     "mixerSetTemp": "mdi:thermometer",
@@ -265,6 +285,13 @@ ENTITY_ICON = {
     "mixerTemp1": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
     "lan": "mdi:lan-connect",
+    "softVer": "mdi:alarm-panel-outline",
+    "controllerID": "mdi:alarm-panel-outline",
+    "moduleASoftVer": "mdi:raspberry-pi",
+    "moduleBSoftVer": "mdi:raspberry-pi",
+    "moduleCSoftVer": "mdi:raspberry-pi",
+    "moduleLambdaSoftVer": "mdi:raspberry-pi",
+    "modulePanelSoftVer": "mdi:alarm-panel-outline",
 }
 
 ENTITY_ICON_OFF = {
@@ -289,7 +316,6 @@ ENTITY_VALUE_PROCESSOR = {
             else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
         )
     ),
-    "main_server": lambda x: "Server available" if x == 1 else "Server not available",
     "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
     "thermostat": lambda x: "ON" if x == 1 else "OFF",
 }
@@ -305,6 +331,7 @@ ENTITY_CATEGORY = {
     "moduleLambdaSoftVer": EntityCategory.DIAGNOSTIC,
     "protocolType": EntityCategory.DIAGNOSTIC,
     "controllerID": EntityCategory.DIAGNOSTIC,
+    "moduleCSoftVer": EntityCategory.DIAGNOSTIC,
     "mainSrv": EntityCategory.DIAGNOSTIC,
     "wifi": EntityCategory.DIAGNOSTIC,
     "lan": EntityCategory.DIAGNOSTIC,

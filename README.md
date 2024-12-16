@@ -171,7 +171,6 @@ These binary sensors are retrieved from the `../econet/regParams` and `../econet
 | `mainSrv`            | Indicates if the main server is operational      | `../econet/sysParams` |
 | `wifi`               | Indicates if the Wi-Fi connection is active      | `../econet/sysParams` |
 | `lan`                | Indicates if the LAN connection is active        | `../econet/sysParams` |
-</details>
 
 ### Number Entities
 
@@ -185,7 +184,6 @@ These number entities are retrieved from the `../econet/rmCurrentDataParamsEdits
 | `tempCOSet`          | Desired fireplace set temperature            | `../econet/rmCurrentDataParamsEdits` |
 | `tempCWUSet`         | Desired hot water (CWU) set temperature      | `../econet/rmCurrentDataParamsEdits` |
 
-</details>
 
 ## Contributing
 

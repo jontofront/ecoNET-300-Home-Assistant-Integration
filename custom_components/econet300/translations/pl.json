@@ -94,9 +94,6 @@
       "mixer_set_temp1": {
         "name": "Temp. zadana mieszacza 1"
       },
-      "main_server": {
-        "name": "Główny serwer"
-      },
       "mode": {
         "name": "Tryb pracy",
         "state": {

@@ -106,11 +106,26 @@
       "firing_up_count": {
         "name": "Firing up count"
       },
-      "main_server": {
-        "name": "Main server"
-      },
       "soft_ver": {
         "name": "Module ecoNET version"
+      },
+      "controller_id": {
+        "name": "Controller name"
+      },
+      "module_a_soft_ver": {
+        "name": "Module A version"
+      },
+      "module_b_soft_ver": {
+        "name": "Module B version"
+      },
+      "module_c_soft_ver": {
+        "name": "Module C version"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Module Lambda version"
+      },
+      "module_panel_soft_ver": {
+        "name": "Module Panel version"
       },
       "mode": {
         "name": "Boiler mode",
