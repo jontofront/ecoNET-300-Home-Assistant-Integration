@@ -12,6 +12,6 @@
   "issue_tracker": "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues",
   "requirements": [],
   "ssdp": [],
-  "version": "v1.0.6",
+  "version": "v1.0.9",
   "zeroconf": []
 }
