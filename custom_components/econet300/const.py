@@ -175,6 +175,7 @@ ENTITY_UNIT_MAP = {
 
 # By default all sensors state_class are MEASUREMENT
 STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
+    "lambdaStatus": None,
     "mode": None,
     "thermostat": None,
     "statusCWU": None,
@@ -245,6 +246,7 @@ ENTITY_PRECISION = {
     "fanPower": 0,
     "statusCWU": None,
     "thermostat": None,
+    "lambdaStatus": None,
     "mode": None,
     "softVer": None,
     "controllerID": None,
