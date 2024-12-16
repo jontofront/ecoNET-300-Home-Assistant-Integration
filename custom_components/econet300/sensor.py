@@ -5,7 +5,11 @@ from dataclasses import dataclass
 import logging
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -88,7 +92,7 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
@@ -118,6 +122,11 @@ def create_controller_sensors(
                 "Created and appended sensor entity from regParams: %s", entity
             )
         elif data_key in data_sysParams:
+            if data_sysParams.get(data_key) is None:
+                _LOGGER.warning(
+                    "%s in sysParams is null, sensor will not be created.", data_key
+                )
+                continue
             entity = EconetSensor(
                 create_sensor_entity_description(data_key), coordinator, api
             )
@@ -155,7 +164,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
