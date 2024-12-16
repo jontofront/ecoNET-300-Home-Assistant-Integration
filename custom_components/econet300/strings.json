@@ -38,6 +38,9 @@
       "fan_works": {
         "name": "Fan"
       },
+      "feeder_works": {
+        "name": "Feeder"
+      },
       "additional_feeder": {
         "name": "Additional feeder"
       },

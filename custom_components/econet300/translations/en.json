@@ -103,6 +103,9 @@
       "feeder_work": {
         "name": "Feeder work"
       },
+      "feeder_works": {
+        "name": "Feeder"
+      },
       "firing_up_count": {
         "name": "Firing up count"
       },
