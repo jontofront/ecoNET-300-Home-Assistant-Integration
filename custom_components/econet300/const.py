@@ -125,7 +125,7 @@ SENSOR_MAP_KEY = {
 
 BINARY_SENSOR_MAP_KEY = {
     "_default": {
-        "lighter",
+        "lighterWorks",
         "pumpCOWorks",
         "fanWorks",
         "pumpFireplaceWorks",
@@ -268,6 +268,7 @@ ENTITY_ICON = {
     "lambdaLevel": "mdi:lambda",
     "lambdaSet": "mdi:lambda",
     "lambdaStatus": "mdi:lambda",
+    "lighterWorks": "mdi:fire",
     "workAt100": "mdi:counter",
     "workAt50": "mdi:counter",
     "workAt30": "mdi:counter",
@@ -305,6 +306,7 @@ ENTITY_ICON_OFF = {
     "statusCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
     "lan": "mdi:lan-disconnect",
+    "lighterWorks": "mdi:fire-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128

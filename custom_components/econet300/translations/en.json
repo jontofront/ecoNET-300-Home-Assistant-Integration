@@ -20,7 +20,7 @@
   },
   "entity": {
     "binary_sensor": {
-      "lighter": {
+      "lighter_works": {
         "name": "Lighter"
       },
       "weather_control": {
