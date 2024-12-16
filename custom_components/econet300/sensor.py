@@ -5,7 +5,11 @@ from dataclasses import dataclass
 import logging
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.components.sensor import (
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -55,13 +59,15 @@ class EconetSensor(EconetEntity, SensorEntity):
         self._attr_native_value = None
         super().__init__(coordinator)
 
-    def _sync_state(self, value):
+    def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
         self._attr_native_value = self.entity_description.process_val(value)
         self.async_write_ha_state()
 
 
-# TODO: Add MixerSensor check class
+# Add MixerSensor check class Mypy warning
+# Definition of "entity_description" in base class "EconetEntity" is incompatible with definition in base
+# class "SensorEntity"
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 
@@ -86,35 +92,54 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
-        suggested_display_precision=ENTITY_PRECISION.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
     )
     _LOGGER.debug("Created sensor entity description: %s", entity_description)
     return entity_description
 
 
-def create_controller_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+def create_controller_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[EconetSensor]:
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
-    coordinator_data = coordinator.data.get("regParams", {})
+
+    data_regParams = coordinator.data.get("regParams", {})
+    data_sysParams = coordinator.data.get("sysParams", {})
+
     for data_key in SENSOR_MAP_KEY["_default"]:
-        if data_key in coordinator_data:
-            entities.append(
-                EconetSensor(
-                    create_sensor_entity_description(data_key), coordinator, api
-                )
+        _LOGGER.debug(
+            "Processing entity sensor data_key: %s from regParams & sysParams", data_key
+        )
+        if data_key in data_regParams:
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
             )
+            entities.append(entity)
             _LOGGER.debug(
-                "Key: %s mapped, sensor entity will be added",
+                "Created and appended sensor entity from regParams: %s", entity
+            )
+        elif data_key in data_sysParams:
+            if data_sysParams.get(data_key) is None:
+                _LOGGER.warning(
+                    "%s in sysParams is null, sensor will not be created.", data_key
+                )
+                continue
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created and appended sensor entity from sysParams: %s", entity
+            )
+        else:
+            _LOGGER.warning(
+                "Key: %s is not mapped in regParams or sysParams, sensor entity will not be added.",
                 data_key,
             )
-            continue
-        _LOGGER.warning(
-            "Key: %s is not mapped, sensor entity will not be added",
-            data_key,
-        )
-
+    _LOGGER.info("Total sensor entities created: %d", len(entities))
     return entities
 
 
@@ -139,7 +164,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         translation_key=camel_to_snake(key),
         icon=ENTITY_ICON.get(key, None),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
@@ -155,7 +180,6 @@ def create_mixer_sensors(
     entities: list[MixerSensor] = []
 
     for key, mixer_keys in SENSOR_MIXER_KEY.items():
-
         # Check if all required mixer keys have valid (non-null) values
         if any(
             coordinator.data.get("regParams", {}).get(mixer_key) is None
@@ -186,4 +210,5 @@ async def async_setup_entry(
     entities.extend(create_controller_sensors(coordinator, api))
     entities.extend(create_mixer_sensors(coordinator, api))
 
-    return async_add_entities(entities)
+    async_add_entities(entities)
+    return True

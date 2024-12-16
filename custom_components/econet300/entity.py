@@ -79,9 +79,9 @@ class EconetEntity(CoordinatorEntity):
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
-        _LOGGER.debug("sysParams: %s", sys_params)
-        _LOGGER.debug("regParams: %s", reg_params)
-        _LOGGER.debug("paramsEdits: %s", params_edits)
+        _LOGGER.debug("async_sysParams: %s", sys_params)
+        _LOGGER.debug("async_regParams: %s", reg_params)
+        _LOGGER.debug("async_paramsEdits: %s", params_edits)
 
         # Check if the coordinator has a 'data' attributes
         if "data" not in dir(self.coordinator):

@@ -19,7 +19,6 @@ from .const import (
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_STEP,
     ENTITY_UNIT_MAP,
-    ENTITY_VISIBLE,
     NUMBER_MAP,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -129,10 +128,17 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
-    return coordinator.has_param_edit_data(key) and coordinator.data["paramsEdits"][key]
+    try:
+        return (
+            coordinator.has_param_edit_data(key)
+            and coordinator.data["paramsEdits"][key]
+        )
+    except KeyError as e:
+        _LOGGER.error("KeyError in can_add: %s", e)
+        return False
 
 
-def apply_limits(desc: EconetNumberEntityDescription, limits: Limits):
+def apply_limits(desc: EconetNumberEntityDescription, limits: Limits) -> None:
     """Set the native minimum and maximum values for the given entity description."""
     desc.native_min_value = limits.min
     desc.native_max_value = limits.max
@@ -149,7 +155,6 @@ def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
         icon=ENTITY_ICON.get(map_key),
         device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
-        entity_registry_visible_default=ENTITY_VISIBLE.get(map_key, True),
         min_value=ENTITY_MIN_VALUE.get(map_key),
         max_value=ENTITY_MAX_VALUE.get(map_key),
         native_step=ENTITY_STEP.get(map_key, 1),
