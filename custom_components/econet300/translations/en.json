@@ -67,6 +67,9 @@
       "boiler_power": {
         "name": "Boiler output"
       },
+      "boiler_power_kw": {
+        "name": "Boiler power"
+      },
       "fuel_level": {
         "name": "Fuel level"
       },
