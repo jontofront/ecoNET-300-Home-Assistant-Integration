@@ -224,7 +224,7 @@ def create_lambda_sensor_entity_description(key: str) -> EconetSensorEntityDescr
         state_class=STATE_CLASS_MAP.get(key, None),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x / 10),
     )
     _LOGGER.debug("Created LambdaSensors entity description: %s", entity_description)
     return entity_description
