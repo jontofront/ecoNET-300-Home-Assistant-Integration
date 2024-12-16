@@ -102,6 +102,7 @@ SENSOR_MAP_KEY = {
         "lambdaLevel",
     },
     "_default": {
+        "boilerPower",
         "tempFeeder",
         "fuelLevel",
         "tempCO",

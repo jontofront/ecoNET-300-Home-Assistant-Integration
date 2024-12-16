@@ -24,6 +24,22 @@ he **ecoNET300 Home Assistant Integration** allows local control and monitoring 
 - **Easy Configuration**: Integrate directly via Home Assistant UI.
 - **Tested With**: ecoMAX810P-L TOUCH controller from [Plum Sp. z o.o.](https://www.plum.pl/)
 
+## Table of Contents
+1. [ecoNET300 Home Assistant Integration](#econet300-home-assistant-integration)
+2. [Overview](#overview)
+3. [Versions](#versions)
+   - [Migrating to v1.0.0_beta](#migrating-to-v100_beta)
+4. [Example](#example)
+5. [Installation](#installation)
+   - [HACS (Recommended)](#hacs-recommended)
+   - [Manual Installation](#manual-installation)
+6. [Configuration](#configuration)
+7. [Entities](#entities)
+   - [Sensors](#sensors)
+   - [Binary Sensors](#binary-sensors)
+8. [Contributing](#contributing)
+9. [Acknowledgments](#acknowledgments)
+10. [Disclaimer](#disclaimer)
 
 ## versions
 * v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
@@ -103,13 +119,13 @@ __Password__: Local password (NOT the password that you use to login to econet24
 <br>
 
 ## Entities
-### Sensors
-
-These sensors are retrieved from the `../econet/regParams` endpoint. Below is the list of available entity keys and their descriptions:
 
 ### Sensors
 
 These sensors are retrieved from the `../econet/regParams` and `../econet/sysParams` endpoints. Below is the list of available entity keys, their descriptions, and the corresponding API endpoint keys:
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
+
 
 | Entity Key           | Description                                               | Endpoint              |
 |----------------------|-----------------------------------------------------------|-----------------------|
@@ -127,6 +143,7 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `tempExternalSensor` | Outside (external) temperature                            | `../econet/regParams` |
 | `tempLowerBuffer`    | Temperature of the lower thermal buffer                   | `../econet/regParams` |
 | `tempUpperBuffer`    | Temperature of the upper thermal buffer                   | `../econet/regParams` |
+| `boilerPower`        | Current power output of the boiler                        | `../econet/regParams` |
 | `quality`            | Fuel quality or system quality indicator (if applicable) | `../econet/sysParams` |
 | `signal`             | Signal strength or communication status                  | `../econet/sysParams` |
 | `softVer`            | Software version of the controller                       | `../econet/sysParams` |
@@ -136,11 +153,13 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `moduleCSoftVer`     | Software version of Module C                             | `../econet/sysParams` |
 | `moduleLambdaSoftVer`| Software version of the lambda module                    | `../econet/sysParams` |
 | `modulePanelSoftVer` | Software version of the control panel                    | `../econet/sysParams` |
-
+</details>
 
 ### Binary Sensors
 
 These binary sensors are retrieved from the `../econet/regParams` and `../econet/sysParams` endpoints. Below is the list of available entity keys, their descriptions, and the corresponding API endpoint keys:
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
 
 | Entity Key           | Description                                      | Endpoint              |
 |----------------------|--------------------------------------------------|-----------------------|
@@ -152,7 +171,7 @@ These binary sensors are retrieved from the `../econet/regParams` and `../econet
 | `mainSrv`            | Indicates if the main server is operational      | `../econet/sysParams` |
 | `wifi`               | Indicates if the Wi-Fi connection is active      | `../econet/sysParams` |
 | `lan`                | Indicates if the LAN connection is active        | `../econet/sysParams` |
-
+</details>
 
 ## Contributing
 
