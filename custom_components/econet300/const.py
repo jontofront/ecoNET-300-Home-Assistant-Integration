@@ -11,6 +11,7 @@ from homeassistant.const import (
     STATE_PROBLEM,
     STATE_UNKNOWN,
     EntityCategory,
+    UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
 )
@@ -25,6 +26,7 @@ DEVICE_INFO_MANUFACTURER = "PLUM"
 DEVICE_INFO_MODEL = "ecoNET300"
 DEVICE_INFO_CONTROLLER_NAME = "PLUM ecoNET300"
 DEVICE_INFO_MIXER_NAME = "Mixer device"
+DEVICE_INFO_LAMBDA_NAME = "Module Lambda"
 
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
@@ -44,14 +46,7 @@ API_REG_PARAMS_PARAM_DATA = "curr"
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
-## Map names for params data in API_REG_PARAMS_DATA_URI
-API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
-
-## Map units for params data map API_RM_CURRENT_DATA_PARAMS_URI
-API_RM_PARAMSUNITSNAMES_URI = "rmParamsUnitsNames"
-
 # Boiler status keys map
-# boiler mode names from  endpoint http://LocalIP/econet/rmParamsEnums?
 OPERATION_MODE_NAMES = {
     0: STATE_OFF,
     1: "fire_up",
@@ -83,7 +78,7 @@ MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 
 # Dynamically generate SENSOR_MIXER_KEY
 SENSOR_MIXER_KEY = {
-    str(i): {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
+    i: {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
     for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
 }
 
@@ -102,27 +97,45 @@ SENSOR_MAP_KEY = {
         "lambdaLevel",
     },
     "_default": {
+        "boilerPower",
+        "boilerPowerKW",
         "tempFeeder",
         "fuelLevel",
         "tempCO",
         "tempCOSet",
         "statusCWU",
+        "tempCWU",
         "tempCWUSet",
         "tempFlueGas",
         "mode",
         "fanPower",
         "thermostat",
         "tempExternalSensor",
+        "tempLowerBuffer",
+        "tempUpperBuffer",
+        "quality",
+        "signal",
+        "softVer",
+        "controllerID",
+        "moduleASoftVer",
+        "moduleBSoftVer",
+        "moduleCSoftVer",
+        "moduleLambdaSoftVer",
+        "modulePanelSoftVer",
     },
 }
 
 BINARY_SENSOR_MAP_KEY = {
     "_default": {
-        "lighter",
+        "lighterWorks",
         "pumpCOWorks",
         "fanWorks",
+        "feederWorks",
         "pumpFireplaceWorks",
         "pumpCWUWorks",
+        "mainSrv",
+        "wifi",
+        "lan",
     },
 }
 
@@ -131,6 +144,7 @@ NUMBER_MAP = {
     "1281": "tempCWUSet",
 }
 
+# By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
     "tempCO": UnitOfTemperature.CELSIUS,
     "tempCOSet": UnitOfTemperature.CELSIUS,
@@ -143,7 +157,6 @@ ENTITY_UNIT_MAP = {
     "workAt50": UnitOfTime.HOURS,
     "workAt30": UnitOfTime.HOURS,
     "FeederWork": UnitOfTime.HOURS,
-    "FiringUpCount": None,
     "thermoTemp": UnitOfTemperature.CELSIUS,
     "fanPower": PERCENTAGE,
     "tempFlueGas": UnitOfTemperature.CELSIUS,
@@ -152,6 +165,7 @@ ENTITY_UNIT_MAP = {
     "tempBack": UnitOfTemperature.CELSIUS,
     "tempCWU": UnitOfTemperature.CELSIUS,
     "boilerPower": PERCENTAGE,
+    "boilerPowerKW": UnitOfPower.KILO_WATT,
     "fuelLevel": PERCENTAGE,
     "tempUpperBuffer": UnitOfTemperature.CELSIUS,
     "tempLowerBuffer": UnitOfTemperature.CELSIUS,
@@ -163,36 +177,22 @@ ENTITY_UNIT_MAP = {
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
 }
 
-STATE_CLASS_MAP: dict[str, SensorStateClass] = {
-    "tempFeeder": SensorStateClass.MEASUREMENT,
-    "tempExternalSensor": SensorStateClass.MEASUREMENT,
-    "lambdaSet": SensorStateClass.MEASUREMENT,
-    "lambdaLevel": SensorStateClass.MEASUREMENT,
-    "workAt100": SensorStateClass.MEASUREMENT,
-    "workAt50": SensorStateClass.MEASUREMENT,
-    "workAt30": SensorStateClass.MEASUREMENT,
-    "FeederWork": SensorStateClass.MEASUREMENT,
-    "FiringUpCount": SensorStateClass.MEASUREMENT,
-    "tempCO": SensorStateClass.MEASUREMENT,
-    "tempCOSet": SensorStateClass.MEASUREMENT,
-    "tempCWUSet": SensorStateClass.MEASUREMENT,
-    "boiler_power": SensorStateClass.MEASUREMENT,
-    "fanPower": SensorStateClass.MEASUREMENT,
-    "tempFlueGas": SensorStateClass.MEASUREMENT,
-    "mixerSetTemp1": SensorStateClass.MEASUREMENT,
-    "tempBack": SensorStateClass.MEASUREMENT,
-    "tempCWU": SensorStateClass.MEASUREMENT,
-    "fuelLevel": SensorStateClass.MEASUREMENT,
-    "tempUpperBuffer": SensorStateClass.MEASUREMENT,
-    "tempLowerBuffer": SensorStateClass.MEASUREMENT,
-    "signal": SensorStateClass.MEASUREMENT,
-    "quality": SensorStateClass.MEASUREMENT,
-    "valveMixer1": SensorStateClass.MEASUREMENT,
-    "burnerOutput": SensorStateClass.MEASUREMENT,
-    "mixerTemp": SensorStateClass.MEASUREMENT,
-    "mixerSetTemp": SensorStateClass.MEASUREMENT,
+# By default all sensors state_class are MEASUREMENT
+STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
+    "lambdaStatus": None,
+    "mode": None,
+    "thermostat": None,
+    "statusCWU": None,
+    "softVer": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
+# By default all sensors device_class are None
 ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     #############################
     #          SENSORS
@@ -201,6 +201,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempExternalSensor": SensorDeviceClass.TEMPERATURE,
     "tempCO": SensorDeviceClass.TEMPERATURE,
     "boilerPower": SensorDeviceClass.POWER_FACTOR,
+    "boilerPowerKW": SensorDeviceClass.POWER,
     "fanPower": SensorDeviceClass.POWER_FACTOR,
     "tempFlueGas": SensorDeviceClass.TEMPERATURE,
     "mixerSetTemp1": SensorDeviceClass.TEMPERATURE,
@@ -212,17 +213,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempUpperBuffer": SensorDeviceClass.TEMPERATURE,
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
-    "softVer": None,
-    "moduleASoftVer": None,
-    "moduleBSoftVer": None,
-    "modulePanelSoftVer": None,
-    "moduleLambdaSoftVer": None,
-    "protocolType": None,
-    "controllerID": None,
-    "valveMixer1": None,
     "servoMixer1": SensorDeviceClass.ENUM,
-    "Status_wifi": None,
-    "main_server": None,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -238,15 +229,10 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     #############################
     #      BINARY SENSORS
     #############################
-    "lighter": BinarySensorDeviceClass.RUNNING,
-    "weatherControl": BinarySensorDeviceClass.RUNNING,
-    "unseal": BinarySensorDeviceClass.RUNNING,
-    "pumpCOWorks": BinarySensorDeviceClass.RUNNING,
-    "fanWorks": BinarySensorDeviceClass.RUNNING,
-    "additionalFeeder": BinarySensorDeviceClass.RUNNING,
-    "pumpFireplaceWorks": BinarySensorDeviceClass.RUNNING,
-    "pumpCWUWorks": BinarySensorDeviceClass.RUNNING,
-    "mixerPumpWorks": BinarySensorDeviceClass.RUNNING,
+    # By default all binary sensors device_class are RUNNING
+    "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
+    "wifi": BinarySensorDeviceClass.CONNECTIVITY,
+    "lan": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -263,25 +249,37 @@ ENTITY_PRECISION = {
     "tempCWU": 1,
     "tempFlueGas": 1,
     "fanPower": 0,
+    "statusCWU": None,
+    "thermostat": None,
+    "lambdaStatus": None,
+    "mode": None,
+    "softVer": None,
+    "controllerID": None,
+    "moduleASoftVer": None,
+    "moduleBSoftVer": None,
+    "moduleCSoftVer": None,
+    "moduleLambdaSoftVer": None,
+    "modulePanelSoftVer": None,
 }
 
 ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
     "temCO": "mdi:thermometer-lines",
-    "tempCOSet": "mdi:thermometer-chevron-up",
-    "tempCWUSet": "mdi:thermometer-chevron-up",
     "statusCWU": "mdi:water-boiler",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
+    "boilerPowerKW": "mdi:gauge",
     "fuelLevel": "mdi:gas-station",
     "lambdaLevel": "mdi:lambda",
     "lambdaSet": "mdi:lambda",
     "lambdaStatus": "mdi:lambda",
+    "lighterWorks": "mdi:fire",
     "workAt100": "mdi:counter",
     "workAt50": "mdi:counter",
     "workAt30": "mdi:counter",
     "FeederWork": "mdi:counter",
+    "feederWorks": "mdi:screw-lag",
     "FiringUpCount": "mdi:counter",
     "quality": "mdi:signal",
     "pumpCOWorks": "mdi:pump",
@@ -289,14 +287,21 @@ ENTITY_ICON = {
     "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump",
     "pumpCWUWorks": "mdi:pump",
-    "main_server": "mdi:server",
     "mixerPumpWorks": "mdi:pump",
     "mixerTemp": "mdi:thermometer",
     "mixerSetTemp": "mdi:thermometer",
     "valveMixer1": "mdi:valve",
-    "mixerSetTemp1": "mdi:thermometer-chevron-up",
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
+    "mainSrv": "mdi:server-network",
+    "lan": "mdi:lan-connect",
+    "softVer": "mdi:alarm-panel-outline",
+    "controllerID": "mdi:alarm-panel-outline",
+    "moduleASoftVer": "mdi:raspberry-pi",
+    "moduleBSoftVer": "mdi:raspberry-pi",
+    "moduleCSoftVer": "mdi:raspberry-pi",
+    "moduleLambdaSoftVer": "mdi:raspberry-pi",
+    "modulePanelSoftVer": "mdi:alarm-panel-outline",
 }
 
 ENTITY_ICON_OFF = {
@@ -306,6 +311,9 @@ ENTITY_ICON_OFF = {
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
     "statusCWU": "mdi:water-boiler-off",
+    "mainSrv": "mdi:server-network-off",
+    "lan": "mdi:lan-disconnect",
+    "lighterWorks": "mdi:fire-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
@@ -319,8 +327,6 @@ ENTITY_VALUE_PROCESSOR = {
             else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
         )
     ),
-    "status_wifi": lambda x: "Connected" if x == 1 else "Disconnected",
-    "main_server": lambda x: "Server available" if x == 1 else "Server not available",
     "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
     "thermostat": lambda x: "ON" if x == 1 else "OFF",
 }
@@ -336,13 +342,10 @@ ENTITY_CATEGORY = {
     "moduleLambdaSoftVer": EntityCategory.DIAGNOSTIC,
     "protocolType": EntityCategory.DIAGNOSTIC,
     "controllerID": EntityCategory.DIAGNOSTIC,
-    "status_wifi": EntityCategory.DIAGNOSTIC,
-    "main_server": EntityCategory.DIAGNOSTIC,
-    "workAt100": EntityCategory.DIAGNOSTIC,
-    "workAt50": EntityCategory.DIAGNOSTIC,
-    "workAt30": EntityCategory.DIAGNOSTIC,
-    "FeederWork": EntityCategory.DIAGNOSTIC,
-    "FiringUpCount": EntityCategory.DIAGNOSTIC,
+    "moduleCSoftVer": EntityCategory.DIAGNOSTIC,
+    "mainSrv": EntityCategory.DIAGNOSTIC,
+    "wifi": EntityCategory.DIAGNOSTIC,
+    "lan": EntityCategory.DIAGNOSTIC,
 }
 
 ENTITY_MIN_VALUE = {
@@ -358,9 +361,4 @@ ENTITY_MAX_VALUE = {
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
-}
-
-ENTITY_VISIBLE = {
-    "tempCOSet": True,
-    "tempCWUSet": True,
 }

@@ -20,7 +20,7 @@
   },
   "entity": {
     "binary_sensor": {
-      "lighter": {
+      "lighter_works": {
         "name": "Lighter"
       },
       "weather_control": {
@@ -52,11 +52,23 @@
       },
       "boiler_pump": {
         "name": "Boiler pump"
+      },
+      "main_srv": {
+        "name": "Econet24.com server"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
       }
     },
     "sensor": {
       "boiler_power": {
         "name": "Boiler output"
+      },
+      "boiler_power_kw": {
+        "name": "Boiler power"
       },
       "fuel_level": {
         "name": "Fuel level"
@@ -82,9 +94,6 @@
       "lambda_level": {
         "name": "Lambda level"
       },
-      "main_server": {
-        "name": "Main server"
-      },
       "work_at100": {
         "name": "Work at 100%"
       },
@@ -96,6 +105,9 @@
       },
       "feeder_work": {
         "name": "Feeder work"
+      },
+      "feeder_works": {
+        "name": "Feeder"
       },
       "firing_up_count": {
         "name": "Firing up count"
@@ -135,14 +147,35 @@
       "pump_fireplace_works": {
         "name": "Boiler pump"
       },
-      "signal": {
+      "quality": {
         "name": "Signal quality"
+      },
+      "signal": {
+        "name": "Signal strength"
+      },
+      "soft_ver": {
+        "name": "Module ecoNET version"
+      },
+      "controller_id": {
+        "name": "Controller name"
+      },
+      "module_a_soft_ver": {
+        "name": "Module A version"
+      },
+      "module_b_soft_ver": {
+        "name": "Module B version"
+      },
+      "module_c_soft_ver": {
+        "name": "Module C version"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Module Lambda version"
+      },
+      "module_panel_soft_ver": {
+        "name": "Module Panel version"
       },
       "servo_mixer1": {
         "name": "Mixer 1 servo position"
-      },
-      "status_wifi": {
-        "name": "Wireless network connected"
       },
       "temp_co": {
         "name": "Heating temperature"

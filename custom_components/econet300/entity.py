@@ -10,6 +10,7 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .const import (
     DEVICE_INFO_CONTROLLER_NAME,
+    DEVICE_INFO_LAMBDA_NAME,
     DEVICE_INFO_MANUFACTURER,
     DEVICE_INFO_MIXER_NAME,
     DEVICE_INFO_MODEL,
@@ -79,9 +80,9 @@ class EconetEntity(CoordinatorEntity):
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
-        _LOGGER.debug("sysParams: %s", sys_params)
-        _LOGGER.debug("regParams: %s", reg_params)
-        _LOGGER.debug("paramsEdits: %s", params_edits)
+        _LOGGER.debug("async_sysParams: %s", sys_params)
+        _LOGGER.debug("async_regParams: %s", reg_params)
+        _LOGGER.debug("async_paramsEdits: %s", params_edits)
 
         # Check if the coordinator has a 'data' attributes
         if "data" not in dir(self.coordinator):
@@ -151,6 +152,31 @@ class MixerEntity(EconetEntity):
             manufacturer=DEVICE_INFO_MANUFACTURER,
             model=DEVICE_INFO_MODEL,
             model_id=self.api.model_id,
+            configuration_url=self.api.host,
+            sw_version=self.api.sw_rev,
+            via_device=(DOMAIN, self.api.uid),
+        )
+
+
+class LambdaEntity(EconetEntity):
+    """Represents EcosterEntity."""
+
+    def __init__(
+        self,
+        description: EntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ):
+        super().__init__(description, coordinator, api)
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info of the entity."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, f"{self.api.uid}lambda")},
+            name=f"{DEVICE_INFO_LAMBDA_NAME}",
+            manufacturer=DEVICE_INFO_MANUFACTURER,
+            model=DEVICE_INFO_MODEL,
             configuration_url=self.api.host,
             sw_version=self.api.sw_rev,
             via_device=(DOMAIN, self.api.uid),

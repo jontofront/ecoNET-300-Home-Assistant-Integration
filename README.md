@@ -24,6 +24,22 @@ he **ecoNET300 Home Assistant Integration** allows local control and monitoring 
 - **Easy Configuration**: Integrate directly via Home Assistant UI.
 - **Tested With**: ecoMAX810P-L TOUCH controller from [Plum Sp. z o.o.](https://www.plum.pl/)
 
+## Table of Contents
+1. [ecoNET300 Home Assistant Integration](#econet300-home-assistant-integration)
+2. [Overview](#overview)
+3. [Versions](#versions)
+   - [Migrating to v1.0.0_beta](#migrating-to-v100_beta)
+4. [Example](#example)
+5. [Installation](#installation)
+   - [HACS (Recommended)](#hacs-recommended)
+   - [Manual Installation](#manual-installation)
+6. [Configuration](#configuration)
+7. [Entities](#entities)
+   - [Sensors](#sensors)
+   - [Binary Sensors](#binary-sensors)
+8. [Contributing](#contributing)
+9. [Acknowledgments](#acknowledgments)
+10. [Disclaimer](#disclaimer)
 
 ## versions
 * v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
@@ -103,36 +119,72 @@ __Password__: Local password (NOT the password that you use to login to econet24
 <br>
 
 ## Entities
+
 ### Sensors
 
-These sensors are retrieved from the `../econet/regParams` endpoint. Below is the list of available entity keys and their descriptions:
+These sensors are retrieved from the `../econet/regParams` and `../econet/sysParams` endpoints. Below is the list of available entity keys, their descriptions, and the corresponding API endpoint keys:
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
 
-| sensor Key           | Description                              |
-|----------------------|------------------------------------------|
-| `tempFeeder`         | Temperature of the feeder mechanism      |
-| `fuelLevel`          | Current fuel level in the system         |
-| `tempCO`             | Current fireplace temperature            |
-| `tempCOSet`          | Desired fireplace set temperature        |
-| `statusCWU`          | Status of the hot water (CWU) system     |
-| `tempCWUSet`         | Desired hot water (CWU) temperature      |
-| `tempFlueGas`        | Exhaust temperature reading              |
-| `mode`               | Current operational mode of the device   |
-| `fanPower`           | Current fan power usage                  |
-| `thermostat`         | Thermostat status or set temperature     |
-| `tempExternalSensor` | Outside (external) temperature           |
 
+| Entity Key           | Description                                               | Endpoint              |
+|----------------------|-----------------------------------------------------------|-----------------------|
+| `tempFeeder`         | Temperature of the feeder mechanism                       | `../econet/regParams` |
+| `fuelLevel`          | Current fuel level in the system                          | `../econet/regParams` |
+| `tempCO`             | Current fireplace temperature                             | `../econet/regParams` |
+| `tempCOSet`          | Desired fireplace set temperature                         | `../econet/regParams` |
+| `statusCWU`          | Status of the hot water (CWU) system                      | `../econet/regParams` |
+| `tempCWU`            | Current hot water (CWU) temperature                       | `../econet/regParams` |
+| `tempCWUSet`         | Desired hot water (CWU) temperature                       | `../econet/regParams` |
+| `tempFlueGas`        | Exhaust temperature reading                               | `../econet/regParams` |
+| `mode`               | Current operational mode of the device                    | `../econet/regParams` |
+| `fanPower`           | Current fan power usage                                   | `../econet/regParams` |
+| `thermostat`         | Thermostat status or set temperature                      | `../econet/regParams` |
+| `tempExternalSensor` | Outside (external) temperature                            | `../econet/regParams` |
+| `tempLowerBuffer`    | Temperature of the lower thermal buffer                   | `../econet/regParams` |
+| `tempUpperBuffer`    | Temperature of the upper thermal buffer                   | `../econet/regParams` |
+| `boilerPower`        | Current power output of the boiler                        | `../econet/regParams` |
+| `quality`            | Fuel quality or system quality indicator (if applicable) | `../econet/sysParams` |
+| `signal`             | Signal strength or communication status                  | `../econet/sysParams` |
+| `softVer`            | Software version of the controller                       | `../econet/sysParams` |
+| `controllerID`       | Unique identifier for the controller                     | `../econet/sysParams` |
+| `moduleASoftVer`     | Software version of Module A                             | `../econet/sysParams` |
+| `moduleBSoftVer`     | Software version of Module B                             | `../econet/sysParams` |
+| `moduleCSoftVer`     | Software version of Module C                             | `../econet/sysParams` |
+| `moduleLambdaSoftVer`| Software version of the lambda module                    | `../econet/sysParams` |
+| `modulePanelSoftVer` | Software version of the control panel                    | `../econet/sysParams` |
+</details>
 
 ### Binary Sensors
 
-These binary sensors are retrieved from the `../econet/regParams` endpoint. Below is the list of available entity keys and their descriptions:
-| Entity Key           | Description                                 |
-|----------------------|---------------------------------------------|
-| `lighter`            | Indicates if the lighter is active          |
-| `pumpCOWorks`        | Indicates if the fireplace pump is working  |
-| `fanWorks`           | Indicates if the fan is currently active    |
-| `pumpFireplaceWorks` | Indicates if the fireplace pump is working  |
-| `pumpCWUWorks`       | Indicates if the hot water (CWU) pump is active |
+These binary sensors are retrieved from the `../econet/regParams` and `../econet/sysParams` endpoints. Below is the list of available entity keys, their descriptions, and the corresponding API endpoint keys:
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
 
+| Entity Key           | Description                                      | Endpoint              |
+|----------------------|--------------------------------------------------|-----------------------|
+| `lighter`            | Indicates if the lighter is active               | `../econet/regParams` |
+| `pumpCOWorks`        | Indicates if the fireplace pump is working       | `../econet/regParams` |
+| `fanWorks`           | Indicates if the fan is currently active         | `../econet/regParams` |
+| `pumpFireplaceWorks` | Indicates if the fireplace pump is working       | `../econet/regParams` |
+| `pumpCWUWorks`       | Indicates if the hot water (CWU) pump is active  | `../econet/regParams` |
+| `mainSrv`            | Indicates if the main server is operational      | `../econet/sysParams` |
+| `wifi`               | Indicates if the Wi-Fi connection is active      | `../econet/sysParams` |
+| `lan`                | Indicates if the LAN connection is active        | `../econet/sysParams` |
+</details>
+
+### Number Entities
+
+These number entities are retrieved from the `../econet/rmCurrentDataParamsEdits` endpoint. Below is the list of available entity keys, their descriptions, and the corresponding API endpoint keys:
+
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
+
+| Entity Key           | Description                                  | Endpoint                             |
+|----------------------|----------------------------------------------|--------------------------------------|
+| `tempCOSet`          | Desired fireplace set temperature            | `../econet/rmCurrentDataParamsEdits` |
+| `tempCWUSet`         | Desired hot water (CWU) set temperature      | `../econet/rmCurrentDataParamsEdits` |
+</details>
 
 ## Contributing
 

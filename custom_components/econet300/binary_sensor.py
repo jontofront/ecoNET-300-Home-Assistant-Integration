@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import logging
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -84,7 +85,9 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
-        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
+        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(
+            key, BinarySensorDeviceClass.RUNNING
+        ),
         icon=ENTITY_ICON.get(key, None),
         icon_off=ENTITY_ICON_OFF.get(key, None),
     )
@@ -95,20 +98,31 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
 def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create binary sensors."""
     entities: list[EconetBinarySensor] = []
-    coordinator_data = coordinator.data["regParams"]
+    data_regParams = coordinator.data.get("regParams", {})
+    data_sysParams = coordinator.data.get("sysParams", {})
+
     for data_key in BINARY_SENSOR_MAP_KEY["_default"]:
-        _LOGGER.debug("Processing binary sensor data_key: %s", data_key)
-        if data_key in coordinator_data:
+        _LOGGER.debug(
+            "Processing binary sensor data_key: %s from regParams & sysParams", data_key
+        )
+        if data_key in data_regParams:
             entity = EconetBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api
             )
             entities.append(entity)
-            _LOGGER.debug("Created and appended entity: %s", entity)
+            _LOGGER.debug("Created and appended entity from regParams: %s", entity)
+        elif data_key in data_sysParams:
+            entity = EconetBinarySensor(
+                create_binary_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug("Created and appended entity from sysParams: %s", entity)
         else:
             _LOGGER.warning(
-                "key: %s is not mapped, binary sensor entity will not be added",
+                "key: %s is not mapped in regParams, binary sensor entity will not be added",
                 data_key,
             )
+    _LOGGER.info("Total entities created: %d", len(entities))
     return entities
 
 
