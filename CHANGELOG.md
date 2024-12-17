@@ -176,4 +176,11 @@ Thank for @pblxptr add new code line from him
 
 **Full Changelog**: [https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/compare/v0.3.3...v1.0.5](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/compare/v0.3.3...v1.0.5)
 
-## [v1.0.5]
+## [v1.0.11]
+
+Additions and Updates to Sensors:
+Added boilerPowerKW as a new sensor type in custom_components/econet300/const.py and updated its unit, device class, and icon. [1] [2] [3] [4] [5]
+Added feederWorks as a new binary sensor in custom_components/econet300/const.py and updated its icon. [1] [2] [3]
+Updates to Existing Sensors:
+Renamed the lighter sensor to lighterWorks in custom_components/econet300/const.py and updated its icon. [1] [2]
+Updated the names of the lighter, boilerPower, and feeder sensors in custom_components/econet300/strings.json and custom_components/econet300/translations/en.json. [1] [2] [3] [4] [5] [6]
