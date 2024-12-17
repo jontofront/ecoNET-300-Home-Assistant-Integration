@@ -114,39 +114,37 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
 
 
 def create_controller_sensors(
-    coordinator: EconetDataCoordinator, api: Econet300Api
+    sensor_keys: dict, coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[EconetSensor]:
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
-
     data_regParams = coordinator.data.get("regParams", {})
     data_sysParams = coordinator.data.get("sysParams", {})
 
-    for data_key in SENSOR_MAP_KEY["_default"]:
+    for data_key in sensor_keys:
         _LOGGER.debug(
             "Processing entity sensor data_key: %s from regParams & sysParams", data_key
         )
+        # Check regParams or sysParams for the key
         if data_key in data_regParams:
-            entity = EconetSensor(
-                create_sensor_entity_description(data_key), coordinator, api
+            entities.append(
+                EconetSensor(
+                    create_sensor_entity_description(data_key), coordinator, api
+                )
             )
-            entities.append(entity)
-            _LOGGER.debug(
-                "Created and appended sensor entity from regParams: %s", entity
-            )
+            _LOGGER.debug("Added sensor from regParams: %s", data_key)
         elif data_key in data_sysParams:
             if data_sysParams.get(data_key) is None:
                 _LOGGER.warning(
-                    "%s in sysParams is null, sensor will not be created.", data_key
+                    "Key %s in sysParams is null, sensor will not be created.", data_key
                 )
                 continue
-            entity = EconetSensor(
-                create_sensor_entity_description(data_key), coordinator, api
+            entities.append(
+                EconetSensor(
+                    create_sensor_entity_description(data_key), coordinator, api
+                )
             )
-            entities.append(entity)
-            _LOGGER.debug(
-                "Created and appended sensor entity from sysParams: %s", entity
-            )
+            _LOGGER.debug("Added sensor from sysParams: %s", data_key)
         else:
             _LOGGER.warning(
                 "Key: %s is not mapped in regParams or sysParams, sensor entity will not be added.",
@@ -267,14 +265,31 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> bool:
-    """Set up the sensor platform."""
+    """Set up the sensor platform dynamically based on ControllerID."""
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
+    sys_params = coordinator.data.get("sysParams", {})
+    controller_id = sys_params.get("controllerID", "_default")
+
+    if not controller_id:
+        _LOGGER.error(
+            "ControllerID is missing in sysParams, no sensors will be created."
+        )
+        return False
+
+    _LOGGER.info("ControllerID found: %s", controller_id)
+
+    # Get the keys for the specific controller, fallback to '_default' if not found
+    controller_keys = SENSOR_MAP_KEY.get(controller_id, SENSOR_MAP_KEY["_default"])
+
+    # Create sensors dynamically based on controller
     entities: list[EconetSensor] = []
-    entities.extend(create_controller_sensors(coordinator, api))
+    entities.extend(create_controller_sensors(controller_keys, coordinator, api))
     entities.extend(create_mixer_sensors(coordinator, api))
     entities.extend(create_lambda_sensors(coordinator, api))
 
+    # Add entities to Home Assistant
     async_add_entities(entities)
+    _LOGGER.info("Total sensor entities added: %d", len(entities))
     return True

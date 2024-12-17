@@ -87,9 +87,14 @@ SENSOR_MIXER_KEY = {
 #######################
 
 SENSOR_MAP_KEY = {
-    "ecoster": {
-        "ecoSterTemp1",
-        "ecoSterTemp2",
+    "ecoMAX360i": {
+        "PS",
+        "Circuit2thermostatTemp",
+        "TempClutch",
+        "Circuit3thermostatTemp",
+        "TempCircuit3",
+        "TempCircuit2",
+        "TempBuforUp",
     },
     "lambda": {
         "lambdaStatus",
@@ -175,6 +180,7 @@ ENTITY_UNIT_MAP = {
     "burnerOutput": PERCENTAGE,
     "mixerTemp": UnitOfTemperature.CELSIUS,
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
+    "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
 }
 
 # By default all sensors state_class are MEASUREMENT
@@ -214,6 +220,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
+    "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -361,4 +368,10 @@ ENTITY_MAX_VALUE = {
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
+}
+
+# Product model is controllerID in the API sysParams
+PRODUCT_MODEL = {
+    "DEFAULT": "default",
+    "ECOMAX_360I": "ecoMAX360i",
 }
