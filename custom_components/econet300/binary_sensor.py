@@ -28,7 +28,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
