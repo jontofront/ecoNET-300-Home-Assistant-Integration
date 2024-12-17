@@ -11,6 +11,7 @@ from homeassistant.const import (
     STATE_PROBLEM,
     STATE_UNKNOWN,
     EntityCategory,
+    UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
 )
@@ -97,6 +98,7 @@ SENSOR_MAP_KEY = {
     },
     "_default": {
         "boilerPower",
+        "boilerPowerKW",
         "tempFeeder",
         "fuelLevel",
         "tempCO",
@@ -125,9 +127,10 @@ SENSOR_MAP_KEY = {
 
 BINARY_SENSOR_MAP_KEY = {
     "_default": {
-        "lighter",
+        "lighterWorks",
         "pumpCOWorks",
         "fanWorks",
+        "feederWorks",
         "pumpFireplaceWorks",
         "pumpCWUWorks",
         "mainSrv",
@@ -162,6 +165,7 @@ ENTITY_UNIT_MAP = {
     "tempBack": UnitOfTemperature.CELSIUS,
     "tempCWU": UnitOfTemperature.CELSIUS,
     "boilerPower": PERCENTAGE,
+    "boilerPowerKW": UnitOfPower.KILO_WATT,
     "fuelLevel": PERCENTAGE,
     "tempUpperBuffer": UnitOfTemperature.CELSIUS,
     "tempLowerBuffer": UnitOfTemperature.CELSIUS,
@@ -197,6 +201,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempExternalSensor": SensorDeviceClass.TEMPERATURE,
     "tempCO": SensorDeviceClass.TEMPERATURE,
     "boilerPower": SensorDeviceClass.POWER_FACTOR,
+    "boilerPowerKW": SensorDeviceClass.POWER,
     "fanPower": SensorDeviceClass.POWER_FACTOR,
     "tempFlueGas": SensorDeviceClass.TEMPERATURE,
     "mixerSetTemp1": SensorDeviceClass.TEMPERATURE,
@@ -264,14 +269,17 @@ ENTITY_ICON = {
     "statusCWU": "mdi:water-boiler",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
+    "boilerPowerKW": "mdi:gauge",
     "fuelLevel": "mdi:gas-station",
     "lambdaLevel": "mdi:lambda",
     "lambdaSet": "mdi:lambda",
     "lambdaStatus": "mdi:lambda",
+    "lighterWorks": "mdi:fire",
     "workAt100": "mdi:counter",
     "workAt50": "mdi:counter",
     "workAt30": "mdi:counter",
     "FeederWork": "mdi:counter",
+    "feederWorks": "mdi:screw-lag",
     "FiringUpCount": "mdi:counter",
     "quality": "mdi:signal",
     "pumpCOWorks": "mdi:pump",
@@ -305,6 +313,7 @@ ENTITY_ICON_OFF = {
     "statusCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
     "lan": "mdi:lan-disconnect",
+    "lighterWorks": "mdi:fire-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128

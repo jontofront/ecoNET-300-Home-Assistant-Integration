@@ -20,7 +20,7 @@
   },
   "entity": {
     "binary_sensor": {
-      "lighter": {
+      "lighter_works": {
         "name": "Lighter"
       },
       "weather_control": {
@@ -37,6 +37,9 @@
       },
       "fan_works": {
         "name": "Fan"
+      },
+      "feeder_works": {
+        "name": "Feeder"
       },
       "additional_feeder": {
         "name": "Additional feeder"
@@ -66,6 +69,9 @@
     "sensor": {
       "boiler_power": {
         "name": "Boiler output"
+      },
+      "boiler_power_kw": {
+        "name": "Boiler power"
       },
       "fuel_level": {
         "name": "Fuel level"

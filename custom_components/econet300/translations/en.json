@@ -20,7 +20,7 @@
   },
   "entity": {
     "binary_sensor": {
-      "lighter": {
+      "lighter_works": {
         "name": "Lighter"
       },
       "weather_control": {
@@ -67,6 +67,9 @@
       "boiler_power": {
         "name": "Boiler output"
       },
+      "boiler_power_kw": {
+        "name": "Boiler power"
+      },
       "fuel_level": {
         "name": "Fuel level"
       },
@@ -102,6 +105,9 @@
       },
       "feeder_work": {
         "name": "Feeder work"
+      },
+      "feeder_works": {
+        "name": "Feeder"
       },
       "firing_up_count": {
         "name": "Firing up count"
