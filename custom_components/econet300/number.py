@@ -126,15 +126,25 @@ class EconetNumber(EconetEntity, NumberEntity):
         self.async_write_ha_state()
 
 
-def can_add(key: str, coordinator: EconetDataCoordinator):
+def can_add_number_entity(key: str, coordinator: EconetDataCoordinator):
     """Check if a given entity can be added based on the availability of data in the coordinator."""
     try:
+        # Check for unsupported controllers
+        controller_id = coordinator.data.get("sysParams", {}).get("controllerID", "")
+        if controller_id == "ecoMAX360i":
+            _LOGGER.info(
+                "Skipping key '%s' because controller '%s' does not support paramsEdits",
+                key,
+                controller_id,
+            )
+            return False
+        # Check for paramsEdits availability for othr controllers
         return (
             coordinator.has_param_edit_data(key)
             and coordinator.data["paramsEdits"][key]
         )
     except KeyError as e:
-        _LOGGER.error("KeyError in can_add: %s", e)
+        _LOGGER.error("KeyError in can_add_number_entity: %s", e)
         return False
 
 
@@ -171,6 +181,15 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
+    # Check the controller type before proceeding
+    controller_id = coordinator.data.get("sysParams", {}).get("controllerID", "")
+    if controller_id == "ecoMAX360i":
+        _LOGGER.info(
+            "Controller '%s' detected - skipping setup of number entities.",
+            controller_id,
+        )
+        return
+
     entities: list[EconetNumber] = []
 
     for key in NUMBER_MAP:
@@ -182,7 +201,7 @@ async def async_setup_entry(
             )
             continue
 
-        if can_add(key, coordinator):
+        if can_add_number_entity(key, coordinator):
             entity_description = create_number_entity_description(key)
             apply_limits(entity_description, number_limits)
             entities.append(EconetNumber(entity_description, coordinator, api))
