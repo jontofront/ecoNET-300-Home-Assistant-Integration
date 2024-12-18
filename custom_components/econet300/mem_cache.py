@@ -47,7 +47,7 @@ class MemCache:
 
         return self._data[key].value()
 
-    def set(self, key, value, duration: int = 60):
+    def set(self, key, value, duration: int = 30):
         """Set the value of the specified key in the cache."""
         _LOGGER.debug("Caching value for: '%s'", key)
         self._data[key] = MemCacheItem(key, value, duration)

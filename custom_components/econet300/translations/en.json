@@ -29,14 +29,14 @@
       "unseal": {
         "name": "Unseal"
       },
-      "thermostat": {
-        "name": "Boiler thermostat"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },
       "fan_works": {
         "name": "Fan"
+      },
+      "feeder_works": {
+        "name": "Feeder"
       },
       "additional_feeder": {
         "name": "Additional feeder"
@@ -106,9 +106,6 @@
       "feeder_work": {
         "name": "Feeder work"
       },
-      "feeder_works": {
-        "name": "Feeder"
-      },
       "firing_up_count": {
         "name": "Firing up count"
       },
@@ -138,14 +135,8 @@
       "mixer_set_temp1": {
         "name": "Mixer target temperature"
       },
-      "pump_cwu_works": {
-        "name": "HUW pump"
-      },
       "status_cwu": {
         "name": "Water heater status"
-      },
-      "pump_fireplace_works": {
-        "name": "Boiler pump"
       },
       "quality": {
         "name": "Signal quality"
@@ -182,6 +173,9 @@
       },
       "temp_cwu": {
         "name": "Water heater temperature"
+      },
+      "temp_cwu_set": {
+        "name": "Water heater set temperature"
       },
       "temp_upper_buffer": {
         "name": "Upper buffer temperature"
