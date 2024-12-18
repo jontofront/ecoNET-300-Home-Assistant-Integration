@@ -200,6 +200,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempFeeder": SensorDeviceClass.TEMPERATURE,
     "tempExternalSensor": SensorDeviceClass.TEMPERATURE,
     "tempCO": SensorDeviceClass.TEMPERATURE,
+    "tempCOSet": SensorDeviceClass.TEMPERATURE,
     "boilerPower": SensorDeviceClass.POWER_FACTOR,
     "boilerPowerKW": SensorDeviceClass.POWER,
     "fanPower": SensorDeviceClass.POWER_FACTOR,

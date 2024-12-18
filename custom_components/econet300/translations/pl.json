@@ -26,9 +26,6 @@
       "unseal": {
         "name": "Unseal"
       },
-      "thermostat": {
-        "name": "Boiler thermostat"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },
@@ -38,9 +35,6 @@
       "aditional_feeder": {
         "name": "Aditional feeder"
       },
-      "pump_fireplace_works": {
-        "name": "Boiler Pump"
-      },
       "pump_cwu_works": {
         "name": "Pump CWU"
       },
@@ -48,6 +42,9 @@
         "name": "Mixer 1 pump"
       },
       "boiler_pump": {
+        "name": "Boiler pump"
+      },
+      "pump_fireplace_works": {
         "name": "Boiler pump"
       },
       "main_srv": {
@@ -112,12 +109,6 @@
           "no_transmission": "No transmission",
           "unknown": "Unknown"
         }
-      },
-      "pump_cwu_works": {
-        "name": "HUW pump"
-      },
-      "pump_fireplace_works": {
-        "name": "Boiler pump"
       },
       "valve_mixer1": {
         "name": "Zawór mieszacza 1"

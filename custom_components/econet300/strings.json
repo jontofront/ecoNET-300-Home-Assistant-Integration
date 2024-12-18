@@ -29,9 +29,6 @@
       "unseal": {
         "name": "Unseal"
       },
-      "thermostat": {
-        "name": "Boiler thermostat"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },
@@ -44,11 +41,11 @@
       "additional_feeder": {
         "name": "Additional feeder"
       },
-      "pump_fireplace_works": {
-        "name": "Boiler Pump"
-      },
       "pump_cwu_works": {
         "name": "Pump CWU"
+      },
+      "pump_fireplace_works": {
+        "name": "Boiler pump"
       },
       "mixer_pump1": {
         "name": "Mixer 1 pump"
@@ -159,15 +156,6 @@
       "mixer_set_temp1": {
         "name": "Mixer target temperature"
       },
-      "pump_cwu_works": {
-        "name": "HUW pump"
-      },
-      "status_cwu": {
-        "name": "Water heater status"
-      },
-      "pump_fireplace_works": {
-        "name": "Boiler pump"
-      },
       "quality": {
         "name": "Signal quality"
       },
@@ -182,6 +170,12 @@
       },
       "temp_cwu": {
         "name": "Water heater temperature"
+      },
+      "status_cwu": {
+        "name": "Water heater status"
+      },
+      "temp_cwu_set": {
+        "name": "Water heater set temperature"
       },
       "temp_upper_buffer": {
         "name": "Upper buffer temperature"
