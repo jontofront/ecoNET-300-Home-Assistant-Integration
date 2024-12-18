@@ -60,7 +60,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         try:
             # Note: asyncio.TimeoutError and aiohttp.ClientError are already
             # handled by the data update coordinator.
-            async with asyncio.timeout(20):
+            async with asyncio.timeout(10):
                 data = await self._api.fetch_sys_params()
                 reg_params = await self._api.fetch_reg_params()
                 params_edits = await self._api.fetch_param_edit_data()
