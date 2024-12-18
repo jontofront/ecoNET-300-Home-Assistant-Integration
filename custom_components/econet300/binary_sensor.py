@@ -28,7 +28,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
@@ -58,12 +58,13 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
             self.entity_description,
         )
 
-    def _sync_state(self, value):
+    def _sync_state(self, value: bool):
         """Sync state."""
+        value = bool(value)
         _LOGGER.debug("EconetBinarySensor _sync_state: %s", value)
         self._attr_is_on = value
         _LOGGER.debug(
-            "Updated Binary sensor _attr_is_on for %s: %s",
+            "Updated EconetBinarySensor _attr_is_on for %s: %s",
             self.entity_description.key,
             self._attr_is_on,
         )
@@ -131,7 +132,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> bool:
-    """Set up the sensor platform."""
+    """Set up the binary sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
