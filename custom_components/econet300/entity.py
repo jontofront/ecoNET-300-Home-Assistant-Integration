@@ -172,6 +172,7 @@ class LambdaEntity(EconetEntity):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
+        """Initialize the LambdaEntity."""
         super().__init__(description, coordinator, api)
 
     @property
