@@ -206,6 +206,30 @@
       },
       "weather_control": {
         "name": "Weather control the boiler"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostatTemp": {
+        "name": "Circuit 2 thermostat temperature"
+      },
+      "temp_clutch": {
+        "name": "Clutch temperature"
+      },
+      "circuit3thermostatTemp": {
+        "name": "Circuit 3 thermostat temperature"
+      },
+      "temp_wthr": {
+        "name": "Weather temperature"
+      },
+      "temp_circuit3": {
+        "name": "Circuit 3 temperature"
+      },
+      "temp_circuit2": {
+        "name": "Circuit 2 temperature"
+      },
+      "temp_bufor_up": {
+        "name": "Upper buffer temperature"
       }
     }
   }
