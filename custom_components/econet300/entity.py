@@ -76,6 +76,11 @@ class EconetEntity(CoordinatorEntity):
         _LOGGER.debug("Added to HASS: %s", self.entity_description)
         _LOGGER.debug("Coordinator: %s", self.coordinator)
 
+        # Check if the coordinator has a 'data' attributes
+        if "data" not in dir(self.coordinator):
+            _LOGGER.error("Coordinator object does not have a 'data' attribute")
+            return
+
         # Retrieve sysParams and regParams paramsEdits data
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
@@ -84,15 +89,10 @@ class EconetEntity(CoordinatorEntity):
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)
 
-        # Check if the coordinator has a 'data' attributes
-        if "data" not in dir(self.coordinator):
-            _LOGGER.error("Coordinator object does not have a 'data' attribute")
-            return
-
         # Check the available keys in all sources
-        sys_keys = sys_params.keys()
-        reg_keys = reg_params.keys()
-        edit_keys = params_edits.keys()
+        sys_keys = sys_params.keys() if sys_params is not None else []
+        reg_keys = reg_params.keys() if reg_params is not None else []
+        edit_keys = params_edits.keys() if params_edits is not None else []
         _LOGGER.debug("Available keys in sysParams: %s", sys_keys)
         _LOGGER.debug("Available keys in regParams: %s", reg_keys)
         _LOGGER.debug("Available keys in paramsEdits: %s", edit_keys)
@@ -103,13 +103,10 @@ class EconetEntity(CoordinatorEntity):
 
         # Retrieve the value from sysParams or regParams  or paramsEdits
         value = (
-            sys_params.get(expected_key)
-            if sys_params.get(expected_key) is not None
-            else (
-                reg_params.get(expected_key)
-                if reg_params.get(expected_key) is not None
-                else params_edits.get(expected_key)
-            )
+            sys_params.get(expected_key) if sys_params is not None and sys_params.get(expected_key) is not None else
+            reg_params.get(expected_key) if reg_params is not None and reg_params.get(expected_key) is not None else
+            params_edits.get(expected_key) if params_edits is not None and params_edits.get(expected_key) is not None else
+            None
         )
 
         if value is not None:
