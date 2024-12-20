@@ -4,7 +4,6 @@ from dataclasses import dataclass
 import logging
 
 from homeassistant.components.binary_sensor import (
-    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -28,7 +27,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass
+@dataclass(frozen=True, kw_only=True)
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
@@ -86,9 +85,7 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
-        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(
-            key, BinarySensorDeviceClass.RUNNING
-        ),
+        device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
         icon=ENTITY_ICON.get(key, None),
         icon_off=ENTITY_ICON_OFF.get(key, None),
     )
