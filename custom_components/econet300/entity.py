@@ -57,17 +57,25 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
-        value = (
-            self.coordinator.data["sysParams"].get(self.entity_description.key)
-            or self.coordinator.data["regParams"].get(self.entity_description.key)
-            or self.coordinator.data.get("paramsEdits", {}).get(
-                self.entity_description.key
-            )
-        )
+        value = None
+        if self.entity_description.key in self.coordinator.data.get("sysParams", {}):
+            value = self.coordinator.data["sysParams"][self.entity_description.key]
+        elif self.entity_description.key in self.coordinator.data.get("regParams", {}):
+            value = self.coordinator.data["regParams"][self.entity_description.key]
+        elif self.entity_description.key in self.coordinator.data.get(
+            "paramsEdits", {}
+        ):
+            value = self.coordinator.data["paramsEdits"][self.entity_description.key]
 
         if value is None:
             _LOGGER.debug("Value for key %s is None", self.entity_description.key)
             return
+
+        _LOGGER.debug(
+            "Updating state for key: %s with value: %s",
+            self.entity_description.key,
+            value,
+        )
         self._sync_state(value)
 
     async def async_added_to_hass(self):
