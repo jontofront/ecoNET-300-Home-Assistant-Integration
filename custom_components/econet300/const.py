@@ -96,6 +96,11 @@ SENSOR_MAP_KEY = {
         "TempCircuit3",
         "TempCircuit2",
         "TempBuforUp",
+        "TempCWU",
+        "TempBuforDown",
+        "heatingUpperTemp",
+        "Circuit1thermostat",
+        "heating_work_state_pump4",
     },
     "lambda": {
         "lambdaStatus",
@@ -189,6 +194,9 @@ ENTITY_UNIT_MAP = {
     "TempCircuit3": UnitOfTemperature.CELSIUS,
     "TempCircuit2": UnitOfTemperature.CELSIUS,
     "TempBuforUp": UnitOfTemperature.CELSIUS,
+    "TempBuforDown": UnitOfTemperature.CELSIUS,
+    "heatingUpperTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1thermostat": UnitOfTemperature.CELSIUS,
 }
 
 # By default all sensors state_class are MEASUREMENT
@@ -206,6 +214,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "modulePanelSoftVer": None,
     # ecoNET360i
     "PS": None,
+    "heating_work_state_pump4": None,
 }
 
 # By default all sensors device_class are None
@@ -239,6 +248,9 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempCircuit3": SensorDeviceClass.TEMPERATURE,
     "TempCircuit2": SensorDeviceClass.TEMPERATURE,
     "TempBuforUp": SensorDeviceClass.TEMPERATURE,
+    "TempBuforDown": SensorDeviceClass.TEMPERATURE,
+    "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -287,6 +299,10 @@ ENTITY_PRECISION = {
     "modulePanelSoftVer": None,
     # ecoNET360i
     "PS": None,
+    "TempBuforDown": 1,
+    "heatingUpperTemp": 1,
+    "Circuit1thermostat": 1,
+    "heating_work_state_pump4": None,
 }
 
 ENTITY_ICON = {
@@ -329,6 +345,10 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    # ecoNET360i
+    "TempBuforDown": "mdi:thermometer",
+    "heatingUpperTemp": "mdi:thermometer",
+    "heating_work_state_pump4": "mdi:sync",
 }
 
 ENTITY_ICON_OFF = {

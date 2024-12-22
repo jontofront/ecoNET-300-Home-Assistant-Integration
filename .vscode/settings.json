@@ -11,6 +11,7 @@
     },
     "cSpell.words": [
         "aiohttp",
+        "bufor",
         "clientsession",
         "codespell",
         "colorlog",
@@ -18,7 +19,9 @@
         "ecoster",
         "hass",
         "homeassistant",
+        "lamda",
         "MILLIWATT",
-        "PARAMSUNITSNAMES"
+        "PARAMSUNITSNAMES",
+        "Wthr"
     ],
 }
