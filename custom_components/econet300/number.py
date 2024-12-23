@@ -138,7 +138,7 @@ def can_add_number_entity(key: str, coordinator: EconetDataCoordinator):
                 controller_id,
             )
             return False
-        # Check for paramsEdits availability for othr controllers
+        # Check for paramsEdits availability for other controllers
         return (
             coordinator.has_param_edit_data(key)
             and coordinator.data["paramsEdits"][key]
