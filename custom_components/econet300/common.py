@@ -58,14 +58,20 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         _LOGGER.debug("Fetching data from API")
 
         try:
-            # Note: asyncio.TimeoutError and aiohttp.ClientError are already
-            # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                data = await self._api.fetch_sys_params()
+                # Fetch the main system parameters
+                sys_params = await self._api.fetch_sys_params()
                 reg_params = await self._api.fetch_reg_params()
-                params_edits = await self._api.fetch_param_edit_data()
+
+                # Check the controller ID to decide whether to fetch params_edits
+                controller_id = sys_params.get("controllerID", "")
+                params_edits = {}
+                if controller_id != "ecoMAX360i":
+                    params_edits = await self._api.fetch_param_edit_data()
+
+                # Return consolidated data
                 return {
-                    "sysParams": data,
+                    "sysParams": sys_params,
                     "regParams": reg_params,
                     "paramsEdits": params_edits,
                 }
