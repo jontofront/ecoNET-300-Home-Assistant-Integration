@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import Limits
-from .common import Econet300Api, EconetDataCoordinator
+from .common import Econet300Api, EconetDataCoordinator, should_skip_params_edits
 from .common_functions import camel_to_snake
 from .const import (
     DOMAIN,
@@ -28,7 +28,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class EconetNumberEntityDescription(NumberEntityDescription):
     """Describes ecoNET number entity."""
 
@@ -126,7 +126,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         self.async_write_ha_state()
 
 
-def can_add(key: str, coordinator: EconetDataCoordinator):
+def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
     """Check if a given entity can be added based on the availability of data in the coordinator."""
     try:
         return (
@@ -174,6 +174,11 @@ async def async_setup_entry(
     entities: list[EconetNumber] = []
 
     for key in NUMBER_MAP:
+        sys_params = coordinator.data.get("sysParams", {})
+        if should_skip_params_edits(sys_params):
+            _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
+            continue
+
         number_limits = await api.get_param_limits(key)
         if number_limits is None:
             _LOGGER.warning(
