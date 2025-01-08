@@ -65,9 +65,6 @@ class EconetSensor(EconetEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-# Add MixerSensor check class Mypy warning
-# Definition of "entity_description" in base class "EconetEntity" is incompatible with definition in base
-# class "SensorEntity"
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 

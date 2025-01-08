@@ -184,3 +184,20 @@ Added feederWorks as a new binary sensor in custom_components/econet300/const.py
 Updates to Existing Sensors:
 Renamed the lighter sensor to lighterWorks in custom_components/econet300/const.py and updated its icon. [1] [2]
 Updated the names of the lighter, boilerPower, and feeder sensors in custom_components/econet300/strings.json and custom_components/econet300/translations/en.json. [1] [2] [3] [4] [5] [6]
+
+## # Changelog
+
+## [1.1.14] - 2025-01-07
+### Added
+- Introduced `should_skip_params_edits` function in `custom_components/econet300/common.py` to determine if parameter edits should be skipped based on `controllerID` (controller_id == "ecoMAX360i":).
+- Added `async_gather_entities` function in `custom_components/econet300/sensor.py` to collect sensor entities.
+- Added annotations and type hints across various functions.
+
+### Changed
+- Updated `EconetDataCoordinator` class in `custom_components/econet300/common.py` to use type hints and new `should_skip_params_edits` function.
+- Modified entity setup in `custom_components/econet300/number.py` to skip for `controllerID: ecoMAX360i`.
+- Changed `homeassistant` version to `2024.12.2` and `ruff` version to `0.8.4` in `requirements.txt`.
+- Removed `colorlog` dependency from `requirements.txt`.
+
+### Fixed
+- Addressed type hinting issues in `custom_components/econet300/common.py` and `custom_components/econet300/number.py`.
