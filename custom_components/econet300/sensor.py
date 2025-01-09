@@ -279,7 +279,7 @@ async def async_setup_entry(
 ) -> bool:
     """Set up the sensor platform."""
 
-    async def async_gather_entities(
+    def gather_entities(
         coordinator: EconetDataCoordinator, api: Econet300Api
     ) -> list[EconetSensor]:
         """Collect all sensor entities."""
@@ -307,10 +307,8 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    # Collect entities asynchronously
-    entities = await hass.async_add_executor_job(
-        async_gather_entities, coordinator, api
-    )
+    # Collect entities synchronously
+    entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
 
     # Add entities to Home Assistant
     async_add_entities(entities)
