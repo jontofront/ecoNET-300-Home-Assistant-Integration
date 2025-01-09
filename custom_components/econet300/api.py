@@ -270,8 +270,22 @@ class Econet300Api:
             regParamsData = await self._fetch_api_data_by_key(
                 API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
             )
+        except aiohttp.ClientError as e:
+            _LOGGER.error("Client error occurred while fetching regParamsData: %s", e)
+            return {}
+        except asyncio.TimeoutError as e:
+            _LOGGER.error("Timeout error occurred while fetching regParamsData: %s", e)
+            return {}
+        except ValueError as e:
+            _LOGGER.error("Value error occurred while fetching regParamsData: %s", e)
+            return {}
         except DataError as e:
-            _LOGGER.error("Error fetching regParamsData: %s", e)
+            _LOGGER.error("Data error occurred while fetching regParamsData: %s", e)
+            return {}
+        except Exception as e:
+            _LOGGER.error(
+                "Unexpected error occurred while fetching regParamsData: %s", e
+            )
             return {}
         else:
             _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
@@ -309,19 +323,50 @@ class Econet300Api:
 
     async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
-        data = await self._client.get(f"{self.host}/econet/{endpoint}")
+        try:
+            data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
-        if data is None:
-            raise DataError(f"Data fetched by API for endpoint: {endpoint} is None")
+            if data is None:
+                _LOGGER.error("Data fetched by API for endpoint: %s is None", endpoint)
+                return None
 
-        if data_key is None:
-            return data
+            if data_key is None:
+                return data
 
-        if data_key not in data:
-            _LOGGER.debug(data)
-            raise DataError(f"Data for key: {data_key} does not exist")
+            if data_key not in data:
+                _LOGGER.error(
+                    "Data for key: %s does not exist in endpoint: %s",
+                    data_key,
+                    endpoint,
+                )
+                return None
 
-        return data[data_key]
+            return data[data_key]
+        except aiohttp.ClientError as e:
+            _LOGGER.error(
+                "lient error occurred while fetching data from endpoint: %s, error: %s",
+                endpoint,
+                e,
+            )
+        except asyncio.TimeoutError as e:
+            _LOGGER.error(
+                "A timeout error occurred while fetching data from endpoint: %s, error: %s",
+                endpoint,
+                e,
+            )
+        except ValueError as e:
+            _LOGGER.error(
+                "A value error occurred while processing data from endpoint: %s, error: %s",
+                endpoint,
+                e,
+            )
+        except Exception as e:
+            _LOGGER.error(
+                "An unexpected error occurred while fetching data from endpoint: %s, error: %s",
+                endpoint,
+                e,
+            )
+        return None
 
 
 async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
