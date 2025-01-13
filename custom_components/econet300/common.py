@@ -1,8 +1,11 @@
 """Common code for econet300 integration."""
 
+from __future__ import annotations
+
 import asyncio
 from datetime import timedelta
 import logging
+from typing import Any
 
 from aiohttp import ClientError
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -14,58 +17,70 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 
-class EconetDataCoordinator(DataUpdateCoordinator):
-    """Econet data coordinator."""
+def should_skip_params_edits(sys_params: dict[str, Any]) -> bool:
+    """Determine whether paramsEdits should be skipped based on controllerID."""
+    controller_id = sys_params.get("controllerID")
+    if controller_id == "ecoMAX360i":
+        _LOGGER.info("Skipping paramsEdits due to controllerID: %s", controller_id)
+        return True
+    return False
 
-    def __init__(self, hass, api: Econet300Api):
+
+class EconetDataCoordinator(DataUpdateCoordinator):
+    """Econet data coordinator to handle data updates."""
+
+    def __init__(self, hass, api: Econet300Api) -> None:
         """Initialize my coordinator."""
         super().__init__(
             hass,
             _LOGGER,
-            name=DOMAIN,
+            name=f"{DOMAIN}_data_coordinator",
             # Polling interval. Will only be polled if there are subscribers.
             update_interval=timedelta(seconds=30),
         )
         self._api = api
 
-    def has_sys_data(self, key: str):
+    def has_sys_data(self, key: str) -> bool:
         """Check if data key is present in sysParams."""
         if self.data is None:
             return False
         return key in self.data["sysParams"]
 
-    def has_reg_data(self, key: str):
+    def has_reg_data(self, key: str) -> bool:
         """Check if data key is present in regParams."""
         if self.data is None:
             return False
 
         return key in self.data["regParams"]
 
-    def has_param_edit_data(self, key: str):
+    def has_param_edit_data(self, key: str) -> bool:
         """Check if ."""
         if self.data is None:
             return False
 
         return key in self.data["paramsEdits"]
 
-    async def _async_update_data(self):
-        """Fetch data from API endpoint.
-
-        This is the place to pre-process the data to lookup tables
-        so entities can quickly look up their data.
-        """
+    async def _async_update_data(self) -> dict[str, Any]:
+        """Fetch data from API endpoint."""
 
         _LOGGER.debug("Fetching data from API")
 
         try:
-            # Note: asyncio.TimeoutError and aiohttp.ClientError are already
-            # handled by the data update coordinator.
             async with asyncio.timeout(10):
-                data = await self._api.fetch_sys_params()
+                # Fetch system parameters from ../econet/sysParams
+                sys_params = await self._api.fetch_sys_params()
+
+                # Determine whether to fetch paramsEdits from ../econet/rmCurrentDataParamsEdits
+                if should_skip_params_edits(sys_params):
+                    params_edits = {}
+                else:
+                    params_edits = await self._api.fetch_param_edit_data()
+
+                # Fetch regular parameters from ../econet/regParams
                 reg_params = await self._api.fetch_reg_params()
-                params_edits = await self._api.fetch_param_edit_data()
+
                 return {
-                    "sysParams": data,
+                    "sysParams": sys_params,
                     "regParams": reg_params,
                     "paramsEdits": params_edits,
                 }

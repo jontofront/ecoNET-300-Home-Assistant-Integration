@@ -65,9 +65,6 @@ class EconetSensor(EconetEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-# Add MixerSensor check class Mypy warning
-# Definition of "entity_description" in base class "EconetEntity" is incompatible with definition in base
-# class "SensorEntity"
 class MixerSensor(MixerEntity, EconetSensor):
     """Mixer sensor class."""
 
@@ -268,13 +265,20 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> bool:
     """Set up the sensor platform."""
+
+    def async_gather_entities(
+        coordinator: EconetDataCoordinator, api: Econet300Api
+    ) -> list[EconetSensor]:
+        """Collect all sensor entities."""
+        entities = []
+        entities.extend(create_controller_sensors(coordinator, api))
+        entities.extend(create_mixer_sensors(coordinator, api))
+        entities.extend(create_lambda_sensors(coordinator, api))
+        return entities
+
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities: list[EconetSensor] = []
-    entities.extend(create_controller_sensors(coordinator, api))
-    entities.extend(create_mixer_sensors(coordinator, api))
-    entities.extend(create_lambda_sensors(coordinator, api))
-
+    entities = async_gather_entities(coordinator, api)
     async_add_entities(entities)
     return True
