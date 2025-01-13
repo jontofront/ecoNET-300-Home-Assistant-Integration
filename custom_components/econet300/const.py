@@ -87,9 +87,20 @@ SENSOR_MIXER_KEY = {
 #######################
 
 SENSOR_MAP_KEY = {
-    "ecoster": {
-        "ecoSterTemp1",
-        "ecoSterTemp2",
+    "ecoMAX360i": {
+        "PS",
+        "Circuit2thermostatTemp",
+        "TempClutch",
+        "Circuit3thermostatTemp",
+        "TempWthr",
+        "TempCircuit3",
+        "TempCircuit2",
+        "TempBuforUp",
+        "TempCWU",
+        "TempBuforDown",
+        "heatingUpperTemp",
+        "Circuit1thermostat",
+        "heating_work_state_pump4",
     },
     "lambda": {
         "lambdaStatus",
@@ -175,6 +186,17 @@ ENTITY_UNIT_MAP = {
     "burnerOutput": PERCENTAGE,
     "mixerTemp": UnitOfTemperature.CELSIUS,
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
+    # ecoMAX360i
+    "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
+    "TempClutch": UnitOfTemperature.CELSIUS,
+    "Circuit3thermostatTemp": UnitOfTemperature.CELSIUS,
+    "TempWthr": UnitOfTemperature.CELSIUS,
+    "TempCircuit3": UnitOfTemperature.CELSIUS,
+    "TempCircuit2": UnitOfTemperature.CELSIUS,
+    "TempBuforUp": UnitOfTemperature.CELSIUS,
+    "TempBuforDown": UnitOfTemperature.CELSIUS,
+    "heatingUpperTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1thermostat": UnitOfTemperature.CELSIUS,
 }
 
 # By default all sensors state_class are MEASUREMENT
@@ -190,6 +212,9 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
+    # ecoMAX360i
+    "PS": None,
+    "heating_work_state_pump4": None,
 }
 
 # By default all sensors device_class are None
@@ -215,6 +240,17 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
+    # ecoMAX360i
+    "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "TempClutch": SensorDeviceClass.TEMPERATURE,
+    "Circuit3thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "TempWthr": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit3": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit2": SensorDeviceClass.TEMPERATURE,
+    "TempBuforUp": SensorDeviceClass.TEMPERATURE,
+    "TempBuforDown": SensorDeviceClass.TEMPERATURE,
+    "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -261,6 +297,12 @@ ENTITY_PRECISION = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
+    # ecoMAX360i
+    "PS": None,
+    "TempBuforDown": 1,
+    "heatingUpperTemp": 1,
+    "Circuit1thermostat": 1,
+    "heating_work_state_pump4": None,
 }
 
 ENTITY_ICON = {
@@ -303,6 +345,10 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    # ecoMAX360i
+    "TempBuforDown": "mdi:thermometer",
+    "heatingUpperTemp": "mdi:thermometer",
+    "heating_work_state_pump4": "mdi:sync",
 }
 
 ENTITY_ICON_OFF = {

@@ -116,10 +116,23 @@ def create_controller_sensors(
     """Create controller sensor entities."""
     entities: list[EconetSensor] = []
 
+    # Get the system and regular parameters from the coordinator
     data_regParams = coordinator.data.get("regParams", {})
     data_sysParams = coordinator.data.get("sysParams", {})
 
-    for data_key in SENSOR_MAP_KEY["_default"]:
+    # Extract the controllerID from sysParams
+    controller_id = data_sysParams.get("controllerID", None)
+
+    # Determine the keys to use based on the controllerID
+    sensor_keys = SENSOR_MAP_KEY.get(controller_id, SENSOR_MAP_KEY["_default"])
+    _LOGGER.info(
+        "Using sensor keys for controllerID '%s': %s",
+        controller_id if controller_id else "None (default)",
+        sensor_keys,
+    )
+
+    # Iterate through the selected keys and create sensors if valid data is found
+    for data_key in sensor_keys:
         _LOGGER.debug(
             "Processing entity sensor data_key: %s from regParams & sysParams", data_key
         )
@@ -266,19 +279,38 @@ async def async_setup_entry(
 ) -> bool:
     """Set up the sensor platform."""
 
-    def async_gather_entities(
+    def gather_entities(
         coordinator: EconetDataCoordinator, api: Econet300Api
     ) -> list[EconetSensor]:
         """Collect all sensor entities."""
         entities = []
-        entities.extend(create_controller_sensors(coordinator, api))
-        entities.extend(create_mixer_sensors(coordinator, api))
-        entities.extend(create_lambda_sensors(coordinator, api))
+        _LOGGER.info("Starting entity collection for sensors...")
+
+        # Gather sensors dynamically based on the controller
+        controller_sensors = create_controller_sensors(coordinator, api)
+        _LOGGER.info("Collected %d controller sensors", len(controller_sensors))
+        entities.extend(controller_sensors)
+
+        # Gather mixer sensors
+        mixer_sensors = create_mixer_sensors(coordinator, api)
+        _LOGGER.info("Collected %d mixer sensors", len(mixer_sensors))
+        entities.extend(mixer_sensors)
+
+        # Gather lambda sensors
+        lambda_sensors = create_lambda_sensors(coordinator, api)
+        _LOGGER.info("Collected %d lambda sensors", len(lambda_sensors))
+        entities.extend(lambda_sensors)
+
+        _LOGGER.info("Total entities collected: %d", len(entities))
         return entities
 
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities = async_gather_entities(coordinator, api)
+    # Collect entities synchronously
+    entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
+
+    # Add entities to Home Assistant
     async_add_entities(entities)
+    _LOGGER.info("Entities successfully added to Home Assistant")
     return True

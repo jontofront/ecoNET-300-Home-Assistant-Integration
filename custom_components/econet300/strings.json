@@ -206,6 +206,42 @@
       },
       "weather_control": {
         "name": "Weather control the boiler"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Circuit 2 thermostat temp."
+      },
+      "temp_clutch": {
+        "name": "Clutch temp."
+      },
+      "circuit3thermostat_temp": {
+        "name": "Circuit 3 thermostat temp."
+      },
+      "temp_wthr": {
+        "name": "Weather temp."
+      },
+      "temp_circuit3": {
+        "name": "Circuit 3 temp."
+      },
+      "temp_circuit2": {
+        "name": "Circuit 2 temp."
+      },
+      "temp_bufor_up": {
+        "name": "Upper buffer temp."
+      },
+      "temp_bufor_down": {
+        "name": "Buffer lower temp."
+      },
+      "heating_upper_temp": {
+        "name": "Heating upper temp."
+      },
+      "circuit1thermostat": {
+        "name": "Circuit 1 actual temp."
+      },
+      "heating_work_state_pump4": {
+        "name": "Heating work state pump 4"
       }
     }
   }

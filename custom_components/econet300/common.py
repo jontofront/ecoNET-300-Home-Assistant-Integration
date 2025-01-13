@@ -17,7 +17,7 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__name__)
 
 
-def should_skip_params_edits(sys_params: dict[str, Any]) -> bool:
+def skip_params_edits(sys_params: dict[str, Any]) -> bool:
     """Determine whether paramsEdits should be skipped based on controllerID."""
     controller_id = sys_params.get("controllerID")
     if controller_id == "ecoMAX360i":
@@ -71,7 +71,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 sys_params = await self._api.fetch_sys_params()
 
                 # Determine whether to fetch paramsEdits from ../econet/rmCurrentDataParamsEdits
-                if should_skip_params_edits(sys_params):
+                if skip_params_edits(sys_params):
                     params_edits = {}
                 else:
                     params_edits = await self._api.fetch_param_edit_data()

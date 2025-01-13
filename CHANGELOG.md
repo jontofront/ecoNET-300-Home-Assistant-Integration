@@ -187,17 +187,23 @@ Updated the names of the lighter, boilerPower, and feeder sensors in custom_comp
 
 ## # Changelog
 
-## [1.1.14] - 2025-01-07
+## [1.1.0] - 2025-01-07
 ### Added
-- Introduced `should_skip_params_edits` function in `custom_components/econet300/common.py` to determine if parameter edits should be skipped based on `controllerID` (controller_id == "ecoMAX360i":).
+- Introduced `skip_params_edits` function in `custom_components/econet300/common.py` to determine if parameter edits should be skipped based on `controllerID` (controller_id == "ecoMAX360i").
 - Added `async_gather_entities` function in `custom_components/econet300/sensor.py` to collect sensor entities.
 - Added annotations and type hints across various functions.
+- Support for ecoMAX360i controller.
 
 ### Changed
-- Updated `EconetDataCoordinator` class in `custom_components/econet300/common.py` to use type hints and new `should_skip_params_edits` function.
+- Updated `EconetDataCoordinator` class in `custom_components/econet300/common.py` to use type hints and new `skip_params_edits` function.
 - Modified entity setup in `custom_components/econet300/number.py` to skip for `controllerID: ecoMAX360i`.
+- Refactored sensor entity gathering logic in `async_setup_entry`.
+- Improved error handling in `Econet300Api` by adding specific exception logging.
 - Changed `homeassistant` version to `2024.12.2` and `ruff` version to `0.8.4` in `requirements.txt`.
 - Removed `colorlog` dependency from `requirements.txt`.
 
 ### Fixed
 - Addressed type hinting issues in `custom_components/econet300/common.py` and `custom_components/econet300/number.py`.
+- Improved data attribute checks in `EconetEntity` for better error handling.
+
+For more details, you can view the commits.
