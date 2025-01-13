@@ -186,7 +186,7 @@ ENTITY_UNIT_MAP = {
     "burnerOutput": PERCENTAGE,
     "mixerTemp": UnitOfTemperature.CELSIUS,
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
-    # ecoNET360i
+    # ecoMAX360i
     "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
     "TempClutch": UnitOfTemperature.CELSIUS,
     "Circuit3thermostatTemp": UnitOfTemperature.CELSIUS,
@@ -212,7 +212,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
-    # ecoNET360i
+    # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
 }
@@ -240,7 +240,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
-    # ecoNET360i
+    # ecoMAX360i
     "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
     "TempClutch": SensorDeviceClass.TEMPERATURE,
     "Circuit3thermostatTemp": SensorDeviceClass.TEMPERATURE,
@@ -297,7 +297,7 @@ ENTITY_PRECISION = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
-    # ecoNET360i
+    # ecoMAX360i
     "PS": None,
     "TempBuforDown": 1,
     "heatingUpperTemp": 1,
@@ -345,7 +345,7 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
-    # ecoNET360i
+    # ecoMAX360i
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",
     "heating_work_state_pump4": "mdi:sync",
