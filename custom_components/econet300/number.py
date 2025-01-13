@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import Limits
-from .common import Econet300Api, EconetDataCoordinator, should_skip_params_edits
+from .common import Econet300Api, EconetDataCoordinator, skip_params_edits
 from .common_functions import camel_to_snake
 from .const import (
     DOMAIN,
@@ -175,7 +175,7 @@ async def async_setup_entry(
 
     for key in NUMBER_MAP:
         sys_params = coordinator.data.get("sysParams", {})
-        if should_skip_params_edits(sys_params):
+        if skip_params_edits(sys_params):
             _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
             continue
 
