@@ -22,4 +22,5 @@
         "MILLIWATT",
         "PARAMSUNITSNAMES"
     ],
+    "python.analysis.typeCheckingMode": "basic",
 }
