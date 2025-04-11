@@ -6,7 +6,7 @@ import logging
 from typing import Any
 
 import aiohttp
-from aiohttp import BasicAuth, ClientSession
+from aiohttp import BasicAuth, ClientSession, ClientTimeout
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -89,7 +89,7 @@ class EconetClient:
                 _LOGGER.debug("Fetching data from URL: %s (Attempt %d)", url, attempt)
 
                 async with await self._session.get(
-                    url, auth=self._auth, timeout=10
+                    url, auth=self._auth, timeout=ClientTimeout(total=10)
                 ) as resp:
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
