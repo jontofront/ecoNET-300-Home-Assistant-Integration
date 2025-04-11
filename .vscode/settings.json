@@ -4,7 +4,7 @@
         "*.yaml": "home-assistant"
     },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "python.globalModuleInstallation": false,
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -22,4 +22,28 @@
         "MILLIWATT",
         "PARAMSUNITSNAMES"
     ],
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.formatting.provider": "none",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/custom_components"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true
+    },
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none"
+    }
 }
