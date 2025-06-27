@@ -1,0 +1,49 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Python Standards for ecoNET-300
+
+## Core Standards
+- Use Python 3.12 features and syntax
+- Follow PEP 8 style guidelines
+- Use type hints for all function parameters and return values
+- Prefer f-strings over % formatting or str.format() for string formatting
+- Use async/await patterns for I/O operations
+- Use dataclasses or attrs for data structures
+
+## Code Quality Tools
+- **Ruff**: Primary linting and formatting tool (replaces black, isort, flake8)
+- **MyPy**: Type checking
+- **Pylint**: Additional static analysis (with specific rules disabled)
+- **Autotyping**: Automatic type annotation
+
+## Import Conventions
+- Use standard Home Assistant import aliases:
+  - `homeassistant.helpers.config_validation` as `cv`
+  - `homeassistant.helpers.entity_registry` as `er`
+  - `homeassistant.helpers.device_registry` as `dr`
+  - `homeassistant.util.dt` as `dt_util`
+  - `voluptuous` as `vol`
+
+## Error Handling
+- Use proper exception handling with specific exception types
+- Log errors with appropriate log levels
+- Use `raise from` for exception chaining
+- Handle network timeouts and connection errors gracefully
+
+## Async Programming
+- Use async/await for all I/O operations
+- Avoid blocking operations in async functions
+- Use asyncio.timeout instead of async_timeout
+- Properly handle task cancellation
+
+## Avoid
+- Blocking operations in async functions
+- Hardcoded values (use constants)
+- Duplicate code (extract common functionality)
+- Overly complex functions (keep under 25 complexity)
+- Unnecessary imports
+- Debug print statements in production code
+
