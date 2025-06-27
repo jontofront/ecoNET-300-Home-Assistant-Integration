@@ -41,7 +41,14 @@ class EconetSwitch(EconetEntity, SwitchEntity):
 
     def _sync_state(self, value: Any) -> None:
         """Synchronize the state of the switch entity."""
-        self._attr_is_on = bool(value)
+        # Use mode parameter: 0 = OFF, anything else = ON
+        mode_value = self.coordinator.data.get("mode", 0)
+        self._attr_is_on = mode_value != 0
+        self.async_write_ha_state()
+
+    def update_state_from_mode(self, mode_value: int) -> None:
+        """Update switch state based on mode value."""
+        self._attr_is_on = mode_value != 0
         self.async_write_ha_state()
 
     def _raise_boiler_control_error(self, message: str) -> None:
@@ -50,6 +57,7 @@ class EconetSwitch(EconetEntity, SwitchEntity):
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the switch on."""
         try:
+            # Use BOILER_CONTROL parameter: set to 1 to turn on
             success = await self.api.set_param("BOILER_CONTROL", 1)
             if success:
                 self._attr_is_on = True
@@ -65,6 +73,7 @@ class EconetSwitch(EconetEntity, SwitchEntity):
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the switch off."""
         try:
+            # Use BOILER_CONTROL parameter: set to 0 to turn off
             success = await self.api.set_param("BOILER_CONTROL", 0)
             if success:
                 self._attr_is_on = False
@@ -84,7 +93,7 @@ def create_boiler_switch(
     """Create boiler control switch entity."""
     entity_description = SwitchEntityDescription(
         key="boiler_control",
-        name="Boiler Control",
+        name="Boiler On/Off",
         icon="mdi:fire",
         translation_key="boiler_control",
     )
@@ -110,9 +119,6 @@ async def async_setup_entry(
     async_add_entities([boiler_switch])
 
     # Update the switch state based on current data
-    # You might need to check if there's a way to get the current boiler state
-    # from your API data and update the switch accordingly
-    if coordinator.data:
-        # Example: check if there's a boiler status in the data
-        # This depends on your API structure
-        pass
+    if coordinator.data and "mode" in coordinator.data:
+        mode_value = coordinator.data["mode"]
+        boiler_switch.update_state_from_mode(mode_value)

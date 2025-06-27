@@ -21,7 +21,7 @@
   "entity": {
     "switch": {
       "boiler_control": {
-        "name": "Sterowanie kotłem"
+        "name": "Kocioł Wł/Wył"
       }
     },
     "binary_sensor": {

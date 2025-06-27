@@ -21,7 +21,7 @@
   "entity": {
     "switch": {
       "boiler_control": {
-        "name": "Boiler Control"
+        "name": "Boiler On/Off"
       }
     },
     "binary_sensor": {
