@@ -1,14 +1,6 @@
 {
     "name": "ecoNET300 Home Assistant integration",
     "render_readme": true,
-    "domains": [
-        "sensor",
-        "binary_sensor",
-        "switch",
-        "number"
-    ],
-    "homeassistant": "2025.2.0",
-    "iot_class": "Local Polling",
     "zip_release": false,
     "filename": "custom_components/econet300/manifest.json",
     "content_in_root": false
