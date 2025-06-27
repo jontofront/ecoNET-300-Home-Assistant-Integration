@@ -19,6 +19,11 @@
     }
   },
   "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Sterowanie kotłem"
+      }
+    },
     "binary_sensor": {
       "weather_control": {
         "name": "Weather control the boiler"
