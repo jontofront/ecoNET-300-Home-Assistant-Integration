@@ -1,0 +1,37 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Testing Standards
+
+## Test Framework
+- Use pytest for testing framework
+- Write unit tests for all public functions
+- Mock external dependencies
+- Test both success and error scenarios
+- Use fixtures for common test data
+
+## Test Structure
+- Group tests by functionality
+- Use descriptive test names
+- Follow AAA pattern (Arrange, Act, Assert)
+- Test edge cases and error conditions
+
+## Mocking Guidelines
+- Mock device API responses
+- Use pytest-mock for mocking
+- Create realistic test data
+- Test different device types and models
+
+## Coverage Requirements
+- Aim for high test coverage
+- Test all public interfaces
+- Include integration tests for critical paths
+- Test configuration flows
+
+## Test Data
+- Use fixtures for common test data
+- Create realistic device responses
+- Test with different parameter combinations
+- Validate error handling scenarios

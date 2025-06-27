@@ -18,10 +18,12 @@
 </div>
 
 ## Overview
-he **ecoNET300 Home Assistant Integration** allows local control and monitoring of ecoNET300 devices directly from Home Assistant. It communicates over your local network via the ecoNET300’s native REST API, avoiding any external cloud services.
+The **ecoNET300 Home Assistant Integration** allows local control and monitoring of ecoNET300 devices directly from Home Assistant. It communicates over your local network via the ecoNET-300's native REST API, avoiding any external cloud services.
 
 - **Local Operation**: No dependency on econet24.com cloud services.
 - **Easy Configuration**: Integrate directly via Home Assistant UI.
+- **Boiler Control**: Turn your boiler ON/OFF directly from Home Assistant.
+- **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status.
 - **Tested With**: ecoMAX810P-L TOUCH controller from [Plum Sp. z o.o.](https://www.plum.pl/)
 
 ## Table of Contents
@@ -37,6 +39,8 @@ he **ecoNET300 Home Assistant Integration** allows local control and monitoring 
 7. [Entities](#entities)
    - [Sensors](#sensors)
    - [Binary Sensors](#binary-sensors)
+   - [Switches](#switches)
+   - [Number Entities](#number-entities)
 8. [Contributing](#contributing)
 9. [Acknowledgments](#acknowledgments)
 10. [Disclaimer](#disclaimer)
@@ -44,6 +48,13 @@ he **ecoNET300 Home Assistant Integration** allows local control and monitoring 
 ## versions
 * v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
 * v1.0.0 - A development version that retrieves more data from the API. It may be unstable, and upgrades from previous versions are not supported.
+* v1.1.1 - Added boiler ON/OFF control switch functionality. New features include direct boiler control via Home Assistant switches.
+
+### New Features in v1.1.1
+- **Boiler Control Switch**: Turn your boiler ON/OFF directly from Home Assistant
+- **API Integration**: Uses the ecoNET-300's native `BOILER_CONTROL` parameter
+- **State Synchronization**: Switch state reflects actual boiler operation mode
+- **Real-time Updates**: Automatic state updates based on boiler mode changes
 
 ### Migrating to v1.0.0_beta
 
@@ -119,6 +130,31 @@ __Password__: Local password (NOT the password that you use to login to econet24
 <br>
 
 ## Entities
+
+### Switches
+
+The integration provides a boiler control switch that allows you to turn the boiler ON and OFF directly from Home Assistant.
+
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
+
+| Entity Key           | Description                                  | Control | State Detection |
+|----------------------|----------------------------------------------|---------|-----------------|
+| `boiler_control`     | Boiler ON/OFF control switch                 | `BOILER_CONTROL` parameter | `mode` parameter |
+</details>
+
+**Features:**
+- **Direct Control**: Turn boiler ON/OFF with a simple switch
+- **State Synchronization**: Switch state reflects actual boiler operation mode
+- **API Integration**: Uses the ecoNET-300's native `BOILER_CONTROL` parameter
+- **Real-time Updates**: Switch state updates based on current boiler mode
+
+**Usage:**
+- **Turn ON**: Sets `BOILER_CONTROL=1` via API
+- **Turn OFF**: Sets `BOILER_CONTROL=0` via API
+- **State Detection**: 
+  - `mode=0` → Switch shows OFF
+  - `mode=1-25` → Switch shows ON (any working state)
 
 ### Sensors
 

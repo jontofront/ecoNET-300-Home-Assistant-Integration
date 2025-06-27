@@ -1,0 +1,65 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Home Assistant Integration Standards
+
+## Core Guidelines
+- Follow Home Assistant integration development guidelines: https://developers.home-assistant.io/docs/development_index
+- Use Home Assistant's built-in validation schemas (cv.*)
+- Implement proper error handling with HomeAssistantError
+- Use async_setup_entry for platform setup
+- Follow the entity lifecycle: __init__ -> async_added_to_hass -> async_will_remove_from_hass
+- Use proper entity naming conventions (domain.entity_name)
+- Implement proper device info and entity info
+
+## File Structure Guidelines
+- Keep files focused on single responsibilities
+- Use descriptive file names
+- Group related functionality in modules
+- Follow Home Assistant's component structure:
+  - `__init__.py` - Main integration setup
+  - `config_flow.py` - Configuration flow
+  - `const.py` - Constants
+  - `entity.py` - Base entity classes
+  - `sensor.py`, `binary_sensor.py`, etc. - Platform implementations
+
+## Common Patterns
+
+### Entity Setup
+```python
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up the sensor platform."""
+    # Implementation here
+```
+
+### Entity Class
+```python
+class Econet300Entity(Entity):
+    """Base entity for ecoNET300 devices."""
+    
+    def __init__(self, coordinator: DataUpdateCoordinator, device_id: str) -> None:
+        """Initialize the entity."""
+        self.coordinator = coordinator
+        self.device_id = device_id
+```
+
+### Config Validation
+```python
+CONFIG_SCHEMA = vol.Schema({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Optional(CONF_PORT, default=80): cv.port,
+})
+```
+
+## Performance Guidelines
+- Minimize API calls to external services
+- Use caching where appropriate
+- Implement proper polling intervals
+- Avoid blocking operations in the main thread
+

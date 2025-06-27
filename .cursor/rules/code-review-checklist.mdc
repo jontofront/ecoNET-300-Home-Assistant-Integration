@@ -1,0 +1,52 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Code Review Checklist
+
+## Type Safety
+- [ ] Type hints are complete and correct
+- [ ] MyPy passes without errors
+- [ ] No `Any` types without justification
+
+## Error Handling
+- [ ] Error handling is comprehensive
+- [ ] Proper exception types are used
+- [ ] `raise from` is used for exception chaining
+- [ ] Network timeouts are handled gracefully
+
+## Async Programming
+- [ ] Async/await is used appropriately
+- [ ] No blocking operations in async functions
+- [ ] Task cancellation is handled properly
+- [ ] `asyncio.timeout` is used instead of `async_timeout`
+
+## Logging
+- [ ] Logging is at appropriate levels
+- [ ] No sensitive data is logged
+- [ ] Error messages are descriptive
+- [ ] Debug statements are removed from production code
+
+## Documentation
+- [ ] Documentation is updated
+- [ ] README.md is updated if needed
+
+## Security
+- [ ] No sensitive data is exposed
+- [ ] Input validation is implemented
+- [ ] Secure defaults are used
+- [ ] Principle of least privilege is followed
+
+## Performance
+- [ ] Performance considerations are addressed
+- [ ] No unnecessary API calls
+- [ ] Caching is used where appropriate
+- [ ] Polling intervals are reasonable
+
+## Code Quality
+- [ ] Ruff passes without errors
+- [ ] Code complexity is under 25
+- [ ] No duplicate code
+- [ ] Functions are focused and single-purpose
+

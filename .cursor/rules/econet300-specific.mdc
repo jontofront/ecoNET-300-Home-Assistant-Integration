@@ -1,0 +1,111 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# ecoNET300-Specific Guidelines
+
+## Device Support
+- Handle device-specific API responses
+- Implement proper device discovery
+- Support multiple device types (ecoMAX, ecoSOL, etc.)
+- Handle device state changes efficiently
+- Implement proper device configuration
+
+## Device Types and Models
+- **ecoMAX**: Boiler control devices
+  - ecoMAX360
+  - ecoMAX810P-L (most feature-rich)
+  - ecoMAX860P2-N
+  - ecoMAX860P3-V
+- **ecoSOL**: Solar thermal systems
+- **SControl MK1**: Control modules
+
+## API Response Structure
+
+### Common API Endpoints
+- `regParams.json` - Current device state and parameters
+- `regParamsData.json` - Parameter definitions and metadata
+- `sysParams.json` - System configuration parameters
+- `rmCurrentDataParams.json` - Real-time current data
+- `rmCurrentDataParamsEdits.json` - Editable current data
+- `rmStructure.json` - Menu structure and parameter organization
+- `rmParamsNames.json` - Parameter names and descriptions
+- `rmParamsEnums.json` - Parameter enumeration values
+- `rmAlarmsNames.json` - Alarm definitions
+
+### ecoMAX API Patterns
+- Current state in `regParams.json` includes:
+  - Temperature sensors (tempCO, tempCWU, tempExternalSensor, etc.)
+  - Pump states (pumpCO, pumpCWU, pumpCirculation, etc.)
+  - Fan states (fan, fan2Exhaust, blowFan1, blowFan2)
+  - Boiler status (boilerPower, mode, statusCO, statusCWU)
+  - Fuel and feeder information (fuelLevel, feeder, lighter)
+  - Mixer temperatures and settings
+- Complex parameter structure with versioning
+- Menu-based parameter organization
+
+### ecoSOL API Patterns
+- Parameter-based structure with metadata:
+  - `value`: Current parameter value
+  - `maxv`/`minv`: Value limits
+  - `edit`: Whether parameter is editable
+  - `unit`: Unit type identifier
+  - `mult`: Multiplier for value conversion
+  - `sec`: Section identifier
+  - `pos`: Position in menu
+  - `num`: Parameter number
+  - `origName`: Original parameter name
+- Different parameter types: boolean, numeric, string, enum
+- Section-based organization (sec: 0, 100, 254, etc.)
+
+### SControl API Patterns
+- Simplified parameter structure
+- Basic system parameters
+- Limited functionality compared to ecoMAX/ecoSOL
+
+## Parameter Handling Guidelines
+- Always check parameter editability before attempting writes
+- Handle different data types (boolean, float, int, string)
+- Respect parameter limits (minv/maxv)
+- Use proper unit conversion based on multiplier
+- Handle null values appropriately
+- Consider parameter sections for organization
+
+## Device Discovery and Compatibility
+- Use test fixtures as reference for device capabilities
+- Implement device type detection based on API responses
+- Handle missing parameters gracefully
+- Support parameter versioning for compatibility
+- Test with all device types in fixtures
+
+## API Patterns
+- Use proper error handling for device communication
+- Implement retry logic for failed requests
+- Handle device-specific parameter structures
+- Support both read and write operations where applicable
+- Respect parameter editability flags
+
+## Testing Considerations
+- Use test fixtures for unit testing
+- Mock device responses based on fixture data
+- Test with different device types and models
+- Test error conditions and edge cases
+- Validate device-specific parameter handling
+- Test parameter limits and validation
+
+## Security
+- Never log sensitive information (passwords, tokens)
+- Validate all user inputs
+- Use secure defaults
+- Follow principle of least privilege
+
+## Documentation
+- Document device-specific features
+- Include examples for different device types
+- Keep device compatibility matrix updated
+- Document API limitations and requirements
+- Reference test fixtures for parameter examples
+
+
+

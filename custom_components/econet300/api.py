@@ -214,7 +214,7 @@ class Econet300Api:
             return False
 
         data = await self._client.get(
-            f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
+            f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
         )
         if data is None or "result" not in data:
             return False
