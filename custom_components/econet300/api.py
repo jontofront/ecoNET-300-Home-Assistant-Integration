@@ -308,6 +308,7 @@ class Econet300Api:
             API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
         )
         _LOGGER.debug("Fetched regParams data: %s", regParams)
+        _LOGGER.debug("Type of regParams: %s", type(regParams))
         return regParams
 
     async def fetch_sys_params(self) -> dict[str, Any]:
@@ -344,7 +345,7 @@ class Econet300Api:
             return data[data_key]
         except aiohttp.ClientError as e:
             _LOGGER.error(
-                "lient error occurred while fetching data from endpoint: %s, error: %s",
+                "Client error occurred while fetching data from endpoint: %s, error: %s",
                 endpoint,
                 e,
             )
