@@ -207,3 +207,34 @@ Updated the names of the lighter, boilerPower, and feeder sensors in custom_comp
 - Improved data attribute checks in `EconetEntity` for better error handling.
 
 For more details, you can view the commits.
+
+## [v1.1.1] - 2025-01-27
+### Added
+- **Boiler Control Switch**: Implemented boiler ON/OFF control functionality as requested in [#58](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/58)
+- **New Switch Entity**: Added `boiler_control` switch entity for direct boiler control
+- **API Integration**: Uses ecoNET-300's native `BOILER_CONTROL` parameter via `/econet/newParam` endpoint
+- **State Synchronization**: Switch state reflects actual boiler operation mode using `mode` parameter
+- **Real-time Updates**: Automatic state updates based on boiler mode changes
+- **Translation Support**: Added English and Polish translations for "Boiler On/Off"
+
+### Changed
+- **API Endpoint**: Updated `set_param` method to use `/econet/newParam` endpoint with `newParamName` parameter
+- **Switch Implementation**: Added proper Home Assistant switch entity with ON/OFF functionality
+- **State Detection**: Switch shows OFF when `mode=0`, ON when `mode=1-25` (any working state)
+
+### Technical Details
+- **Control**: Turn ON sets `BOILER_CONTROL=1`, Turn OFF sets `BOILER_CONTROL=0`
+- **State Reading**: Uses `mode` parameter from coordinator data for state detection
+- **Error Handling**: Proper error handling for API failures with user-friendly messages
+- **Code Quality**: Follows Home Assistant coding standards and passes Ruff linting
+
+### Files Modified
+- `custom_components/econet300/switch.py` - New switch implementation
+- `custom_components/econet300/api.py` - Updated API endpoint
+- `custom_components/econet300/translations/en.json` - English translations
+- `custom_components/econet300/translations/pl.json` - Polish translations
+- `README.md` - Updated documentation with new feature
+- `tests/fixtures/API_DOCUMENTATION.md` - Added API documentation
+- `tests/fixtures/BOILER_CONTROL_README.md` - Added feature-specific documentation
+
+## [1.1.0] - 2025-01-07

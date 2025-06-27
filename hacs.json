@@ -1,5 +1,7 @@
 {
     "name": "ecoNET300 Home Assistant integration",
-    "render_readme": true
+    "render_readme": true,
+    "zip_release": false,
+    "filename": "custom_components/econet300/manifest.json",
+    "content_in_root": false
 }
-
