@@ -3,7 +3,11 @@
 from dataclasses import dataclass
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberEntityDescription, NumberMode
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberEntityDescription,
+    NumberMode,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -130,10 +134,12 @@ class EconetNumber(EconetEntity, NumberEntity):
 def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
     """Check if a given entity can be added based on the availability of data in the coordinator."""
     try:
-        return (
+        result = (
             coordinator.has_param_edit_data(key)
             and coordinator.data["paramsEdits"][key]
         )
+        _LOGGER.info("can_add for %s: %s", key, result)
+        return result
     except KeyError as e:
         _LOGGER.error("KeyError in can_add: %s", e)
         return False
@@ -149,7 +155,8 @@ def apply_limits(desc: EconetNumberEntityDescription, limits: Limits) -> None:
 def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
     """Create ecoNET300 number entity description."""
     map_key = NUMBER_MAP.get(str(key), str(key))
-    _LOGGER.debug("Creating number entity for key: %s", map_key)
+    _LOGGER.info("Creating number entity for key: %s, map_key: %s", key, map_key)
+
     return EconetNumberEntityDescription(
         key=key,
         translation_key=camel_to_snake(map_key),
@@ -175,13 +182,21 @@ async def async_setup_entry(
 
     entities: list[EconetNumber] = []
 
+    _LOGGER.info("=== Starting number entity setup ===")
+    _LOGGER.info("NUMBER_MAP keys: %s", list(NUMBER_MAP.keys()))
+
     for key in NUMBER_MAP:
+        _LOGGER.info("Processing number entity key: %s", key)
+
         sys_params = coordinator.data.get("sysParams", {})
+
         if skip_params_edits(sys_params):
             _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
             continue
 
         number_limits = await api.get_param_limits(key)
+        _LOGGER.info("Param limits for %s: %s", key, number_limits)
+
         if number_limits is None:
             _LOGGER.warning(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
@@ -189,14 +204,22 @@ async def async_setup_entry(
             )
             continue
 
-        if can_add(key, coordinator):
+        can_add_result = can_add(key, coordinator)
+        _LOGGER.info("can_add result for %s: %s", key, can_add_result)
+
+        if can_add_result:
             entity_description = create_number_entity_description(key)
             apply_limits(entity_description, number_limits)
-            entities.append(EconetNumber(entity_description, coordinator, api))
+            entity = EconetNumber(entity_description, coordinator, api)
+            entities.append(entity)
+            _LOGGER.info("Added entity: %s", entity.name)
         else:
             _LOGGER.warning(
                 "Cannot add number entity - availability key: %s does not exist",
                 key,
             )
+
+    _LOGGER.info("Total entities to add: %s", len(entities))
+    _LOGGER.info("=== Finished number entity setup ===")
 
     return async_add_entities(entities)

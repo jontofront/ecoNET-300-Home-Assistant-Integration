@@ -226,6 +226,8 @@ class Econet300Api:
 
     async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
+        _LOGGER.info("get_param_limits called for param: %s", param)
+        
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             try:
                 # Attempt to fetch the API data
@@ -254,15 +256,15 @@ class Econet300Api:
             _LOGGER.warning(
                 "Limits for parameter '%s' do not exist. Available limits: %s",
                 param,
-                limits,
+                list(limits.keys()) if limits else "None",
             )
             return None
 
         # Extract and log the limits
         curr_limits = limits[param]
-        _LOGGER.debug("Limits '%s'", limits)
-        _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
-        return Limits(curr_limits["min"], curr_limits["max"])
+        result = Limits(curr_limits["min"], curr_limits["max"])
+        _LOGGER.info("Created Limits object for param '%s': min=%s, max=%s", param, result.min, result.max)
+        return result
 
     async def fetch_reg_params_data(self) -> dict[str, Any]:
         """Fetch data from econet/regParamsData."""

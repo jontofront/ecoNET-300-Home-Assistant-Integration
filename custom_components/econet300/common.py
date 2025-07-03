@@ -58,7 +58,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         if self.data is None:
             return False
 
-        return key in self.data["paramsEdits"]
+        result = key in self.data["paramsEdits"]
+        _LOGGER.info("has_param_edit_data: key %s in paramsEdits: %s", key, result)
+        return result
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint."""
