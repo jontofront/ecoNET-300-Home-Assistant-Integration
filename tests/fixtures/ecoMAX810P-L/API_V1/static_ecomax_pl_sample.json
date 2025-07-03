@@ -1,0 +1,356 @@
+{
+    "version": "2.0",
+    "language": "pl",
+    "deviceType": "ecomax",
+    "lastUpdated": "2024-01-01T12:00:00Z",
+    "parameters": {
+        "boilerHeatingCurve": {
+            "name": "Krzywa Grzewcza Kotła",
+            "description": "Dostosowuje temperaturę wyjściową kotła na podstawie temperatury zewnętrznej",
+            "unit": "",
+            "category": "heating",
+            "group": "boiler",
+            "help": "Wyższe wartości produkują gorętszą wodę gdy jest zimno na zewnątrz",
+            "ui": {
+                "label": "Krzywa Grzewcza",
+                "placeholder": "Wprowadź wartość krzywej",
+                "tooltip": "Ustaw wartość krzywej grzewczej (0.1-0.4)"
+            }
+        },
+        "tempCOSet": {
+            "name": "Temperatura Kotła - Ustawienie",
+            "description": "Temperatura docelowa kotła",
+            "unit": "°C",
+            "category": "heating",
+            "group": "boiler",
+            "help": "Ustaw pożądaną temperaturę kotła",
+            "ui": {
+                "label": "Temperatura Kotła",
+                "placeholder": "Wprowadź temperaturę",
+                "tooltip": "Ustaw temperaturę kotła (30-90°C)"
+            }
+        },
+        "tempCWUSet": {
+            "name": "Temperatura Ciepłej Wody - Ustawienie",
+            "description": "Temperatura docelowa ciepłej wody użytkowej",
+            "unit": "°C",
+            "category": "hot_water",
+            "group": "cwu",
+            "help": "Ustaw pożądaną temperaturę ciepłej wody",
+            "ui": {
+                "label": "Temperatura CWU",
+                "placeholder": "Wprowadź temperaturę",
+                "tooltip": "Ustaw temperaturę ciepłej wody (30-65°C)"
+            }
+        },
+        "mode": {
+            "name": "Tryb Pracy",
+            "description": "Aktualny tryb pracy urządzenia",
+            "unit": "",
+            "category": "system",
+            "group": "control",
+            "help": "Pokazuje aktualny tryb pracy",
+            "ui": {
+                "label": "Tryb",
+                "placeholder": "Wybierz tryb",
+                "tooltip": "Aktualny tryb pracy"
+            },
+            "values": {
+                "0": "Wyłączony",
+                "1": "Ręczny",
+                "2": "Automatyczny",
+                "3": "Eco",
+                "4": "Komfort"
+            }
+        },
+        "boilerPower": {
+            "name": "Moc Kotła",
+            "description": "Aktualna moc wyjściowa kotła",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "boiler",
+            "help": "Pokazuje aktualną moc kotła jako procent",
+            "ui": {
+                "label": "Moc",
+                "placeholder": "",
+                "tooltip": "Aktualna moc wyjściowa kotła"
+            }
+        },
+        "tempFeeder": {
+            "name": "Temperatura Podajnika",
+            "description": "Temperatura podajnika paliwa",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "feeder",
+            "help": "Pokazuje temperaturę podajnika paliwa",
+            "ui": {
+                "label": "Temp. Podajnika",
+                "placeholder": "",
+                "tooltip": "Temperatura podajnika paliwa"
+            }
+        },
+        "fuelLevel": {
+            "name": "Poziom Paliwa",
+            "description": "Aktualny poziom paliwa w zbiorniku",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "fuel",
+            "help": "Pokazuje aktualny poziom paliwa jako procent",
+            "ui": {
+                "label": "Poziom Paliwa",
+                "placeholder": "",
+                "tooltip": "Aktualny poziom paliwa"
+            }
+        },
+        "tempCO": {
+            "name": "Temperatura Kotła",
+            "description": "Aktualna temperatura kotła",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "boiler",
+            "help": "Pokazuje aktualną temperaturę kotła",
+            "ui": {
+                "label": "Temp. Kotła",
+                "placeholder": "",
+                "tooltip": "Aktualna temperatura kotła"
+            }
+        },
+        "statusCWU": {
+            "name": "Status Ciepłej Wody",
+            "description": "Status systemu ciepłej wody użytkowej",
+            "unit": "",
+            "category": "monitoring",
+            "group": "cwu",
+            "help": "Pokazuje status systemu ciepłej wody",
+            "ui": {
+                "label": "Status CWU",
+                "placeholder": "",
+                "tooltip": "Status systemu ciepłej wody"
+            },
+            "values": {
+                "0": "Nie Ustawione",
+                "1": "Ustawione"
+            }
+        },
+        "tempCWU": {
+            "name": "Temperatura Ciepłej Wody",
+            "description": "Aktualna temperatura ciepłej wody użytkowej",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "cwu",
+            "help": "Pokazuje aktualną temperaturę ciepłej wody",
+            "ui": {
+                "label": "Temp. CWU",
+                "placeholder": "",
+                "tooltip": "Aktualna temperatura ciepłej wody"
+            }
+        },
+        "tempFlueGas": {
+            "name": "Temperatura Spalin",
+            "description": "Temperatura spalin",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "exhaust",
+            "help": "Pokazuje temperaturę spalin",
+            "ui": {
+                "label": "Temp. Spalin",
+                "placeholder": "",
+                "tooltip": "Temperatura spalin"
+            }
+        },
+        "fanPower": {
+            "name": "Moc Wentylatora",
+            "description": "Aktualna moc wyjściowa wentylatora",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "fan",
+            "help": "Pokazuje aktualną moc wentylatora jako procent",
+            "ui": {
+                "label": "Moc Wentylatora",
+                "placeholder": "",
+                "tooltip": "Aktualna moc wyjściowa wentylatora"
+            }
+        },
+        "thermostat": {
+            "name": "Status Termostatu",
+            "description": "Status termostatu pokojowego",
+            "unit": "",
+            "category": "monitoring",
+            "group": "thermostat",
+            "help": "Pokazuje status termostatu pokojowego",
+            "ui": {
+                "label": "Termostat",
+                "placeholder": "",
+                "tooltip": "Status termostatu pokojowego"
+            },
+            "values": {
+                "0": "WYŁĄCZONY",
+                "1": "WŁĄCZONY"
+            }
+        },
+        "tempExternalSensor": {
+            "name": "Temperatura Zewnętrzna",
+            "description": "Temperatura z czujnika zewnętrznego",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "sensors",
+            "help": "Pokazuje temperaturę zewnętrzną",
+            "ui": {
+                "label": "Temp. Zewnętrzna",
+                "placeholder": "",
+                "tooltip": "Temperatura zewnętrzna"
+            }
+        },
+        "tempLowerBuffer": {
+            "name": "Temperatura Dolnego Bufora",
+            "description": "Temperatura dolnego zbiornika buforowego",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "buffer",
+            "help": "Pokazuje temperaturę dolnego bufora",
+            "ui": {
+                "label": "Dolny Bufor",
+                "placeholder": "",
+                "tooltip": "Temperatura dolnego bufora"
+            }
+        },
+        "tempUpperBuffer": {
+            "name": "Temperatura Górnego Bufora",
+            "description": "Temperatura górnego zbiornika buforowego",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "buffer",
+            "help": "Pokazuje temperaturę górnego bufora",
+            "ui": {
+                "label": "Górny Bufor",
+                "placeholder": "",
+                "tooltip": "Temperatura górnego bufora"
+            }
+        },
+        "quality": {
+            "name": "Jakość Sygnału",
+            "description": "Jakość sygnału komunikacyjnego",
+            "unit": "%",
+            "category": "system",
+            "group": "communication",
+            "help": "Pokazuje jakość sygnału jako procent",
+            "ui": {
+                "label": "Jakość Sygnału",
+                "placeholder": "",
+                "tooltip": "Jakość sygnału komunikacyjnego"
+            }
+        },
+        "signal": {
+            "name": "Siła Sygnału",
+            "description": "Siła sygnału komunikacyjnego",
+            "unit": "%",
+            "category": "system",
+            "group": "communication",
+            "help": "Pokazuje siłę sygnału jako procent",
+            "ui": {
+                "label": "Siła Sygnału",
+                "placeholder": "",
+                "tooltip": "Siła sygnału komunikacyjnego"
+            }
+        }
+    },
+    "categories": {
+        "heating": {
+            "name": "Ogrzewanie",
+            "description": "Parametry systemu ogrzewania",
+            "icon": "heating"
+        },
+        "hot_water": {
+            "name": "Ciepła Woda",
+            "description": "Parametry ciepłej wody użytkowej",
+            "icon": "hot_water"
+        },
+        "monitoring": {
+            "name": "Monitorowanie",
+            "description": "Parametry monitorowania systemu",
+            "icon": "monitoring"
+        },
+        "system": {
+            "name": "System",
+            "description": "Parametry sterowania systemem",
+            "icon": "system"
+        }
+    },
+    "groups": {
+        "boiler": {
+            "name": "Kocioł",
+            "description": "Parametry kotła",
+            "icon": "boiler"
+        },
+        "cwu": {
+            "name": "Ciepła Woda",
+            "description": "Parametry systemu ciepłej wody",
+            "icon": "cwu"
+        },
+        "control": {
+            "name": "Sterowanie",
+            "description": "Parametry systemu sterowania",
+            "icon": "control"
+        },
+        "feeder": {
+            "name": "Podajnik",
+            "description": "Parametry podajnika paliwa",
+            "icon": "feeder"
+        },
+        "fuel": {
+            "name": "Paliwo",
+            "description": "Parametry systemu paliwowego",
+            "icon": "fuel"
+        },
+        "exhaust": {
+            "name": "Spaliny",
+            "description": "Parametry systemu spalin",
+            "icon": "exhaust"
+        },
+        "fan": {
+            "name": "Wentylator",
+            "description": "Parametry wentylatora",
+            "icon": "fan"
+        },
+        "thermostat": {
+            "name": "Termostat",
+            "description": "Parametry termostatu",
+            "icon": "thermostat"
+        },
+        "sensors": {
+            "name": "Czujniki",
+            "description": "Parametry czujników",
+            "icon": "sensors"
+        },
+        "buffer": {
+            "name": "Bufor",
+            "description": "Parametry zbiorników buforowych",
+            "icon": "buffer"
+        },
+        "communication": {
+            "name": "Komunikacja",
+            "description": "Parametry komunikacji",
+            "icon": "communication"
+        }
+    },
+    "ui": {
+        "common": {
+            "save": "Zapisz",
+            "cancel": "Anuluj",
+            "reset": "Resetuj",
+            "refresh": "Odśwież",
+            "loading": "Ładowanie...",
+            "error": "Błąd",
+            "success": "Sukces",
+            "warning": "Ostrzeżenie",
+            "info": "Informacja"
+        },
+        "units": {
+            "temperature": "°C",
+            "percentage": "%",
+            "power": "kW",
+            "pressure": "bar",
+            "flow": "l/min"
+        }
+    }
+}

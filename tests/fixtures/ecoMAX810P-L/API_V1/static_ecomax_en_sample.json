@@ -1,0 +1,356 @@
+{
+    "version": "2.0",
+    "language": "en",
+    "deviceType": "ecomax",
+    "lastUpdated": "2024-01-01T12:00:00Z",
+    "parameters": {
+        "boilerHeatingCurve": {
+            "name": "Boiler Heating Curve",
+            "description": "Adjusts the boiler output temperature based on outside temperature",
+            "unit": "",
+            "category": "heating",
+            "group": "boiler",
+            "help": "Higher values produce hotter water when it's cold outside",
+            "ui": {
+                "label": "Heating Curve",
+                "placeholder": "Enter curve value",
+                "tooltip": "Set the heating curve value (0.1-0.4)"
+            }
+        },
+        "tempCOSet": {
+            "name": "Boiler Temperature Setpoint",
+            "description": "Target temperature for the boiler",
+            "unit": "°C",
+            "category": "heating",
+            "group": "boiler",
+            "help": "Set the desired boiler temperature",
+            "ui": {
+                "label": "Boiler Temperature",
+                "placeholder": "Enter temperature",
+                "tooltip": "Set boiler temperature (30-90°C)"
+            }
+        },
+        "tempCWUSet": {
+            "name": "Hot Water Temperature Setpoint",
+            "description": "Target temperature for domestic hot water",
+            "unit": "°C",
+            "category": "hot_water",
+            "group": "cwu",
+            "help": "Set the desired hot water temperature",
+            "ui": {
+                "label": "Hot Water Temperature",
+                "placeholder": "Enter temperature",
+                "tooltip": "Set hot water temperature (30-65°C)"
+            }
+        },
+        "mode": {
+            "name": "Operation Mode",
+            "description": "Current operation mode of the device",
+            "unit": "",
+            "category": "system",
+            "group": "control",
+            "help": "Shows the current operation mode",
+            "ui": {
+                "label": "Mode",
+                "placeholder": "Select mode",
+                "tooltip": "Current operation mode"
+            },
+            "values": {
+                "0": "Off",
+                "1": "Manual",
+                "2": "Auto",
+                "3": "Eco",
+                "4": "Comfort"
+            }
+        },
+        "boilerPower": {
+            "name": "Boiler Power",
+            "description": "Current boiler power output",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "boiler",
+            "help": "Shows current boiler power as percentage",
+            "ui": {
+                "label": "Power",
+                "placeholder": "",
+                "tooltip": "Current boiler power output"
+            }
+        },
+        "tempFeeder": {
+            "name": "Feeder Temperature",
+            "description": "Temperature of the fuel feeder",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "feeder",
+            "help": "Shows the temperature of the fuel feeder",
+            "ui": {
+                "label": "Feeder Temp",
+                "placeholder": "",
+                "tooltip": "Fuel feeder temperature"
+            }
+        },
+        "fuelLevel": {
+            "name": "Fuel Level",
+            "description": "Current fuel level in the tank",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "fuel",
+            "help": "Shows the current fuel level as percentage",
+            "ui": {
+                "label": "Fuel Level",
+                "placeholder": "",
+                "tooltip": "Current fuel level"
+            }
+        },
+        "tempCO": {
+            "name": "Boiler Temperature",
+            "description": "Current boiler temperature",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "boiler",
+            "help": "Shows the current boiler temperature",
+            "ui": {
+                "label": "Boiler Temp",
+                "placeholder": "",
+                "tooltip": "Current boiler temperature"
+            }
+        },
+        "statusCWU": {
+            "name": "Hot Water Status",
+            "description": "Status of the hot water system",
+            "unit": "",
+            "category": "monitoring",
+            "group": "cwu",
+            "help": "Shows the status of the hot water system",
+            "ui": {
+                "label": "HW Status",
+                "placeholder": "",
+                "tooltip": "Hot water system status"
+            },
+            "values": {
+                "0": "Not Set",
+                "1": "Set"
+            }
+        },
+        "tempCWU": {
+            "name": "Hot Water Temperature",
+            "description": "Current hot water temperature",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "cwu",
+            "help": "Shows the current hot water temperature",
+            "ui": {
+                "label": "HW Temperature",
+                "placeholder": "",
+                "tooltip": "Current hot water temperature"
+            }
+        },
+        "tempFlueGas": {
+            "name": "Flue Gas Temperature",
+            "description": "Temperature of the flue gas",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "exhaust",
+            "help": "Shows the flue gas temperature",
+            "ui": {
+                "label": "Flue Gas Temp",
+                "placeholder": "",
+                "tooltip": "Flue gas temperature"
+            }
+        },
+        "fanPower": {
+            "name": "Fan Power",
+            "description": "Current fan power output",
+            "unit": "%",
+            "category": "monitoring",
+            "group": "fan",
+            "help": "Shows current fan power as percentage",
+            "ui": {
+                "label": "Fan Power",
+                "placeholder": "",
+                "tooltip": "Current fan power output"
+            }
+        },
+        "thermostat": {
+            "name": "Thermostat Status",
+            "description": "Status of the room thermostat",
+            "unit": "",
+            "category": "monitoring",
+            "group": "thermostat",
+            "help": "Shows the room thermostat status",
+            "ui": {
+                "label": "Thermostat",
+                "placeholder": "",
+                "tooltip": "Room thermostat status"
+            },
+            "values": {
+                "0": "OFF",
+                "1": "ON"
+            }
+        },
+        "tempExternalSensor": {
+            "name": "External Temperature",
+            "description": "Temperature from external sensor",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "sensors",
+            "help": "Shows the external temperature",
+            "ui": {
+                "label": "External Temp",
+                "placeholder": "",
+                "tooltip": "External temperature"
+            }
+        },
+        "tempLowerBuffer": {
+            "name": "Lower Buffer Temperature",
+            "description": "Temperature of the lower buffer tank",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "buffer",
+            "help": "Shows the lower buffer temperature",
+            "ui": {
+                "label": "Lower Buffer",
+                "placeholder": "",
+                "tooltip": "Lower buffer temperature"
+            }
+        },
+        "tempUpperBuffer": {
+            "name": "Upper Buffer Temperature",
+            "description": "Temperature of the upper buffer tank",
+            "unit": "°C",
+            "category": "monitoring",
+            "group": "buffer",
+            "help": "Shows the upper buffer temperature",
+            "ui": {
+                "label": "Upper Buffer",
+                "placeholder": "",
+                "tooltip": "Upper buffer temperature"
+            }
+        },
+        "quality": {
+            "name": "Signal Quality",
+            "description": "Quality of the communication signal",
+            "unit": "%",
+            "category": "system",
+            "group": "communication",
+            "help": "Shows the signal quality as percentage",
+            "ui": {
+                "label": "Signal Quality",
+                "placeholder": "",
+                "tooltip": "Communication signal quality"
+            }
+        },
+        "signal": {
+            "name": "Signal Strength",
+            "description": "Strength of the communication signal",
+            "unit": "%",
+            "category": "system",
+            "group": "communication",
+            "help": "Shows the signal strength as percentage",
+            "ui": {
+                "label": "Signal Strength",
+                "placeholder": "",
+                "tooltip": "Communication signal strength"
+            }
+        }
+    },
+    "categories": {
+        "heating": {
+            "name": "Heating",
+            "description": "Heating system parameters",
+            "icon": "heating"
+        },
+        "hot_water": {
+            "name": "Hot Water",
+            "description": "Domestic hot water parameters",
+            "icon": "hot_water"
+        },
+        "monitoring": {
+            "name": "Monitoring",
+            "description": "System monitoring parameters",
+            "icon": "monitoring"
+        },
+        "system": {
+            "name": "System",
+            "description": "System control parameters",
+            "icon": "system"
+        }
+    },
+    "groups": {
+        "boiler": {
+            "name": "Boiler",
+            "description": "Boiler-related parameters",
+            "icon": "boiler"
+        },
+        "cwu": {
+            "name": "Hot Water",
+            "description": "Hot water system parameters",
+            "icon": "cwu"
+        },
+        "control": {
+            "name": "Control",
+            "description": "Control system parameters",
+            "icon": "control"
+        },
+        "feeder": {
+            "name": "Feeder",
+            "description": "Fuel feeder parameters",
+            "icon": "feeder"
+        },
+        "fuel": {
+            "name": "Fuel",
+            "description": "Fuel system parameters",
+            "icon": "fuel"
+        },
+        "exhaust": {
+            "name": "Exhaust",
+            "description": "Exhaust system parameters",
+            "icon": "exhaust"
+        },
+        "fan": {
+            "name": "Fan",
+            "description": "Fan system parameters",
+            "icon": "fan"
+        },
+        "thermostat": {
+            "name": "Thermostat",
+            "description": "Thermostat parameters",
+            "icon": "thermostat"
+        },
+        "sensors": {
+            "name": "Sensors",
+            "description": "Sensor parameters",
+            "icon": "sensors"
+        },
+        "buffer": {
+            "name": "Buffer",
+            "description": "Buffer tank parameters",
+            "icon": "buffer"
+        },
+        "communication": {
+            "name": "Communication",
+            "description": "Communication parameters",
+            "icon": "communication"
+        }
+    },
+    "ui": {
+        "common": {
+            "save": "Save",
+            "cancel": "Cancel",
+            "reset": "Reset",
+            "refresh": "Refresh",
+            "loading": "Loading...",
+            "error": "Error",
+            "success": "Success",
+            "warning": "Warning",
+            "info": "Information"
+        },
+        "units": {
+            "temperature": "°C",
+            "percentage": "%",
+            "power": "kW",
+            "pressure": "bar",
+            "flow": "l/min"
+        }
+    }
+}
