@@ -156,6 +156,9 @@
       },
       "weather_control": {
         "name": "Weather control the boiler"
+      },
+      "boiler_heating_curve": {
+        "name": "Krzywa grzewcza kotła"
       }
     }
   }

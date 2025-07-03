@@ -242,6 +242,9 @@
       },
       "heating_work_state_pump4": {
         "name": "Heating work state pump 4"
+      },
+      "boiler_heating_curve": {
+        "name": "Boiler heating curve"
       }
     }
   }

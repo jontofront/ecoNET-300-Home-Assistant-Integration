@@ -153,6 +153,7 @@ BINARY_SENSOR_MAP_KEY = {
 NUMBER_MAP = {
     "1280": "tempCOSet",
     "1281": "tempCWUSet",
+    "112": "boilerHeatingCurve",
 }
 
 # By default all sensors unit_of_measurement are None
@@ -259,6 +260,7 @@ ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
     #############################
     "tempCOSet": NumberDeviceClass.TEMPERATURE,
     "tempCWUSet": NumberDeviceClass.TEMPERATURE,
+    "boilerHeatingCurve": None,
 }
 
 
@@ -349,6 +351,7 @@ ENTITY_ICON = {
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",
     "heating_work_state_pump4": "mdi:sync",
+    "boilerHeatingCurve": "mdi:chart-line",
 }
 
 ENTITY_ICON_OFF = {
@@ -398,14 +401,17 @@ ENTITY_CATEGORY = {
 ENTITY_MIN_VALUE = {
     "tempCOSet": 27,
     "tempCWUSet": 20,
+    "boilerHeatingCurve": 0.1,
 }
 
 ENTITY_MAX_VALUE = {
     "tempCOSet": 68,
     "tempCWUSet": 55,
+    "boilerHeatingCurve": 0.4,
 }
 
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
+    "boilerHeatingCurve": 0.1,
 }
