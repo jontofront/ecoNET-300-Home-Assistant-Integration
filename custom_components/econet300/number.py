@@ -3,7 +3,11 @@
 from dataclasses import dataclass
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberEntityDescription, NumberMode
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberEntityDescription,
+    NumberMode,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback

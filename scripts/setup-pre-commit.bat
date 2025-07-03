@@ -30,4 +30,4 @@ echo    - Code formatting (Ruff)
 echo    - General code quality checks
 echo.
 echo 💡 To run checks manually: pre-commit run --all-files
-pause 
+pause

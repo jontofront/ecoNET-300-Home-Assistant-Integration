@@ -33,4 +33,4 @@
 - **Switches**: Boiler ON/OFF control
 - **Number Entities**: Temperature setpoints and configuration
 
-For detailed information, see the [full README](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration). 
+For detailed information, see the [full README](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration).

@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Python Standards for ecoNET-300
@@ -18,6 +18,56 @@ alwaysApply: false
 - **MyPy**: Type checking
 - **Pylint**: Additional static analysis (with specific rules disabled)
 - **Autotyping**: Automatic type annotation
+
+## Ruff Configuration
+All ruff rules are configured in `pyproject.toml`. Key configuration:
+
+### Selected Rules (from pyproject.toml)
+- **Import sorting**: `I` (isort) - Automatic import organization
+- **Code style**: `E`, `W` (pycodestyle) - PEP 8 compliance
+- **Flake8**: `F` (pyflakes) - Unused imports, variables, etc.
+- **Type hints**: `UP` (pyupgrade) - Modern Python syntax
+- **Logging**: `G`, `LOG` - Proper logging format
+- **Print statements**: `T20` - Avoid print() in production
+- **Complexity**: `C` - Function complexity limits
+- **Docstrings**: `D` - Google-style docstrings
+
+### Ignored Rules (from pyproject.toml)
+- `E501`: Line too long (handled by formatter)
+- `D202`, `D203`, `D213`: Docstring formatting
+- `PLR0911`, `PLR0912`, `PLR0913`, `PLR0915`: Complexity limits
+- `TCH001`, `TCH002`, `TCH003`: Type checking imports
+- `UP038`: Union syntax in isinstance
+
+### Key Best Practices
+- **String Formatting**: Use f-strings, except for logging (use % formatting)
+- **Logging**: Use `_LOGGER.info("message %s", variable)` format
+- **Print Statements**: Avoid `print()` in production code, use logging
+- **Type Hints**: Use modern Python syntax (`list`, `dict`, `set` instead of `typing.*`)
+- **Import Order**: Follow isort configuration in pyproject.toml
+
+### Import Order (from pyproject.toml isort config)
+```python
+# Standard library imports
+import json
+import logging
+import sys
+from pathlib import Path
+from typing import Dict, Set
+
+# Third-party imports
+import voluptuous as vol
+
+# Local imports (custom_components.econet300)
+from .const import DOMAIN
+```
+
+### Scripts and Validation Files
+- **Logging Setup**: Always configure logging at the top of scripts
+- **Error Handling**: Use proper exception handling with logging
+- **Exit Codes**: Use `sys.exit(0)` for success, `sys.exit(1)` for errors
+- **Type Hints**: Use modern Python syntax (e.g., `list` instead of `typing.List`)
+- **No Print Statements**: Use `_LOGGER.info()`, `_LOGGER.error()`, etc.
 
 ## Import Conventions
 - Use standard Home Assistant import aliases:
@@ -46,4 +96,3 @@ alwaysApply: false
 - Overly complex functions (keep under 25 complexity)
 - Unnecessary imports
 - Debug print statements in production code
-

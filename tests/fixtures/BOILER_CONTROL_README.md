@@ -140,4 +140,4 @@ To verify the implementation works:
 - The `BOILER_CONTROL` parameter is the correct way to control boiler ON/OFF
 - The `mode` parameter is read-only and shows current operation state
 - Authentication is required for all API operations
-- The switch provides a simple ON/OFF interface for boiler control 
+- The switch provides a simple ON/OFF interface for boiler control
