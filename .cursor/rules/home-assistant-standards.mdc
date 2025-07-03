@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Home Assistant Integration Standards
@@ -42,7 +42,7 @@ async def async_setup_entry(
 ```python
 class Econet300Entity(Entity):
     """Base entity for ecoNET300 devices."""
-    
+
     def __init__(self, coordinator: DataUpdateCoordinator, device_id: str) -> None:
         """Initialize the entity."""
         self.coordinator = coordinator
@@ -62,4 +62,3 @@ CONFIG_SCHEMA = vol.Schema({
 - Use caching where appropriate
 - Implement proper polling intervals
 - Avoid blocking operations in the main thread
-

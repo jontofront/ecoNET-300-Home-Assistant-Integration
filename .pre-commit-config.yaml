@@ -1,0 +1,57 @@
+repos:
+  - repo: local
+    hooks:
+      - id: translation-validation
+        name: Translation Validation
+        entry: python tests/validation/check_translations.py
+        language: system
+        files: |
+          (?x)^(
+              custom_components/econet300/strings\.json|
+              custom_components/econet300/translations/.*\.json
+          )$
+        pass_filenames: false
+
+      - id: python-syntax-check
+        name: Python Syntax Check
+        entry: python -m py_compile
+        language: system
+        files: \.py$
+        args: [--help]
+        stages: [pre-commit]
+
+      - id: json-syntax-check
+        name: JSON Syntax Check
+        entry: python -c "import json, sys; [json.load(open(f)) for f in sys.argv[1:]]"
+        language: system
+        files: \.json$
+        args: [--help]
+        stages: [pre-commit]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-ast
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: requirements-txt-fixer
+      - id: fix-byte-order-marker
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format

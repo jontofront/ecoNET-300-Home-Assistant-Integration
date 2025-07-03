@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # ecoNET300-Specific Guidelines
@@ -106,6 +106,3 @@ alwaysApply: false
 - Keep device compatibility matrix updated
 - Document API limitations and requirements
 - Reference test fixtures for parameter examples
-
-
-

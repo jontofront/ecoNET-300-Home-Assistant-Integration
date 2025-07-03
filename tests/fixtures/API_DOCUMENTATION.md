@@ -111,7 +111,7 @@ The boiler control is implemented as a switch entity in Home Assistant:
 
 1. **Turn ON**: Sets `BOILER_CONTROL=1`
 2. **Turn OFF**: Sets `BOILER_CONTROL=0`
-3. **State Detection**: 
+3. **State Detection**:
    - `mode=0` → Switch shows OFF
    - `mode=1-25` → Switch shows ON
 
@@ -148,4 +148,4 @@ curl "http://DEVICE_IP/econet/newParam?newParamName=BOILER_CONTROL&newParamValue
 - The `BOILER_CONTROL` parameter is the correct way to control the boiler ON/OFF state
 - The `mode` parameter is read-only and reflects the current boiler operation mode
 - Authentication is required for all API calls
-- The API returns JSON responses with a `result` field indicating success/failure 
+- The API returns JSON responses with a `result` field indicating success/failure

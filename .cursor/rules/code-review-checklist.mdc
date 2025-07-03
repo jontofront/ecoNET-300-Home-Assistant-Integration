@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Code Review Checklist
@@ -49,4 +49,3 @@ alwaysApply: false
 - [ ] Code complexity is under 25
 - [ ] No duplicate code
 - [ ] Functions are focused and single-purpose
-

@@ -1,0 +1,108 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Pre-Commit Validation Checks
+
+## Required Checks Before Committing
+
+### 1. Translation Validation
+```bash
+python tests/validation/check_translations.py
+```
+- ✅ All translation files have valid JSON syntax
+- ✅ Translation keys are consistent across all files
+- ✅ No missing translations in language files
+- ✅ No extra/unused translation keys
+
+### 2. Code Syntax Validation
+```bash
+python -m py_compile custom_components/econet300/const.py
+python -m py_compile custom_components/econet300/number.py
+python -m py_compile custom_components/econet300/sensor.py
+python -m py_compile custom_components/econet300/binary_sensor.py
+python -m py_compile custom_components/econet300/switch.py
+```
+
+### 3. JSON Syntax Validation
+```bash
+python -c "import json; json.load(open('custom_components/econet300/strings.json'))"
+python -c "import json; json.load(open('custom_components/econet300/translations/en.json'))"
+python -c "import json; json.load(open('custom_components/econet300/translations/pl.json'))"
+```
+
+## Validation Checklist
+
+### Before Each Commit
+- [ ] Run translation validation script
+- [ ] Check Python syntax for modified files
+- [ ] Validate JSON syntax for translation files
+- [ ] Ensure all new entities have proper translations
+- [ ] Verify translation keys follow `camel_to_snake()` pattern
+
+### When Adding New Entities
+- [ ] Add entity to appropriate mapping in `const.py`
+- [ ] Add translation key to `strings.json`
+- [ ] Add translation key to `translations/en.json`
+- [ ] Add translation key to `translations/pl.json`
+- [ ] Use correct `translation_key` in entity description
+- [ ] Test entity appears correctly in Home Assistant
+
+### Translation Key Requirements
+- ✅ Use `camel_to_snake()` function for key conversion
+- ✅ Follow existing naming patterns
+- ✅ Provide both English and Polish translations
+- ✅ Use consistent terminology across languages
+
+## Common Issues to Check
+
+### Translation Issues
+- ❌ Missing translation keys in language files
+- ❌ Extra translation keys not in `strings.json`
+- ❌ Incorrect key naming (camelCase instead of snake_case)
+- ❌ JSON syntax errors in translation files
+
+### Code Issues
+- ❌ Python syntax errors
+- ❌ Missing imports
+- ❌ Incorrect entity configuration
+- ❌ Missing translation_key in entity descriptions
+
+## Quick Fix Commands
+
+### Fix Translation Issues
+```bash
+# Check what's missing
+python tests/validation/check_translations.py
+
+# Fix JSON syntax issues
+python -c "import json; json.load(open('custom_components/econet300/strings.json'))"
+```
+
+### Fix Code Issues
+```bash
+# Check Python syntax
+python -m py_compile custom_components/econet300/const.py
+
+# Check specific file
+python -c "import ast; ast.parse(open('custom_components/econet300/const.py').read())"
+```
+
+## Integration Testing
+
+### Test in Home Assistant
+1. Copy `custom_components/econet300` to Home Assistant's `config/custom_components/`
+2. Restart Home Assistant
+3. Check that new entities appear correctly
+4. Verify translations display properly
+5. Test entity functionality
+
+### Validation Commands
+```bash
+# Full validation suite
+python tests/validation/check_translations.py && \
+python -m py_compile custom_components/econet300/const.py && \
+python -m py_compile custom_components/econet300/number.py && \
+echo "✅ All checks passed!"
+```

@@ -25,6 +25,9 @@
       }
     },
     "binary_sensor": {
+      "lighter_works": {
+        "name": "Zapalarka"
+      },
       "weather_control": {
         "name": "Weather control the boiler"
       },
@@ -37,11 +40,17 @@
       "fan_works": {
         "name": "Fan"
       },
-      "aditional_feeder": {
-        "name": "Aditional feeder"
+      "feeder_works": {
+        "name": "Podajnik"
+      },
+      "additional_feeder": {
+        "name": "Dodatkowy podajnik"
       },
       "pump_cwu_works": {
         "name": "Pump CWU"
+      },
+      "pump_fireplace_works": {
+        "name": "Boiler pump"
       },
       "mixer_pump1": {
         "name": "Mixer 1 pump"
@@ -49,14 +58,14 @@
       "boiler_pump": {
         "name": "Boiler pump"
       },
-      "pump_fireplace_works": {
-        "name": "Boiler pump"
-      },
       "main_srv": {
         "name": "Econet24.com server"
       },
       "wifi": {
         "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
       }
     },
     "sensor": {

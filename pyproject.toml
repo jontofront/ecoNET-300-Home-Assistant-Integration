@@ -213,7 +213,7 @@ disable = [
     "no-else-raise", # RET506
     "no-else-return", # RET505
     "broad-except", # BLE001
-    "protected-access", # 
+    "protected-access", #
     "broad-exception-raised", # TRY002
     "consider-using-f-string", # PLC0209
     # "no-self-use", # PLR6301  # Optional plugin, not enabled

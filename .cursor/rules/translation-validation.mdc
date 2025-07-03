@@ -1,0 +1,117 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Translation Validation Rules
+
+## Translation Key Consistency
+
+### Entity Translation Keys
+- All entity translation keys must follow the pattern: `camel_to_snake(entity_name)`
+- Translation keys in `strings.json` must match the `translation_key` used in entity descriptions
+- Example: `boilerHeatingCurve` → `boiler_heating_curve`
+
+### Required Translation Structure
+```json
+{
+  "entity": {
+    "sensor": {
+      "entity_key": {
+        "name": "Human readable name"
+      }
+    },
+    "number": {
+      "entity_key": {
+        "name": "Human readable name"
+      }
+    },
+    "binary_sensor": {
+      "entity_key": {
+        "name": "Human readable name"
+      }
+    },
+    "switch": {
+      "entity_key": {
+        "name": "Human readable name"
+      }
+    }
+  }
+}
+```
+
+## Language File Requirements
+
+### English Translations (`translations/en.json`)
+- Must contain ALL translation keys from `strings.json`
+- Must be the primary reference for all translations
+- Use proper English capitalization and grammar
+
+### Polish Translations (`translations/pl.json`)
+- Must contain ALL translation keys from `strings.json`
+- Use proper Polish grammar and terminology
+- Maintain consistent terminology across the integration
+
+## Validation Checklist
+
+### When Adding New Entities
+1. ✅ Add translation key to `strings.json` (English)
+2. ✅ Add translation key to `translations/en.json` (English)
+3. ✅ Add translation key to `translations/pl.json` (Polish)
+4. ✅ Ensure `translation_key` in entity description matches JSON keys
+5. ✅ Use `camel_to_snake()` function for key conversion
+
+### Translation Key Patterns
+- **Sensors**: `temp_co_set` → "Heating target temperature"
+- **Numbers**: `boiler_heating_curve` → "Boiler heating curve"
+- **Binary Sensors**: `pump_co_works` → "Pump CO"
+- **Switches**: `boiler_control` → "Boiler On/Off"
+
+### Common Translation Keys
+- `temp_co`: "Heating temperature"
+- `temp_cwu`: "Water heater temperature"
+- `temp_co_set`: "Heating target temperature"
+- `temp_cwu_set`: "Water heater set temperature"
+- `boiler_heating_curve`: "Boiler heating curve"
+- `pump_co_works`: "Pump CO"
+- `fan_works`: "Fan"
+- `boiler_control`: "Boiler On/Off"
+
+## Error Prevention
+
+### Common Mistakes to Avoid
+- ❌ Using camelCase in translation keys (`boilerHeatingCurve`)
+- ❌ Missing translations in one language file
+- ❌ Inconsistent naming between `strings.json` and language files
+- ❌ Not using `camel_to_snake()` for key conversion
+- ❌ Typos in translation keys
+
+### Validation Commands
+```bash
+# Check JSON syntax
+python -c "import json; json.load(open('custom_components/econet300/strings.json')); print('✅ strings.json: OK')"
+python -c "import json; json.load(open('custom_components/econet300/translations/en.json')); print('✅ en.json: OK')"
+python -c "import json; json.load(open('custom_components/econet300/translations/pl.json')); print('✅ pl.json: OK')"
+```
+
+## Translation Guidelines
+
+### English Guidelines
+- Use clear, descriptive names
+- Follow Home Assistant naming conventions
+- Use proper capitalization (Title Case for entity names)
+- Be consistent with existing terminology
+
+### Polish Guidelines
+- Use proper Polish technical terminology
+- Maintain consistency with existing Polish translations
+- Use appropriate Polish grammar forms
+- Follow Polish capitalization rules
+
+### Technical Terms
+- **Boiler**: "Kocioł" (Polish)
+- **Temperature**: "Temperatura" (Polish)
+- **Heating**: "Ogrzewanie" (Polish)
+- **Water heater**: "CWU" (Polish abbreviation)
+- **Pump**: "Pompa" (Polish)
+- **Fan**: "Wentylator" (Polish)
