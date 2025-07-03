@@ -1,7 +1,7 @@
 """Constants from the Home Assistant."""
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
-from homeassistant.components.number import NumberDeviceClass
+from homeassistant.components.number import NumberDeviceClass, NumberMode
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
     PERCENTAGE,
@@ -414,4 +414,10 @@ ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
     "boilerHeatingCurve": 0.1,
+}
+
+ENTITY_MODE = {
+    "tempCOSet": NumberMode.BOX,
+    "tempCWUSet": NumberMode.BOX,
+    "boilerHeatingCurve": NumberMode.BOX,
 }

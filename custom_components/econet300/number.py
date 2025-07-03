@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberEntityDescription
+from homeassistant.components.number import NumberEntity, NumberEntityDescription, NumberMode
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -16,6 +16,7 @@ from .const import (
     ENTITY_ICON,
     ENTITY_MAX_VALUE,
     ENTITY_MIN_VALUE,
+    ENTITY_MODE,
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_STEP,
     ENTITY_UNIT_MAP,
@@ -153,10 +154,11 @@ def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
         key=key,
         translation_key=camel_to_snake(map_key),
         icon=ENTITY_ICON.get(map_key),
+        mode=ENTITY_MODE.get(map_key, NumberMode.BOX),
         device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
-        min_value=ENTITY_MIN_VALUE.get(map_key),
-        max_value=ENTITY_MAX_VALUE.get(map_key),
+        native_min_value=ENTITY_MIN_VALUE.get(map_key),
+        native_max_value=ENTITY_MAX_VALUE.get(map_key),
         native_step=ENTITY_STEP.get(map_key, 1),
     )
 
