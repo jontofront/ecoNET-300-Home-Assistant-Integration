@@ -1076,6 +1076,159 @@ fetch('/econet/rmStructure?lang=en')
 - **Alarm Monitoring**: Real-time alarm detection
 - **Safety Features**: DHW temperature limits, fuel monitoring
 
+## **✅ Complete Parameter Names Mapping**
+
+**Endpoint:** `/econet/rmParamsNames`  
+**Response Version:** 61477
+
+### **🔥 Boiler Control Parameters (0-17):**
+- **0**: 100% ventil.galinguma (100% Fan Power)
+- **1**: 100% Tiekimo darbas (100% Feeder Work)
+- **2**: 100% Tiekimo pertr. (100% Feeder Break)
+- **3**: 50% ventil.galinguma (50% Fan Power)
+- **4**: 50% Tiekimo darbas (50% Feeder Work)
+- **5**: 50% Tiekimo pertr. (50% Feeder Break)
+- **6**: 30% ventil.galinguma (30% Fan Power)
+- **7**: 30% Tiekimo darbas (30% Feeder Work)
+- **8**: 30% Tiekimo darbas (30% Feeder Work)
+- **9**: 50% Histerezė H2 (50% Hysteresis H2)
+- **10**: 30% Histerezė H1 (30% Hysteresis H1)
+- **11**: Katilo histerezė (Boiler Hysteresis)
+- **12**: FLventil.koregav. (FL Fan Adjustment)
+- **13**: Minimalus katilo galingumas FL (Minimal Boiler Power FL)
+- **14**: Maksimalus katilo galingumas FL (Maximal Boiler Power FL)
+- **15**: Parametras A FuzzyLogic (Parameter A FuzzyLogic)
+- **16**: Parametras B FuzzyLogic (Parameter B FuzzyLogic)
+- **17**: Parametras C FuzzyLogic (Parameter C FuzzyLogic)
+
+### **⚙️ Power Modulation (18-25):**
+- **18**: Reguliav.tvarka: (Regulation Order)
+- **19**: Prapūtimo galingumo korektūra 100% (Blowing Power Correction 100%)
+- **20**: Tiekiklio darbo korektūra 100% (Feeder Work Correction 100%)
+- **21**: Prapūtimo galingumo korektūra 50% (Blowing Power Correction 50%)
+- **22**: Tiekiklio darbo korektūra 50% (Feeder Work Correction 50%)
+- **23**: 30% Prapūtimo galingumo korektūra (30% Blowing Power Correction)
+- **24**: 30% Tiekiklio darbo korektūra (30% Feeder Work Correction)
+
+### **🔥 Ignition & Maintenance (25-40):**
+- **25**: Užkūrim.ventiliator. (Ignition Fan)
+- **26**: Užd.priet.test.laik. (Ignition Pretest Time)
+- **27**: Uždegim.test.laik.2 (Ignition Test Time 2)
+- **28**: Tiekiklio darbas (Feeder Work)
+- **29**: Užkūrimo laikas (Ignition Time)
+- **30**: Išmetamų dujų delta (Flue Gas Delta)
+- **31**: Išmetamųjų dujų delta 2 (Flue Gas Delta 2)
+- **32**: Išmetamų dujų temp. uždegimo pabaigoje (Flue Gas Temp at Ignition End)
+- **33**: Bandomasis kiekis (Test Amount)
+- **34**: Priežiūros laikas (Maintenance Time)
+- **35**: Padavimo laikas (Supply Time)
+- **36**: Tiekiklio intervalas (Feeder Interval)
+- **37**: Ventiliatoriaus min. galingumas (Fan Min Power)
+- **38**: Parametras A Lambda (Parameter A Lambda)
+- **39**: Parametr B Lambda (Parameter B Lambda)
+- **40**: Parametras C Lambda (Parameter C Lambda)
+
+### **🌡️ Oxygen & Temperature Control (41-50):**
+- **41**: 100% Deguonis (100% Oxygen)
+- **42**: 50% Deguonis (50% Oxygen)
+- **43**: 30% Deguonis (30% Oxygen)
+- **44**: Pūtimo koregavimo diapazonas (Blowing Adjustment Range)
+- **45**: FLdeguonies koreg. (FL Oxygen Correction)
+- **46**: Katilui užduota temp. (Boiler Set Temperature) - **ID: 1280**
+- **47**: Minimali katilo temperatūra (Minimal Boiler Temperature)
+- **48**: Maksimali katilo temperatūra (Maximal Boiler Temperature)
+- **49**: BVŠ nustatyta temp (DHW Set Temperature) - **ID: 1281**
+- **50**: BVŠ minimali temperatūra (DHW Minimal Temperature)
+
+### **🚿 DHW & Summer Mode (51-60):**
+- **51**: BVŠ maksimali temperatūra (DHW Maximal Temperature)
+- **52**: BVŠsiurb.darb.tvarka (DHW Pump Work Order)
+- **53**: BVŠ kolektoriaus histerezė (DHW Collector Hysteresis)
+- **54**: BVŠ dezinfekcija (DHW Disinfection)
+- **55**: VASARA režimas (SUMMER Mode)
+- **56**: Režimo VASARA įjungimo temp. (SUMMER Mode On Temperature)
+- **57**: Režimo VASARA išjungimo temp. (SUMMER Mode Off Temperature)
+- **58**: CŠ siurblio prijungimo temperatūra (CH Pump Connection Temperature)
+- **59**: CŠ siurblio sustabdymas BVŠ krovimo metu (CH Pump Stop During DHW Charging)
+- **60**: Katilo temp.didin. nuo BVŠ ir maišytuvo (Boiler Temp Increase from DHW and Mixer)
+
+### **🎚️ Mixer System (61-100):**
+- **61**: BVŠ darbo ilginimas (DHW Work Extension)
+- **62**: Šilumos keitiklis (Heat Exchanger)
+- **63**: Maišytuvo 1 nustatyta temperatūra (Mixer 1 Set Temperature) - **ID: 1287**
+- **64**: Maišytuvo 2 nustatyta temperatūra (Mixer 2 Set Temperature) - **ID: 1288**
+- **65**: Maišytuvo 3 nustatyta temperatūra (Mixer 3 Set Temperature) - **ID: 1289**
+- **66**: Maišytuvo 4 nustatyta temperatūra (Mixer 4 Set Temperature) - **ID: 1290**
+- **67-70**: Minimali maišytuvo 1-4 temperatūra (Minimal Mixer 1-4 Temperature)
+- **71-74**: Maksimali maišytuvo 1-4 temperatūra (Maximal Mixer 1-4 Temperature)
+- **75-78**: Kambario termostatas 1-4 (Room Thermostat 1-4)
+- **79-82**: Maišytuvo 1-4 oro reguliavimas (Mixer 1-4 Air Regulation)
+- **83-86**: Maišytuvo 1-4 šildymo kreivė (Mixer 1-4 Heating Curve)
+- **87-90**: Maišytuvo 1-4 aptarnavimas (Mixer 1-4 Service)
+- **91-94**: Proporcingumo diapazonas (Proportional Range)
+- **95-98**: Nuolatinis integracijos laikas (Continuous Integration Time)
+- **99-102**: Siurblio atjungimas nuo termostato (Pump Disconnection from Thermostat)
+
+### **🔧 Advanced Control (103-120):**
+- **103-106**: Vožtuv.atidar.laikas (Valve Opening Time)
+- **107-110**: MaišytuvoNejautrumas 1-4 (Mixer Insensitivity 1-4)
+- **111**: Katilo oro reguliavimas (Boiler Air Regulation)
+- **112**: Katilo šild.kreivė (Boiler Heating Curve)
+- **113**: Katilo atšaldymo temperatūra (Boiler Cooling Temperature)
+- **114-117**: Termost.pasirinik. (Thermostat Selection)
+- **118**: Cirkuliacinio siurblio prastovos laikas (Circulation Pump Idle Time)
+- **119**: Cirkuliacinio siurblio darbo laikas (Circulation Pump Work Time)
+- **120-124**: Lygiagretus kreivės perstūmimas (Parallel Curve Shift)
+
+### **📊 Monitoring & Safety (125-140):**
+- **125-129**: Kamabrinės temperatūros koeficientas (Room Temperature Coefficient)
+- **130**: Žarsteklio ciklo laikas (Grate Cycle Time)
+- **131**: Degiklio valymas (Burner Cleaning)
+- **132**: Stabilizacijos laikas (Stabilization Time)
+- **133**: Gesinimo laikas (Extinguishing Time)
+- **134**: Prapūtimo stiprumas (Blowing Strength)
+- **135**: Buferio aptarnav (Buffer Service)
+- **136**: Krovimo pradžios temperatūra (Charging Start Temperature)
+- **137**: Krovimo pabaigos temperatūra (Charging End Temperature)
+- **138**: Aliarminis lygis (Alarm Level)
+- **139**: Kuro trūkumo detekcijos laikas (Fuel Shortage Detection Time)
+- **140**: Įtraukimas (Inclusion)
+
+### **🔧 Additional Features (141-150):**
+- **141**: 2 tiekiklio darbo laikas (2nd Feeder Work Time)
+- **142**: Tiekiklio 2 darbo laikas (Feeder 2 Work Time)
+- **143**: Rezervinis katilas (Backup Boiler)
+- **144**: Ventiliatoriaus darbo prailginimas (Fan Work Extension)
+- **145**: Maksimali tiektuvo temperatūra (Maximal Feeder Temperature)
+- **146**: Išmetamų dujų temp. neesant kurui (Flue Gas Temp Without Fuel)
+- **147**: Histerezės funkcija (Hysteresis Function)
+- **148**: katilo blokavimas nuo termostato (Boiler Blocking from Thermostat)
+- **149**: Blokada nuo termost. (Blocking from Thermostat)
+- **150**: Katilo siurblio blokavimas (Boiler Pump Blocking)
+
+### **⚙️ System Control (151-155):**
+- **151**: Darbas laiku (Work by Time)
+- **152**: Darbas su Lambda (Work with Lambda)
+- **153**: Tiekiklio užrakinimas (Feeder Locking)
+- **154**: Kuro aptikimas: deguonis (Fuel Detection: Oxygen)
+- **155**: Kuro aptikimas: laikas (Fuel Detection: Time)
+- **156**: Ventiliatoriaus apsisukimų aptikimas (Fan Rotation Detection)
+- **157**: Tiektuvo daviklio režimas (Feeder Sensor Mode)
+- **158**: Išėjimo H1 (Output H1)
+- **159**: Išėjimo H2 ir H3 (Output H2 and H3)
+- **160**: Katilo galingumas (Boiler Power)
+- **161**: Darbo laikas (Work Time)
+- **162**: Rodyk išplėstinius (Show Extended)
+- **163**: Aliarmai (Alarms)
+
+### **🎯 Key Parameter IDs for Home Assistant:**
+- **1280**: Katilui užduota temp. (Boiler Set Temperature)
+- **1281**: BVŠ nustatyta temp (DHW Set Temperature)
+- **1287**: Maišytuvo 1 nustatyta temperatūra (Mixer 1 Set Temperature)
+- **1288**: Maišytuvo 2 nustatyta temperatūra (Mixer 2 Set Temperature)
+- **1289**: Maišytuvo 3 nustatyta temperatūra (Mixer 3 Set Temperature)
+- **1290**: Maišytuvo 4 nustatyta temperatūra (Mixer 4 Set Temperature)
+
 ## **Development Summary:**
 
 ### **✅ What We've Discovered:**
@@ -1196,3 +1349,139 @@ fetch('/econet/rmExistingLangs')
 - **Alarm Monitoring**: Real-time alarm detection
 
 **Please test the remaining 4 endpoints and share the responses!** This will complete our API documentation and we can then create a comprehensive implementation plan for your Home Assistant integration. 🚀 
+
+## **🔍 Key Discoveries from dev_set2.js:**
+
+### **1. Parameter Connection Mappings:**
+```javascript
+var PARAMETERS_CONN = {
+    "tempCO": ["CO_TEMP_SET", "CO_TEMP_SET"],
+    "tempCWU": ["CWU_SET_TEMP", "CWU_SET_TEMP"],
+    "mixerTemp1": ["MIX_SET_TEMP_1", "SET_TEMP_H_1"],
+    "mixerTemp2": ["MIX_SET_TEMP_2", "SET_TEMP_H_2"],
+    "mixerTemp3": ["MIX_SET_TEMP_3", "SET_TEMP_H_3"],
+    "mixerTemp4": ["MIX_SET_TEMP_4", "SET_TEMP_H_4"],
+    // ... up to mixerTemp8
+}
+```
+
+### **2. Remote Menu Parameter IDs:**
+```javascript
+var RM_PARAMETERS_CONN = {
+    "tempCO": "1280",
+    "tempCWU": "1281", 
+    "mixerTemp1": "1287",
+    "mixerTemp2": "1288",
+    "mixerTemp3": "1289",
+    "mixerTemp4": "1290",
+    "mixerTemp5": "1291",
+    "mixerTemp6": "1292"
+}
+```
+
+**This confirms our API findings!** The parameter IDs we discovered (1280, 1281, 1287-1290) match exactly with the web interface mappings.
+
+### **3. ecoSTER Temperature Control:**
+```javascript
+var ecoSterTemp1 = [
+    "STER_TEMP_DAY_1", "STER_TEMP_NIGHT_1", 
+    "STER_TEMP_SET_PARTY_1", "STER_TEMP_SET_SUMMER_1",
+    "STER_TEMP_ANTIFREEZ_1", "STER_MODE_1", "WORK_MODE_H_1"
+]
+```
+
+### **4. Pump System Mappings:**
+```javascript
+var FonkoPumps = {"P1":"CWUCOUT","P3":"H2OUTnum","P4":"H1OUTnum"};
+var GalmetPumps = {"P1":"LPOutnum","P2":"LPUpN","P3":"CWUCOUT","P4":"H1OUTnum","P5":"H2OUTnum"};
+var PumpsDict = {59:FonkoPumps, 60:GalmetPumps, 62:FonkoPumps, 63:GalmetPumps, 61:EsnodPumps, 96:ThermoshopPumps};
+```
+
+### **5. Tile System for UI:**
+```javascript
+var tiles_type_temp = "tile_temp";
+var tiles_type_temp_ro = "tile_temp_ro";
+var tiles_type_level = "tile_level";
+var tiles_type_flame = "tile_flame";
+var tiles_type_fan = "tile_fan";
+var tiles_type_pump = "tile_pump";
+```
+
+## **🎯 What This Tells Us:**
+
+### **✅ Confirmation of Our API Analysis:**
+- **Parameter IDs match** our API discoveries
+- **Mixer system** supports up to 8 mixers (not just 4)
+- **ecoSTER integration** for room temperature control
+- **Multiple pump configurations** for different boiler models
+
+### **🔧 Additional Capabilities:**
+- **Real-time UI updates** with tile system
+- **Multiple pump types** (Fonko, Galmet, Esnod, Thermoshop)
+- **Advanced temperature control** with ecoSTER panels
+- **Dynamic parameter connections**
+
+## **🎯 Next Steps:**
+
+### **1. Test Additional Parameters:**
+Since the JS shows support for up to 8 mixers, let's test if your device supports:
+```javascript
+// Test for additional mixer parameters
+fetch('/econet/rmCurrentDataParamsEdits')
+  .then(r => r.json())
+  .then(data => {
+    console.log('Looking for mixerTemp5-8:', data);
+    // Check if mixerTemp5, mixerTemp6, mixerTemp7, mixerTemp8 exist
+  });
+```
+
+### **2. Test ecoSTER Parameters:**
+```javascript
+// Test for ecoSTER temperature control
+fetch('/econet/regParams')
+  .then(r => r.json())
+  .then(data => {
+    console.log('Looking for ecoSTER params:', data);
+    // Check for STER_TEMP_DAY_1, STER_MODE_1, etc.
+  });
+```
+
+### **3. Test Pump Configuration:**
+```javascript
+// Test for pump state parameters
+fetch('/econet/regParams')
+  .then(r => r.json())
+  .then(data => {
+    console.log('Looking for pump states:', data);
+    // Check for CWUCOUT, H1OUTnum, H2OUTnum, etc.
+  });
+```
+
+**Would you like to test these additional parameters on your local device?** This will help us discover if your ecoMAX810P-L TOUCH supports the full range of features shown in the web interface!
+
+The dev_set2.js file reveals that the ecoNET-300 system is much more capable than we initially discovered, with support for advanced room temperature control and multiple pump configurations. 🚀 
+
+// Simple test to see what we get
+fetch('/econet/regParams')
+  .then(r => {
+    alert('Status: ' + r.status);
+    return r.text(); // Get raw text first
+  })
+  .then(text => {
+    alert('Raw response (first 200 chars): ' + text.substring(0, 200));
+    console.log('Full raw response:', text);
+  })
+  .catch(err => {
+    alert('Fetch error: ' + err.message);
+  });
+
+fetch('/econet/regParams')
+  .then(r => r.json())
+  .then(data => {
+    if (data && data.data) {
+      const paramIds = Object.keys(data.data).sort((a, b) => parseInt(a) - parseInt(b));
+      alert('Parameter definitions found:\nTotal: ' + paramIds.length + '\nRange: ' + paramIds[0] + ' to ' + paramIds[paramIds.length - 1]);
+    } else {
+      alert('No parameter definitions found\nResponse keys: ' + Object.keys(data));
+    }
+  });
