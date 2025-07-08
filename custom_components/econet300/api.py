@@ -260,8 +260,8 @@ class Econet300Api:
 
         # Extract and log the limits
         curr_limits = limits[param]
-        _LOGGER.debug("Limits '%s'", limits)
-        _LOGGER.debug("Limits for edit param '%s': %s", param, curr_limits)
+        # Remove sensitive data from debug logging to prevent information disclosure
+        _LOGGER.debug("Limits for edit param '%s' retrieved successfully", param)
         return Limits(curr_limits["min"], curr_limits["max"])
 
     async def fetch_reg_params_data(self) -> dict[str, Any]:
