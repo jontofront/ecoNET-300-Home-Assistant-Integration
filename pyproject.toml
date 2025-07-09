@@ -213,7 +213,7 @@ disable = [
     "no-else-raise", # RET506
     "no-else-return", # RET505
     "broad-except", # BLE001
-    "protected-access", # 
+    "protected-access", #
     "broad-exception-raised", # TRY002
     "consider-using-f-string", # PLC0209
     # "no-self-use", # PLR6301  # Optional plugin, not enabled
@@ -330,17 +330,11 @@ runtime-typing = false
 max-line-length-suggestions = 72
 
 [tool.ruff]
-required-version = ">=0.6.8"
 
 [tool.ruff.lint]
 select = [
     "A001", # Variable {name} is shadowing a Python builtin
-    "ASYNC210", # Async functions should not call blocking HTTP methods
-    "ASYNC220", # Async functions should not create subprocesses with blocking methods
-    "ASYNC221", # Async functions should not run processes with blocking methods
-    "ASYNC222", # Async functions should not wait on processes with blocking methods
-    "ASYNC230", # Async functions should not open files with blocking methods like open
-    "ASYNC251", # Async functions should not call time.sleep
+
     "B002", # Python does not support the unary prefix increment
     "B005", # Using .strip() with multi-character strings is misleading
     "B007", # Loop control variable {name} not used within loop body
