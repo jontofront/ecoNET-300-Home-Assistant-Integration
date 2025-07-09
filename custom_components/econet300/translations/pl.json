@@ -57,6 +57,21 @@
       },
       "wifi": {
         "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
+      },
+      "lambda_status": {
+        "name": "Czujnik Lambda"
+      },
+      "thermostat": {
+        "name": "Termostat"
+      },
+      "status_co": {
+        "name": "Status ogrzewania"
+      },
+      "status_cwu": {
+        "name": "Status CWU"
       }
     },
     "sensor": {

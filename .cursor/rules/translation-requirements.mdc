@@ -1,0 +1,64 @@
+---
+description: Translation requirements and checklist for ecoNET300 integration
+globs: ["custom_components/econet300/**/*.py", "custom_components/econet300/translations/*.json", "custom_components/econet300/strings.json"]
+alwaysApply: true
+---
+
+# Translation Requirements Checklist
+
+## 🚨 MANDATORY: Translation Check Before Committing
+
+When adding new entities, sensors, binary sensors, switches, or any user-facing features:
+
+### ✅ Required Files to Update:
+1. **`custom_components/econet300/strings.json`** - Base English strings
+2. **`custom_components/econet300/translations/en.json`** - English translations  
+3. **`custom_components/econet300/translations/pl.json`** - Polish translations
+
+### 🔍 Translation Key Format:
+- Use `camel_to_snake` format for entity keys
+- Example: `lambdaStatus` → `lambda_status`
+- Keys must match exactly across all three files
+
+### 📝 Translation Structure:
+```json
+{
+  "entity": {
+    "binary_sensor": {
+      "new_entity_key": {
+        "name": "Human readable name"
+      }
+    },
+    "sensor": {
+      "new_entity_key": {
+        "name": "Human readable name"
+      }
+    }
+  }
+}
+```
+
+### 🧪 Testing Checklist:
+- [ ] All three translation files updated
+- [ ] Keys match exactly across files
+- [ ] Names are user-friendly and descriptive
+- [ ] Test by restarting Home Assistant
+- [ ] Verify entities appear with correct names
+
+### ⚠️ Common Mistakes to Avoid:
+- Forgetting to update `strings.json`
+- Inconsistent naming between files
+- Missing Polish translations
+- Wrong key format (should be snake_case)
+- Not testing after changes
+
+### 🔄 When This Applies:
+- Adding new sensors
+- Adding new binary sensors  
+- Adding new switches
+- Adding new number entities
+- Modifying entity names
+- Adding new device classes
+- Any user-facing text changes
+
+**Remember: Translations are REQUIRED for all user-facing features!**
