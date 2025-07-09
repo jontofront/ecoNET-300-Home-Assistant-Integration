@@ -31,20 +31,24 @@ DEVICE_INFO_LAMBDA_NAME = "Module Lambda"
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 
-## Sys params
+# Sys params
 API_SYS_PARAMS_URI = "sysParams"
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
 API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 
-## Reg params
+# Reg params
 API_REG_PARAMS_URI = "regParams"
 API_REG_PARAMS_PARAM_DATA = "curr"
 
-## Reg params data all in one
+# Reg params data all in one
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
+
+# Alarm system
+API_ALARMS_URI = "rmAlarmsNames"
+API_ALARMS_DATA = "data"
 
 # Boiler status keys map
 OPERATION_MODE_NAMES = {
@@ -64,10 +68,35 @@ OPERATION_MODE_NAMES = {
     13: "no_transmission",
 }
 
-## Editable params limits
+# Editable params limits
 API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
+
+# Alarm system constants
+ALARM_CODES = {
+    0: "normal_operation",
+    1: "boiler_temp_sensor_damage",
+    2: "max_boiler_temp_exceeded",
+    3: "feeder_temp_sensor_damage",
+    4: "max_feeder_temp_exceeded",
+    5: "flue_gas_sensor_damage",
+    7: "ignition_failure",
+    11: "fan_failure",
+    255: "alarm_continues",
+}
+
+ALARM_SEVERITY = {
+    0: "none",  # Normal operation
+    1: "critical",  # Sensor damage
+    2: "critical",  # Temperature exceeded
+    3: "critical",  # Sensor damage
+    4: "critical",  # Temperature exceeded
+    5: "critical",  # Sensor damage
+    7: "warning",  # Ignition failure (needs maintenance)
+    11: "critical",  # Fan failure
+    255: "info",  # Alarm continues
+}
 
 ###################################
 #    NUMBER of AVAILABLE MIXERS
@@ -133,6 +162,8 @@ SENSOR_MAP_KEY = {
         "moduleCSoftVer",
         "moduleLambdaSoftVer",
         "modulePanelSoftVer",
+        "alarmCode",
+        "alarmDescription",
     },
 }
 
@@ -147,10 +178,10 @@ BINARY_SENSOR_MAP_KEY = {
         "mainSrv",
         "wifi",
         "lan",
-        "lambdaStatus",
         "thermostat",
-        "statusCO",
-        "statusCWU",
+        "pumpCO",
+        "pumpCWU",
+        "alarmActive",
     },
 }
 
@@ -205,7 +236,6 @@ ENTITY_UNIT_MAP = {
 
 # By default all sensors state_class are MEASUREMENT
 STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
-    "lambdaStatus": None,
     "mode": None,
     "thermostat": None,
     "statusCWU": None,
@@ -274,10 +304,10 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
-    "lambdaStatus": BinarySensorDeviceClass.RUNNING,
     "thermostat": BinarySensorDeviceClass.RUNNING,
-    "statusCO": BinarySensorDeviceClass.RUNNING,
-    "statusCWU": BinarySensorDeviceClass.RUNNING,
+    "pumpCO": BinarySensorDeviceClass.RUNNING,
+    "pumpCWU": BinarySensorDeviceClass.RUNNING,
+    "alarmActive": BinarySensorDeviceClass.PROBLEM,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -294,9 +324,7 @@ ENTITY_PRECISION = {
     "tempCWU": 1,
     "tempFlueGas": 1,
     "fanPower": 0,
-    "statusCWU": None,
     "thermostat": None,
-    "lambdaStatus": None,
     "mode": None,
     "softVer": None,
     "controllerID": None,
@@ -317,14 +345,14 @@ ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
     "temCO": "mdi:thermometer-lines",
-    "statusCWU": "mdi:water-boiler",
+    "pumpCWU": "mdi:water-boiler",
+    "pumpCO": "mdi:fire",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
     "boilerPowerKW": "mdi:gauge",
     "fuelLevel": "mdi:gas-station",
     "lambdaLevel": "mdi:lambda",
     "lambdaSet": "mdi:lambda",
-    "lambdaStatus": "mdi:lambda",
     "lighterWorks": "mdi:fire",
     "workAt100": "mdi:counter",
     "workAt50": "mdi:counter",
@@ -353,6 +381,9 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    "alarmCode": "mdi:alert-circle",
+    "alarmDescription": "mdi:alert-circle-outline",
+    "alarmActive": "mdi:alert",
     # ecoMAX360i
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",
@@ -365,27 +396,19 @@ ENTITY_ICON_OFF = {
     "additionalFeeder": "mdi:screw-lag",
     "pumpFireplaceWorks": "mdi:pump-off",
     "pumpCWUWorks": "mdi:pump-off",
-    "statusCWU": "mdi:water-boiler-off",
+    "pumpCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
     "lan": "mdi:lan-disconnect",
     "lighterWorks": "mdi:fire-off",
-    "lambdaStatus": "mdi:lambda-off",
     "thermostat": "mdi:thermostat-off",
-    "statusCO": "mdi:heating-off",
+    "pumpCO": "mdi:heating-off",
+    "alarmActive": "mdi:check-circle",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    "lambdaStatus": (
-        lambda x: (
-            "stop"
-            if x == 0
-            else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
-        )
-    ),
-    "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
     "thermostat": lambda x: "ON" if x == 1 else "OFF",
 }
 

@@ -61,17 +61,17 @@
       "lan": {
         "name": "LAN"
       },
-      "lambda_status": {
-        "name": "Czujnik Lambda"
-      },
       "thermostat": {
         "name": "Termostat"
       },
-      "status_co": {
-        "name": "Status ogrzewania"
+      "pump_co": {
+        "name": "Pompa CO"
       },
-      "status_cwu": {
-        "name": "Status CWU"
+      "pump_cwu": {
+        "name": "Pompa CWU"
+      },
+      "alarm_active": {
+        "name": "Alarm aktywny"
       }
     },
     "sensor": {
@@ -156,6 +156,12 @@
       },
       "temp_flue_gas": {
         "name": "Temperatura spalin"
+      },
+      "alarm_code": {
+        "name": "Kod alarmu"
+      },
+      "alarm_description": {
+        "name": "Opis alarmu"
       },
       "temp_external_sensor": {
         "name": "Temperatura zewnętrzna"

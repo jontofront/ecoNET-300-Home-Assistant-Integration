@@ -11,6 +11,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
+    API_ALARMS_DATA,
+    API_ALARMS_URI,
     API_EDITABLE_PARAMS_LIMITS_DATA,
     API_EDITABLE_PARAMS_LIMITS_URI,
     API_REG_PARAMS_DATA_PARAM_DATA,
@@ -321,6 +323,16 @@ class Econet300Api:
         sysParams = await self._fetch_api_data_by_key(API_SYS_PARAMS_URI)
         _LOGGER.debug("Fetched sysParams data: %s", sysParams)
         return sysParams
+
+    async def fetch_alarms(self) -> dict[str, Any]:
+        """Fetch alarm definitions from the API."""
+        _LOGGER.debug(
+            "fetch_alarms called: Fetching alarms from host '%s'",
+            self.host,
+        )
+        alarms = await self._fetch_api_data_by_key(API_ALARMS_URI, API_ALARMS_DATA)
+        _LOGGER.debug("Fetched alarms data: %s", alarms)
+        return alarms
 
     async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""

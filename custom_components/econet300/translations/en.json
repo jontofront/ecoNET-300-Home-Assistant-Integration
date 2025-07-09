@@ -67,17 +67,17 @@
       "lan": {
         "name": "LAN"
       },
-      "lambda_status": {
-        "name": "Lambda sensor"
-      },
       "thermostat": {
         "name": "Thermostat"
       },
-      "status_co": {
-        "name": "Central heating status"
+      "pump_co": {
+        "name": "Central heating pump"
       },
-      "status_cwu": {
-        "name": "Hot water status"
+      "pump_cwu": {
+        "name": "Hot water pump"
+      },
+      "alarm_active": {
+        "name": "Alarm Active"
       }
     },
     "sensor": {
@@ -202,6 +202,12 @@
       },
       "temp_flue_gas": {
         "name": "Flue gas temperature"
+      },
+      "alarm_code": {
+        "name": "Alarm Code"
+      },
+      "alarm_description": {
+        "name": "Alarm Description"
       },
       "temp_external_sensor": {
         "name": "Outside temperature"

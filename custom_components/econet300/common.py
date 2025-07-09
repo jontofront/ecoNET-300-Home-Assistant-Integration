@@ -60,6 +60,13 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
         return key in self.data["paramsEdits"]
 
+    def has_alarm_data(self, key: str) -> bool:
+        """Check if alarm data key is present in alarms."""
+        if self.data is None:
+            return False
+
+        return key in self.data["alarms"]
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint."""
 
@@ -79,10 +86,14 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 # Fetch regular parameters from ../econet/regParams
                 reg_params = await self._api.fetch_reg_params()
 
+                # Fetch alarm definitions from ../econet/rmAlarmsNames
+                alarms = await self._api.fetch_alarms()
+
                 return {
                     "sysParams": sys_params,
                     "regParams": reg_params,
                     "paramsEdits": params_edits,
+                    "alarms": alarms,
                 }
         except AuthError as err:
             _LOGGER.error("Authentication error: %s", err)

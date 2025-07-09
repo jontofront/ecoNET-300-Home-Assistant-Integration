@@ -6,17 +6,20 @@ import logging
 from typing import Any
 
 from homeassistant.components.sensor import (
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake
 from .const import (
+    ALARM_CODES,
     DOMAIN,
     ENTITY_CATEGORY,
     ENTITY_ICON,
@@ -33,6 +36,39 @@ from .const import (
 from .entity import EconetEntity, LambdaEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def process_alarm_code(value) -> str:
+    """Process alarm code to get alarm name."""
+    if value is None:
+        return "No alarm"
+
+    alarm_code = int(value) if isinstance(value, (int, float, str)) else 0
+    return ALARM_CODES.get(alarm_code, f"Unknown alarm ({alarm_code})")
+
+
+def process_alarm_description(value, coordinator) -> str:
+    """Process alarm code to get alarm description."""
+    if value is None:
+        return "No alarm"
+
+    alarm_code = int(value) if isinstance(value, (int, float, str)) else 0
+
+    # Get alarm descriptions from coordinator data
+    alarms_data = coordinator.data.get("alarms", {})
+    if str(alarm_code) in alarms_data:
+        return alarms_data[str(alarm_code)]
+
+    return ALARM_CODES.get(alarm_code, f"Unknown alarm ({alarm_code})")
+
+
+def is_alarm_active(value) -> bool:
+    """Check if alarm is active."""
+    if value is None:
+        return False
+
+    alarm_code = int(value) if isinstance(value, (int, float, str)) else 0
+    return alarm_code != 0  # Any non-zero alarm code means alarm is active
 
 
 @dataclass(frozen=True)
@@ -90,6 +126,29 @@ class LambdaSensors(LambdaEntity, EconetSensor):
     ):
         """Initialize a new instance of the EconetSensor class."""
         super().__init__(description, coordinator, api)
+
+
+class AlarmSensor(EconetSensor):
+    """Alarm sensor class for processing alarm data."""
+
+    def __init__(
+        self,
+        description: EconetSensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ):
+        """Initialize a new alarm sensor."""
+        super().__init__(description, coordinator, api)
+
+    def _sync_state(self, value) -> None:
+        """Synchronize the state of the alarm sensor."""
+        if self.entity_description.key == "alarmCode":
+            self._attr_native_value = process_alarm_code(value)
+        elif self.entity_description.key == "alarmDescription":
+            self._attr_native_value = process_alarm_description(value, self.coordinator)
+        else:
+            self._attr_native_value = value
+        self.async_write_ha_state()
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
@@ -163,6 +222,42 @@ def create_controller_sensors(
                 data_key,
             )
     _LOGGER.info("Total sensor entities created: %d", len(entities))
+    return entities
+
+
+def create_alarm_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[AlarmSensor]:
+    """Create alarm sensor entities."""
+    entities: list[AlarmSensor] = []
+
+    # Get the mode from regParams (this contains the alarm code)
+    data_regParams = coordinator.data.get("regParams", {})
+    mode_value = data_regParams.get("mode", 0)
+
+    # Create alarm code sensor
+    alarm_code_description = EconetSensorEntityDescription(
+        key="alarmCode",
+        translation_key="alarm_code",
+        icon="mdi:alert-circle",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        process_val=lambda x: x,  # Will be processed in _sync_state
+    )
+    entities.append(AlarmSensor(alarm_code_description, coordinator, api))
+
+    # Create alarm description sensor
+    alarm_desc_description = EconetSensorEntityDescription(
+        key="alarmDescription",
+        translation_key="alarm_description",
+        icon="mdi:alert-circle-outline",
+        device_class=SensorDeviceClass.ENUM,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        process_val=lambda x: x,  # Will be processed in _sync_state
+    )
+    entities.append(AlarmSensor(alarm_desc_description, coordinator, api))
+
+    _LOGGER.info("Created %d alarm sensors", len(entities))
     return entities
 
 
@@ -300,6 +395,11 @@ async def async_setup_entry(
         lambda_sensors = create_lambda_sensors(coordinator, api)
         _LOGGER.info("Collected %d lambda sensors", len(lambda_sensors))
         entities.extend(lambda_sensors)
+
+        # Gather alarm sensors
+        alarm_sensors = create_alarm_sensors(coordinator, api)
+        _LOGGER.info("Collected %d alarm sensors", len(alarm_sensors))
+        entities.extend(alarm_sensors)
 
         _LOGGER.info("Total entities collected: %d", len(entities))
         return entities

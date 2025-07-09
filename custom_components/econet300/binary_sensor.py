@@ -23,6 +23,7 @@ from .const import (
     SERVICE_COORDINATOR,
 )
 from .entity import EconetEntity
+from .sensor import is_alarm_active
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -79,6 +80,27 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         )
 
 
+class AlarmBinarySensor(EconetBinarySensor):
+    """Alarm binary sensor class for processing alarm status."""
+
+    def _sync_state(self, value: bool):
+        """Sync state for alarm binary sensor."""
+        # Get the mode value from regParams (contains alarm code)
+        data_regParams = self.coordinator.data.get("regParams", {})
+        mode_value = data_regParams.get("mode", 0)
+
+        # Check if alarm is active based on mode value
+        alarm_active = is_alarm_active(mode_value)
+
+        _LOGGER.debug(
+            "AlarmBinarySensor _sync_state: mode=%s, alarm_active=%s",
+            mode_value,
+            alarm_active,
+        )
+        self._attr_is_on = alarm_active
+        self.async_write_ha_state()
+
+
 def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescription:
     """Create Econet300 binary entity description."""
     _LOGGER.debug("create_binary_entity_description: %s", key)
@@ -103,7 +125,14 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
         _LOGGER.debug(
             "Processing binary sensor data_key: %s from regParams & sysParams", data_key
         )
-        if data_key in data_regParams:
+        if data_key == "alarmActive":
+            # Create alarm binary sensor
+            entity = AlarmBinarySensor(
+                create_binary_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug("Created and appended alarm binary sensor: %s", entity)
+        elif data_key in data_regParams:
             entity = EconetBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api
             )
