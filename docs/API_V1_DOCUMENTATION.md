@@ -19,7 +19,7 @@ Most endpoints require basic authentication with username and password.
 
 ### Device Information
 - **Tested Device**: ecoMAX810P-L TOUCH
-- **UID**: 7VCPMB4ZJ8DHH208002Z0
+- **UID**: YOUR_DEVICE_UID
 - **Software Version**: 3.2.3879
 - **Protocol**: em (ecoMAX)
 - **IP Address**: DEVICE_IP
@@ -164,7 +164,7 @@ The device supports alarm monitoring with the following alarm codes:
 **Response Structure**:
 ```json
 {
-  "uid": "7VCPMB4ZJ8DHH208002Z0",
+  "uid": "YOUR_DEVICE_UID",
   "controllerID": "ecoMAX810P-L TOUCH",
   "softVer": "3.2.3879",
   "routerType": "mr3020-v3",
@@ -248,7 +248,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmCurrentDataParams?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmCurrentDataParams?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Current Data Parameters Edits
 - **Endpoint**: `rmCurrentDataParamsEdits`
@@ -256,7 +256,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves editable current data parameters with limits
 - **Parameters**: 
   - `uid` (optional): Device UID
-- **Example**: `GET http://DEVICE_IP/econet/rmCurrentDataParamsEdits?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/rmCurrentDataParamsEdits?uid=YOUR_DEVICE_UID`
 
 #### Get Parameter Names
 - **Endpoint**: `rmParamsNames`
@@ -265,7 +265,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmParamsNames?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmParamsNames?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Parameter Enums
 - **Endpoint**: `rmParamsEnums`
@@ -274,7 +274,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmParamsEnums?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmParamsEnums?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Parameter Descriptions
 - **Endpoint**: `rmParamsDescs`
@@ -283,7 +283,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmParamsDescs?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmParamsDescs?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Menu Structure
 - **Endpoint**: `rmStructure`
@@ -292,7 +292,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmStructure?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmStructure?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Parameter Data
 - **Endpoint**: `rmParamsData`
@@ -300,7 +300,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves parameter data
 - **Parameters**: 
   - `uid` (optional): Device UID
-- **Example**: `GET http://DEVICE_IP/econet/rmParamsData?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/rmParamsData?uid=YOUR_DEVICE_UID`
 
 #### Get Alarm Names
 - **Endpoint**: `rmAlarmsNames`
@@ -309,7 +309,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmAlarmsNames?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmAlarmsNames?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Category Names
 - **Endpoint**: `rmCatsNames`
@@ -318,7 +318,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmCatsNames?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmCatsNames?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Category Descriptions
 - **Endpoint**: `rmCatsDescs`
@@ -327,7 +327,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmCatsDescs?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmCatsDescs?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Parameter Units Names
 - **Endpoint**: `rmParamsUnitsNames`
@@ -336,7 +336,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmParamsUnitsNames?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmParamsUnitsNames?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Lock Names
 - **Endpoint**: `rmLocksNames`
@@ -345,7 +345,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Parameters**: 
   - `uid` (optional): Device UID
   - `lang` (optional): Language code
-- **Example**: `GET http://DEVICE_IP/econet/rmLocksNames?uid=7VCPMB4ZJ8DHH208002Z0&lang=en`
+- **Example**: `GET http://DEVICE_IP/econet/rmLocksNames?uid=YOUR_DEVICE_UID&lang=en`
 
 #### Get Available Languages
 - **Endpoint**: `rmExistingLangs`
@@ -353,7 +353,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves list of available languages
 - **Parameters**: 
   - `uid` (optional): Device UID
-- **Example**: `GET http://DEVICE_IP/econet/rmExistingLangs?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/rmExistingLangs?uid=YOUR_DEVICE_UID`
 
 ### 4. Parameter Control
 
@@ -424,7 +424,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device parameters
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getDeviceParams?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getDeviceParams?uid=YOUR_DEVICE_UID`
 
 #### Get Device Reg Parameters
 - **Endpoint**: `getDeviceRegParams`
@@ -432,7 +432,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device regular parameters
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getDeviceRegParams?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getDeviceRegParams?uid=YOUR_DEVICE_UID`
 
 #### Get Device Sys Parameters
 - **Endpoint**: `getDeviceSysParams`
@@ -440,7 +440,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device system parameters
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getDeviceSysParams?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getDeviceSysParams?uid=YOUR_DEVICE_UID`
 
 #### Get Device Editable Parameters
 - **Endpoint**: `getDeviceEditableParams`
@@ -448,7 +448,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device editable parameters
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getDeviceEditableParams?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getDeviceEditableParams?uid=YOUR_DEVICE_UID`
 
 #### Get Device Alarms
 - **Endpoint**: `getDeviceAlarms`
@@ -456,7 +456,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device alarms
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getDeviceAlarms?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getDeviceAlarms?uid=YOUR_DEVICE_UID`
 
 ### 7. Scheduling
 
@@ -478,7 +478,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves device schedules
 - **Parameters**: 
   - `uid` (optional): Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getSchedule?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getSchedule?uid=YOUR_DEVICE_UID`
 
 ### 8. Software Updates
 
@@ -497,7 +497,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Updates device software
 - **Parameters**: 
   - `uid` (optional): Device UID
-- **Example**: `GET http://DEVICE_IP/econet/updateEconet?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/updateEconet?uid=YOUR_DEVICE_UID`
 
 ### 9. Logging & Monitoring
 
@@ -507,7 +507,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Retrieves econet log
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/getEconetLog?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/getEconetLog?uid=YOUR_DEVICE_UID`
 
 #### Get Fuel Consumption
 - **Endpoint**: `getFuelConsumption`
@@ -517,7 +517,7 @@ The device supports alarm monitoring with the following alarm codes:
   - `uid`: Device UID
   - `fromDate`: Start date
   - `toDate`: End date
-- **Example**: `GET http://DEVICE_IP/econet/getFuelConsumption?uid=7VCPMB4ZJ8DHH208002Z0&fromDate=2024-01-01&toDate=2024-01-31`
+- **Example**: `GET http://DEVICE_IP/econet/getFuelConsumption?uid=YOUR_DEVICE_UID&fromDate=2024-01-01&toDate=2024-01-31`
 
 ### 10. Device Control
 
@@ -527,7 +527,7 @@ The device supports alarm monitoring with the following alarm codes:
 - **Description**: Restarts the device
 - **Parameters**: 
   - `uid`: Device UID
-- **Example**: `GET http://DEVICE_IP/econet/restartDevice?uid=7VCPMB4ZJ8DHH208002Z0`
+- **Example**: `GET http://DEVICE_IP/econet/restartDevice?uid=YOUR_DEVICE_UID`
 
 ## Error Responses
 
