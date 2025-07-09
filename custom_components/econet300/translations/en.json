@@ -78,6 +78,12 @@
       },
       "alarm_active": {
         "name": "Alarm Active"
+      },
+      "alarm_boiler": {
+        "name": "Boiler Alarm"
+      },
+      "alarm_system": {
+        "name": "System Alarm"
       }
     },
     "sensor": {

@@ -1,7 +1,7 @@
 ---
-description: 
-globs: 
-alwaysApply: false
+description: Home Assistant Integration Development Standards and Entity Types
+globs:
+alwaysApply: true
 ---
 # Home Assistant Integration Standards
 
@@ -13,6 +13,218 @@ alwaysApply: false
 - Follow the entity lifecycle: __init__ -> async_added_to_hass -> async_will_remove_from_hass
 - Use proper entity naming conventions (domain.entity_name)
 - Implement proper device info and entity info
+
+## 🎯 Available Home Assistant Entity Types
+
+### **Core Entity Types**
+| Entity Type | Purpose | Use Case |
+|-------------|---------|----------|
+| **Air quality** | Air quality measurements | CO2, VOC, PM2.5, etc. |
+| **Alarm control panel** | Security system control | Arm/disarm, alarm states |
+| **Assist satellite** | Voice assistant devices | Microphone, speaker control |
+| **Binary sensor** | ON/OFF states | Status indicators, presence |
+| **Button** | One-time actions | Reset, restart, trigger actions |
+| **Calendar** | Calendar events | Event scheduling, reminders |
+| **Camera** | Video streams | Live video, recordings |
+| **Climate** | HVAC control | Temperature, mode, fan control |
+| **Conversation** | Chat interfaces | AI conversations, messaging |
+| **Cover** | Cover devices | Blinds, garage doors, windows |
+| **Date** | Date selection | Date pickers, scheduling |
+| **Date/Time** | Date and time | DateTime pickers |
+| **Device tracker** | Location tracking | GPS, presence detection |
+| **Event** | Event triggers | System events, notifications |
+| **Fan** | Fan control | Speed, direction, oscillation |
+| **Humidifier** | Humidity control | Humidifier/dehumidifier |
+| **Image** | Static images | Photos, diagrams, status images |
+| **Lawn mower** | Lawn mower control | Mowing, charging, docking |
+| **Light** | Lighting control | Brightness, color, effects |
+| **Lock** | Lock control | Door locks, security |
+| **Media player** | Media playback | Music, video, streaming |
+| **Notify** | Notifications | Push notifications, alerts |
+| **Number** | Numeric input | Setpoints, configuration values |
+| **Remote** | Remote control | IR/RF remotes, universal remotes |
+| **Scene** | Scene activation | Predefined states, automation |
+| **Select** | Option selection | Mode selection, configuration |
+| **Sensor** | Data measurements | Temperature, pressure, status |
+| **Siren** | Audio alerts | Alarms, notifications, warnings |
+| **Speech-to-text** | Voice recognition | Voice commands, transcription |
+| **Switch** | ON/OFF control | Power switches, toggles |
+| **Text** | Text input | Configuration strings, notes |
+| **Time** | Time selection | Time pickers, scheduling |
+| **To-do list** | Task management | Task lists, reminders |
+| **Text-to-speech** | Voice synthesis | Voice announcements, TTS |
+| **Update** | System updates | Firmware, software updates |
+| **Vacuum** | Vacuum control | Cleaning, docking, scheduling |
+| **Valve** | Valve control | Water, gas, irrigation valves |
+| **Wake word detection** | Voice wake words | "Hey Google", "Alexa" |
+| **Water heater** | Water heater control | Temperature, mode control |
+| **Weather** | Weather data | Current conditions, forecasts |
+
+### **Entity Type Selection Guidelines**
+
+#### **For ecoNET-300 Integration:**
+- **Binary sensor** - Pump status, fan status, alarm status
+  - **Device Classes**: `RUNNING` (pumps, fans), `PROBLEM` (alarms), `CONNECTIVITY` (network status)
+  - **Properties**: `is_on` (required boolean), `device_class` (optional)
+  - **Reference**: [Binary Sensor Documentation](https://developers.home-assistant.io/docs/core/entity/binary-sensor)
+- **Sensor** - Temperature readings, alarm codes, version info
+- **Number** - Temperature setpoints, configuration values
+- **Switch** - Boiler ON/OFF control
+- **Select** - Operation modes, season modes
+- **Climate** - Advanced HVAC control (if applicable)
+- **Update** - Firmware updates (if available)
+
+### **Binary Sensor Device Classes Reference**
+
+| Device Class | Description | Use Case |
+|--------------|-------------|----------|
+| `BATTERY` | On means low, Off means normal | Battery level monitoring |
+| `BATTERY_CHARGING` | On means charging, Off means not charging | Charging status |
+| `CO` | On means carbon monoxide detected, Off means clear | CO detection |
+| `COLD` | On means cold, Off means normal | Temperature monitoring |
+| `CONNECTIVITY` | On means connected, Off means disconnected | Network status, WiFi, LAN |
+| `DOOR` | On means open, Off means closed | Door sensors |
+| `GARAGE_DOOR` | On means open, Off means closed | Garage door status |
+| `GAS` | On means gas detected, Off means clear | Gas detection |
+| `HEAT` | On means hot, Off means normal | Temperature monitoring |
+| `LIGHT` | On means light detected, Off means no light | Light detection |
+| `LOCK` | On means open (unlocked), Off means closed (locked) | Lock status |
+| `MOISTURE` | On means wet, Off means dry | Moisture detection |
+| `MOTION` | On means motion detected, Off means no motion | Motion sensors |
+| `MOVING` | On means moving, Off means not moving | Movement detection |
+| `OCCUPANCY` | On means occupied, Off means not occupied | Occupancy sensors |
+| `OPENING` | On means open, Off means closed | Generic opening sensors |
+| `PLUG` | On means plugged in, Off means unplugged | Plug status |
+| `POWER` | On means power detected, Off means no power | Power detection |
+| `PRESENCE` | On means home, Off means away | Presence detection |
+| `PROBLEM` | On means problem detected, Off means no problem (OK) | **Alarms, errors, warnings** |
+| `RUNNING` | On means running, Off means not running | **Pumps, fans, motors** |
+| `SAFETY` | On means unsafe, Off means safe | Safety sensors |
+| `SMOKE` | On means smoke detected, Off means no smoke | Smoke detection |
+| `SOUND` | On means sound detected, Off means no sound | Sound detection |
+| `TAMPER` | On means tampering detected, Off means no tampering | Tamper detection |
+| `UPDATE` | On means update available, Off means up-to-date | Update availability |
+| `VIBRATION` | On means vibration detected, Off means no vibration | Vibration detection |
+| `WINDOW` | On means open, Off means closed | Window sensors |
+
+**Note**: The `UPDATE` device class should be avoided - use the [update entity](https://developers.home-assistant.io/docs/core/entity/update) instead.
+
+### **Sensor Device Classes Reference**
+
+| Device Class | Description | Use Case |
+|--------------|-------------|----------|
+| `TEMPERATURE` | Temperature measurements | **Boiler temp, water temp, ambient temp** |
+| `POWER` | Power consumption | **Boiler power, fan power** |
+| `POWER_FACTOR` | Power factor | **Boiler efficiency** |
+| `SIGNAL_STRENGTH` | Signal quality | **WiFi signal, network quality** |
+| `ENUM` | Discrete text values | **Alarm codes, status descriptions** |
+| `TIMESTAMP` | Time values | **Last update, operation time** |
+| `HUMIDITY` | Humidity levels | **Environmental monitoring** |
+| `PRESSURE` | Pressure readings | **System pressure** |
+| `ILLUMINANCE` | Light levels | **Ambient lighting** |
+| `ENERGY` | Energy consumption | **Total energy usage** |
+| `VOLTAGE` | Voltage readings | **Electrical monitoring** |
+| `CURRENT` | Current readings | **Electrical monitoring** |
+| `FREQUENCY` | Frequency values | **Electrical monitoring** |
+
+**Reference**: [Sensor Documentation](https://developers.home-assistant.io/docs/core/entity/sensor)
+
+### **Number Entity Guidelines**
+
+**Use for**: User-controllable numeric values with min/max limits
+
+**Key Properties**:
+- `native_value` - Current value
+- `native_min_value` - Minimum allowed value
+- `native_max_value` - Maximum allowed value
+- `native_step` - Step increment
+- `mode` - `BOX` (slider) or `AUTO` (auto-detect)
+
+**Device Classes**:
+- `TEMPERATURE` - Temperature setpoints
+- `PRESSURE` - Pressure setpoints
+- `DURATION` - Time settings
+- `VOLUME_FLOW_RATE` - Flow rate settings
+
+**ecoNET-300 Examples**:
+- `tempCOSet` - Boiler temperature setpoint (27-68°C)
+- `tempCWUSet` - Hot water setpoint
+- `mixerSetTemp1` - Mixer temperature setpoint
+
+**Reference**: [Number Documentation](https://developers.home-assistant.io/docs/core/entity/number)
+
+### **Switch Entity Guidelines**
+
+**Use for**: User-controllable ON/OFF actions
+
+**Key Properties**:
+- `is_on` - Current state (required)
+- `assumed_state` - Whether state is assumed or confirmed
+
+**ecoNET-300 Examples**:
+- `boiler_control` - Boiler ON/OFF control
+- `lambda_start` - Lambda sensor start/stop
+- `system_enable` - System enable/disable
+
+**Implementation Pattern**:
+```python
+async def async_turn_on(self, **kwargs):
+    """Turn the switch on."""
+    await self.api.set_parameter("BOILER_CONTROL", 1)
+    self._attr_is_on = True
+    self.async_write_ha_state()
+
+async def async_turn_off(self, **kwargs):
+    """Turn the switch off."""
+    await self.api.set_parameter("BOILER_CONTROL", 0)
+    self._attr_is_on = False
+    self.async_write_ha_state()
+```
+
+**Reference**: [Switch Documentation](https://developers.home-assistant.io/docs/core/entity/switch)
+
+### **Select Entity Guidelines**
+
+**Use for**: User-selectable options from predefined choices
+
+**Key Properties**:
+- `current_option` - Currently selected option
+- `options` - List of available options
+- `assumed_state` - Whether state is assumed
+
+**ecoNET-300 Examples**:
+- `operation_mode` - Auto/Manual/Schedule modes
+- `season_mode` - Summer/Winter/Auto modes
+- `control_algorithm` - Different control algorithms
+- `sensor_type` - Sensor configuration options
+
+**Implementation Pattern**:
+```python
+async def async_select_option(self, option: str) -> None:
+    """Select an option."""
+    await self.api.set_parameter("OPERATION_MODE", option)
+    self._attr_current_option = option
+    self.async_write_ha_state()
+```
+
+**Reference**: [Select Documentation](https://developers.home-assistant.io/docs/core/entity/select)
+
+### **Entity Categories**
+
+| Category | Description | Use Case |
+|----------|-------------|----------|
+| `DIAGNOSTIC` | System information | **Versions, status, alarms** |
+| `CONFIG` | Configuration | **Settings, parameters** |
+| `None` | Primary functionality | **Main controls, measurements** |
+
+### **State Classes (for Sensors)**
+
+| State Class | Description | Use Case |
+|-------------|-------------|----------|
+| `MEASUREMENT` | Instantaneous measurement | **Temperature, power, pressure** |
+| `TOTAL` | Cumulative total | **Energy consumption, runtime** |
+| `TOTAL_INCREASING` | Always increasing total | **Lifetime counters** |
+| `None` | No specific state class | **Status, versions, codes** |
 
 ## File Structure Guidelines
 - Keep files focused on single responsibilities
@@ -42,7 +254,7 @@ async def async_setup_entry(
 ```python
 class Econet300Entity(Entity):
     """Base entity for ecoNET300 devices."""
-    
+
     def __init__(self, coordinator: DataUpdateCoordinator, device_id: str) -> None:
         """Initialize the entity."""
         self.coordinator = coordinator
@@ -62,4 +274,3 @@ CONFIG_SCHEMA = vol.Schema({
 - Use caching where appropriate
 - Implement proper polling intervals
 - Avoid blocking operations in the main thread
-

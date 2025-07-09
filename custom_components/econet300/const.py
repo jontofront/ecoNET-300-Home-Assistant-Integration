@@ -182,6 +182,8 @@ BINARY_SENSOR_MAP_KEY = {
         "pumpCO",
         "pumpCWU",
         "alarmActive",
+        "alarmBoiler",
+        "alarmSystem",
     },
 }
 
@@ -308,6 +310,8 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "pumpCO": BinarySensorDeviceClass.RUNNING,
     "pumpCWU": BinarySensorDeviceClass.RUNNING,
     "alarmActive": BinarySensorDeviceClass.PROBLEM,
+    "alarmBoiler": BinarySensorDeviceClass.PROBLEM,
+    "alarmSystem": BinarySensorDeviceClass.PROBLEM,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -384,6 +388,8 @@ ENTITY_ICON = {
     "alarmCode": "mdi:alert-circle",
     "alarmDescription": "mdi:alert-circle-outline",
     "alarmActive": "mdi:alert",
+    "alarmBoiler": "mdi:fire-alert",
+    "alarmSystem": "mdi:alert-octagon",
     # ecoMAX360i
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",

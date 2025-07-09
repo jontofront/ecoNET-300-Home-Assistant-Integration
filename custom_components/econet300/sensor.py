@@ -13,7 +13,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
@@ -75,7 +75,7 @@ def is_alarm_active(value) -> bool:
 class EconetSensorEntityDescription(SensorEntityDescription):
     """Describes ecoNET sensor entity."""
 
-    process_val: Callable[[Any], Any] = lambda x: x
+    process_val: Callable[[Any], Any] = lambda x: x  # noqa: E731
 
 
 class EconetSensor(EconetEntity, SensorEntity):
@@ -139,6 +139,31 @@ class AlarmSensor(EconetSensor):
     ):
         """Initialize a new alarm sensor."""
         super().__init__(description, coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator for alarm sensors."""
+        _LOGGER.debug("Update AlarmSensor for key: %s", self.entity_description.key)
+
+        # Get the mode value from regParams (contains alarm code)
+        data_regParams = self.coordinator.data.get("regParams", {})
+        mode_value = data_regParams.get("mode", 0)
+
+        if self.entity_description.key == "alarmCode":
+            self._attr_native_value = process_alarm_code(mode_value)
+        elif self.entity_description.key == "alarmDescription":
+            self._attr_native_value = process_alarm_description(
+                mode_value, self.coordinator
+            )
+        else:
+            self._attr_native_value = mode_value
+
+        _LOGGER.debug(
+            "AlarmSensor _handle_coordinator_update: mode=%s, value=%s",
+            mode_value,
+            self._attr_native_value,
+        )
+        self.async_write_ha_state()
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the alarm sensor."""
@@ -233,7 +258,7 @@ def create_alarm_sensors(
 
     # Get the mode from regParams (this contains the alarm code)
     data_regParams = coordinator.data.get("regParams", {})
-    mode_value = data_regParams.get("mode", 0)
+    # mode_value = data_regParams.get("mode", 0)  # Not used in this function
 
     # Create alarm code sensor
     alarm_code_description = EconetSensorEntityDescription(

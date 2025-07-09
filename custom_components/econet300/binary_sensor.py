@@ -8,7 +8,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
@@ -83,6 +83,39 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
 class AlarmBinarySensor(EconetBinarySensor):
     """Alarm binary sensor class for processing alarm status."""
 
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator for alarm binary sensor."""
+        _LOGGER.debug(
+            "Update AlarmBinarySensor for key: %s", self.entity_description.key
+        )
+
+        # Get the mode value from regParams (contains alarm code)
+        data_regParams = self.coordinator.data.get("regParams", {})
+        mode_value = data_regParams.get("mode", 0)
+
+        # Determine alarm status based on sensor type
+        if self.entity_description.key == "alarmActive":
+            # General alarm - any alarm is active
+            alarm_active = is_alarm_active(mode_value)
+        elif self.entity_description.key == "alarmBoiler":
+            # Boiler-specific alarms (codes 1, 2, 7)
+            alarm_active = mode_value in {1, 2, 7}
+        elif self.entity_description.key == "alarmSystem":
+            # System-level alarms (codes 0, 11)
+            alarm_active = mode_value in {0, 11}
+        else:
+            alarm_active = False
+
+        _LOGGER.debug(
+            "AlarmBinarySensor _handle_coordinator_update: mode=%s, alarm_type=%s, alarm_active=%s",
+            mode_value,
+            self.entity_description.key,
+            alarm_active,
+        )
+        self._attr_is_on = alarm_active
+        self.async_write_ha_state()
+
     def _sync_state(self, value: bool):
         """Sync state for alarm binary sensor."""
         # Get the mode value from regParams (contains alarm code)
@@ -125,7 +158,7 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
         _LOGGER.debug(
             "Processing binary sensor data_key: %s from regParams & sysParams", data_key
         )
-        if data_key == "alarmActive":
+        if data_key in {"alarmActive", "alarmBoiler", "alarmSystem"}:
             # Create alarm binary sensor
             entity = AlarmBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api
