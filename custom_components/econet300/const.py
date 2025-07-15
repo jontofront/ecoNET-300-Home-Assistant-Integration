@@ -31,18 +31,18 @@ DEVICE_INFO_LAMBDA_NAME = "Module Lambda"
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 
-## Sys params
+# Sys params
 API_SYS_PARAMS_URI = "sysParams"
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
 API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 
-## Reg params
+# Reg params
 API_REG_PARAMS_URI = "regParams"
 API_REG_PARAMS_PARAM_DATA = "curr"
 
-## Reg params data all in one
+# Reg params data all in one
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
@@ -64,7 +64,7 @@ OPERATION_MODE_NAMES = {
     13: "no_transmission",
 }
 
-## Editable params limits
+# Editable params limits
 API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
@@ -344,6 +344,8 @@ ENTITY_ICON = {
     "valveMixer1": "mdi:valve",
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
+    "tempUpperBuffer": "mdi:thermometer",
+    "tempLowerBuffer": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
     "lan": "mdi:lan-connect",
     "softVer": "mdi:alarm-panel-outline",

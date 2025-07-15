@@ -39,7 +39,7 @@ _LOGGER = logging.getLogger(__name__)
 class EconetSensorEntityDescription(SensorEntityDescription):
     """Describes ecoNET sensor entity."""
 
-    process_val: Callable[[Any], Any] = lambda x: x
+    process_val: Callable[[Any], Any] = lambda x: x  # noqa: E731
 
 
 class EconetSensor(EconetEntity, SensorEntity):
@@ -104,7 +104,7 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
     )
     _LOGGER.debug("Created sensor entity description: %s", entity_description)
     return entity_description
@@ -137,6 +137,12 @@ def create_controller_sensors(
             "Processing entity sensor data_key: %s from regParams & sysParams", data_key
         )
         if data_key in data_regParams:
+            # Check if the value is not null before creating the sensor
+            if data_regParams.get(data_key) is None:
+                _LOGGER.info(
+                    "%s in regParams is null, sensor will not be created.", data_key
+                )
+                continue
             entity = EconetSensor(
                 create_sensor_entity_description(data_key), coordinator, api
             )
@@ -146,8 +152,9 @@ def create_controller_sensors(
             )
         elif data_key in data_sysParams:
             if data_sysParams.get(data_key) is None:
-                _LOGGER.warning(
-                    "%s in sysParams is null, sensor will not be created.", data_key
+                _LOGGER.info(
+                    "%s in sysParams sensor value is null, sensor will not be created.",
+                    data_key,
                 )
                 continue
             entity = EconetSensor(
@@ -190,7 +197,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
     )
     _LOGGER.debug("Created Mixer entity description: %s", entity_description)
     return entity_description
@@ -234,7 +241,7 @@ def create_lambda_sensor_entity_description(key: str) -> EconetSensorEntityDescr
         state_class=STATE_CLASS_MAP.get(key, None),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x / 10),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x / 10),  # noqa: E731
     )
     _LOGGER.debug("Created LambdaSensors entity description: %s", entity_description)
     return entity_description

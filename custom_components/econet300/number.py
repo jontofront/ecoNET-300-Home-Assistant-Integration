@@ -52,7 +52,22 @@ class EconetNumber(EconetEntity, NumberEntity):
     def _sync_state(self, value):
         """Sync the state of the ecoNET number entity."""
         _LOGGER.debug("ecoNETNumber _sync_state: %s", value)
-        self._attr_native_value = value.get("value")
+        _LOGGER.debug(
+            "DEBUG: Value type: %s, Value keys: %s",
+            type(value),
+            value.keys() if isinstance(value, dict) else "Not a dict",
+        )
+
+        # Handle both dict and direct value
+        if isinstance(value, dict) and "value" in value:
+            self._attr_native_value = value.get("value")
+            _LOGGER.debug(
+                "DEBUG: Extracted value from dict: %s", self._attr_native_value
+            )
+        else:
+            self._attr_native_value = value
+            _LOGGER.debug("DEBUG: Using direct value: %s", self._attr_native_value)
+
         map_key = NUMBER_MAP.get(self.entity_description.key)
 
         if map_key:
