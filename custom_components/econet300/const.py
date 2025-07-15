@@ -166,7 +166,6 @@ NUMBER_MAP = {
 }
 
 
-
 # By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
     "tempCO": UnitOfTemperature.CELSIUS,
