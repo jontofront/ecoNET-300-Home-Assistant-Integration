@@ -1,0 +1,23 @@
+# ecoNET24 Translation Files Download Info
+
+Downloaded on: C:\Users\jon2front\Desktop\GIT Code\ecoNET-300-Home-Assistant-Integration
+Source: https://www.econet24.com/static/ui/
+
+## Files Downloaded:
+- econet_basicset.js: https://www.econet24.com/static/ui/econet_basicset.js?f9fb2c1f
+- econet_transt.js: https://www.econet24.com/static/ui/econet_transt.js?8c71c880
+- econet_transp1.js: https://www.econet24.com/static/ui/econet_transp1.js?ae7cdce1
+- econet_transp2.js: https://www.econet24.com/static/ui/econet_transp2.js?94994b86
+- econet_transp3.js: https://www.econet24.com/static/ui/econet_transp3.js?2224d6f0
+- econet_transp4.js: https://www.econet24.com/static/ui/econet_transp4.js?93f9fa7e
+
+## Total Files: 6
+
+## Usage:
+These files contain the official ecoNET24 translations and can be used as reference
+for improving the local Home Assistant integration translations.
+
+## Note:
+- Cache busters may change when files are updated
+- Check periodically for new versions
+- Respect ecoNET's terms of service

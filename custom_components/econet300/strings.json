@@ -61,6 +61,18 @@
       },
       "lan": {
         "name": "LAN"
+      },
+      "lambda_status": {
+        "name": "Lambda sensor"
+      },
+      "thermostat": {
+        "name": "Thermostat"
+      },
+      "status_co": {
+        "name": "Central heating status"
+      },
+      "status_cwu": {
+        "name": "Hot water status"
       }
     },
     "sensor": {

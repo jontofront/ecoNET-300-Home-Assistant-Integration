@@ -1,0 +1,114 @@
+---
+description: Translation requirements and checklist for ecoNET300 integration
+globs: ["custom_components/econet300/**/*.py", "custom_components/econet300/translations/*.json", "custom_components/econet300/strings.json"]
+alwaysApply: true
+---
+
+# Translation Requirements Checklist
+
+## 🚨 MANDATORY: Translation Check Before Committing
+
+When adding new entities, sensors, binary sensors, switches, or any user-facing features:
+
+### 📚 FIRST: Check Cloud Translation Reference
+**ALWAYS check the cloud translation documentation first:**
+- **Primary Reference**: `docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md`
+- **Backup Reference**: `docs/cloud_translations/TRANSLATION_REFERENCE.md`
+- **Raw Data**: `docs/cloud_translations/raw_translations.json`
+
+**Look for existing translations before creating new ones!**
+
+### ✅ Required Files to Update:
+1. **`custom_components/econet300/strings.json`** - Base English strings
+2. **`custom_components/econet300/translations/en.json`** - English translations  
+3. **`custom_components/econet300/translations/pl.json`** - Polish translations
+
+### 🔍 Translation Key Format:
+- Use `camel_to_snake` format for entity keys
+- Example: `lambdaStatus` → `lambda_status`
+- Keys must match exactly across all three files
+
+### 🌐 Using Cloud Translations:
+- **Find the key** in the cloud reference (e.g., `tempCO` for boiler temperature)
+- **Use official translations** from the reference:
+  - English: "Boiler temperature"
+  - Polish: "Temperatura kotła"
+- **Convert to snake_case** for Home Assistant: `temp_co`
+- **Verify consistency** with existing translations
+
+### 📝 Translation Structure:
+```json
+{
+  "entity": {
+    "binary_sensor": {
+      "new_entity_key": {
+        "name": "Human readable name"
+      }
+    },
+    "sensor": {
+      "new_entity_key": {
+        "name": "Human readable name"
+      }
+    }
+  }
+}
+```
+
+### 🧪 Testing Checklist:
+- [ ] All three translation files updated
+- [ ] Keys match exactly across files
+- [ ] Names are user-friendly and descriptive
+- [ ] Test by restarting Home Assistant
+- [ ] Verify entities appear with correct names
+
+### 🔄 Translation Workflow:
+1. **Check cloud reference** for existing translations
+2. **Use official translations** when available
+3. **Create consistent naming** following established patterns
+4. **Update all three files** (strings.json, en.json, pl.json)
+5. **Test the changes** in Home Assistant
+
+### ⚠️ Common Mistakes to Avoid:
+- Forgetting to update `strings.json`
+- Inconsistent naming between files
+- Missing Polish translations
+- Wrong key format (should be snake_case)
+- Not testing after changes
+- **Not checking cloud translations first**
+- **Creating duplicate translations** when official ones exist
+- **Inconsistent terminology** with official ecoNET terms
+
+### 📋 Common Translation Patterns:
+- **Temperature sensors**: `temp[Component]` → `temp_[component]`
+- **Status sensors**: `status[Component]` → `status_[component]`
+- **Control switches**: `[Component]Control` → `[component]_control`
+- **Power sensors**: `[Component]Power` → `[component]_power`
+
+### 🔄 When This Applies:
+- Adding new sensors
+- Adding new binary sensors  
+- Adding new switches
+- Adding new number entities
+- Modifying entity names
+- Adding new device classes
+- Any user-facing text changes
+
+### 💡 Example Implementation:
+
+**Adding a new boiler temperature sensor:**
+
+1. **Check cloud reference**: Find `tempCO` → "Boiler temperature" / "Temperatura kotła"
+2. **Create constant**: `SENSOR_TEMP_CO = "tempCO"`
+3. **Update translations**:
+   ```json
+   // strings.json
+   "temp_co": { "name": "Boiler Temperature" }
+   
+   // en.json  
+   "temp_co": { "name": "Boiler Temperature" }
+   
+   // pl.json
+   "temp_co": { "name": "Temperatura kotła" }
+   ```
+
+**Remember: Always check cloud translations first, then use official terminology!**

@@ -107,5 +107,16 @@ alwaysApply: false
 - Document API limitations and requirements
 - Reference test fixtures for parameter examples
 
+## Translation Requirements
+- **ALWAYS** check translations when adding new entities or features
+- **Required files to update**:
+  - `custom_components/econet300/strings.json` (English base strings)
+  - `custom_components/econet300/translations/en.json` (English translations)
+  - `custom_components/econet300/translations/pl.json` (Polish translations)
+- **Translation keys must match** the entity keys in camel_to_snake format
+- **Check all three files** before committing any entity changes
+- **Use consistent naming** across all translation files
+- **Test translations** by restarting Home Assistant after changes
+
 
 

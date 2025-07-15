@@ -147,6 +147,10 @@ BINARY_SENSOR_MAP_KEY = {
         "mainSrv",
         "wifi",
         "lan",
+        "lambdaStatus",
+        "thermostat",
+        "statusCO",
+        "statusCWU",
     },
 }
 
@@ -270,6 +274,10 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
+    "lambdaStatus": BinarySensorDeviceClass.RUNNING,
+    "thermostat": BinarySensorDeviceClass.RUNNING,
+    "statusCO": BinarySensorDeviceClass.RUNNING,
+    "statusCWU": BinarySensorDeviceClass.RUNNING,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -361,6 +369,9 @@ ENTITY_ICON_OFF = {
     "mainSrv": "mdi:server-network-off",
     "lan": "mdi:lan-disconnect",
     "lighterWorks": "mdi:fire-off",
+    "lambdaStatus": "mdi:lambda-off",
+    "thermostat": "mdi:thermostat-off",
+    "statusCO": "mdi:heating-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128

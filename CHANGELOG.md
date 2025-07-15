@@ -234,7 +234,7 @@ For more details, you can view the commits.
 - `custom_components/econet300/translations/en.json` - English translations
 - `custom_components/econet300/translations/pl.json` - Polish translations
 - `README.md` - Updated documentation with new feature
-- `tests/fixtures/API_DOCUMENTATION.md` - Added API documentation
-- `tests/fixtures/BOILER_CONTROL_README.md` - Added feature-specific documentation
+- `docs/API_DOCUMENTATION.md` - Added API documentation
+- `docs/BOILER_CONTROL_README.md` - Added feature-specific documentation
 
 ## [1.1.0] - 2025-01-07

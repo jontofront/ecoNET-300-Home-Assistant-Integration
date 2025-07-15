@@ -41,9 +41,10 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
    - [Binary Sensors](#binary-sensors)
    - [Switches](#switches)
    - [Number Entities](#number-entities)
-8. [Contributing](#contributing)
-9. [Acknowledgments](#acknowledgments)
-10. [Disclaimer](#disclaimer)
+8. [API Documentation](#api-documentation)
+9. [Contributing](#contributing)
+10. [Acknowledgments](#acknowledgments)
+11. [Disclaimer](#disclaimer)
 
 ## versions
 * v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
@@ -221,6 +222,20 @@ These number entities are retrieved from the `../econet/rmCurrentDataParamsEdits
 | `tempCOSet`          | Desired fireplace set temperature            | `../econet/rmCurrentDataParamsEdits` |
 | `tempCWUSet`         | Desired hot water (CWU) set temperature      | `../econet/rmCurrentDataParamsEdits` |
 </details>
+
+## API Documentation
+
+For developers and advanced users, comprehensive API documentation is available in the `docs/` folder:
+
+- **[API V1 Documentation](docs/API_V1_DOCUMENTATION.md)** - Complete API reference with all endpoints, parameters, and examples
+- **[Boiler Control README](docs/BOILER_CONTROL_README.md)** - Detailed guide for boiler control functionality
+
+These documents provide detailed information about:
+- All available API endpoints
+- Parameter mappings and data structures
+- Authentication methods
+- Example requests and responses
+- Device-specific information and capabilities
 
 ## Contributing
 
