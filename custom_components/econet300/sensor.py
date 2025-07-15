@@ -67,8 +67,29 @@ def is_alarm_active(value) -> bool:
     if value is None:
         return False
 
-    alarm_code = int(value) if isinstance(value, (int, float, str)) else 0
-    return alarm_code != 0  # Any non-zero alarm code means alarm is active
+    # Handle string values (operation mode names)
+    if isinstance(value, str):
+        if value.lower() in {"off", "normal_operation"}:
+            return False
+        if value.lower() in {"alarm", "problem"}:
+            return True
+        # Try to convert to int for other string values
+        try:
+            alarm_code = int(value)
+            if alarm_code != 0:
+                return True
+        except (ValueError, TypeError):
+            pass
+    else:
+        # Handle numeric values
+        try:
+            alarm_code = int(value)
+            if alarm_code != 0:  # Any non-zero alarm code means alarm is active
+                return True
+        except (ValueError, TypeError):
+            pass
+
+    return False
 
 
 @dataclass(frozen=True)
@@ -255,10 +276,6 @@ def create_alarm_sensors(
 ) -> list[AlarmSensor]:
     """Create alarm sensor entities."""
     entities: list[AlarmSensor] = []
-
-    # Get the mode from regParams (this contains the alarm code)
-    data_regParams = coordinator.data.get("regParams", {})
-    # mode_value = data_regParams.get("mode", 0)  # Not used in this function
 
     # Create alarm code sensor
     alarm_code_description = EconetSensorEntityDescription(

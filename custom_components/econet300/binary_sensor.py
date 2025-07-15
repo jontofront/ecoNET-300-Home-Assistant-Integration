@@ -99,11 +99,21 @@ class AlarmBinarySensor(EconetBinarySensor):
             # General alarm - any alarm is active
             alarm_active = is_alarm_active(mode_value)
         elif self.entity_description.key == "alarmBoiler":
-            # Boiler-specific alarms (codes 1, 2, 7)
-            alarm_active = mode_value in {1, 2, 7}
+            # Boiler-specific alarms - check if mode indicates boiler alarm
+            if isinstance(mode_value, str):
+                # For string values, check if it's an alarm state
+                alarm_active = mode_value.lower() in {"alarm", "problem"}
+            else:
+                # For numeric values, check specific alarm codes (1, 2, 7)
+                alarm_active = mode_value in {1, 2, 7}
         elif self.entity_description.key == "alarmSystem":
-            # System-level alarms (codes 0, 11)
-            alarm_active = mode_value in {0, 11}
+            # System-level alarms - check if mode indicates system alarm
+            if isinstance(mode_value, str):
+                # For string values, check if it's an alarm state
+                alarm_active = mode_value.lower() in {"alarm", "problem"}
+            else:
+                # For numeric values, check specific alarm codes (0, 11)
+                alarm_active = mode_value in {0, 11}
         else:
             alarm_active = False
 
@@ -122,12 +132,33 @@ class AlarmBinarySensor(EconetBinarySensor):
         data_regParams = self.coordinator.data.get("regParams", {})
         mode_value = data_regParams.get("mode", 0)
 
-        # Check if alarm is active based on mode value
-        alarm_active = is_alarm_active(mode_value)
+        # Determine alarm status based on sensor type
+        if self.entity_description.key == "alarmActive":
+            # General alarm - any alarm is active
+            alarm_active = is_alarm_active(mode_value)
+        elif self.entity_description.key == "alarmBoiler":
+            # Boiler-specific alarms - check if mode indicates boiler alarm
+            if isinstance(mode_value, str):
+                # For string values, check if it's an alarm state
+                alarm_active = mode_value.lower() in {"alarm", "problem"}
+            else:
+                # For numeric values, check specific alarm codes (1, 2, 7)
+                alarm_active = mode_value in {1, 2, 7}
+        elif self.entity_description.key == "alarmSystem":
+            # System-level alarms - check if mode indicates system alarm
+            if isinstance(mode_value, str):
+                # For string values, check if it's an alarm state
+                alarm_active = mode_value.lower() in {"alarm", "problem"}
+            else:
+                # For numeric values, check specific alarm codes (0, 11)
+                alarm_active = mode_value in {0, 11}
+        else:
+            alarm_active = False
 
         _LOGGER.debug(
-            "AlarmBinarySensor _sync_state: mode=%s, alarm_active=%s",
+            "AlarmBinarySensor _sync_state: mode=%s, alarm_type=%s, alarm_active=%s",
             mode_value,
+            self.entity_description.key,
             alarm_active,
         )
         self._attr_is_on = alarm_active
