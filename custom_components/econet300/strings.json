@@ -166,7 +166,22 @@
         "name": "Mixer 1 temperature"
       },
       "mixer_set_temp1": {
-        "name": "Mixer target temperature"
+        "name": "Mixer 1 target temperature"
+      },
+      "mixer_set_temp2": {
+        "name": "Mixer 2 target temperature"
+      },
+      "mixer_set_temp3": {
+        "name": "Mixer 3 target temperature"
+      },
+      "mixer_set_temp4": {
+        "name": "Mixer 4 target temperature"
+      },
+      "mixer_set_temp5": {
+        "name": "Mixer 5 target temperature"
+      },
+      "mixer_set_temp6": {
+        "name": "Mixer 6 target temperature"
       },
       "quality": {
         "name": "Signal quality"

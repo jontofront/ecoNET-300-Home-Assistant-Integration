@@ -22,6 +22,7 @@ from .const import (
     API_SYS_PARAMS_PARAM_SW_REV,
     API_SYS_PARAMS_PARAM_UID,
     API_SYS_PARAMS_URI,
+    NUMBER_MAP,
 )
 from .mem_cache import MemCache
 
@@ -213,16 +214,53 @@ class Econet300Api:
             )
             return False
 
-        data = await self._client.get(
-            f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
-        )
+        # Use rmNewParam for temperature setpoints (parameter indices like 1280)
+        # Use newParam for control parameters (parameter names like BOILER_CONTROL)
+        if param in NUMBER_MAP:
+            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using rmNewParam endpoint for temperature setpoint %s: %s", param, url
+            )
+        elif param == "BOILER_CONTROL":
+            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using newParam endpoint for control parameter %s: %s", param, url
+            )
+        else:
+            # Default to newParam for unknown parameters
+            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using default newParam endpoint for parameter %s: %s", param, url
+            )
+
+        data = await self._client.get(url)
         if data is None or "result" not in data:
             return False
         if data["result"] != "OK":
             return False
+
+        # Cache the value locally
         self._cache.set(param, value)
 
+        # Force immediate refresh of paramsEdits data
+        await self._force_refresh_params_edits()
+
         return True
+
+    async def _force_refresh_params_edits(self):
+        """Force refresh paramsEdits data by fetching fresh data and updating cache."""
+        try:
+            _LOGGER.debug("Force refreshing paramsEdits data")
+            fresh_data = await self._fetch_api_data_by_key(
+                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+            )
+            if fresh_data:
+                self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, fresh_data)
+                _LOGGER.debug("Successfully refreshed paramsEdits data: %s", fresh_data)
+            else:
+                _LOGGER.warning("Failed to refresh paramsEdits data")
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
+            _LOGGER.error("Error refreshing paramsEdits data: %s", e)
 
     async def get_param_limits(self, param: str):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
@@ -234,7 +272,7 @@ class Econet300Api:
                 )
                 # Cache the fetched data
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
-            except Exception as e:
+            except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
                 # Log the error and return None if an exception occurs
                 _LOGGER.error(
                     "An error occurred while fetching API data from %s: %s",
@@ -361,7 +399,7 @@ class Econet300Api:
                 endpoint,
                 e,
             )
-        except Exception as e:
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             _LOGGER.error(
                 "An unexpected error occurred while fetching data from endpoint: %s, error: %s",
                 endpoint,

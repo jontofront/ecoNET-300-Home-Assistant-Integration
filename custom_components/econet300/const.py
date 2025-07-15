@@ -155,9 +155,17 @@ BINARY_SENSOR_MAP_KEY = {
 }
 
 NUMBER_MAP = {
-    "1280": "tempCOSet",
-    "1281": "tempCWUSet",
+    "1280": "tempCOSet",  # Boiler temperature setpoint
+    "1281": "tempCWUSet",  # Hot water temperature setpoint
+    "1287": "mixerSetTemp1",  # Mixer 1 temperature setpoint
+    "1288": "mixerSetTemp2",  # Mixer 2 temperature setpoint
+    "1289": "mixerSetTemp3",  # Mixer 3 temperature setpoint
+    "1290": "mixerSetTemp4",  # Mixer 4 temperature setpoint
+    "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
+    "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
 }
+
+
 
 # By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
