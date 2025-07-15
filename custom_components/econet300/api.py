@@ -214,12 +214,12 @@ class Econet300Api:
             )
             return False
 
-        # Use rmNewParam for temperature setpoints (parameter indices like 1280)
+        # Use rmCurrNewParam for temperature setpoints (parameter keys like 1280)
         # Use newParam for control parameters (parameter names like BOILER_CONTROL)
         if param in NUMBER_MAP:
-            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+            url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
             _LOGGER.debug(
-                "Using rmNewParam endpoint for temperature setpoint %s: %s", param, url
+                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s", param, url
             )
         elif param == "BOILER_CONTROL":
             url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
