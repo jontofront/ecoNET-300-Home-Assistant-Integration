@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.1.4] - 2025-07-15
+## [v1.1.3] - 2025-07-15
 ### Added
 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6
   - **New Number Entities**: mixerSetTemp1 through mixerSetTemp6 (parameters 1287-1292)
@@ -20,7 +20,7 @@
 - **Entity Creation Logic**: Existing logic automatically handles null values (mixers that don't exist)
 - **GitHub Actions**: Added CI workflow with translation checks, tests, and linting
 
-## [v1.1.3] - 2025-07-15
+## [v1.1.2] - 2025-01-XX
 ### Fixed
 - **Temperature Control API Endpoint**: Fixed incorrect API endpoint for temperature setpoints
   - **Problem**: Integration was using `/econet/rmNewParam?newParamIndex={param}` which doesn't work
