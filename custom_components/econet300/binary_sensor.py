@@ -19,10 +19,11 @@ from .const import (
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_ICON,
     ENTITY_ICON_OFF,
+    MIXER_PUMP_BINARY_SENSOR_KEYS,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
-from .entity import EconetEntity
+from .entity import EconetEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -79,6 +80,49 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         )
 
 
+class MixerBinarySensor(MixerEntity, BinarySensorEntity):
+    """Mixer Binary Sensor."""
+
+    entity_description: EconetBinarySensorEntityDescription
+
+    def __init__(
+        self,
+        entity_description: EconetBinarySensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        idx: int,
+    ):
+        """Initialize a new mixer binary sensor."""
+        super().__init__(entity_description, coordinator, api, idx)
+        self._attr_is_on = None
+        _LOGGER.debug(
+            "MixerBinarySensor initialized with unique_id: %s, entity_description: %s",
+            self.unique_id,
+            self.entity_description,
+        )
+
+    def _sync_state(self, value: bool):
+        """Sync state."""
+        value = bool(value)
+        _LOGGER.debug("MixerBinarySensor _sync_state: %s", value)
+        self._attr_is_on = value
+        _LOGGER.debug(
+            "Updated MixerBinarySensor _attr_is_on for %s: %s",
+            self.entity_description.key,
+            self._attr_is_on,
+        )
+        self.async_write_ha_state()
+
+    @property
+    def icon(self) -> str | None:
+        """Return the icon to use in the frontend."""
+        return (
+            self.entity_description.icon_off
+            if self.entity_description.icon_off is not None and not self.is_on
+            else self.entity_description.icon
+        )
+
+
 def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescription:
     """Create Econet300 binary entity description."""
     _LOGGER.debug("create_binary_entity_description: %s", key)
@@ -96,8 +140,8 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
 def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create binary sensors."""
     entities: list[EconetBinarySensor] = []
-    data_regParams = coordinator.data.get("regParams", {})
-    data_sysParams = coordinator.data.get("sysParams", {})
+    data_regParams = coordinator.data.get("regParams") or {}
+    data_sysParams = coordinator.data.get("sysParams") or {}
 
     for data_key in BINARY_SENSOR_MAP_KEY["_default"]:
         _LOGGER.debug(
@@ -124,6 +168,26 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     return entities
 
 
+def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+    """Create mixer binary sensors."""
+    entities: list[MixerBinarySensor] = []
+    data_regParams = coordinator.data.get("regParams") or {}
+
+    # Create mixer pump status sensors using the dynamic keys
+    for mixer_pump_key in MIXER_PUMP_BINARY_SENSOR_KEYS:
+        if mixer_pump_key in data_regParams and data_regParams[mixer_pump_key] is not None:
+            # Extract mixer number from key (e.g., "mixerPumpWorks1" -> 1)
+            mixer_number = int(mixer_pump_key.replace("mixerPumpWorks", ""))
+            entity = MixerBinarySensor(
+                create_binary_entity_description(mixer_pump_key), coordinator, api, mixer_number
+            )
+            entities.append(entity)
+            _LOGGER.debug("Created mixer binary sensor: %s", mixer_pump_key)
+
+    _LOGGER.info("Total mixer binary sensor entities created: %d", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -133,7 +197,8 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities: list[EconetBinarySensor] = []
+    entities: list[EconetBinarySensor | MixerBinarySensor] = []
     entities.extend(create_binary_sensors(coordinator, api))
+    entities.extend(create_mixer_binary_sensors(coordinator, api))
     async_add_entities(entities)
     return True

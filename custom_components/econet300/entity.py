@@ -162,8 +162,10 @@ class MixerEntity(EconetEntity):
         idx: int,
     ):
         """Initialize the MixerEntity."""
-        super().__init__(description, coordinator, api)
+        self.entity_description = description
+        self.api = api
         self._idx = idx
+        super().__init__(coordinator)
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -190,7 +192,9 @@ class LambdaEntity(EconetEntity):
         api: Econet300Api,
     ):
         """Initialize the LambdaEntity."""
-        super().__init__(description, coordinator, api)
+        self.entity_description = description
+        self.api = api
+        super().__init__(coordinator)
 
     @property
     def device_info(self) -> DeviceInfo | None:
