@@ -219,7 +219,9 @@ class Econet300Api:
         if param in NUMBER_MAP:
             url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
             _LOGGER.debug(
-                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s", param, url
+                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
+                param,
+                url,
             )
         elif param == "BOILER_CONTROL":
             url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
@@ -272,7 +274,7 @@ class Econet300Api:
                 )
                 # Cache the fetched data
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
-            except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
+            except Exception as e:
                 # Log the error and return None if an exception occurs
                 _LOGGER.error(
                     "An error occurred while fetching API data from %s: %s",
