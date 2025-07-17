@@ -133,6 +133,27 @@ SENSOR_MAP_KEY = {
         "moduleCSoftVer",
         "moduleLambdaSoftVer",
         "modulePanelSoftVer",
+        # Mixer temperature sensors
+        "mixerTemp1",
+        "mixerTemp2",
+        "mixerTemp3",
+        "mixerTemp4",
+        "mixerTemp5",
+        "mixerTemp6",
+        # Mixer valve position sensors
+        "valveMixer1",
+        "valveMixer2",
+        "valveMixer3",
+        "valveMixer4",
+        "valveMixer5",
+        "valveMixer6",
+        # Mixer servo position sensors
+        "servoMixer1",
+        "servoMixer2",
+        "servoMixer3",
+        "servoMixer4",
+        "servoMixer5",
+        "servoMixer6",
     },
 }
 
@@ -151,6 +172,13 @@ BINARY_SENSOR_MAP_KEY = {
         "thermostat",
         "statusCO",
         "statusCWU",
+        # Mixer pump status sensors
+        "mixerPumpWorks1",
+        "mixerPumpWorks2",
+        "mixerPumpWorks3",
+        "mixerPumpWorks4",
+        "mixerPumpWorks5",
+        "mixerPumpWorks6",
     },
 }
 
@@ -197,6 +225,31 @@ ENTITY_UNIT_MAP = {
     "burnerOutput": PERCENTAGE,
     "mixerTemp": UnitOfTemperature.CELSIUS,
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
+    # Mixer temperature sensors
+    "mixerTemp2": UnitOfTemperature.CELSIUS,
+    "mixerTemp3": UnitOfTemperature.CELSIUS,
+    "mixerTemp4": UnitOfTemperature.CELSIUS,
+    "mixerTemp5": UnitOfTemperature.CELSIUS,
+    "mixerTemp6": UnitOfTemperature.CELSIUS,
+    # Mixer setpoint number entities
+    "mixerSetTemp2": UnitOfTemperature.CELSIUS,
+    "mixerSetTemp3": UnitOfTemperature.CELSIUS,
+    "mixerSetTemp4": UnitOfTemperature.CELSIUS,
+    "mixerSetTemp5": UnitOfTemperature.CELSIUS,
+    "mixerSetTemp6": UnitOfTemperature.CELSIUS,
+    # Mixer valve position sensors (percentage)
+    "valveMixer2": PERCENTAGE,
+    "valveMixer3": PERCENTAGE,
+    "valveMixer4": PERCENTAGE,
+    "valveMixer5": PERCENTAGE,
+    "valveMixer6": PERCENTAGE,
+    # Mixer servo position sensors (binary)
+    "servoMixer1": None,  # Binary sensor
+    "servoMixer2": None,  # Binary sensor
+    "servoMixer3": None,  # Binary sensor
+    "servoMixer4": None,  # Binary sensor
+    "servoMixer5": None,  # Binary sensor
+    "servoMixer6": None,  # Binary sensor
     # ecoMAX360i
     "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
     "TempClutch": UnitOfTemperature.CELSIUS,
@@ -251,6 +304,26 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
+    # Mixer temperature sensors
+    "mixerTemp1": SensorDeviceClass.TEMPERATURE,
+    "mixerTemp2": SensorDeviceClass.TEMPERATURE,
+    "mixerTemp3": SensorDeviceClass.TEMPERATURE,
+    "mixerTemp4": SensorDeviceClass.TEMPERATURE,
+    "mixerTemp5": SensorDeviceClass.TEMPERATURE,
+    "mixerTemp6": SensorDeviceClass.TEMPERATURE,
+    # Mixer valve position sensors
+    "valveMixer1": None,  # Percentage sensor
+    "valveMixer2": None,  # Percentage sensor
+    "valveMixer3": None,  # Percentage sensor
+    "valveMixer4": None,  # Percentage sensor
+    "valveMixer5": None,  # Percentage sensor
+    "valveMixer6": None,  # Percentage sensor
+    # Mixer servo position sensors
+    "servoMixer2": SensorDeviceClass.ENUM,
+    "servoMixer3": SensorDeviceClass.ENUM,
+    "servoMixer4": SensorDeviceClass.ENUM,
+    "servoMixer5": SensorDeviceClass.ENUM,
+    "servoMixer6": SensorDeviceClass.ENUM,
     # ecoMAX360i
     "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
     "TempClutch": SensorDeviceClass.TEMPERATURE,
@@ -270,6 +343,13 @@ ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
     #############################
     "tempCOSet": NumberDeviceClass.TEMPERATURE,
     "tempCWUSet": NumberDeviceClass.TEMPERATURE,
+    # Mixer setpoint number entities
+    "mixerSetTemp1": NumberDeviceClass.TEMPERATURE,
+    "mixerSetTemp2": NumberDeviceClass.TEMPERATURE,
+    "mixerSetTemp3": NumberDeviceClass.TEMPERATURE,
+    "mixerSetTemp4": NumberDeviceClass.TEMPERATURE,
+    "mixerSetTemp5": NumberDeviceClass.TEMPERATURE,
+    "mixerSetTemp6": NumberDeviceClass.TEMPERATURE,
 }
 
 
@@ -285,6 +365,13 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "thermostat": BinarySensorDeviceClass.RUNNING,
     "statusCO": BinarySensorDeviceClass.RUNNING,
     "statusCWU": BinarySensorDeviceClass.RUNNING,
+    # Mixer pump status
+    "mixerPumpWorks1": BinarySensorDeviceClass.RUNNING,
+    "mixerPumpWorks2": BinarySensorDeviceClass.RUNNING,
+    "mixerPumpWorks3": BinarySensorDeviceClass.RUNNING,
+    "mixerPumpWorks4": BinarySensorDeviceClass.RUNNING,
+    "mixerPumpWorks5": BinarySensorDeviceClass.RUNNING,
+    "mixerPumpWorks6": BinarySensorDeviceClass.RUNNING,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -362,6 +449,31 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    # Mixer pump icons
+    "mixerPumpWorks1": "mdi:pump",
+    "mixerPumpWorks2": "mdi:pump",
+    "mixerPumpWorks3": "mdi:pump",
+    "mixerPumpWorks4": "mdi:pump",
+    "mixerPumpWorks5": "mdi:pump",
+    "mixerPumpWorks6": "mdi:pump",
+    # Mixer temperature icons
+    "mixerTemp2": "mdi:thermometer",
+    "mixerTemp3": "mdi:thermometer",
+    "mixerTemp4": "mdi:thermometer",
+    "mixerTemp5": "mdi:thermometer",
+    "mixerTemp6": "mdi:thermometer",
+    # Mixer valve position icons
+    "valveMixer2": "mdi:valve",
+    "valveMixer3": "mdi:valve",
+    "valveMixer4": "mdi:valve",
+    "valveMixer5": "mdi:valve",
+    "valveMixer6": "mdi:valve",
+    # Mixer servo position icons
+    "servoMixer2": "mdi:valve",
+    "servoMixer3": "mdi:valve",
+    "servoMixer4": "mdi:valve",
+    "servoMixer5": "mdi:valve",
+    "servoMixer6": "mdi:valve",
     # ecoMAX360i
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",
@@ -381,6 +493,13 @@ ENTITY_ICON_OFF = {
     "lambdaStatus": "mdi:lambda-off",
     "thermostat": "mdi:thermostat-off",
     "statusCO": "mdi:heating-off",
+    # Mixer pump off icons
+    "mixerPumpWorks1": "mdi:pump-off",
+    "mixerPumpWorks2": "mdi:pump-off",
+    "mixerPumpWorks3": "mdi:pump-off",
+    "mixerPumpWorks4": "mdi:pump-off",
+    "mixerPumpWorks5": "mdi:pump-off",
+    "mixerPumpWorks6": "mdi:pump-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128

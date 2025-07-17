@@ -25,6 +25,9 @@
       }
     },
     "binary_sensor": {
+      "lighter_works": {
+        "name": "Zapalarka"
+      },
       "weather_control": {
         "name": "Weather control the boiler"
       },
@@ -36,6 +39,12 @@
       },
       "fan_works": {
         "name": "Fan"
+      },
+      "feeder_works": {
+        "name": "Podajnik"
+      },
+      "additional_feeder": {
+        "name": "Dodatkowy podajnik"
       },
       "aditional_feeder": {
         "name": "Aditional feeder"
@@ -72,11 +81,32 @@
       },
       "status_cwu": {
         "name": "Status CWU"
+      },
+      "mixer_pump_works1": {
+        "name": "Pompa mieszacza 1"
+      },
+      "mixer_pump_works2": {
+        "name": "Pompa mieszacza 2"
+      },
+      "mixer_pump_works3": {
+        "name": "Pompa mieszacza 3"
+      },
+      "mixer_pump_works4": {
+        "name": "Pompa mieszacza 4"
+      },
+      "mixer_pump_works5": {
+        "name": "Pompa mieszacza 5"
+      },
+      "mixer_pump_works6": {
+        "name": "Pompa mieszacza 6"
       }
     },
     "sensor": {
       "boiler_power": {
         "name": "Moc kotła"
+      },
+      "boiler_power_kw": {
+        "name": "Moc kotła kW"
       },
       "burner_power": {
         "name": "Burner output"
@@ -86,6 +116,9 @@
       },
       "fan_works": {
         "name": "Fan"
+      },
+      "lighter_works": {
+        "name": "Zapalarka"
       },
       "fan_power": {
         "name": "Moc nadmuchu"
@@ -104,6 +137,60 @@
       },
       "lambda_level": {
         "name": "Czujnik Lambda"
+      },
+      "work_at100": {
+        "name": "Praca przy 100%"
+      },
+      "work_at50": {
+        "name": "Praca przy 50%"
+      },
+      "work_at30": {
+        "name": "Praca przy 30%"
+      },
+      "feeder_work": {
+        "name": "Praca podajnika"
+      },
+      "temp_back": {
+        "name": "Temperatura powrotu"
+      },
+      "burner_output": {
+        "name": "Moc palnika"
+      },
+      "thermo_temp": {
+        "name": "Temperatura termostatu"
+      },
+      "mixer_temp": {
+        "name": "Temperatura mieszacza"
+      },
+      "mixer_set_temp": {
+        "name": "Temperatura zadana mieszacza"
+      },
+      "firing_up_count": {
+        "name": "Liczba rozruchów"
+      },
+      "soft_ver": {
+        "name": "Wersja modułu ecoNET"
+      },
+      "controller_id": {
+        "name": "Nazwa kontrolera"
+      },
+      "module_a_soft_ver": {
+        "name": "Wersja modułu A"
+      },
+      "module_b_soft_ver": {
+        "name": "Wersja modułu B"
+      },
+      "module_c_soft_ver": {
+        "name": "Wersja modułu C"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Wersja modułu Lambda"
+      },
+      "module_panel_soft_ver": {
+        "name": "Wersja modułu Panel"
+      },
+      "quality": {
+        "name": "Jakość sygnału"
       },
       "mixer_temp1": {
         "name": "Temp. mieszacza 1"
@@ -125,6 +212,21 @@
       },
       "mixer_set_temp6": {
         "name": "Temp. zadana mieszacza 6"
+      },
+      "mixer_temp2": {
+        "name": "Temp. mieszacza 2"
+      },
+      "mixer_temp3": {
+        "name": "Temp. mieszacza 3"
+      },
+      "mixer_temp4": {
+        "name": "Temp. mieszacza 4"
+      },
+      "mixer_temp5": {
+        "name": "Temp. mieszacza 5"
+      },
+      "mixer_temp6": {
+        "name": "Temp. mieszacza 6"
       },
       "mode": {
         "name": "Tryb pracy",
@@ -151,6 +253,36 @@
       "servo_Mixer1": {
         "name": "Siłownik mieszacza 1"
       },
+      "valve_mixer2": {
+        "name": "Zawór mieszacza 2"
+      },
+      "valve_mixer3": {
+        "name": "Zawór mieszacza 3"
+      },
+      "valve_mixer4": {
+        "name": "Zawór mieszacza 4"
+      },
+      "valve_mixer5": {
+        "name": "Zawór mieszacza 5"
+      },
+      "valve_mixer6": {
+        "name": "Zawór mieszacza 6"
+      },
+      "servo_mixer2": {
+        "name": "Siłownik mieszacza 2"
+      },
+      "servo_mixer3": {
+        "name": "Siłownik mieszacza 3"
+      },
+      "servo_mixer4": {
+        "name": "Siłownik mieszacza 4"
+      },
+      "servo_mixer5": {
+        "name": "Siłownik mieszacza 5"
+      },
+      "servo_mixer6": {
+        "name": "Siłownik mieszacza 6"
+      },
       "signal": {
         "name": "Siła sygnału"
       },
@@ -162,6 +294,9 @@
       },
       "temp_cwu": {
         "name": "Temperatura CWU"
+      },
+      "temp_cwu_set": {
+        "name": "Temperatura zadana CWU"
       },
       "temp_upper_buffer": {
         "name": "Temperatura bufora górna"
@@ -186,6 +321,45 @@
       },
       "weather_control": {
         "name": "Weather control the boiler"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Temp. termostatu obwodu 2"
+      },
+      "temp_clutch": {
+        "name": "Temp. sprzęgła"
+      },
+      "circuit3thermostat_temp": {
+        "name": "Temp. termostatu obwodu 3"
+      },
+      "temp_wthr": {
+        "name": "Temp. pogodowa"
+      },
+      "temp_circuit3": {
+        "name": "Temp. obwodu 3"
+      },
+      "temp_circuit2": {
+        "name": "Temp. obwodu 2"
+      },
+      "temp_bufor_up": {
+        "name": "Temp. bufora górna"
+      },
+      "temp_bufor_down": {
+        "name": "Temp. bufora dolna"
+      },
+      "heating_upper_temp": {
+        "name": "Temp. ogrzewania górna"
+      },
+      "circuit1thermostat": {
+        "name": "Temp. rzeczywista obwodu 1"
+      },
+      "heating_work_state_pump4": {
+        "name": "Stan pracy pompy ogrzewania 4"
+      },
+      "servo_mixer1": {
+        "name": "Pozycja siłownika mieszacza 1"
       }
     }
   }

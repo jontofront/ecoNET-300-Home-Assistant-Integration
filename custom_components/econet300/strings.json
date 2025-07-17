@@ -19,6 +19,11 @@
     }
   },
   "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Boiler Control"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Lighter"
@@ -73,6 +78,24 @@
       },
       "status_cwu": {
         "name": "Hot water status"
+      },
+      "mixer_pump_works1": {
+        "name": "Mixer 1 pump"
+      },
+      "mixer_pump_works2": {
+        "name": "Mixer 2 pump"
+      },
+      "mixer_pump_works3": {
+        "name": "Mixer 3 pump"
+      },
+      "mixer_pump_works4": {
+        "name": "Mixer 4 pump"
+      },
+      "mixer_pump_works5": {
+        "name": "Mixer 5 pump"
+      },
+      "mixer_pump_works6": {
+        "name": "Mixer 6 pump"
       }
     },
     "sensor": {
@@ -117,6 +140,21 @@
       },
       "feeder_work": {
         "name": "Feeder work"
+      },
+      "temp_back": {
+        "name": "Return temperature"
+      },
+      "burner_output": {
+        "name": "Burner output"
+      },
+      "thermo_temp": {
+        "name": "Thermostat temperature"
+      },
+      "mixer_temp": {
+        "name": "Mixer temperature"
+      },
+      "mixer_set_temp": {
+        "name": "Mixer set temperature"
       },
       "firing_up_count": {
         "name": "Firing up count"
@@ -182,6 +220,21 @@
       },
       "mixer_set_temp6": {
         "name": "Mixer 6 target temperature"
+      },
+      "mixer_temp2": {
+        "name": "Mixer 2 temperature"
+      },
+      "mixer_temp3": {
+        "name": "Mixer 3 temperature"
+      },
+      "mixer_temp4": {
+        "name": "Mixer 4 temperature"
+      },
+      "mixer_temp5": {
+        "name": "Mixer 5 temperature"
+      },
+      "mixer_temp6": {
+        "name": "Mixer 6 temperature"
       },
       "quality": {
         "name": "Signal quality"
@@ -269,6 +322,36 @@
       },
       "heating_work_state_pump4": {
         "name": "Heating work state pump 4"
+      },
+      "valve_mixer2": {
+        "name": "Mixer 2 valve % open"
+      },
+      "valve_mixer3": {
+        "name": "Mixer 3 valve % open"
+      },
+      "valve_mixer4": {
+        "name": "Mixer 4 valve % open"
+      },
+      "valve_mixer5": {
+        "name": "Mixer 5 valve % open"
+      },
+      "valve_mixer6": {
+        "name": "Mixer 6 valve % open"
+      },
+      "servo_mixer2": {
+        "name": "Mixer 2 servo position"
+      },
+      "servo_mixer3": {
+        "name": "Mixer 3 servo position"
+      },
+      "servo_mixer4": {
+        "name": "Mixer 4 servo position"
+      },
+      "servo_mixer5": {
+        "name": "Mixer 5 servo position"
+      },
+      "servo_mixer6": {
+        "name": "Mixer 6 servo position"
       }
     }
   }
