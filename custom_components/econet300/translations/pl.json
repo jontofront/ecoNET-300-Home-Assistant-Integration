@@ -111,6 +111,21 @@
       "mixer_set_temp1": {
         "name": "Temp. zadana mieszacza 1"
       },
+      "mixer_set_temp2": {
+        "name": "Temp. zadana mieszacza 2"
+      },
+      "mixer_set_temp3": {
+        "name": "Temp. zadana mieszacza 3"
+      },
+      "mixer_set_temp4": {
+        "name": "Temp. zadana mieszacza 4"
+      },
+      "mixer_set_temp5": {
+        "name": "Temp. zadana mieszacza 5"
+      },
+      "mixer_set_temp6": {
+        "name": "Temp. zadana mieszacza 6"
+      },
       "mode": {
         "name": "Tryb pracy",
         "state": {

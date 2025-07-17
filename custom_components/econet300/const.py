@@ -31,18 +31,18 @@ DEVICE_INFO_LAMBDA_NAME = "Module Lambda"
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 
-## Sys params
+# Sys params
 API_SYS_PARAMS_URI = "sysParams"
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
 API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 
-## Reg params
+# Reg params
 API_REG_PARAMS_URI = "regParams"
 API_REG_PARAMS_PARAM_DATA = "curr"
 
-## Reg params data all in one
+# Reg params data all in one
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
@@ -64,7 +64,7 @@ OPERATION_MODE_NAMES = {
     13: "no_transmission",
 }
 
-## Editable params limits
+# Editable params limits
 API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
@@ -155,9 +155,16 @@ BINARY_SENSOR_MAP_KEY = {
 }
 
 NUMBER_MAP = {
-    "1280": "tempCOSet",
-    "1281": "tempCWUSet",
+    "1280": "tempCOSet",  # Boiler temperature setpoint
+    "1281": "tempCWUSet",  # Hot water temperature setpoint
+    "1287": "mixerSetTemp1",  # Mixer 1 temperature setpoint
+    "1288": "mixerSetTemp2",  # Mixer 2 temperature setpoint
+    "1289": "mixerSetTemp3",  # Mixer 3 temperature setpoint
+    "1290": "mixerSetTemp4",  # Mixer 4 temperature setpoint
+    "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
+    "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
 }
+
 
 # By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
@@ -344,6 +351,8 @@ ENTITY_ICON = {
     "valveMixer1": "mdi:valve",
     "servoMixer1": "mdi:valve",
     "mixerTemp1": "mdi:thermometer",
+    "tempUpperBuffer": "mdi:thermometer",
+    "tempLowerBuffer": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
     "lan": "mdi:lan-connect",
     "softVer": "mdi:alarm-panel-outline",

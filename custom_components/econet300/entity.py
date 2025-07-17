@@ -57,15 +57,29 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
+        # Debug: Check what's available in each data source
+        sys_params = self.coordinator.data.get("sysParams", {})
+        reg_params = self.coordinator.data.get("regParams", {})
+        params_edits = self.coordinator.data.get("paramsEdits", {})
+
+        _LOGGER.debug(
+            "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s",
+            self.entity_description.key,
+            self.entity_description.key in sys_params,
+            self.entity_description.key in reg_params,
+            self.entity_description.key in params_edits,
+        )
+
         value = None
-        if self.entity_description.key in self.coordinator.data.get("sysParams", {}):
-            value = self.coordinator.data["sysParams"][self.entity_description.key]
-        elif self.entity_description.key in self.coordinator.data.get("regParams", {}):
-            value = self.coordinator.data["regParams"][self.entity_description.key]
-        elif self.entity_description.key in self.coordinator.data.get(
-            "paramsEdits", {}
-        ):
-            value = self.coordinator.data["paramsEdits"][self.entity_description.key]
+        if self.entity_description.key in sys_params:
+            value = sys_params[self.entity_description.key]
+            _LOGGER.debug("DEBUG: Found in sysParams: %s", value)
+        elif self.entity_description.key in reg_params:
+            value = reg_params[self.entity_description.key]
+            _LOGGER.debug("DEBUG: Found in regParams: %s", value)
+        elif self.entity_description.key in params_edits:
+            value = params_edits[self.entity_description.key]
+            _LOGGER.debug("DEBUG: Found in paramsEdits: %s", value)
 
         if value is None:
             _LOGGER.debug("Value for key %s is None", self.entity_description.key)
@@ -175,6 +189,7 @@ class LambdaEntity(EconetEntity):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
+        """Initialize the LambdaEntity."""
         super().__init__(description, coordinator, api)
 
     @property

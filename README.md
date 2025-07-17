@@ -50,12 +50,25 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 * v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
 * v1.0.0 - A development version that retrieves more data from the API. It may be unstable, and upgrades from previous versions are not supported.
 * v1.1.1 - Added boiler ON/OFF control switch functionality. New features include direct boiler control via Home Assistant switches.
+* v1.1.3 - **Critical Fix**: Fixed temperature control API endpoint. Temperature setpoints now work correctly.
+* v1.1.3 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6 with smart entity creation.
 
 ### New Features in v1.1.1
 - **Boiler Control Switch**: Turn your boiler ON/OFF directly from Home Assistant
 - **API Integration**: Uses the ecoNET-300's native `BOILER_CONTROL` parameter
 - **State Synchronization**: Switch state reflects actual boiler operation mode
 - **Real-time Updates**: Automatic state updates based on boiler mode changes
+
+### Critical Fix in v1.1.3
+- **Temperature Control**: Fixed API endpoint for temperature setpoints
+- **Boiler Temperature**: Users can now set boiler temperature setpoints
+- **Hot Water Temperature**: Hot water temperature can be adjusted
+- **Mixer Temperature**: All mixer temperature setpoints work correctly
+- **Number Entities**: Home Assistant number entities function properly
+- **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6
+- **Smart Entity Creation**: Only creates entities for mixers that exist on your boiler
+- **Translation Support**: Proper English and Polish translations for all mixer setpoints
+- **Improved Debugging**: Better error handling for development and troubleshooting
 
 ### Migrating to v1.0.0_beta
 
@@ -69,7 +82,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 <div align="center">
 
 
-<img src="https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/sensors.png" />             
+<img src="https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/sensors.png" />
 
 </div>
 
@@ -102,7 +115,7 @@ Integrate ecoNET300 via the user interface:
 [![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start?domain=econet300)
 <details>
   <summary><b>Manual Configuration Steps</b></summary>
-  
+
 Apart from using 'My button' (in case it doesn't work) you can also perform the following steps manually:
 
 1. Go to **Settings > Devices & Services** in Home Assistant.
@@ -113,9 +126,9 @@ Apart from using 'My button' (in case it doesn't work) you can also perform the 
 
 ![Search dialog](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/search.png)
 
-6. Enter your local device IP/domain and local credentials (not econet24.com credentials). **"Submit"**.  
+6. Enter your local device IP/domain and local credentials (not econet24.com credentials). **"Submit"**.
 
-__Host__: Local IP/domain of your device.  
+__Host__: Local IP/domain of your device.
 
 __Username__: Local username (NOT the username that you use to login to econet24.com!).
 
@@ -126,7 +139,7 @@ __Password__: Local password (NOT the password that you use to login to econet24
 7. Your device should now be available in your Home Assistant installation.
 
 ![Success](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/success.png)
-  
+
 </details>
 <br>
 
@@ -153,7 +166,7 @@ The integration provides a boiler control switch that allows you to turn the boi
 **Usage:**
 - **Turn ON**: Sets `BOILER_CONTROL=1` via API
 - **Turn OFF**: Sets `BOILER_CONTROL=0` via API
-- **State Detection**: 
+- **State Detection**:
   - `mode=0` → Switch shows OFF
   - `mode=1-25` → Switch shows ON (any working state)
 
@@ -221,7 +234,19 @@ These number entities are retrieved from the `../econet/rmCurrentDataParamsEdits
 |----------------------|----------------------------------------------|--------------------------------------|
 | `tempCOSet`          | Desired fireplace set temperature            | `../econet/rmCurrentDataParamsEdits` |
 | `tempCWUSet`         | Desired hot water (CWU) set temperature      | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp1`      | Mixer 1 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp2`      | Mixer 2 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp3`      | Mixer 3 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp4`      | Mixer 4 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp5`      | Mixer 5 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp6`      | Mixer 6 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
 </details>
+
+**Note on Mixer Temperature Setpoints:**
+- **Smart Entity Creation**: The integration automatically detects which mixers exist on your specific boiler model
+- **ecoMAX810P-L**: Supports mixers 1-4 (mixerSetTemp1 through mixerSetTemp4)
+- **Other Models**: May support different numbers of mixers
+- **Missing Mixers**: Entities for non-existent mixers will not be created (no null entities)
 
 ## API Documentation
 
@@ -249,8 +274,8 @@ We welcome contributions to improve the ecoNET300 integration! Please follow the
 
 Thank you for contributing to the Home Assistant community!
 
-**Acknowledgments:**  
-- [@pblxpt](https://github.com/pblxpt) for the original integration code.  
+**Acknowledgments:**
+- [@pblxpt](https://github.com/pblxpt) for the original integration code.
 - [@denpamusic](https://github.com/denpamusic) for guidance.
 <a href="https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=jontofront/ecoNET-300-Home-Assistant-Integration" />
@@ -259,5 +284,5 @@ Thank you for contributing to the Home Assistant community!
 
 ## Disclaimer
 
-**Use at your own risk.**  
+**Use at your own risk.**
 This software is provided as-is, for educational purposes. The authors and contributors hold no responsibility for any harm, data loss, or damage caused by using this integration.
