@@ -46,6 +46,24 @@
       "mixer_pump1": {
         "name": "Mixer 1 pump"
       },
+      "mixer_pump_works1": {
+        "name": "Pompa mieszacza 1"
+      },
+      "mixer_pump_works2": {
+        "name": "Pompa mieszacza 2"
+      },
+      "mixer_pump_works3": {
+        "name": "Pompa mieszacza 3"
+      },
+      "mixer_pump_works4": {
+        "name": "Pompa mieszacza 4"
+      },
+      "mixer_pump_works5": {
+        "name": "Pompa mieszacza 5"
+      },
+      "mixer_pump_works6": {
+        "name": "Pompa mieszacza 6"
+      },
       "boiler_pump": {
         "name": "Boiler pump"
       },
@@ -107,6 +125,21 @@
       },
       "mixer_temp1": {
         "name": "Temp. mieszacza 1"
+      },
+      "mixer_temp2": {
+        "name": "Temp. mieszacza 2"
+      },
+      "mixer_temp3": {
+        "name": "Temp. mieszacza 3"
+      },
+      "mixer_temp4": {
+        "name": "Temp. mieszacza 4"
+      },
+      "mixer_temp5": {
+        "name": "Temp. mieszacza 5"
+      },
+      "mixer_temp6": {
+        "name": "Temp. mieszacza 6"
       },
       "mixer_set_temp1": {
         "name": "Temp. zadana mieszacza 1"

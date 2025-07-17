@@ -50,6 +50,24 @@
       "mixer_pump1": {
         "name": "Mixer 1 pump"
       },
+      "mixer_pump_works1": {
+        "name": "Mixer 1 pump"
+      },
+      "mixer_pump_works2": {
+        "name": "Mixer 2 pump"
+      },
+      "mixer_pump_works3": {
+        "name": "Mixer 3 pump"
+      },
+      "mixer_pump_works4": {
+        "name": "Mixer 4 pump"
+      },
+      "mixer_pump_works5": {
+        "name": "Mixer 5 pump"
+      },
+      "mixer_pump_works6": {
+        "name": "Mixer 6 pump"
+      },
       "boiler_pump": {
         "name": "Boiler pump"
       },
@@ -164,6 +182,21 @@
       },
       "mixer_temp1": {
         "name": "Mixer 1 temperature"
+      },
+      "mixer_temp2": {
+        "name": "Mixer 2 temperature"
+      },
+      "mixer_temp3": {
+        "name": "Mixer 3 temperature"
+      },
+      "mixer_temp4": {
+        "name": "Mixer 4 temperature"
+      },
+      "mixer_temp5": {
+        "name": "Mixer 5 temperature"
+      },
+      "mixer_temp6": {
+        "name": "Mixer 6 temperature"
       },
       "mixer_set_temp1": {
         "name": "Mixer 1 target temperature"

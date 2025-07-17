@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.4] - 2025-01-XX
+### Changed
+- **Version Update**: Updated version to 1.1.4
+
 ## [v1.1.3] - 2025-07-15
 ### Added
 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6

@@ -65,8 +65,10 @@ class EconetSensor(EconetEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-class MixerSensor(MixerEntity, EconetSensor):
+class MixerSensor(MixerEntity, SensorEntity):
     """Mixer sensor class."""
+
+    entity_description: EconetSensorEntityDescription
 
     def __init__(
         self,
@@ -75,12 +77,20 @@ class MixerSensor(MixerEntity, EconetSensor):
         api: Econet300Api,
         idx: int,
     ):
-        """Initialize a new instance of the EconetSensor class."""
+        """Initialize a new instance of the MixerSensor class."""
         super().__init__(description, coordinator, api, idx)
+        self._attr_native_value = None
+
+    def _sync_state(self, value) -> None:
+        """Synchronize the state of the sensor entity."""
+        self._attr_native_value = self.entity_description.process_val(value)
+        self.async_write_ha_state()
 
 
-class LambdaSensors(LambdaEntity, EconetSensor):
+class LambdaSensors(LambdaEntity, SensorEntity):
     """Lambda sensor class."""
+
+    entity_description: EconetSensorEntityDescription
 
     def __init__(
         self,
@@ -88,8 +98,14 @@ class LambdaSensors(LambdaEntity, EconetSensor):
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
     ):
-        """Initialize a new instance of the EconetSensor class."""
+        """Initialize a new instance of the LambdaSensors class."""
         super().__init__(description, coordinator, api)
+        self._attr_native_value = None
+
+    def _sync_state(self, value) -> None:
+        """Synchronize the state of the sensor entity."""
+        self._attr_native_value = self.entity_description.process_val(value)
+        self.async_write_ha_state()
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
