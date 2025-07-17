@@ -51,6 +51,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 * v1.0.0 - A development version that retrieves more data from the API. It may be unstable, and upgrades from previous versions are not supported.
 * v1.1.1 - Added boiler ON/OFF control switch functionality. New features include direct boiler control via Home Assistant switches.
 * v1.1.3 - **Critical Fix**: Fixed temperature control API endpoint. Temperature setpoints now work correctly.
+* v1.1.4 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6 with smart entity creation.
 
 ### New Features in v1.1.1
 - **Boiler Control Switch**: Turn your boiler ON/OFF directly from Home Assistant
@@ -64,6 +65,12 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Hot Water Temperature**: Hot water temperature can be adjusted
 - **Mixer Temperature**: All mixer temperature setpoints work correctly
 - **Number Entities**: Home Assistant number entities function properly
+
+### New Features in v1.1.4
+- **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6
+- **Smart Entity Creation**: Only creates entities for mixers that exist on your boiler
+- **Translation Support**: Proper English and Polish translations for all mixer setpoints
+- **Improved Debugging**: Better error handling for development and troubleshooting
 
 ### Migrating to v1.0.0_beta
 
@@ -229,7 +236,19 @@ These number entities are retrieved from the `../econet/rmCurrentDataParamsEdits
 |----------------------|----------------------------------------------|--------------------------------------|
 | `tempCOSet`          | Desired fireplace set temperature            | `../econet/rmCurrentDataParamsEdits` |
 | `tempCWUSet`         | Desired hot water (CWU) set temperature      | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp1`      | Mixer 1 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp2`      | Mixer 2 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp3`      | Mixer 3 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp4`      | Mixer 4 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp5`      | Mixer 5 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
+| `mixerSetTemp6`      | Mixer 6 target temperature                   | `../econet/rmCurrentDataParamsEdits` |
 </details>
+
+**Note on Mixer Temperature Setpoints:**
+- **Smart Entity Creation**: The integration automatically detects which mixers exist on your specific boiler model
+- **ecoMAX810P-L**: Supports mixers 1-4 (mixerSetTemp1 through mixerSetTemp4)
+- **Other Models**: May support different numbers of mixers
+- **Missing Mixers**: Entities for non-existent mixers will not be created (no null entities)
 
 ## API Documentation
 
