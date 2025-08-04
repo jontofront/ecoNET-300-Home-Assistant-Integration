@@ -104,52 +104,52 @@
       "pump_fireplace_works": {
         "name": "Fireplace pump working"
       },
-      "ecoSter_contacts1": {
+      "ecoster_contacts1": {
         "name": "Room thermostat 1 contacts"
       },
-      "ecoSter_contacts2": {
+      "ecoster_contacts2": {
         "name": "Room thermostat 2 contacts"
       },
-      "ecoSter_contacts3": {
+      "ecoster_contacts3": {
         "name": "Room thermostat 3 contacts"
       },
-      "ecoSter_contacts4": {
+      "ecoster_contacts4": {
         "name": "Room thermostat 4 contacts"
       },
-      "ecoSter_contacts5": {
+      "ecoster_contacts5": {
         "name": "Room thermostat 5 contacts"
       },
-      "ecoSter_contacts6": {
+      "ecoster_contacts6": {
         "name": "Room thermostat 6 contacts"
       },
-      "ecoSter_contacts7": {
+      "ecoster_contacts7": {
         "name": "Room thermostat 7 contacts"
       },
-      "ecoSter_contacts8": {
+      "ecoster_contacts8": {
         "name": "Room thermostat 8 contacts"
       },
-      "ecoSter_day_sched1": {
+      "ecoster_day_sched1": {
         "name": "Room thermostat 1 day schedule"
       },
-      "ecoSter_day_sched2": {
+      "ecoster_day_sched2": {
         "name": "Room thermostat 2 day schedule"
       },
-      "ecoSter_day_sched3": {
+      "ecoster_day_sched3": {
         "name": "Room thermostat 3 day schedule"
       },
-      "ecoSter_day_sched4": {
+      "ecoster_day_sched4": {
         "name": "Room thermostat 4 day schedule"
       },
-      "ecoSter_day_sched5": {
+      "ecoster_day_sched5": {
         "name": "Room thermostat 5 day schedule"
       },
-      "ecoSter_day_sched6": {
+      "ecoster_day_sched6": {
         "name": "Room thermostat 6 day schedule"
       },
-      "ecoSter_day_sched7": {
+      "ecoster_day_sched7": {
         "name": "Room thermostat 7 day schedule"
       },
-      "ecoSter_day_sched8": {
+      "ecoster_day_sched8": {
         "name": "Room thermostat 8 day schedule"
       }
     },
@@ -375,52 +375,52 @@
       "transmission": {
         "name": "Transmission"
       },
-      "ecoSter_temp1": {
+      "ecoster_temp1": {
         "name": "Room temperature 1"
       },
-      "ecoSter_temp2": {
+      "ecoster_temp2": {
         "name": "Room temperature 2"
       },
-      "ecoSter_temp3": {
+      "ecoster_temp3": {
         "name": "Room temperature 3"
       },
-      "ecoSter_temp4": {
+      "ecoster_temp4": {
         "name": "Room temperature 4"
       },
-      "ecoSter_temp5": {
+      "ecoster_temp5": {
         "name": "Room temperature 5"
       },
-      "ecoSter_temp6": {
+      "ecoster_temp6": {
         "name": "Room temperature 6"
       },
-      "ecoSter_temp7": {
+      "ecoster_temp7": {
         "name": "Room temperature 7"
       },
-      "ecoSter_temp8": {
+      "ecoster_temp8": {
         "name": "Room temperature 8"
       },
-      "ecoSter_mode1": {
+      "ecoster_mode1": {
         "name": "Room thermostat 1 mode"
       },
-      "ecoSter_mode2": {
+      "ecoster_mode2": {
         "name": "Room thermostat 2 mode"
       },
-      "ecoSter_mode3": {
+      "ecoster_mode3": {
         "name": "Room thermostat 3 mode"
       },
-      "ecoSter_mode4": {
+      "ecoster_mode4": {
         "name": "Room thermostat 4 mode"
       },
-      "ecoSter_mode5": {
+      "ecoster_mode5": {
         "name": "Room thermostat 5 mode"
       },
-      "ecoSter_mode6": {
+      "ecoster_mode6": {
         "name": "Room thermostat 6 mode"
       },
-      "ecoSter_mode7": {
+      "ecoster_mode7": {
         "name": "Room thermostat 7 mode"
       },
-      "ecoSter_mode8": {
+      "ecoster_mode8": {
         "name": "Room thermostat 8 mode"
       }
     }

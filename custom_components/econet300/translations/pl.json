@@ -103,52 +103,52 @@
       "pump_solar_works": {
         "name": "Pompa solarna pracuje"
       },
-      "ecoSter_contacts1": {
+      "ecoster_contacts1": {
         "name": "Styki termostatu pokojowego 1"
       },
-      "ecoSter_contacts2": {
+      "ecoster_contacts2": {
         "name": "Styki termostatu pokojowego 2"
       },
-      "ecoSter_contacts3": {
+      "ecoster_contacts3": {
         "name": "Styki termostatu pokojowego 3"
       },
-      "ecoSter_contacts4": {
+      "ecoster_contacts4": {
         "name": "Styki termostatu pokojowego 4"
       },
-      "ecoSter_contacts5": {
+      "ecoster_contacts5": {
         "name": "Styki termostatu pokojowego 5"
       },
-      "ecoSter_contacts6": {
+      "ecoster_contacts6": {
         "name": "Styki termostatu pokojowego 6"
       },
-      "ecoSter_contacts7": {
+      "ecoster_contacts7": {
         "name": "Styki termostatu pokojowego 7"
       },
-      "ecoSter_contacts8": {
+      "ecoster_contacts8": {
         "name": "Styki termostatu pokojowego 8"
       },
-      "ecoSter_day_sched1": {
+      "ecoster_day_sched1": {
         "name": "Harmonogram dzienny termostatu 1"
       },
-      "ecoSter_day_sched2": {
+      "ecoster_day_sched2": {
         "name": "Harmonogram dzienny termostatu 2"
       },
-      "ecoSter_day_sched3": {
+      "ecoster_day_sched3": {
         "name": "Harmonogram dzienny termostatu 3"
       },
-      "ecoSter_day_sched4": {
+      "ecoster_day_sched4": {
         "name": "Harmonogram dzienny termostatu 4"
       },
-      "ecoSter_day_sched5": {
+      "ecoster_day_sched5": {
         "name": "Harmonogram dzienny termostatu 5"
       },
-      "ecoSter_day_sched6": {
+      "ecoster_day_sched6": {
         "name": "Harmonogram dzienny termostatu 6"
       },
-      "ecoSter_day_sched7": {
+      "ecoster_day_sched7": {
         "name": "Harmonogram dzienny termostatu 7"
       },
-      "ecoSter_day_sched8": {
+      "ecoster_day_sched8": {
         "name": "Harmonogram dzienny termostatu 8"
       }
     },
@@ -292,52 +292,52 @@
       "transmission": {
         "name": "Transmisja"
       },
-      "ecoSter_temp1": {
+      "ecoster_temp1": {
         "name": "Temperatura pokojowa 1"
       },
-      "ecoSter_temp2": {
+      "ecoster_temp2": {
         "name": "Temperatura pokojowa 2"
       },
-      "ecoSter_temp3": {
+      "ecoster_temp3": {
         "name": "Temperatura pokojowa 3"
       },
-      "ecoSter_temp4": {
+      "ecoster_temp4": {
         "name": "Temperatura pokojowa 4"
       },
-      "ecoSter_temp5": {
+      "ecoster_temp5": {
         "name": "Temperatura pokojowa 5"
       },
-      "ecoSter_temp6": {
+      "ecoster_temp6": {
         "name": "Temperatura pokojowa 6"
       },
-      "ecoSter_temp7": {
+      "ecoster_temp7": {
         "name": "Temperatura pokojowa 7"
       },
-      "ecoSter_temp8": {
+      "ecoster_temp8": {
         "name": "Temperatura pokojowa 8"
       },
-      "ecoSter_mode1": {
+      "ecoster_mode1": {
         "name": "Tryb termostatu pokojowego 1"
       },
-      "ecoSter_mode2": {
+      "ecoster_mode2": {
         "name": "Tryb termostatu pokojowego 2"
       },
-      "ecoSter_mode3": {
+      "ecoster_mode3": {
         "name": "Tryb termostatu pokojowego 3"
       },
-      "ecoSter_mode4": {
+      "ecoster_mode4": {
         "name": "Tryb termostatu pokojowego 4"
       },
-      "ecoSter_mode5": {
+      "ecoster_mode5": {
         "name": "Tryb termostatu pokojowego 5"
       },
-      "ecoSter_mode6": {
+      "ecoster_mode6": {
         "name": "Tryb termostatu pokojowego 6"
       },
-      "ecoSter_mode7": {
+      "ecoster_mode7": {
         "name": "Tryb termostatu pokojowego 7"
       },
-      "ecoSter_mode8": {
+      "ecoster_mode8": {
         "name": "Tryb termostatu pokojowego 8"
       }
     }

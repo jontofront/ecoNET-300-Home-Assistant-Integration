@@ -128,6 +128,20 @@ alwaysApply: false
 - **Verify consistency** with existing translations
 - **Check for duplicates** in all translation files before adding new keys
 
+### Home Assistant Translation Key Naming Convention
+- **Translation keys MUST follow the pattern**: `[a-z0-9-_]+`
+- **NO uppercase letters allowed** in translation keys
+- **NO hyphens or underscores at start or end** of keys
+- **Examples of valid keys**:
+  - ✅ `ecoster_contacts1` (correct)
+  - ✅ `ecoster_temp1` (correct)
+  - ✅ `ecoster_mode1` (correct)
+  - ❌ `ecoSter_contacts1` (invalid - uppercase 'S')
+  - ❌ `ecoster-contacts1` (invalid - hyphen)
+  - ❌ `_ecoster_contacts1` (invalid - starts with underscore)
+- **Always use lowercase** for all translation keys
+- **Test translation keys** with Home Assistant validation
+
 ## Duplicate Key Prevention Rules
 - **ALWAYS check for duplicate keys** in all constant files before adding new entries
 - **Check these files for duplicates**:
