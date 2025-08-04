@@ -90,6 +90,81 @@
       },
       "status_cwu": {
         "name": "Status CWU"
+      },
+      "contact_gzc": {
+        "name": "Styk GZC"
+      },
+      "contact_gzc_active": {
+        "name": "Styk GZC aktywny"
+      },
+      "pump_circulation": {
+        "name": "Pompa cyrkulacyjna"
+      },
+      "pump_circulation_works": {
+        "name": "Pompa cyrkulacyjna pracuje"
+      },
+      "pump_solar": {
+        "name": "Pompa solarna"
+      },
+      "pump_solar_works": {
+        "name": "Pompa solarna pracuje"
+      },
+      "pump_fireplace": {
+        "name": "Pompa kominkowa"
+      },
+      "pump_co": {
+        "name": "Pompa CO"
+      },
+      "pump_cwu": {
+        "name": "Pompa CWU"
+      },
+      "ecoSter_contacts1": {
+        "name": "Styki termostatu pokojowego 1"
+      },
+      "ecoSter_contacts2": {
+        "name": "Styki termostatu pokojowego 2"
+      },
+      "ecoSter_contacts3": {
+        "name": "Styki termostatu pokojowego 3"
+      },
+      "ecoSter_contacts4": {
+        "name": "Styki termostatu pokojowego 4"
+      },
+      "ecoSter_contacts5": {
+        "name": "Styki termostatu pokojowego 5"
+      },
+      "ecoSter_contacts6": {
+        "name": "Styki termostatu pokojowego 6"
+      },
+      "ecoSter_contacts7": {
+        "name": "Styki termostatu pokojowego 7"
+      },
+      "ecoSter_contacts8": {
+        "name": "Styki termostatu pokojowego 8"
+      },
+      "ecoSter_day_sched1": {
+        "name": "Harmonogram dzienny termostatu 1"
+      },
+      "ecoSter_day_sched2": {
+        "name": "Harmonogram dzienny termostatu 2"
+      },
+      "ecoSter_day_sched3": {
+        "name": "Harmonogram dzienny termostatu 3"
+      },
+      "ecoSter_day_sched4": {
+        "name": "Harmonogram dzienny termostatu 4"
+      },
+      "ecoSter_day_sched5": {
+        "name": "Harmonogram dzienny termostatu 5"
+      },
+      "ecoSter_day_sched6": {
+        "name": "Harmonogram dzienny termostatu 6"
+      },
+      "ecoSter_day_sched7": {
+        "name": "Harmonogram dzienny termostatu 7"
+      },
+      "ecoSter_day_sched8": {
+        "name": "Harmonogram dzienny termostatu 8"
       }
     },
     "sensor": {
@@ -219,6 +294,66 @@
       },
       "weather_control": {
         "name": "Weather control the boiler"
+      },
+      "fuel_consum": {
+        "name": "Zużycie paliwa"
+      },
+      "fuel_stream": {
+        "name": "Strumień paliwa"
+      },
+      "temp_back": {
+        "name": "Temperatura powrotu"
+      },
+      "transmission": {
+        "name": "Transmisja"
+      },
+      "ecoSter_temp1": {
+        "name": "Temperatura pokojowa 1"
+      },
+      "ecoSter_temp2": {
+        "name": "Temperatura pokojowa 2"
+      },
+      "ecoSter_temp3": {
+        "name": "Temperatura pokojowa 3"
+      },
+      "ecoSter_temp4": {
+        "name": "Temperatura pokojowa 4"
+      },
+      "ecoSter_temp5": {
+        "name": "Temperatura pokojowa 5"
+      },
+      "ecoSter_temp6": {
+        "name": "Temperatura pokojowa 6"
+      },
+      "ecoSter_temp7": {
+        "name": "Temperatura pokojowa 7"
+      },
+      "ecoSter_temp8": {
+        "name": "Temperatura pokojowa 8"
+      },
+      "ecoSter_mode1": {
+        "name": "Tryb termostatu pokojowego 1"
+      },
+      "ecoSter_mode2": {
+        "name": "Tryb termostatu pokojowego 2"
+      },
+      "ecoSter_mode3": {
+        "name": "Tryb termostatu pokojowego 3"
+      },
+      "ecoSter_mode4": {
+        "name": "Tryb termostatu pokojowego 4"
+      },
+      "ecoSter_mode5": {
+        "name": "Tryb termostatu pokojowego 5"
+      },
+      "ecoSter_mode6": {
+        "name": "Tryb termostatu pokojowego 6"
+      },
+      "ecoSter_mode7": {
+        "name": "Tryb termostatu pokojowego 7"
+      },
+      "ecoSter_mode8": {
+        "name": "Tryb termostatu pokojowego 8"
       }
     }
   }

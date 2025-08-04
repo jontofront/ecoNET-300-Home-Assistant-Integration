@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # ecoNET300-Specific Guidelines
@@ -118,5 +118,29 @@ alwaysApply: false
 - **Use consistent naming** across all translation files
 - **Test translations** by restarting Home Assistant after changes
 
+## Translation Rules and Validation
+- **ALWAYS check cloud translations first** before creating new translations:
+  - Primary reference: `docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md`
+  - Backup reference: `docs/cloud_translations/TRANSLATION_REFERENCE.md`
+  - Raw data: `docs/cloud_translations/raw_translations.json`
+- **Use official translations** when available in cloud reference
+- **Convert to snake_case** for Home Assistant entity keys
+- **Verify consistency** with existing translations
+- **Check for duplicates** in all translation files before adding new keys
 
-
+## Duplicate Key Prevention Rules
+- **ALWAYS check for duplicate keys** in all constant files before adding new entries
+- **Check these files for duplicates**:
+  - `custom_components/econet300/const.py` - All mapping dictionaries
+  - `custom_components/econet300/strings.json` - Translation keys
+  - `custom_components/econet300/translations/en.json` - English translations
+  - `custom_components/econet300/translations/pl.json` - Polish translations
+- **Use search tools** to verify no duplicate keys exist:
+  - Search for exact key names in all files
+  - Check for case variations (camelCase vs snake_case)
+  - Verify entity keys match across all mapping dictionaries
+- **Common duplicate sources**:
+  - Same key in multiple device-specific mappings
+  - Keys in both `_default` and device-specific mappings
+  - Translation keys that don't match entity keys
+  - Inconsistent naming between files

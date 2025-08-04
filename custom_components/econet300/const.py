@@ -72,7 +72,7 @@ API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 ###################################
 #    NUMBER of AVAILABLE MIXERS
 ###################################
-AVAILABLE_NUMBER_OF_MIXERS = 6
+AVAILABLE_NUMBER_OF_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 
@@ -107,6 +107,36 @@ SENSOR_MAP_KEY = {
         "Circuit1thermostat",
         "heating_work_state_pump4",
     },
+    # ecoSTER thermostat sensors if moduleEcoSTERSoftVer is not None
+    "ecoSTER": {
+        # ecoSTER temperature sensors
+        "ecoSterTemp1",
+        "ecoSterTemp2",
+        "ecoSterTemp3",
+        "ecoSterTemp4",
+        "ecoSterTemp5",
+        "ecoSterTemp6",
+        "ecoSterTemp7",
+        "ecoSterTemp8",
+        # ecoSTER setpoint sensors
+        "ecoSterSetTemp1",
+        "ecoSterSetTemp2",
+        "ecoSterSetTemp3",
+        "ecoSterSetTemp4",
+        "ecoSterSetTemp5",
+        "ecoSterSetTemp6",
+        "ecoSterSetTemp7",
+        "ecoSterSetTemp8",
+        # ecoSTER mode sensors
+        "ecoSterMode1",
+        "ecoSterMode2",
+        "ecoSterMode3",
+        "ecoSterMode4",
+        "ecoSterMode5",
+        "ecoSterMode6",
+        "ecoSterMode7",
+        "ecoSterMode8",
+    },
     "lambda": {
         "lambdaStatus",
         "lambdaSet",
@@ -138,6 +168,12 @@ SENSOR_MAP_KEY = {
         "moduleCSoftVer",
         "moduleLambdaSoftVer",
         "modulePanelSoftVer",
+        "moduleEcoSTERSoftVer",
+        # ecoMAX850R2-X specific sensors
+        "fuelConsum",
+        "fuelStream",
+        "tempBack",
+        "transmission",
     },
 }
 
@@ -156,6 +192,38 @@ BINARY_SENSOR_MAP_KEY = {
         "thermostat",
         "statusCO",
         "statusCWU",
+        # ecoMAX850R2-X specific binary sensors
+        "contactGZC",
+        "contactGZCActive",
+        "pumpCirculation",
+        "pumpCirculationWorks",
+        "pumpSolar",
+        "pumpSolarWorks",
+        "pumpFireplace",
+        "pumpFireplaceWorks",
+        "pumpCO",
+        "pumpCWU",
+    },
+    # ecoSTER thermostat binary sensors if moduleEcoSTERSoftVer is not None
+    "ecoSTER": {
+        # ecoSTER contact sensors
+        "ecoSterContacts1",
+        "ecoSterContacts2",
+        "ecoSterContacts3",
+        "ecoSterContacts4",
+        "ecoSterContacts5",
+        "ecoSterContacts6",
+        "ecoSterContacts7",
+        "ecoSterContacts8",
+        # ecoSTER day schedule sensors
+        "ecoSterDaySched1",
+        "ecoSterDaySched2",
+        "ecoSterDaySched3",
+        "ecoSterDaySched4",
+        "ecoSterDaySched5",
+        "ecoSterDaySched6",
+        "ecoSterDaySched7",
+        "ecoSterDaySched8",
     },
 }
 
@@ -212,6 +280,35 @@ ENTITY_UNIT_MAP = {
     "burnerOutput": PERCENTAGE,
     "mixerTemp": UnitOfTemperature.CELSIUS,
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
+    # ecoMAX850R2-X specific units
+    "fuelConsum": PERCENTAGE,
+    "fuelStream": PERCENTAGE,
+    "transmission": None,
+    # ecoSTER thermostat units
+    "ecoSterTemp1": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp2": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp3": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp4": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp5": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp6": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp7": UnitOfTemperature.CELSIUS,
+    "ecoSterTemp8": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp1": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp2": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp3": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp4": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp5": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp6": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp7": UnitOfTemperature.CELSIUS,
+    "ecoSterSetTemp8": UnitOfTemperature.CELSIUS,
+    "ecoSterMode1": None,
+    "ecoSterMode2": None,
+    "ecoSterMode3": None,
+    "ecoSterMode4": None,
+    "ecoSterMode5": None,
+    "ecoSterMode6": None,
+    "ecoSterMode7": None,
+    "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
     "TempClutch": UnitOfTemperature.CELSIUS,
@@ -277,6 +374,35 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
     "signal": SensorDeviceClass.SIGNAL_STRENGTH,
     "servoMixer1": SensorDeviceClass.ENUM,
+    # ecoMAX850R2-X specific device classes
+    "fuelConsum": SensorDeviceClass.POWER_FACTOR,
+    "fuelStream": SensorDeviceClass.POWER_FACTOR,
+    "transmission": None,
+    # ecoSTER thermostat device classes
+    "ecoSterTemp1": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp2": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp3": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp4": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp5": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp6": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp7": SensorDeviceClass.TEMPERATURE,
+    "ecoSterTemp8": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp1": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp2": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp3": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp4": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp5": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp6": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp7": SensorDeviceClass.TEMPERATURE,
+    "ecoSterSetTemp8": SensorDeviceClass.TEMPERATURE,
+    "ecoSterMode1": None,
+    "ecoSterMode2": None,
+    "ecoSterMode3": None,
+    "ecoSterMode4": None,
+    "ecoSterMode5": None,
+    "ecoSterMode6": None,
+    "ecoSterMode7": None,
+    "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
     "TempClutch": SensorDeviceClass.TEMPERATURE,
@@ -296,6 +422,8 @@ ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
     #############################
     "tempCOSet": NumberDeviceClass.TEMPERATURE,
     "tempCWUSet": NumberDeviceClass.TEMPERATURE,
+    # ecoMAX850R2-X specific number entities
+    "mixerSetTemp5": NumberDeviceClass.TEMPERATURE,
 }
 
 
@@ -346,6 +474,23 @@ ENTITY_PRECISION = {
     # ecoMAX360i
     "PS": None,
     "TempBuforDown": 1,
+    # ecoSTER thermostat precision
+    "ecoSterTemp1": 1,
+    "ecoSterTemp2": 1,
+    "ecoSterTemp3": 1,
+    "ecoSterTemp4": 1,
+    "ecoSterTemp5": 1,
+    "ecoSterTemp6": 1,
+    "ecoSterTemp7": 1,
+    "ecoSterTemp8": 1,
+    "ecoSterSetTemp1": 1,
+    "ecoSterSetTemp2": 1,
+    "ecoSterSetTemp3": 1,
+    "ecoSterSetTemp4": 1,
+    "ecoSterSetTemp5": 1,
+    "ecoSterSetTemp6": 1,
+    "ecoSterSetTemp7": 1,
+    "ecoSterSetTemp8": 1,
     "heatingUpperTemp": 1,
     "Circuit1thermostat": 1,
     "heating_work_state_pump4": None,
@@ -404,6 +549,39 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    # ecoSTER thermostat icons
+    "ecoSterTemp1": "mdi:thermometer",
+    "ecoSterTemp2": "mdi:thermometer",
+    "ecoSterTemp3": "mdi:thermometer",
+    "ecoSterTemp4": "mdi:thermometer",
+    "ecoSterTemp5": "mdi:thermometer",
+    "ecoSterTemp6": "mdi:thermometer",
+    "ecoSterTemp7": "mdi:thermometer",
+    "ecoSterTemp8": "mdi:thermometer",
+    "ecoSterSetTemp1": "mdi:thermometer",
+    "ecoSterSetTemp2": "mdi:thermometer",
+    "ecoSterSetTemp3": "mdi:thermometer",
+    "ecoSterSetTemp4": "mdi:thermometer",
+    "ecoSterSetTemp5": "mdi:thermometer",
+    "ecoSterSetTemp6": "mdi:thermometer",
+    "ecoSterSetTemp7": "mdi:thermometer",
+    "ecoSterSetTemp8": "mdi:thermometer",
+    "ecoSterContacts1": "mdi:thermostat",
+    "ecoSterContacts2": "mdi:thermostat",
+    "ecoSterContacts3": "mdi:thermostat",
+    "ecoSterContacts4": "mdi:thermostat",
+    "ecoSterContacts5": "mdi:thermostat",
+    "ecoSterContacts6": "mdi:thermostat",
+    "ecoSterContacts7": "mdi:thermostat",
+    "ecoSterContacts8": "mdi:thermostat",
+    "ecoSterDaySched1": "mdi:calendar-clock",
+    "ecoSterDaySched2": "mdi:calendar-clock",
+    "ecoSterDaySched3": "mdi:calendar-clock",
+    "ecoSterDaySched4": "mdi:calendar-clock",
+    "ecoSterDaySched5": "mdi:calendar-clock",
+    "ecoSterDaySched6": "mdi:calendar-clock",
+    "ecoSterDaySched7": "mdi:calendar-clock",
+    "ecoSterDaySched8": "mdi:calendar-clock",
     # ecoMAX360i
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",

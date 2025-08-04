@@ -147,6 +147,16 @@ def create_controller_sensors(
         sensor_keys,
     )
 
+    # Check for ecoSTER module availability
+    ecoSTER_module_available = data_sysParams.get("moduleEcoSTERSoftVer") is not None
+    if not ecoSTER_module_available:
+        _LOGGER.info(
+            "moduleEcoSTERSoftVer is None, ecoSTER sensors will not be created"
+        )
+        # Filter out ecoSTER sensors if module is not available
+        ecoSTER_sensors = SENSOR_MAP_KEY.get("ecoSTER", set())
+        sensor_keys = sensor_keys - ecoSTER_sensors
+
     # Iterate through the selected keys and create sensors if valid data is found
     for data_key in sensor_keys:
         _LOGGER.debug(

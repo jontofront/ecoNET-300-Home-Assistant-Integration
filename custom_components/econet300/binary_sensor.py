@@ -143,7 +143,23 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     data_regParams = coordinator.data.get("regParams") or {}
     data_sysParams = coordinator.data.get("sysParams") or {}
 
-    for data_key in BINARY_SENSOR_MAP_KEY["_default"]:
+    # Get all binary sensor keys to process
+    binary_sensor_keys = BINARY_SENSOR_MAP_KEY["_default"].copy()
+
+    # Check for ecoSTER module availability
+    ecoSTER_module_available = data_sysParams.get("moduleEcoSTERSoftVer") is not None
+    if ecoSTER_module_available:
+        _LOGGER.info(
+            "moduleEcoSTERSoftVer is available, ecoSTER binary sensors will be created"
+        )
+        ecoSTER_binary_sensors = BINARY_SENSOR_MAP_KEY.get("ecoSTER", set())
+        binary_sensor_keys.update(ecoSTER_binary_sensors)
+    else:
+        _LOGGER.info(
+            "moduleEcoSTERSoftVer is None, ecoSTER binary sensors will not be created"
+        )
+
+    for data_key in binary_sensor_keys:
         _LOGGER.debug(
             "Processing binary sensor data_key: %s from regParams & sysParams", data_key
         )
@@ -175,11 +191,17 @@ def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet3
 
     # Create mixer pump status sensors using the dynamic keys
     for mixer_pump_key in MIXER_PUMP_BINARY_SENSOR_KEYS:
-        if mixer_pump_key in data_regParams and data_regParams[mixer_pump_key] is not None:
+        if (
+            mixer_pump_key in data_regParams
+            and data_regParams[mixer_pump_key] is not None
+        ):
             # Extract mixer number from key (e.g., "mixerPumpWorks1" -> 1)
             mixer_number = int(mixer_pump_key.replace("mixerPumpWorks", ""))
             entity = MixerBinarySensor(
-                create_binary_entity_description(mixer_pump_key), coordinator, api, mixer_number
+                create_binary_entity_description(mixer_pump_key),
+                coordinator,
+                api,
+                mixer_number,
             )
             entities.append(entity)
             _LOGGER.debug("Created mixer binary sensor: %s", mixer_pump_key)
