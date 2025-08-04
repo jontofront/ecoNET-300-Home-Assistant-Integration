@@ -44,6 +44,12 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 
 ### 🏠 Supported Devices
 - **ecoMAX810P-L TOUCH** controller from [Plum Sp. z o.o.](https://www.plum.pl/)
+- **ecoMAX850R2-X** pellet boiler controller
+- **ecoMAX360** boiler controller
+- **ecoMAX860P2-N** boiler controller
+- **ecoMAX860P3-V** boiler controller
+- **ecoSOL** solar thermal controller
+- **SControl MK1** control module
 - Other ecoNET300 compatible devices
 
 ---

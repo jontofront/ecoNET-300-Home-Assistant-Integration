@@ -1,8 +1,8 @@
 # ecoNET-300 API V1 Documentation
 
-**Last Updated:** 2025-07-18  
-**Device Tested:** ecoMAX810P-L TOUCH  
-**Total Endpoints Discovered:** 48  
+**Last Updated:** 2025-07-18
+**Device Tested:** ecoMAX810P-L TOUCH
+**Total Endpoints Discovered:** 48
 **All Endpoints Successful:** ✅ Yes
 
 ## 🎉 Major Discovery Summary
@@ -37,6 +37,7 @@ Most endpoints require basic authentication with username and password.
 
 ### Tested Devices
 - **ecoMAX810P-L TOUCH** (Software: 3.2.3879)
+- **ecoMAX850R2-X** (Software: 2.0.3521)
 - **ecoMAX360i**
 - **ecoMAX860P2-N**
 - **ecoMAX860P3-V**
@@ -240,8 +241,8 @@ These endpoints provide detailed metadata about parameters:
 - **rmParamsLogs** - Parameter logging settings
 - **rmParamsDebug** - Parameter debug information
 
-**Size:** ~0.1 KB each  
-**Response Time:** ~0.1s each  
+**Size:** ~0.1 KB each
+**Response Time:** ~0.1s each
 **Priority:** **LOW** - Advanced parameter management
 
 ---
