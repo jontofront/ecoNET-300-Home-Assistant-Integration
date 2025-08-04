@@ -20,6 +20,7 @@ from .const import (
     ENTITY_ICON,
     ENTITY_ICON_OFF,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
+    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
@@ -197,6 +198,16 @@ def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet3
         ):
             # Extract mixer number from key (e.g., "mixerPumpWorks1" -> 1)
             mixer_number = int(mixer_pump_key.replace("mixerPumpWorks", ""))
+
+            # Check if this mixer has valid temperature data (same logic as sensor creation)
+            mixer_keys = SENSOR_MIXER_KEY.get(mixer_number, set())
+            if any(data_regParams.get(mixer_key) is None for mixer_key in mixer_keys):
+                _LOGGER.warning(
+                    "Mixer %d binary sensor will not be created due to invalid temperature data.",
+                    mixer_number,
+                )
+                continue
+
             entity = MixerBinarySensor(
                 create_binary_entity_description(mixer_pump_key),
                 coordinator,
