@@ -95,29 +95,14 @@
       "contact_gzc_active": {
         "name": "GZC contact active"
       },
-      "pump_circulation": {
-        "name": "Circulation pump"
-      },
       "pump_circulation_works": {
         "name": "Circulation pump working"
-      },
-      "pump_solar": {
-        "name": "Solar pump"
       },
       "pump_solar_works": {
         "name": "Solar pump working"
       },
-      "pump_fireplace": {
-        "name": "Fireplace pump"
-      },
       "pump_fireplace_works": {
         "name": "Fireplace pump working"
-      },
-      "pump_co": {
-        "name": "Central heating pump"
-      },
-      "pump_cwu": {
-        "name": "Hot water pump"
       },
       "ecoSter_contacts1": {
         "name": "Room thermostat 1 contacts"

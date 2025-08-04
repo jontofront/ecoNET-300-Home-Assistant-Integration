@@ -195,14 +195,9 @@ BINARY_SENSOR_MAP_KEY = {
         # ecoMAX850R2-X specific binary sensors
         "contactGZC",
         "contactGZCActive",
-        "pumpCirculation",
         "pumpCirculationWorks",
-        "pumpSolar",
         "pumpSolarWorks",
-        "pumpFireplace",
         "pumpFireplaceWorks",
-        "pumpCO",
-        "pumpCWU",
     },
     # ecoSTER thermostat binary sensors if moduleEcoSTERSoftVer is not None
     "ecoSTER": {

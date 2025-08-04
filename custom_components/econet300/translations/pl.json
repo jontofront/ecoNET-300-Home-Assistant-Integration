@@ -97,26 +97,11 @@
       "contact_gzc_active": {
         "name": "Styk GZC aktywny"
       },
-      "pump_circulation": {
-        "name": "Pompa cyrkulacyjna"
-      },
       "pump_circulation_works": {
         "name": "Pompa cyrkulacyjna pracuje"
       },
-      "pump_solar": {
-        "name": "Pompa solarna"
-      },
       "pump_solar_works": {
         "name": "Pompa solarna pracuje"
-      },
-      "pump_fireplace": {
-        "name": "Pompa kominkowa"
-      },
-      "pump_co": {
-        "name": "Pompa CO"
-      },
-      "pump_cwu": {
-        "name": "Pompa CWU"
       },
       "ecoSter_contacts1": {
         "name": "Styki termostatu pokojowego 1"
