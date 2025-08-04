@@ -4,8 +4,8 @@
       "user": {
         "data": {
           "host": "Host",
-          "username": "Hasło",
-          "password": "Nazwa użytkownika"
+          "username": "Nazwa użytkownika",
+          "password": "Hasło"
         }
       }
     },
@@ -26,19 +26,19 @@
     },
     "binary_sensor": {
       "weather_control": {
-        "name": "Weather control the boiler"
+        "name": "Sterowanie pogodowe kotła"
       },
       "unseal": {
-        "name": "Unseal"
+        "name": "Odpieczętowanie"
       },
       "pump_co_works": {
-        "name": "Pump CO"
+        "name": "Pompa CO"
       },
       "fan_works": {
-        "name": "Fan"
+        "name": "Nadmuch"
       },
-      "aditional_feeder": {
-        "name": "Aditional feeder"
+      "additional_feeder": {
+        "name": "Dodatkowy podajnik"
       },
       "pump_cwu_works": {
         "name": "Pump CWU"
@@ -65,13 +65,13 @@
         "name": "Pompa mieszacza 6"
       },
       "boiler_pump": {
-        "name": "Boiler pump"
+        "name": "Pompa kotła"
       },
       "pump_fireplace_works": {
-        "name": "Boiler pump"
+        "name": "Pompa kominka"
       },
       "main_srv": {
-        "name": "Econet24.com server"
+        "name": "Serwer Econet24.com"
       },
       "wifi": {
         "name": "Wi-Fi"
@@ -157,13 +157,13 @@
         "name": "Moc kotła"
       },
       "burner_power": {
-        "name": "Burner output"
+        "name": "Moc palnika"
       },
       "fuel_level": {
         "name": "Poziom paliwa"
       },
       "fan_works": {
-        "name": "Fan"
+        "name": "Nadmuch"
       },
       "fan_power": {
         "name": "Moc nadmuchu"
@@ -182,6 +182,30 @@
       },
       "lambda_level": {
         "name": "Czujnik Lambda"
+      },
+      "soft_ver": {
+        "name": "Wersja modułu ecoNET"
+      },
+      "controller_id": {
+        "name": "Nazwa kontrolera"
+      },
+      "module_a_soft_ver": {
+        "name": "Wersja modułu A"
+      },
+      "module_b_soft_ver": {
+        "name": "Wersja modułu B"
+      },
+      "module_c_soft_ver": {
+        "name": "Wersja modułu C"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Wersja modułu Lambda"
+      },
+      "module_panel_soft_ver": {
+        "name": "Wersja modułu Panel"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Wersja modułu ecoSTER"
       },
       "mixer_temp1": {
         "name": "Temp. mieszacza 1"
@@ -241,14 +265,14 @@
       "valve_mixer1": {
         "name": "Zawór mieszacza 1"
       },
-      "servo_Mixer1": {
+      "servo_mixer1": {
         "name": "Siłownik mieszacza 1"
       },
       "signal": {
         "name": "Siła sygnału"
       },
       "temp_co_set": {
-        "name": "Heating target temperature"
+        "name": "Temperatura zadana ogrzewania"
       },
       "temp_co": {
         "name": "Temperatura kotła"
@@ -272,13 +296,13 @@
         "name": "Temperatura podajnika"
       },
       "unseal": {
-        "name": "Unseal"
+        "name": "Odpieczętowanie"
       },
       "thermostat": {
-        "name": "Thermostat"
+        "name": "Termostat"
       },
       "weather_control": {
-        "name": "Weather control the boiler"
+        "name": "Sterowanie pogodowe kotła"
       },
       "fuel_consum": {
         "name": "Zużycie paliwa"
@@ -339,6 +363,66 @@
       },
       "ecoster_mode8": {
         "name": "Tryb termostatu pokojowego 8"
+      },
+      "ecoster_set_temp1": {
+        "name": "Temperatura zadana termostatu 1"
+      },
+      "ecoster_set_temp2": {
+        "name": "Temperatura zadana termostatu 2"
+      },
+      "ecoster_set_temp3": {
+        "name": "Temperatura zadana termostatu 3"
+      },
+      "ecoster_set_temp4": {
+        "name": "Temperatura zadana termostatu 4"
+      },
+      "ecoster_set_temp5": {
+        "name": "Temperatura zadana termostatu 5"
+      },
+      "ecoster_set_temp6": {
+        "name": "Temperatura zadana termostatu 6"
+      },
+      "ecoster_set_temp7": {
+        "name": "Temperatura zadana termostatu 7"
+      },
+      "ecoster_set_temp8": {
+        "name": "Temperatura zadana termostatu 8"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 2"
+      },
+      "temp_clutch": {
+        "name": "Temperatura sprzęgła"
+      },
+      "circuit3thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 3"
+      },
+      "temp_wthr": {
+        "name": "Temperatura pogodowa"
+      },
+      "temp_circuit3": {
+        "name": "Temperatura obwodu 3"
+      },
+      "temp_circuit2": {
+        "name": "Temperatura obwodu 2"
+      },
+      "temp_bufor_up": {
+        "name": "Temperatura bufora górna"
+      },
+      "temp_bufor_down": {
+        "name": "Temperatura bufora dolna"
+      },
+      "heating_upper_temp": {
+        "name": "Temperatura ogrzewania górna"
+      },
+      "circuit1thermostat": {
+        "name": "Temperatura rzeczywista obwodu 1"
+      },
+      "heating_work_state_pump4": {
+        "name": "Stan pracy pompy ogrzewania 4"
       }
     }
   }

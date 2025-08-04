@@ -220,6 +220,9 @@
       "module_panel_soft_ver": {
         "name": "Module Panel version"
       },
+      "module_ecoster_soft_ver": {
+        "name": "Module ecoSTER version"
+      },
       "mode": {
         "name": "Boiler mode",
         "state": {
@@ -422,6 +425,30 @@
       },
       "ecoster_mode8": {
         "name": "Room thermostat 8 mode"
+      },
+      "ecoster_set_temp1": {
+        "name": "Room thermostat 1 setpoint"
+      },
+      "ecoster_set_temp2": {
+        "name": "Room thermostat 2 setpoint"
+      },
+      "ecoster_set_temp3": {
+        "name": "Room thermostat 3 setpoint"
+      },
+      "ecoster_set_temp4": {
+        "name": "Room thermostat 4 setpoint"
+      },
+      "ecoster_set_temp5": {
+        "name": "Room thermostat 5 setpoint"
+      },
+      "ecoster_set_temp6": {
+        "name": "Room thermostat 6 setpoint"
+      },
+      "ecoster_set_temp7": {
+        "name": "Room thermostat 7 setpoint"
+      },
+      "ecoster_set_temp8": {
+        "name": "Room thermostat 8 setpoint"
       }
     }
   }
