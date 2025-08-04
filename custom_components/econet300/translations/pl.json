@@ -183,6 +183,9 @@
       "lambda_level": {
         "name": "Czujnik Lambda"
       },
+      "status_co": {
+        "name": "Status ogrzewania"
+      },
       "soft_ver": {
         "name": "Wersja modułu ecoNET"
       },

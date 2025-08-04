@@ -189,6 +189,9 @@
       "lambda_level": {
         "name": "Lambda level"
       },
+      "status_co": {
+        "name": "Central heating status"
+      },
       "work_at100": {
         "name": "Work at 100%"
       },
