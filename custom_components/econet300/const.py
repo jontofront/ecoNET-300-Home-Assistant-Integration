@@ -435,6 +435,9 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lambdaStatus": BinarySensorDeviceClass.RUNNING,
     "thermostat": BinarySensorDeviceClass.RUNNING,
     "statusCWU": BinarySensorDeviceClass.RUNNING,
+    # ecoMAX850R2-X specific binary sensors
+    "contactGZC": BinarySensorDeviceClass.CONNECTIVITY,
+    "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -547,6 +550,7 @@ ENTITY_ICON = {
     "moduleCSoftVer": "mdi:raspberry-pi",
     "moduleLambdaSoftVer": "mdi:raspberry-pi",
     "modulePanelSoftVer": "mdi:alarm-panel-outline",
+    "moduleEcoSTERSoftVer": "mdi:raspberry-pi",
     # ecoSTER thermostat icons
     "ecoSterTemp1": "mdi:thermometer",
     "ecoSterTemp2": "mdi:thermometer",
@@ -564,6 +568,14 @@ ENTITY_ICON = {
     "ecoSterSetTemp6": "mdi:thermometer",
     "ecoSterSetTemp7": "mdi:thermometer",
     "ecoSterSetTemp8": "mdi:thermometer",
+    "ecoSterMode1": "mdi:thermostat",
+    "ecoSterMode2": "mdi:thermostat",
+    "ecoSterMode3": "mdi:thermostat",
+    "ecoSterMode4": "mdi:thermostat",
+    "ecoSterMode5": "mdi:thermostat",
+    "ecoSterMode6": "mdi:thermostat",
+    "ecoSterMode7": "mdi:thermostat",
+    "ecoSterMode8": "mdi:thermostat",
     "ecoSterContacts1": "mdi:thermostat",
     "ecoSterContacts2": "mdi:thermostat",
     "ecoSterContacts3": "mdi:thermostat",
@@ -581,9 +593,27 @@ ENTITY_ICON = {
     "ecoSterDaySched7": "mdi:calendar-clock",
     "ecoSterDaySched8": "mdi:calendar-clock",
     # ecoMAX360i
+    "PS": "mdi:power-plug",
+    "Circuit2thermostatTemp": "mdi:thermometer",
+    "TempClutch": "mdi:thermometer",
+    "Circuit3thermostatTemp": "mdi:thermometer",
+    "TempWthr": "mdi:thermometer",
+    "TempCircuit3": "mdi:thermometer",
+    "TempCircuit2": "mdi:thermometer",
+    "TempBuforUp": "mdi:thermometer",
     "TempBuforDown": "mdi:thermometer",
     "heatingUpperTemp": "mdi:thermometer",
+    "Circuit1thermostat": "mdi:thermometer",
     "heating_work_state_pump4": "mdi:sync",
+    # ecoMAX850R2-X specific icons
+    "fuelConsum": "mdi:gas-station",
+    "fuelStream": "mdi:gas-station",
+    "tempBack": "mdi:thermometer",
+    "transmission": "mdi:transmission-tower",
+    "contactGZC": "mdi:connection",
+    "contactGZCActive": "mdi:connection",
+    "pumpCirculationWorks": "mdi:pump",
+    "pumpSolarWorks": "mdi:pump",
 }
 
 ENTITY_ICON_OFF = {
@@ -602,8 +632,29 @@ ENTITY_ICON_OFF = {
     "mainSrv": "mdi:server-network-off",
     "lan": "mdi:lan-disconnect",
     "lighterWorks": "mdi:fire-off",
-    "lambdaStatus": "mdi:lambda-off",
     "thermostat": "mdi:thermostat-off",
+    # ecoMAX850R2-X specific off icons
+    "contactGZC": "mdi:connection-off",
+    "contactGZCActive": "mdi:connection-off",
+    "pumpCirculationWorks": "mdi:pump-off",
+    "pumpSolarWorks": "mdi:pump-off",
+    # ecoSTER thermostat off icons
+    "ecoSterContacts1": "mdi:thermostat-off",
+    "ecoSterContacts2": "mdi:thermostat-off",
+    "ecoSterContacts3": "mdi:thermostat-off",
+    "ecoSterContacts4": "mdi:thermostat-off",
+    "ecoSterContacts5": "mdi:thermostat-off",
+    "ecoSterContacts6": "mdi:thermostat-off",
+    "ecoSterContacts7": "mdi:thermostat-off",
+    "ecoSterContacts8": "mdi:thermostat-off",
+    "ecoSterDaySched1": "mdi:calendar-clock-off",
+    "ecoSterDaySched2": "mdi:calendar-clock-off",
+    "ecoSterDaySched3": "mdi:calendar-clock-off",
+    "ecoSterDaySched4": "mdi:calendar-clock-off",
+    "ecoSterDaySched5": "mdi:calendar-clock-off",
+    "ecoSterDaySched6": "mdi:calendar-clock-off",
+    "ecoSterDaySched7": "mdi:calendar-clock-off",
+    "ecoSterDaySched8": "mdi:calendar-clock-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
