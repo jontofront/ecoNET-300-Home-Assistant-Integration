@@ -174,6 +174,7 @@ SENSOR_MAP_KEY = {
         "fuelStream",
         "tempBack",
         "transmission",
+        "statusCO",
     },
 }
 
@@ -190,7 +191,6 @@ BINARY_SENSOR_MAP_KEY = {
         "lan",
         "lambdaStatus",
         "thermostat",
-        "statusCO",
         "statusCWU",
         # ecoMAX850R2-X specific binary sensors
         "contactGZC",
@@ -327,6 +327,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "lambdaStatus": None,
     "mode": None,
     "thermostat": None,
+    "statusCO": None,
     "statusCWU": None,
     "softVer": None,
     "controllerID": None,
@@ -369,6 +370,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "mixerSetTemp": SensorDeviceClass.TEMPERATURE,
     "tempBack": SensorDeviceClass.TEMPERATURE,
     "tempCWU": SensorDeviceClass.TEMPERATURE,
+    "statusCO": None,
     "statusCWU": None,
     "tempUpperBuffer": SensorDeviceClass.TEMPERATURE,
     "tempLowerBuffer": SensorDeviceClass.TEMPERATURE,
@@ -437,7 +439,6 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
     "lambdaStatus": BinarySensorDeviceClass.RUNNING,
     "thermostat": BinarySensorDeviceClass.RUNNING,
-    "statusCO": BinarySensorDeviceClass.RUNNING,
     "statusCWU": BinarySensorDeviceClass.RUNNING,
 }
 
@@ -460,6 +461,7 @@ ENTITY_PRECISION = {
     "tempCWU": 1,
     "tempFlueGas": 1,
     "fanPower": 0,
+    "statusCO": None,
     "statusCWU": None,
     "thermostat": None,
     "lambdaStatus": None,
@@ -500,6 +502,7 @@ ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
     "temCO": "mdi:thermometer-lines",
+    "statusCO": "mdi:heating",
     "statusCWU": "mdi:water-boiler",
     "thermostat": "mdi:thermostat",
     "boilerPower": "mdi:gauge",
@@ -606,7 +609,6 @@ ENTITY_ICON_OFF = {
     "lighterWorks": "mdi:fire-off",
     "lambdaStatus": "mdi:lambda-off",
     "thermostat": "mdi:thermostat-off",
-    "statusCO": "mdi:heating-off",
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
