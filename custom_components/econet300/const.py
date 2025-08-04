@@ -189,7 +189,6 @@ BINARY_SENSOR_MAP_KEY = {
         "mainSrv",
         "wifi",
         "lan",
-        "lambdaStatus",
         "thermostat",
         "statusCWU",
         # ecoMAX850R2-X specific binary sensors
