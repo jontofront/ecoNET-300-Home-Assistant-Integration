@@ -30,7 +30,7 @@ from .const import (
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
 )
-from .entity import EconetEntity, LambdaEntity, MixerEntity
+from .entity import EconetEntity, LambdaEntity, MixerEntity, EcoSTEREntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -108,6 +108,31 @@ class LambdaSensors(LambdaEntity, SensorEntity):
         self.async_write_ha_state()
 
 
+class EcoSTERSensor(EcoSTEREntity, SensorEntity):
+    """EcoSTER sensor class."""
+
+    entity_description: EconetSensorEntityDescription
+
+    def __init__(
+        self,
+        description: EconetSensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        idx: int,
+    ):
+        """Initialize the EcoSTER sensor."""
+        self.entity_description = description
+        self.api = api
+        self._idx = idx
+        super().__init__(description, coordinator, api, idx)
+
+    def _sync_state(self, value) -> None:
+        """Sync state."""
+        _LOGGER.debug("EcoSTER sensor sync state: %s", value)
+        self._attr_native_value = self.entity_description.process_val(value)
+        self.async_write_ha_state()
+
+
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     """Create ecoNET300 sensor entity based on supplied key."""
     _LOGGER.debug("Creating sensor entity description for key: %s", key)
@@ -147,15 +172,10 @@ def create_controller_sensors(
         sensor_keys,
     )
 
-    # Check for ecoSTER module availability
-    ecoSTER_module_available = data_sysParams.get("moduleEcoSTERSoftVer") is not None
-    if not ecoSTER_module_available:
-        _LOGGER.info(
-            "moduleEcoSTERSoftVer is None, ecoSTER sensors will not be created"
-        )
-        # Filter out ecoSTER sensors if module is not available
-        ecoSTER_sensors = SENSOR_MAP_KEY.get("ecoSTER", set())
-        sensor_keys = sensor_keys - ecoSTER_sensors
+    # Always filter out ecoSTER sensors from controller sensors since they are created as separate devices
+    ecoSTER_sensors = SENSOR_MAP_KEY.get("ecoSTER", set())
+    sensor_keys = sensor_keys - ecoSTER_sensors
+    _LOGGER.info("Filtered out ecoSTER sensors from controller sensors: %s", ecoSTER_sensors)
 
     # Iterate through the selected keys and create sensors if valid data is found
     for data_key in sensor_keys:
@@ -305,6 +325,80 @@ def create_lambda_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     return entities
 
 
+def create_ecoster_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
+    """Create a sensor entity description for an ecoSTER sensor."""
+    _LOGGER.debug("Creating ecoSTER entity sensor description for key: %s", key)
+    entity_description = EconetSensorEntityDescription(
+        key=key,
+        translation_key=camel_to_snake(key),
+        icon=ENTITY_ICON.get(key, None),
+        native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
+        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
+        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
+        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
+    )
+    _LOGGER.debug("Created ecoSTER entity description: %s", entity_description)
+    return entity_description
+
+
+def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+    """Create ecoSTER sensor entities."""
+    entities: list[EcoSTERSensor] = []
+    sys_params = coordinator.data.get("sysParams", {})
+
+    # Check if moduleEcoSTERSoftVer is None
+    if sys_params.get("moduleEcoSTERSoftVer") is None:
+        _LOGGER.info("moduleEcoSTERSoftVer is None, no ecoSTER sensors will be created")
+        return entities
+
+    coordinator_data = coordinator.data.get("regParams", {})
+
+    # Create ecoSTER sensors for each thermostat (1-8)
+    for thermostat_idx in range(1, 9):  # 1-8
+        # Create temperature sensor
+        temp_key = f"ecoSterTemp{thermostat_idx}"
+        if temp_key in coordinator_data and coordinator_data.get(temp_key) is not None:
+            entities.append(
+                EcoSTERSensor(
+                    create_ecoster_sensor_entity_description(temp_key),
+                    coordinator,
+                    api,
+                    thermostat_idx,
+                )
+            )
+            _LOGGER.debug("Created ecoSTER temperature sensor: %s", temp_key)
+
+        # Create setpoint sensor
+        set_temp_key = f"ecoSterSetTemp{thermostat_idx}"
+        if set_temp_key in coordinator_data and coordinator_data.get(set_temp_key) is not None:
+            entities.append(
+                EcoSTERSensor(
+                    create_ecoster_sensor_entity_description(set_temp_key),
+                    coordinator,
+                    api,
+                    thermostat_idx,
+                )
+            )
+            _LOGGER.debug("Created ecoSTER setpoint sensor: %s", set_temp_key)
+
+        # Create mode sensor
+        mode_key = f"ecoSterMode{thermostat_idx}"
+        if mode_key in coordinator_data and coordinator_data.get(mode_key) is not None:
+            entities.append(
+                EcoSTERSensor(
+                    create_ecoster_sensor_entity_description(mode_key),
+                    coordinator,
+                    api,
+                    thermostat_idx,
+                )
+            )
+            _LOGGER.debug("Created ecoSTER mode sensor: %s", mode_key)
+
+    _LOGGER.info("Created %d ecoSTER sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -333,6 +427,11 @@ async def async_setup_entry(
         lambda_sensors = create_lambda_sensors(coordinator, api)
         _LOGGER.info("Collected %d lambda sensors", len(lambda_sensors))
         entities.extend(lambda_sensors)
+
+        # Gather ecoSTER sensors
+        ecoster_sensors = create_ecoster_sensors(coordinator, api)
+        _LOGGER.info("Collected %d ecoSTER sensors", len(ecoster_sensors))
+        entities.extend(ecoster_sensors)
 
         _LOGGER.info("Total entities collected: %d", len(entities))
         return entities
