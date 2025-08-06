@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-API Endpoint Testing Script for ecoNET-300
+API Endpoint Testing Script for ecoNET-300.
 
 This script systematically tests all discovered API endpoints and documents
 their response structures to understand the complete API.
@@ -13,6 +13,7 @@ import argparse
 import json
 import logging
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -63,10 +64,9 @@ class ApiEndpointTester:
         }
         
         try:
-            _LOGGER.info(f"Testing endpoint: {endpoint}")
+            _LOGGER.info("Testing endpoint: %s", endpoint)
             
             # Make request and measure time
-            import time
             start_time = time.time()
             response = self.session.get(url, timeout=self.timeout)
             end_time = time.time()
@@ -83,18 +83,18 @@ class ApiEndpointTester:
                     result["is_json"] = True
                     result["data"] = data
                     result["structure"] = self.analyze_json_structure(data)
-                    _LOGGER.info(f"✅ {endpoint}: JSON response ({len(data)} items)")
+                    _LOGGER.info("✅ %s: JSON response (%d items)", endpoint, len(data))
                 except json.JSONDecodeError:
                     result["data"] = response.text[:1000]  # First 1000 chars
                     result["structure"] = "text"
-                    _LOGGER.info(f"✅ {endpoint}: Text response ({len(response.text)} chars)")
+                    _LOGGER.info("✅ %s: Text response (%d chars)", endpoint, len(response.text))
             else:
                 result["error"] = f"HTTP {response.status_code}"
-                _LOGGER.warning(f"❌ {endpoint}: {result['error']}")
+                _LOGGER.warning("❌ %s: %s", endpoint, result['error'])
                 
         except Exception as e:
             result["error"] = str(e)
-            _LOGGER.error(f"❌ {endpoint}: {e}")
+            _LOGGER.error("❌ %s: %s", endpoint, e)
         
         return result
 
@@ -114,15 +114,14 @@ class ApiEndpointTester:
         elif isinstance(data, list):
             if len(data) == 0:
                 return "[]"
-            elif len(data) == 1:
+            if len(data) == 1:
                 return [self.analyze_json_structure(data[0], max_depth, current_depth + 1)]
-            else:
-                return [self.analyze_json_structure(data[0], max_depth, current_depth + 1), f"... ({len(data)} items)"]
+            return [self.analyze_json_structure(data[0], max_depth, current_depth + 1), f"... ({len(data)} items)"]
         else:
             return type(data).__name__
 
     def get_all_endpoints(self) -> List[str]:
-        """Get list of all endpoints to test."""
+        """Get list of all endpoints to test (safe endpoints only)."""
         # Core endpoints
         core_endpoints = [
             "sysParams",
@@ -131,7 +130,7 @@ class ApiEndpointTester:
             "rmCurrentDataParamsEdits"
         ]
         
-        # Discovered endpoints
+        # Discovered endpoints (safe for testing)
         discovered_endpoints = [
             "rmCurrentDataParams",
             "rmParamsData",
@@ -145,21 +144,15 @@ class ApiEndpointTester:
             "rmLogs",
             "rmConfig",
             "rmFirmware",
-            "rmNetwork",
-            "rmSecurity",
             "rmUsers",
             "rmSchedule",
             "rmStatistics",
             "rmMaintenance",
             "rmService",
-            "rmTest",
-            "rmCalibration",
-            "rmFactory",
-            "rmBackup",
-            "rmRestore"
+            "rmTest"
         ]
         
-        # Additional endpoints to try
+        # Additional endpoints to try (safe for testing)
         additional_endpoints = [
             "rmParamsDescs",
             "rmCatsNames", 
@@ -220,23 +213,23 @@ class ApiEndpointTester:
         # Save complete results
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         results_file = output_path / f"api_test_results_{timestamp}.json"
-        with open(results_file, 'w', encoding='utf-8') as f:
+        with results_file.open('w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
-        _LOGGER.info(f"Saved complete results to: {results_file}")
+        _LOGGER.info("Saved complete results to: %s", results_file)
 
         # Create summary report
         summary_file = output_path / f"api_test_summary_{timestamp}.md"
         self.create_summary_report(results, summary_file)
-        _LOGGER.info(f"Saved summary report to: {summary_file}")
+        _LOGGER.info("Saved summary report to: %s", summary_file)
 
         # Create endpoint documentation
         docs_file = output_path / f"api_endpoint_documentation_{timestamp}.md"
         self.create_endpoint_documentation(results, docs_file)
-        _LOGGER.info(f"Saved endpoint documentation to: {docs_file}")
+        _LOGGER.info("Saved endpoint documentation to: %s", docs_file)
 
     def create_summary_report(self, results: Dict[str, Any], file_path: Path):
         """Create a summary report of the test results."""
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with file_path.open('w', encoding='utf-8') as f:
             f.write("# ecoNET-300 API Endpoint Test Results\n\n")
             
             # Test info
@@ -275,7 +268,7 @@ class ApiEndpointTester:
 
     def create_endpoint_documentation(self, results: Dict[str, Any], file_path: Path):
         """Create detailed endpoint documentation."""
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with file_path.open('w', encoding='utf-8') as f:
             f.write("# ecoNET-300 API Endpoint Documentation\n\n")
             f.write(f"**Generated:** {results['test_info']['tested_at']}\n\n")
             
@@ -318,15 +311,15 @@ class ApiEndpointTester:
             
             # Print summary
             test_info = results["test_info"]
-            _LOGGER.info(f"Testing completed!")
-            _LOGGER.info(f"Total endpoints: {test_info['total_endpoints']}")
-            _LOGGER.info(f"Successful: {test_info['successful_tests']}")
-            _LOGGER.info(f"Failed: {test_info['failed_tests']}")
+            _LOGGER.info("Testing completed!")
+            _LOGGER.info("Total endpoints: %d", test_info['total_endpoints'])
+            _LOGGER.info("Successful: %d", test_info['successful_tests'])
+            _LOGGER.info("Failed: %d", test_info['failed_tests'])
             
             return True
             
         except Exception as e:
-            _LOGGER.error(f"Testing failed: {e}")
+            _LOGGER.error("Testing failed: %s", e)
             return False
 
 
@@ -345,9 +338,22 @@ def main():
         logging.getLogger().setLevel(logging.DEBUG)
 
     tester = ApiEndpointTester(args.host, args.username, args.password)
-    success = tester.run_tests()
-    sys.exit(0 if success else 1)
+    
+    # Test safe endpoints only
+    results = tester.test_all_endpoints()
+    
+    # Save results
+    tester.save_results(results, args.output_dir)
+    
+    # Print summary
+    test_info = results["test_info"]
+    _LOGGER.info("Testing completed!")
+    _LOGGER.info("Total endpoints: %d", test_info['total_endpoints'])
+    _LOGGER.info("Successful: %d", test_info['successful_tests'])
+    _LOGGER.info("Failed: %d", test_info['failed_tests'])
+    
+    sys.exit(0)
 
 
 if __name__ == "__main__":
-    main() 
+    main()
