@@ -1,63 +1,44 @@
-# Essential Scripts
+# ecoNET-300 Scripts
 
-This directory contains essential scripts for the ecoNET-300 Home Assistant integration.
+This directory contains utility scripts for working with the ecoNET-300 integration.
 
-## 🔧 Available Scripts
+## 🧪 API Endpoint Testing Script
 
-### API Testing
-- **test_api_endpoints.py** - Test all API endpoints and document responses
+### `test_api_endpoints.py`
 
-### Translation Management
-- **check_translations.py** - Validate translation files
-- **download_cloud_translations.py** - Download cloud translation data
-- **extract_cloud_translations.py** - Extract translation data from cloud files
+A comprehensive API endpoint testing script that tests all safe endpoints.
 
-## 🚀 Usage
-
-Most scripts can be run directly with Python:
+#### Usage
 
 ```bash
-# Test API endpoints
-python scripts/test_api_endpoints.py --host YOUR_DEVICE_IP --username admin --password YOUR_PASSWORD
-
-# Check translations
-python scripts/check_translations.py
-
-# Download cloud translations
-python scripts/download_cloud_translations.py
-
-# Extract cloud translations
-python scripts/extract_cloud_translations.py
+python test_api_endpoints.py --host 192.168.1.100 --username admin --password your_password
 ```
 
-## 📋 Script Details
+#### Command Line Options
 
-### test_api_endpoints.py
-- **Purpose**: Test all discovered API endpoints and document their responses
-- **Use case**: Verify API functionality, debug connection issues
-- **Output**: Detailed endpoint documentation and test results
+- `--host`: Device IP address or hostname (required)
+- `--username`: Username for authentication (required)
+- `--password`: Password for authentication (required)
+- `--output-dir`: Output directory for results (default: `api_test_results`)
+- `--verbose, -v`: Enable verbose logging
 
-### check_translations.py
-- **Purpose**: Validate translation files for consistency
-- **Use case**: Ensure all translation keys are present and properly formatted
-- **Output**: Translation validation report
+#### Output
 
-### download_cloud_translations.py
-- **Purpose**: Download translation data from ecoNET cloud services
-- **Use case**: Get latest translation updates from official sources
-- **Output**: Raw translation data files
+The script generates:
+- **JSON Results**: Complete test results in JSON format
+- **Summary Report**: Markdown summary of test results
+- **Endpoint Documentation**: Detailed documentation of each endpoint
 
-### extract_cloud_translations.py
-- **Purpose**: Extract and process translation data from cloud files
-- **Use case**: Convert cloud translations to Home Assistant format
-- **Output**: Processed translation files ready for integration
+## 🔧 Other Scripts
 
-## 🎯 Integration Development
+### `check_translations.py`
+Validates translation files for consistency.
 
-These scripts support the ongoing development of the Home Assistant integration:
+### `download_cloud_translations.py`
+Downloads cloud translations from ecoNET servers.
 
-1. **API Testing** - Verify endpoint functionality and response structures
-2. **Translation Management** - Ensure proper localization support
-3. **Cloud Integration** - Access official translation data
+### `extract_cloud_translations.py`
+Extracts and processes cloud translation data.
 
-All discovery and analysis tools have been moved to the development archive after completing the initial API discovery phase.
+### `test_api_endpoints.py`
+Comprehensive API endpoint testing for safe endpoints only.
