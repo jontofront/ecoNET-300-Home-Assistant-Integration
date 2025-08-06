@@ -1,4 +1,6 @@
-# ecoNET-300 API V1 Documentation
+# ecoNET-300 API v1 Documentation
+
+## 📊 API Endpoint Overview
 
 **Last Updated:** 2025-07-18
 **Device Tested:** ecoMAX810P-L TOUCH
