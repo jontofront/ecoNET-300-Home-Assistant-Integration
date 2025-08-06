@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.1.5] - 2025-01-XX
+### Added
+- **ecoMAX850R2-X Support**: Added comprehensive support for the new ecoMAX850R2-X boiler controller
+  - **New Device Type**: Full integration with ecoMAX850R2-X controller capabilities
+  - **ecoSTER Thermostat Support**: Added support for up to 8 ecoSTER room thermostats
+  - **Enhanced Sensor Support**: Added new sensors specific to ecoMAX850R2-X (fuelConsum, fuelStream, tempBack, transmission)
+  - **Documentation**: Created comprehensive documentation for ecoMAX850R2-X features and capabilities
+  - **Test Fixtures**: Added complete test fixtures for ecoMAX850R2-X validation
+
+### Fixed
+- **statusCO Sensor Translation**: Fixed missing translation for statusCO sensor causing "PLUM ecoNET300" display issue
+  - **Problem**: statusCO sensor was missing translation key in sensor section
+  - **Solution**: Added status_co translation to all translation files (strings.json, en.json, pl.json)
+  - **Impact**: statusCO sensor now displays as "Central heating status" instead of raw translation key
+  - **Files Modified**: Translation files in sensor section
+
+### Changed
+- **ecoSTER as Separate Devices**: Refactored ecoSTER thermostats to be separate Home Assistant devices
+  - **Device Structure**: Each ecoSTER thermostat (1-8) now appears as a separate device under the main controller
+  - **Entity Organization**: ecoSTER sensors and binary sensors are properly grouped by thermostat
+  - **Module Detection**: ecoSTER entities only created when moduleEcoSTERSoftVer is present in sysParams
+  - **Files Modified**: `custom_components/econet300/entity.py`, `sensor.py`, `binary_sensor.py`
+
+### Technical Changes
+- **Constants Organization**: Reorganized sensor and binary sensor mappings for better device-specific support
+- **Translation Validation**: Added comprehensive validation logic and commit workflow documentation
+- **Entity Creation Logic**: Improved module detection and entity filtering for ecoSTER devices
+- **Documentation**: Updated cursor rules with validation guidelines and commit workflow
+
 ## [v1.1.4] - 2025-01-XX
 ### Changed
 - **Version Update**: Updated version to 1.1.4

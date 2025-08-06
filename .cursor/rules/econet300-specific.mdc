@@ -1,8 +1,3 @@
----
-description: 
-globs: 
-alwaysApply: false
----
 # ecoNET300-Specific Guidelines
 
 ## Device Support
@@ -118,5 +113,240 @@ alwaysApply: false
 - **Use consistent naming** across all translation files
 - **Test translations** by restarting Home Assistant after changes
 
+## Translation Rules and Validation
+- **ALWAYS check cloud translations first** before creating new translations:
+  - Primary reference: `docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md`
+  - Backup reference: `docs/cloud_translations/TRANSLATION_REFERENCE.md`
+  - Raw data: `docs/cloud_translations/raw_translations.json`
+- **Use official translations** when available in cloud reference
+- **Convert to snake_case** for Home Assistant entity keys
+- **Verify consistency** with existing translations
+- **Check for duplicates** in all translation files before adding new keys
 
+### Home Assistant Translation Key Naming Convention
+- **Translation keys MUST follow the pattern**: `[a-z0-9-_]+`
+- **NO uppercase letters allowed** in translation keys
+- **NO hyphens or underscores at start or end** of keys
+- **Examples of valid keys**:
+  - ✅ `ecoster_contacts1` (correct)
+  - ✅ `ecoster_temp1` (correct)
+  - ✅ `ecoster_mode1` (correct)
+  - ❌ `ecoSter_contacts1` (invalid - uppercase 'S')
+  - ❌ `ecoster-contacts1` (invalid - hyphen)
+  - ❌ `_ecoster_contacts1` (invalid - starts with underscore)
+- **Always use lowercase** for all translation keys
+- **Test translation keys** with Home Assistant validation
 
+## Duplicate Key Prevention Rules
+- **ALWAYS check for duplicate keys** in all constant files before adding new entries
+- **Check these files for duplicates**:
+  - `custom_components/econet300/const.py` - All mapping dictionaries
+  - `custom_components/econet300/strings.json` - Translation keys
+  - `custom_components/econet300/translations/en.json` - English translations
+  - `custom_components/econet300/translations/pl.json` - Polish translations
+- **Use search tools** to verify no duplicate keys exist:
+  - Search for exact key names in all files
+  - Check for case variations (camelCase vs snake_case)
+  - Verify entity keys match across all mapping dictionaries
+- **Common duplicate sources**:
+  - Same key in multiple device-specific mappings
+  - Keys in both `_default` and device-specific mappings
+  - Translation keys that don't match entity keys
+  - Inconsistent naming between files
+
+## Binary Sensor Device Class Rules
+- **By default, all binary sensors device_class are RUNNING** (as defined in `const.py`)
+- **Only specify device_class in `ENTITY_BINARY_DEVICE_CLASS_MAP` when it's NOT RUNNING**
+- **Common non-RUNNING device classes**:
+  - `BinarySensorDeviceClass.CONNECTIVITY` - For network/connection sensors (wifi, lan, mainSrv, contactGZC, contactGZCActive)
+  - `BinarySensorDeviceClass.RUNNING` - For operational status sensors (pumps, fans, thermostats, etc.)
+- **Examples from constants**:
+  - ✅ `"mainSrv": BinarySensorDeviceClass.CONNECTIVITY` (network connectivity)
+  - ✅ `"wifi": BinarySensorDeviceClass.CONNECTIVITY` (network connectivity)
+  - ✅ `"lan": BinarySensorDeviceClass.CONNECTIVITY` (network connectivity)
+  - ✅ `"pumpCOWorks": BinarySensorDeviceClass.RUNNING` (pump operation status)
+  - ✅ `"fanWorks": BinarySensorDeviceClass.RUNNING` (fan operation status)
+- **When adding new binary sensors**:
+  - If it's a network/connectivity sensor → use `CONNECTIVITY`
+  - If it's an operational status sensor → use `RUNNING` (or omit from map for default)
+  - Only add to `ENTITY_BINARY_DEVICE_CLASS_MAP` if it's NOT the default `RUNNING`
+
+## Constants and Translations Validation Logic
+
+### **Step-by-Step Validation Process**
+
+#### **1. Constants File Analysis (`const.py`)**
+**Check all mapping dictionaries for completeness:**
+- `SENSOR_MAP_KEY` - All sensor entities defined
+- `BINARY_SENSOR_MAP_KEY` - All binary sensor entities defined
+- `ENTITY_UNIT_MAP` - Units for all sensors
+- `ENTITY_SENSOR_DEVICE_CLASS_MAP` - Device classes for sensors
+- `ENTITY_BINARY_DEVICE_CLASS_MAP` - Device classes for binary sensors
+- `ENTITY_ICON` - Icons for all entities
+- `ENTITY_ICON_OFF` - Off-state icons for binary sensors
+- `ENTITY_PRECISION` - Precision settings for numeric sensors
+- `STATE_CLASS_MAP` - State classes for sensors
+- `ENTITY_CATEGORY` - Entity categories (diagnostic, etc.)
+
+**Validation Rules:**
+- Every entity in `SENSOR_MAP_KEY` should have corresponding entries in other maps
+- Every entity in `BINARY_SENSOR_MAP_KEY` should have corresponding entries in other maps
+- Check for missing icons, units, device classes, precision settings
+- Verify no duplicate keys across all mappings
+
+#### **2. Translation Files Cross-Reference**
+**Check all three translation files for consistency:**
+- `custom_components/econet300/strings.json` (base English strings)
+- `custom_components/econet300/translations/en.json` (English translations)
+- `custom_components/econet300/translations/pl.json` (Polish translations)
+
+**Validation Process:**
+1. **Extract all entity keys** from `SENSOR_MAP_KEY` and `BINARY_SENSOR_MAP_KEY`
+2. **Convert to snake_case** using `camel_to_snake` function
+3. **Check each translation file** for corresponding keys
+4. **Verify naming consistency** across all three files
+5. **Check for missing translations** in any file
+
+#### **3. Translation Key Validation**
+**Naming Convention Check:**
+- ✅ Valid: `[a-z0-9-_]+` pattern
+- ❌ Invalid: Uppercase letters, hyphens at start/end, underscores at start/end
+- **Examples:**
+  - ✅ `ecoster_contacts1` (valid)
+  - ❌ `ecoSter_contacts1` (invalid - uppercase 'S')
+  - ❌ `ecoster-contacts1` (invalid - hyphen)
+  - ❌ `_ecoster_contacts1` (invalid - starts with underscore)
+
+#### **4. Completeness Validation**
+**Check for missing entries:**
+- **Missing translations**: Entity exists in constants but not in translation files
+- **Missing constants**: Translation exists but no corresponding entity in constants
+- **Missing icons**: Entity exists but no icon defined
+- **Missing device classes**: Entity exists but no device class defined
+- **Missing units**: Sensor exists but no unit defined
+- **Missing precision**: Numeric sensor exists but no precision defined
+
+#### **5. Language-Specific Validation**
+**Polish Translation Specific Checks:**
+- **Configuration errors**: Check username/password fields are correct
+- **English text in Polish**: Look for English text that should be translated
+- **Missing module translations**: Check for missing module version translations
+- **Device-specific translations**: Check for missing ecoMAX360i, ecoMAX850R2-X translations
+
+### **Automated Validation Commands**
+```bash
+# Check for duplicate keys in constants
+grep -r "ENTITY_KEY" custom_components/econet300/const.py | sort | uniq -d
+
+# Check for missing translation keys
+grep -r "entity.*sensor" custom_components/econet300/strings.json | wc -l
+grep -r "entity.*sensor" custom_components/econet300/translations/en.json | wc -l
+grep -r "entity.*sensor" custom_components/econet300/translations/pl.json | wc -l
+
+# Check for invalid translation key patterns
+grep -r "[A-Z]" custom_components/econet300/strings.json
+grep -r "[A-Z]" custom_components/econet300/translations/en.json
+grep -r "[A-Z]" custom_components/econet300/translations/pl.json
+```
+
+### **Common Issues Found**
+1. **Missing ecoSTER setpoint translations** (`ecoster_set_temp1-8`)
+2. **Polish username/password swap** in configuration
+3. **Missing module version translations** in Polish file
+4. **English text in Polish translations** (weather_control, unseal, etc.)
+5. **Missing icons for new entities** (ecoMAX360i, ecoMAX850R2-X)
+6. **Missing binary sensor device classes** for new sensors
+7. **Missing off-state icons** for binary sensors
+8. **Duplicate keys** in constants or translations
+9. **Invalid translation key patterns** (uppercase letters)
+
+### **Validation Checklist**
+- [ ] All entities in constants have corresponding translations
+- [ ] All translation keys follow `[a-z0-9-_]+` pattern
+- [ ] All entities have appropriate icons defined
+- [ ] All binary sensors have device classes (or use default RUNNING)
+- [ ] All sensors have appropriate units defined
+- [ ] All numeric sensors have precision settings
+- [ ] All binary sensors have off-state icons where appropriate
+- [ ] No duplicate keys in any mapping dictionaries
+- [ ] Polish translations are actually in Polish (not English)
+- [ ] Configuration fields are correctly translated
+- [ ] Module version translations exist in all files
+
+## Updated Commit Workflow
+
+### **Pre-Commit Validation Steps**
+**Before committing any changes, run this validation checklist:**
+
+#### **1. Constants Validation**
+```bash
+# Check for missing icons
+grep -r "ENTITY_ICON" custom_components/econet300/const.py
+# Check for missing device classes
+grep -r "ENTITY_BINARY_DEVICE_CLASS_MAP" custom_components/econet300/const.py
+# Check for missing units
+grep -r "ENTITY_UNIT_MAP" custom_components/econet300/const.py
+```
+
+#### **2. Translation Validation**
+```bash
+# Check all three translation files have same number of entities
+echo "Strings.json entities:" && grep -c "entity.*sensor\|entity.*binary_sensor" custom_components/econet300/strings.json
+echo "EN.json entities:" && grep -c "entity.*sensor\|entity.*binary_sensor" custom_components/econet300/translations/en.json
+echo "PL.json entities:" && grep -c "entity.*sensor\|entity.*binary_sensor" custom_components/econet300/translations/pl.json
+
+# Check for invalid translation keys (uppercase letters)
+echo "Invalid keys in strings.json:" && grep -r "[A-Z]" custom_components/econet300/strings.json | grep "entity"
+echo "Invalid keys in en.json:" && grep -r "[A-Z]" custom_components/econet300/translations/en.json | grep "entity"
+echo "Invalid keys in pl.json:" && grep -r "[A-Z]" custom_components/econet300/translations/pl.json | grep "entity"
+```
+
+#### **3. Polish Translation Specific Checks**
+```bash
+# Check for English text in Polish translations
+grep -r "Weather control\|Unseal\|Pump CO\|Fan\|Boiler pump" custom_components/econet300/translations/pl.json
+
+# Check for username/password swap
+grep -A 3 -B 3 "username\|password" custom_components/econet300/translations/pl.json
+```
+
+### **Commit Workflow Steps**
+1. **Make changes** to constants, translations, or code
+2. **Run validation checklist** above
+3. **Fix any issues** found during validation
+4. **Test in Home Assistant** (restart integration)
+5. **Commit with descriptive message**:
+   ```bash
+   git add .
+   git commit --no-verify -m "feat/fix: [Category] Description
+
+   - [ ] Added missing translations for [entity]
+   - [ ] Fixed Polish translation for [entity]
+   - [ ] Added missing icons for [entity]
+   - [ ] Added missing device classes for [entity]
+   - [ ] Fixed translation key naming (camel_to_snake)
+   - [ ] Added missing units for [sensor]
+   - [ ] Added missing precision for [numeric_sensor]
+   - [ ] Added missing off-state icons for [binary_sensor]
+   - [ ] Fixed duplicate keys in [file]
+   - [ ] Added missing module version translations
+   - [ ] Fixed configuration translation errors"
+   ```
+6. **Push to repository**:
+   ```bash
+   git push origin [branch_name]
+   ```
+
+### **Post-Commit Verification**
+- **Check Home Assistant logs** for any translation errors
+- **Verify entities appear** with correct names in UI
+- **Test entity functionality** (sensors, binary sensors, etc.)
+- **Check device tree** for proper organization
+- **Verify translations** in different languages
+
+### **Common Commit Categories**
+- `feat:` - New features, entities, or functionality
+- `fix:` - Bug fixes, translation fixes, missing entries
+- `refactor:` - Code improvements, reorganization
+- `docs:` - Documentation updates
+- `test:` - Test fixture updates or additions

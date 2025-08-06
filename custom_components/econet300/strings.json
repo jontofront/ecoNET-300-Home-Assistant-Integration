@@ -44,9 +44,6 @@
       "pump_cwu_works": {
         "name": "Pump CWU"
       },
-      "pump_fireplace_works": {
-        "name": "Boiler pump"
-      },
       "mixer_pump1": {
         "name": "Mixer 1 pump"
       },
@@ -91,6 +88,69 @@
       },
       "status_cwu": {
         "name": "Hot water status"
+      },
+      "contact_gzc": {
+        "name": "GZC contact"
+      },
+      "contact_gzc_active": {
+        "name": "GZC contact active"
+      },
+      "pump_circulation_works": {
+        "name": "Circulation pump working"
+      },
+      "pump_solar_works": {
+        "name": "Solar pump working"
+      },
+      "pump_fireplace_works": {
+        "name": "Fireplace pump working"
+      },
+      "ecoster_contacts1": {
+        "name": "Room thermostat 1 contacts"
+      },
+      "ecoster_contacts2": {
+        "name": "Room thermostat 2 contacts"
+      },
+      "ecoster_contacts3": {
+        "name": "Room thermostat 3 contacts"
+      },
+      "ecoster_contacts4": {
+        "name": "Room thermostat 4 contacts"
+      },
+      "ecoster_contacts5": {
+        "name": "Room thermostat 5 contacts"
+      },
+      "ecoster_contacts6": {
+        "name": "Room thermostat 6 contacts"
+      },
+      "ecoster_contacts7": {
+        "name": "Room thermostat 7 contacts"
+      },
+      "ecoster_contacts8": {
+        "name": "Room thermostat 8 contacts"
+      },
+      "ecoster_day_sched1": {
+        "name": "Room thermostat 1 day schedule"
+      },
+      "ecoster_day_sched2": {
+        "name": "Room thermostat 2 day schedule"
+      },
+      "ecoster_day_sched3": {
+        "name": "Room thermostat 3 day schedule"
+      },
+      "ecoster_day_sched4": {
+        "name": "Room thermostat 4 day schedule"
+      },
+      "ecoster_day_sched5": {
+        "name": "Room thermostat 5 day schedule"
+      },
+      "ecoster_day_sched6": {
+        "name": "Room thermostat 6 day schedule"
+      },
+      "ecoster_day_sched7": {
+        "name": "Room thermostat 7 day schedule"
+      },
+      "ecoster_day_sched8": {
+        "name": "Room thermostat 8 day schedule"
       }
     },
     "sensor": {
@@ -123,6 +183,9 @@
       },
       "lambda_level": {
         "name": "Lambda level"
+      },
+      "status_co": {
+        "name": "Central heating status"
       },
       "work_at100": {
         "name": "Work at 100%"
@@ -159,6 +222,9 @@
       },
       "module_panel_soft_ver": {
         "name": "Module Panel version"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Module ecoSTER version"
       },
       "mode": {
         "name": "Boiler mode",
@@ -302,6 +368,90 @@
       },
       "heating_work_state_pump4": {
         "name": "Heating work state pump 4"
+      },
+      "fuel_consum": {
+        "name": "Fuel consumption"
+      },
+      "fuel_stream": {
+        "name": "Fuel stream"
+      },
+      "temp_back": {
+        "name": "Return temperature"
+      },
+      "transmission": {
+        "name": "Transmission"
+      },
+      "ecoster_temp1": {
+        "name": "Room temperature 1"
+      },
+      "ecoster_temp2": {
+        "name": "Room temperature 2"
+      },
+      "ecoster_temp3": {
+        "name": "Room temperature 3"
+      },
+      "ecoster_temp4": {
+        "name": "Room temperature 4"
+      },
+      "ecoster_temp5": {
+        "name": "Room temperature 5"
+      },
+      "ecoster_temp6": {
+        "name": "Room temperature 6"
+      },
+      "ecoster_temp7": {
+        "name": "Room temperature 7"
+      },
+      "ecoster_temp8": {
+        "name": "Room temperature 8"
+      },
+      "ecoster_mode1": {
+        "name": "Room thermostat 1 mode"
+      },
+      "ecoster_mode2": {
+        "name": "Room thermostat 2 mode"
+      },
+      "ecoster_mode3": {
+        "name": "Room thermostat 3 mode"
+      },
+      "ecoster_mode4": {
+        "name": "Room thermostat 4 mode"
+      },
+      "ecoster_mode5": {
+        "name": "Room thermostat 5 mode"
+      },
+      "ecoster_mode6": {
+        "name": "Room thermostat 6 mode"
+      },
+      "ecoster_mode7": {
+        "name": "Room thermostat 7 mode"
+      },
+      "ecoster_mode8": {
+        "name": "Room thermostat 8 mode"
+      },
+      "ecoster_set_temp1": {
+        "name": "Room thermostat 1 setpoint"
+      },
+      "ecoster_set_temp2": {
+        "name": "Room thermostat 2 setpoint"
+      },
+      "ecoster_set_temp3": {
+        "name": "Room thermostat 3 setpoint"
+      },
+      "ecoster_set_temp4": {
+        "name": "Room thermostat 4 setpoint"
+      },
+      "ecoster_set_temp5": {
+        "name": "Room thermostat 5 setpoint"
+      },
+      "ecoster_set_temp6": {
+        "name": "Room thermostat 6 setpoint"
+      },
+      "ecoster_set_temp7": {
+        "name": "Room thermostat 7 setpoint"
+      },
+      "ecoster_set_temp8": {
+        "name": "Room thermostat 8 setpoint"
       }
     }
   }
