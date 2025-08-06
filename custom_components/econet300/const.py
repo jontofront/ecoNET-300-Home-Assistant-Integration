@@ -109,7 +109,7 @@ SENSOR_MAP_KEY = {
         "heating_work_state_pump4",
     },
     # ecoSTER thermostat sensors if moduleEcoSTERSoftVer is not None
-    "ecoSTER": {
+    "ecoSter": {
         # ecoSTER temperature sensors
         "ecoSterTemp1",
         "ecoSterTemp2",
@@ -197,10 +197,9 @@ BINARY_SENSOR_MAP_KEY = {
         "contactGZCActive",
         "pumpCirculationWorks",
         "pumpSolarWorks",
-        "pumpFireplaceWorks",
     },
     # ecoSTER thermostat binary sensors if moduleEcoSTERSoftVer is not None
-    "ecoSTER": {
+    "ecoSter": {
         # ecoSTER contact sensors
         "ecoSterContacts1",
         "ecoSterContacts2",

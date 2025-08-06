@@ -24,7 +24,7 @@ from .const import (
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
-from .entity import EconetEntity, MixerEntity, EcoSTEREntity
+from .entity import EconetEntity, EcoSterEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -124,8 +124,8 @@ class MixerBinarySensor(MixerEntity, BinarySensorEntity):
         )
 
 
-class EcoSTERBinarySensor(EcoSTEREntity, BinarySensorEntity):
-    """EcoSTER Binary Sensor."""
+class EcoSterBinarySensor(EcoSterEntity, BinarySensorEntity):
+    """EcoSter Binary Sensor."""
 
     entity_description: EconetBinarySensorEntityDescription
 
@@ -136,7 +136,7 @@ class EcoSTERBinarySensor(EcoSTEREntity, BinarySensorEntity):
         api: Econet300Api,
         idx: int,
     ):
-        """Initialize the EcoSTER binary sensor."""
+        """Initialize the EcoSter binary sensor."""
         self.entity_description = entity_description
         self.api = api
         self._idx = idx
@@ -144,7 +144,7 @@ class EcoSTERBinarySensor(EcoSTEREntity, BinarySensorEntity):
 
     def _sync_state(self, value: bool):
         """Sync state."""
-        _LOGGER.debug("EcoSTER binary sensor sync state: %s", value)
+        _LOGGER.debug("EcoSter binary sensor sync state: %s", value)
         self._attr_is_on = value
         self.async_write_ha_state()
 
@@ -180,9 +180,12 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     binary_sensor_keys = BINARY_SENSOR_MAP_KEY["_default"].copy()
 
     # Always filter out ecoSTER binary sensors from controller binary sensors since they are created as separate devices
-    ecoSTER_binary_sensors = BINARY_SENSOR_MAP_KEY.get("ecoSTER", set())
+    ecoSTER_binary_sensors = BINARY_SENSOR_MAP_KEY.get("ecoSter", set())
     binary_sensor_keys = binary_sensor_keys - ecoSTER_binary_sensors
-    _LOGGER.info("Filtered out ecoSTER binary sensors from controller binary sensors: %s", ecoSTER_binary_sensors)
+    _LOGGER.info(
+        "Filtered out ecoSTER binary sensors from controller binary sensors: %s",
+        ecoSTER_binary_sensors,
+    )
 
     for data_key in binary_sensor_keys:
         _LOGGER.debug(
@@ -245,14 +248,18 @@ def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet3
     return entities
 
 
-def create_ecoster_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+def create_ecoster_binary_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+):
     """Create ecoSTER binary sensor entities."""
-    entities: list[EcoSTERBinarySensor] = []
+    entities: list[EcoSterBinarySensor] = []
     sys_params = coordinator.data.get("sysParams", {})
 
     # Check if moduleEcoSTERSoftVer is None
     if sys_params.get("moduleEcoSTERSoftVer") is None:
-        _LOGGER.info("moduleEcoSTERSoftVer is None, no ecoSTER binary sensors will be created")
+        _LOGGER.info(
+            "moduleEcoSTERSoftVer is None, no ecoSTER binary sensors will be created"
+        )
         return entities
 
     coordinator_data = coordinator.data.get("regParams", {})
@@ -261,9 +268,12 @@ def create_ecoster_binary_sensors(coordinator: EconetDataCoordinator, api: Econe
     for thermostat_idx in range(1, 9):  # 1-8
         # Create contacts sensor
         contacts_key = f"ecoSterContacts{thermostat_idx}"
-        if contacts_key in coordinator_data and coordinator_data.get(contacts_key) is not None:
+        if (
+            contacts_key in coordinator_data
+            and coordinator_data.get(contacts_key) is not None
+        ):
             entities.append(
-                EcoSTERBinarySensor(
+                EcoSterBinarySensor(
                     create_binary_entity_description(contacts_key),
                     coordinator,
                     api,
@@ -274,9 +284,12 @@ def create_ecoster_binary_sensors(coordinator: EconetDataCoordinator, api: Econe
 
         # Create day schedule sensor
         day_sched_key = f"ecoSterDaySched{thermostat_idx}"
-        if day_sched_key in coordinator_data and coordinator_data.get(day_sched_key) is not None:
+        if (
+            day_sched_key in coordinator_data
+            and coordinator_data.get(day_sched_key) is not None
+        ):
             entities.append(
-                EcoSTERBinarySensor(
+                EcoSterBinarySensor(
                     create_binary_entity_description(day_sched_key),
                     coordinator,
                     api,
@@ -298,7 +311,7 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities: list[EconetBinarySensor | MixerBinarySensor | EcoSTERBinarySensor] = []
+    entities: list[EconetBinarySensor | MixerBinarySensor | EcoSterBinarySensor] = []
     entities.extend(create_binary_sensors(coordinator, api))
     entities.extend(create_mixer_binary_sensors(coordinator, api))
     entities.extend(create_ecoster_binary_sensors(coordinator, api))

@@ -10,11 +10,11 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .const import (
     DEVICE_INFO_CONTROLLER_NAME,
+    DEVICE_INFO_ECOSTER_NAME,
     DEVICE_INFO_LAMBDA_NAME,
     DEVICE_INFO_MANUFACTURER,
     DEVICE_INFO_MIXER_NAME,
     DEVICE_INFO_MODEL,
-    DEVICE_INFO_ECOSTER_NAME,
     DOMAIN,
 )
 
@@ -211,8 +211,8 @@ class LambdaEntity(EconetEntity):
         )
 
 
-class EcoSTEREntity(EconetEntity):
-    """Represents EcoSTEREntity."""
+class EcoSterEntity(EconetEntity):
+    """Represents EcoSterEntity."""
 
     def __init__(
         self,
@@ -221,7 +221,7 @@ class EcoSTEREntity(EconetEntity):
         api: Econet300Api,
         idx: int,
     ):
-        """Initialize the EcoSTEREntity."""
+        """Initialize the EcoSterEntity."""
         self.entity_description = description
         self.api = api
         self._idx = idx

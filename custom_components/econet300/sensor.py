@@ -30,7 +30,7 @@ from .const import (
     SERVICE_COORDINATOR,
     STATE_CLASS_MAP,
 )
-from .entity import EconetEntity, LambdaEntity, MixerEntity, EcoSTEREntity
+from .entity import EconetEntity, EcoSterEntity, LambdaEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -108,8 +108,8 @@ class LambdaSensors(LambdaEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-class EcoSTERSensor(EcoSTEREntity, SensorEntity):
-    """EcoSTER sensor class."""
+class EcoSterSensor(EcoSterEntity, SensorEntity):
+    """EcoSter sensor class."""
 
     entity_description: EconetSensorEntityDescription
 
@@ -120,7 +120,7 @@ class EcoSTERSensor(EcoSTEREntity, SensorEntity):
         api: Econet300Api,
         idx: int,
     ):
-        """Initialize the EcoSTER sensor."""
+        """Initialize the EcoSter sensor."""
         self.entity_description = description
         self.api = api
         self._idx = idx
@@ -128,7 +128,7 @@ class EcoSTERSensor(EcoSTEREntity, SensorEntity):
 
     def _sync_state(self, value) -> None:
         """Sync state."""
-        _LOGGER.debug("EcoSTER sensor sync state: %s", value)
+        _LOGGER.debug("EcoSter sensor sync state: %s", value)
         self._attr_native_value = self.entity_description.process_val(value)
         self.async_write_ha_state()
 
@@ -173,9 +173,11 @@ def create_controller_sensors(
     )
 
     # Always filter out ecoSTER sensors from controller sensors since they are created as separate devices
-    ecoSTER_sensors = SENSOR_MAP_KEY.get("ecoSTER", set())
+    ecoSTER_sensors = SENSOR_MAP_KEY.get("ecoSter", set())
     sensor_keys = sensor_keys - ecoSTER_sensors
-    _LOGGER.info("Filtered out ecoSTER sensors from controller sensors: %s", ecoSTER_sensors)
+    _LOGGER.info(
+        "Filtered out ecoSTER sensors from controller sensors: %s", ecoSTER_sensors
+    )
 
     # Iterate through the selected keys and create sensors if valid data is found
     for data_key in sensor_keys:
@@ -344,7 +346,7 @@ def create_ecoster_sensor_entity_description(key: str) -> EconetSensorEntityDesc
 
 def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
     """Create ecoSTER sensor entities."""
-    entities: list[EcoSTERSensor] = []
+    entities: list[EcoSterSensor] = []
     sys_params = coordinator.data.get("sysParams", {})
 
     # Check if moduleEcoSTERSoftVer is None
@@ -360,7 +362,7 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         temp_key = f"ecoSterTemp{thermostat_idx}"
         if temp_key in coordinator_data and coordinator_data.get(temp_key) is not None:
             entities.append(
-                EcoSTERSensor(
+                EcoSterSensor(
                     create_ecoster_sensor_entity_description(temp_key),
                     coordinator,
                     api,
@@ -371,9 +373,12 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
 
         # Create setpoint sensor
         set_temp_key = f"ecoSterSetTemp{thermostat_idx}"
-        if set_temp_key in coordinator_data and coordinator_data.get(set_temp_key) is not None:
+        if (
+            set_temp_key in coordinator_data
+            and coordinator_data.get(set_temp_key) is not None
+        ):
             entities.append(
-                EcoSTERSensor(
+                EcoSterSensor(
                     create_ecoster_sensor_entity_description(set_temp_key),
                     coordinator,
                     api,
@@ -386,7 +391,7 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         mode_key = f"ecoSterMode{thermostat_idx}"
         if mode_key in coordinator_data and coordinator_data.get(mode_key) is not None:
             entities.append(
-                EcoSTERSensor(
+                EcoSterSensor(
                     create_ecoster_sensor_entity_description(mode_key),
                     coordinator,
                     api,
