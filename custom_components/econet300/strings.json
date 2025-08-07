@@ -452,6 +452,48 @@
       },
       "ecoster_set_temp8": {
         "name": "Room thermostat 8 setpoint"
+      },
+      "t1": {
+        "name": "Collector Temperature"
+      },
+      "t2": {
+        "name": "Tank Temperature"
+      },
+      "t3": {
+        "name": "Tank Temperature"
+      },
+      "t4": {
+        "name": "Return Temperature"
+      },
+      "t5": {
+        "name": "Return Temperature"
+      },
+      "t6": {
+        "name": "Temperature Sensor"
+      },
+      "tzcwu": {
+        "name": "Hot Water Temperature"
+      },
+      "p1": {
+        "name": "Pump 1 Status"
+      },
+      "p2": {
+        "name": "Pump 2 Status"
+      },
+      "h": {
+        "name": "Output Status"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Total Heat Output"
+      },
+      "kolektor_a_1": {
+        "name": "Collector A1"
+      },
+      "kolektor_a_2": {
+        "name": "Collector A2"
+      },
+      "kolektor_a_3": {
+        "name": "Collector A3"
       }
     }
   }

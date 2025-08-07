@@ -426,6 +426,48 @@
       },
       "heating_work_state_pump4": {
         "name": "Stan pracy pompy ogrzewania 4"
+      },
+      "t1": {
+        "name": "Temperatura kolektora"
+      },
+      "t2": {
+        "name": "Temperatura zbiornika"
+      },
+      "t3": {
+        "name": "Temperatura zbiornika"
+      },
+      "t4": {
+        "name": "Temperatura powrotu"
+      },
+      "t5": {
+        "name": "Temperatura powrotu"
+      },
+      "t6": {
+        "name": "Czujnik temperatury"
+      },
+      "tzcwu": {
+        "name": "Temperatura CWU"
+      },
+      "p1": {
+        "name": "Status pompy 1"
+      },
+      "p2": {
+        "name": "Status pompy 2"
+      },
+      "h": {
+        "name": "Status wyjścia"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Całkowity uzysk ciepła"
+      },
+      "kolektor_a_1": {
+        "name": "Kolektor A1"
+      },
+      "kolektor_a_2": {
+        "name": "Kolektor A2"
+      },
+      "kolektor_a_3": {
+        "name": "Kolektor A3"
       }
     }
   }
