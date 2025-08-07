@@ -150,7 +150,7 @@ SENSOR_MAP_KEY = {
         "T2",  # Tank temperature
         "T3",  # Tank temperature
         "T4",  # Return temperature
-        "T5",  # Return temperature
+        "T5",  # Collector temperature - power measurement
         "T6",  # Temperature sensor
         "TzCWU",  # Hot water temperature
         # Pump status sensors
@@ -160,7 +160,6 @@ SENSOR_MAP_KEY = {
         "H",  # Output status
         # Heat output
         "Uzysk_ca_kowity",  # Total heat output
-
     },
     "_default": {
         "boilerPower",
@@ -345,7 +344,6 @@ ENTITY_UNIT_MAP = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": PERCENTAGE,
-
 }
 
 # By default all sensors state_class are MEASUREMENT

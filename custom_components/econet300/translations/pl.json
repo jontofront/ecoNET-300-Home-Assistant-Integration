@@ -440,7 +440,7 @@
         "name": "Temperatura powrotu"
       },
       "t5": {
-        "name": "Temperatura powrotu"
+        "name": "Temperatura kolektora - pomiar mocy"
       },
       "t6": {
         "name": "Czujnik temperatury"
@@ -459,15 +459,6 @@
       },
       "uzysk_ca_kowity": {
         "name": "Całkowity uzysk ciepła"
-      },
-      "kolektor_a_1": {
-        "name": "Kolektor A1"
-      },
-      "kolektor_a_2": {
-        "name": "Kolektor A2"
-      },
-      "kolektor_a_3": {
-        "name": "Kolektor A3"
       }
     }
   }
