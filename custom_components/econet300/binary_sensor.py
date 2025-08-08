@@ -17,6 +17,7 @@ from .const import (
     BINARY_SENSOR_MAP_KEY,
     DOMAIN,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
+    ENTITY_CATEGORY,
     ENTITY_ICON,
     ENTITY_ICON_OFF,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
@@ -163,6 +164,7 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
         key=key,
         translation_key=camel_to_snake(key),
         device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
+        entity_category=ENTITY_CATEGORY.get(key, None),
         icon=ENTITY_ICON.get(key, None),
         icon_off=ENTITY_ICON_OFF.get(key, None),
     )
