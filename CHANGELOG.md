@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.1.7] - 2025-08-08
+### Fixed
+- **Entity Category Mapping**: Fixed binary sensor entity categories for better UI organization
+  - **Problem**: Diagnostic entities like 'lan', 'wifi', 'mainSrv' were showing in Sensors section instead of Diagnostics
+  - **Solution**: Added explicit entity_category property to EconetBinarySensor class and proper type annotations
+  - **Impact**: Diagnostic entities now appear in the correct Diagnostics section in Home Assistant UI
+  - **Files Modified**: `custom_components/econet300/binary_sensor.py`
+  - **Technical Details**: Added EntityCategory import and explicit entity_category property with proper type annotations
+
+### Technical Changes
+- **Type Annotations**: Fixed mypy type checking errors for _attr_is_on property
+- **Entity Category Property**: Added explicit entity_category property to ensure proper category inheritance
+- **Code Quality**: All pre-commit checks pass including mypy static type checking
+
 ## [v1.1.6] - 2025-08-08
 ### Added
 - **ecoSOL500 Solar Collector Support**: Added comprehensive support for ecoSOL500 solar collector controller
