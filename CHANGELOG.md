@@ -1,6 +1,38 @@
 # Changelog
 
-## [v1.1.5] - 2025-01-XX
+## [v1.1.6] - 2025-08-08
+### Added
+- **ecoSOL500 Solar Collector Support**: Added comprehensive support for ecoSOL500 solar collector controller
+  - **New Device Type**: Full integration with ecoSOL500 solar collector capabilities
+  - **Temperature Sensors**: Added support for T1-T6 temperature sensors (collector, tank, return temperatures)
+  - **Hot Water Temperature**: Added TzCWU sensor for hot water temperature monitoring
+  - **Pump Status Sensors**: Added P1 and P2 pump status sensors
+  - **Output Status**: Added H output status sensor
+  - **Heat Output**: Added Uzysk_ca_kowity (total heat output) sensor with percentage unit
+  - **Test Fixtures**: Added complete test fixtures for ecoSOL500 validation
+  - **Translation Support**: Added proper translations for all ecoSOL500 sensors
+
+### Fixed
+- **Entity Category Mapping**: Fixed binary sensor entity categories for better UI organization
+  - **Problem**: Diagnostic entities like 'lan', 'wifi', 'mainSrv' were showing in Sensors section instead of Diagnostics
+  - **Solution**: Added proper entity_category mapping in binary sensor creation
+  - **Impact**: Diagnostic entities now appear in the correct Diagnostics section in Home Assistant UI
+  - **Files Modified**: `custom_components/econet300/binary_sensor.py`
+
+### Changed
+- **Code Quality Tools**: Enhanced development workflow with professional code quality tools
+  - **Pre-commit Hooks**: Added comprehensive pre-commit configuration with debug statement prevention and docstring checks
+  - **Type Checking**: Added mypy static type checking with proper dependencies
+  - **Security Analysis**: Added CodeQL security analysis workflow for automated vulnerability detection
+  - **Files Modified**: `.pre-commit-config.yaml`, `.github/workflows/codeql.yml`
+
+### Technical Changes
+- **Constants Organization**: Added ecoSOL500-specific sensor mappings, device classes, units, and icons
+- **Entity Creation Logic**: Improved entity category handling for better UI organization
+- **Development Standards**: Enhanced code quality with automated linting, formatting, and security checks
+- **Documentation**: Updated development workflow with professional standards
+
+## [v1.1.5] - 2025-08-06
 ### Added
 - **ecoMAX850R2-X Support**: Added comprehensive support for the new ecoMAX850R2-X boiler controller
   - **New Device Type**: Full integration with ecoMAX850R2-X controller capabilities
