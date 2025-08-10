@@ -11,6 +11,8 @@ repos:
       - id: check-case-conflict
       - id: check-json
       - id: check-toml
+      - id: debug-statements  # Prevents debug statements in production code
+      - id: check-docstring-first  # Ensures docstrings are at the beginning of functions
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.1.11
@@ -18,3 +20,10 @@ repos:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --preview]
       - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests, types-PyYAML]
+        args: [--ignore-missing-imports]
