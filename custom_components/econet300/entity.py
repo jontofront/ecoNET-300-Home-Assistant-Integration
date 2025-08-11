@@ -64,6 +64,11 @@ class EconetEntity(CoordinatorEntity):
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
 
+        # Safety check: ensure params_edits is always a dict
+        if params_edits is None:
+            params_edits = {}
+            _LOGGER.warning("paramsEdits was None, defaulting to empty dict")
+
         _LOGGER.debug(
             "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s",
             self.entity_description.key,
@@ -109,6 +114,11 @@ class EconetEntity(CoordinatorEntity):
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
+
+        # Safety check: ensure params_edits is always a dict
+        if params_edits is None:
+            params_edits = {}
+            _LOGGER.warning("async_added_to_hass: paramsEdits was None, defaulting to empty dict")
         _LOGGER.debug("async_sysParams: %s", sys_params)
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)

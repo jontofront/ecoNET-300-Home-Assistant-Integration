@@ -20,9 +20,23 @@ _LOGGER = logging.getLogger(__name__)
 def skip_params_edits(sys_params: dict[str, Any]) -> bool:
     """Determine whether paramsEdits should be skipped based on controllerID."""
     controller_id = sys_params.get("controllerID")
-    if controller_id == "ecoMAX360i":
-        _LOGGER.info("Skipping paramsEdits due to controllerID: %s", controller_id)
+
+    # Controllers that don't support rmCurrentDataParamsEdits endpoint
+    unsupported_controllers = {
+        "ecoMAX360i",      # Known to not support the endpoint
+        "ecoSOL 500",      # Solar collector - doesn't have this endpoint
+        "ecoSOL500",       # Alternative naming
+        "ecoSOL",          # Generic ecoSOL controllers
+        "ecoSter",         # ecoSter controllers
+        "SControl MK1",    # SControl controllers
+    }
+
+    if controller_id in unsupported_controllers:
+        _LOGGER.info("Skipping paramsEdits due to controllerID: %s (endpoint not supported)", controller_id)
         return True
+
+    # Log which controllers do support the endpoint
+    _LOGGER.debug("Controller %s supports paramsEdits endpoint", controller_id)
     return False
 
 

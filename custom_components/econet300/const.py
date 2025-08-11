@@ -143,8 +143,8 @@ SENSOR_MAP_KEY = {
         "lambdaSet",
         "lambdaLevel",
     },
-    # ecoSOL500 solar collector sensors
-    "ecoSOL500": {
+    # Controller ID = ecoSOL 500 solar collector sensors
+    "ecoSOL 500": {
         # Temperature sensors
         "T1",  # Collector temperature
         "T2",  # Tank temperature
@@ -237,6 +237,7 @@ BINARY_SENSOR_MAP_KEY = {
         "ecoSterDaySched7",
         "ecoSterDaySched8",
     },
+
 }
 
 NUMBER_MAP = {
@@ -479,6 +480,7 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     # ecoMAX850R2-X specific binary sensors
     "contactGZC": BinarySensorDeviceClass.CONNECTIVITY,
     "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
+
 }
 
 """Add only keys where precision more than 0 needed"""
@@ -720,6 +722,7 @@ ENTITY_ICON_OFF = {
     "ecoSterDaySched6": "mdi:calendar-clock-off",
     "ecoSterDaySched7": "mdi:calendar-clock-off",
     "ecoSterDaySched8": "mdi:calendar-clock-off",
+
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128

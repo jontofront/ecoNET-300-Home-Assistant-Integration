@@ -312,6 +312,9 @@ def create_ecoster_binary_sensors(
     return entities
 
 
+
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -325,5 +328,6 @@ async def async_setup_entry(
     entities.extend(create_binary_sensors(coordinator, api))
     entities.extend(create_mixer_binary_sensors(coordinator, api))
     entities.extend(create_ecoster_binary_sensors(coordinator, api))
+
     async_add_entities(entities)
     return True
