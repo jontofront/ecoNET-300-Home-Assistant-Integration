@@ -2,27 +2,37 @@
 
 ## 📊 API Endpoint Overview
 
-**Last Updated:** 2025-07-18
+**Last Updated:** 2025-08-11
 **Device Tested:** ecoMAX810P-L TOUCH
-**Total Endpoints Discovered:** 48
-**All Endpoints Successful:** ✅ Yes
+**Total Endpoints Discovered:** 80+ (48 local + 30+ cloud-discovered)
+**All Local Endpoints Successful:** ✅ Yes
+**Cloud Analysis Completed:** ✅ Yes
 
 ## 🎉 Major Discovery Summary
 
-We have successfully discovered **48 API endpoints** on the ecoNET-300 device, with **100% success rate**! This represents a massive expansion from the original 4 known endpoints to a comprehensive API with extensive functionality.
+We have successfully discovered **80+ API endpoints** for the ecoNET-300 device through local testing and cloud analysis! This represents a massive expansion from the original 4 known endpoints to a comprehensive API with extensive functionality, including advanced ecoMAX features and remote menu capabilities.
 
 ### 📊 Discovery Statistics
-- **Total Data Retrieved:** 89.5 KB
-- **Average Response Time:** 0.130s
+- **Total Data Retrieved:** 89.5 KB (local) + Cloud analysis data
+- **Average Response Time:** 0.130s (local endpoints)
 - **Fastest Endpoint:** rmParamsUnits (0.039s)
 - **Largest Endpoint:** rmParamsDescs (29.1 KB)
 - **Most Complex:** rmCurrentDataParams (493 complexity score)
+- **Cloud-Discovered Endpoints:** 30+ new endpoints
+- **Total API Coverage:** 80+ endpoints across local and cloud APIs
 
 ---
 
 ## Overview
 
 This document provides comprehensive documentation of the ecoNET-300 API V1 endpoints discovered through local device testing and analysis. These endpoints can be used to interact with ecoNET-300 devices locally.
+
+### 📚 **Related Documentation**
+- **`ecoSOL_DISCOVERY_SUMMARY.md`** - Complete ecoSOL device analysis and features
+- **`ecoMAX360_DISCOVERY_SUMMARY.md`** - Complete ecoMAX device analysis and features  
+- **`NEW_API_ENDPOINTS_DISCOVERED.md`** - Detailed list of cloud-discovered endpoints
+- **`CLOUD_TRANSLATIONS.md`** - Multi-language translation system documentation
+- **`ecoMAX810P-L_PARAMETER_NAMES_ANALYSIS.md`** - Local test results and parameter analysis
 
 ## Base URL Structure
 
@@ -572,14 +582,261 @@ The device supports alarm monitoring with the following alarm codes:
 
 ---
 
-## 🚀 Next Steps for Home Assistant Integration
+## 🆕 Additional API Endpoints Discovered from Cloud Analysis
 
-1. **Implement Core Sensors** using rmCurrentDataParams
-2. **Add Parameter Monitoring** using rmParamsData + rmParamsNames
-3. **Create User-Friendly UI** using rmParamsDescs
-4. **Add Alarm Integration** using rmAlarms + rmAlarmsNames
-5. **Implement Status Monitoring** using rmStatus
-6. **Add Parameter Controls** using rmCurrentDataParamsEdits
-7. **Create Advanced Features** using remaining endpoints
+### 📋 **Overview**
+Through analysis of ecoNET24 cloud JavaScript files (`dev_set1.js` through `dev_set5.js`), we've discovered **30+ additional API endpoints** that extend the local API capabilities. These endpoints provide access to advanced features, remote menu functionality, and ecoMAX-specific capabilities.
 
-This discovery represents a **complete revolution** in ecoNET-300 integration capabilities, providing access to virtually every aspect of the boiler system through a comprehensive REST API.
+### 🔥 **ecoMAX-Specific Endpoints**
+
+#### Fuel Consumption & History
+- **`getFuelConsumption`** - Historical fuel usage data
+  - **URL:** `GET /econet/getFuelConsumption`
+  - **Parameters:** `uid`, `fromDate`, `toDate`
+  - **Description:** Retrieves historical fuel consumption data with configurable time ranges
+  - **Data:** Hourly/daily fuel usage, consumption charts, export capabilities
+  - **Priority:** **HIGH** - Essential for ecoMAX fuel monitoring
+
+- **`getHistoryParamsValues`** - Historical parameter values
+  - **URL:** `GET /econet/getHistoryParamsValues`
+  - **Parameters:** `uid`, `fromDate`, `toDate`
+  - **Description:** Retrieves historical values for any system parameter
+  - **Data:** Time-series data for temperature, power, fuel consumption
+  - **Priority:** **HIGH** - Historical data analysis
+
+#### Advanced Scheduling
+- **`getSchedule`** - Retrieve device schedules
+  - **URL:** `GET /econet/getSchedule`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Gets current scheduling configuration for thermostats and mixer circuits
+  - **Data:** 7-day schedules, time zones, temperature setpoints
+  - **Priority:** **MEDIUM** - Automation capabilities
+
+- **`saveSchedules`** - Save ecoMAX schedules
+  - **URL:** `GET /econet/saveSchedules`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Saves scheduling configuration for ecoMAX devices
+  - **Data:** Thermostat schedules, mixer circuit schedules, heating circuit schedules
+  - **Priority:** **MEDIUM** - Schedule management
+
+- **`saveVentSchedules`** - Save ventilation schedules
+  - **URL:** `GET /econet/saveVentSchedules`
+  - **Parameters:** `uid`, `data`, `param`, `value`
+  - **Description:** Manages ventilation system scheduling
+  - **Data:** Ventilation timing, airflow control, schedule optimization
+  - **Priority:** **LOW** - Specialized ventilation control
+
+### 🎛️ **Remote Menu (RM) API System**
+
+#### Core Remote Menu Endpoints
+- **`rmLangs`** - Available languages
+  - **URL:** `GET /econet/rmLangs`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Lists available languages for remote menu interface
+  - **Priority:** **MEDIUM** - Internationalization support
+
+- **`rmExistingLangs`** - Existing language list
+  - **URL:** `GET /econet/rmExistingLangs`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Lists languages already configured on the device
+  - **Priority:** **MEDIUM** - Language management
+
+- **`rmSaveLang`** - Save language preference
+  - **URL:** `GET /econet/rmSaveLang`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Saves user language preference for remote menu
+  - **Priority:** **MEDIUM** - User preferences
+
+#### Parameter Management
+- **`newParam`** - Save parameter value
+  - **URL:** `GET /econet/newParam`
+  - **Parameters:** `newParamName`, `newParamValue`, `uid` (optional)
+  - **Description:** Saves new parameter values to the system
+  - **Priority:** **HIGH** - Parameter control
+
+- **`rmNewParam`** - Save remote menu parameter
+  - **URL:** `GET /econet/rmNewParam`
+  - **Parameters:** `newParamIndex`, `newParamValue`, `uid` (optional)
+  - **Description:** Saves parameters specifically for remote menu functionality
+  - **Priority:** **MEDIUM** - Remote menu configuration
+
+- **`rmCurrNewParam`** - Save current remote menu parameter
+  - **URL:** `GET /econet/rmCurrNewParam`
+  - **Parameters:** `newParamKey`, `newParamValue`, `uid` (optional)
+  - **Description:** Updates current remote menu parameter values
+  - **Priority:** **MEDIUM** - Real-time parameter updates
+
+### 🔐 **Access Control & Security**
+
+#### Authentication & Passwords
+- **`password`** - Service password
+  - **URL:** `GET /econet/password`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Retrieves service access passwords
+  - **Priority:** **HIGH** - Security management
+
+- **`etpassword`** - ET service passwords
+  - **URL:** `GET /econet/etpassword`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Retrieves ET (ecoTRONIC) service passwords
+  - **Priority:** **MEDIUM** - Specialized access control
+
+- **`rmAccess`** - Remote menu access verification
+  - **URL:** `GET /econet/rmAccess`
+  - **Parameters:** `password`, `uid` (optional)
+  - **Description:** Verifies user access to remote menu functionality
+  - **Priority:** **HIGH** - Security validation
+
+### 🚀 **Software & System Management**
+
+#### Updates & Maintenance
+- **`checkSoftwareUpdate`** - Check for updates
+  - **URL:** `GET /econet/checkSoftwareUpdate`
+  - **Parameters:** `protocol`, `uid` (optional)
+  - **Description:** Checks for available software updates
+  - **Priority:** **MEDIUM** - System maintenance
+
+- **`updateSoftware`** - Install updates
+  - **URL:** `GET /econet/updateSoftware`
+  - **Parameters:** `uid` (optional)
+  - **Description:** Initiates software update installation
+  - **Priority:** **MEDIUM** - System updates
+
+#### Device Management
+- **`getDevices`** - Device listing
+  - **URL:** `GET /econet/getDevices`
+  - **Parameters:** `active`, `notactive`, `blocked`, `deviceType`, `uid`, `prodId`, `softVer`, `ver_mod_a`, `ver_panel`
+  - **Description:** Lists all devices with comprehensive filtering options
+  - **Priority:** **HIGH** - Device discovery and management
+
+- **`getDeviceParams`** - Device parameters
+  - **URL:** `GET /econet/getDeviceParams`
+  - **Parameters:** `uid`
+  - **Description:** Retrieves parameters for a specific device
+  - **Priority:** **HIGH** - Device-specific monitoring
+
+- **`getDeviceRegParams`** - Device regulator parameters
+  - **URL:** `GET /econet/getDeviceRegParams`
+  - **Parameters:** `uid`
+  - **Description:** Retrieves regulator-specific parameters for a device
+  - **Priority:** **MEDIUM** - Advanced device control
+
+### 🔧 **Service & Utility Endpoints**
+
+#### System Services
+- **`deleteDeviceAlarms`** - Clear device alarms
+  - **URL:** `POST /service/deleteDeviceAlarms`
+  - **Parameters:** `uid` (in POST data)
+  - **Headers:** `X-CSRFToken`
+  - **Description:** Clears all alarms for a specific device
+  - **Priority:** **MEDIUM** - Alarm management
+
+- **`getETtranslations`** - ET translations
+  - **URL:** `POST /service/getETtranslations/`
+  - **Parameters:** `ver`, `client`, `lang`, `regName`
+  - **Headers:** `Accept: json`, `Content-Type: application/x-www-form-urlencoded`
+  - **Description:** Retrieves ecoTRONIC translation data
+  - **Priority:** **LOW** - Internationalization support
+
+#### Additional Utilities
+- **`saveAlertDateUser`** - Save alert dates
+  - **URL:** `GET /econet/saveAlertDateUser`
+  - **Parameters:** `userDate`
+  - **Description:** Saves user-defined alert dates
+  - **Priority:** **LOW** - User customization
+
+- **`getAlertsDates`** - Get alert dates
+  - **URL:** `GET /econet/getAlertsDates`
+  - **Description:** Retrieves configured alert dates
+  - **Priority:** **LOW** - Alert management
+
+- **`deviceTypes`** - Available device types
+  - **URL:** `GET /econet/deviceTypes`
+  - **Description:** Lists all supported device types
+  - **Priority:** **MEDIUM** - Device discovery
+
+- **`uids`** - Available UIDs
+  - **URL:** `GET /econet/uids`
+  - **Description:** Lists all available device UIDs
+  - **Priority:** **MEDIUM** - Device identification
+
+### 🌟 **ecoMAX360-Specific Advanced Features**
+
+#### Enhanced Temperature Control
+- **Room Temperature Sensors**: Support for up to 8 room temperature sensors (`ecoSterTemp1` through `ecoSterTemp8`)
+- **Mixer Circuits**: Support for up to 8 mixer circuits (`mixerTemp1` through `mixerTemp8`)
+- **Advanced Scheduling**: 7-day scheduling with multiple time zones for thermostats and mixer circuits
+
+#### Lambda Sensor Monitoring
+- **Precision Handling**: Lambda sensor values are stored with 10x precision and divided by 10 for display
+- **Real-time Monitoring**: Continuous oxygen level monitoring for optimal combustion
+- **Setpoint Control**: Configurable lambda sensor setpoints for performance optimization
+
+#### Fuel Consumption Analytics
+- **Historical Data**: Hourly and daily fuel consumption tracking
+- **Chart Visualization**: Configurable time ranges with chart generation
+- **Performance Analysis**: Fuel efficiency monitoring and optimization
+
+---
+
+## 📊 **Updated API Statistics**
+
+### **Total Endpoints Available:**
+- **Local API Endpoints:** 48 (100% success rate)
+- **Cloud-Discovered Endpoints:** 30+
+- **Total Estimated Endpoints:** 80+
+
+### **New Integration Capabilities:**
+- **Fuel Consumption Monitoring** - Historical fuel usage analysis
+- **Advanced Scheduling** - 7-day temperature control automation
+- **Remote Menu System** - Complete parameter management interface
+- **Enhanced Security** - Multi-level access control
+- **Software Management** - Update checking and installation
+- **Device Discovery** - Comprehensive device listing and filtering
+
+### **ecoMAX360-Specific Enhancements:**
+- **8 Room Temperature Sensors** - Multi-zone temperature control
+- **8 Mixer Circuits** - Advanced heating circuit management
+- **Lambda Sensor Integration** - Combustion optimization
+- **Fuel Analytics** - Performance monitoring and optimization
+- **Advanced Scheduling** - Time-based automation for all circuits
+
+---
+
+## 🎯 **Enhanced Home Assistant Integration Recommendations**
+
+### 🚀 **NEW HIGH PRIORITY** - Implement First
+1. **`getFuelConsumption`** - Fuel monitoring for ecoMAX devices
+2. **`getHistoryParamsValues`** - Historical data analysis
+3. **`getSchedule` + `saveSchedules`** - Advanced scheduling automation
+4. **`getDevices`** - Device discovery and management
+5. **`rmAccess`** - Enhanced security integration
+
+### 🔧 **NEW MEDIUM PRIORITY** - Implement Second
+1. **Remote Menu System** - Complete parameter management
+2. **Lambda Sensor Monitoring** - Combustion optimization
+3. **Advanced Temperature Control** - Multi-zone management
+4. **Software Update Management** - System maintenance
+5. **Enhanced Device Control** - Parameter modification
+
+### ⚙️ **NEW LOW PRIORITY** - Advanced Features
+1. **Fuel Analytics Dashboard** - Performance monitoring
+2. **Multi-language Support** - Internationalization
+3. **Advanced Scheduling UI** - Time-based automation
+4. **System Health Monitoring** - Predictive maintenance
+5. **User Management** - Access control and permissions
+
+---
+
+## 🚀 **Next Steps for Enhanced Integration**
+
+1. **Implement Fuel Monitoring** using `getFuelConsumption` endpoint
+2. **Add Historical Data** using `getHistoryParamsValues` endpoint
+3. **Create Advanced Scheduling** using scheduling endpoints
+4. **Enhance Security** using access control endpoints
+5. **Add Device Management** using device discovery endpoints
+6. **Implement Remote Menu** using RM API system
+7. **Add Lambda Monitoring** for ecoMAX devices
+8. **Create Performance Analytics** using fuel consumption data
+
+This cloud analysis discovery represents a **massive expansion** of ecoNET-300 integration capabilities, providing access to advanced ecoMAX features, comprehensive remote menu functionality, and enhanced system management capabilities that were previously unavailable through the local API alone.

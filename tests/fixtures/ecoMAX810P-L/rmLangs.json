@@ -1,0 +1,82 @@
+{
+    "remoteMenuLangsVer": "20028",
+    "defaultLang": "default",
+    "data": [
+        {
+            "code": "pl",
+            "name": "Polski",
+            "version": "3EDBB76"
+        },
+        {
+            "default": true,
+            "code": "en",
+            "name": "English",
+            "version": "3ACA62B1"
+        },
+        {
+            "code": "de",
+            "name": "Deutsch",
+            "version": "B568ABB0"
+        },
+        {
+            "code": "es",
+            "name": "Española",
+            "version": "E083CB46"
+        },
+        {
+            "code": "it",
+            "name": "Italiano",
+            "version": "F4FF99F6"
+        },
+        {
+            "code": "cs",
+            "name": "Čeština",
+            "version": "C0732920"
+        },
+        {
+            "code": "ru",
+            "name": "Русский",
+            "version": "F2139EE"
+        },
+        {
+            "code": "pt",
+            "name": "Português",
+            "version": "BAD44518"
+        },
+        {
+            "code": "lt",
+            "name": "Lietuvių",
+            "version": "912162FF"
+        },
+        {
+            "code": "uk",
+            "name": "Український",
+            "version": "FBCB2AF"
+        },
+        {
+            "code": "nl",
+            "name": "Nederlands",
+            "version": "10A4A031"
+        },
+        {
+            "code": "fr",
+            "name": "Français",
+            "version": "91696AA"
+        },
+        {
+            "code": "ro",
+            "name": "Română",
+            "version": "62C0C5DB"
+        },
+        {
+            "code": "lv",
+            "name": "Latviešu",
+            "version": "201D7116"
+        },
+        {
+            "code": "dk",
+            "name": "Dansk",
+            "version": "24B5E7F"
+        }
+    ]
+}
