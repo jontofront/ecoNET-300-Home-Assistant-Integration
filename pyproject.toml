@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "ecoNET-300-Home-Assistant-Integration"
-version = "v1.1.4"
+version = "v1.1.8"
 description = "ecoNET300 Home Assistant integration"
 authors = ["Jon <jontofront@gmail.com>"]
 readme = "README.md"
