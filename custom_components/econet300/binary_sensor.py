@@ -8,6 +8,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -17,6 +18,7 @@ from .const import (
     BINARY_SENSOR_MAP_KEY,
     DOMAIN,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
+    ENTITY_CATEGORY,
     ENTITY_ICON,
     ENTITY_ICON_OFF,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
@@ -51,7 +53,7 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         """Initialize a new ecoNET binary sensor."""
         self.entity_description = entity_description
         self.api = api
-        self._attr_is_on = None
+        self._attr_is_on: bool | None = None
         super().__init__(coordinator)
         _LOGGER.debug(
             "EconetBinarySensor initialized with unique_id: %s, entity_description: %s",
@@ -80,6 +82,11 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
             else self.entity_description.icon
         )
 
+    @property
+    def entity_category(self) -> EntityCategory | None:
+        """Return the entity category."""
+        return self.entity_description.entity_category
+
 
 class MixerBinarySensor(MixerEntity, BinarySensorEntity):
     """Mixer Binary Sensor."""
@@ -95,7 +102,7 @@ class MixerBinarySensor(MixerEntity, BinarySensorEntity):
     ):
         """Initialize a new mixer binary sensor."""
         super().__init__(entity_description, coordinator, api, idx)
-        self._attr_is_on = None
+        self._attr_is_on: bool | None = None
         _LOGGER.debug(
             "MixerBinarySensor initialized with unique_id: %s, entity_description: %s",
             self.unique_id,
@@ -159,10 +166,13 @@ class EcoSterBinarySensor(EcoSterEntity, BinarySensorEntity):
 def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescription:
     """Create Econet300 binary entity description."""
     _LOGGER.debug("create_binary_entity_description: %s", key)
+    entity_category = ENTITY_CATEGORY.get(key, None)
+    _LOGGER.debug("Entity category for %s: %s", key, entity_category)
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
         device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
+        entity_category=entity_category,
         icon=ENTITY_ICON.get(key, None),
         icon_off=ENTITY_ICON_OFF.get(key, None),
     )

@@ -143,6 +143,24 @@ SENSOR_MAP_KEY = {
         "lambdaSet",
         "lambdaLevel",
     },
+    # ecoSOL500 solar collector sensors
+    "ecoSOL500": {
+        # Temperature sensors
+        "T1",  # Collector temperature
+        "T2",  # Tank temperature
+        "T3",  # Tank temperature
+        "T4",  # Return temperature
+        "T5",  # Collector temperature - power measurement
+        "T6",  # Temperature sensor
+        "TzCWU",  # Hot water temperature
+        # Pump status sensors
+        "P1",  # Pump 1 status
+        "P2",  # Pump 2 status
+        # Output status
+        "H",  # Output status
+        # Heat output
+        "Uzysk_ca_kowity",  # Total heat output
+    },
     "_default": {
         "boilerPower",
         "boilerPowerKW",
@@ -314,6 +332,18 @@ ENTITY_UNIT_MAP = {
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
+    # ecoSOL500 specific units
+    "T1": UnitOfTemperature.CELSIUS,
+    "T2": UnitOfTemperature.CELSIUS,
+    "T3": UnitOfTemperature.CELSIUS,
+    "T4": UnitOfTemperature.CELSIUS,
+    "T5": UnitOfTemperature.CELSIUS,
+    "T6": UnitOfTemperature.CELSIUS,
+    "TzCWU": UnitOfTemperature.CELSIUS,
+    "P1": None,
+    "P2": None,
+    "H": None,
+    "Uzysk_ca_kowity": PERCENTAGE,
 }
 
 # By default all sensors state_class are MEASUREMENT
@@ -410,6 +440,18 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
+    # ecoSOL500 specific device classes
+    "T1": SensorDeviceClass.TEMPERATURE,
+    "T2": SensorDeviceClass.TEMPERATURE,
+    "T3": SensorDeviceClass.TEMPERATURE,
+    "T4": SensorDeviceClass.TEMPERATURE,
+    "T5": SensorDeviceClass.TEMPERATURE,
+    "T6": SensorDeviceClass.TEMPERATURE,
+    "TzCWU": SensorDeviceClass.TEMPERATURE,
+    "P1": None,
+    "P2": None,
+    "H": None,
+    "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -493,6 +535,18 @@ ENTITY_PRECISION = {
     "heatingUpperTemp": 1,
     "Circuit1thermostat": 1,
     "heating_work_state_pump4": None,
+    # ecoSOL500 specific precision
+    "T1": 1,
+    "T2": 1,
+    "T3": 1,
+    "T4": 1,
+    "T5": 1,
+    "T6": 1,
+    "TzCWU": 1,
+    "P1": None,
+    "P2": None,
+    "H": None,
+    "Uzysk_ca_kowity": 1,
 }
 
 ENTITY_ICON = {
@@ -613,6 +667,18 @@ ENTITY_ICON = {
     "contactGZCActive": "mdi:connection",
     "pumpCirculationWorks": "mdi:pump",
     "pumpSolarWorks": "mdi:pump",
+    # ecoSOL500 specific icons
+    "T1": "mdi:thermometer",
+    "T2": "mdi:thermometer",
+    "T3": "mdi:thermometer",
+    "T4": "mdi:thermometer",
+    "T5": "mdi:thermometer",
+    "T6": "mdi:thermometer",
+    "TzCWU": "mdi:thermometer",
+    "P1": "mdi:pump",
+    "P2": "mdi:pump",
+    "H": "mdi:gauge",
+    "Uzysk_ca_kowity": "mdi:gauge",
 }
 
 ENTITY_ICON_OFF = {
