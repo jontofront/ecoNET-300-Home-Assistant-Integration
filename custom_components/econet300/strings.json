@@ -19,6 +19,16 @@
     }
   },
   "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Boiler Control"
+      }
+    },
+    "number": {
+      "mixer_set_temp1": {
+        "name": "Mixer 1 Set Temperature"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Lighter"
@@ -100,6 +110,12 @@
       },
       "pump_solar_works": {
         "name": "Solar pump working"
+      },
+      "fuel_consumption_calc": {
+        "name": "Fuel Consumption Calculator"
+      },
+      "ecosrv_https": {
+        "name": "ecoNET Server HTTPS"
       },
       "pump_fireplace_works": {
         "name": "Fireplace pump working"
@@ -485,9 +501,6 @@
       },
       "uzysk_ca_kowity": {
         "name": "Total Heat Output"
-      },
-      "fuel_consumption_calc": {
-        "name": "Fuel Consumption Calculator"
       },
       "ecosrv_https": {
         "name": "ecoNET Server HTTPS"

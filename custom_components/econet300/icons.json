@@ -85,6 +85,13 @@
                     "on": "mdi:water-boiler"
                 }
             },
+            "status_co": {
+                "default": "mdi:heating",
+                "state": {
+                    "off": "mdi:heating-off",
+                    "on": "mdi:heating"
+                }
+            },
             "main_srv": {
                 "default": "mdi:server-network",
                 "state": {
@@ -279,16 +286,73 @@
             "temp_co": {
                 "default": "mdi:thermometer"
             },
+            "temp_cwu": {
+                "default": "mdi:thermometer-water"
+            },
             "temp_feeder": {
                 "default": "mdi:thermometer"
             },
             "temp_external_sensor": {
                 "default": "mdi:thermometer"
             },
+            "temp_upper_buffer": {
+                "default": "mdi:thermometer"
+            },
+            "temp_lower_buffer": {
+                "default": "mdi:thermometer"
+            },
+            "temp_upper_solar": {
+                "default": "mdi:thermometer"
+            },
+            "temp_lower_solar": {
+                "default": "mdi:thermometer"
+            },
+            "temp_optical_sensor": {
+                "default": "mdi:thermometer"
+            },
+            "temp_flue_gas": {
+                "default": "mdi:thermometer"
+            },
+            "temp_back": {
+                "default": "mdi:thermometer"
+            },
+            "temp_circuit2": {
+                "default": "mdi:thermometer"
+            },
+            "temp_circuit3": {
+                "default": "mdi:thermometer"
+            },
+            "temp_clutch": {
+                "default": "mdi:thermometer"
+            },
+            "temp_wthr": {
+                "default": "mdi:thermometer"
+            },
+            "temp_bufor_up": {
+                "default": "mdi:thermometer"
+            },
+            "temp_bufor_down": {
+                "default": "mdi:thermometer"
+            },
+            "heating_upper_temp": {
+                "default": "mdi:thermometer"
+            },
+            "circuit1thermostat": {
+                "default": "mdi:thermometer"
+            },
+            "circuit2thermostat_temp": {
+                "default": "mdi:thermometer"
+            },
+            "circuit3thermostat_temp": {
+                "default": "mdi:thermometer"
+            },
             "lambda_level": {
                 "default": "mdi:lambda"
             },
             "lambda_set": {
+                "default": "mdi:lambda"
+            },
+            "lambda_status": {
                 "default": "mdi:lambda"
             },
             "mixer_temp1": {
@@ -309,26 +373,38 @@
             "mixer_temp6": {
                 "default": "mdi:thermometer"
             },
-            "temp_back": {
+            "mixer_set_temp": {
                 "default": "mdi:thermometer"
             },
-            "temp_upper_buffer": {
+            "mixer_set_temp1": {
                 "default": "mdi:thermometer"
             },
-            "temp_lower_buffer": {
+            "mixer_set_temp2": {
                 "default": "mdi:thermometer"
             },
-            "temp_cwu": {
+            "mixer_set_temp3": {
                 "default": "mdi:thermometer"
             },
-            "temp_flue_gas": {
+            "mixer_set_temp4": {
                 "default": "mdi:thermometer"
+            },
+            "mixer_set_temp5": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp6": {
+                "default": "mdi:thermometer"
+            },
+            "valve_mixer1": {
+                "default": "mdi:valve"
+            },
+            "servo_mixer1": {
+                "default": "mdi:valve"
             },
             "fan_power": {
                 "default": "mdi:fan"
             },
             "status_co": {
-                "default": "mdi:fire"
+                "default": "mdi:heating"
             },
             "status_cwu": {
                 "default": "mdi:water-boiler"
@@ -336,11 +412,8 @@
             "thermostat": {
                 "default": "mdi:thermostat"
             },
-            "lambda_status": {
-                "default": "mdi:lambda"
-            },
             "mode": {
-                "default": "mdi:fire"
+                "default": "mdi:sync"
             },
             "soft_ver": {
                 "default": "mdi:alarm-panel-outline"
@@ -363,7 +436,7 @@
             "module_panel_soft_ver": {
                 "default": "mdi:alarm-panel-outline"
             },
-            "module_ecoster_soft_ver": {
+            "module_eco_ster_soft_ver": {
                 "default": "mdi:raspberry-pi"
             },
             "eco_ster_temp1": {
@@ -441,36 +514,6 @@
             "ps": {
                 "default": "mdi:power-plug"
             },
-            "circuit2thermostat_temp": {
-                "default": "mdi:thermometer"
-            },
-            "temp_clutch": {
-                "default": "mdi:thermometer"
-            },
-            "circuit3thermostat_temp": {
-                "default": "mdi:thermometer"
-            },
-            "temp_wthr": {
-                "default": "mdi:thermometer"
-            },
-            "temp_circuit3": {
-                "default": "mdi:thermometer"
-            },
-            "temp_circuit2": {
-                "default": "mdi:thermometer"
-            },
-            "temp_bufor_up": {
-                "default": "mdi:thermometer"
-            },
-            "temp_bufor_down": {
-                "default": "mdi:thermometer"
-            },
-            "heating_upper_temp": {
-                "default": "mdi:thermometer"
-            },
-            "circuit1thermostat": {
-                "default": "mdi:thermometer"
-            },
             "heating_work_state_pump4": {
                 "default": "mdi:sync"
             },
@@ -533,6 +576,48 @@
             },
             "ecosrv_soft_ver": {
                 "default": "mdi:server-network"
+            },
+            "boiler_power": {
+                "default": "mdi:gauge"
+            },
+            "boiler_power_kw": {
+                "default": "mdi:gauge"
+            },
+            "lighter_works": {
+                "default": "mdi:fire"
+            },
+            "work_at_100": {
+                "default": "mdi:counter"
+            },
+            "work_at_50": {
+                "default": "mdi:counter"
+            },
+            "work_at_30": {
+                "default": "mdi:counter"
+            },
+            "feeder_work": {
+                "default": "mdi:counter"
+            },
+            "feeder_works": {
+                "default": "mdi:screw-lag"
+            },
+            "firing_up_count": {
+                "default": "mdi:counter"
+            },
+            "quality": {
+                "default": "mdi:signal"
+            },
+            "fuel_consumption_calc": {
+                "default": "mdi:calculator"
+            },
+            "ecosrv_https": {
+                "default": "mdi:lock"
+            },
+            "contact_gzc": {
+                "default": "mdi:connection"
+            },
+            "contact_gzc_active": {
+                "default": "mdi:connection"
             }
         },
         "switch": {
@@ -558,6 +643,48 @@
                 "default": "mdi:thermometer"
             },
             "temp_ecoster_set": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp1": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp2": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp3": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp4": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp5": {
+                "default": "mdi:thermometer"
+            },
+            "mixer_set_temp6": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp1": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp2": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp3": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp4": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp5": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp6": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp7": {
+                "default": "mdi:thermometer"
+            },
+            "eco_ster_set_temp8": {
                 "default": "mdi:thermometer"
             }
         }
