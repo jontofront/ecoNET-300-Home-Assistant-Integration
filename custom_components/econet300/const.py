@@ -143,7 +143,7 @@ SENSOR_MAP_KEY = {
         "lambdaSet",
         "lambdaLevel",
     },
-    # Controller ID = ecoSOL 500 solar collector sensors
+    # sysParams.json ControllerID = 'ecoSOL 500' solar collector sensors
     "ecoSOL 500": {
         # Temperature sensors
         "T1",  # Collector temperature
@@ -160,6 +160,15 @@ SENSOR_MAP_KEY = {
         "H",  # Output status
         # Heat output
         "Uzysk_ca_kowity",  # Total heat output
+        # Diagnostic sensors
+        "ecosrvAddr",
+        "quality",
+        "signal",
+        "softVer",
+        "routerType",
+        "protocolType",
+        "controllerID",
+        "ecosrvSoftVer",
     },
     "_default": {
         "boilerPower",
@@ -237,7 +246,14 @@ BINARY_SENSOR_MAP_KEY = {
         "ecoSterDaySched7",
         "ecoSterDaySched8",
     },
-
+    # sysParams.json ControllerID = 'ecoSOL 500' solar collector  binary sensors
+    "ecoSOL 500": {
+        "wifi",
+        "lan",
+        "mainSrv",
+        "fuelConsumptionCalc",
+        "ecosrvHttps",
+    },
 }
 
 NUMBER_MAP = {
@@ -345,6 +361,13 @@ ENTITY_UNIT_MAP = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": PERCENTAGE,
+    # ecoSOL500 diagnostic units
+    "ecosrvAddr": None,
+    "softVer": None,
+    "routerType": None,
+    "protocolType": None,
+    "controllerID": None,
+    "ecosrvSoftVer": None,
 }
 
 # By default all sensors state_class are MEASUREMENT
@@ -453,6 +476,13 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
+    # ecoSOL500 diagnostic device classes
+    "ecosrvAddr": None,
+    "softVer": None,
+    "routerType": None,
+    "protocolType": None,
+    "controllerID": None,
+    "ecosrvSoftVer": None,
 }
 
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
@@ -474,16 +504,17 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
+    "fuelConsumptionCalc": BinarySensorDeviceClass.RUNNING,
+    "ecosrvHttps": BinarySensorDeviceClass.CONNECTIVITY,
     "lambdaStatus": BinarySensorDeviceClass.RUNNING,
     "thermostat": BinarySensorDeviceClass.RUNNING,
     "statusCWU": BinarySensorDeviceClass.RUNNING,
     # ecoMAX850R2-X specific binary sensors
     "contactGZC": BinarySensorDeviceClass.CONNECTIVITY,
     "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
-
 }
 
-"""Add only keys where precision more than 0 needed"""
+# Add only keys where precision more than 0 needed
 ENTITY_PRECISION = {
     "tempFeeder": 1,
     "tempExternalSensor": 1,
@@ -549,6 +580,11 @@ ENTITY_PRECISION = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": 1,
+    # ecoSOL500 diagnostic precision
+    "ecosrvAddr": None,
+    "routerType": None,
+    "protocolType": None,
+    "ecosrvSoftVer": None,
 }
 
 ENTITY_ICON = {
@@ -597,7 +633,10 @@ ENTITY_ICON = {
     "tempUpperBuffer": "mdi:thermometer",
     "tempLowerBuffer": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
+    "wifi": "mdi:wifi",
     "lan": "mdi:lan-connect",
+    "fuelConsumptionCalc": "mdi:calculator",
+    "ecosrvHttps": "mdi:lock",
     "softVer": "mdi:alarm-panel-outline",
     "controllerID": "mdi:alarm-panel-outline",
     "moduleASoftVer": "mdi:raspberry-pi",
@@ -681,6 +720,11 @@ ENTITY_ICON = {
     "P2": "mdi:pump",
     "H": "mdi:gauge",
     "Uzysk_ca_kowity": "mdi:gauge",
+    # ecoSOL500 diagnostic icons
+    "ecosrvAddr": "mdi:server",
+    "routerType": "mdi:router-wireless",
+    "protocolType": "mdi:protocol",
+    "ecosrvSoftVer": "mdi:server-network",
 }
 
 ENTITY_ICON_OFF = {
@@ -697,7 +741,10 @@ ENTITY_ICON_OFF = {
     "mixerPumpWorks6": "mdi:pump-off",
     "statusCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
+    "wifi": "mdi:wifi-off",
     "lan": "mdi:lan-disconnect",
+    "fuelConsumptionCalc": "mdi:calculator-off",
+    "ecosrvHttps": "mdi:lock-off",
     "lighterWorks": "mdi:fire-off",
     "thermostat": "mdi:thermostat-off",
     # ecoMAX850R2-X specific off icons
@@ -722,7 +769,6 @@ ENTITY_ICON_OFF = {
     "ecoSterDaySched6": "mdi:calendar-clock-off",
     "ecoSterDaySched7": "mdi:calendar-clock-off",
     "ecoSterDaySched8": "mdi:calendar-clock-off",
-
 }
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
@@ -755,6 +801,11 @@ ENTITY_CATEGORY = {
     "mainSrv": EntityCategory.DIAGNOSTIC,
     "wifi": EntityCategory.DIAGNOSTIC,
     "lan": EntityCategory.DIAGNOSTIC,
+    "fuelConsumptionCalc": EntityCategory.DIAGNOSTIC,
+    "ecosrvHttps": EntityCategory.DIAGNOSTIC,
+    "ecosrvAddr": EntityCategory.DIAGNOSTIC,
+    "routerType": EntityCategory.DIAGNOSTIC,
+    "ecosrvSoftVer": EntityCategory.DIAGNOSTIC,
 }
 
 ENTITY_MIN_VALUE = {

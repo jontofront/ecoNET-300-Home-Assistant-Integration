@@ -459,6 +459,18 @@
       },
       "uzysk_ca_kowity": {
         "name": "Całkowity uzysk ciepła"
+      },
+      "fuel_consumption_calc": {
+        "name": "Kalkulator zużycia paliwa"
+      },
+      "ecosrv_https": {
+        "name": "Serwer ecoNET HTTPS"
+      },
+      "ecosrv_addr": {
+        "name": "Adres serwera ecoNET"
+      },
+      "ecosrv_soft_ver": {
+        "name": "Wersja oprogramowania serwera ecoNET"
       }
     }
   }
