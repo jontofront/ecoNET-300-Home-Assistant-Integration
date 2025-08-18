@@ -120,52 +120,52 @@
       "ecosrv_https": {
         "name": "Serwer ecoNET HTTPS"
       },
-      "ecoster_contacts1": {
+      "eco_ster_contacts1": {
         "name": "Styki termostatu pokojowego 1"
       },
-      "ecoster_contacts2": {
+      "eco_ster_contacts2": {
         "name": "Styki termostatu pokojowego 2"
       },
-      "ecoster_contacts3": {
+      "eco_ster_contacts3": {
         "name": "Styki termostatu pokojowego 3"
       },
-      "ecoster_contacts4": {
+      "eco_ster_contacts4": {
         "name": "Styki termostatu pokojowego 4"
       },
-      "ecoster_contacts5": {
+      "eco_ster_contacts5": {
         "name": "Styki termostatu pokojowego 5"
       },
-      "ecoster_contacts6": {
+      "eco_ster_contacts6": {
         "name": "Styki termostatu pokojowego 6"
       },
-      "ecoster_contacts7": {
+      "eco_ster_contacts7": {
         "name": "Styki termostatu pokojowego 7"
       },
-      "ecoster_contacts8": {
+      "eco_ster_contacts8": {
         "name": "Styki termostatu pokojowego 8"
       },
-      "ecoster_day_sched1": {
+      "eco_ster_day_sched1": {
         "name": "Harmonogram dzienny termostatu 1"
       },
-      "ecoster_day_sched2": {
+      "eco_ster_day_sched2": {
         "name": "Harmonogram dzienny termostatu 2"
       },
-      "ecoster_day_sched3": {
+      "eco_ster_day_sched3": {
         "name": "Harmonogram dzienny termostatu 3"
       },
-      "ecoster_day_sched4": {
+      "eco_ster_day_sched4": {
         "name": "Harmonogram dzienny termostatu 4"
       },
-      "ecoster_day_sched5": {
+      "eco_ster_day_sched5": {
         "name": "Harmonogram dzienny termostatu 5"
       },
-      "ecoster_day_sched6": {
+      "eco_ster_day_sched6": {
         "name": "Harmonogram dzienny termostatu 6"
       },
-      "ecoster_day_sched7": {
+      "eco_ster_day_sched7": {
         "name": "Harmonogram dzienny termostatu 7"
       },
-      "ecoster_day_sched8": {
+      "eco_ster_day_sched8": {
         "name": "Harmonogram dzienny termostatu 8"
       }
     },

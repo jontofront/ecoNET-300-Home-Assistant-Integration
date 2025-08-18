@@ -120,52 +120,52 @@
       "ecosrv_https": {
         "name": "ecoNET Server HTTPS"
       },
-      "ecoster_contacts1": {
+      "eco_ster_contacts1": {
         "name": "Room thermostat 1 contacts"
       },
-      "ecoster_contacts2": {
+      "eco_ster_contacts2": {
         "name": "Room thermostat 2 contacts"
       },
-      "ecoster_contacts3": {
+      "eco_ster_contacts3": {
         "name": "Room thermostat 3 contacts"
       },
-      "ecoster_contacts4": {
+      "eco_ster_contacts4": {
         "name": "Room thermostat 4 contacts"
       },
-      "ecoster_contacts5": {
+      "eco_ster_contacts5": {
         "name": "Room thermostat 5 contacts"
       },
-      "ecoster_contacts6": {
+      "eco_ster_contacts6": {
         "name": "Room thermostat 6 contacts"
       },
-      "ecoster_contacts7": {
+      "eco_ster_contacts7": {
         "name": "Room thermostat 7 contacts"
       },
-      "ecoster_contacts8": {
+      "eco_ster_contacts8": {
         "name": "Room thermostat 8 contacts"
       },
-      "ecoster_day_sched1": {
+      "eco_ster_day_sched1": {
         "name": "Room thermostat 1 day schedule"
       },
-      "ecoster_day_sched2": {
+      "eco_ster_day_sched2": {
         "name": "Room thermostat 2 day schedule"
       },
-      "ecoster_day_sched3": {
+      "eco_ster_day_sched3": {
         "name": "Room thermostat 3 day schedule"
       },
-      "ecoster_day_sched4": {
+      "eco_ster_day_sched4": {
         "name": "Room thermostat 4 day schedule"
       },
-      "ecoster_day_sched5": {
+      "eco_ster_day_sched5": {
         "name": "Room thermostat 5 day schedule"
       },
-      "ecoster_day_sched6": {
+      "eco_ster_day_sched6": {
         "name": "Room thermostat 6 day schedule"
       },
-      "ecoster_day_sched7": {
+      "eco_ster_day_sched7": {
         "name": "Room thermostat 7 day schedule"
       },
-      "ecoster_day_sched8": {
+      "eco_ster_day_sched8": {
         "name": "Room thermostat 8 day schedule"
       }
     },
