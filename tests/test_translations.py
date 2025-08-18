@@ -177,7 +177,7 @@ class TestTranslationSystem(unittest.TestCase):
                     f"{entity_type}.{entity_key} should use snake_case"
                 )
                 # Check that it contains underscores (not camelCase) - except for common abbreviations and valid words
-                if entity_key not in ["wifi", "lan", "thermostat", "circuit1thermostat", "mode"]:  # Common abbreviations and valid words that don't need underscores
+                if entity_key not in ["wifi", "lan", "thermostat", "circuit1thermostat", "mode", "ps", "transmission", "t1", "t2", "t3", "t4", "t5", "t6", "tzcwu", "p1", "p2", "h", "quality", "signal", "status", "soft", "module", "panel", "lambda", "ecoster"]:  # Common abbreviations and valid words that don't need underscores
                     assert "_" in entity_key, (
                         f"{entity_type}.{entity_key} should use underscores, not camelCase"
                     )
