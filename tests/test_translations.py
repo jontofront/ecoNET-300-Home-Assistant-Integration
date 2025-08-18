@@ -67,12 +67,11 @@ class TestTranslationSystem(unittest.TestCase):
                 assert "state" in sensor_icons, (
                     f"{sensor_key} should have state-based icons"
                 )
-                assert "on" in sensor_icons["state"], (
-                    f"{sensor_key} should have 'on' state icon"
-                )
+                # We only define "off" state icons since "on" uses the default icon
                 assert "off" in sensor_icons["state"], (
                     f"{sensor_key} should have 'off' state icon"
                 )
+                # The "on" state uses the default icon, so we don't need to define it explicitly
 
     def test_sensor_icon_translations(self):
         """Test sensor icon translations have appropriate icons."""
