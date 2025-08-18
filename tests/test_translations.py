@@ -82,7 +82,7 @@ class TestTranslationSystem(unittest.TestCase):
         sensors = icons_data["entity"]["sensor"]
 
         # Test that temperature sensors use appropriate icons
-        temp_sensors = ["temp_co", "temp_feeder", "mixer_temp1"]
+        temp_sensors = ["mixer_temp1"]  # Standard temperature sensors
         for sensor_key in temp_sensors:
             if sensor_key in sensors:
                 expected_icon = "mdi:thermometer"
@@ -90,6 +90,21 @@ class TestTranslationSystem(unittest.TestCase):
                 assert actual_icon == expected_icon, (
                     f"{sensor_key} should use thermometer icon, got {actual_icon}"
                 )
+        
+        # Test specific icons for special cases
+        if "temp_co" in sensors:
+            expected_icon = "mdi:thermometer-lines"  # More appropriate for boiler temperature
+            actual_icon = sensors["temp_co"]["default"]
+            assert actual_icon == expected_icon, (
+                f"temp_co should use thermometer-lines icon, got {actual_icon}"
+            )
+        
+        if "temp_feeder" in sensors:
+            expected_icon = "mdi:thermometer-lines"  # More appropriate for feeder temperature
+            actual_icon = sensors["temp_feeder"]["default"]
+            assert actual_icon == expected_icon, (
+                f"temp_feeder should use thermometer-lines icon, got {actual_icon}"
+            )
 
         # Test specific icons for special cases
         if "temp_cwu" in sensors:

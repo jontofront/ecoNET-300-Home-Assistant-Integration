@@ -169,112 +169,112 @@
                     "on": "mdi:pump"
                 }
             },
-            "eco_ster_contacts1": {
+            "ecoster_contacts1": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts2": {
+            "ecoster_contacts2": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts3": {
+            "ecoster_contacts3": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts4": {
+            "ecoster_contacts4": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts5": {
+            "ecoster_contacts5": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts6": {
+            "ecoster_contacts6": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts7": {
+            "ecoster_contacts7": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_contacts8": {
+            "ecoster_contacts8": {
                 "default": "mdi:thermostat",
                 "state": {
                     "off": "mdi:thermostat-off",
                     "on": "mdi:thermostat"
                 }
             },
-            "eco_ster_day_sched1": {
+            "ecoster_day_sched1": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched2": {
+            "ecoster_day_sched2": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched3": {
+            "ecoster_day_sched3": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched4": {
+            "ecoster_day_sched4": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched5": {
+            "ecoster_day_sched5": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched6": {
+            "ecoster_day_sched6": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched7": {
+            "ecoster_day_sched7": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
                     "on": "mdi:calendar-clock"
                 }
             },
-            "eco_ster_day_sched8": {
+            "ecoster_day_sched8": {
                 "default": "mdi:calendar-clock",
                 "state": {
                     "off": "mdi:calendar-clock-off",
@@ -284,16 +284,13 @@
         },
         "sensor": {
             "temp_co": {
-                "default": "mdi:thermometer"
+                "default": "mdi:thermometer-lines"
             },
             "temp_cwu": {
                 "default": "mdi:thermometer-water"
             },
             "temp_feeder": {
-                "default": "mdi:thermometer"
-            },
-            "temp_external_sensor": {
-                "default": "mdi:thermometer"
+                "default": "mdi:thermometer-lines"
             },
             "temp_upper_buffer": {
                 "default": "mdi:thermometer"
@@ -301,59 +298,11 @@
             "temp_lower_buffer": {
                 "default": "mdi:thermometer"
             },
-            "temp_upper_solar": {
-                "default": "mdi:thermometer"
-            },
-            "temp_lower_solar": {
-                "default": "mdi:thermometer"
-            },
-            "temp_optical_sensor": {
-                "default": "mdi:thermometer"
-            },
-            "temp_flue_gas": {
-                "default": "mdi:thermometer"
-            },
             "temp_back": {
                 "default": "mdi:thermometer"
             },
-            "temp_circuit2": {
+            "temp_mixer": {
                 "default": "mdi:thermometer"
-            },
-            "temp_circuit3": {
-                "default": "mdi:thermometer"
-            },
-            "temp_clutch": {
-                "default": "mdi:thermometer"
-            },
-            "temp_wthr": {
-                "default": "mdi:thermometer"
-            },
-            "temp_bufor_up": {
-                "default": "mdi:thermometer"
-            },
-            "temp_bufor_down": {
-                "default": "mdi:thermometer"
-            },
-            "heating_upper_temp": {
-                "default": "mdi:thermometer"
-            },
-            "circuit1thermostat": {
-                "default": "mdi:thermometer"
-            },
-            "circuit2thermostat_temp": {
-                "default": "mdi:thermometer"
-            },
-            "circuit3thermostat_temp": {
-                "default": "mdi:thermometer"
-            },
-            "lambda_level": {
-                "default": "mdi:lambda"
-            },
-            "lambda_set": {
-                "default": "mdi:lambda"
-            },
-            "lambda_status": {
-                "default": "mdi:lambda"
             },
             "mixer_temp1": {
                 "default": "mdi:thermometer"
@@ -373,209 +322,29 @@
             "mixer_temp6": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp": {
+            "ecoster_temp1": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp1": {
+            "ecoster_temp2": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp2": {
+            "ecoster_temp3": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp3": {
+            "ecoster_temp4": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp4": {
+            "ecoster_temp5": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp5": {
+            "ecoster_temp6": {
                 "default": "mdi:thermometer"
             },
-            "mixer_set_temp6": {
+            "ecoster_temp7": {
                 "default": "mdi:thermometer"
             },
-            "valve_mixer1": {
-                "default": "mdi:valve"
-            },
-            "servo_mixer1": {
-                "default": "mdi:valve"
-            },
-            "fan_power": {
-                "default": "mdi:fan"
-            },
-            "status_co": {
-                "default": "mdi:heating"
-            },
-            "status_cwu": {
-                "default": "mdi:water-boiler"
-            },
-            "thermostat": {
-                "default": "mdi:thermostat"
-            },
-            "mode": {
-                "default": "mdi:sync"
-            },
-            "soft_ver": {
-                "default": "mdi:alarm-panel-outline"
-            },
-            "controller_id": {
-                "default": "mdi:alarm-panel-outline"
-            },
-            "module_a_soft_ver": {
-                "default": "mdi:raspberry-pi"
-            },
-            "module_b_soft_ver": {
-                "default": "mdi:raspberry-pi"
-            },
-            "module_c_soft_ver": {
-                "default": "mdi:raspberry-pi"
-            },
-            "module_lambda_soft_ver": {
-                "default": "mdi:raspberry-pi"
-            },
-            "module_panel_soft_ver": {
-                "default": "mdi:alarm-panel-outline"
-            },
-            "module_eco_ster_soft_ver": {
-                "default": "mdi:raspberry-pi"
-            },
-            "eco_ster_temp1": {
+            "ecoster_temp8": {
                 "default": "mdi:thermometer"
-            },
-            "eco_ster_temp2": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp3": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp4": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp5": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp6": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp7": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_temp8": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp1": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp2": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp3": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp4": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp5": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp6": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp7": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_set_temp8": {
-                "default": "mdi:thermometer"
-            },
-            "eco_ster_mode1": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode2": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode3": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode4": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode5": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode6": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode7": {
-                "default": "mdi:thermostat"
-            },
-            "eco_ster_mode8": {
-                "default": "mdi:thermostat"
-            },
-            "ps": {
-                "default": "mdi:power-plug"
-            },
-            "heating_work_state_pump4": {
-                "default": "mdi:sync"
-            },
-            "fuel_consum": {
-                "default": "mdi:gas-station"
-            },
-            "fuel_stream": {
-                "default": "mdi:gas-station"
-            },
-            "transmission": {
-                "default": "mdi:transmission-tower"
-            },
-            "pump_circulation_works": {
-                "default": "mdi:pump"
-            },
-            "pump_solar_works": {
-                "default": "mdi:pump"
-            },
-            "t1": {
-                "default": "mdi:thermometer"
-            },
-            "t2": {
-                "default": "mdi:thermometer"
-            },
-            "t3": {
-                "default": "mdi:thermometer"
-            },
-            "t4": {
-                "default": "mdi:thermometer"
-            },
-            "t5": {
-                "default": "mdi:thermometer"
-            },
-            "t6": {
-                "default": "mdi:thermometer"
-            },
-            "tz_cwu": {
-                "default": "mdi:thermometer"
-            },
-            "p1": {
-                "default": "mdi:pump"
-            },
-            "p2": {
-                "default": "mdi:pump"
-            },
-            "h": {
-                "default": "mdi:gauge"
-            },
-            "uzyk_calkowity": {
-                "default": "mdi:gauge"
-            },
-            "ecosrv_addr": {
-                "default": "mdi:server"
-            },
-            "router_type": {
-                "default": "mdi:router-wireless"
-            },
-            "protocol_type": {
-                "default": "mdi:protocol"
-            },
-            "ecosrv_soft_ver": {
-                "default": "mdi:server-network"
             },
             "boiler_power": {
                 "default": "mdi:gauge"
@@ -583,8 +352,28 @@
             "boiler_power_kw": {
                 "default": "mdi:gauge"
             },
-            "lighter_works": {
-                "default": "mdi:fire"
+            "fuel_level": {
+                "default": "mdi:gas-station"
+            },
+            "lambda_level": {
+                "default": "mdi:lambda"
+            },
+            "lambda_set": {
+                "default": "mdi:lambda"
+            },
+            "lambda_status": {
+                "default": "mdi:lambda",
+                "state_attributes": {
+                    "status": {
+                        "default": "mdi:lambda",
+                        "state": {
+                            "running": "mdi:lambda",
+                            "stopped": "mdi:lambda-off",
+                            "error": "mdi:alert-circle",
+                            "maintenance": "mdi:wrench"
+                        }
+                    }
+                }
             },
             "work_at_100": {
                 "default": "mdi:counter"
@@ -618,6 +407,264 @@
             },
             "contact_gzc_active": {
                 "default": "mdi:connection"
+            },
+            "mode": {
+                "default": "mdi:sync",
+                "state_attributes": {
+                    "preset_mode": {
+                        "default": "mdi:sync",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode1": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode2": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode3": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode4": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode5": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode6": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode7": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ecoster_mode8": {
+                "default": "mdi:thermostat",
+                "state_attributes": {
+                    "mode": {
+                        "default": "mdi:thermostat",
+                        "state": {
+                            "eco": "mdi:leaf",
+                            "comfort": "mdi:home",
+                            "night": "mdi:weather-night",
+                            "frost_protection": "mdi:snowflake",
+                            "manual": "mdi:hand",
+                            "auto": "mdi:auto-fix"
+                        }
+                    }
+                }
+            },
+            "ps": {
+                "default": "mdi:power-plug"
+            },
+            "circuit2thermostat_temp": {
+                "default": "mdi:thermometer"
+            },
+            "temp_clutch": {
+                "default": "mdi:thermometer"
+            },
+            "circuit3thermostat_temp": {
+                "default": "mdi:thermometer"
+            },
+            "temp_wthr": {
+                "default": "mdi:thermometer"
+            },
+            "temp_circuit3": {
+                "default": "mdi:thermometer"
+            },
+            "temp_circuit2": {
+                "default": "mdi:thermometer"
+            },
+            "temp_bufor_up": {
+                "default": "mdi:thermometer"
+            },
+            "temp_bufor_down": {
+                "default": "mdi:thermometer"
+            },
+            "heating_upper_temp": {
+                "default": "mdi:thermometer"
+            },
+            "circuit1thermostat": {
+                "default": "mdi:thermometer"
+            },
+            "heating_work_state_pump4": {
+                "default": "mdi:sync"
+            },
+            "fuel_consum": {
+                "default": "mdi:gas-station"
+            },
+            "fuel_stream": {
+                "default": "mdi:gas-station"
+            },
+            "transmission": {
+                "default": "mdi:transmission-tower"
+            },
+            "t1": {
+                "default": "mdi:thermometer"
+            },
+            "t2": {
+                "default": "mdi:thermometer"
+            },
+            "t3": {
+                "default": "mdi:thermometer"
+            },
+            "t4": {
+                "default": "mdi:thermometer"
+            },
+            "t5": {
+                "default": "mdi:thermometer"
+            },
+            "t6": {
+                "default": "mdi:thermometer"
+            },
+            "tzcwu": {
+                "default": "mdi:thermometer"
+            },
+            "p1": {
+                "default": "mdi:pump"
+            },
+            "p2": {
+                "default": "mdi:pump"
+            },
+            "h": {
+                "default": "mdi:gauge"
+            },
+            "uzysk_ca_kowity": {
+                "default": "mdi:gauge"
+            },
+            "ecosrv_addr": {
+                "default": "mdi:server"
+            },
+            "router_type": {
+                "default": "mdi:router-wireless"
+            },
+            "protocol_type": {
+                "default": "mdi:protocol"
+            },
+            "ecosrv_soft_ver": {
+                "default": "mdi:server-network"
+            },
+            "soft_ver": {
+                "default": "mdi:alarm-panel-outline"
+            },
+            "controller_id": {
+                "default": "mdi:alarm-panel-outline"
+            },
+            "module_a_soft_ver": {
+                "default": "mdi:raspberry-pi"
+            },
+            "module_b_soft_ver": {
+                "default": "mdi:raspberry-pi"
+            },
+            "module_c_soft_ver": {
+                "default": "mdi:raspberry-pi"
+            },
+            "module_lambda_soft_ver": {
+                "default": "mdi:raspberry-pi"
+            },
+            "module_panel_soft_ver": {
+                "default": "mdi:alarm-panel-outline"
+            },
+            "module_ecoster_soft_ver": {
+                "default": "mdi:raspberry-pi"
             }
         },
         "switch": {
