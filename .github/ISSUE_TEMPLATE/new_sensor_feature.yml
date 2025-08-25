@@ -66,8 +66,18 @@ body:
     id: api_parameter
     attributes:
       label: "API Parameter Name"
-      description: "What is the exact parameter name from the ecoNET API? (e.g., 'tempCO', 'statusPump')"
-      placeholder: "tempCO"
+      description: "What is the exact parameter name from the ecoNET API? This is the key name that appears in the API response JSON. Check the API documentation or use the test endpoints to find the correct parameter name."
+      placeholder: "e.g., tempCO, statusPump, powerBoiler, pressureSystem"
+
+  - type: markdown
+    attributes:
+      value: |
+        **💡 Need help finding the API parameter?**
+
+        - **API Documentation**: Check the [API V1 Documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/API_V1_DOCUMENTATION.md)
+        - **Test Endpoints**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to explore your device's API
+        - **Device Parameters**: See [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
+        - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
 
   - type: dropdown
     id: data_type
