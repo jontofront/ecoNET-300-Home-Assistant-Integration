@@ -22,7 +22,6 @@ body:
       label: "Device Model"
       description: "What ecoNET device model do you have? (e.g., ecoMAX810P-L, ecoSOL500, ecoMAX360)"
       placeholder: "ecoMAX810P-L"
-      required: true
 
   - type: input
     id: sensor_name
@@ -30,7 +29,6 @@ body:
       label: "Sensor Name"
       description: "What should this sensor be called? (e.g., 'Boiler Temperature', 'Pump Status')"
       placeholder: "Boiler Temperature"
-      required: true
 
   - type: dropdown
     id: entity_type
@@ -45,7 +43,6 @@ body:
         - "select"
         - "climate"
         - "other"
-      required: true
 
   - type: input
     id: api_parameter
@@ -53,7 +50,6 @@ body:
       label: "API Parameter Name"
       description: "What is the exact parameter name from the ecoNET API? (e.g., 'tempCO', 'statusPump')"
       placeholder: "tempCO"
-      required: true
 
   - type: dropdown
     id: data_type
@@ -71,7 +67,6 @@ body:
         - "boolean"
         - "numeric"
         - "other"
-      required: true
 
   - type: input
     id: unit_of_measurement
@@ -112,7 +107,6 @@ body:
       label: "Description"
       description: "Describe what this sensor measures and why it would be useful"
       placeholder: "This sensor measures the boiler temperature and is essential for monitoring heating system performance..."
-      required: true
 
   - type: textarea
     id: use_case
@@ -138,4 +132,3 @@ body:
         - label: "I understand this is a feature request and may not be implemented immediately"
         - label: "I can provide additional information or testing if needed"
         - label: "I have verified this sensor is supported by my device model"
-      required: true
