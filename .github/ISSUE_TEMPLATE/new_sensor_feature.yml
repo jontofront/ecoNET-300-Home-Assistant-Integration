@@ -12,7 +12,6 @@ body:
         Use this template to request new sensors, binary sensors, switches, or other entities to be added to the ecoNET-300 Home Assistant integration.
 
         **Before submitting:**
-        - Check if the sensor already exists in the [device documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices)
         - Verify the sensor is supported by your ecoNET device model
         - Check the [cloud translations reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for existing translations
 
