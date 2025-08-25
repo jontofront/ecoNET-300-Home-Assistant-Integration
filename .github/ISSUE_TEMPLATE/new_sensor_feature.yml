@@ -99,7 +99,6 @@ body:
         - "connectivity"
         - "gas"
         - "moisture"
-        - "none"
 
   - type: textarea
     id: description
