@@ -1,4 +1,13 @@
-"""Constants from the Home Assistant."""
+"""Constants for ecoNET300 integration.
+
+This module contains all constants organized by functionality:
+- Core integration constants
+- API endpoints and parameters
+- Device-specific sensor mappings
+- Entity configurations
+- Operation modes and status mappings
+- Mixer and thermostat configurations
+"""
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass
@@ -16,12 +25,16 @@ from homeassistant.const import (
     UnitOfTime,
 )
 
-# Constant for the econet Integration integration
+# =============================================================================
+# CORE INTEGRATION CONSTANTS
+# =============================================================================
 DOMAIN = "econet300"
-
 SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
 
+# =============================================================================
+# DEVICE INFORMATION CONSTANTS
+# =============================================================================
 DEVICE_INFO_MANUFACTURER = "PLUM"
 DEVICE_INFO_MODEL = "ecoNET300"
 DEVICE_INFO_CONTROLLER_NAME = "PLUM ecoNET300"
@@ -32,22 +45,36 @@ DEVICE_INFO_ECOSTER_NAME = "ecoSTER"
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 
-# Sys params
+# =============================================================================
+# API ENDPOINT CONSTANTS
+# =============================================================================
+# endpoint url sysParams
 API_SYS_PARAMS_URI = "sysParams"
+
+# sysParams roperty names
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
 API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 
-# Reg params
+#  endpoint url regParams
 API_REG_PARAMS_URI = "regParams"
+
+# regParams roperty names
 API_REG_PARAMS_PARAM_DATA = "curr"
 
-# Reg params data all in one
+# endpoint url regParamsData
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
-# Boiler status keys map
+# Editable parameters
+API_EDIT_PARAM_URI = "rmCurrNewParam"
+API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
+API_EDITABLE_PARAMS_LIMITS_DATA = "data"
+
+# =============================================================================
+# OPERATION MODES AND STATUS MAPPINGS
+# =============================================================================
 OPERATION_MODE_NAMES = {
     0: STATE_OFF,
     1: "fire_up",
@@ -65,14 +92,9 @@ OPERATION_MODE_NAMES = {
     13: "no_transmission",
 }
 
-# Editable params limits
-API_EDIT_PARAM_URI = "rmCurrNewParam"
-API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
-API_EDITABLE_PARAMS_LIMITS_DATA = "data"
-
-###################################
-#    NUMBER of AVAILABLE MIXERS
-###################################
+# =============================================================================
+# MIXER CONFIGURATION CONSTANTS
+# =============================================================================
 AVAILABLE_NUMBER_OF_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
@@ -88,157 +110,201 @@ MIXER_PUMP_BINARY_SENSOR_KEYS = {
     f"mixerPumpWorks{i}" for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
 }
 
-#######################
-#    REG PARAM MAPS
-#######################
+# =============================================================================
+# DEVICE-SPECIFIC SENSOR MAPPINGS
+# =============================================================================
+# ecoMAX360i specific sensors
+ECOMAX360I_SENSORS = {
+    "PS",
+    "Circuit2thermostatTemp",
+    "TempClutch",
+    "Circuit3thermostatTemp",
+    "TempWthr",
+    "TempCircuit3",
+    "TempCircuit2",
+    "TempBuforUp",
+    "TempCWU",
+    "TempBuforDown",
+    "heatingUpperTemp",
+    "Circuit1thermostat",
+    "heating_work_state_pump4",
+}
 
+# ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
+ECOSTER_SENSORS = {
+    # ecoSTER temperature sensors
+    "ecoSterTemp1",
+    "ecoSterTemp2",
+    "ecoSterTemp3",
+    "ecoSterTemp4",
+    "ecoSterTemp5",
+    "ecoSterTemp6",
+    "ecoSterTemp7",
+    "ecoSterTemp8",
+    # ecoSTER setpoint sensors
+    "ecoSterSetTemp1",
+    "ecoSterSetTemp2",
+    "ecoSterSetTemp3",
+    "ecoSterSetTemp4",
+    "ecoSterSetTemp5",
+    "ecoSterSetTemp6",
+    "ecoSterSetTemp7",
+    "ecoSterSetTemp8",
+    # ecoSTER mode sensors
+    "ecoSterMode1",
+    "ecoSterMode2",
+    "ecoSterMode3",
+    "ecoSterMode4",
+    "ecoSterMode5",
+    "ecoSterMode6",
+    "ecoSterMode7",
+    "ecoSterMode8",
+}
+
+# Lambda sensor module
+LAMBDA_SENSORS = {
+    "lambdaStatus",
+    "lambdaSet",
+    "lambdaLevel",
+}
+
+# ecoSOL 500 solar collector sensors
+ECOSOL500_SENSORS = {
+    # Temperature sensors
+    "T1",  # Collector temperature
+    "T2",  # Tank temperature
+    "T3",  # Tank temperature
+    "T4",  # Return temperature
+    "T5",  # Collector temperature - power measurement
+    "T6",  # Temperature sensor
+    "TzCWU",  # Hot water temperature
+    # Pump status sensors
+    "P1",  # Pump 1 status
+    "P2",  # Pump 2 status
+    # Output status
+    "H",  # Output status
+    # Heat output
+    "Uzysk_ca_kowity",  # Total heat output
+    # Diagnostic sensors
+    "ecosrvAddr",
+    "quality",
+    "signal",
+    "softVer",
+    "routerType",
+    "protocolType",
+    "controllerID",
+    "ecosrvSoftVer",
+}
+
+# Default sensors for most controllers
+DEFAULT_SENSORS = {
+    "boilerPower",
+    "boilerPowerKW",
+    "tempFeeder",
+    "fuelLevel",
+    "tempCO",
+    "tempCOSet",
+    "statusCWU",
+    "tempCWU",
+    "tempCWUSet",
+    "tempFlueGas",
+    "mode",
+    "fanPower",
+    "thermostat",
+    "tempExternalSensor",
+    "tempLowerBuffer",
+    "tempUpperBuffer",
+    "quality",
+    "signal",
+    "softVer",
+    "controllerID",
+    "moduleASoftVer",
+    "moduleBSoftVer",
+    "moduleCSoftVer",
+    "moduleLambdaSoftVer",
+    "modulePanelSoftVer",
+    "moduleEcoSTERSoftVer",
+    # ecoMAX850R2-X specific sensors
+    "fuelConsum",
+    "fuelStream",
+    "tempBack",
+    "transmission",
+    "statusCO",
+}
+
+# Main sensor mapping by controller type
 SENSOR_MAP_KEY = {
-    "ecoMAX360i": {
-        "PS",
-        "Circuit2thermostatTemp",
-        "TempClutch",
-        "Circuit3thermostatTemp",
-        "TempWthr",
-        "TempCircuit3",
-        "TempCircuit2",
-        "TempBuforUp",
-        "TempCWU",
-        "TempBuforDown",
-        "heatingUpperTemp",
-        "Circuit1thermostat",
-        "heating_work_state_pump4",
-    },
-    # ecoSTER thermostat sensors if moduleEcoSTERSoftVer is not None
-    "ecoSter": {
-        # ecoSTER temperature sensors
-        "ecoSterTemp1",
-        "ecoSterTemp2",
-        "ecoSterTemp3",
-        "ecoSterTemp4",
-        "ecoSterTemp5",
-        "ecoSterTemp6",
-        "ecoSterTemp7",
-        "ecoSterTemp8",
-        # ecoSTER setpoint sensors
-        "ecoSterSetTemp1",
-        "ecoSterSetTemp2",
-        "ecoSterSetTemp3",
-        "ecoSterSetTemp4",
-        "ecoSterSetTemp5",
-        "ecoSterSetTemp6",
-        "ecoSterSetTemp7",
-        "ecoSterSetTemp8",
-        # ecoSTER mode sensors
-        "ecoSterMode1",
-        "ecoSterMode2",
-        "ecoSterMode3",
-        "ecoSterMode4",
-        "ecoSterMode5",
-        "ecoSterMode6",
-        "ecoSterMode7",
-        "ecoSterMode8",
-    },
-    "lambda": {
-        "lambdaStatus",
-        "lambdaSet",
-        "lambdaLevel",
-    },
-    # ecoSOL500 solar collector sensors
-    "ecoSOL500": {
-        # Temperature sensors
-        "T1",  # Collector temperature
-        "T2",  # Tank temperature
-        "T3",  # Tank temperature
-        "T4",  # Return temperature
-        "T5",  # Collector temperature - power measurement
-        "T6",  # Temperature sensor
-        "TzCWU",  # Hot water temperature
-        # Pump status sensors
-        "P1",  # Pump 1 status
-        "P2",  # Pump 2 status
-        # Output status
-        "H",  # Output status
-        # Heat output
-        "Uzysk_ca_kowity",  # Total heat output
-    },
-    "_default": {
-        "boilerPower",
-        "boilerPowerKW",
-        "tempFeeder",
-        "fuelLevel",
-        "tempCO",
-        "tempCOSet",
-        "statusCWU",
-        "tempCWU",
-        "tempCWUSet",
-        "tempFlueGas",
-        "mode",
-        "fanPower",
-        "thermostat",
-        "tempExternalSensor",
-        "tempLowerBuffer",
-        "tempUpperBuffer",
-        "quality",
-        "signal",
-        "softVer",
-        "controllerID",
-        "moduleASoftVer",
-        "moduleBSoftVer",
-        "moduleCSoftVer",
-        "moduleLambdaSoftVer",
-        "modulePanelSoftVer",
-        "moduleEcoSTERSoftVer",
-        # ecoMAX850R2-X specific sensors
-        "fuelConsum",
-        "fuelStream",
-        "tempBack",
-        "transmission",
-        "statusCO",
-    },
+    "ecoMAX360i": ECOMAX360I_SENSORS,
+    "ecoSter": ECOSTER_SENSORS,
+    "lambda": LAMBDA_SENSORS,
+    "ecoSOL 500": ECOSOL500_SENSORS,
+    "_default": DEFAULT_SENSORS,
 }
 
+# =============================================================================
+# DEVICE-SPECIFIC BINARY SENSOR MAPPINGS
+# =============================================================================
+# Default binary sensors for most controllers
+DEFAULT_BINARY_SENSORS = {
+    "lighterWorks",
+    "pumpCOWorks",
+    "fanWorks",
+    "feederWorks",
+    "pumpFireplaceWorks",
+    "pumpCWUWorks",
+    "mainSrv",
+    "wifi",
+    "lan",
+    "thermostat",
+    "statusCWU",
+    # ecoMAX850R2-X specific binary sensors
+    "contactGZC",
+    "contactGZCActive",
+    "pumpCirculationWorks",
+    "pumpSolarWorks",
+}
+
+# ecoSTER thermostat binary sensors
+ECOSTER_BINARY_SENSORS = {
+    # ecoSTER contact sensors
+    "ecoSterContacts1",
+    "ecoSterContacts2",
+    "ecoSterContacts3",
+    "ecoSterContacts4",
+    "ecoSterContacts5",
+    "ecoSterContacts6",
+    "ecoSterContacts7",
+    "ecoSterContacts8",
+    # ecoSTER day schedule sensors
+    "ecoSterDaySched1",
+    "ecoSterDaySched2",
+    "ecoSterDaySched3",
+    "ecoSterDaySched4",
+    "ecoSterDaySched5",
+    "ecoSterDaySched6",
+    "ecoSterDaySched7",
+    "ecoSterDaySched8",
+}
+
+# ecoSOL 500 solar collector binary sensors
+ECOSOL500_BINARY_SENSORS = {
+    "wifi",
+    "lan",
+    "mainSrv",
+    "fuelConsumptionCalc",
+    "ecosrvHttps",
+}
+
+# Main binary sensor mapping by controller type
 BINARY_SENSOR_MAP_KEY = {
-    "_default": {
-        "lighterWorks",
-        "pumpCOWorks",
-        "fanWorks",
-        "feederWorks",
-        "pumpFireplaceWorks",
-        "pumpCWUWorks",
-        "mainSrv",
-        "wifi",
-        "lan",
-        "thermostat",
-        "statusCWU",
-        # ecoMAX850R2-X specific binary sensors
-        "contactGZC",
-        "contactGZCActive",
-        "pumpCirculationWorks",
-        "pumpSolarWorks",
-    },
-    # ecoSTER thermostat binary sensors if moduleEcoSTERSoftVer is not None
-    "ecoSter": {
-        # ecoSTER contact sensors
-        "ecoSterContacts1",
-        "ecoSterContacts2",
-        "ecoSterContacts3",
-        "ecoSterContacts4",
-        "ecoSterContacts5",
-        "ecoSterContacts6",
-        "ecoSterContacts7",
-        "ecoSterContacts8",
-        # ecoSTER day schedule sensors
-        "ecoSterDaySched1",
-        "ecoSterDaySched2",
-        "ecoSterDaySched3",
-        "ecoSterDaySched4",
-        "ecoSterDaySched5",
-        "ecoSterDaySched6",
-        "ecoSterDaySched7",
-        "ecoSterDaySched8",
-    },
+    "_default": DEFAULT_BINARY_SENSORS,
+    "ecoSter": ECOSTER_BINARY_SENSORS,
+    "ecoSOL 500": ECOSOL500_BINARY_SENSORS,
 }
 
+# =============================================================================
+# NUMBER ENTITY MAPPINGS
+# =============================================================================
 NUMBER_MAP = {
     "1280": "tempCOSet",  # Boiler temperature setpoint
     "1281": "tempCWUSet",  # Hot water temperature setpoint
@@ -250,7 +316,9 @@ NUMBER_MAP = {
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
 }
 
-
+# =============================================================================
+# ENTITY UNIT MAPPINGS
+# =============================================================================
 # By default all sensors unit_of_measurement are None
 ENTITY_UNIT_MAP = {
     "tempCO": UnitOfTemperature.CELSIUS,
@@ -344,8 +412,18 @@ ENTITY_UNIT_MAP = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": PERCENTAGE,
+    # ecoSOL500 diagnostic units
+    "ecosrvAddr": None,
+    "softVer": None,
+    "routerType": None,
+    "protocolType": None,
+    "controllerID": None,
+    "ecosrvSoftVer": None,
 }
 
+# =============================================================================
+# ENTITY STATE CLASS MAPPINGS
+# =============================================================================
 # By default all sensors state_class are MEASUREMENT
 STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "lambdaStatus": None,
@@ -365,11 +443,11 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "heating_work_state_pump4": None,
 }
 
-# By default all sensors device_class are None
+# =============================================================================
+# ENTITY DEVICE CLASS MAPPINGS
+# =============================================================================
+
 ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
-    #############################
-    #          SENSORS
-    #############################
     "tempFeeder": SensorDeviceClass.TEMPERATURE,
     "tempExternalSensor": SensorDeviceClass.TEMPERATURE,
     "tempCO": SensorDeviceClass.TEMPERATURE,
@@ -452,27 +530,31 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
+    # ecoSOL500 diagnostic device classes
+    "ecosrvAddr": None,
+    "softVer": None,
+    "routerType": None,
+    "protocolType": None,
+    "controllerID": None,
+    "ecosrvSoftVer": None,
 }
 
+# Number entity device classes
 ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
-    #############################
-    #       NUMBER SENSORS
-    #############################
     "tempCOSet": NumberDeviceClass.TEMPERATURE,
     "tempCWUSet": NumberDeviceClass.TEMPERATURE,
     # ecoMAX850R2-X specific number entities
     "mixerSetTemp5": NumberDeviceClass.TEMPERATURE,
 }
 
-
+# Binary sensor device classes
 ENTITY_BINARY_DEVICE_CLASS_MAP = {
-    #############################
-    #      BINARY SENSORS
-    #############################
     # By default all binary sensors device_class are RUNNING
     "mainSrv": BinarySensorDeviceClass.CONNECTIVITY,
     "wifi": BinarySensorDeviceClass.CONNECTIVITY,
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
+    "fuelConsumptionCalc": BinarySensorDeviceClass.RUNNING,
+    "ecosrvHttps": BinarySensorDeviceClass.CONNECTIVITY,
     "lambdaStatus": BinarySensorDeviceClass.RUNNING,
     "thermostat": BinarySensorDeviceClass.RUNNING,
     "statusCWU": BinarySensorDeviceClass.RUNNING,
@@ -481,7 +563,10 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
 }
 
-"""Add only keys where precision more than 0 needed"""
+# =============================================================================
+# ENTITY PRECISION MAPPINGS
+# =============================================================================
+# Add only keys where precision more than 0 needed
 ENTITY_PRECISION = {
     "tempFeeder": 1,
     "tempExternalSensor": 1,
@@ -547,8 +632,16 @@ ENTITY_PRECISION = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": 1,
+    # ecoSOL500 diagnostic precision
+    "ecosrvAddr": None,
+    "routerType": None,
+    "protocolType": None,
+    "ecosrvSoftVer": None,
 }
 
+# =============================================================================
+# ENTITY ICON MAPPINGS
+# =============================================================================
 ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
@@ -595,7 +688,10 @@ ENTITY_ICON = {
     "tempUpperBuffer": "mdi:thermometer",
     "tempLowerBuffer": "mdi:thermometer",
     "mainSrv": "mdi:server-network",
+    "wifi": "mdi:wifi",
     "lan": "mdi:lan-connect",
+    "fuelConsumptionCalc": "mdi:calculator",
+    "ecosrvHttps": "mdi:lock",
     "softVer": "mdi:alarm-panel-outline",
     "controllerID": "mdi:alarm-panel-outline",
     "moduleASoftVer": "mdi:raspberry-pi",
@@ -679,8 +775,16 @@ ENTITY_ICON = {
     "P2": "mdi:pump",
     "H": "mdi:gauge",
     "Uzysk_ca_kowity": "mdi:gauge",
+    # ecoSOL500 diagnostic icons
+    "ecosrvAddr": "mdi:server",
+    "routerType": "mdi:router-wireless",
+    "protocolType": "mdi:protocol",
+    "ecosrvSoftVer": "mdi:server-network",
 }
 
+# =============================================================================
+# ENTITY ICON OFF MAPPINGS
+# =============================================================================
 ENTITY_ICON_OFF = {
     "pumpCOWorks": "mdi:pump-off",
     "fanWorks": "mdi:fan-off",
@@ -695,7 +799,10 @@ ENTITY_ICON_OFF = {
     "mixerPumpWorks6": "mdi:pump-off",
     "statusCWU": "mdi:water-boiler-off",
     "mainSrv": "mdi:server-network-off",
+    "wifi": "mdi:wifi-off",
     "lan": "mdi:lan-disconnect",
+    "fuelConsumptionCalc": "mdi:calculator-off",
+    "ecosrvHttps": "mdi:lock-off",
     "lighterWorks": "mdi:fire-off",
     "thermostat": "mdi:thermostat-off",
     # ecoMAX850R2-X specific off icons
@@ -722,6 +829,9 @@ ENTITY_ICON_OFF = {
     "ecoSterDaySched8": "mdi:calendar-clock-off",
 }
 
+# =============================================================================
+# ENTITY VALUE PROCESSORS
+# =============================================================================
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
 ENTITY_VALUE_PROCESSOR = {
@@ -737,7 +847,9 @@ ENTITY_VALUE_PROCESSOR = {
     "thermostat": lambda x: "ON" if x == 1 else "OFF",
 }
 
-
+# =============================================================================
+# ENTITY CATEGORY MAPPINGS
+# =============================================================================
 ENTITY_CATEGORY = {
     "signal": EntityCategory.DIAGNOSTIC,
     "quality": EntityCategory.DIAGNOSTIC,
@@ -752,8 +864,16 @@ ENTITY_CATEGORY = {
     "mainSrv": EntityCategory.DIAGNOSTIC,
     "wifi": EntityCategory.DIAGNOSTIC,
     "lan": EntityCategory.DIAGNOSTIC,
+    "fuelConsumptionCalc": EntityCategory.DIAGNOSTIC,
+    "ecosrvHttps": EntityCategory.DIAGNOSTIC,
+    "ecosrvAddr": EntityCategory.DIAGNOSTIC,
+    "routerType": EntityCategory.DIAGNOSTIC,
+    "ecosrvSoftVer": EntityCategory.DIAGNOSTIC,
 }
 
+# =============================================================================
+# ENTITY VALUE LIMITS
+# =============================================================================
 ENTITY_MIN_VALUE = {
     "tempCOSet": 27,
     "tempCWUSet": 20,

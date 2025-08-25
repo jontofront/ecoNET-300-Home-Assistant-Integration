@@ -332,14 +332,24 @@ class Econet300Api:
             return regParamsData
 
     async def fetch_param_edit_data(self):
-        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
+        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available.
+        
+        Note: This endpoint is only supported by certain controllers (e.g., ecoMAX series).
+        Controllers like ecoSOL500, ecoSter, SControl MK1 don't support this endpoint.
+        The common.py skip_params_edits() function handles controller-specific endpoint support.
+        """
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             limits = await self._fetch_api_data_by_key(
                 API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
             )
+            # Ensure we always return a dict, not None
+            if limits is None:
+                limits = {}
             self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
 
-        return self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
+        result = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
+        # Ensure we always return a dict, not None
+        return result if result is not None else {}
 
     async def fetch_reg_params(self) -> dict[str, Any]:
         """Fetch and return the regParams data from ip/econet/regParams endpoint."""

@@ -485,6 +485,18 @@
       },
       "uzysk_ca_kowity": {
         "name": "Total Heat Output"
+      },
+      "fuel_consumption_calc": {
+        "name": "Fuel Consumption Calculator"
+      },
+      "ecosrv_https": {
+        "name": "ecoNET Server HTTPS"
+      },
+      "ecosrv_addr": {
+        "name": "ecoNET Server Address"
+      },
+      "ecosrv_soft_ver": {
+        "name": "ecoNET Server Software Ver."
       }
     }
   }

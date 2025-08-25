@@ -1,355 +1,355 @@
 {
-    "remoteMenuCurrDataParamsVer": "17127",
+    "remoteMenuCurrDataParamsVer": "17127_1",
     "data": {
-        "151": {
-            "special": 2,
-            "name": "Oxygen",
-            "unit": 31
-        },
-        "150": {
-            "special": 3,
-            "name": "Valve mixer 4",
-            "unit": 31
-        },
-        "155": {
-            "special": 0,
-            "name": "Work at 100%",
-            "unit": 4
-        },
-        "154": {
-            "special": 1,
-            "name": "Oxygen",
-            "unit": 5
-        },
-        "157": {
-            "special": 0,
-            "name": "Work at 30%",
-            "unit": 4
-        },
-        "156": {
-            "special": 0,
-            "name": "Work at 50%",
-            "unit": 4
-        },
-        "159": {
-            "special": 0,
-            "name": "Firing-up count",
-            "unit": 0
-        },
-        "158": {
-            "special": 0,
-            "name": "Feeder work",
-            "unit": 4
-        },
-        "1288": {
-            "special": 0,
-            "name": "Preset temp. mixer 2",
-            "unit": 1
-        },
-        "114": {
-            "special": 1,
-            "name": "Fuel level",
-            "unit": 31
-        },
-        "117": {
-            "special": 1,
-            "name": "Boiler thermostat",
-            "unit": 31
-        },
-        "113": {
-            "special": 1,
-            "name": "Unseal",
-            "unit": 31
-        },
-        "1550": {
-            "special": 1,
-            "name": "Pump mixer 3",
-            "unit": 31
-        },
-        "139": {
-            "special": 0,
-            "name": "Valve mixer 1",
-            "unit": 5
-        },
-        "119": {
-            "special": 1,
-            "name": "Room thermostat mixer 2",
-            "unit": 31
-        },
-        "118": {
-            "special": 1,
-            "name": "Room thermostat mixer 1",
-            "unit": 31
-        },
-        "171": {
-            "special": 5,
-            "name": "Wifi status:",
-            "unit": 31
-        },
-        "170": {
-            "special": 0,
-            "name": "Signal strenght:",
-            "unit": 5
-        },
-        "1547": {
-            "special": 1,
-            "name": "Pump mixer 2",
-            "unit": 31
-        },
-        "26": {
-            "special": 1,
-            "name": "Feeder temperature",
-            "unit": 1
-        },
-        "1542": {
-            "special": 1,
-            "name": "HUW pump",
-            "unit": 31
-        },
-        "1543": {
-            "special": 1,
-            "name": "Circulating pump",
-            "unit": 31
-        },
-        "1540": {
-            "special": 1,
-            "name": "Additional feeder",
-            "unit": 31
-        },
-        "1541": {
-            "special": 1,
-            "name": "Boiler pump",
-            "unit": 31
-        },
-        "173": {
-            "special": 0,
-            "name": "SSID:",
-            "unit": 0
-        },
-        "28": {
-            "special": 1,
-            "name": "Weather temperature",
-            "unit": 1
-        },
-        "161": {
-            "special": 0,
-            "name": "IP:",
-            "unit": 0
-        },
         "1": {
-            "special": 1,
+            "unit": 31,
             "name": "Lighter",
-            "unit": 31
+            "special": 1
         },
         "3": {
-            "special": 1,
+            "unit": 31,
             "name": "Poker",
-            "unit": 31
+            "special": 1
         },
-        "1553": {
-            "special": 1,
-            "name": "Pump mixer 4",
-            "unit": 31
+        "26": {
+            "unit": 1,
+            "name": "Feeder temperature",
+            "special": 1
         },
-        "1032": {
-            "special": 1,
-            "name": "Temp. mixer 2",
-            "unit": 1
+        "28": {
+            "unit": 1,
+            "name": "Weather temperature",
+            "special": 1
         },
-        "1033": {
-            "special": 1,
-            "name": "Temp. mixer 3",
-            "unit": 1
+        "113": {
+            "unit": 31,
+            "name": "Unseal",
+            "special": 1
         },
-        "1290": {
-            "special": 0,
-            "name": "Preset temp. mixer 4",
-            "unit": 1
+        "114": {
+            "unit": 31,
+            "name": "Fuel level",
+            "special": 1
         },
-        "1031": {
-            "special": 1,
-            "name": "Temp. mixer 1",
-            "unit": 1
+        "117": {
+            "unit": 31,
+            "name": "Boiler thermostat",
+            "special": 1
         },
-        "1034": {
-            "special": 1,
-            "name": "Temp. mixer 4",
-            "unit": 1
+        "118": {
+            "unit": 31,
+            "name": "Room thermostat mixer 1",
+            "special": 1
         },
-        "146": {
-            "special": 4,
-            "name": "Servo mixer 4",
-            "unit": 31
-        },
-        "147": {
-            "special": 3,
-            "name": "Valve mixer 1",
-            "unit": 31
-        },
-        "144": {
-            "special": 4,
-            "name": "Servo mixer 2",
-            "unit": 31
-        },
-        "145": {
-            "special": 4,
-            "name": "Servo mixer 3",
-            "unit": 31
-        },
-        "142": {
-            "special": 0,
-            "name": "Valve mixer 4",
-            "unit": 5
-        },
-        "143": {
-            "special": 4,
-            "name": "Servo mixer 1",
-            "unit": 31
-        },
-        "140": {
-            "special": 0,
-            "name": "Valve mixer 2",
-            "unit": 5
-        },
-        "141": {
-            "special": 0,
-            "name": "Valve mixer 3",
-            "unit": 5
-        },
-        "1792": {
-            "special": 7,
-            "name": "",
-            "unit": 31
-        },
-        "1544": {
-            "special": 1,
-            "name": "Pump mixer 1",
-            "unit": 31
-        },
-        "148": {
-            "special": 3,
-            "name": "Valve mixer 2",
-            "unit": 31
-        },
-        "1794": {
-            "special": 0,
-            "name": "Burner output",
-            "unit": 5
+        "119": {
+            "unit": 31,
+            "name": "Room thermostat mixer 2",
+            "special": 1
         },
         "120": {
-            "special": 1,
+            "unit": 31,
             "name": "Room thermostat mixer 3",
-            "unit": 31
+            "special": 1
         },
         "121": {
-            "special": 1,
+            "unit": 31,
             "name": "Room thermostat mixer 4",
-            "unit": 31
+            "special": 1
         },
-        "168": {
-            "special": 5,
-            "name": "Server:",
-            "unit": 31
+        "139": {
+            "unit": 5,
+            "name": "Valve mixer 1",
+            "special": 0
         },
-        "169": {
-            "special": 6,
-            "name": "Encryption:",
-            "unit": 31
+        "140": {
+            "unit": 5,
+            "name": "Valve mixer 2",
+            "special": 0
         },
-        "164": {
-            "special": 5,
-            "name": "Server:",
-            "unit": 31
+        "141": {
+            "unit": 5,
+            "name": "Valve mixer 3",
+            "special": 0
         },
-        "165": {
-            "special": 0,
-            "name": "IP:",
-            "unit": 0
+        "142": {
+            "unit": 5,
+            "name": "Valve mixer 4",
+            "special": 0
         },
-        "166": {
-            "special": 0,
-            "name": "Mask:",
-            "unit": 0
+        "143": {
+            "unit": 31,
+            "name": "Servo mixer 1",
+            "special": 4
         },
-        "167": {
-            "special": 0,
-            "name": "Gateway:",
-            "unit": 0
+        "144": {
+            "unit": 31,
+            "name": "Servo mixer 2",
+            "special": 4
         },
-        "160": {
-            "special": 0,
-            "name": "Number of resets",
-            "unit": 4
+        "145": {
+            "unit": 31,
+            "name": "Servo mixer 3",
+            "special": 4
         },
-        "1030": {
-            "special": 1,
-            "name": "Emission temperature",
-            "unit": 1
+        "146": {
+            "unit": 31,
+            "name": "Servo mixer 4",
+            "special": 4
         },
-        "162": {
-            "special": 0,
-            "name": "Mask:",
-            "unit": 0
+        "147": {
+            "unit": 31,
+            "name": "Valve mixer 1",
+            "special": 3
         },
-        "163": {
-            "special": 0,
-            "name": "Gateway:",
-            "unit": 0
-        },
-        "1025": {
-            "special": 1,
-            "name": "HUW temperature",
-            "unit": 1
-        },
-        "1024": {
-            "special": 1,
-            "name": "Boiler temperature",
-            "unit": 1
-        },
-        "1287": {
-            "special": 0,
-            "name": "Preset temp. mixer 1",
-            "unit": 1
-        },
-        "1281": {
-            "special": 0,
-            "name": "HUW preset temperature",
-            "unit": 1
-        },
-        "1280": {
-            "special": 0,
-            "name": "Preset boiler temperature",
-            "unit": 1
-        },
-        "1289": {
-            "special": 0,
-            "name": "Preset temp. mixer 3",
-            "unit": 1
-        },
-        "1028": {
-            "special": 1,
-            "name": "Upper buffer temperature",
-            "unit": 1
-        },
-        "1536": {
-            "special": 1,
-            "name": "Fan",
-            "unit": 31
-        },
-        "1029": {
-            "special": 1,
-            "name": "Lower buffer temperature",
-            "unit": 1
+        "148": {
+            "unit": 31,
+            "name": "Valve mixer 2",
+            "special": 3
         },
         "149": {
-            "special": 3,
+            "unit": 31,
             "name": "Valve mixer 3",
-            "unit": 31
+            "special": 3
+        },
+        "150": {
+            "unit": 31,
+            "name": "Valve mixer 4",
+            "special": 3
+        },
+        "151": {
+            "unit": 31,
+            "name": "Oxygen",
+            "special": 2
+        },
+        "154": {
+            "unit": 5,
+            "name": "Oxygen",
+            "special": 1
+        },
+        "155": {
+            "unit": 4,
+            "name": "Work at 100%",
+            "special": 0
+        },
+        "156": {
+            "unit": 4,
+            "name": "Work at 50%",
+            "special": 0
+        },
+        "157": {
+            "unit": 4,
+            "name": "Work at 30%",
+            "special": 0
+        },
+        "158": {
+            "unit": 4,
+            "name": "Feeder work",
+            "special": 0
+        },
+        "159": {
+            "unit": 0,
+            "name": "Firing-up count",
+            "special": 0
+        },
+        "160": {
+            "unit": 4,
+            "name": "Number of resets",
+            "special": 0
+        },
+        "161": {
+            "unit": 0,
+            "name": "IP:",
+            "special": 0
+        },
+        "162": {
+            "unit": 0,
+            "name": "Mask:",
+            "special": 0
+        },
+        "163": {
+            "unit": 0,
+            "name": "Gateway:",
+            "special": 0
+        },
+        "164": {
+            "unit": 31,
+            "name": "Server:",
+            "special": 5
+        },
+        "165": {
+            "unit": 0,
+            "name": "IP:",
+            "special": 0
+        },
+        "166": {
+            "unit": 0,
+            "name": "Mask:",
+            "special": 0
+        },
+        "167": {
+            "unit": 0,
+            "name": "Gateway:",
+            "special": 0
+        },
+        "168": {
+            "unit": 31,
+            "name": "Server:",
+            "special": 5
+        },
+        "169": {
+            "unit": 31,
+            "name": "Encryption:",
+            "special": 6
+        },
+        "170": {
+            "unit": 5,
+            "name": "Signal strenght:",
+            "special": 0
+        },
+        "171": {
+            "unit": 31,
+            "name": "Wifi status:",
+            "special": 5
+        },
+        "173": {
+            "unit": 0,
+            "name": "SSID:",
+            "special": 0
+        },
+        "1024": {
+            "unit": 1,
+            "name": "Boiler temperature",
+            "special": 1
+        },
+        "1025": {
+            "unit": 1,
+            "name": "HUW temperature",
+            "special": 1
+        },
+        "1028": {
+            "unit": 1,
+            "name": "Upper buffer temperature",
+            "special": 1
+        },
+        "1029": {
+            "unit": 1,
+            "name": "Lower buffer temperature",
+            "special": 1
+        },
+        "1030": {
+            "unit": 1,
+            "name": "Emission temperature",
+            "special": 1
+        },
+        "1031": {
+            "unit": 1,
+            "name": "Temp. mixer 1",
+            "special": 1
+        },
+        "1032": {
+            "unit": 1,
+            "name": "Temp. mixer 2",
+            "special": 1
+        },
+        "1033": {
+            "unit": 1,
+            "name": "Temp. mixer 3",
+            "special": 1
+        },
+        "1034": {
+            "unit": 1,
+            "name": "Temp. mixer 4",
+            "special": 1
+        },
+        "1280": {
+            "unit": 1,
+            "name": "Preset boiler temperature",
+            "special": 0
+        },
+        "1281": {
+            "unit": 1,
+            "name": "HUW preset temperature",
+            "special": 0
+        },
+        "1287": {
+            "unit": 1,
+            "name": "Preset temp. mixer 1",
+            "special": 0
+        },
+        "1288": {
+            "unit": 1,
+            "name": "Preset temp. mixer 2",
+            "special": 0
+        },
+        "1289": {
+            "unit": 1,
+            "name": "Preset temp. mixer 3",
+            "special": 0
+        },
+        "1290": {
+            "unit": 1,
+            "name": "Preset temp. mixer 4",
+            "special": 0
+        },
+        "1536": {
+            "unit": 31,
+            "name": "Fan",
+            "special": 1
         },
         "1538": {
-            "special": 1,
+            "unit": 31,
             "name": "Feeder",
-            "unit": 31
+            "special": 1
+        },
+        "1540": {
+            "unit": 31,
+            "name": "Additional feeder",
+            "special": 1
+        },
+        "1541": {
+            "unit": 31,
+            "name": "Boiler pump",
+            "special": 1
+        },
+        "1542": {
+            "unit": 31,
+            "name": "HUW pump",
+            "special": 1
+        },
+        "1543": {
+            "unit": 31,
+            "name": "Circulating pump",
+            "special": 1
+        },
+        "1544": {
+            "unit": 31,
+            "name": "Pump mixer 1",
+            "special": 1
+        },
+        "1547": {
+            "unit": 31,
+            "name": "Pump mixer 2",
+            "special": 1
+        },
+        "1550": {
+            "unit": 31,
+            "name": "Pump mixer 3",
+            "special": 1
+        },
+        "1553": {
+            "unit": 31,
+            "name": "Pump mixer 4",
+            "special": 1
+        },
+        "1792": {
+            "unit": 31,
+            "name": "",
+            "special": 7
+        },
+        "1794": {
+            "unit": 5,
+            "name": "Burner output",
+            "special": 0
         }
     }
 }

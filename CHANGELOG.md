@@ -1,5 +1,44 @@
 # Changelog
 
+## [v1.1.8] - 2025-08-11
+### Fixed
+- **Critical Error Resolution**: Fixed `TypeError: argument of type 'NoneType' is not iterable` error
+  - **Problem**: System crashed when controllers didn't support `rmCurrentDataParamsEdits` endpoint
+  - **Solution**: Added controller-specific endpoint support detection and comprehensive safety checks
+  - **Impact**: No more crashes for ecoSOL500, ecoSOL, SControl MK1, and ecoMAX360i controllers
+  - **Files Modified**: `custom_components/econet300/api.py`, `common.py`, `entity.py`
+
+- **API Endpoint Error**: Fixed `Data for key: data does not exist in endpoint: rmCurrentDataParamsEdits` error
+  - **Problem**: API calls to unsupported endpoints caused system failures
+  - **Solution**: Implemented proactive controller detection to skip unsupported endpoints
+  - **Impact**: Better performance and stability for all controller types
+  - **Files Modified**: `custom_components/econet300/common.py`
+
+### Added
+- **Controller-Specific Endpoint Support**: Added intelligent detection of endpoint compatibility
+  - **Supported Controllers**: ecoMAX series (810P-L, 850R2-X, 860P2-N, 860P3-V)
+  - **Unsupported Controllers**: ecoSOL500, ecoSOL, SControl MK1, ecoMAX360i
+  - **Smart Detection**: System automatically detects controller type and skips incompatible endpoints
+  - **Performance Improvement**: No unnecessary API calls to unsupported endpoints
+
+- **Comprehensive Safety Checks**: Added multiple layers of protection against None values
+  - **API Level**: Ensures `fetch_param_edit_data()` always returns dict, never None
+  - **Entity Level**: Double-checks params_edits is always a dict before processing
+  - **Logging**: Clear warnings when unexpected None values are encountered
+  - **Graceful Degradation**: System continues working even when endpoints are unavailable
+
+### Changed
+- **Error Handling Strategy**: Changed from reactive error handling to proactive endpoint detection
+  - **Before**: Made API calls first, then handled errors when they occurred
+  - **After**: Check controller compatibility first, then make only supported API calls
+  - **Benefits**: Faster startup, better performance, no crashes, cleaner logs
+
+### Technical Changes
+- **skip_params_edits Function**: Enhanced to detect all unsupported controller types
+- **Safety Checks**: Added multiple validation layers in entity update methods
+- **Documentation**: Updated API documentation with controller-specific endpoint information
+- **Code Quality**: Improved error handling and logging throughout the system
+
 ## [v1.1.7] - 2025-08-08
 ### Fixed
 - **Entity Category Mapping**: Fixed binary sensor entity categories for better UI organization

@@ -144,9 +144,6 @@ class EcoSterBinarySensor(EcoSterEntity, BinarySensorEntity):
         idx: int,
     ):
         """Initialize the EcoSter binary sensor."""
-        self.entity_description = entity_description
-        self.api = api
-        self._idx = idx
         super().__init__(entity_description, coordinator, api, idx)
 
     def _sync_state(self, value: bool):
@@ -186,15 +183,22 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     data_regParams = coordinator.data.get("regParams") or {}
     data_sysParams = coordinator.data.get("sysParams") or {}
 
-    # Get all binary sensor keys to process
-    binary_sensor_keys = BINARY_SENSOR_MAP_KEY["_default"].copy()
+    # Get controller ID to determine which binary sensors to create
+    controller_id = data_sysParams.get("controllerID", None)
+
+    # Get controller-specific binary sensor keys or fall back to default
+    binary_sensor_keys = BINARY_SENSOR_MAP_KEY.get(
+        controller_id, BINARY_SENSOR_MAP_KEY["_default"]
+    ).copy()
 
     # Always filter out ecoSTER binary sensors from controller binary sensors since they are created as separate devices
     ecoSTER_binary_sensors = BINARY_SENSOR_MAP_KEY.get("ecoSter", set())
     binary_sensor_keys = binary_sensor_keys - ecoSTER_binary_sensors
+
     _LOGGER.info(
-        "Filtered out ecoSTER binary sensors from controller binary sensors: %s",
-        ecoSTER_binary_sensors,
+        "Using binary sensor keys for controllerID '%s': %s",
+        controller_id if controller_id else "None (default)",
+        binary_sensor_keys,
     )
 
     for data_key in binary_sensor_keys:
@@ -312,6 +316,58 @@ def create_ecoster_binary_sensors(
     return entities
 
 
+def create_ecosol500_binary_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+):
+    """Create ecoSOL500-specific binary sensor entities."""
+    entities: list[EconetBinarySensor] = []
+    sys_params = coordinator.data.get("sysParams", {})
+
+    # Check if this is an ecoSOL500 controller
+    controller_id = sys_params.get("controllerID", "")
+    if controller_id not in {"ecoSOL 500", "ecoSOL500"}:
+        _LOGGER.debug("Not an ecoSOL500 controller, skipping ecoSOL500 binary sensors")
+        return entities
+
+    _LOGGER.info("Creating ecoSOL500 binary sensors for controller: %s", controller_id)
+
+    # Get ecoSOL500 binary sensor keys
+    ecoSOL500_keys = BINARY_SENSOR_MAP_KEY.get("ecoSOL 500", set())
+
+    # Check data availability in both regParams and sysParams
+    data_regParams = coordinator.data.get("regParams", {})
+    data_sysParams = coordinator.data.get("sysParams", {})
+
+    for data_key in ecoSOL500_keys:
+        _LOGGER.debug("Processing ecoSOL500 binary sensor: %s", data_key)
+
+        # Check if data exists and is not None
+        if data_key in data_regParams and data_regParams.get(data_key) is not None:
+            entity = EconetBinarySensor(
+                create_binary_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created ecoSOL500 binary sensor from regParams: %s", data_key
+            )
+        elif data_key in data_sysParams and data_sysParams.get(data_key) is not None:
+            entity = EconetBinarySensor(
+                create_binary_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created ecoSOL500 binary sensor from sysParams: %s", data_key
+            )
+        else:
+            _LOGGER.warning(
+                "ecoSOL500 binary sensor %s not found or has no data, skipping",
+                data_key,
+            )
+
+    _LOGGER.info("Created %d ecoSOL500 binary sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -322,8 +378,19 @@ async def async_setup_entry(
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
     entities: list[EconetBinarySensor | MixerBinarySensor | EcoSterBinarySensor] = []
+
+    # Create standard binary sensors (including controller-specific ones)
     entities.extend(create_binary_sensors(coordinator, api))
+
+    # Create mixer binary sensors
     entities.extend(create_mixer_binary_sensors(coordinator, api))
+
+    # Create ecoSTER binary sensors
     entities.extend(create_ecoster_binary_sensors(coordinator, api))
+
+    # Create ecoSOL500-specific binary sensors
+    entities.extend(create_ecosol500_binary_sensors(coordinator, api))
+
+    _LOGGER.info("Total binary sensor entities: %d", len(entities))
     async_add_entities(entities)
     return True

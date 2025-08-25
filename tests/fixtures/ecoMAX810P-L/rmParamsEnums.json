@@ -1,5 +1,5 @@
 {
-    "remoteMenuParamsEnumsVer": "23521",
+    "remoteMenuParamsEnumsVer": "23521_1",
     "data": [
         {
             "values": [],
@@ -137,7 +137,7 @@
         },
         {
             "values": [
-                "Off",
+                "No",
                 "Universal",
                 "ecoSTER T1",
                 "ecoSTER T2",

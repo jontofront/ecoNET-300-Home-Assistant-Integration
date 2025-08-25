@@ -29,6 +29,21 @@ We have successfully discovered and documented **48 API endpoints** on the ecoNE
 - **Device Tested:** ecoMAX810P-L TOUCH
 - **Key Discovery:** Real-time sensor data access via `rmCurrentDataParams`
 
+## 🐛 Recent Bug Fixes & Improvements
+
+### ✅ Critical Error Resolution (Latest Release)
+- **Fixed:** `TypeError: argument of type 'NoneType' is not iterable` error
+- **Fixed:** `Data for key: data does not exist in endpoint: rmCurrentDataParamsEdits` error
+- **Added:** Controller-specific endpoint support detection
+- **Added:** Comprehensive safety checks for unsupported endpoints
+- **Added:** Full ecoSOL500 solar collector system support
+
+### 🎯 What This Means for Users
+- **No more crashes** when using ecoSOL500 or other unsupported controllers
+- **Better performance** - system skips unsupported endpoints proactively
+- **Enhanced stability** - comprehensive error handling and safety checks
+- **New device support** - ecoSOL500 integration with 11 sensors
+
 ---
 
 ## Overview
@@ -49,6 +64,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **ecoMAX360** boiler controller
 - **ecoMAX860P2-N** boiler controller
 - **ecoMAX860P3-V** boiler controller
+- **ecoSOL500** solar collector system controller
 - **ecoSOL** solar thermal controller
 - **SControl MK1** control module
 - Other ecoNET300 compatible devices

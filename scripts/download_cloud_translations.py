@@ -20,7 +20,13 @@ TRANSLATION_FILES = {
     "econet_transp1.js": "?ae7cdce1",
     "econet_transp2.js": "?94994b86",
     "econet_transp3.js": "?2224d6f0",
-    "econet_transp4.js": "?93f9fa7e"
+    "econet_transp4.js": "?93f9fa7e",
+    # Controller and device setup files
+    "dev_set1.js": "?332fd073",
+    "dev_set2.js": "?94aabcac", 
+    "dev_set3.js": "?4fc3a2c6",
+    "dev_set4.js": "?8ba3d676",
+    "dev_set5.js": "?20666c27"
 }
 
 # Output directory
