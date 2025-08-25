@@ -45,8 +45,18 @@ body:
     id: sensor_name
     attributes:
       label: "Sensor Name"
-      description: "What should this sensor be called? (e.g., 'Boiler Temperature', 'Pump Status')"
-      placeholder: "Boiler Temperature"
+      description: "What should this sensor be called? Use clear, descriptive names that will be translated into multiple languages. Check existing translations to maintain consistency."
+      placeholder: "e.g., Boiler Temperature, Pump Status, System Pressure"
+
+  - type: markdown
+    attributes:
+      value: |
+        **🌐 Translation Guidelines:**
+
+        - **Check existing names**: Browse [current translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/custom_components/econet300/translations/en.json) to see naming patterns
+        - **Cloud translations**: Check [official ecoNET translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for your parameter
+        - **Naming convention**: Use descriptive names like "Boiler Temperature" not "temp1"
+        - **Language support**: Names will be translated to English, Polish, and other languages
 
   - type: dropdown
     id: entity_type
