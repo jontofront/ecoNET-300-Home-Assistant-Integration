@@ -16,12 +16,30 @@ body:
         - Verify the sensor is supported by your ecoNET device model
         - Check the [cloud translations reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for existing translations
 
-  - type: input
+  - type: dropdown
     id: device_model
     attributes:
       label: "Device Model"
-      description: "What ecoNET device model do you have? (e.g., ecoMAX810P-L, ecoSOL500, ecoMAX360)"
-      placeholder: "ecoMAX810P-L"
+      description: "What ecoNET device model do you have?"
+      options:
+        - "ecoMAX810P-L"
+        - "ecoSOL500"
+        - "ecoMAX360"
+        - "ecoMAX850R2-X"
+        - "ecoMAX860P2-N"
+        - "ecoMAX860P3-V"
+        - "ecoSOL"
+        - "SControl MK1"
+        - "Other (please specify)"
+
+  - type: input
+    id: device_model_other
+    attributes:
+      label: "Other Device Model"
+      description: "Please specify your ecoNET device model"
+      placeholder: "e.g., ecoMAX900P, ecoSOL300"
+    validations:
+      required: false
 
   - type: input
     id: sensor_name
