@@ -213,7 +213,7 @@ def create_controller_sensors(
                 "Created and appended sensor entity from sysParams: %s", entity
             )
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Key: %s is not mapped in regParams or sysParams, sensor entity will not be added.",
                 data_key,
             )
@@ -263,7 +263,7 @@ def create_mixer_sensors(
             coordinator.data.get("regParams", {}).get(mixer_key) is None
             for mixer_key in mixer_keys
         ):
-            _LOGGER.warning("Mixer: %s will not be created due to invalid data.", key)
+            _LOGGER.info("Mixer: %s will not be created due to invalid data.", key)
             continue
 
         # Create sensors for this mixer
@@ -319,7 +319,7 @@ def create_lambda_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
                 data_key,
             )
             continue
-        _LOGGER.warning(
+        _LOGGER.info(
             "Key: %s is not mapped, lamda sensor entity will not be added",
             data_key,
         )

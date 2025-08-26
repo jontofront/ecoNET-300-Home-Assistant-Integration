@@ -49,9 +49,6 @@ class Limits:
         self.min = min_v
         self.max = max_v
 
-    class AuthError(Exception):
-        """Raised when authentication fails."""
-
 
 class EconetClient:
     """Econet client class."""
@@ -198,7 +195,7 @@ class Econet300Api:
     ):
         """Set an attribute from system parameters with logging if unavailable."""
         if param_key not in sys_params:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "%s not in sys_params - cannot set proper %s", param_key, param_desc
             )
             setattr(self, attr_name, default)
@@ -208,7 +205,7 @@ class Econet300Api:
     async def set_param(self, param, value) -> bool:
         """Set param value in Econet300 API."""
         if param is None:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Requested param set for: '%s' but mapping for this param does not exist",
                 param,
             )
@@ -260,7 +257,7 @@ class Econet300Api:
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, fresh_data)
                 _LOGGER.debug("Successfully refreshed paramsEdits data: %s", fresh_data)
             else:
-                _LOGGER.warning("Failed to refresh paramsEdits data")
+                _LOGGER.info("Failed to refresh paramsEdits data")
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             _LOGGER.error("Error refreshing paramsEdits data: %s", e)
 
@@ -287,11 +284,11 @@ class Econet300Api:
         limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
         if not param:
-            _LOGGER.warning("Parameter name is None. Unable to fetch limits.")
+            _LOGGER.info("Parameter name is None. Unable to fetch limits.")
             return None
 
         if param not in limits:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Limits for parameter '%s' do not exist. Available limits: %s",
                 param,
                 limits,

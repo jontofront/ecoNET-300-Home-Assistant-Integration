@@ -68,7 +68,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         return key in self.data["regParams"]
 
     def has_param_edit_data(self, key: str) -> bool:
-        """Check if ."""
+        """Check if parameter edit data key is present in paramsEdits."""
         if self.data is None:
             return False
 

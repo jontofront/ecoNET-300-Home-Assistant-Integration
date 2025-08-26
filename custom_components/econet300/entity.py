@@ -67,7 +67,7 @@ class EconetEntity(CoordinatorEntity):
         # Safety check: ensure params_edits is always a dict
         if params_edits is None:
             params_edits = {}
-            _LOGGER.warning("paramsEdits was None, defaulting to empty dict")
+            _LOGGER.info("paramsEdits was None, defaulting to empty dict")
 
         _LOGGER.debug(
             "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s",
@@ -118,7 +118,7 @@ class EconetEntity(CoordinatorEntity):
         # Safety check: ensure params_edits is always a dict
         if params_edits is None:
             params_edits = {}
-            _LOGGER.warning("async_added_to_hass: paramsEdits was None, defaulting to empty dict")
+            _LOGGER.info("async_added_to_hass: paramsEdits was None, defaulting to empty dict")
         _LOGGER.debug("async_sysParams: %s", sys_params)
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)
@@ -149,7 +149,7 @@ class EconetEntity(CoordinatorEntity):
         if value is not None:
             _LOGGER.debug("Found key '%s' with value: %s", expected_key, value)
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s",
                 expected_key,
                 sys_keys,

@@ -218,7 +218,7 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
             entities.append(entity)
             _LOGGER.debug("Created and appended entity from sysParams: %s", entity)
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "key: %s is not mapped in regParams, binary sensor entity will not be added",
                 data_key,
             )
@@ -359,7 +359,7 @@ def create_ecosol500_binary_sensors(
                 "Created ecoSOL500 binary sensor from sysParams: %s", data_key
             )
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "ecoSOL500 binary sensor %s not found or has no data, skipping",
                 data_key,
             )
