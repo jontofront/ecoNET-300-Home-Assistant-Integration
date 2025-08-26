@@ -57,39 +57,9 @@ body:
         - **Naming convention**: Use descriptive names like "Boiler Temperature" not "temp1"
         - **Language support**: Names will be translated to English, Polish, and other languages
 
-  - type: markdown
-    attributes:
-      value: |
-        **📋 Common API Parameters Reference:**
-
-        **Temperature Sensors:**
-        - `tempCO` - Boiler temperature
-        - `tempCWU` - Hot water temperature
-        - `tempFeeder` - Feeder temperature
-        - `tempFlueGas` - Flue gas temperature
-        - `tempExternalSensor` - External sensor temperature
-        - `tempBack` - Return temperature
-        - `tempUpperBuffer` - Upper buffer temperature
-        - `tempLowerBuffer` - Lower buffer temperature
-        - `tempUpperSolar` - Upper solar temperature
-        - `tempLowerSolar` - Lower solar temperature
-        - `tempFireplace` - Fireplace temperature
-        - `ecoSterTemp1-8` - Room temperature sensors 1-8
-        - `mixerTemp1-8` - Mixer temperatures 1-8
-        - `circuitTemp1-8` - Circuit temperatures 1-8
-
-        **Status & Control:**
-        - `mode` - Operating mode
-        - `status` - System status
-        - `lambdaLevel` - Lambda sensor level
-        - `boilerPower` - Boiler power
-        - `fanPower` - Fan power
-        - `fuelLevel` - Fuel level
-        - `fuelStream` - Fuel stream
-
         **📚 Complete Translations Reference:**
         - **English & Polish**: [Comprehensive Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/ROBUST_TRANSLATIONS.md) - 1105+ parameters with full EN/PL translations
-        - **Raw Data**: [JSON Format](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/robust_translations.json) - For programmatic use
+        - **Raw Data**: [JSON Format](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/robust_translations.md) - For programmatic use
         - **Original Cloud Data**: [Raw Cloud Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json)
 
   - type: dropdown
