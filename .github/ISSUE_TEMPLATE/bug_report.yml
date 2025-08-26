@@ -1,4 +1,4 @@
-name: HA Econet300 Integration Bug Report
+name: Bug Report
 title: '"[Bug]: <short description>"'
 description: Report an issue with Econet300 home assistant integration.
 labels: ["bug", "triage"]
@@ -9,42 +9,27 @@ body:
       value: >-
         This issue form is for reporting bugs only!
         If you have a feature or enhancement request, please use the feature request issue type.
-        [feature request]: https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/new/choose
-
-  - type: input
-    id: bug_title
-    attributes:
-      label: Bug Title
-      description: A brief description of the bug.
-      placeholder: "Enter the bug title here"
 
   - type: textarea
     id: problem_description
     attributes:
       label: The problem
-      description: >-
-        Describe the issue you are experiencing here, to communicate to
-        the maintainers. Tell us what you were trying to do and what happened.
-        Provide a clear and concise description of what the problem is.
+      description: Describe the issue you are experiencing here.
       placeholder: "Enter the problem description here"
 
   - type: checkboxes
     id: connected_devices
     attributes:
       label: Connected devices
-      description: Select all ecoNET devices you have connected. For more information, see the [device documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices)
+      description: Select all ecoNET devices you have connected.
       options:
         - label: ecoMAX360
-        - label: ecoMAX360i
         - label: ecoMAX810P-L
         - label: ecoMAX850R2-X
         - label: ecoMAX860P2-N
         - label: ecoMAX860P3-V
         - label: ecoSOL 300
-        - label: ecoSOL 301
-        - label: ecoSOL 400
         - label: ecoSOL 500
-        - label: ecoSOL (generic)
         - label: SControl MK1
         - label: Other (please specify)
 
@@ -52,10 +37,8 @@ body:
     id: device_model_other
     attributes:
       label: Other Device Model
-      description: If you selected "Other (please specify)", please specify your ecoNET device model here
+      description: If you selected "Other", please specify your ecoNET device model here
       placeholder: "e.g., ecoMAX900P, ecoSOL300"
-    validations:
-      required: false
 
   - type: dropdown
     id: severity
@@ -106,33 +89,13 @@ body:
   - type: input
     id: ha_version
     attributes:
-      label: What version of Home Assistant Core has the issue?
-      description: >
-        Can be found in the System information section of Home Assistant.
-
-        [Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/redirect/system_health/)
-        [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
-
-  - type: input
-    id: last_working_version
-    attributes:
-      label: Last Known Good Version
-      description: What was the last working version of Econet300 integration? (If known, otherwise leave blank)
-
-  - type: markdown
-    attributes:
-      value: |
-        # Details
+      label: Home Assistant Core Version
+      description: What version of Home Assistant Core has the issue?
+      placeholder: "Enter the version here"
 
   - type: textarea
     id: diagnostics
     attributes:
       label: Diagnostics information
       placeholder: "Drag-and-drop diagnostics data file here"
-      description: >-
-        Follow HA guide to [download diagnostic data](https://www.home-assistant.io/docs/configuration/troubleshooting/#debug-logs-and-diagnostics).
-
-        **It would really help if you could download the diagnostics data for the device you are having issues with,
-        and <ins>drag-and-drop that file into the textbox below.</ins>**
-
-        It generally allows pinpointing defects and thus resolving issues faster.
+      description: Follow HA guide to download diagnostic data. It would really help if you could download the diagnostics data for the device you are having issues with.
