@@ -337,28 +337,21 @@ ecoNET-300-Home-Assistant-Integration/
 
 ## 📋 Versions
 
-* v0.3.3 - version is stable. Most of the work was done by @pblxpt, for which we're very thankful as the community.
-* v1.0.0 - A development version that retrieves more data from the API. It may be unstable, and upgrades from previous versions are not supported.
-* v1.1.1 - Added boiler ON/OFF control switch functionality. New features include direct boiler control via Home Assistant switches.
-* v1.1.3 - **Critical Fix**: Fixed temperature control API endpoint. Temperature setpoints now work correctly.
-* v1.1.3 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6 with smart entity creation.
+For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
-### New Features in v1.1.1
-- **Boiler Control Switch**: Turn your boiler ON/OFF directly from Home Assistant
-- **API Integration**: Uses the ecoNET-300's native `BOILER_CONTROL` parameter
-- **State Synchronization**: Switch state reflects actual boiler operation mode
-- **Real-time Updates**: Automatic state updates based on boiler mode changes
+### Key Versions
+* **v0.3.3** - Stable version by @pblxpt (original developer)
+* **v1.0.0** - Development version with enhanced API data retrieval
+* **v1.1.1** - Added boiler ON/OFF control switch functionality
+* **v1.1.3** - Critical fixes for temperature control and mixer setpoints
 
-### Critical Fix in v1.1.3
-- **Temperature Control**: Fixed API endpoint for temperature setpoints
-- **Boiler Temperature**: Users can now set boiler temperature setpoints
-- **Hot Water Temperature**: Hot water temperature can be adjusted
-- **Mixer Temperature**: All mixer temperature setpoints work correctly
-- **Number Entities**: Home Assistant number entities function properly
-- **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6
-- **Smart Entity Creation**: Only creates entities for mixers that exist on your boiler
-- **Translation Support**: Proper English and Polish translations for all mixer setpoints
-- **Improved Debugging**: Better error handling for development and troubleshooting
+### Latest Features
+- **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
+- **Temperature Setpoints**: Full control over heating and hot water temperatures
+- **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
+- **ecoSTER Integration**: Support for 8 room thermostats
+- **ecoSOL 500 Support**: Solar collector system integration
+- **Multi-language**: English and Polish translations
 
 ---
 
