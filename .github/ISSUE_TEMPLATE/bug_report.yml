@@ -75,7 +75,8 @@ body:
   - type: input
     id: econet300_version
     attributes:
-      label: What version of Econet300 integration has the issue?
+      label: Current Integration Version
+      description: What version of Econet300 integration has the issue?
       placeholder: "Enter the version here"
 
   - type: textarea
@@ -121,9 +122,8 @@ body:
   - type: input
     id: last_working_version
     attributes:
-      label: What was the last working version of Econet300 integration?
-      description: >
-        If known, otherwise leave blank.
+      label: Last Working Version
+      description: What was the last working version of Econet300 integration? (If known, otherwise leave blank)
 
   - type: markdown
     attributes:
