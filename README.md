@@ -18,33 +18,7 @@
 
 </div>
 
-## 🎉 Major Achievement: Complete API Discovery
 
-We have successfully discovered and documented **48 API endpoints** on the ecoNET-300 device, achieving a **100% success rate**! This represents a **12x increase** from the original 4 known endpoints.
-
-### 📊 Discovery Statistics
-- **Total Endpoints:** 48 (all successful)
-- **Total Data Retrieved:** 89.5 KB
-- **Average Response Time:** 0.130s
-- **Device Tested:** ecoMAX810P-L TOUCH
-- **Key Discovery:** Real-time sensor data access via `rmCurrentDataParams`
-
-## 🐛 Recent Bug Fixes & Improvements
-
-### ✅ Critical Error Resolution (Latest Release)
-- **Fixed:** `TypeError: argument of type 'NoneType' is not iterable` error
-- **Fixed:** `Data for key: data does not exist in endpoint: rmCurrentDataParamsEdits` error
-- **Added:** Controller-specific endpoint support detection
-- **Added:** Comprehensive safety checks for unsupported endpoints
-- **Added:** Full ecoSOL500 solar collector system support
-
-### 🎯 What This Means for Users
-- **No more crashes** when using ecoSOL500 or other unsupported controllers
-- **Better performance** - system skips unsupported endpoints proactively
-- **Enhanced stability** - comprehensive error handling and safety checks
-- **New device support** - ecoSOL500 integration with 11 sensors
-
----
 
 ## Overview
 
