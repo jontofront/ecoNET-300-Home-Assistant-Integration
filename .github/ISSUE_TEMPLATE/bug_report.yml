@@ -47,8 +47,6 @@ body:
         - label: ecoSOL (generic)
         - label: SControl MK1
         - label: Other (please specify)
-    validations:
-      required: true
 
   - type: input
     id: device_model_other
@@ -69,8 +67,6 @@ body:
         - "High - Major functionality affected"
         - "Medium - Minor functionality affected"
         - "Low - Cosmetic or minor issue"
-    validations:
-      required: true
 
   - type: input
     id: econet300_version
@@ -109,8 +105,6 @@ body:
 
   - type: input
     id: ha_version
-    validations:
-      required: true
     attributes:
       label: What version of Home Assistant Core has the issue?
       description: >
