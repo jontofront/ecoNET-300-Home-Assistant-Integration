@@ -18,7 +18,9 @@ This guide shows you how to use browser developer tools to find the exact API pa
 3. **Right-click anywhere** on the page → Select "Inspect Element"
 4. **Click on the "Network" tab** in the developer tools panel
 
-![Developer Tools Network Tab](https://via.placeholder.com/800x400/2ecc71/ffffff?text=Network+Tab+Open)
+![Developer Tools Network Tab - API Calls Visible](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/docs/images/developer_tools_network_tab.png)
+
+*The Network tab shows API calls like `getCurrentState`, `getDeviceParams`, `getDeviceRegParams` with status 200 (successful responses)*
 
 ### Step 2: Monitor API Calls
 
@@ -26,6 +28,12 @@ This guide shows you how to use browser developer tools to find the exact API pa
 2. **Refresh the page** (F5) or navigate to different sections
 3. **Look for requests** to your device's IP address (e.g., `192.168.1.100`)
 4. **Filter by "Fetch/XHR"** to see only API calls
+
+**What You'll See:**
+- API calls like `getCurrentState`, `getDeviceParams`, `getDeviceRegParams`
+- Status codes showing "200" for successful responses
+- Timeline markers showing when requests were made (500ms, 1000ms, 1500ms)
+- Filter options to narrow down the requests you want to examine
 
 ### Step 3: Find Parameter Keys
 
