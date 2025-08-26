@@ -147,25 +147,83 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 | Entity Key           | Description                                               | Endpoint              |
 |----------------------|-----------------------------------------------------------|-----------------------|
-| `tempFeeder`         | Temperature of the feeder mechanism                       | `../econet/regParams` |
-| `fuelLevel`          | Current fuel level in the system                          | `../econet/regParams` |
-| `tempCO`             | Current fireplace temperature                             | `../econet/regParams` |
-| `tempCOSet`          | Desired fireplace set temperature                         | `../econet/regParams` |
-| `statusCWU`          | Status of the hot water (CWU) system                      | `../econet/regParams` |
-| `tempCWU`            | Current hot water (CWU) temperature                       | `../econet/regParams` |
-| `tempCWUSet`         | Desired hot water (CWU) temperature                       | `../econet/regParams` |
-| `tempFlueGas`        | Exhaust temperature reading                               | `../econet/regParams` |
-| `mode`               | Current operational mode of the device                    | `../econet/regParams` |
-| `fanPower`           | Current fan power usage                                   | `../econet/regParams` |
-| `thermostat`         | Thermostat status or set temperature                      | `../econet/regParams` |
-| `tempExternalSensor` | Outside (external) temperature                            | `../econet/regParams` |
-| `tempLowerBuffer`    | Temperature of the lower thermal buffer                   | `../econet/regParams` |
-| `tempUpperBuffer`    | Temperature of the upper thermal buffer                   | `../econet/regParams` |
-| `boilerPower`        | Current power output of the boiler                        | `../econet/regParams` |
-| `quality`            | Fuel quality or system quality indicator (if applicable) | `../econet/sysParams` |
-| `signal`             | Signal strength or communication status                  | `../econet/sysParams` |
-| `softVer`            | Software version of the controller                       | `../econet/sysParams` |
-| `controllerID`       | Unique identifier for the controller                     | `../econet/sysParams` |
+| **Boiler & Heating** |
+| `boilerPower`        | Boiler output                                            | `../econet/regParams` |
+| `boilerPowerKW`      | Boiler power                                             | `../econet/regParams` |
+| `tempCO`             | Heating temperature                                       | `../econet/regParams` |
+| `tempCOSet`          | Heating target temperature                                | `../econet/regParams` |
+| `tempBack`           | Return temperature                                        | `../econet/regParams` |
+| `statusCO`           | Central heating status                                    | `../econet/regParams` |
+| **Hot Water (CWU)** |
+| `tempCWU`            | Water heater temperature                                  | `../econet/regParams` |
+| `tempCWUSet`         | Water heater set temperature                              | `../econet/regParams` |
+| `statusCWU`          | Water heater status                                       | `../econet/regParams` |
+| **Temperature Sensors** |
+| `tempFeeder`         | Feeder temperature                                        | `../econet/regParams` |
+| `tempFlueGas`        | Flue gas temperature                                      | `../econet/regParams` |
+| `tempExternalSensor` | Outside temperature                                       | `../econet/regParams` |
+| `tempLowerBuffer`    | Lower buffer temperature                                  | `../econet/regParams` |
+| `tempUpperBuffer`    | Upper buffer temperature                                  | `../econet/regParams` |
+| **Mixer Temperatures** |
+| `mixerTemp1`         | Mixer 1 temperature                                       | `../econet/regParams` |
+| `mixerTemp2`         | Mixer 2 temperature                                       | `../econet/regParams` |
+| `mixerTemp3`         | Mixer 3 temperature                                       | `../econet/regParams` |
+| `mixerTemp4`         | Mixer 4 temperature                                       | `../econet/regParams` |
+| `mixerTemp5`         | Mixer 5 temperature                                       | `../econet/regParams` |
+| `mixerTemp6`         | Mixer 6 temperature                                       | `../econet/regParams` |
+| **System Status** |
+| `mode`               | Boiler mode                                               | `../econet/regParams` |
+| `fanPower`           | Fan power                                                 | `../econet/regParams` |
+| `thermostat`         | Thermostat                                                | `../econet/regParams` |
+| **Fuel & Consumption** |
+| `fuelLevel`          | Fuel level                                                | `../econet/regParams` |
+| `fuelConsum`         | Fuel consumption                                          | `../econet/regParams` |
+| `fuelStream`         | Fuel stream                                               | `../econet/regParams` |
+| **ecoSTER Room Thermostats** |
+| `ecosterTemp1`       | Room temperature 1                                        | `../econet/regParams` |
+| `ecosterTemp2`       | Room temperature 2                                        | `../econet/regParams` |
+| `ecosterTemp3`       | Room temperature 3                                        | `../econet/regParams` |
+| `ecosterTemp4`       | Room temperature 4                                        | `../econet/regParams` |
+| `ecosterTemp5`       | Room temperature 5                                        | `../econet/regParams` |
+| `ecosterTemp6`       | Room temperature 6                                        | `../econet/regParams` |
+| `ecosterTemp7`       | Room temperature 7                                        | `../econet/regParams` |
+| `ecosterTemp8`       | Room temperature 8                                        | `../econet/regParams` |
+| `ecosterMode1`       | Room thermostat 1 mode                                    | `../econet/regParams` |
+| `ecosterMode2`       | Room thermostat 2 mode                                    | `../econet/regParams` |
+| `ecosterMode3`       | Room thermostat 3 mode                                    | `../econet/regParams` |
+| `ecosterMode4`       | Room thermostat 4 mode                                    | `../econet/regParams` |
+| `ecosterMode5`       | Room thermostat 5 mode                                    | `../econet/regParams` |
+| `ecosterMode6`       | Room thermostat 6 mode                                    | `../econet/regParams` |
+| `ecosterMode7`       | Room thermostat 7 mode                                    | `../econet/regParams` |
+| `ecosterMode8`       | Room thermostat 8 mode                                    | `../econet/regParams` |
+| **Lambda Sensor Module** |
+| `lambdaStatus`       | Lambda status                                             | `../econet/regParams` |
+| `lambdaSet`          | Lambda set                                                | `../econet/regParams` |
+| `lambdaLevel`        | Lambda level                                              | `../econet/regParams` |
+| **ecoSOL 500 Solar System** |
+| `T1`                 | Collector Temperature                                     | `../econet/regParams` |
+| `T2`                 | Tank Temperature                                          | `../econet/regParams` |
+| `T3`                 | Tank Temperature                                          | `../econet/regParams` |
+| `T4`                 | Return Temperature                                        | `../econet/regParams` |
+| `T5`                 | Collector Temperature - Power Measurement                 | `../econet/regParams` |
+| `T6`                 | Temperature Sensor                                        | `../econet/regParams` |
+| `TzCWU`              | Hot Water Temperature                                     | `../econet/regParams` |
+| `P1`                 | Pump 1 Status                                             | `../econet/regParams` |
+| `P2`                 | Pump 2 Status                                             | `../econet/regParams` |
+| `H`                  | Output Status                                             | `../econet/regParams` |
+| `Uzysk_ca_kowity`    | Total Heat Output                                         | `../econet/regParams` |
+| **System Information** |
+| `quality`            | Signal quality                                            | `../econet/sysParams` |
+| `signal`             | Signal strength                                           | `../econet/sysParams` |
+| `softVer`            | Module ecoNET version                                     | `../econet/sysParams` |
+| `controllerID`       | Controller name                                           | `../econet/sysParams` |
+| `moduleASoftVer`     | Module A version                                          | `../econet/sysParams` |
+| `moduleBSoftVer`     | Module B version                                          | `../econet/sysParams` |
+| `moduleCSoftVer`     | Module C version                                          | `../econet/sysParams` |
+| `moduleLambdaSoftVer`| Module Lambda version                                     | `../econet/sysParams` |
+| `modulePanelSoftVer` | Module Panel version                                      | `../econet/sysParams` |
+| `moduleEcoSTERSoftVer`| Module ecoSTER version                                    | `../econet/sysParams` |
+| `transmission`       | Transmission                                              | `../econet/regParams` |
 </details>
 
 ### Binary Sensors
@@ -175,19 +233,46 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 | Entity Key           | Description                                               | Endpoint              |
 |----------------------|-----------------------------------------------------------|-----------------------|
-| `pumpCO`             | Central heating pump status                               | `../econet/regParams` |
-| `pumpCWU`            | Hot water pump status                                     | `../econet/regParams` |
-| `pumpSolar`          | Solar pump status                                         | `../econet/regParams` |
-| `pumpCirculation`    | Circulation pump status                                   | `../econet/regParams` |
-| `pumpFireplace`      | Fireplace pump status                                     | `../econet/regParams` |
-| `fan`                | Fan status                                                | `../econet/regParams` |
-| `blowFan1`           | Blow fan 1 status                                         | `../econet/regParams` |
-| `blowFan2`           | Blow fan 2 status                                         | `../econet/regParams` |
-| `feeder`             | Feeder mechanism status                                   | `../econet/regParams` |
-| `lighter`            | Lighter status                                            | `../econet/regParams` |
-| `outerBoiler`        | Outer boiler status                                       | `../econet/regParams` |
-| `contactGZC`         | GZC contact status                                        | `../econet/regParams` |
-| `alarmOutput`        | Alarm output status                                       | `../econet/regParams` |
+| **Pump Status** |
+| `pumpCOWorks`        | Central heating pump working                              | `../econet/regParams` |
+| `pumpCWUWorks`       | Hot water pump working                                    | `../econet/regParams` |
+| `pumpSolarWorks`     | Solar pump working                                        | `../econet/regParams` |
+| `pumpCirculationWorks`| Circulation pump working                                  | `../econet/regParams` |
+| `pumpFireplaceWorks` | Fireplace pump working                                    | `../econet/regParams` |
+| **Fan Status** |
+| `fanWorks`           | Fan working                                               | `../econet/regParams` |
+| **System Components** |
+| `lighterWorks`       | Lighter working                                           | `../econet/regParams` |
+| `feederWorks`        | Feeder working                                            | `../econet/regParams` |
+| `thermostat`         | Thermostat                                                | `../econet/regParams` |
+| `statusCWU`          | Hot water status                                          | `../econet/regParams` |
+| **Network & Communication** |
+| `mainSrv`            | Econet24.com server                                       | `../econet/regParams` |
+| `wifi`               | Wi-Fi connection                                          | `../econet/regParams` |
+| `lan`                | LAN connection                                            | `../econet/regParams` |
+| **ecoMAX850R2-X Specific** |
+| `contactGZC`         | GZC contact                                               | `../econet/regParams` |
+| `contactGZCActive`   | GZC contact active                                        | `../econet/regParams` |
+| **ecoSTER Room Thermostats** |
+| `ecosterContacts1`   | Room thermostat 1 contacts                                | `../econet/regParams` |
+| `ecosterContacts2`   | Room thermostat 2 contacts                                | `../econet/regParams` |
+| `ecosterContacts3`   | Room thermostat 3 contacts                                | `../econet/regParams` |
+| `ecosterContacts4`   | Room thermostat 4 contacts                                | `../econet/regParams` |
+| `ecosterContacts5`   | Room thermostat 5 contacts                                | `../econet/regParams` |
+| `ecosterContacts6`   | Room thermostat 6 contacts                                | `../econet/regParams` |
+| `ecosterContacts7`   | Room thermostat 7 contacts                                | `../econet/regParams` |
+| `ecosterContacts8`   | Room thermostat 8 contacts                                | `../econet/regParams` |
+| `ecosterDaySched1`   | Room thermostat 1 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched2`   | Room thermostat 2 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched3`   | Room thermostat 3 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched4`   | Room thermostat 4 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched5`   | Room thermostat 5 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched6`   | Room thermostat 6 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched7`   | Room thermostat 7 day schedule                            | `../econet/regParams` |
+| `ecosterDaySched8`   | Room thermostat 8 day schedule                            | `../econet/regParams` |
+| **ecoSOL 500 Solar System** |
+| `fuelConsumptionCalc`| Fuel consumption calculator                                | `../econet/regParams` |
+| `ecosrvHttps`        | ecoNET server HTTPS                                       | `../econet/regParams` |
 </details>
 
 ### Number Entities
@@ -197,14 +282,25 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 | Entity Key           | Description                                               | Endpoint              |
 |----------------------|-----------------------------------------------------------|-----------------------|
+| **Temperature Setpoints** |
 | `tempCOSet`          | Central heating temperature setpoint                      | `../econet/regParams` |
 | `tempCWUSet`         | Hot water temperature setpoint                            | `../econet/regParams` |
-| `mixerSetTemp1`      | Mixer 1 temperature setpoint                              | `../econet/regParams` |
-| `mixerSetTemp2`      | Mixer 2 temperature setpoint                              | `../econet/regParams` |
-| `mixerSetTemp3`      | Mixer 3 temperature setpoint                              | `../econet/regParams` |
-| `mixerSetTemp4`      | Mixer 4 temperature setpoint                              | `../econet/regParams` |
-| `mixerSetTemp5`      | Mixer 5 temperature setpoint                              | `../econet/regParams` |
-| `mixerSetTemp6`      | Mixer 6 temperature setpoint                              | `../econet/regParams` |
+| **Mixer Temperature Setpoints** |
+| `mixerSetTemp1`      | Mixer 1 target temperature                                | `../econet/regParams` |
+| `mixerSetTemp2`      | Mixer 2 target temperature                                | `../econet/regParams` |
+| `mixerSetTemp3`      | Mixer 3 target temperature                                | `../econet/regParams` |
+| `mixerSetTemp4`      | Mixer 4 target temperature                                | `../econet/regParams` |
+| `mixerSetTemp5`      | Mixer 5 target temperature                                | `../econet/regParams` |
+| `mixerSetTemp6`      | Mixer 6 target temperature                                | `../econet/regParams` |
+| **ecoSTER Room Thermostat Setpoints** |
+| `ecosterSetTemp1`    | Room thermostat 1 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp2`    | Room thermostat 2 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp3`    | Room thermostat 3 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp4`    | Room thermostat 4 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp5`    | Room thermostat 5 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp6`    | Room thermostat 6 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp7`    | Room thermostat 7 setpoint                                | `../econet/regParams` |
+| `ecosterSetTemp8`    | Room thermostat 8 setpoint                                | `../econet/regParams` |
 </details>
 
 ---
