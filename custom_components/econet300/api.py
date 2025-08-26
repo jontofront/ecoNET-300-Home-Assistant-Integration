@@ -330,7 +330,7 @@ class Econet300Api:
 
     async def fetch_param_edit_data(self):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available.
-        
+
         Note: This endpoint is only supported by certain controllers (e.g., ecoMAX series).
         Controllers like ecoSOL500, ecoSter, SControl MK1 don't support this endpoint.
         The common.py skip_params_edits() function handles controller-specific endpoint support.

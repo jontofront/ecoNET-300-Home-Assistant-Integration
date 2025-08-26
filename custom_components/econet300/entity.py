@@ -118,7 +118,9 @@ class EconetEntity(CoordinatorEntity):
         # Safety check: ensure params_edits is always a dict
         if params_edits is None:
             params_edits = {}
-            _LOGGER.info("async_added_to_hass: paramsEdits was None, defaulting to empty dict")
+            _LOGGER.info(
+                "async_added_to_hass: paramsEdits was None, defaulting to empty dict"
+            )
         _LOGGER.debug("async_sysParams: %s", sys_params)
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)
