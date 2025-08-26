@@ -78,7 +78,7 @@ body:
     id: api_parameter
     attributes:
       label: "API Parameter Name"
-      description: "What is the exact parameter name from the ecoNET API? This is the key name that appears in the API response JSON. Check the API documentation or use the test endpoints to find the correct parameter name."
+      description: "What is the exact parameter name from the ecoNET API? This is the key name that appears in the API response JSON. Check the API documentation or use the test endpoints to find the correct parameter name. See the service inspection example below for reference."
       placeholder: "e.g., tempCO, statusPump, powerBoiler, pressureSystem"
 
   - type: markdown
@@ -91,6 +91,15 @@ body:
         - **Test Endpoints**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/scripts/test_api_endpoints.py) to explore your device's API
         - **Device Parameters**: See [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
         - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
+
+        **📸 Example: Service Inspection**
+        ![Service Inspection Example](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/images/service%20inspect.png)
+
+        **🔧 How to Use Service Inspection:**
+        1. Go to your device's service inspection page on econet24.com
+        2. Look for the parameter you want to add
+        3. Note the exact parameter name (e.g., `tempCO`, `statusPump`)
+        4. Use this name in the "API Parameter Name" field above
 
         **🔍 Need help finding API parameters?**
 
