@@ -146,3 +146,10 @@ body:
       label: "Additional Information"
       description: "Any other relevant information, screenshots, API responses, or documentation references that might help implement this sensor"
       placeholder: "I found this parameter in the API documentation at... or I can see this value in the ecoNET app... or here's a screenshot of the API response..."
+
+  - type: input
+    id: econet24_screenshot
+    attributes:
+      label: "econet24.com Screenshot"
+      description: "Upload a screenshot from econet24.com showing the parameter you want to add (drag & drop or click to upload)"
+      placeholder: "Upload screenshot from econet24.com"
