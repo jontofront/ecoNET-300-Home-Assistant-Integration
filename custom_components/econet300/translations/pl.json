@@ -41,10 +41,10 @@
         "name": "Dodatkowy podajnik"
       },
       "pump_cwu_works": {
-        "name": "Pump CWU"
+        "name": "Pompa CWU"
       },
       "mixer_pump1": {
-        "name": "Mixer 1 pump"
+        "name": "Pompa mieszacza 1"
       },
       "mixer_pump_works1": {
         "name": "Pompa mieszacza 1"
@@ -501,6 +501,12 @@
       },
       "boiler_power_kw": {
         "name": "Moc kotła (kW)"
+      },
+      "router_type": {
+        "name": "Typ routera"
+      },
+      "protocol_type": {
+        "name": "Typ protokołu"
       }
     }
   }

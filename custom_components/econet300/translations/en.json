@@ -47,7 +47,7 @@
         "name": "Additional feeder"
       },
       "pump_fireplace_works": {
-        "name": "Boiler Pump"
+        "name": "Boiler pump"
       },
       "pump_cwu_works": {
         "name": "Pump CWU"
@@ -502,6 +502,12 @@
       },
       "ecosrv_soft_ver": {
         "name": "ecoNET Server Software Ver."
+      },
+      "router_type": {
+        "name": "Router Type"
+      },
+      "protocol_type": {
+        "name": "Protocol Type"
       }
     }
   }

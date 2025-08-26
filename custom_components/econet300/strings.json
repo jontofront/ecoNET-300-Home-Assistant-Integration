@@ -502,6 +502,12 @@
       },
       "ecosrv_soft_ver": {
         "name": "ecoNET Server Software Ver."
+      },
+      "router_type": {
+        "name": "Router Type"
+      },
+      "protocol_type": {
+        "name": "Protocol Type"
       }
     }
   }
