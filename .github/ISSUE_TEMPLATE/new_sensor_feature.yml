@@ -91,6 +91,36 @@ body:
         - **Device Parameters**: See [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
         - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
 
+        **🔍 How to Find API Parameters Using Browser Developer Tools:**
+
+        **Step 1: Open Developer Tools**
+        - Press `F12` or right-click → "Inspect Element"
+        - Go to the **Network** tab
+
+        **Step 2: Monitor API Calls**
+        - Refresh the econet24.com page or navigate to different sections
+        - Look for requests to your device's IP address (e.g., `192.168.1.100`)
+        - Filter by "Fetch/XHR" to see only API calls
+
+        **Step 3: Find Parameter Keys**
+        - Click on any API request to your device
+        - Check the **Response** tab to see the JSON data
+        - Look for parameter names like `tempCO`, `statusPump`, etc.
+        - The parameter name is the **key** (left side of the colon)
+
+        **Step 4: Example Response Structure**
+        ```json
+        {
+          "tempCO": 65.2,        ← "tempCO" is the parameter key
+          "statusPump": true,    ← "statusPump" is the parameter key
+          "fuelLevel": 85        ← "fuelLevel" is the parameter key
+        }
+        ```
+
+        **💻 Alternative: Use the Test Script**
+        - Run the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to get all available parameters
+        - This will show you the exact parameter names from your device
+
   - type: dropdown
     id: data_type
     attributes:
