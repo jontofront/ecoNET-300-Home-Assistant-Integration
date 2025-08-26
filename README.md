@@ -49,10 +49,8 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 1. [Installation](#installation)
 2. [Configuration](#configuration)
 3. [Entities](#entities)
-4. [API Discovery](#api-discovery)
-5. [Development Roadmap](#development-roadmap)
-6. [Contributing](#contributing)
-7. [Acknowledgments](#acknowledgments)
+4. [Contributing](#contributing)
+5. [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -305,92 +303,7 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 ---
 
-## 🔍 API Discovery
 
-### 🎯 Key API Endpoints Discovered
-
-#### ⭐ **HIGH PRIORITY** (Implement First)
-1. **rmCurrentDataParams** - Real-time sensor data (4.8 KB)
-2. **rmParamsData** - Parameter values (12.7 KB)
-3. **rmParamsNames** - Parameter names (5.4 KB)
-4. **rmParamsDescs** - Parameter descriptions (29.1 KB)
-5. **rmAlarms** - System alarms
-6. **rmStatus** - System status
-
-#### 🔧 **MEDIUM PRIORITY** (Implement Second)
-1. **rmStructure** - System structure (13.1 KB)
-2. **rmParamsEnums** - Parameter enumerations (2.5 KB)
-3. **rmCatsNames** - Category names (1.1 KB)
-4. **rmDiagnostics** - Diagnostic information
-5. **rmSchedule** - Automation capabilities
-6. **rmStatistics** - Performance monitoring
-
-#### ⚙️ **LOW PRIORITY** (Advanced Features)
-- 16 parameter management endpoints
-- System administration endpoints
-- Testing and calibration endpoints
-- Factory and backup endpoints
-
-### 📊 Integration Potential
-- **11 potential sensors** identified
-- **45 potential controls** identified
-- **Real-time monitoring** capabilities
-- **Complete parameter ecosystem** access
-- **Comprehensive alarm system** integration
-
----
-
-## 🚀 Development Roadmap
-
-### ✅ **Completed**
-- [x] API endpoint discovery (48 endpoints)
-- [x] Response structure documentation
-- [x] Performance analysis
-- [x] Data sanitization
-- [x] Project organization
-- [x] Complete documentation
-
-### 🚧 **In Progress**
-- [ ] Home Assistant sensor implementation
-- [ ] Parameter monitoring integration
-- [ ] Alarm system integration
-- [ ] Status monitoring implementation
-
-### 📅 **Planned**
-- [ ] Parameter control implementation
-- [ ] Advanced automation features
-- [ ] User interface improvements
-- [ ] Performance optimization
-- [ ] Comprehensive testing
-
-### 🎯 **Next Steps for Integration**
-
-#### 1. **Implement Core Sensors** (Week 1)
-- Use `rmCurrentDataParams` for real-time temperature, status, and power data
-- Create sensors for boiler temperature, pump status, fan status, fuel level
-- Implement alarm sensors using `rmAlarms`
-
-#### 2. **Add Parameter Monitoring** (Week 2)
-- Use `rmParamsData` + `rmParamsNames` for parameter monitoring
-- Create user-friendly parameter names using the name mappings
-- Add parameter descriptions using `rmParamsDescs`
-
-#### 3. **Implement Status Monitoring** (Week 3)
-- Use `rmStatus` for system health monitoring
-- Add diagnostic information using `rmDiagnostics`
-- Implement performance monitoring using `rmStatistics`
-
-#### 4. **Add Parameter Controls** (Week 4)
-- Use `rmCurrentDataParamsEdits` for editable parameters
-- Implement parameter validation using `rmParamsEnums`
-- Add parameter limits using the parameter metadata endpoints
-
-#### 5. **Create Advanced Features** (Week 5+)
-- Implement scheduling using `rmSchedule`
-- Add system administration features
-- Create comprehensive automation capabilities
-
----
 
 ## 📁 Project Structure
 
