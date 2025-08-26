@@ -146,28 +146,3 @@ body:
       label: "Additional Information"
       description: "Any other relevant information, screenshots, API responses, or documentation references that might help implement this sensor"
       placeholder: "I found this parameter in the API documentation at... or I can see this value in the ecoNET app... or here's a screenshot of the API response..."
-
-  - type: markdown
-    attributes:
-      value: |
-        **🔧 Implementation Notes:**
-
-        **Required Information for Implementation:**
-        - **API Parameter**: Must be a valid parameter from your device's API
-        - **Data Format**: Specify if the data is numeric, text, boolean, or enum
-        - **Update Frequency**: How often does this value change? (real-time, every few seconds, on-demand)
-        - **Value Range**: What are the minimum/maximum values? (e.g., temperature: -20°C to 120°C)
-        - **Device Support**: Confirm this parameter exists on your specific device model
-
-        **💡 Pro Tips:**
-        - Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to verify the parameter exists
-        - Check the [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
-        - Provide sample API responses to help with implementation
-        - Include any error messages or unexpected behavior you've observed
-
-        **📋 Checklist Before Submitting:**
-        - [ ] Parameter exists in your device's API response
-        - [ ] You can provide sample data values
-        - [ ] You've checked the cloud translations for existing parameters
-        - [ ] You understand this is a feature request (not a bug report)
-        - [ ] You can provide additional testing if needed
