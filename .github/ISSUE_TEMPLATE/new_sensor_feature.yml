@@ -53,15 +53,12 @@ body:
       value: |
         **🌐 Translation Guidelines:**
 
-        - **Check existing names**: Browse [current translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/custom_components/econet300/translations/en.json) to see naming patterns
         - **Cloud translations**: Check [official ecoNET translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for your parameter
         - **Naming convention**: Use descriptive names like "Boiler Temperature" not "temp1"
-        - **Language support**: Names will be translated to English, Polish, and other languages
 
         **📚 Complete Translations Reference:**
         - **Cloud Translations**: [Raw Cloud Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json) - Complete official ecoNET cloud translations
         - **Manual Reference**: [Manual Translation Reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) - Curated parameter reference
-        - **Current Integration**: [Current Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/custom_components/econet300/translations/en.json) - Already implemented entities
 
   - type: dropdown
     id: entity_type
@@ -144,33 +141,33 @@ body:
         - "moisture"
 
   - type: textarea
-    id: description
-    attributes:
-      label: "Description"
-      description: "Describe what this sensor measures and why it would be useful"
-      placeholder: "This sensor measures the boiler temperature and is essential for monitoring heating system performance..."
-
-  - type: textarea
-    id: use_case
-    attributes:
-      label: "Use Case"
-      description: "How would you use this sensor? (e.g., automations, dashboards, monitoring)"
-      placeholder: "I want to create automations based on boiler temperature and display it on my heating dashboard..."
-
-  - type: textarea
     id: additional_info
     attributes:
       label: "Additional Information"
-      description: "Any other relevant information, screenshots, or documentation references"
-      placeholder: "I found this parameter in the API documentation at... or I can see this value in the ecoNET app..."
+      description: "Any other relevant information, screenshots, API responses, or documentation references that might help implement this sensor"
+      placeholder: "I found this parameter in the API documentation at... or I can see this value in the ecoNET app... or here's a screenshot of the API response..."
 
-  - type: checkboxes
-    id: terms
+  - type: markdown
     attributes:
-      label: "Terms"
-      description: "By submitting this issue, you agree to:"
-      options:
-        - label: "I have checked that this sensor doesn't already exist in the integration"
-        - label: "I understand this is a feature request and may not be implemented immediately"
-        - label: "I can provide additional information or testing if needed"
-        - label: "I have verified this sensor is supported by my device model"
+      value: |
+        **🔧 Implementation Notes:**
+
+        **Required Information for Implementation:**
+        - **API Parameter**: Must be a valid parameter from your device's API
+        - **Data Format**: Specify if the data is numeric, text, boolean, or enum
+        - **Update Frequency**: How often does this value change? (real-time, every few seconds, on-demand)
+        - **Value Range**: What are the minimum/maximum values? (e.g., temperature: -20°C to 120°C)
+        - **Device Support**: Confirm this parameter exists on your specific device model
+
+        **💡 Pro Tips:**
+        - Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to verify the parameter exists
+        - Check the [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
+        - Provide sample API responses to help with implementation
+        - Include any error messages or unexpected behavior you've observed
+
+        **📋 Checklist Before Submitting:**
+        - [ ] Parameter exists in your device's API response
+        - [ ] You can provide sample data values
+        - [ ] You've checked the cloud translations for existing parameters
+        - [ ] You understand this is a feature request (not a bug report)
+        - [ ] You can provide additional testing if needed
