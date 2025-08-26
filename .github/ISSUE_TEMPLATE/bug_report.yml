@@ -1,53 +1,127 @@
-name: Report an issue with Econet300 home assistant integration
+name: HA Econet300 Integration Bug Report
+title: '"[Bug]: <short description>"'
 description: Report an issue with Econet300 home assistant integration.
-title: "[Bug]: "
 labels: ["bug", "triage"]
-assignees:
-  - jontofront
+assignees: ["jontofront"]
 body:
   - type: markdown
     attributes:
-      value: |
+      value: >-
         This issue form is for reporting bugs only!
-
         If you have a feature or enhancement request, please use the feature request issue type.
-
         [feature request]: https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/new/choose
 
+  - type: input
+    id: bug_title
+    attributes:
+      label: Bug Title
+      description: A brief description of the bug.
+      placeholder: "Enter the bug title here"
+
   - type: textarea
-    validations:
-      required: true
+    id: problem_description
     attributes:
       label: The problem
       description: >-
-        Describe the issue you are experiencing here, to communicate to the
-        maintainers. Tell us what you were trying to do and what happened.
-
+        Describe the issue you are experiencing here, to communicate to
+        the maintainers. Tell us what you were trying to do and what happened.
         Provide a clear and concise description of what the problem is.
-  - type: markdown
+      placeholder: "Enter the problem description here"
+
+  - type: checkboxes
+    id: connected_devices
     attributes:
-      value: |
-        ## Environment
-  - type: input
-    id: econet300_version
+      label: Connected devices
+      description: Select all ecoNET devices you have connected. For more information, see the [device documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices)
+      options:
+        - label: ecoMAX360
+        - label: ecoMAX360i
+        - label: ecoMAX810P-L
+        - label: ecoMAX850R2-X
+        - label: ecoMAX860P2-N
+        - label: ecoMAX860P3-V
+        - label: ecoSOL 300
+        - label: ecoSOL 301
+        - label: ecoSOL 400
+        - label: ecoSOL 500
+        - label: ecoSOL (generic)
+        - label: SControl MK1
+        - label: Other (please specify)
     validations:
       required: true
+
+  - type: input
+    id: device_model_other
     attributes:
-      label: What version of ecoNET300 integration has the issue?
+      label: Other Device Model
+      description: If you selected "Other (please specify)", please specify your ecoNET device model here
+      placeholder: "e.g., ecoMAX900P, ecoSOL300"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Bug Severity
+      description: How critical is this issue?
+      options:
+        - "Critical - System completely broken"
+        - "High - Major functionality affected"
+        - "Medium - Minor functionality affected"
+        - "Low - Cosmetic or minor issue"
+    validations:
+      required: true
+
+  - type: input
+    id: econet300_version
+    attributes:
+      label: What version of Econet300 integration has the issue?
+      placeholder: "Enter the version here"
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the bug.
+      placeholder: "Enter the steps to reproduce the bug here"
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what you expected to happen.
+      placeholder: "Enter the expected behavior here"
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: Describe what actually happened.
+      placeholder: "Enter the actual behavior here"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Include any relevant logs or error messages.
+      placeholder: "Enter the logs or error messages here"
+
   - type: input
     id: ha_version
     validations:
       required: true
     attributes:
       label: What version of Home Assistant Core has the issue?
-      placeholder: core-
       description: >
-        Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
+        Can be found in the System information section of Home Assistant.
 
+        [Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/redirect/system_health/)
         [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
+
   - type: input
+    id: last_working_version
     attributes:
-      label: What was the last working version of ecoNET300 integration?
+      label: What was the last working version of Econet300 integration?
       description: >
         If known, otherwise leave blank.
 
@@ -55,10 +129,12 @@ body:
     attributes:
       value: |
         # Details
+
   - type: textarea
+    id: diagnostics
     attributes:
       label: Diagnostics information
-      placeholder: "drag-and-drop the diagnostics data file here (do not copy-and-paste the content)"
+      placeholder: "Drag-and-drop diagnostics data file here"
       description: >-
         Follow HA guide to [download diagnostic data](https://www.home-assistant.io/docs/configuration/troubleshooting/#debug-logs-and-diagnostics).
 
@@ -66,13 +142,3 @@ body:
         and <ins>drag-and-drop that file into the textbox below.</ins>**
 
         It generally allows pinpointing defects and thus resolving issues faster.
-  - type: textarea
-    attributes:
-      label: Anything in the logs that might be useful for us?
-      description: For example, error message, or stack traces.
-      render: text
-  - type: textarea
-    attributes:
-      label: Additional information
-      description: >
-        If you have any additional information for us, use the field below.
