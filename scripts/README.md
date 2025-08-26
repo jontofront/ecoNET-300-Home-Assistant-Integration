@@ -1,6 +1,6 @@
 # ecoNET-300 Scripts
 
-This directory contains utility scripts for working with the ecoNET-300 integration.
+This directory contains essential utility scripts for working with the ecoNET-300 integration.
 
 ## 🧪 API Endpoint Testing Script
 
@@ -29,16 +29,58 @@ The script generates:
 - **Summary Report**: Markdown summary of test results
 - **Endpoint Documentation**: Detailed documentation of each endpoint
 
-## 🔧 Other Scripts
+## 🔍 Translation Management Scripts
 
 ### `check_translations.py`
-Validates translation files for consistency.
+Validates translation files for consistency and completeness.
+- Checks for missing translations
+- Validates translation key formats
+- Ensures consistency across language files
 
-### `download_cloud_translations.py`
-Downloads cloud translations from ecoNET servers.
+### `language_finder.py`
+**NEW: Optimized language discovery tool** that combines fast and comprehensive discovery.
+- Fast language detection (reads file beginnings)
+- Comprehensive analysis (full file processing)
+- Coverage analysis and reporting
+- Generates detailed language reports
 
-### `extract_cloud_translations.py`
-Extracts and processes cloud translation data.
+#### Usage
+```bash
+python language_finder.py
+```
 
-### `test_api_endpoints.py`
-Comprehensive API endpoint testing for safe endpoints only.
+#### Output
+- `available_languages.txt` - Simple language list
+- `language_coverage_report.json` - Detailed coverage data
+- `language_coverage_report.md` - Markdown report with samples
+
+## 📁 Scripts Organization
+
+### **Current Scripts (Essential):**
+- `test_api_endpoints.py` - API testing and documentation
+- `check_translations.py` - Translation validation
+- `language_finder.py` - Language discovery and analysis
+- `README.md` - This documentation
+
+### **Backup (Obsolete):**
+- `obsolete_backup/` - Contains scripts that have accomplished their goals
+- These scripts are kept for reference but are no longer needed
+
+## 🚀 Quick Start
+
+1. **API Testing**: Use `test_api_endpoints.py` for device testing
+2. **Translation Validation**: Use `check_translations.py` for quality checks
+3. **Language Discovery**: Use `language_finder.py` to find new languages
+
+## 📊 Script Statistics
+
+| Script | Purpose | Status | Size |
+|--------|---------|--------|------|
+| `test_api_endpoints.py` | API testing | ✅ Active | 15KB |
+| `check_translations.py` | Translation validation | ✅ Active | 3KB |
+| `language_finder.py` | Language discovery | ✅ Active | 8KB |
+| **Total Active** | | | **26KB** |
+
+**Previous total**: 12 scripts, ~80KB
+**Current total**: 3 scripts, 26KB
+**Improvement**: 67% reduction in size, 75% reduction in scripts

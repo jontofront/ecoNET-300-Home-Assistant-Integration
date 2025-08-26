@@ -1,0 +1,132 @@
+
+# 🚨 MANDATORY: Code Style with Ruff
+
+## **Code Formatting: Ruff (replaces `black`, `isort`, `flake8`)**
+- **ALWAYS use Ruff** for code formatting and linting
+- **NEVER use Black, isort, or flake8** - they are replaced by Ruff
+- **Ruff configuration** is in `pyproject.toml`
+- **Run Ruff** before committing: `ruff check .` and `ruff format .`
+
+## **🚨 CRITICAL: Import Sorting Rules**
+- **ALWAYS sort imports alphabetically** within their groups
+- **ALWAYS use proper import order**: stdlib → third-party → local
+- **NEVER mix import types** on the same line
+- **ALWAYS separate import groups** with blank lines
+- **Common mistake**: `import re` should come before `from pathlib import Path`
+
+### **✅ Correct Import Order:**
+```python
+# Standard library imports (alphabetical)
+import json
+import re
+from pathlib import Path
+from typing import Set
+
+# Third-party imports (alphabetical)
+import requests
+
+# Local imports (alphabetical)
+from .utils import helper
+```
+
+### **❌ Common Mistakes to Avoid:**
+```python
+# WRONG: Mixed order
+from pathlib import Path
+import re  # Should be before Path
+import json
+
+# WRONG: No blank lines between groups
+import json
+import re
+from pathlib import Path
+from typing import Set
+import requests  # Should have blank line before
+
+# WRONG: Mixed import types on same line
+import json, re  # Should be separate lines
+```
+
+## **🚨 CRITICAL: Blank Line Rules**
+- **NEVER have whitespace in blank lines** - Ruff rule W293
+- **ALWAYS use empty lines** without spaces or tabs
+- **Common mistake**: Lines with only spaces or tabs
+- **Check for**: ` ` (space) or `	` (tab) on empty lines
+
+### **✅ Correct Blank Lines:**
+```python
+def function1():
+    pass
+
+# This is a proper blank line (no whitespace)
+def function2():
+    pass
+```
+
+### **❌ Common Blank Line Mistakes:**
+```python
+def function1():
+    pass
+ # WRONG: Space at beginning of blank line
+def function2():
+    pass
+	# WRONG: Tab at beginning of blank line
+def function3():
+    pass
+```
+
+## **Ruff Commands:**
+```bash
+# Check code quality
+ruff check .
+
+# Format code
+ruff format .
+
+# Auto-fix issues
+ruff check --fix .
+
+# Check specific file
+ruff check custom_components/econet300/
+```
+
+## **Why Ruff?**
+- **Faster** than Black + isort + flake8 combined
+- **Unified tool** for formatting, linting, and import sorting
+- **Python 3.12+ optimized** with modern syntax support
+- **Consistent rules** across the entire project
+
+## **Import Sorting Priority:**
+1. **Standard library** (alphabetical)
+2. **Blank line** (no whitespace!)
+3. **Third-party packages** (alphabetical)
+4. **Blank line** (no whitespace!)
+5. **Local imports** (alphabetical)
+
+## **🚨 ALWAYS CHECK IMPORTS AND BLANK LINES FIRST:**
+Before writing any Python code, ensure:
+1. Imports follow the exact pattern
+2. Blank lines contain NO whitespace
+3. Run `ruff check .` to catch these issues
+
+## **Before Committing:**
+1. **Format code**: `ruff format .`
+2. **Check quality**: `ruff check .`
+3. **Fix issues**: `ruff check --fix .`
+4. **Verify**: `ruff check .` (should show no errors)
+
+## **Common Ruff Rules:**
+- **Line length**: 88 characters (configurable)
+- **Import sorting**: Automatic with Home Assistant conventions
+- **Code complexity**: Max 25 (configurable in pyproject.toml)
+- **Type hints**: Encouraged but not enforced
+- **Docstrings**: Optional but recommended
+
+## **Integration with pyproject.toml:**
+- Ruff configuration is already set up
+- Includes Home Assistant import conventions
+- Disables conflicting rules automatically
+- Optimized for this project's needs
+
+- Disables conflicting rules automatically
+- Optimized for this project's needs

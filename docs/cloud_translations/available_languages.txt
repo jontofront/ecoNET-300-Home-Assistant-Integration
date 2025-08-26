@@ -1,0 +1,15 @@
+Available Languages in ecoNET Files:
+========================================
+
+- bg
+- cz
+- en
+- hr
+- hu
+- it
+- lv
+- pl
+- ro
+- ru
+- tr
+- uk
