@@ -86,8 +86,9 @@ body:
       value: |
         **💡 Need help finding the API parameter?**
 
+        - **🔍 Developer Tools Guide**: [Step-by-step instructions](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/issue-registration-templates/docs/DEVELOPER_TOOLS_GUIDE.md) for using browser developer tools
         - **API Documentation**: Check the [API V1 Documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/API_V1_DOCUMENTATION.md)
-        - **Test Endpoints**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to explore your device's API
+        - **Test Endpoints**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/scripts/test_api_endpoints.py) to explore your device's API
         - **Device Parameters**: See [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
         - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
 
