@@ -243,7 +243,7 @@ def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet3
             # Check if this mixer has valid temperature data (same logic as sensor creation)
             mixer_keys = SENSOR_MIXER_KEY.get(mixer_number, set())
             if any(data_regParams.get(mixer_key) is None for mixer_key in mixer_keys):
-                _LOGGER.warning(
+                _LOGGER.info(
                     "Mixer %d binary sensor will not be created due to invalid temperature data.",
                     mixer_number,
                 )
