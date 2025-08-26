@@ -13,7 +13,8 @@ body:
 
         **Before submitting:**
         - Verify the sensor is supported by your ecoNET device model
-        - Check the [cloud translations reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for existing translations
+        - Check the [raw cloud translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json) for existing parameters
+        - Review the [manual translation reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for curated parameters
 
   - type: dropdown
     id: device_model
@@ -58,9 +59,9 @@ body:
         - **Language support**: Names will be translated to English, Polish, and other languages
 
         **📚 Complete Translations Reference:**
-        - **English & Polish**: [Comprehensive Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/ROBUST_TRANSLATIONS.md) - 1105+ parameters with full EN/PL translations
-        - **Raw Data**: [JSON Format](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/robust_translations.md) - For programmatic use
-        - **Original Cloud Data**: [Raw Cloud Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json)
+        - **Cloud Translations**: [Raw Cloud Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json) - Complete official ecoNET cloud translations
+        - **Manual Reference**: [Manual Translation Reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) - Curated parameter reference
+        - **Current Integration**: [Current Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/custom_components/econet300/translations/en.json) - Already implemented entities
 
   - type: dropdown
     id: entity_type
