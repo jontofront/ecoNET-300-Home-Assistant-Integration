@@ -7,21 +7,20 @@ body:
   - type: markdown
     attributes:
       value: >-
-        This issue form is for reporting bugs only!
-        If you have a feature or enhancement request, please use the feature request issue type.
+        **Please describe the bug you found. The more details you provide, the faster we can help!**
 
   - type: textarea
     id: problem_description
     attributes:
-      label: The problem
-      description: Describe the issue you are experiencing here.
-      placeholder: "Enter the problem description here"
+      label: What's the problem? 🐛
+      description: Describe what's not working as expected
+      placeholder: "Example: The temperature sensor shows wrong values after restart"
 
   - type: checkboxes
     id: connected_devices
     attributes:
-      label: Connected devices
-      description: Select all ecoNET devices you have connected.
+      label: Which ecoNET device do you have? 🔌
+      description: Select your device (check all that apply)
       options:
         - label: ecoMAX360
         - label: ecoMAX810P-L
@@ -37,65 +36,44 @@ body:
     id: device_model_other
     attributes:
       label: Other Device Model
-      description: If you selected "Other", please specify your ecoNET device model here
-      placeholder: "e.g., ecoMAX900P, ecoSOL300"
+      description: If you selected "Other", what's your device model?
+      placeholder: "e.g., ecoMAX900P"
 
   - type: dropdown
     id: severity
     attributes:
-      label: Bug Severity
-      description: How critical is this issue?
+      label: How bad is it? 🚨
+      description: Choose the severity level
       options:
-        - "Critical - System completely broken"
-        - "High - Major functionality affected"
-        - "Medium - Minor functionality affected"
-        - "Low - Cosmetic or minor issue"
-
-  - type: input
-    id: econet300_version
-    attributes:
-      label: Current Version
-      description: What version of Econet300 integration has the issue?
-      placeholder: "Enter the version here"
+        - "Critical - Nothing works"
+        - "High - Major problem"
+        - "Medium - Annoying but usable"
+        - "Low - Minor issue"
 
   - type: textarea
     id: steps_to_reproduce
     attributes:
-      label: Steps to Reproduce
-      description: Detailed steps to reproduce the bug.
-      placeholder: "Enter the steps to reproduce the bug here"
+      label: How to reproduce? 📋
+      description: Step-by-step instructions to see the bug
+      placeholder: "1. Restart Home Assistant\n2. Check the sensor\n3. See wrong value"
 
   - type: textarea
-    id: expected_behavior
+    id: screenshots
     attributes:
-      label: Expected Behavior
-      description: Describe what you expected to happen.
-      placeholder: "Enter the expected behavior here"
-
-  - type: textarea
-    id: actual_behavior
-    attributes:
-      label: Actual Behavior
-      description: Describe what actually happened.
-      placeholder: "Enter the actual behavior here"
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Logs
-      description: Include any relevant logs or error messages.
-      placeholder: "Enter the logs or error messages here"
+      label: Screenshots 📸
+      description: Add screenshots showing the problem (drag & drop images here)
+      placeholder: "Upload screenshots of error messages, wrong values, or broken UI"
 
   - type: input
-    id: ha_version
+    id: versions
     attributes:
-      label: Home Assistant Core Version
-      description: What version of Home Assistant Core has the issue?
-      placeholder: "Enter the version here"
+      label: Versions 📦
+      description: What versions are you using?
+      placeholder: "HA: 2025.2.2, Integration: v1.1.6"
 
   - type: textarea
-    id: diagnostics
+    id: additional_info
     attributes:
-      label: Diagnostics information
-      placeholder: "Drag-and-drop diagnostics data file here"
-      description: Follow HA guide to download diagnostic data. It would really help if you could download the diagnostics data for the device you are having issues with.
+      label: Anything else? 💡
+      description: Additional details, logs, or context that might help
+      placeholder: "Optional: logs, error messages, or other relevant info"
