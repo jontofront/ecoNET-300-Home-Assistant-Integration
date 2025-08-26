@@ -310,22 +310,28 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 ```
 ecoNET-300-Home-Assistant-Integration/
 ├── custom_components/econet300/     # Home Assistant integration
-├── docs/                            # Complete API documentation
-├── scripts/                         # Essential development scripts
+├── docs/                            # Complete documentation
+├── scripts/                         # Development and utility scripts
 ├── tests/                           # Integration tests
 └── [standard project files]
 ```
 
 ### 🔧 **Essential Scripts** (in `scripts/`)
-- **test_api_endpoints.py** - Test all API endpoints
-- **check_translations.py** - Validate translation files
-- **download_cloud_translations.py** - Download cloud translations
-- **extract_cloud_translations.py** - Extract translation data
+- **test_api_endpoints.py** - Test all API endpoints and validate responses
+- **check_translations.py** - Validate translation files for consistency
+- **language_finder.py** - Find and analyze language-specific content
+- **README.md** - Scripts documentation and usage instructions
 
 ### 📚 **Essential Documentation** (in `docs/`)
 - **API_V1_DOCUMENTATION.md** - Complete API documentation (consolidated)
-- **BOILER_CONTROL_README.md** - Boiler control documentation
-- **CLOUD_TRANSLATIONS.md** - Cloud translations documentation
+- **BOILER_CONTROL_README.md** - Boiler control documentation and setup
+- **CLOUD_TRANSLATIONS.md** - Cloud translations documentation and usage
+- **ecoSOL_DISCOVERY_SUMMARY.md** - ecoSOL device discovery and analysis
+- **ecoMAX810P-L_PARAMETER_NAMES_ANALYSIS.md** - Parameter analysis for ecoMAX810P-L
+- **ecoMAX850R2-X_DOCUMENTATION.md** - Complete ecoMAX850R2-X documentation
+- **NEW_API_ENDPOINTS_DISCOVERED.md** - Newly discovered API endpoints
+- **devices/** - Device-specific documentation and parameters
+- **cloud_translations/** - Cloud translation data and references
 
 ---
 
