@@ -103,6 +103,12 @@
       "pump_solar_works": {
         "name": "Pompa solarna pracuje"
       },
+      "lighter_works": {
+        "name": "Zapalnik"
+      },
+      "feeder_works": {
+        "name": "Podajnik"
+      },
       "ecoster_contacts1": {
         "name": "Styki termostatu pokojowego 1"
       },
@@ -155,9 +161,6 @@
     "sensor": {
       "boiler_power": {
         "name": "Moc kotła"
-      },
-      "burner_power": {
-        "name": "Moc palnika"
       },
       "fuel_level": {
         "name": "Poziom paliwa"
@@ -245,6 +248,9 @@
       },
       "mixer_set_temp6": {
         "name": "Temp. zadana mieszacza 6"
+      },
+      "status_cwu": {
+        "name": "Status CWU"
       },
       "mode": {
         "name": "Tryb pracy",
@@ -471,6 +477,30 @@
       },
       "ecosrv_soft_ver": {
         "name": "Wersja oprogramowania serwera ecoNET"
+      },
+      "work_at100": {
+        "name": "Praca przy 100%"
+      },
+      "work_at50": {
+        "name": "Praca przy 50%"
+      },
+      "work_at30": {
+        "name": "Praca przy 30%"
+      },
+      "feeder_work": {
+        "name": "Praca podajnika"
+      },
+      "firing_up_count": {
+        "name": "Liczba rozpalania"
+      },
+      "temp_cwu_set": {
+        "name": "Temperatura zadana CWU"
+      },
+      "quality": {
+        "name": "Jakość sygnału"
+      },
+      "boiler_power_kw": {
+        "name": "Moc kotła (kW)"
       }
     }
   }

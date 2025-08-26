@@ -1,9 +1,27 @@
----
-description: 
-globs: 
-alwaysApply: false
----
 # Python Standards for ecoNET-300
+
+## 🚨 MANDATORY: Code Style with Ruff
+
+### **Code Formatting: Ruff (replaces `black`, `isort`, `flake8`)**
+- **ALWAYS use Ruff** for code formatting and linting
+- **NEVER use Black, isort, or flake8** - they are replaced by Ruff
+- **Ruff configuration** is in `pyproject.toml`
+- **Run Ruff** before committing: `ruff check .` and `ruff format .`
+
+### **Ruff Commands:**
+```bash
+# Check code quality
+ruff check .
+
+# Format code
+ruff format .
+
+# Auto-fix issues
+ruff check --fix .
+
+# Check specific file
+ruff check custom_components/econet300/
+```
 
 ## Core Standards
 - Use Python 3.12 features and syntax
@@ -46,4 +64,3 @@ alwaysApply: false
 - Overly complex functions (keep under 25 complexity)
 - Unnecessary imports
 - Debug print statements in production code
-

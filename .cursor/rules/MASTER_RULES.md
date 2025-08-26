@@ -4,9 +4,10 @@
 
 ### 1. ALWAYS READ THESE RULES FIRST:
 - `.cursor/rules/home-assistant-standards.mdc` - HA integration standards
-- `.cursor/rules/econet300-specific.mdc` - Device-specific guidelines  
+- `.cursor/rules/econet300-specific.mdc` - Device-specific guidelines
 - `.cursor/rules/python-standards.mdc` - Python coding standards
 - `.cursor/rules/translation-requirements.mdc` - Translation requirements
+- `.cursor/rules/code-style-ruff.mdc` - **Code formatting with Ruff** 🚨
 
 ### 2. ALWAYS FOLLOW HA DOCUMENTATION:
 - Reference: https://developers.home-assistant.io/docs/development_index
@@ -19,20 +20,20 @@
 - Test translations after changes
 
 ### 4. ALWAYS USE PROPER PATTERNS:
-- Follow existing codebase patterns
-- Use type hints and proper error handling
-- Implement async/await for I/O operations
-
-## ❌ NEVER:
-- Make changes without reading rules first
-- Ignore HA documentation standards
-- Skip translation updates for new entities
-- Use blocking operations in async functions
-- Hardcode values (use constants)
-
-## ✅ ALWAYS:
-- Read rules before coding
-- Follow HA standards
-- Update translations
 - Use proper error handling
-- Test your changes 
+- Test your changes
+- Use Ruff for code formatting and linting
+
+### 5. 🚨 CRITICAL: CODE STYLE RULES
+- **ALWAYS use Ruff** for formatting and linting
+- **NEVER use Black, isort, or flake8**
+- **ALWAYS sort imports alphabetically** within groups
+- **NEVER have whitespace in blank lines** (W293 rule)
+- **ALWAYS run `ruff check .` before committing**
+
+### 6. ALWAYS CHECK BEFORE COMMITTING:
+- Run `ruff check .` to catch style issues
+- Run `ruff format .` to auto-format code
+- Ensure no import sorting issues
+- Ensure no blank line whitespace issues
+- Test your changes work as expected

@@ -1,78 +1,79 @@
-name: Report an issue with Econet300 home assistant integration
+name: Bug Report
+title: '"[Bug]: <short description>"'
 description: Report an issue with Econet300 home assistant integration.
-title: "[Bug]: "
 labels: ["bug", "triage"]
-assignees:
-  - jontofront
+assignees: ["jontofront"]
 body:
   - type: markdown
     attributes:
-      value: |
-        This issue form is for reporting bugs only!
-
-        If you have a feature or enhancement request, please use the feature request issue type.
-
-        [feature request]: https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/new/choose
+      value: >-
+        **Please describe the bug you found. The more details you provide, the faster we can help!**
 
   - type: textarea
-    validations:
-      required: true
+    id: problem_description
     attributes:
-      label: The problem
-      description: >-
-        Describe the issue you are experiencing here, to communicate to the
-        maintainers. Tell us what you were trying to do and what happened.
+      label: What's the problem? 🐛
+      description: Describe what's not working as expected
+      placeholder: "Example: The temperature sensor shows wrong values after restart"
 
-        Provide a clear and concise description of what the problem is.
-  - type: markdown
+  - type: checkboxes
+    id: connected_devices
     attributes:
-      value: |
-        ## Environment
+      label: Which ecoNET device do you have? 🔌
+      description: Select your device (check all that apply)
+      options:
+        - label: ecoMAX360
+        - label: ecoMAX810P-L
+        - label: ecoMAX850R2-X
+        - label: ecoMAX860P2-N
+        - label: ecoMAX860P3-V
+        - label: ecoSOL 300
+        - label: ecoSOL 500
+        - label: SControl MK1
+        - label: Other (please specify)
+
   - type: input
-    id: econet300_version
-    validations:
-      required: true
+    id: device_model_other
     attributes:
-      label: What version of ecoNET300 integration has the issue?
+      label: Other Device Model
+      description: If you selected "Other", what's your device model?
+      placeholder: "e.g., ecoMAX900P"
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: How bad is it? 🚨
+      description: Choose the severity level
+      options:
+        - "Critical - Nothing works"
+        - "High - Major problem"
+        - "Medium - Annoying but usable"
+        - "Low - Minor issue"
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: How to reproduce? 📋
+      description: Step-by-step instructions to see the bug
+      placeholder: "1. Restart Home Assistant\n2. Check the sensor\n3. See wrong value"
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots 📸
+      description: Add screenshots showing the problem (drag & drop images here)
+      placeholder: "Upload screenshots of error messages, wrong values, or broken UI"
+
   - type: input
-    id: ha_version
-    validations:
-      required: true
+    id: versions
     attributes:
-      label: What version of Home Assistant Core has the issue?
-      placeholder: core-
-      description: >
-        Can be found in: [Settings ⇒ System ⇒ Repairs ⇒ Three Dots in Upper Right ⇒ System information](https://my.home-assistant.io/redirect/system_health/).
+      label: Versions 📦
+      description: What versions are you using?
+      placeholder: "HA: 2025.2.2, Integration: v1.1.6"
 
-        [![Open your Home Assistant instance and show the system information.](https://my.home-assistant.io/badges/system_health.svg)](https://my.home-assistant.io/redirect/system_health/)
-  - type: input
-    attributes:
-      label: What was the last working version of ecoNET300 integration?
-      description: >
-        If known, otherwise leave blank.
-
-  - type: markdown
-    attributes:
-      value: |
-        # Details
   - type: textarea
+    id: additional_info
     attributes:
-      label: Diagnostics information
-      placeholder: "drag-and-drop the diagnostics data file here (do not copy-and-paste the content)"
-      description: >-
-        Follow HA guide to [download diagnostic data](https://www.home-assistant.io/docs/configuration/troubleshooting/#debug-logs-and-diagnostics).
-
-        **It would really help if you could download the diagnostics data for the device you are having issues with,
-        and <ins>drag-and-drop that file into the textbox below.</ins>**
-
-        It generally allows pinpointing defects and thus resolving issues faster.
-  - type: textarea
-    attributes:
-      label: Anything in the logs that might be useful for us?
-      description: For example, error message, or stack traces.
-      render: text
-  - type: textarea
-    attributes:
-      label: Additional information
-      description: >
-        If you have any additional information for us, use the field below.
+      label: Anything else? 💡
+      description: Additional details, logs, or context that might help
+      placeholder: "Optional: logs, error messages, or other relevant info"

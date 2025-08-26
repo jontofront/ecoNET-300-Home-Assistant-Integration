@@ -1,0 +1,164 @@
+name: 🆕 New Sensor Feature Request
+description: Request a new sensor, binary sensor, or switch to be added to the ecoNET-300 integration
+title: "[NEW SENSOR] "
+labels: ["enhancement", "sensor", "feature-request"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🆕 New Sensor Feature Request
+
+        Use this template to request new sensors, binary sensors, switches, or other entities to be added to the ecoNET-300 Home Assistant integration.
+
+        **Before submitting:**
+        - Verify the sensor is supported by your ecoNET device model
+        - Check the [raw cloud translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json) for existing parameters
+        - Review the [manual translation reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for curated parameters
+
+  - type: dropdown
+    id: device_model
+    attributes:
+      label: "Device Model"
+      description: "What ecoNET device model do you have?"
+      options:
+        - "ecoMAX810P-L"
+        - "ecoSOL500"
+        - "ecoMAX360"
+        - "ecoMAX850R2-X"
+        - "ecoMAX860P2-N"
+        - "ecoMAX860P3-V"
+        - "ecoSOL"
+        - "SControl MK1"
+        - "Other (please specify)"
+
+  - type: input
+    id: device_model_other
+    attributes:
+      label: "Other Device Model"
+      description: "Please specify your ecoNET device model"
+      placeholder: "e.g., ecoMAX900P, ecoSOL300"
+    validations:
+      required: false
+
+  - type: input
+    id: sensor_name
+    attributes:
+      label: "Sensor Name"
+      description: "What should this sensor be called? Use clear, descriptive names that will be translated into multiple languages. Check existing translations to maintain consistency."
+      placeholder: "e.g., Boiler Temperature, Pump Status, System Pressure"
+
+  - type: markdown
+    attributes:
+      value: |
+        **🌐 Translation Guidelines:**
+
+        - **Cloud translations**: Check [official ecoNET translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) for your parameter
+        - **Naming convention**: Use descriptive names like "Boiler Temperature" not "temp1"
+
+        **📚 Complete Translations Reference:**
+        - **Cloud Translations**: [Raw Cloud Translations](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/raw_translations.json) - Complete official ecoNET cloud translations
+        - **Manual Reference**: [Manual Translation Reference](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) - Curated parameter reference
+
+  - type: dropdown
+    id: entity_type
+    attributes:
+      label: "Entity Type"
+      description: "What type of entity is this?"
+      options:
+        - "sensor"
+        - "binary_sensor"
+        - "switch"
+        - "number"
+        - "select"
+        - "climate"
+        - "other"
+
+  - type: input
+    id: api_parameter
+    attributes:
+      label: "API Parameter Name"
+      description: "What is the exact parameter name from the ecoNET API? This is the key name that appears in the API response JSON. Check the API documentation or use the test endpoints to find the correct parameter name. See the service inspection example below for reference."
+      placeholder: "e.g., tempCO, statusPump, powerBoiler, pressureSystem"
+
+  - type: markdown
+    attributes:
+      value: |
+        **💡 Need help finding the API parameter?**
+
+        - **🔍 Developer Tools Guide**: [Step-by-step instructions](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/issue-registration-templates/docs/DEVELOPER_TOOLS_GUIDE.md) for using browser developer tools
+        - **API Documentation**: Check the [API V1 Documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/API_V1_DOCUMENTATION.md)
+        - **Test Endpoints**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/scripts/test_api_endpoints.py) to explore your device's API
+        - **Device Parameters**: See [device-specific documentation](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/tree/master/docs/devices) for your model
+        - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
+
+        **📸 Example: Service Inspection**
+        See the [Developer Tools Guide](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/DEVELOPER_TOOLS_GUIDE.md) for a visual example of service inspection.
+
+        **🔍 Need help finding API parameters?**
+
+        - **📖 Complete Guide**: [Developer Tools Guide](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/DEVELOPER_TOOLS_GUIDE.md) - Step-by-step instructions with examples
+        - **💻 Test Script**: Use the [test script](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/scripts/test_api_endpoints.py) to get all available parameters automatically
+
+  - type: dropdown
+    id: data_type
+    attributes:
+      label: "Data Type"
+      description: "What type of data does this sensor provide?"
+      options:
+        - "temperature"
+        - "pressure"
+        - "percentage"
+        - "power"
+        - "energy"
+        - "time"
+        - "status"
+        - "boolean"
+        - "numeric"
+        - "other"
+
+  - type: input
+    id: unit_of_measurement
+    attributes:
+      label: "Unit of Measurement"
+      description: "What unit should be displayed? (e.g., '°C', 'bar', '%', 'W')"
+      placeholder: "°C"
+
+  - type: dropdown
+    id: device_class
+    attributes:
+      label: "Device Class"
+      description: "What device class should be used? (Leave empty if unsure)"
+      options:
+        - "temperature"
+        - "pressure"
+        - "power"
+        - "energy"
+        - "frequency"
+        - "signal_strength"
+        - "battery"
+        - "humidity"
+        - "illuminance"
+        - "motion"
+        - "opening"
+        - "presence"
+        - "smoke"
+        - "sound"
+        - "vibration"
+        - "connectivity"
+        - "gas"
+        - "moisture"
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "Additional Information"
+      description: "Any other relevant information, screenshots, API responses, or documentation references that might help implement this sensor"
+      placeholder: "I found this parameter in the API documentation at... or I can see this value in the ecoNET app... or here's a screenshot of the API response..."
+
+  - type: input
+    id: econet24_screenshot
+    attributes:
+      label: "econet24.com Screenshot"
+      description: "Upload a screenshot from econet24.com showing the parameter you want to add (drag & drop or click to upload)"
+      placeholder: "Upload screenshot from econet24.com"
