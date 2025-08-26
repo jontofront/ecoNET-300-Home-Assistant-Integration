@@ -375,14 +375,14 @@ class Econet300Api:
             data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
             if data is None:
-                _LOGGER.error("Data fetched by API for endpoint: %s is None", endpoint)
+                _LOGGER.info("Data fetched by API for endpoint: %s is None", endpoint)
                 return None
 
             if data_key is None:
                 return data
 
             if data_key not in data:
-                _LOGGER.error(
+                _LOGGER.info(
                     "Data for key: %s does not exist in endpoint: %s",
                     data_key,
                     endpoint,

@@ -59,12 +59,23 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
+        # Safety check: ensure coordinator data exists
+        if self.coordinator.data is None:
+            _LOGGER.info("Coordinator data is None, skipping update")
+            return
+
         # Debug: Check what's available in each data source
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
 
-        # Safety check: ensure params_edits is always a dict
+        # Safety check: ensure all data sources are always dicts
+        if sys_params is None:
+            sys_params = {}
+            _LOGGER.info("sysParams was None, defaulting to empty dict")
+        if reg_params is None:
+            reg_params = {}
+            _LOGGER.info("regParams was None, defaulting to empty dict")
         if params_edits is None:
             params_edits = {}
             _LOGGER.info("paramsEdits was None, defaulting to empty dict")
@@ -110,12 +121,27 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.error("Coordinator object does not have a 'data' attribute")
             return
 
+        # Safety check: ensure coordinator data exists
+        if self.coordinator.data is None:
+            _LOGGER.info("Coordinator data is None, skipping setup")
+            return
+
         # Retrieve sysParams and regParams paramsEdits data
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
 
-        # Safety check: ensure params_edits is always a dict
+        # Safety check: ensure all data sources are always dicts
+        if sys_params is None:
+            sys_params = {}
+            _LOGGER.info(
+                "async_added_to_hass: sysParams was None, defaulting to empty dict"
+            )
+        if reg_params is None:
+            reg_params = {}
+            _LOGGER.info(
+                "async_added_to_hass: regParams was None, defaulting to empty dict"
+            )
         if params_edits is None:
             params_edits = {}
             _LOGGER.info(
@@ -163,6 +189,17 @@ class EconetEntity(CoordinatorEntity):
         # Synchronize with HASS
         await super().async_added_to_hass()
         self._sync_state(value)
+
+    # ruff: noqa: PLR6301
+    def _sync_state(self, value) -> None:
+        """Synchronize the state of the entity.
+
+        This is a base implementation that should be overridden by subclasses.
+        The base class just logs the value for debugging purposes.
+        """
+        _LOGGER.debug("Base _sync_state called with value: %s", value)
+        # Base class doesn't have specific state attributes, so just log
+        # Subclasses should override this method to set their specific state
 
 
 class MixerEntity(EconetEntity):
