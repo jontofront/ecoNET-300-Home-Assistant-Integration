@@ -93,13 +93,7 @@ body:
         - **Cloud Translations**: Check [existing parameters](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md) to avoid duplicates
 
         **📸 Example: Service Inspection**
-        ![Service Inspection Example](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/images/service%20inspect.png)
-
-        **🔧 How to Use Service Inspection:**
-        1. Go to your device's service inspection page on econet24.com
-        2. Look for the parameter you want to add
-        3. Note the exact parameter name (e.g., `tempCO`, `statusPump`)
-        4. Use this name in the "API Parameter Name" field above
+        See the [Developer Tools Guide](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/blob/master/docs/DEVELOPER_TOOLS_GUIDE.md) for a visual example of service inspection.
 
         **🔍 Need help finding API parameters?**
 

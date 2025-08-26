@@ -42,6 +42,18 @@ This guide shows you how to use browser developer tools to find the exact API pa
 3. **Look for parameter names** like `tempCO`, `statusPump`, etc.
 4. **The parameter name is the key** (left side of the colon in JSON)
 
+#### Service Inspection Method
+
+You can also find parameters directly from the econet24.com service inspection page:
+
+![Service Inspection Example](./images/service%20inspect.png)
+
+**How to use Service Inspection:**
+1. Go to your device's service inspection page on econet24.com
+2. Look for the parameter you want to add
+3. Note the exact parameter name (e.g., `tempCO`, `statusPump`)
+4. Use this name in your feature request
+
 ## 📊 Example: Finding the Boiler Temperature Parameter
 
 ### Visual Example
