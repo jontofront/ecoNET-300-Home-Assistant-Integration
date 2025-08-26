@@ -18,7 +18,7 @@ This guide shows you how to use browser developer tools to find the exact API pa
 3. **Right-click anywhere** on the page → Select "Inspect Element"
 4. **Click on the "Network" tab** in the developer tools panel
 
-![Developer Tools Network Tab - API Calls Visible](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/docs/images/developer_tools_network_tab.png)
+![Developer Tools Network Tab - API Calls Visible](./images/developer_tools_network_tab.png)
 
 *The Network tab shows API calls like `getCurrentState`, `getDeviceParams`, `getDeviceRegParams` with status 200 (successful responses)*
 
@@ -48,7 +48,7 @@ This guide shows you how to use browser developer tools to find the exact API pa
 
 The image below shows how to inspect the "Boiler temperature" tile:
 
-![Parameter Inspection Example](https://via.placeholder.com/800x400/3498db/ffffff?text=Boiler+Temperature+Inspection)
+![Parameter Inspection Example](./images/boiler_temperature_inspection.png)
 
 ### What to Look For
 
