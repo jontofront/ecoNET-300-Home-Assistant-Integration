@@ -91,9 +91,6 @@
       "thermostat": {
         "name": "Thermostat"
       },
-      "status_co": {
-        "name": "Central heating status"
-      },
       "status_cwu": {
         "name": "Hot water status"
       },
@@ -190,7 +187,20 @@
         "name": "Lambda level"
       },
       "status_co": {
-        "name": "Central heating status"
+        "name": "Central heating status",
+        "state": {
+          "0": "Off",
+          "1": "Standby",
+          "2": "Starting",
+          "3": "Running",
+          "4": "Stopping",
+          "5": "Error",
+          "6": "Maintenance",
+          "7": "Test mode",
+          "8": "Emergency stop",
+          "9": "Calibration",
+          "10": "Unknown"
+        }
       },
       "work_at100": {
         "name": "Work at 100%"

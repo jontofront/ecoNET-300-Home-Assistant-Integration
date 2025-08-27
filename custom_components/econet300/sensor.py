@@ -213,7 +213,7 @@ def create_controller_sensors(
                 "Created and appended sensor entity from sysParams: %s", entity
             )
         else:
-            _LOGGER.info(
+            _LOGGER.debug(
                 "Key: %s is not mapped in regParams or sysParams, sensor entity will not be added.",
                 data_key,
             )
@@ -319,7 +319,7 @@ def create_lambda_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
                 data_key,
             )
             continue
-        _LOGGER.info(
+        _LOGGER.debug(
             "Key: %s is not mapped, lamda sensor entity will not be added",
             data_key,
         )
