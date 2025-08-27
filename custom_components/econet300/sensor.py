@@ -14,7 +14,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .common import Econet300Api, EconetDataCoordinator
+from .api import Econet300Api
+from .common import EconetDataCoordinator
 from .common_functions import camel_to_snake
 from .const import (
     DOMAIN,
@@ -57,7 +58,7 @@ class EconetSensor(EconetEntity, SensorEntity):
         self.entity_description = entity_description
         self.api = api
         self._attr_native_value = None
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
