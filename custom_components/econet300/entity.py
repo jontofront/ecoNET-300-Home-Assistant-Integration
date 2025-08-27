@@ -28,6 +28,11 @@ class EconetEntity(CoordinatorEntity):
     api: Econet300Api
     entity_description: EntityDescription
 
+    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api):
+        """Initialize the EconetEntity."""
+        super().__init__(coordinator)
+        self.api = api
+
     @property
     def has_entity_name(self):
         """Return if the name of the entity is describing only the entity itself."""
@@ -108,6 +113,7 @@ class EconetEntity(CoordinatorEntity):
             self.entity_description.key,
             value,
         )
+        # Call _sync_state to update entity state
         self._sync_state(value)
 
     async def async_added_to_hass(self):
@@ -188,18 +194,16 @@ class EconetEntity(CoordinatorEntity):
 
         # Synchronize with HASS
         await super().async_added_to_hass()
+        # Call _sync_state to update entity state
         self._sync_state(value)
 
-    # ruff: noqa: PLR6301
     def _sync_state(self, value) -> None:
-        """Synchronize the state of the entity.
+        """Update entity state with the provided value.
 
-        This is a base implementation that should be overridden by subclasses.
-        The base class just logs the value for debugging purposes.
+        This method is called when the coordinator provides new data.
+        Child classes should override this to handle entity-specific state updates.
         """
-        _LOGGER.debug("Base _sync_state called with value: %s", value)
-        # Base class doesn't have specific state attributes, so just log
-        # Subclasses should override this method to set their specific state
+        # Base implementation does nothing - child classes handle state updates
 
 
 class MixerEntity(EconetEntity):
@@ -216,7 +220,7 @@ class MixerEntity(EconetEntity):
         self.entity_description = description
         self.api = api
         self._idx = idx
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -245,7 +249,7 @@ class LambdaEntity(EconetEntity):
         """Initialize the LambdaEntity."""
         self.entity_description = description
         self.api = api
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -275,7 +279,7 @@ class EcoSterEntity(EconetEntity):
         self.entity_description = description
         self.api = api
         self._idx = idx
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:
