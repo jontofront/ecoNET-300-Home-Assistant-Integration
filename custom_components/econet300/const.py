@@ -440,6 +440,9 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
+    # Diagnostic sensors (non-numeric)
+    "routerType": None,
+    "protocolType": None,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
