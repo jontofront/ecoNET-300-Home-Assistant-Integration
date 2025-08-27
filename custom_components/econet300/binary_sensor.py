@@ -54,7 +54,7 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         self.entity_description = entity_description
         self.api = api
         self._attr_is_on: bool | None = None
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
         _LOGGER.debug(
             "EconetBinarySensor initialized with unique_id: %s, entity_description: %s",
             self.unique_id,
@@ -218,7 +218,7 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
             entities.append(entity)
             _LOGGER.debug("Created and appended entity from sysParams: %s", entity)
         else:
-            _LOGGER.warning(
+            _LOGGER.debug(
                 "key: %s is not mapped in regParams, binary sensor entity will not be added",
                 data_key,
             )
@@ -243,7 +243,7 @@ def create_mixer_binary_sensors(coordinator: EconetDataCoordinator, api: Econet3
             # Check if this mixer has valid temperature data (same logic as sensor creation)
             mixer_keys = SENSOR_MIXER_KEY.get(mixer_number, set())
             if any(data_regParams.get(mixer_key) is None for mixer_key in mixer_keys):
-                _LOGGER.warning(
+                _LOGGER.info(
                     "Mixer %d binary sensor will not be created due to invalid temperature data.",
                     mixer_number,
                 )
@@ -359,7 +359,7 @@ def create_ecosol500_binary_sensors(
                 "Created ecoSOL500 binary sensor from sysParams: %s", data_key
             )
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "ecoSOL500 binary sensor %s not found or has no data, skipping",
                 data_key,
             )

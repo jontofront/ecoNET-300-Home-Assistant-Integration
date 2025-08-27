@@ -47,7 +47,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Initialize a new ecoNET number entity."""
         self.entity_description = entity_description
         self.api = api
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     def _sync_state(self, value):
         """Sync the state of the ecoNET number entity."""
@@ -98,7 +98,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         _LOGGER.debug("Number limits retrieved: %s", number_limits)
 
         if not number_limits:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
                 self.entity_description.key,
             )
@@ -196,7 +196,7 @@ async def async_setup_entry(
 
         number_limits = await api.get_param_limits(key)
         if number_limits is None:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
                 key,
             )
@@ -207,7 +207,7 @@ async def async_setup_entry(
             apply_limits(entity_description, number_limits)
             entities.append(EconetNumber(entity_description, coordinator, api))
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Cannot add number entity - availability key: %s does not exist",
                 key,
             )

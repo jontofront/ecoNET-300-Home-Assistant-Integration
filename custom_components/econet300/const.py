@@ -230,6 +230,9 @@ DEFAULT_SENSORS = {
     "tempBack",
     "transmission",
     "statusCO",
+    # Diagnostic sensors
+    "routerType",
+    "protocolType",
 }
 
 # Main sensor mapping by controller type
@@ -255,7 +258,6 @@ DEFAULT_BINARY_SENSORS = {
     "mainSrv",
     "wifi",
     "lan",
-    "thermostat",
     "statusCWU",
     # ecoMAX850R2-X specific binary sensors
     "contactGZC",
@@ -438,6 +440,9 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "moduleCSoftVer": None,
     "moduleLambdaSoftVer": None,
     "modulePanelSoftVer": None,
+    # Diagnostic sensors (non-numeric)
+    "routerType": None,
+    "protocolType": None,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,

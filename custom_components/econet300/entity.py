@@ -28,6 +28,11 @@ class EconetEntity(CoordinatorEntity):
     api: Econet300Api
     entity_description: EntityDescription
 
+    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api):
+        """Initialize the EconetEntity."""
+        super().__init__(coordinator)
+        self.api = api
+
     @property
     def has_entity_name(self):
         """Return if the name of the entity is describing only the entity itself."""
@@ -59,15 +64,26 @@ class EconetEntity(CoordinatorEntity):
             "Update EconetEntity, entity name: %s", self.entity_description.name
         )
 
+        # Safety check: ensure coordinator data exists
+        if self.coordinator.data is None:
+            _LOGGER.info("Coordinator data is None, skipping update")
+            return
+
         # Debug: Check what's available in each data source
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
 
-        # Safety check: ensure params_edits is always a dict
+        # Safety check: ensure all data sources are always dicts
+        if sys_params is None:
+            sys_params = {}
+            _LOGGER.info("sysParams was None, defaulting to empty dict")
+        if reg_params is None:
+            reg_params = {}
+            _LOGGER.info("regParams was None, defaulting to empty dict")
         if params_edits is None:
             params_edits = {}
-            _LOGGER.warning("paramsEdits was None, defaulting to empty dict")
+            _LOGGER.info("paramsEdits was None, defaulting to empty dict")
 
         _LOGGER.debug(
             "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s",
@@ -97,6 +113,7 @@ class EconetEntity(CoordinatorEntity):
             self.entity_description.key,
             value,
         )
+        # Call _sync_state to update entity state
         self._sync_state(value)
 
     async def async_added_to_hass(self):
@@ -110,15 +127,32 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.error("Coordinator object does not have a 'data' attribute")
             return
 
+        # Safety check: ensure coordinator data exists
+        if self.coordinator.data is None:
+            _LOGGER.info("Coordinator data is None, skipping setup")
+            return
+
         # Retrieve sysParams and regParams paramsEdits data
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
 
-        # Safety check: ensure params_edits is always a dict
+        # Safety check: ensure all data sources are always dicts
+        if sys_params is None:
+            sys_params = {}
+            _LOGGER.info(
+                "async_added_to_hass: sysParams was None, defaulting to empty dict"
+            )
+        if reg_params is None:
+            reg_params = {}
+            _LOGGER.info(
+                "async_added_to_hass: regParams was None, defaulting to empty dict"
+            )
         if params_edits is None:
             params_edits = {}
-            _LOGGER.warning("async_added_to_hass: paramsEdits was None, defaulting to empty dict")
+            _LOGGER.info(
+                "async_added_to_hass: paramsEdits was None, defaulting to empty dict"
+            )
         _LOGGER.debug("async_sysParams: %s", sys_params)
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)
@@ -149,7 +183,7 @@ class EconetEntity(CoordinatorEntity):
         if value is not None:
             _LOGGER.debug("Found key '%s' with value: %s", expected_key, value)
         else:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s",
                 expected_key,
                 sys_keys,
@@ -160,7 +194,16 @@ class EconetEntity(CoordinatorEntity):
 
         # Synchronize with HASS
         await super().async_added_to_hass()
+        # Call _sync_state to update entity state
         self._sync_state(value)
+
+    def _sync_state(self, value) -> None:
+        """Update entity state with the provided value.
+
+        This method is called when the coordinator provides new data.
+        Child classes should override this to handle entity-specific state updates.
+        """
+        # Base implementation does nothing - child classes handle state updates
 
 
 class MixerEntity(EconetEntity):
@@ -177,7 +220,7 @@ class MixerEntity(EconetEntity):
         self.entity_description = description
         self.api = api
         self._idx = idx
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -206,7 +249,7 @@ class LambdaEntity(EconetEntity):
         """Initialize the LambdaEntity."""
         self.entity_description = description
         self.api = api
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -236,7 +279,7 @@ class EcoSterEntity(EconetEntity):
         self.entity_description = description
         self.api = api
         self._idx = idx
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     @property
     def device_info(self) -> DeviceInfo | None:

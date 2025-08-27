@@ -6,7 +6,7 @@ import logging
 from typing import Any
 
 import aiohttp
-from aiohttp import BasicAuth, ClientSession
+from aiohttp import BasicAuth, ClientSession, ClientTimeout
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -49,9 +49,6 @@ class Limits:
         self.min = min_v
         self.max = max_v
 
-    class AuthError(Exception):
-        """Raised when authentication fails."""
-
 
 class EconetClient:
     """Econet client class."""
@@ -90,7 +87,7 @@ class EconetClient:
                 _LOGGER.debug("Fetching data from URL: %s (Attempt %d)", url, attempt)
 
                 async with await self._session.get(
-                    url, auth=self._auth, timeout=10
+                    url, auth=self._auth, timeout=ClientTimeout(total=15)
                 ) as resp:
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
@@ -193,22 +190,20 @@ class Econet300Api:
             sys_params, API_SYS_PARAMS_PARAM_HW_VER, "_hw_version", "hardware version"
         )
 
-    def _set_device_property(
-        self, sys_params, param_key, attr_name, param_desc, default=None
-    ):
+    def _set_device_property(self, sys_params, param_key, attr_name, param_desc):
         """Set an attribute from system parameters with logging if unavailable."""
         if param_key not in sys_params:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "%s not in sys_params - cannot set proper %s", param_key, param_desc
             )
-            setattr(self, attr_name, default)
+            setattr(self, attr_name, None)
         else:
             setattr(self, attr_name, sys_params[param_key])
 
     async def set_param(self, param, value) -> bool:
         """Set param value in Econet300 API."""
         if param is None:
-            _LOGGER.warning(
+            _LOGGER.info(
                 "Requested param set for: '%s' but mapping for this param does not exist",
                 param,
             )
@@ -260,7 +255,7 @@ class Econet300Api:
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, fresh_data)
                 _LOGGER.debug("Successfully refreshed paramsEdits data: %s", fresh_data)
             else:
-                _LOGGER.warning("Failed to refresh paramsEdits data")
+                _LOGGER.info("Failed to refresh paramsEdits data")
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             _LOGGER.error("Error refreshing paramsEdits data: %s", e)
 
@@ -274,10 +269,21 @@ class Econet300Api:
                 )
                 # Cache the fetched data
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)
-            except Exception as e:
-                # Log the error and return None if an exception occurs
+            except (
+                aiohttp.ClientError,
+                asyncio.TimeoutError,
+                ValueError,
+                DataError,
+            ) as e:
                 _LOGGER.error(
-                    "An error occurred while fetching API data from %s: %s",
+                    "API error while fetching data from %s: %s",
+                    API_EDITABLE_PARAMS_LIMITS_URI,
+                    e,
+                )
+                return None
+            except (TypeError, AttributeError) as e:
+                _LOGGER.error(
+                    "Data structure error while processing API data from %s: %s",
                     API_EDITABLE_PARAMS_LIMITS_URI,
                     e,
                 )
@@ -287,11 +293,11 @@ class Econet300Api:
         limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
         if not param:
-            _LOGGER.warning("Parameter name is None. Unable to fetch limits.")
+            _LOGGER.info("Parameter name is None. Unable to fetch limits.")
             return None
 
-        if param not in limits:
-            _LOGGER.warning(
+        if limits is None or param not in limits:
+            _LOGGER.info(
                 "Limits for parameter '%s' do not exist. Available limits: %s",
                 param,
                 limits,
@@ -304,27 +310,18 @@ class Econet300Api:
         _LOGGER.debug("Limits for edit param '%s' retrieved successfully", param)
         return Limits(curr_limits["min"], curr_limits["max"])
 
-    async def fetch_reg_params_data(self) -> dict[str, Any]:
+    async def fetch_reg_params_data(self) -> dict[str, Any] | None:
         """Fetch data from econet/regParamsData."""
         try:
             regParamsData = await self._fetch_api_data_by_key(
                 API_REG_PARAMS_DATA_URI, API_REG_PARAMS_DATA_PARAM_DATA
             )
-        except aiohttp.ClientError as e:
-            _LOGGER.error("Client error occurred while fetching regParamsData: %s", e)
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError, DataError) as e:
+            _LOGGER.error("API error occurred while fetching regParamsData: %s", e)
             return {}
-        except asyncio.TimeoutError as e:
-            _LOGGER.error("Timeout error occurred while fetching regParamsData: %s", e)
-            return {}
-        except ValueError as e:
-            _LOGGER.error("Value error occurred while fetching regParamsData: %s", e)
-            return {}
-        except DataError as e:
-            _LOGGER.error("Data error occurred while fetching regParamsData: %s", e)
-            return {}
-        except Exception as e:
+        except (TypeError, AttributeError) as e:
             _LOGGER.error(
-                "Unexpected error occurred while fetching regParamsData: %s", e
+                "Data structure error occurred while processing regParamsData: %s", e
             )
             return {}
         else:
@@ -333,7 +330,7 @@ class Econet300Api:
 
     async def fetch_param_edit_data(self):
         """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available.
-        
+
         Note: This endpoint is only supported by certain controllers (e.g., ecoMAX series).
         Controllers like ecoSOL500, ecoSter, SControl MK1 don't support this endpoint.
         The common.py skip_params_edits() function handles controller-specific endpoint support.
@@ -351,7 +348,7 @@ class Econet300Api:
         # Ensure we always return a dict, not None
         return result if result is not None else {}
 
-    async def fetch_reg_params(self) -> dict[str, Any]:
+    async def fetch_reg_params(self) -> dict[str, Any] | None:
         """Fetch and return the regParams data from ip/econet/regParams endpoint."""
         _LOGGER.info("Calling fetch_reg_params method")
         regParams = await self._fetch_api_data_by_key(
@@ -361,7 +358,7 @@ class Econet300Api:
         _LOGGER.debug("Type of regParams: %s", type(regParams))
         return regParams
 
-    async def fetch_sys_params(self) -> dict[str, Any]:
+    async def fetch_sys_params(self) -> dict[str, Any] | None:
         """Fetch and return the regParam data from ip/econet/sysParams endpoint."""
         _LOGGER.debug(
             "fetch_sys_params called: Fetching parameters for registry '%s' from host '%s'",
@@ -378,14 +375,14 @@ class Econet300Api:
             data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
             if data is None:
-                _LOGGER.error("Data fetched by API for endpoint: %s is None", endpoint)
+                _LOGGER.info("Data fetched by API for endpoint: %s is None", endpoint)
                 return None
 
             if data_key is None:
                 return data
 
             if data_key not in data:
-                _LOGGER.error(
+                _LOGGER.info(
                     "Data for key: %s does not exist in endpoint: %s",
                     data_key,
                     endpoint,
@@ -411,9 +408,9 @@ class Econet300Api:
                 endpoint,
                 e,
             )
-        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
+        except (TypeError, AttributeError) as e:
             _LOGGER.error(
-                "An unexpected error occurred while fetching data from endpoint: %s, error: %s",
+                "Data structure error occurred while processing response from endpoint: %s, error: %s",
                 endpoint,
                 e,
             )

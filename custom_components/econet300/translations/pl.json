@@ -41,10 +41,10 @@
         "name": "Dodatkowy podajnik"
       },
       "pump_cwu_works": {
-        "name": "Pump CWU"
+        "name": "Pompa CWU"
       },
       "mixer_pump1": {
-        "name": "Mixer 1 pump"
+        "name": "Pompa mieszacza 1"
       },
       "mixer_pump_works1": {
         "name": "Pompa mieszacza 1"
@@ -84,9 +84,6 @@
       },
       "thermostat": {
         "name": "Termostat"
-      },
-      "status_co": {
-        "name": "Status ogrzewania"
       },
       "status_cwu": {
         "name": "Status CWU"
@@ -187,7 +184,20 @@
         "name": "Czujnik Lambda"
       },
       "status_co": {
-        "name": "Status ogrzewania"
+        "name": "Status ogrzewania",
+        "state": {
+          "0": "Wyłączone",
+          "1": "Oczekiwanie",
+          "2": "Uruchamianie",
+          "3": "Praca",
+          "4": "Zatrzymywanie",
+          "5": "Błąd",
+          "6": "Konserwacja",
+          "7": "Tryb testowy",
+          "8": "Zatrzymanie awaryjne",
+          "9": "Kalibracja",
+          "10": "Nieznany"
+        }
       },
       "soft_ver": {
         "name": "Wersja modułu ecoNET"
@@ -501,6 +511,12 @@
       },
       "boiler_power_kw": {
         "name": "Moc kotła (kW)"
+      },
+      "router_type": {
+        "name": "Typ routera"
+      },
+      "protocol_type": {
+        "name": "Typ protokołu"
       }
     }
   }

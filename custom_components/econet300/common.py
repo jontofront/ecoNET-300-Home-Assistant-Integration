@@ -23,16 +23,19 @@ def skip_params_edits(sys_params: dict[str, Any]) -> bool:
 
     # Controllers that don't support rmCurrentDataParamsEdits endpoint
     unsupported_controllers = {
-        "ecoMAX360i",      # Known to not support the endpoint
-        "ecoSOL 500",      # Solar collector - doesn't have this endpoint
-        "ecoSOL500",       # Alternative naming
-        "ecoSOL",          # Generic ecoSOL controllers
-        "ecoSter",         # ecoSter controllers
-        "SControl MK1",    # SControl controllers
+        "ecoMAX360i",  # Known to not support the endpoint
+        "ecoSOL 500",  # Solar collector - doesn't have this endpoint
+        "ecoSOL500",  # Alternative naming
+        "ecoSOL",  # Generic ecoSOL controllers
+        "ecoSter",  # ecoSter controllers
+        "SControl MK1",  # SControl controllers
     }
 
     if controller_id in unsupported_controllers:
-        _LOGGER.info("Skipping paramsEdits due to controllerID: %s (endpoint not supported)", controller_id)
+        _LOGGER.info(
+            "Skipping paramsEdits due to controllerID: %s (endpoint not supported)",
+            controller_id,
+        )
         return True
 
     # Log which controllers do support the endpoint
@@ -68,7 +71,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         return key in self.data["regParams"]
 
     def has_param_edit_data(self, key: str) -> bool:
-        """Check if ."""
+        """Check if parameter edit data key is present in paramsEdits."""
         if self.data is None:
             return False
 
@@ -85,7 +88,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 sys_params = await self._api.fetch_sys_params()
 
                 # Determine whether to fetch paramsEdits from ../econet/rmCurrentDataParamsEdits
-                if skip_params_edits(sys_params):
+                if sys_params is None or skip_params_edits(sys_params):
                     params_edits = {}
                 else:
                     params_edits = await self._api.fetch_param_edit_data()

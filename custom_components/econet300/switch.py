@@ -37,7 +37,7 @@ class EconetSwitch(EconetEntity, SwitchEntity):
         self.entity_description = entity_description
         self.api = api
         self._attr_is_on = False
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     def _sync_state(self, value: Any) -> None:
         """Synchronize the state of the switch entity."""
@@ -58,7 +58,8 @@ class EconetSwitch(EconetEntity, SwitchEntity):
             return "mdi:fire-off" if not self.is_on else "mdi:fire"
         return self.entity_description.icon
 
-    def _raise_boiler_control_error(self, message: str) -> None:
+    @staticmethod
+    def _raise_boiler_control_error(message: str) -> None:
         raise BoilerControlError(message)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
@@ -72,7 +73,7 @@ class EconetSwitch(EconetEntity, SwitchEntity):
                 _LOGGER.info("Boiler turned ON")
             else:
                 _LOGGER.error("Failed to turn boiler ON - API returned failure")
-                self._raise_boiler_control_error("Failed to turn boiler ON")
+                EconetSwitch._raise_boiler_control_error("Failed to turn boiler ON")
         except Exception as e:
             _LOGGER.error("Failed to turn boiler ON: %s", e)
             raise
@@ -88,7 +89,7 @@ class EconetSwitch(EconetEntity, SwitchEntity):
                 _LOGGER.info("Boiler turned OFF")
             else:
                 _LOGGER.error("Failed to turn boiler OFF - API returned failure")
-                self._raise_boiler_control_error("Failed to turn boiler OFF")
+                EconetSwitch._raise_boiler_control_error("Failed to turn boiler OFF")
         except Exception as e:
             _LOGGER.error("Failed to turn boiler OFF: %s", e)
             raise

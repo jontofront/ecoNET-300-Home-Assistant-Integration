@@ -1,26 +1,18 @@
 {
-    "pylint.importStrategy": "fromEnvironment",
-    "files.associations": {
-        "*.yaml": "home-assistant"
-    },
+    "python.linting.enabled": true,
+    "python.linting.ruffEnabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.defaultInterpreterPath": "./venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "ruff.enable": true,
+    "ruff.organizeImports": true,
+    "ruff.fixAll": true,
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "python.globalModuleInstallation": false,
-    "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
     },
-    "cSpell.words": [
-        "aiohttp",
-        "clientsession",
-        "codespell",
-        "colorlog",
-        "econet",
-        "ecoster",
-        "hass",
-        "homeassistant",
-        "lamda",
-        "MILLIWATT",
-        "PARAMSUNITSNAMES"
-    ],
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "basic"
 }
