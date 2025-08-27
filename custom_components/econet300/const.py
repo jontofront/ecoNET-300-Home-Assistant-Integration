@@ -230,6 +230,9 @@ DEFAULT_SENSORS = {
     "tempBack",
     "transmission",
     "statusCO",
+    # Diagnostic sensors
+    "routerType",
+    "protocolType",
 }
 
 # Main sensor mapping by controller type
