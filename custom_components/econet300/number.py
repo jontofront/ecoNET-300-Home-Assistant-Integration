@@ -47,7 +47,7 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Initialize a new ecoNET number entity."""
         self.entity_description = entity_description
         self.api = api
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
 
     def _sync_state(self, value):
         """Sync the state of the ecoNET number entity."""

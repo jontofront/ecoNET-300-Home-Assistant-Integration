@@ -54,7 +54,7 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         self.entity_description = entity_description
         self.api = api
         self._attr_is_on: bool | None = None
-        super().__init__(coordinator)
+        super().__init__(coordinator, api)
         _LOGGER.debug(
             "EconetBinarySensor initialized with unique_id: %s, entity_description: %s",
             self.unique_id,
