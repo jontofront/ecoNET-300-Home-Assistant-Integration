@@ -258,7 +258,6 @@ DEFAULT_BINARY_SENSORS = {
     "mainSrv",
     "wifi",
     "lan",
-    "thermostat",
     "statusCWU",
     # ecoMAX850R2-X specific binary sensors
     "contactGZC",
