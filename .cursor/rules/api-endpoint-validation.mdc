@@ -1,0 +1,108 @@
+# API Endpoint Validation Rules
+
+## 🚨 MANDATORY: API Response Validation Against Test Fixtures
+
+When documenting API endpoints or implementing API-related functionality, **ALWAYS** validate against the JSON examples in `tests/fixtures/`.
+
+### 📚 Test Fixtures Reference
+**Primary locations for API response examples:**
+- `tests/fixtures/ecoMAX810P-L/` - ecoMAX810P-L controller examples
+- `tests/fixtures/ecoMAX360/` - ecoMAX360 controller examples
+- `tests/fixtures/ecoSOL/` - ecoSOL controller examples
+- `tests/fixtures/ecoSOL500/` - ecoSOL500 controller examples
+- `tests/fixtures/ecoMAX850R2-X/` - ecoMAX850R2-X controller examples
+- `tests/fixtures/ecoMAX860P2-N/` - ecoMAX860P2-N controller examples
+- `tests/fixtures/ecoMAX860P3-V/` - ecoMAX860P3-V controller examples
+- `tests/fixtures/SControl MK1/` - SControl MK1 examples
+
+### 🔍 Validation Checklist
+
+#### 1. **Parameter Type Verification**
+- [ ] Check actual JSON response types in fixtures
+- [ ] Verify numeric vs boolean vs string values
+- [ ] Confirm value ranges (e.g., 0-10, 0-100, etc.)
+- [ ] Validate enum values against actual responses
+
+#### 2. **Entity Classification**
+- [ ] **Sensors**: Numeric values, multiple states, ranges
+- [ ] **Binary Sensors**: Boolean values (true/false), on/off states
+- [ ] **Switches**: Writable boolean parameters
+- [ ] **Numbers**: Numeric parameters with min/max constraints
+
+#### 3. **API Response Structure**
+- [ ] Verify parameter names match exactly
+- [ ] Check data types in actual responses
+- [ ] Validate nested object structures
+- [ ] Confirm array formats and contents
+
+### 📋 Example Validation Process
+
+#### **Before Documenting `statusCO`:**
+1. **Check Test Fixtures**: `tests/fixtures/ecoMAX810P-L/regParams.json`
+2. **Verify Actual Value**: `"statusCO": 16` (numeric, not boolean)
+3. **Confirm Type**: Regular sensor (multiple states 0-10)
+4. **Document Correctly**: "Read | 0-10" (not "true/false")
+
+#### **Before Implementing Entity:**
+1. **Check Fixture Data**: Actual response format and types
+2. **Verify Entity Class**: Sensor vs Binary Sensor vs Switch
+3. **Validate Constants**: Use correct fixture-based definitions
+4. **Test Implementation**: Against fixture data
+
+### ⚠️ Common Validation Errors
+
+#### **Entity Type Mismatches:**
+- ❌ `statusCO` as binary sensor (should be sensor with 0-10 range)
+- ❌ `pumpCOWorks` as sensor (should be binary sensor with true/false)
+- ❌ `tempCO` as switch (should be sensor with temperature values)
+
+#### **Value Range Errors:**
+- ❌ Documenting boolean for numeric parameters
+- ❌ Missing min/max constraints
+- ❌ Incorrect unit specifications
+
+#### **Parameter Name Inconsistencies:**
+- ❌ Mismatched camelCase vs snake_case
+- ❌ Missing or extra parameters
+- ❌ Different naming conventions
+
+### 🔄 Validation Workflow
+
+1. **Identify Parameter**: Find parameter in API documentation
+2. **Locate Fixture**: Find corresponding test fixture file
+3. **Extract Example**: Get actual JSON response example
+4. **Analyze Type**: Determine data type and structure
+5. **Classify Entity**: Sensor, Binary Sensor, Switch, or Number
+6. **Verify Implementation**: Check code matches fixture data
+7. **Update Documentation**: Ensure consistency with actual responses
+
+### 📊 Fixture File Mapping
+
+| API Endpoint | Fixture File | Purpose |
+|--------------|--------------|---------|
+| `/econet/regParams` | `regParams.json` | Current register values |
+| `/econet/rmCurrentDataParams` | `rmCurrentDataParams.json` | Real-time data |
+| `/econet/rmParamsData` | `rmParamsData.json` | Parameter definitions |
+| `/econet/rmParamsEnums` | `rmParamsEnums.json` | Enumeration values |
+| `/econet/rmParamsNames` | `rmParamsNames.json` | Parameter names |
+| `/econet/rmParamsDescs` | `rmParamsDescs.json` | Parameter descriptions |
+| `/econet/rmStructure` | `rmStructure.json` | Parameter structure |
+
+### 💡 Best Practices
+
+1. **Always Reference Fixtures**: Never document without checking actual data
+2. **Validate Entity Types**: Use fixture data to determine correct entity classification
+3. **Check Value Ranges**: Extract actual min/max values from fixtures
+4. **Verify Data Types**: Confirm boolean vs numeric vs string
+5. **Test Against Fixtures**: Use fixture data for unit tests
+6. **Maintain Consistency**: Keep documentation in sync with actual API responses
+
+### 🧪 Testing Requirements
+
+- [ ] Unit tests use fixture data
+- [ ] Entity creation matches fixture types
+- [ ] Value parsing handles actual response formats
+- [ ] Error handling covers fixture edge cases
+- [ ] Documentation matches fixture examples
+
+**Remember: Test fixtures are the source of truth for API behavior. Always validate against them!**
