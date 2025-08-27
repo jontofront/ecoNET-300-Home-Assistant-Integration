@@ -88,7 +88,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 sys_params = await self._api.fetch_sys_params()
 
                 # Determine whether to fetch paramsEdits from ../econet/rmCurrentDataParamsEdits
-                if skip_params_edits(sys_params):
+                if sys_params is None or skip_params_edits(sys_params):
                     params_edits = {}
                 else:
                     params_edits = await self._api.fetch_param_edit_data()
