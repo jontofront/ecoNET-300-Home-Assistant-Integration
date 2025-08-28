@@ -357,9 +357,7 @@
       "lambda_set": {
         "default": "mdi:lambda"
       },
-      "lambda_status": {
-        "default": "mdi:lambda"
-      },
+
       "work_at100": {
         "default": "mdi:counter"
       },
