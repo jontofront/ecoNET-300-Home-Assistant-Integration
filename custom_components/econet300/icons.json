@@ -671,6 +671,120 @@
       },
       "water_heater_status": {
         "default": "mdi:water-boiler"
+      },
+      "module_c_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_ecoster_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "fuel_consum": {
+        "default": "mdi:gas-station"
+      },
+      "fuel_stream": {
+        "default": "mdi:gas-station"
+      },
+      "temp_back": {
+        "default": "mdi:thermometer"
+      },
+      "status_co": {
+        "default": "mdi:heating"
+      },
+      "temp_flue_gas": {
+        "default": "mdi:thermometer"
+      },
+      "temp_external_sensor": {
+        "default": "mdi:thermometer"
+      },
+      "temp_lower_buffer": {
+        "default": "mdi:thermometer"
+      },
+      "temp_upper_buffer": {
+        "default": "mdi:thermometer"
+      },
+      "temp_cwu": {
+        "default": "mdi:thermometer"
+      },
+      "temp_cwu_set": {
+        "default": "mdi:thermometer"
+      },
+      "temp_feeder": {
+        "default": "mdi:thermometer"
+      },
+      "temp_wthr": {
+        "default": "mdi:thermometer"
+      },
+      "t1": {
+        "default": "mdi:thermometer"
+      },
+      "t2": {
+        "default": "mdi:thermometer"
+      },
+      "t3": {
+        "default": "mdi:thermometer"
+      },
+      "t4": {
+        "default": "mdi:thermometer"
+      },
+      "t5": {
+        "default": "mdi:thermometer"
+      },
+      "t6": {
+        "default": "mdi:thermometer"
+      },
+      "tzcwu": {
+        "default": "mdi:thermometer"
+      },
+      "p1": {
+        "default": "mdi:pump"
+      },
+      "p2": {
+        "default": "mdi:pump"
+      },
+      "h": {
+        "default": "mdi:gauge"
+      },
+      "uzysk_ca_kowity": {
+        "default": "mdi:gauge"
+      },
+      "ps": {
+        "default": "mdi:power-plug"
+      },
+      "temp_bufor_down": {
+        "default": "mdi:thermometer"
+      },
+      "temp_bufor_up": {
+        "default": "mdi:thermometer"
+      },
+      "temp_circuit2": {
+        "default": "mdi:thermometer"
+      },
+      "temp_circuit3": {
+        "default": "mdi:thermometer"
+      },
+      "temp_clutch": {
+        "default": "mdi:thermometer"
+      },
+      "circuit1thermostat": {
+        "default": "mdi:thermometer"
+      },
+      "circuit2thermostat_temp": {
+        "default": "mdi:thermometer"
+      },
+      "circuit3thermostat_temp": {
+        "default": "mdi:thermometer"
+      },
+      "heating_upper_temp": {
+        "default": "mdi:thermometer"
+      },
+      "heating_work_state_pump4": {
+        "default": "mdi:sync"
+      },
+      "ecosrv_addr": {
+        "default": "mdi:server"
+      },
+      "ecosrv_soft_ver": {
+        "default": "mdi:server-network"
       }
     },
     "diagnostic": {
@@ -703,6 +817,24 @@
       },
       "transmission": {
         "default": "mdi:transmission-tower"
+      },
+      "module_c_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_ecoster_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "soft_ver": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "controller_id": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "ecosrv_addr": {
+        "default": "mdi:server"
+      },
+      "ecosrv_soft_ver": {
+        "default": "mdi:server-network"
       }
     }
   }
