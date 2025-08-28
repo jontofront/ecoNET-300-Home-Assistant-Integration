@@ -275,6 +275,399 @@
           "on": "mdi:lock",
           "off": "mdi:lock-open"
         }
+      },
+      "additional_feeder": {
+        "default": "mdi:screw-lag",
+        "state": {
+          "on": "mdi:screw-lag",
+          "off": "mdi:screw-lag"
+        }
+      },
+      "boiler_pump": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "lambda_status": {
+        "default": "mdi:lambda",
+        "state": {
+          "on": "mdi:lambda",
+          "off": "mdi:lambda"
+        }
+      },
+      "mixer_pump1": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "thermostat": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "unseal": {
+        "default": "mdi:lock-open",
+        "state": {
+          "on": "mdi:lock-open",
+          "off": "mdi:lock"
+        }
+      },
+      "weather_control": {
+        "default": "mdi:weather-partly-cloudy",
+        "state": {
+          "on": "mdi:weather-partly-cloudy",
+          "off": "mdi:weather-partly-cloudy"
+        }
+      }
+    },
+    "sensor": {
+      "mode": {
+        "default": "mdi:sync"
+      },
+      "fan_power": {
+        "default": "mdi:fan"
+      },
+      "status_co": {
+        "default": "mdi:heating"
+      },
+      "status_cwu": {
+        "default": "mdi:water-boiler"
+      },
+      "thermostat": {
+        "default": "mdi:thermostat"
+      },
+      "boiler_power": {
+        "default": "mdi:gauge"
+      },
+      "boiler_power_kw": {
+        "default": "mdi:gauge"
+      },
+      "fuel_level": {
+        "default": "mdi:gas-station"
+      },
+      "lambda_level": {
+        "default": "mdi:lambda"
+      },
+      "lambda_set": {
+        "default": "mdi:lambda"
+      },
+      "lambda_status": {
+        "default": "mdi:lambda"
+      },
+      "work_at100": {
+        "default": "mdi:counter"
+      },
+      "work_at50": {
+        "default": "mdi:counter"
+      },
+      "work_at30": {
+        "default": "mdi:counter"
+      },
+      "feeder_work": {
+        "default": "mdi:counter"
+      },
+      "firing_up_count": {
+        "default": "mdi:counter"
+      },
+      "quality": {
+        "default": "mdi:signal"
+      },
+      "mixer_temp": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp": {
+        "default": "mdi:thermometer"
+      },
+      "valve_mixer1": {
+        "default": "mdi:valve"
+      },
+      "servo_mixer1": {
+        "default": "mdi:valve"
+      },
+      "mixer_temp1": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_temp2": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_temp3": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_temp4": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_temp5": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_temp6": {
+        "default": "mdi:thermometer"
+      },
+      "temp_upper_buffer": {
+        "default": "mdi:thermometer"
+      },
+      "temp_lower_buffer": {
+        "default": "mdi:thermometer"
+      },
+      "soft_ver": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "controller_id": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "module_a_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_b_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_c_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_lambda_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_panel_soft_ver": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "module_ecoster_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "ecoster_temp1": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp2": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp3": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp4": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp5": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp6": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp7": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_temp8": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp1": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp2": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp3": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp4": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp5": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp6": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp7": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_set_temp8": {
+        "default": "mdi:thermometer"
+      },
+      "ecoster_mode1": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode2": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode3": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode4": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode5": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode6": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode7": {
+        "default": "mdi:thermostat"
+      },
+      "ecoster_mode8": {
+        "default": "mdi:thermostat"
+      },
+      "circuit1thermostat": {
+        "default": "mdi:thermostat"
+      },
+      "circuit2thermostat_temp": {
+        "default": "mdi:thermometer"
+      },
+      "circuit3thermostat_temp": {
+        "default": "mdi:thermometer"
+      },
+      "ecosrv_addr": {
+        "default": "mdi:server"
+      },
+      "ecosrv_https": {
+        "default": "mdi:lock"
+      },
+      "ecosrv_soft_ver": {
+        "default": "mdi:server-network"
+      },
+      "fan_works": {
+        "default": "mdi:fan"
+      },
+      "fuel_consum": {
+        "default": "mdi:gas-station"
+      },
+      "fuel_consumption_calc": {
+        "default": "mdi:calculator"
+      },
+      "fuel_stream": {
+        "default": "mdi:gas-station"
+      },
+      "heating_upper_temp": {
+        "default": "mdi:thermometer"
+      },
+      "heating_work_state_pump4": {
+        "default": "mdi:sync"
+      },
+      "ps": {
+        "default": "mdi:power-plug"
+      },
+      "temp_bufor_down": {
+        "default": "mdi:thermometer"
+      },
+      "temp_bufor_up": {
+        "default": "mdi:thermometer"
+      },
+      "temp_circuit2": {
+        "default": "mdi:thermometer"
+      },
+      "temp_circuit3": {
+        "default": "mdi:thermometer"
+      },
+      "temp_clutch": {
+        "default": "mdi:thermometer"
+      },
+      "temp_cwu": {
+        "default": "mdi:thermometer"
+      },
+      "temp_cwu_set": {
+        "default": "mdi:thermometer"
+      },
+      "temp_external_sensor": {
+        "default": "mdi:thermometer"
+      },
+      "temp_feeder": {
+        "default": "mdi:thermometer"
+      },
+      "temp_flue_gas": {
+        "default": "mdi:thermometer"
+      },
+      "temp_wthr": {
+        "default": "mdi:thermometer"
+      },
+      "t1": {
+        "default": "mdi:thermometer"
+      },
+      "t2": {
+        "default": "mdi:thermometer"
+      },
+      "t3": {
+        "default": "mdi:thermometer"
+      },
+      "t4": {
+        "default": "mdi:thermometer"
+      },
+      "t5": {
+        "default": "mdi:thermometer"
+      },
+      "t6": {
+        "default": "mdi:thermometer"
+      },
+      "tzcwu": {
+        "default": "mdi:thermometer"
+      },
+      "p1": {
+        "default": "mdi:pump"
+      },
+      "p2": {
+        "default": "mdi:pump"
+      },
+      "h": {
+        "default": "mdi:gauge"
+      },
+      "uzysk_ca_kowity": {
+        "default": "mdi:gauge"
+      },
+      "router_type": {
+        "default": "mdi:router-wireless"
+      },
+      "protocol_type": {
+        "default": "mdi:protocol"
+      },
+      "unseal": {
+        "default": "mdi:lock-open"
+      },
+      "weather_control": {
+        "default": "mdi:weather-partly-cloudy"
+      },
+      "transmission": {
+        "default": "mdi:transmission-tower"
+      },
+      "temp_back": {
+        "default": "mdi:thermometer"
+      },
+      "additional_feeder": {
+        "default": "mdi:screw-lag"
+      },
+      "feeder_works": {
+        "default": "mdi:screw-lag"
+      },
+      "tem_co": {
+        "default": "mdi:thermometer-lines"
+      },
+      "mixer_set_temp1": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp2": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp3": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp4": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp5": {
+        "default": "mdi:thermometer"
+      },
+      "mixer_set_temp6": {
+        "default": "mdi:thermometer"
+      },
+      "signal": {
+        "default": "mdi:signal"
+      },
+      "temp_co": {
+        "default": "mdi:thermometer"
+      },
+      "temp_co_set": {
+        "default": "mdi:thermometer"
       }
     }
   }

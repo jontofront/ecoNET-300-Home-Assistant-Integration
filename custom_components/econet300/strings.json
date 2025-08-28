@@ -524,6 +524,9 @@
       },
       "protocol_type": {
         "name": "Protocol Type"
+      },
+      "tem_co": {
+        "name": "Boiler Temperature"
       }
     }
   }

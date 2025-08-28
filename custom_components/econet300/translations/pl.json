@@ -523,6 +523,9 @@
       },
       "protocol_type": {
         "name": "Typ protokołu"
+      },
+      "tem_co": {
+        "name": "Temperatura kotła"
       }
     }
   }

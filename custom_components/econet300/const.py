@@ -650,29 +650,29 @@ ENTITY_PRECISION = {
 # Binary sensors and switches now use icon translations via icons.json
 # Sensors and numbers still use the old icon system (until we implement icon translations for them)
 ENTITY_ICON = {
-    "mode": "mdi:sync",
-    "fanPower": "mdi:fan",
-    "temCO": "mdi:thermometer-lines",
-    "statusCO": "mdi:heating",
-    "statusCWU": "mdi:water-boiler",
-    "thermostat": "mdi:thermostat",
-    "boilerPower": "mdi:gauge",
-    "boilerPowerKW": "mdi:gauge",
-    "fuelLevel": "mdi:gas-station",
-    "lambdaLevel": "mdi:lambda",
-    "lambdaSet": "mdi:lambda",
-    "lambdaStatus": "mdi:lambda",
+    # "mode": "mdi:sync",  # Now using icon translations
+    # "fanPower": "mdi:fan",  # Now using icon translations
+    # "temCO": "mdi:thermometer-lines",  # Now using icon translations
+    # "statusCO": "mdi:heating",  # Now using icon translations
+    # "statusCWU": "mdi:water-boiler",  # Now using icon translations
+    # "thermostat": "mdi:thermostat",  # Now using icon translations
+    # "boilerPower": "mdi:gauge",  # Now using icon translations
+    # "boilerPowerKW": "mdi:gauge",  # Now using icon translations
+    # "fuelLevel": "mdi:gas-station",  # Now using icon translations
+    # "lambdaLevel": "mdi:lambda",  # Now using icon translations
+    # "lambdaSet": "mdi:lambda",  # Now using icon translations
+    # "lambdaStatus": "mdi:lambda",  # Now using icon translations
     # "lighterWorks": "mdi:fire",  # Now using icon translations
-    "workAt100": "mdi:counter",
-    "workAt50": "mdi:counter",
-    "workAt30": "mdi:counter",
-    "FeederWork": "mdi:counter",
-    "feederWorks": "mdi:screw-lag",
-    "FiringUpCount": "mdi:counter",
-    "quality": "mdi:signal",
+    # "workAt100": "mdi:counter",  # Now using icon translations
+    # "workAt50": "mdi:counter",  # Now using icon translations
+    # "workAt30": "mdi:counter",  # Now using icon translations
+    # "FeederWork": "mdi:counter",  # Now using icon translations
+    # "feederWorks": "mdi:screw-lag",  # Now using icon translations
+    # "FiringUpCount": "mdi:counter",  # Now using icon translations
+    # "quality": "mdi:signal",  # Now using icon translations
     # "pumpCOWorks": "mdi:pump",  # Now using icon translations
     # "fanWorks": "mdi:fan",  # Now using icon translations
-    "additionalFeeder": "mdi:screw-lag",
+    # "additionalFeeder": "mdi:screw-lag",  # Now using icon translations
     # "pumpFireplaceWorks": "mdi:pump",  # Now using icon translations
     # "pumpCWUWorks": "mdi:pump",  # Now using icon translations
     # "mixerPumpWorks": "mdi:pump",  # Now using icon translations
@@ -682,56 +682,56 @@ ENTITY_ICON = {
     # "mixerPumpWorks4": "mdi:pump",  # Now using icon translations
     # "mixerPumpWorks5": "mdi:pump",  # Now using icon translations
     # "mixerPumpWorks6": "mdi:pump",  # Now using icon translations
-    "mixerTemp": "mdi:thermometer",
-    "mixerSetTemp": "mdi:thermometer",
-    "valveMixer1": "mdi:valve",
-    "servoMixer1": "mdi:valve",
-    "mixerTemp1": "mdi:thermometer",
-    "mixerTemp2": "mdi:thermometer",
-    "mixerTemp3": "mdi:thermometer",
-    "mixerTemp4": "mdi:thermometer",
-    "mixerTemp5": "mdi:thermometer",
-    "mixerTemp6": "mdi:thermometer",
-    "tempUpperBuffer": "mdi:thermometer",
-    "tempLowerBuffer": "mdi:thermometer",
+    # "mixerTemp": "mdi:thermometer",  # Now using icon translations
+    # "mixerSetTemp": "mdi:thermometer",  # Now using icon translations
+    # "valveMixer1": "mdi:valve",  # Now using icon translations
+    # "servoMixer1": "mdi:valve",  # Now using icon translations
+    # "mixerTemp1": "mdi:thermometer",  # Now using icon translations
+    # "mixerTemp2": "mdi:thermometer",  # Now using icon translations
+    # "mixerTemp3": "mdi:thermometer",  # Now using icon translations
+    # "mixerTemp4": "mdi:thermometer",  # Now using icon translations
+    # "mixerTemp5": "mdi:thermometer",  # Now using icon translations
+    # "mixerTemp6": "mdi:thermometer",  # Now using icon translations
+    # "tempUpperBuffer": "mdi:thermometer",  # Now using icon translations
+    # "tempLowerBuffer": "mdi:thermometer",  # Now using icon translations
     # "mainSrv": "mdi:server-network",  # Now using icon translations
     # "wifi": "mdi:wifi",  # Now using icon translations
     # "lan": "mdi:lan-connect",  # Now using icon translations
     # "fuelConsumptionCalc": "mdi:calculator",  # Now using icon translations
     # "ecosrvHttps": "mdi:lock",  # Now using icon translations
-    "softVer": "mdi:alarm-panel-outline",
-    "controllerID": "mdi:alarm-panel-outline",
-    "moduleASoftVer": "mdi:raspberry-pi",
-    "moduleBSoftVer": "mdi:raspberry-pi",
-    "moduleCSoftVer": "mdi:raspberry-pi",
-    "moduleLambdaSoftVer": "mdi:raspberry-pi",
-    "modulePanelSoftVer": "mdi:alarm-panel-outline",
-    "moduleEcoSTERSoftVer": "mdi:raspberry-pi",
+    # "softVer": "mdi:alarm-panel-outline",  # Now using icon translations
+    # "controllerID": "mdi:alarm-panel-outline",  # Now using icon translations
+    # "moduleASoftVer": "mdi:raspberry-pi",  # Now using icon translations
+    # "moduleBSoftVer": "mdi:raspberry-pi",  # Now using icon translations
+    # "moduleCSoftVer": "mdi:raspberry-pi",  # Now using icon translations
+    # "moduleLambdaSoftVer": "mdi:raspberry-pi",  # Now using icon translations
+    # "modulePanelSoftVer": "mdi:alarm-panel-outline",  # Now using icon translations
+    # "moduleEcoSTERSoftVer": "mdi:raspberry-pi",  # Now using icon translations
     # ecoSTER thermostat icons
-    "ecoSterTemp1": "mdi:thermometer",
-    "ecoSterTemp2": "mdi:thermometer",
-    "ecoSterTemp3": "mdi:thermometer",
-    "ecoSterTemp4": "mdi:thermometer",
-    "ecoSterTemp5": "mdi:thermometer",
-    "ecoSterTemp6": "mdi:thermometer",
-    "ecoSterTemp7": "mdi:thermometer",
-    "ecoSterTemp8": "mdi:thermometer",
-    "ecoSterSetTemp1": "mdi:thermometer",
-    "ecoSterSetTemp2": "mdi:thermometer",
-    "ecoSterSetTemp3": "mdi:thermometer",
-    "ecoSterSetTemp4": "mdi:thermometer",
-    "ecoSterSetTemp5": "mdi:thermometer",
-    "ecoSterSetTemp6": "mdi:thermometer",
-    "ecoSterSetTemp7": "mdi:thermometer",
-    "ecoSterSetTemp8": "mdi:thermometer",
-    "ecoSterMode1": "mdi:thermostat",
-    "ecoSterMode2": "mdi:thermostat",
-    "ecoSterMode3": "mdi:thermostat",
-    "ecoSterMode4": "mdi:thermostat",
-    "ecoSterMode5": "mdi:thermostat",
-    "ecoSterMode6": "mdi:thermostat",
-    "ecoSterMode7": "mdi:thermostat",
-    "ecoSterMode8": "mdi:thermostat",
+    # "ecoSterTemp1": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp2": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp3": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp4": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp5": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp6": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp7": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterTemp8": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp1": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp2": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp3": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp4": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp5": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp6": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp7": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterSetTemp8": "mdi:thermometer",  # Now using icon translations
+    # "ecoSterMode1": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode2": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode3": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode4": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode5": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode6": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode7": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterMode8": "mdi:thermostat",  # Now using icon translations
     # "ecoSterContacts1": "mdi:thermostat",  # Now using icon translations
     # "ecoSterContacts2": "mdi:thermostat",  # Now using icon translations
     # "ecoSterContacts3": "mdi:thermostat",  # Now using icon translations
@@ -749,44 +749,44 @@ ENTITY_ICON = {
     # "ecoSterDaySched7": "mdi:calendar-clock",  # Now using icon translations
     # "ecoSterDaySched8": "mdi:calendar-clock",  # Now using icon translations
     # ecoMAX360i
-    "PS": "mdi:power-plug",
-    "Circuit2thermostatTemp": "mdi:thermometer",
-    "TempClutch": "mdi:thermometer",
-    "Circuit3thermostatTemp": "mdi:thermometer",
-    "TempWthr": "mdi:thermometer",
-    "TempCircuit3": "mdi:thermometer",
-    "TempCircuit2": "mdi:thermometer",
-    "TempBuforUp": "mdi:thermometer",
-    "TempBuforDown": "mdi:thermometer",
-    "heatingUpperTemp": "mdi:thermometer",
-    "Circuit1thermostat": "mdi:thermometer",
-    "heating_work_state_pump4": "mdi:sync",
+    # "PS": "mdi:power-plug",  # Now using icon translations
+    # "Circuit2thermostatTemp": "mdi:thermometer",  # Now using icon translations
+    # "TempClutch": "mdi:thermometer",  # Now using icon translations
+    # "Circuit3thermostatTemp": "mdi:thermometer",  # Now using icon translations
+    # "TempWthr": "mdi:thermometer",  # Now using icon translations
+    # "TempCircuit3": "mdi:thermometer",  # Now using icon translations
+    # "TempCircuit2": "mdi:thermometer",  # Now using icon translations
+    # "TempBuforUp": "mdi:thermometer",  # Now using icon translations
+    # "TempBuforDown": "mdi:thermometer",  # Now using icon translations
+    # "heatingUpperTemp": "mdi:thermometer",  # Now using icon translations
+    # "Circuit1thermostat": "mdi:thermometer",  # Now using icon translations
+    # "heating_work_state_pump4": "mdi:sync",  # Now using icon translations
     # ecoMAX850R2-X specific icons
-    "fuelConsum": "mdi:gas-station",
-    "fuelStream": "mdi:gas-station",
-    "tempBack": "mdi:thermometer",
-    "transmission": "mdi:transmission-tower",
+    # "fuelConsum": "mdi:gas-station",  # Now using icon translations
+    # "fuelStream": "mdi:gas-station",  # Now using icon translations
+    # "tempBack": "mdi:thermometer",  # Now using icon translations
+    # "transmission": "mdi:transmission-tower",  # Now using icon translations
     # "contactGZC": "mdi:connection",  # Now using icon translations
     # "contactGZCActive": "mdi:connection",  # Now using icon translations
     # "pumpCirculationWorks": "mdi:pump",  # Now using icon translations
     # "pumpSolarWorks": "mdi:pump",  # Now using icon translations
     # ecoSOL500 specific icons
-    "T1": "mdi:thermometer",
-    "T2": "mdi:thermometer",
-    "T3": "mdi:thermometer",
-    "T4": "mdi:thermometer",
-    "T5": "mdi:thermometer",
-    "T6": "mdi:thermometer",
-    "TzCWU": "mdi:thermometer",
-    "P1": "mdi:pump",
-    "P2": "mdi:pump",
-    "H": "mdi:gauge",
-    "Uzysk_ca_kowity": "mdi:gauge",
+    # "T1": "mdi:thermometer",  # Now using icon translations
+    # "T2": "mdi:thermometer",  # Now using icon translations
+    # "T3": "mdi:thermometer",  # Now using icon translations
+    # "T4": "mdi:thermometer",  # Now using icon translations
+    # "T5": "mdi:thermometer",  # Now using icon translations
+    # "T6": "mdi:thermometer",  # Now using icon translations
+    # "TzCWU": "mdi:thermometer",  # Now using icon translations
+    # "P1": "mdi:pump",  # Now using icon translations
+    # "P2": "mdi:pump",  # Now using icon translations
+    # "H": "mdi:gauge",  # Now using icon translations
+    # "Uzysk_ca_kowity": "mdi:gauge",  # Now using icon translations
     # ecoSOL500 diagnostic icons
-    "ecosrvAddr": "mdi:server",
-    "routerType": "mdi:router-wireless",
-    "protocolType": "mdi:protocol",
-    "ecosrvSoftVer": "mdi:server-network",
+    # "ecosrvAddr": "mdi:server",  # Now using icon translations
+    # "routerType": "mdi:router-wireless",  # Now using icon translations
+    # "protocolType": "mdi:protocol",  # Now using icon translations
+    # "ecosrvSoftVer": "mdi:server-network",  # Now using icon translations
 }
 
 # =============================================================================
@@ -835,7 +835,7 @@ ENTITY_ICON_OFF = {
     # "ecoSterDaySched7": "mdi:calendar-clock-off",
     # "ecoSterDaySched8": "mdi:calendar-clock-off",
     # Keep icons for sensors and numbers (not yet converted to icon translations):
-    "additionalFeeder": "mdi:screw-lag",  # This is a sensor, not binary sensor
+    # "additionalFeeder": "mdi:screw-lag",  # Now using icon translations
 }
 
 # =============================================================================
