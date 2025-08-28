@@ -668,6 +668,41 @@
       },
       "temp_co_set": {
         "default": "mdi:thermometer"
+      },
+      "water_heater_status": {
+        "default": "mdi:water-boiler"
+      }
+    },
+    "diagnostic": {
+      "module_a_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_b_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_econet_version": {
+        "default": "mdi:chip"
+      },
+      "module_lambda_soft_ver": {
+        "default": "mdi:raspberry-pi"
+      },
+      "module_panel_soft_ver": {
+        "default": "mdi:alarm-panel-outline"
+      },
+      "controller_name": {
+        "default": "mdi:server"
+      },
+      "signal_quality": {
+        "default": "mdi:signal"
+      },
+      "router_type": {
+        "default": "mdi:router-wireless"
+      },
+      "protocol_type": {
+        "default": "mdi:protocol"
+      },
+      "transmission": {
+        "default": "mdi:transmission-tower"
       }
     }
   }
