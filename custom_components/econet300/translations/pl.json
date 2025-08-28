@@ -153,6 +153,12 @@
       },
       "ecoster_day_sched8": {
         "name": "Harmonogram dzienny termostatu 8"
+      },
+      "fuel_consumption_calc": {
+        "name": "Kalkulator zużycia paliwa"
+      },
+      "ecosrv_https": {
+        "name": "Serwer ecoNET HTTPS"
       }
     },
     "sensor": {

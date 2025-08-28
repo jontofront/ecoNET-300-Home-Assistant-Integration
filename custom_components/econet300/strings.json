@@ -153,6 +153,12 @@
       },
       "ecoster_day_sched8": {
         "name": "Room thermostat 8 day schedule"
+      },
+      "fuel_consumption_calc": {
+        "name": "Fuel consumption calculator"
+      },
+      "ecosrv_https": {
+        "name": "ecoNET server HTTPS"
       }
     },
     "sensor": {
