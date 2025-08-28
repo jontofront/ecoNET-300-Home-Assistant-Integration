@@ -1,0 +1,13 @@
+{
+  "entity": {
+    "switch": {
+      "boiler_control": {
+        "default": "mdi:fire",
+        "state": {
+          "on": "mdi:fire",
+          "off": "mdi:fire-off"
+        }
+      }
+    }
+  }
+}
