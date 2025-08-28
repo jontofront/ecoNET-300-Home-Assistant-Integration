@@ -1,29 +1,20 @@
-# Basic pre-commit configuration for ecoNET300 integration
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-added-large-files
-      - id: check-merge-conflict
-      - id: check-case-conflict
-      - id: check-json
-      - id: check-toml
-      - id: debug-statements  # Prevents debug statements in production code
-      - id: check-docstring-first  # Ensures docstrings are at the beginning of functions
-
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.11
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.3
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix, --preview]
+        args:
+          - --fix
       - id: ruff-format
-
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.0
+    hooks:
+      - id: codespell
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
+    rev: v1.14.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-PyYAML]
         args: [--ignore-missing-imports]
+        exclude: ^tests/

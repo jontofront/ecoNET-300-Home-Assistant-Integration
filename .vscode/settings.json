@@ -1,18 +1,85 @@
 {
+    // Home Assistant Development Guidelines Configuration
+    // Based on: https://developers.home-assistant.io/docs/development_guidelines
+
+    // Python Configuration
+    "python.defaultInterpreterPath": "./venv/bin/python",
     "python.linting.enabled": true,
-    "python.linting.ruffEnabled": true,
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": false,
     "python.linting.mypyEnabled": true,
-    "python.defaultInterpreterPath": "./venv/bin/python",
-    "python.terminal.activateEnvironment": true,
-    "ruff.enable": true,
-    "ruff.organizeImports": true,
-    "ruff.fixAll": true,
+    "python.formatting.provider": "none",
+
+    // Ruff Configuration (replaces black, isort, flake8)
+    "python.linting.ruffEnabled": true,
+    "python.linting.ruffPath": "./venv/bin/ruff",
+    "python.linting.ruffArgs": [
+        "--fix",
+        "--exit-non-zero-on-fix"
+    ],
+
+    // Editor Settings
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": "explicit",
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
     },
-    "python.analysis.typeCheckingMode": "basic"
+    "editor.rulers": [88],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+
+    // File Associations
+    "files.associations": {
+        "*.yaml": "yaml",
+        "*.yml": "yaml",
+        "*.json": "json",
+        "*.toml": "toml"
+    },
+
+    // YAML Configuration
+    "yaml.format.enable": true,
+    "yaml.format.singleQuote": false,
+    "yaml.format.bracketSpacing": true,
+    "yaml.format.proseWrap": "preserve",
+
+    // JSON Configuration
+    "json.format.enable": true,
+    "json.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+
+    // Python Specific
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoSearchPaths": true,
+
+    // Testing Configuration
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+
+    // Pre-commit Integration
+    "pre-commit.installOnSave": true,
+    "pre-commit.runOnSave": true,
+
+    // Code Style Enforcement
+    "python.linting.maxNumberOfProblems": 1000,
+    "python.analysis.diagnosticMode": "workspace",
+
+    // Import Organization
+    "python.sortImports.args": [
+        "--profile",
+        "black",
+        "--line-length",
+        "88"
+    ],
+
+    // Documentation
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.include": [
+        "custom_components/**/*.py",
+        "tests/**/*.py"
+    ]
 }

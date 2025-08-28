@@ -1,7 +1,53 @@
 {
     "recommendations": [
-      "charliermarsh.ruff",
-      "esbenp.prettier-vscode",
-      "ms-python.python"
+        // Python Development
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.flake8",
+        "ms-python.mypy-type-checker",
+
+        // Ruff Integration
+        "charliermarsh.ruff",
+
+        // YAML Support
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+
+        // Git Integration
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+
+        // Testing
+        "littlefoxteam.vscode-python-test-adapter",
+        "hbenl.vscode-test-explorer",
+
+        // Code Quality
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.vscode-json",
+
+        // Pre-commit Integration
+        "marklarah.pre-commit-vscode",
+
+        // Home Assistant Specific
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+
+        // Productivity
+        "ms-vscode.vscode-json",
+        "ms-vscode.vscode-toml",
+        "ms-vscode.vscode-markdown",
+
+        // Code Navigation
+        "ms-vscode.vscode-json",
+        "ms-vscode.vscode-toml",
+        "ms-vscode.vscode-markdown"
+    ],
+    "unwantedRecommendations": [
+        // Disable conflicting formatters
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.flake8"
     ]
-  }
+}
