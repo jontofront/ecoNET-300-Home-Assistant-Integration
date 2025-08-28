@@ -15,7 +15,7 @@ import logging
 from pathlib import Path
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -43,14 +43,14 @@ class ApiEndpointTester:
         self.timeout = 30
 
         # Test results
-        self.test_results: Dict[str, Any] = {}
-        self.endpoint_responses: Dict[str, Any] = {}
+        self.test_results: dict[str, Any] = {}
+        self.endpoint_responses: dict[str, Any] = {}
 
-    def test_endpoint(self, endpoint: str) -> Dict[str, Any]:
+    def test_endpoint(self, endpoint: str) -> dict[str, Any]:
         """Test a single endpoint and return the result."""
         url = f"{self.host}/econet/{endpoint}"
 
-        result = {
+        result: dict[str, Any] = {
             "endpoint": endpoint,
             "url": url,
             "status_code": None,
@@ -94,9 +94,19 @@ class ApiEndpointTester:
                 result["error"] = f"HTTP {response.status_code}"
                 _LOGGER.warning("❌ %s: %s", endpoint, result["error"])
 
-        except Exception as e:
+        except (
+            requests.RequestException,
+            requests.Timeout,
+            requests.ConnectionError,
+        ) as e:
             result["error"] = str(e)
-            _LOGGER.error("❌ %s: %s", endpoint, e)
+            _LOGGER.error("❌ %s: Network error - %s", endpoint, e)
+        except ValueError as e:
+            result["error"] = str(e)
+            _LOGGER.error("❌ %s: Value error - %s", endpoint, e)
+        except (TypeError, AttributeError) as e:
+            result["error"] = str(e)
+            _LOGGER.error("❌ %s: Data processing error - %s", endpoint, e)
 
         return result
 
@@ -117,7 +127,7 @@ class ApiEndpointTester:
                 else:
                     structure[key] = type(value).__name__
             return structure
-        elif isinstance(data, list):
+        if isinstance(data, list):
             if len(data) == 0:
                 return "[]"
             if len(data) == 1:
@@ -128,10 +138,9 @@ class ApiEndpointTester:
                 self.analyze_json_structure(data[0], max_depth, current_depth + 1),
                 f"... ({len(data)} items)",
             ]
-        else:
-            return type(data).__name__
+        return type(data).__name__
 
-    def get_all_endpoints(self) -> List[str]:
+    def get_all_endpoints(self) -> list[str]:
         """Get list of all endpoints to test (safe endpoints only)."""
         # Core endpoints
         core_endpoints = [
@@ -189,12 +198,12 @@ class ApiEndpointTester:
 
         return core_endpoints + discovered_endpoints + additional_endpoints
 
-    def test_all_endpoints(self) -> Dict[str, Any]:
+    def test_all_endpoints(self) -> dict[str, Any]:
         """Test all endpoints and collect results."""
         _LOGGER.info("Starting comprehensive API endpoint testing...")
 
         endpoints = self.get_all_endpoints()
-        results = {
+        results: dict[str, Any] = {
             "test_info": {
                 "host": self.host,
                 "tested_at": datetime.now().isoformat(),
@@ -210,14 +219,18 @@ class ApiEndpointTester:
             results["endpoints"][endpoint] = result
 
             if result["status_code"] == 200:
-                results["test_info"]["successful_tests"] += 1
+                results["test_info"]["successful_tests"] = (
+                    int(results["test_info"]["successful_tests"]) + 1
+                )
             else:
-                results["test_info"]["failed_tests"] += 1
+                results["test_info"]["failed_tests"] = (
+                    int(results["test_info"]["failed_tests"]) + 1
+                )
 
         return results
 
     def save_results(
-        self, results: Dict[str, Any], output_dir: str = "api_test_results"
+        self, results: dict[str, Any], output_dir: str = "api_test_results"
     ):
         """Save test results to files."""
         output_path = Path(output_dir)
@@ -240,7 +253,7 @@ class ApiEndpointTester:
         self.create_endpoint_documentation(results, docs_file)
         _LOGGER.info("Saved endpoint documentation to: %s", docs_file)
 
-    def create_summary_report(self, results: Dict[str, Any], file_path: Path):
+    def create_summary_report(self, results: dict[str, Any], file_path: Path):
         """Create a summary report of the test results."""
         with file_path.open("w", encoding="utf-8") as f:
             f.write("# ecoNET-300 API Endpoint Test Results\n\n")
@@ -277,7 +290,7 @@ class ApiEndpointTester:
             for endpoint in failed:
                 result = results["endpoints"][endpoint]
                 error_msg = result.get(
-                    "error", f'HTTP {result.get("status_code", "Unknown")}'
+                    "error", f"HTTP {result.get('status_code', 'Unknown')}"
                 )
                 f.write(f"- **{endpoint}**: {error_msg}\n")
             f.write("\n")
@@ -299,7 +312,7 @@ class ApiEndpointTester:
             f.write(f"**Text Responses:** {len(text_responses)}\n")
             f.write(f"**Failed Requests:** {len(failed)}\n\n")
 
-    def create_endpoint_documentation(self, results: Dict[str, Any], file_path: Path):
+    def create_endpoint_documentation(self, results: dict[str, Any], file_path: Path):
         """Create detailed endpoint documentation."""
         with file_path.open("w", encoding="utf-8") as f:
             f.write("# ecoNET-300 API Endpoint Documentation\n\n")
@@ -359,15 +372,15 @@ class ApiEndpointTester:
             _LOGGER.info("Successful: %d", test_info["successful_tests"])
             _LOGGER.info("Failed: %d", test_info["failed_tests"])
 
-            return True
-
-        except Exception as e:
-            _LOGGER.error("Testing failed: %s", e)
+        except OSError as e:
+            _LOGGER.error("Testing failed - File/IO error: %s", e)
             return False
+        else:
+            return True
 
 
 def main():
-    """Main function."""
+    """Execute the main function."""
     parser = argparse.ArgumentParser(description="Test ecoNET-300 API Endpoints")
     parser.add_argument("--host", required=True, help="Device IP address or hostname")
     parser.add_argument("--username", required=True, help="Username for authentication")
