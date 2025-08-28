@@ -8,6 +8,274 @@
           "off": "mdi:fire-off"
         }
       }
+    },
+    "binary_sensor": {
+      "lighter_works": {
+        "default": "mdi:fire",
+        "state": {
+          "on": "mdi:fire",
+          "off": "mdi:fire-off"
+        }
+      },
+      "pump_co_works": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "fan_works": {
+        "default": "mdi:fan",
+        "state": {
+          "on": "mdi:fan",
+          "off": "mdi:fan-off"
+        }
+      },
+      "feeder_works": {
+        "default": "mdi:screw-lag",
+        "state": {
+          "on": "mdi:screw-lag",
+          "off": "mdi:screw-lag-off"
+        }
+      },
+      "pump_fireplace_works": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "pump_cwu_works": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "main_srv": {
+        "default": "mdi:server-network",
+        "state": {
+          "on": "mdi:server-network",
+          "off": "mdi:server-network-off"
+        }
+      },
+      "wifi": {
+        "default": "mdi:wifi",
+        "state": {
+          "on": "mdi:wifi",
+          "off": "mdi:wifi-off"
+        }
+      },
+      "lan": {
+        "default": "mdi:lan-connect",
+        "state": {
+          "on": "mdi:lan-connect",
+          "off": "mdi:lan-disconnect"
+        }
+      },
+      "status_cwu": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "on": "mdi:water-boiler",
+          "off": "mdi:water-boiler-off"
+        }
+      },
+      "contact_gzc": {
+        "default": "mdi:contact-sensor",
+        "state": {
+          "on": "mdi:contact-sensor",
+          "off": "mdi:contact-sensor-off"
+        }
+      },
+      "contact_gzc_active": {
+        "default": "mdi:contact-sensor",
+        "state": {
+          "on": "mdi:contact-sensor",
+          "off": "mdi:contact-sensor-off"
+        }
+      },
+      "pump_circulation_works": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "pump_solar_works": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works1": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works2": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works3": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works4": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works5": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "mixer_pump_works6": {
+        "default": "mdi:pump",
+        "state": {
+          "on": "mdi:pump",
+          "off": "mdi:pump-off"
+        }
+      },
+      "ecoster_contacts1": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts2": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts3": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts4": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts5": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts6": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts7": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_contacts8": {
+        "default": "mdi:thermostat",
+        "state": {
+          "on": "mdi:thermostat",
+          "off": "mdi:thermostat-off"
+        }
+      },
+      "ecoster_day_sched1": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched2": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched3": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched4": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched5": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched6": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched7": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "ecoster_day_sched8": {
+        "default": "mdi:calendar-clock",
+        "state": {
+          "on": "mdi:calendar-clock",
+          "off": "mdi:calendar-clock-outline"
+        }
+      },
+      "fuel_consumption_calc": {
+        "default": "mdi:calculator",
+        "state": {
+          "on": "mdi:calculator",
+          "off": "mdi:calculator-off"
+        }
+      },
+      "ecosrv_https": {
+        "default": "mdi:lock",
+        "state": {
+          "on": "mdi:lock",
+          "off": "mdi:lock-open"
+        }
+      }
     }
   }
 }

@@ -51,7 +51,7 @@ CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 # endpoint url sysParams
 API_SYS_PARAMS_URI = "sysParams"
 
-# sysParams roperty names
+# sysParams property names
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
@@ -60,7 +60,7 @@ API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 #  endpoint url regParams
 API_REG_PARAMS_URI = "regParams"
 
-# regParams roperty names
+# regParams property names
 API_REG_PARAMS_PARAM_DATA = "curr"
 
 # endpoint url regParamsData
@@ -647,6 +647,8 @@ ENTITY_PRECISION = {
 # =============================================================================
 # ENTITY ICON MAPPINGS
 # =============================================================================
+# Binary sensors and switches now use icon translations via icons.json
+# Sensors and numbers still use the old icon system (until we implement icon translations for them)
 ENTITY_ICON = {
     "mode": "mdi:sync",
     "fanPower": "mdi:fan",
@@ -660,7 +662,7 @@ ENTITY_ICON = {
     "lambdaLevel": "mdi:lambda",
     "lambdaSet": "mdi:lambda",
     "lambdaStatus": "mdi:lambda",
-    "lighterWorks": "mdi:fire",
+    # "lighterWorks": "mdi:fire",  # Now using icon translations
     "workAt100": "mdi:counter",
     "workAt50": "mdi:counter",
     "workAt30": "mdi:counter",
@@ -668,18 +670,18 @@ ENTITY_ICON = {
     "feederWorks": "mdi:screw-lag",
     "FiringUpCount": "mdi:counter",
     "quality": "mdi:signal",
-    "pumpCOWorks": "mdi:pump",
-    "fanWorks": "mdi:fan",
+    # "pumpCOWorks": "mdi:pump",  # Now using icon translations
+    # "fanWorks": "mdi:fan",  # Now using icon translations
     "additionalFeeder": "mdi:screw-lag",
-    "pumpFireplaceWorks": "mdi:pump",
-    "pumpCWUWorks": "mdi:pump",
-    "mixerPumpWorks": "mdi:pump",
-    "mixerPumpWorks1": "mdi:pump",
-    "mixerPumpWorks2": "mdi:pump",
-    "mixerPumpWorks3": "mdi:pump",
-    "mixerPumpWorks4": "mdi:pump",
-    "mixerPumpWorks5": "mdi:pump",
-    "mixerPumpWorks6": "mdi:pump",
+    # "pumpFireplaceWorks": "mdi:pump",  # Now using icon translations
+    # "pumpCWUWorks": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks1": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks2": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks3": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks4": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks5": "mdi:pump",  # Now using icon translations
+    # "mixerPumpWorks6": "mdi:pump",  # Now using icon translations
     "mixerTemp": "mdi:thermometer",
     "mixerSetTemp": "mdi:thermometer",
     "valveMixer1": "mdi:valve",
@@ -692,11 +694,11 @@ ENTITY_ICON = {
     "mixerTemp6": "mdi:thermometer",
     "tempUpperBuffer": "mdi:thermometer",
     "tempLowerBuffer": "mdi:thermometer",
-    "mainSrv": "mdi:server-network",
-    "wifi": "mdi:wifi",
-    "lan": "mdi:lan-connect",
-    "fuelConsumptionCalc": "mdi:calculator",
-    "ecosrvHttps": "mdi:lock",
+    # "mainSrv": "mdi:server-network",  # Now using icon translations
+    # "wifi": "mdi:wifi",  # Now using icon translations
+    # "lan": "mdi:lan-connect",  # Now using icon translations
+    # "fuelConsumptionCalc": "mdi:calculator",  # Now using icon translations
+    # "ecosrvHttps": "mdi:lock",  # Now using icon translations
     "softVer": "mdi:alarm-panel-outline",
     "controllerID": "mdi:alarm-panel-outline",
     "moduleASoftVer": "mdi:raspberry-pi",
@@ -730,22 +732,22 @@ ENTITY_ICON = {
     "ecoSterMode6": "mdi:thermostat",
     "ecoSterMode7": "mdi:thermostat",
     "ecoSterMode8": "mdi:thermostat",
-    "ecoSterContacts1": "mdi:thermostat",
-    "ecoSterContacts2": "mdi:thermostat",
-    "ecoSterContacts3": "mdi:thermostat",
-    "ecoSterContacts4": "mdi:thermostat",
-    "ecoSterContacts5": "mdi:thermostat",
-    "ecoSterContacts6": "mdi:thermostat",
-    "ecoSterContacts7": "mdi:thermostat",
-    "ecoSterContacts8": "mdi:thermostat",
-    "ecoSterDaySched1": "mdi:calendar-clock",
-    "ecoSterDaySched2": "mdi:calendar-clock",
-    "ecoSterDaySched3": "mdi:calendar-clock",
-    "ecoSterDaySched4": "mdi:calendar-clock",
-    "ecoSterDaySched5": "mdi:calendar-clock",
-    "ecoSterDaySched6": "mdi:calendar-clock",
-    "ecoSterDaySched7": "mdi:calendar-clock",
-    "ecoSterDaySched8": "mdi:calendar-clock",
+    # "ecoSterContacts1": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts2": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts3": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts4": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts5": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts6": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts7": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterContacts8": "mdi:thermostat",  # Now using icon translations
+    # "ecoSterDaySched1": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched2": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched3": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched4": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched5": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched6": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched7": "mdi:calendar-clock",  # Now using icon translations
+    # "ecoSterDaySched8": "mdi:calendar-clock",  # Now using icon translations
     # ecoMAX360i
     "PS": "mdi:power-plug",
     "Circuit2thermostatTemp": "mdi:thermometer",
@@ -764,10 +766,10 @@ ENTITY_ICON = {
     "fuelStream": "mdi:gas-station",
     "tempBack": "mdi:thermometer",
     "transmission": "mdi:transmission-tower",
-    "contactGZC": "mdi:connection",
-    "contactGZCActive": "mdi:connection",
-    "pumpCirculationWorks": "mdi:pump",
-    "pumpSolarWorks": "mdi:pump",
+    # "contactGZC": "mdi:connection",  # Now using icon translations
+    # "contactGZCActive": "mdi:connection",  # Now using icon translations
+    # "pumpCirculationWorks": "mdi:pump",  # Now using icon translations
+    # "pumpSolarWorks": "mdi:pump",  # Now using icon translations
     # ecoSOL500 specific icons
     "T1": "mdi:thermometer",
     "T2": "mdi:thermometer",
@@ -790,48 +792,50 @@ ENTITY_ICON = {
 # =============================================================================
 # ENTITY ICON OFF MAPPINGS
 # =============================================================================
+# Binary sensors now use icon translations via icons.json
+# Sensors and numbers still use the old icon system (until we implement icon translations for them)
 ENTITY_ICON_OFF = {
-    "pumpCOWorks": "mdi:pump-off",
-    "fanWorks": "mdi:fan-off",
-    "additionalFeeder": "mdi:screw-lag",
-    "pumpFireplaceWorks": "mdi:pump-off",
-    "pumpCWUWorks": "mdi:pump-off",
-    "mixerPumpWorks1": "mdi:pump-off",
-    "mixerPumpWorks2": "mdi:pump-off",
-    "mixerPumpWorks3": "mdi:pump-off",
-    "mixerPumpWorks4": "mdi:pump-off",
-    "mixerPumpWorks5": "mdi:pump-off",
-    "mixerPumpWorks6": "mdi:pump-off",
-    "statusCWU": "mdi:water-boiler-off",
-    "mainSrv": "mdi:server-network-off",
-    "wifi": "mdi:wifi-off",
-    "lan": "mdi:lan-disconnect",
-    "fuelConsumptionCalc": "mdi:calculator-off",
-    "ecosrvHttps": "mdi:lock-off",
-    "lighterWorks": "mdi:fire-off",
-    "thermostat": "mdi:thermostat-off",
-    # ecoMAX850R2-X specific off icons
-    "contactGZC": "mdi:connection-off",
-    "contactGZCActive": "mdi:connection-off",
-    "pumpCirculationWorks": "mdi:pump-off",
-    "pumpSolarWorks": "mdi:pump-off",
-    # ecoSTER thermostat off icons
-    "ecoSterContacts1": "mdi:thermostat-off",
-    "ecoSterContacts2": "mdi:thermostat-off",
-    "ecoSterContacts3": "mdi:thermostat-off",
-    "ecoSterContacts4": "mdi:thermostat-off",
-    "ecoSterContacts5": "mdi:thermostat-off",
-    "ecoSterContacts6": "mdi:thermostat-off",
-    "ecoSterContacts7": "mdi:thermostat-off",
-    "ecoSterContacts8": "mdi:thermostat-off",
-    "ecoSterDaySched1": "mdi:calendar-clock-off",
-    "ecoSterDaySched2": "mdi:calendar-clock-off",
-    "ecoSterDaySched3": "mdi:calendar-clock-off",
-    "ecoSterDaySched4": "mdi:calendar-clock-off",
-    "ecoSterDaySched5": "mdi:calendar-clock-off",
-    "ecoSterDaySched6": "mdi:calendar-clock-off",
-    "ecoSterDaySched7": "mdi:calendar-clock-off",
-    "ecoSterDaySched8": "mdi:calendar-clock-off",
+    # Binary sensor icons moved to icons.json:
+    # "pumpCOWorks": "mdi:pump-off",
+    # "fanWorks": "mdi:fan-off",
+    # "pumpFireplaceWorks": "mdi:pump-off",
+    # "pumpCWUWorks": "mdi:pump-off",
+    # "mixerPumpWorks1": "mdi:pump-off",
+    # "mixerPumpWorks2": "mdi:pump-off",
+    # "mixerPumpWorks3": "mdi:pump-off",
+    # "mixerPumpWorks4": "mdi:pump-off",
+    # "mixerPumpWorks5": "mdi:pump-off",
+    # "mixerPumpWorks6": "mdi:pump-off",
+    # "statusCWU": "mdi:water-boiler-off",
+    # "mainSrv": "mdi:server-network-off",
+    # "wifi": "mdi:wifi-off",
+    # "lan": "mdi:lan-disconnect",
+    # "fuelConsumptionCalc": "mdi:calculator-off",
+    # "ecosrvHttps": "mdi:lock-off",
+    # "lighterWorks": "mdi:fire-off",
+    # "thermostat": "mdi:thermostat-off",
+    # "contactGZC": "mdi:connection-off",
+    # "contactGZCActive": "mdi:connection-off",
+    # "pumpCirculationWorks": "mdi:pump-off",
+    # "pumpSolarWorks": "mdi:pump-off",
+    # "ecoSterContacts1": "mdi:thermostat-off",
+    # "ecoSterContacts2": "mdi:thermostat-off",
+    # "ecoSterContacts3": "mdi:thermostat-off",
+    # "ecoSterContacts4": "mdi:thermostat-off",
+    # "ecoSterContacts5": "mdi:thermostat-off",
+    # "ecoSterContacts6": "mdi:thermostat-off",
+    # "ecoSterContacts7": "mdi:thermostat-off",
+    # "ecoSterContacts8": "mdi:thermostat-off",
+    # "ecoSterDaySched1": "mdi:calendar-clock-off",
+    # "ecoSterDaySched2": "mdi:calendar-clock-off",
+    # "ecoSterDaySched3": "mdi:calendar-clock-off",
+    # "ecoSterDaySched4": "mdi:calendar-clock-off",
+    # "ecoSterDaySched5": "mdi:calendar-clock-off",
+    # "ecoSterDaySched6": "mdi:calendar-clock-off",
+    # "ecoSterDaySched7": "mdi:calendar-clock-off",
+    # "ecoSterDaySched8": "mdi:calendar-clock-off",
+    # Keep icons for sensors and numbers (not yet converted to icon translations):
+    "additionalFeeder": "mdi:screw-lag",  # This is a sensor, not binary sensor
 }
 
 # =============================================================================
