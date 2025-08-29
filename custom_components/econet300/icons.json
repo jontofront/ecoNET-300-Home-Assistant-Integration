@@ -287,9 +287,9 @@
       "lambda_status": {
         "default": "mdi:gauge",
         "state": {
-          "Stop": "mdi:stop",
-          "Start": "mdi:play",
-          "Working": "mdi:gauge"
+          "stop": "mdi:stop",
+          "start": "mdi:play",
+          "working": "mdi:gauge"
         }
       },
       "mixer_pump1": {
@@ -318,17 +318,17 @@
       "mode": {
         "default": "mdi:sync",
         "state": {
-          "Off": "mdi:power-off",
-          "Manual": "mdi:fire",
-          "Auto": "mdi:fire",
-          "Service": "mdi:fire",
-          "Test": "mdi:eye",
-          "Pause": "mdi:pause",
-          "Error": "mdi:stop",
-          "Standby": "mdi:fire",
-          "Emergency": "mdi:hand",
-          "Maintenance": "mdi:alert",
-          "Calibration": "mdi:lock"
+          "off": "mdi:power-off",
+          "manual": "mdi:fire",
+          "auto": "mdi:fire",
+          "service": "mdi:fire",
+          "test": "mdi:eye",
+          "pause": "mdi:pause",
+          "error": "mdi:stop",
+          "standby": "mdi:fire",
+          "emergency": "mdi:hand",
+          "maintenance": "mdi:alert",
+          "calibration": "mdi:lock"
         }
       },
       "fan_power": {
@@ -360,15 +360,15 @@
       "status_cwu": {
         "default": "mdi:water-boiler",
         "state": {
-          "Not set": "mdi:water-boiler-off",
-          "Set": "mdi:water-boiler"
+          "not_set": "mdi:water-boiler-off",
+          "set": "mdi:water-boiler"
         }
       },
       "thermostat": {
         "default": "mdi:thermostat",
         "state": {
-          "OFF": "mdi:thermostat-off",
-          "ON": "mdi:thermostat"
+          "off": "mdi:thermostat-off",
+          "on": "mdi:thermostat"
         }
       },
       "boiler_power": {
@@ -909,7 +909,7 @@
       "temp_external_sensor": {
         "default": "mdi:thermometer",
         "range": {
-          "-20": "mdi:thermometer-low",
+          "minus_20": "mdi:thermometer-low",
           "0": "mdi:thermometer-low",
           "1": "mdi:thermometer",
           "25": "mdi:thermometer",
@@ -942,7 +942,7 @@
       "temp_wthr": {
         "default": "mdi:thermometer",
         "range": {
-          "-20": "mdi:thermometer-low",
+          "minus_20": "mdi:thermometer-low",
           "0": "mdi:thermometer-low",
           "1": "mdi:thermometer",
           "25": "mdi:thermometer",
