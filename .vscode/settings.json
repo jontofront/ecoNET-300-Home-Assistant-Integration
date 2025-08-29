@@ -81,5 +81,31 @@
     "python.analysis.include": [
         "custom_components/**/*.py",
         "tests/**/*.py"
+    ],
+    "cursorpyright.analysis.autoImportCompletions": true,
+    "cursorpyright.analysis.autoSearchPaths": true,
+    "cursorpyright.analysis.diagnosticMode": "workspace",
+    "cursorpyright.analysis.include": [
+        "custom_components/**/*.py",
+        "tests/**/*.py"
+    ],
+    "cursorpyright.analysis.typeCheckingMode": "basic",
+    "cSpell.words": [
+        "bufor",
+        "clientsession",
+        "consum",
+        "econet",
+        "ecosol",
+        "ecosrv",
+        "ecoster",
+        "hass",
+        "homeassistant",
+        "kowity",
+        "sched",
+        "setpoint",
+        "setpoints",
+        "tzcwu",
+        "uzysk",
+        "wthr"
     ]
 }
