@@ -258,7 +258,8 @@ DEFAULT_BINARY_SENSORS = {
     "mainSrv",
     "wifi",
     "lan",
-    "statusCWU",
+    "fuelConsumptionCalc",
+    "ecosrvHttps",
     # ecoMAX850R2-X specific binary sensors
     "contactGZC",
     "contactGZCActive",
@@ -443,6 +444,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     # Diagnostic sensors (non-numeric)
     "routerType": None,
     "protocolType": None,
+    "moduleEcoSTERSoftVer": None,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
@@ -560,9 +562,6 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
     "fuelConsumptionCalc": BinarySensorDeviceClass.RUNNING,
     "ecosrvHttps": BinarySensorDeviceClass.CONNECTIVITY,
-    "lambdaStatus": BinarySensorDeviceClass.RUNNING,
-    "thermostat": BinarySensorDeviceClass.RUNNING,
-    "statusCWU": BinarySensorDeviceClass.RUNNING,
     # ecoMAX850R2-X specific binary sensors
     "contactGZC": BinarySensorDeviceClass.CONNECTIVITY,
     "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
@@ -675,6 +674,7 @@ ENTITY_CATEGORY = {
     "ecosrvAddr": EntityCategory.DIAGNOSTIC,
     "routerType": EntityCategory.DIAGNOSTIC,
     "ecosrvSoftVer": EntityCategory.DIAGNOSTIC,
+    "moduleEcoSTERSoftVer": EntityCategory.DIAGNOSTIC,
 }
 
 # =============================================================================

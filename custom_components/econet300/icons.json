@@ -299,13 +299,6 @@
           "off": "mdi:pump"
         }
       },
-      "thermostat": {
-        "default": "mdi:thermostat",
-        "state": {
-          "on": "mdi:thermostat",
-          "off": "mdi:thermostat"
-        }
-      },
       "unseal": {
         "default": "mdi:lock",
         "state": {
@@ -811,16 +804,10 @@
         "default": "mdi:lock"
       },
       "ecosrv_soft_ver": {
-        "default": "mdi:server"
-      },
-      "fan_works": {
-        "default": "mdi:fan"
+        "default": "mdi:lock"
       },
       "fuel_consum": {
         "default": "mdi:gas-station"
-      },
-      "fuel_consumption_calc": {
-        "default": "mdi:calculator"
       },
       "fuel_stream": {
         "default": "mdi:gas-station"
@@ -1030,6 +1017,17 @@
         }
       },
       "tzcwu": {
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
+      },
+      "tz_cwu": {
         "default": "mdi:thermometer",
         "range": {
           "0": "mdi:thermometer-low",

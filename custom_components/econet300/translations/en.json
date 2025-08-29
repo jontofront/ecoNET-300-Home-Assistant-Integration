@@ -159,9 +159,6 @@
       "fan_power": {
         "name": "Fan power"
       },
-      "fan_works": {
-        "name": "Fan"
-      },
       "lambda_status": {
         "name": "Lambda status",
         "state": {
@@ -308,6 +305,9 @@
       },
       "temp_cwu_set": {
         "name": "Water heater set temperature"
+      },
+      "tz_cwu": {
+        "name": "Hot water temperature"
       },
       "temp_upper_buffer": {
         "name": "Upper buffer temperature"
@@ -484,12 +484,6 @@
       },
       "uzysk_ca_kowity": {
         "name": "Total Heat Output"
-      },
-      "fuel_consumption_calc": {
-        "name": "Fuel Consumption Calculator"
-      },
-      "ecosrv_https": {
-        "name": "ecoNET Server HTTPS"
       },
       "ecosrv_addr": {
         "name": "ecoNET Server Address"

@@ -85,12 +85,6 @@
       "lambda_status": {
         "name": "Lambda sensor"
       },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "status_cwu": {
-        "name": "Hot water status"
-      },
       "contact_gzc": {
         "name": "GZC contact"
       },
@@ -173,9 +167,6 @@
       },
       "fan_power": {
         "name": "Fan power"
-      },
-      "fan_works": {
-        "name": "Fan"
       },
       "lambda_status": {
         "name": "Lambda status",
@@ -323,6 +314,9 @@
       },
       "temp_cwu_set": {
         "name": "Water heater set temperature"
+      },
+      "tz_cwu": {
+        "name": "Hot water temperature"
       },
       "temp_upper_buffer": {
         "name": "Upper buffer temperature"
@@ -506,12 +500,6 @@
       },
       "uzysk_ca_kowity": {
         "name": "Total Heat Output"
-      },
-      "fuel_consumption_calc": {
-        "name": "Fuel Consumption Calculator"
-      },
-      "ecosrv_https": {
-        "name": "ecoNET Server HTTPS"
       },
       "ecosrv_addr": {
         "name": "ecoNET Server Address"
