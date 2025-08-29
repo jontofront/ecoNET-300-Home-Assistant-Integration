@@ -5,7 +5,7 @@
         "default": "mdi:fire",
         "state": {
           "on": "mdi:fire",
-          "off": "mdi:fire-off"
+          "off": "mdi:fire"
         }
       }
     },
@@ -14,307 +14,308 @@
         "default": "mdi:fire",
         "state": {
           "on": "mdi:fire",
-          "off": "mdi:fire-off"
+          "off": "mdi:fire"
         }
       },
       "pump_co_works": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "fan_works": {
         "default": "mdi:fan",
         "state": {
           "on": "mdi:fan",
-          "off": "mdi:fan-off"
+          "off": "mdi:fan"
         }
       },
       "feeder_works": {
-        "default": "mdi:screw-lag",
+        "default": "mdi:gauge",
         "state": {
-          "on": "mdi:screw-lag",
-          "off": "mdi:screw-lag-off"
+          "on": "mdi:gauge",
+          "off": "mdi:gauge-empty"
         }
       },
       "pump_fireplace_works": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "pump_cwu_works": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "main_srv": {
-        "default": "mdi:server-network",
+        "default": "mdi:server",
         "state": {
-          "on": "mdi:server-network",
-          "off": "mdi:server-network-off"
+          "on": "mdi:server",
+          "off": "mdi:server"
         }
       },
       "wifi": {
         "default": "mdi:wifi",
         "state": {
           "on": "mdi:wifi",
-          "off": "mdi:wifi-off"
+          "off": "mdi:wifi"
         }
       },
       "lan": {
-        "default": "mdi:lan-connect",
+        "default": "mdi:lan",
         "state": {
-          "on": "mdi:lan-connect",
-          "off": "mdi:lan-disconnect"
+          "on": "mdi:lan",
+          "off": "mdi:lan"
         }
       },
       "status_cwu": {
         "default": "mdi:water-boiler",
         "state": {
           "on": "mdi:water-boiler",
-          "off": "mdi:water-boiler-off"
+          "off": "mdi:water-boiler"
         }
       },
       "contact_gzc": {
         "default": "mdi:contact-sensor",
         "state": {
           "on": "mdi:contact-sensor",
-          "off": "mdi:contact-sensor-off"
+          "off": "mdi:contact-sensor"
         }
       },
       "contact_gzc_active": {
         "default": "mdi:contact-sensor",
         "state": {
           "on": "mdi:contact-sensor",
-          "off": "mdi:contact-sensor-off"
+          "off": "mdi:contact-sensor"
         }
       },
       "pump_circulation_works": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "pump_solar_works": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works1": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works2": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works3": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works4": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works5": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "mixer_pump_works6": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "ecoster_contacts1": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts2": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts3": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts4": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts5": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts6": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts7": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_contacts8": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "ecoster_day_sched1": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched2": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched3": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched4": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched5": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched6": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched7": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "ecoster_day_sched8": {
         "default": "mdi:calendar-clock",
         "state": {
           "on": "mdi:calendar-clock",
-          "off": "mdi:calendar-clock-outline"
+          "off": "mdi:calendar-clock"
         }
       },
       "fuel_consumption_calc": {
         "default": "mdi:calculator",
         "state": {
           "on": "mdi:calculator",
-          "off": "mdi:calculator-off"
+          "off": "mdi:calculator"
         }
       },
       "ecosrv_https": {
         "default": "mdi:lock",
         "state": {
           "on": "mdi:lock",
-          "off": "mdi:lock-open"
+          "off": "mdi:lock"
         }
       },
       "additional_feeder": {
-        "default": "mdi:screw-lag",
+        "default": "mdi:gauge",
         "state": {
-          "on": "mdi:screw-lag",
-          "off": "mdi:screw-lag"
+          "on": "mdi:gauge",
+          "off": "mdi:gauge-empty"
         }
       },
       "boiler_pump": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "lambda_status": {
-        "default": "mdi:lambda",
+        "default": "mdi:gauge",
         "state": {
-          "on": "mdi:lambda",
-          "off": "mdi:lambda"
+          "0": "mdi:stop",
+          "1": "mdi:play",
+          "2": "mdi:gauge"
         }
       },
       "mixer_pump1": {
         "default": "mdi:pump",
         "state": {
           "on": "mdi:pump",
-          "off": "mdi:pump-off"
+          "off": "mdi:pump"
         }
       },
       "thermostat": {
         "default": "mdi:thermostat",
         "state": {
           "on": "mdi:thermostat",
-          "off": "mdi:thermostat-off"
+          "off": "mdi:thermostat"
         }
       },
       "unseal": {
-        "default": "mdi:lock-open",
+        "default": "mdi:lock",
         "state": {
-          "on": "mdi:lock-open",
+          "on": "mdi:lock",
           "off": "mdi:lock"
         }
       },
@@ -328,16 +329,50 @@
     },
     "sensor": {
       "mode": {
-        "default": "mdi:sync"
+        "default": "mdi:sync",
+        "state": {
+          "0": "mdi:power-off",
+          "1": "mdi:fire",
+          "2": "mdi:fire",
+          "3": "mdi:fire",
+          "4": "mdi:eye",
+          "5": "mdi:pause",
+          "6": "mdi:stop",
+          "7": "mdi:fire",
+          "8": "mdi:hand",
+          "9": "mdi:alert",
+          "10": "mdi:lock",
+          "11": "mdi:chimney",
+          "12": "mdi:sync",
+          "13": "mdi:wifi"
+        }
       },
       "fan_power": {
         "default": "mdi:fan"
       },
       "status_co": {
-        "default": "mdi:heating"
+        "default": "mdi:fire",
+        "state": {
+          "0": "mdi:fire",
+          "1": "mdi:fire",
+          "2": "mdi:fire",
+          "3": "mdi:fire",
+          "4": "mdi:fire",
+          "5": "mdi:alert",
+          "6": "mdi:alert",
+          "7": "mdi:test-tube",
+          "8": "mdi:stop-circle",
+          "9": "mdi:gauge",
+          "10": "mdi:help-circle"
+        }
       },
       "status_cwu": {
-        "default": "mdi:water-boiler"
+        "default": "mdi:water-boiler",
+        "state": {
+          "0": "mdi:water-boiler",
+          "1": "mdi:water-boiler",
+          "128": "mdi:water-boiler"
+        }
       },
       "thermostat": {
         "default": "mdi:thermostat"
@@ -352,10 +387,10 @@
         "default": "mdi:gas-station"
       },
       "lambda_level": {
-        "default": "mdi:lambda"
+        "default": "mdi:gauge"
       },
       "lambda_set": {
-        "default": "mdi:lambda"
+        "default": "mdi:gauge"
       },
 
       "work_at100": {
@@ -524,7 +559,7 @@
         "default": "mdi:lock"
       },
       "ecosrv_soft_ver": {
-        "default": "mdi:server-network"
+        "default": "mdi:server"
       },
       "fan_works": {
         "default": "mdi:fan"
@@ -617,28 +652,28 @@
         "default": "mdi:router-wireless"
       },
       "protocol_type": {
-        "default": "mdi:protocol"
+        "default": "mdi:connection"
       },
       "unseal": {
-        "default": "mdi:lock-open"
+        "default": "mdi:lock"
       },
       "weather_control": {
         "default": "mdi:weather-partly-cloudy"
       },
       "transmission": {
-        "default": "mdi:transmission-tower"
+        "default": "mdi:antenna"
       },
       "temp_back": {
         "default": "mdi:thermometer"
       },
       "additional_feeder": {
-        "default": "mdi:screw-lag"
+        "default": "mdi:gauge"
       },
       "feeder_works": {
-        "default": "mdi:screw-lag"
+        "default": "mdi:gauge"
       },
       "tem_co": {
-        "default": "mdi:thermometer-lines"
+        "default": "mdi:thermometer"
       },
       "mixer_set_temp1": {
         "default": "mdi:thermometer"
@@ -697,10 +732,10 @@
         "default": "mdi:router-wireless"
       },
       "protocol_type": {
-        "default": "mdi:protocol"
+        "default": "mdi:connection"
       },
       "transmission": {
-        "default": "mdi:transmission-tower"
+        "default": "mdi:antenna"
       }
     }
   }
