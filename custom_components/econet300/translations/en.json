@@ -262,7 +262,11 @@
         "name": "Mixer 6 target temperature"
       },
       "status_cwu": {
-        "name": "Water heater status"
+        "name": "Water heater status",
+        "state": {
+          "not_set": "Not set",
+          "set": "Set"
+        }
       },
       "quality": {
         "name": "Signal quality"

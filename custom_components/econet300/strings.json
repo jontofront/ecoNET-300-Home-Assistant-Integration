@@ -310,7 +310,11 @@
         "name": "Water heater temperature"
       },
       "status_cwu": {
-        "name": "Water heater status"
+        "name": "Water heater status",
+        "state": {
+          "not_set": "Not set",
+          "set": "Set"
+        }
       },
       "temp_cwu_set": {
         "name": "Water heater set temperature"

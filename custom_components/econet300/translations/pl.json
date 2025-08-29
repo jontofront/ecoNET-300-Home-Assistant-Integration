@@ -248,7 +248,11 @@
         "name": "Temp. zadana mieszacza 6"
       },
       "status_cwu": {
-        "name": "Status CWU"
+        "name": "Status CWU",
+        "state": {
+          "not_set": "Nie ustawiono",
+          "set": "Ustawiono"
+        }
       },
       "mode": {
         "name": "Tryb pracy",
