@@ -5,7 +5,7 @@
         "default": "mdi:fire",
         "state": {
           "on": "mdi:fire",
-          "off": "mdi:fire"
+          "off": "mdi:fire-off"
         }
       }
     },
@@ -14,21 +14,21 @@
         "default": "mdi:fire",
         "state": {
           "on": "mdi:fire",
-          "off": "mdi:fire"
+          "off": "mdi:fire-off"
         }
       },
       "pump_co_works": {
-        "default": "mdi:pump",
+        "default": "mdi:radiator",
         "state": {
-          "on": "mdi:pump",
-          "off": "mdi:pump"
+          "on": "mdi:radiator",
+          "off": "mdi:radiator-off"
         }
       },
       "fan_works": {
         "default": "mdi:fan",
         "state": {
           "on": "mdi:fan",
-          "off": "mdi:fan"
+          "off": "mdi:fan-off"
         }
       },
       "feeder_works": {
@@ -39,10 +39,10 @@
         }
       },
       "pump_fireplace_works": {
-        "default": "mdi:pump",
+        "default": "mdi:radiator",
         "state": {
-          "on": "mdi:pump",
-          "off": "mdi:pump"
+          "on": "mdi:radiator",
+          "off": "mdi:radiator-off"
         }
       },
       "pump_cwu_works": {
@@ -56,42 +56,36 @@
         "default": "mdi:server",
         "state": {
           "on": "mdi:server",
-          "off": "mdi:server"
+          "off": "mdi:server-off"
         }
       },
       "wifi": {
         "default": "mdi:wifi",
         "state": {
           "on": "mdi:wifi",
-          "off": "mdi:wifi"
+          "off": "mdi:wifi-strength-off"
         }
       },
       "lan": {
         "default": "mdi:lan",
         "state": {
-          "on": "mdi:lan",
-          "off": "mdi:lan"
+          "on": "mdi:lan-connect",
+          "off": "mdi:lan-disconnect"
         }
       },
-      "status_cwu": {
-        "default": "mdi:water-boiler",
-        "state": {
-          "on": "mdi:water-boiler",
-          "off": "mdi:water-boiler"
-        }
-      },
+
       "contact_gzc": {
-        "default": "mdi:contact-sensor",
+        "default": "mdi:connection",
         "state": {
-          "on": "mdi:contact-sensor",
-          "off": "mdi:contact-sensor"
+          "on": "mdi:connection",
+          "off": "mdi:connection-off"
         }
       },
       "contact_gzc_active": {
-        "default": "mdi:contact-sensor",
+        "default": "mdi:connection",
         "state": {
-          "on": "mdi:contact-sensor",
-          "off": "mdi:contact-sensor"
+          "on": "mdi:connection",
+          "off": "mdi:connection-off"
         }
       },
       "pump_circulation_works": {
@@ -102,10 +96,10 @@
         }
       },
       "pump_solar_works": {
-        "default": "mdi:pump",
+        "default": "mdi:sun-thermometer",
         "state": {
-          "on": "mdi:pump",
-          "off": "mdi:pump"
+          "on": "mdi:sun-thermometer",
+          "off": "mdi:sun-thermometer-outline"
         }
       },
       "mixer_pump_works1": {
@@ -348,14 +342,21 @@
         }
       },
       "fan_power": {
-        "default": "mdi:fan"
+        "default": "mdi:fan",
+        "range": {
+          "0": "mdi:fan-off",
+          "25": "mdi:fan-speed-1",
+          "50": "mdi:fan-speed-2",
+          "75": "mdi:fan-speed-3",
+          "100": "mdi:fan-speed-3"
+        }
       },
       "status_co": {
         "default": "mdi:fire",
         "state": {
-          "0": "mdi:fire",
-          "1": "mdi:fire",
-          "2": "mdi:fire",
+          "0": "mdi:fire-off",
+          "1": "mdi:pause",
+          "2": "mdi:reload",
           "3": "mdi:fire",
           "4": "mdi:fire",
           "5": "mdi:alert",
@@ -369,22 +370,49 @@
       "status_cwu": {
         "default": "mdi:water-boiler",
         "state": {
-          "0": "mdi:water-boiler",
+          "0": "mdi:water-boiler-off",
           "1": "mdi:water-boiler",
-          "128": "mdi:water-boiler"
+          "128": "mdi:water-boiler-off"
         }
       },
       "thermostat": {
         "default": "mdi:thermostat"
       },
       "boiler_power": {
-        "default": "mdi:gauge"
+        "default": "mdi:gauge",
+        "range": {
+          "0": "mdi:gauge-empty",
+          "25": "mdi:gauge-low",
+          "50": "mdi:gauge",
+          "75": "mdi:gauge",
+          "100": "mdi:gauge-full"
+        }
       },
       "boiler_power_kw": {
-        "default": "mdi:gauge"
+        "default": "mdi:gauge",
+        "range": {
+          "0": "mdi:gauge-empty",
+          "25": "mdi:gauge-low",
+          "50": "mdi:gauge",
+          "75": "mdi:gauge",
+          "100": "mdi:gauge-full"
+        }
       },
       "fuel_level": {
-        "default": "mdi:gas-station"
+        "default": "mdi:gas-station",
+        "range": {
+          "0": "mdi:gas-station-off",
+          "10": "mdi:gas-station",
+          "20": "mdi:gas-station",
+          "30": "mdi:gas-station",
+          "40": "mdi:gas-station",
+          "50": "mdi:gas-station",
+          "60": "mdi:gas-station",
+          "70": "mdi:gas-station",
+          "80": "mdi:gas-station",
+          "90": "mdi:gas-station",
+          "100": "mdi:gas-station"
+        }
       },
       "lambda_level": {
         "default": "mdi:gauge"
@@ -412,10 +440,26 @@
         "default": "mdi:signal"
       },
       "mixer_temp": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_set_temp": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "valve_mixer1": {
         "default": "mdi:valve"
@@ -424,28 +468,92 @@
         "default": "mdi:valve"
       },
       "mixer_temp1": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_temp2": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_temp3": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_temp4": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_temp5": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "mixer_temp6": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_upper_buffer": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_lower_buffer": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "soft_ver": {
         "default": "mdi:alarm-panel-outline"
@@ -472,52 +580,180 @@
         "default": "mdi:raspberry-pi"
       },
       "ecoster_temp1": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp2": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp3": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp4": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp5": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp6": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp7": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_temp8": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp1": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp2": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp3": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp4": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp5": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp6": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp7": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_set_temp8": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecoster_mode1": {
         "default": "mdi:thermostat"
@@ -547,10 +783,26 @@
         "default": "mdi:thermostat"
       },
       "circuit2thermostat_temp": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "circuit3thermostat_temp": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "ecosrv_addr": {
         "default": "mdi:server"
@@ -574,7 +826,15 @@
         "default": "mdi:gas-station"
       },
       "heating_upper_temp": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "heating_work_state_pump4": {
         "default": "mdi:sync"
@@ -583,58 +843,202 @@
         "default": "mdi:power-plug"
       },
       "temp_bufor_down": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_bufor_up": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_circuit2": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_circuit3": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_clutch": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_cwu": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_cwu_set": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_external_sensor": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "-20": "mdi:thermometer-low",
+          "0": "mdi:thermometer-low",
+          "1": "mdi:thermometer",
+          "25": "mdi:thermometer",
+          "26": "mdi:thermometer-high",
+          "50": "mdi:thermometer-high"
+        }
       },
       "temp_feeder": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_flue_gas": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "50": "mdi:thermometer-low",
+          "51": "mdi:thermometer",
+          "100": "mdi:thermometer",
+          "101": "mdi:thermometer-high",
+          "200": "mdi:thermometer-high"
+        }
       },
       "temp_wthr": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "-20": "mdi:thermometer-low",
+          "0": "mdi:thermometer-low",
+          "1": "mdi:thermometer",
+          "25": "mdi:thermometer",
+          "26": "mdi:thermometer-high",
+          "50": "mdi:thermometer-high"
+        }
       },
       "t1": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "t2": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "t3": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "t4": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "t5": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "t6": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "tzcwu": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "p1": {
         "default": "mdi:pump"
@@ -697,10 +1101,26 @@
         "default": "mdi:signal"
       },
       "temp_co": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "temp_co_set": {
-        "default": "mdi:thermometer"
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "30": "mdi:thermometer-low",
+          "31": "mdi:thermometer",
+          "60": "mdi:thermometer",
+          "61": "mdi:thermometer-high",
+          "100": "mdi:thermometer-high"
+        }
       },
       "water_heater_status": {
         "default": "mdi:water-boiler"
