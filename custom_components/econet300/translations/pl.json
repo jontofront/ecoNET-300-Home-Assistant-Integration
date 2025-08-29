@@ -25,12 +25,6 @@
       }
     },
     "binary_sensor": {
-      "weather_control": {
-        "name": "Sterowanie pogodowe kotła"
-      },
-      "unseal": {
-        "name": "Odpieczętowanie"
-      },
       "pump_co_works": {
         "name": "Pompa CO"
       },
@@ -78,15 +72,6 @@
       },
       "lan": {
         "name": "LAN"
-      },
-      "lambda_status": {
-        "name": "Czujnik Lambda"
-      },
-      "thermostat": {
-        "name": "Termostat"
-      },
-      "status_cwu": {
-        "name": "Status CWU"
       },
       "contact_gzc": {
         "name": "Styk GZC"
@@ -167,9 +152,6 @@
       },
       "fuel_level": {
         "name": "Poziom paliwa"
-      },
-      "fan_works": {
-        "name": "Nadmuch"
       },
       "fan_power": {
         "name": "Moc nadmuchu"

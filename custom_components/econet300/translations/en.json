@@ -28,12 +28,6 @@
       "lighter_works": {
         "name": "Lighter"
       },
-      "weather_control": {
-        "name": "Weather control the boiler"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },
@@ -84,15 +78,6 @@
       },
       "lan": {
         "name": "LAN"
-      },
-      "lambda_status": {
-        "name": "Lambda sensor"
-      },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "status_cwu": {
-        "name": "Hot water status"
       },
       "contact_gzc": {
         "name": "GZC contact"
@@ -342,17 +327,10 @@
       "temp_co_set": {
         "name": "Heating target temperature"
       },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
+
+
       "valve_mixer1": {
         "name": "Mixer 1 valve % open"
-      },
-      "weather_control": {
-        "name": "Weather control the boiler"
       },
       "ps": {
         "name": "PS"
