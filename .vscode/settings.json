@@ -94,6 +94,7 @@
         "bufor",
         "clientsession",
         "consum",
+        "ECOMAX",
         "econet",
         "ecosol",
         "ecosrv",
@@ -101,11 +102,17 @@
         "hass",
         "homeassistant",
         "kowity",
+        "lamda",
+        "MILLIWATT",
         "sched",
         "setpoint",
         "setpoints",
         "tzcwu",
         "uzysk",
         "wthr"
+    ],
+    "cSpell.ignorePaths": [
+        "custom_components/econet300/translations/pl.json",
+        "pyproject.toml"
     ]
 }
