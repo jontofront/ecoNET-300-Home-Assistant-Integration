@@ -909,7 +909,6 @@
       "temp_external_sensor": {
         "default": "mdi:thermometer",
         "range": {
-          "minus_20": "mdi:thermometer-low",
           "0": "mdi:thermometer-low",
           "1": "mdi:thermometer",
           "25": "mdi:thermometer",

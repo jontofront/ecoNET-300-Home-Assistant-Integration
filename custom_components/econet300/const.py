@@ -719,7 +719,7 @@ SENSOR_LAMBDA_STATUS_MAPPING: dict[int, str] = {
 }
 
 SENSOR_STATUS_CWU_MAPPING: dict[int, str] = {
-    0: "Not set",
+    0: "notSet",
     1: "Set",
 }
 
