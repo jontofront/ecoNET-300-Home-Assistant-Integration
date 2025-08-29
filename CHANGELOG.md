@@ -36,20 +36,6 @@
   - **Solution**: Implemented proper translation key mapping and icon validation
   - **Impact**: Consistent icon display across all entity types
 
-### Technical Changes
-
-- **Code Cleanup**: Removed 130+ lines of commented-out icon constants from `const.py`
-- **Icon Validation Scripts**: Created and used validation tools to ensure all icons are valid
-- **Translation Integration**: Proper linking between `icons.json`, `strings.json`, and entity descriptions
-- **State-Based Icon Logic**: Implemented dynamic icon selection based on numeric entity states
-- **Code Quality**: All pre-commit hooks pass (ruff, ruff-format, mypy)
-
-### Files Modified
-
-- `custom_components/econet300/icons.json` - Complete icon system overhaul
-- `custom_components/econet300/const.py` - Removed old icon constants
-- `.pre-commit-config.yaml` - Removed codespell hook
-
 ## [v1.1.9] - 2025-01-27
 
 ### Changed
