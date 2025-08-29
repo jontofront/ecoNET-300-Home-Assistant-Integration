@@ -644,36 +644,13 @@ ENTITY_PRECISION = {
     "ecosrvSoftVer": None,
 }
 
-# =============================================================================
-# ENTITY ICON MAPPINGS
-# =============================================================================
-# All icons now use the new icon translation method via icons.json
-# This section is kept for future reference but is no longer used
-# ENTITY_ICON = {}  # Moved to icons.json
-
-# =============================================================================
-# ENTITY ICON OFF MAPPINGS
-# =============================================================================
-# All icons now use the new icon translation method via icons.json
-# This section is kept for future reference but is no longer used
-# ENTITY_ICON_OFF = {}  # Moved to icons.json
-
-# =============================================================================
-# ENTITY VALUE PROCESSORS
-# =============================================================================
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
 ENTITY_VALUE_PROCESSOR = {
-    "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    "lambdaStatus": (
-        lambda x: (
-            "stop"
-            if x == 0
-            else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
-        )
-    ),
-    "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
-    "thermostat": lambda x: "ON" if x == 1 else "OFF",
+    "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
+    "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
+    "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, STATE_UNKNOWN),
+    "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
 }
 
 # =============================================================================
@@ -716,4 +693,37 @@ ENTITY_MAX_VALUE = {
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
+}
+
+# Sensor value mappings for both display and icon support
+SENSOR_MODE_MAPPING: dict[int, str] = {
+    0: "Off",
+    1: "Manual",
+    2: "Auto",
+    3: "Service",
+    4: "Test",
+    5: "Pause",
+    6: "Error",
+    7: "Standby",
+    8: "Emergency",
+    9: "Maintenance",
+    10: "Calibration",
+}
+
+SENSOR_LAMBDA_STATUS_MAPPING: dict[int, str] = {
+    0: "Stop",
+    1: "Start",
+    2: "Working",
+    3: "Error",
+    4: "Maintenance",
+}
+
+SENSOR_STATUS_CWU_MAPPING: dict[int, str] = {
+    0: "Not set",
+    1: "Set",
+}
+
+SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
+    0: "OFF",
+    1: "ON",
 }

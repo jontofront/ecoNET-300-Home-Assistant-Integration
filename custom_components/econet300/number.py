@@ -166,7 +166,6 @@ def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
     return EconetNumberEntityDescription(
         key=key,
         translation_key=camel_to_snake(map_key),
-        # Icon now handled automatically by Home Assistant via icons.json
         device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
         min_value=ENTITY_MIN_VALUE.get(map_key),

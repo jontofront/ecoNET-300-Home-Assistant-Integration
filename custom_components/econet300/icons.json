@@ -287,9 +287,9 @@
       "lambda_status": {
         "default": "mdi:gauge",
         "state": {
-          "0": "mdi:stop",
-          "1": "mdi:play",
-          "2": "mdi:gauge"
+          "Stop": "mdi:stop",
+          "Start": "mdi:play",
+          "Working": "mdi:gauge"
         }
       },
       "mixer_pump1": {
@@ -325,20 +325,17 @@
       "mode": {
         "default": "mdi:sync",
         "state": {
-          "0": "mdi:power-off",
-          "1": "mdi:fire",
-          "2": "mdi:fire",
-          "3": "mdi:fire",
-          "4": "mdi:eye",
-          "5": "mdi:pause",
-          "6": "mdi:stop",
-          "7": "mdi:fire",
-          "8": "mdi:hand",
-          "9": "mdi:alert",
-          "10": "mdi:lock",
-          "11": "mdi:chimney",
-          "12": "mdi:sync",
-          "13": "mdi:wifi"
+          "Off": "mdi:power-off",
+          "Manual": "mdi:fire",
+          "Auto": "mdi:fire",
+          "Service": "mdi:fire",
+          "Test": "mdi:eye",
+          "Pause": "mdi:pause",
+          "Error": "mdi:stop",
+          "Standby": "mdi:fire",
+          "Emergency": "mdi:hand",
+          "Maintenance": "mdi:alert",
+          "Calibration": "mdi:lock"
         }
       },
       "fan_power": {
@@ -370,13 +367,16 @@
       "status_cwu": {
         "default": "mdi:water-boiler",
         "state": {
-          "0": "mdi:water-boiler-off",
-          "1": "mdi:water-boiler",
-          "128": "mdi:water-boiler-off"
+          "Not set": "mdi:water-boiler-off",
+          "Set": "mdi:water-boiler"
         }
       },
       "thermostat": {
-        "default": "mdi:thermostat"
+        "default": "mdi:thermostat",
+        "state": {
+          "OFF": "mdi:thermostat-off",
+          "ON": "mdi:thermostat"
+        }
       },
       "boiler_power": {
         "default": "mdi:gauge",

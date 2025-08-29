@@ -141,7 +141,6 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         entity_category=ENTITY_CATEGORY.get(key, None),
         translation_key=camel_to_snake(key),
-        # Icon now handled automatically by Home Assistant via icons.json
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
@@ -240,7 +239,6 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
     entity_description = EconetSensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
-        # Icon now handled automatically by Home Assistant via icons.json
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
@@ -284,7 +282,6 @@ def create_lambda_sensor_entity_description(key: str) -> EconetSensorEntityDescr
     entity_description = EconetSensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
-        # Icon now handled automatically by Home Assistant via icons.json
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, None),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
@@ -333,7 +330,6 @@ def create_ecoster_sensor_entity_description(key: str) -> EconetSensorEntityDesc
     entity_description = EconetSensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
-        # Icon now handled automatically by Home Assistant via icons.json
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
         state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
