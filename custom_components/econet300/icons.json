@@ -311,7 +311,7 @@
       "mode": {
         "default": "mdi:sync",
         "state": {
-          "off": "mdi:power-off",
+          "off": "mdi:fire-off",
           "manual": "mdi:fire",
           "auto": "mdi:fire",
           "service": "mdi:fire",
@@ -396,19 +396,19 @@
         }
       },
       "fuel_level": {
-        "default": "mdi:gas-station",
+        "default": "mdi:battery",
         "range": {
-          "0": "mdi:gas-station-off",
-          "10": "mdi:gas-station",
-          "20": "mdi:gas-station",
-          "30": "mdi:gas-station",
-          "40": "mdi:gas-station",
-          "50": "mdi:gas-station",
-          "60": "mdi:gas-station",
-          "70": "mdi:gas-station",
-          "80": "mdi:gas-station",
-          "90": "mdi:gas-station",
-          "100": "mdi:gas-station"
+          "0": "mdi:battery-outline",
+          "10": "mdi:battery-10",
+          "20": "mdi:battery-20",
+          "30": "mdi:battery-30",
+          "40": "mdi:battery-40",
+          "50": "mdi:battery-50",
+          "60": "mdi:battery-60",
+          "70": "mdi:battery-70",
+          "80": "mdi:battery-80",
+          "90": "mdi:battery-90",
+          "100": "mdi:battery"
         }
       },
       "lambda_level": {
