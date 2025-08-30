@@ -174,7 +174,8 @@
           "stop": "Stop",
           "start": "Start",
           "working": "Working",
-          "unknown": "Unknown"
+          "error": "Error",
+          "maintenance": "Maintenance"
         }
       },
       "lambda_set": {
@@ -186,17 +187,17 @@
       "status_co": {
         "name": "Central heating status",
         "state": {
-          "0": "Off",
-          "1": "Standby",
-          "2": "Starting",
-          "3": "Running",
-          "4": "Stopping",
-          "5": "Error",
-          "6": "Maintenance",
-          "7": "Test mode",
-          "8": "Emergency stop",
-          "9": "Calibration",
-          "10": "Unknown"
+          "off": "Off",
+          "pause": "Pause",
+          "reload": "Reload",
+          "fire": "Fire",
+          "alert": "Alert",
+          "test_tube": "Test tube",
+          "stop_circle": "Stop circle",
+          "gauge": "Gauge",
+          "help_circle": "Help circle",
+          "error": "Error",
+          "maintenance": "Maintenance"
         }
       },
       "work_at100": {
@@ -313,7 +314,8 @@
         "name": "Water heater status",
         "state": {
           "not_set": "Not set",
-          "set": "Set"
+          "set": "Set",
+          "no_temp_set": "No set"
         }
       },
       "temp_cwu_set": {

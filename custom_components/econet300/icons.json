@@ -284,14 +284,7 @@
           "off": "mdi:pump"
         }
       },
-      "lambda_status": {
-        "default": "mdi:gauge",
-        "state": {
-          "stop": "mdi:stop",
-          "start": "mdi:play",
-          "working": "mdi:gauge"
-        }
-      },
+
       "mixer_pump1": {
         "default": "mdi:pump",
         "state": {
@@ -344,24 +337,35 @@
       "status_co": {
         "default": "mdi:fire",
         "state": {
-          "0": "mdi:fire-off",
-          "1": "mdi:pause",
-          "2": "mdi:reload",
-          "3": "mdi:fire",
-          "4": "mdi:fire",
-          "5": "mdi:alert",
-          "6": "mdi:alert",
-          "7": "mdi:test-tube",
-          "8": "mdi:stop-circle",
-          "9": "mdi:gauge",
-          "10": "mdi:help-circle"
+          "off": "mdi:fire-off",
+          "pause": "mdi:pause",
+          "reload": "mdi:reload",
+          "fire": "mdi:fire",
+          "alert": "mdi:alert",
+          "test_tube": "mdi:test-tube",
+          "stop_circle": "mdi:stop-circle",
+          "gauge": "mdi:gauge",
+          "help_circle": "mdi:help-circle",
+          "error": "mdi:stop",
+          "maintenance": "mdi:alert"
         }
       },
       "status_cwu": {
         "default": "mdi:water-boiler",
         "state": {
           "not_set": "mdi:water-boiler-off",
-          "set": "mdi:water-boiler"
+          "set": "mdi:water-boiler",
+          "no_temp_set": "mdi:water-boiler-off"
+        }
+      },
+      "lambda_status": {
+        "default": "mdi:gauge",
+        "state": {
+          "stop": "mdi:stop",
+          "start": "mdi:play",
+          "working": "mdi:gauge",
+          "error": "mdi:alert",
+          "maintenance": "mdi:wrench"
         }
       },
       "thermostat": {

@@ -162,7 +162,8 @@
           "stop": "Stop",
           "start": "Start",
           "working": "Working",
-          "unknown": "Unknown"
+          "error": "Błąd",
+          "maintenance": "Konserwacja"
         }
       },
       "lambda_set": {
@@ -174,17 +175,17 @@
       "status_co": {
         "name": "Status ogrzewania",
         "state": {
-          "0": "Wyłączone",
-          "1": "Oczekiwanie",
-          "2": "Uruchamianie",
-          "3": "Praca",
-          "4": "Zatrzymywanie",
-          "5": "Błąd",
-          "6": "Konserwacja",
-          "7": "Tryb testowy",
-          "8": "Zatrzymanie awaryjne",
-          "9": "Kalibracja",
-          "10": "Nieznany"
+          "off": "Wyłączone",
+          "pause": "Pauza",
+          "reload": "Przeładowanie",
+          "fire": "Ogień",
+          "alert": "Alert",
+          "test_tube": "Rurka testowa",
+          "stop_circle": "Zatrzymanie",
+          "gauge": "Wskaźnik",
+          "help_circle": "Pomoc",
+          "error": "Błąd",
+          "maintenance": "Konserwacja"
         }
       },
       "soft_ver": {
@@ -251,7 +252,8 @@
         "name": "Status CWU",
         "state": {
           "not_set": "Nie ustawiono",
-          "set": "Ustawiono"
+          "set": "Ustawiono",
+          "no_temp_set": "Brak temperatury"
         }
       },
       "mode": {

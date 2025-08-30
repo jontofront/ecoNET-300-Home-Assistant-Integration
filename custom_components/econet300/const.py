@@ -649,6 +649,7 @@ ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
     "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, STATE_UNKNOWN),
+    "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
 }
 
@@ -697,33 +698,48 @@ ENTITY_STEP = {
 
 # Sensor value mappings for both display and icon support
 SENSOR_MODE_MAPPING: dict[int, str] = {
-    0: "Off",
-    1: "Manual",
-    2: "Auto",
-    3: "Service",
-    4: "Test",
-    5: "Pause",
-    6: "Error",
-    7: "Standby",
-    8: "Emergency",
-    9: "Maintenance",
-    10: "Calibration",
+    0: "off",
+    1: "manual",
+    2: "auto",
+    3: "service",
+    4: "test",
+    5: "pause",
+    6: "error",
+    7: "standby",
+    8: "emergency",
+    9: "maintenance",
+    10: "calibration",
 }
 
 SENSOR_LAMBDA_STATUS_MAPPING: dict[int, str] = {
-    0: "Stop",
-    1: "Start",
-    2: "Working",
-    3: "Error",
-    4: "Maintenance",
+    0: "stop",
+    1: "start",
+    2: "working",
+    3: "error",
+    4: "maintenance",
 }
 
 SENSOR_STATUS_CWU_MAPPING: dict[int, str] = {
-    0: "notSet",
-    1: "Set",
+    0: "not_set",
+    1: "set",
+    128: "no_temp_set",
+}
+
+SENSOR_STATUS_CO_MAPPING: dict[int, str] = {
+    0: "off",
+    1: "pause",
+    2: "reload",
+    3: "fire",
+    4: "fire",
+    5: "alert",
+    6: "alert",
+    7: "test_tube",
+    8: "stop_circle",
+    9: "gauge",
+    10: "help_circle",
 }
 
 SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
-    0: "OFF",
-    1: "ON",
+    0: "off",
+    1: "on",
 }
