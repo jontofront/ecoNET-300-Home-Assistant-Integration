@@ -19,8 +19,6 @@ from .const import (
     DOMAIN,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_CATEGORY,
-    ENTITY_ICON,
-    ENTITY_ICON_OFF,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
     SENSOR_MIXER_KEY,
     SERVICE_API,
@@ -35,7 +33,6 @@ _LOGGER = logging.getLogger(__name__)
 class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describes Econet binary sensor entity."""
 
-    icon_off: str | None = None
     availability_key: str = ""
 
 
@@ -72,15 +69,6 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
             self._attr_is_on,
         )
         self.async_write_ha_state()
-
-    @property
-    def icon(self) -> str | None:
-        """Return the icon to use in the frontend."""
-        return (
-            self.entity_description.icon_off
-            if self.entity_description.icon_off is not None and not self.is_on
-            else self.entity_description.icon
-        )
 
     @property
     def entity_category(self) -> EntityCategory | None:
@@ -121,15 +109,6 @@ class MixerBinarySensor(MixerEntity, BinarySensorEntity):
         )
         self.async_write_ha_state()
 
-    @property
-    def icon(self) -> str | None:
-        """Return the icon to use in the frontend."""
-        return (
-            self.entity_description.icon_off
-            if self.entity_description.icon_off is not None and not self.is_on
-            else self.entity_description.icon
-        )
-
 
 class EcoSterBinarySensor(EcoSterEntity, BinarySensorEntity):
     """EcoSter Binary Sensor."""
@@ -152,26 +131,21 @@ class EcoSterBinarySensor(EcoSterEntity, BinarySensorEntity):
         self._attr_is_on = value
         self.async_write_ha_state()
 
-    @property
-    def icon(self) -> str | None:
-        """Return the icon of the entity."""
-        if self.is_on:
-            return self.entity_description.icon
-        return self.entity_description.icon_off
-
 
 def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescription:
     """Create Econet300 binary entity description."""
     _LOGGER.debug("create_binary_entity_description: %s", key)
     entity_category = ENTITY_CATEGORY.get(key, None)
     _LOGGER.debug("Entity category for %s: %s", key, entity_category)
+
+    # All binary sensors now use icon translations
+    # The translation_key will automatically link to icons.json
     entity_description = EconetBinarySensorEntityDescription(
         key=key,
         translation_key=camel_to_snake(key),
         device_class=ENTITY_BINARY_DEVICE_CLASS_MAP.get(key, None),
         entity_category=entity_category,
-        icon=ENTITY_ICON.get(key, None),
-        icon_off=ENTITY_ICON_OFF.get(key, None),
+        # No icon or icon_off - Home Assistant will use icons.json automatically
     )
     _LOGGER.debug("create_binary_entity_description: %s", entity_description)
     return entity_description

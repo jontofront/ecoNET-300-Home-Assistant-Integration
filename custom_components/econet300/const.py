@@ -51,7 +51,7 @@ CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 # endpoint url sysParams
 API_SYS_PARAMS_URI = "sysParams"
 
-# sysParams roperty names
+# sysParams property names
 API_SYS_PARAMS_PARAM_UID = "uid"
 API_SYS_PARAMS_PARAM_MODEL_ID = "controllerID"
 API_SYS_PARAMS_PARAM_SW_REV = "softVer"
@@ -60,7 +60,7 @@ API_SYS_PARAMS_PARAM_HW_VER = "routerType"
 #  endpoint url regParams
 API_REG_PARAMS_URI = "regParams"
 
-# regParams roperty names
+# regParams property names
 API_REG_PARAMS_PARAM_DATA = "curr"
 
 # endpoint url regParamsData
@@ -258,7 +258,8 @@ DEFAULT_BINARY_SENSORS = {
     "mainSrv",
     "wifi",
     "lan",
-    "statusCWU",
+    "fuelConsumptionCalc",
+    "ecosrvHttps",
     # ecoMAX850R2-X specific binary sensors
     "contactGZC",
     "contactGZCActive",
@@ -443,6 +444,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     # Diagnostic sensors (non-numeric)
     "routerType": None,
     "protocolType": None,
+    "moduleEcoSTERSoftVer": None,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
@@ -560,9 +562,6 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "lan": BinarySensorDeviceClass.CONNECTIVITY,
     "fuelConsumptionCalc": BinarySensorDeviceClass.RUNNING,
     "ecosrvHttps": BinarySensorDeviceClass.CONNECTIVITY,
-    "lambdaStatus": BinarySensorDeviceClass.RUNNING,
-    "thermostat": BinarySensorDeviceClass.RUNNING,
-    "statusCWU": BinarySensorDeviceClass.RUNNING,
     # ecoMAX850R2-X specific binary sensors
     "contactGZC": BinarySensorDeviceClass.CONNECTIVITY,
     "contactGZCActive": BinarySensorDeviceClass.CONNECTIVITY,
@@ -644,212 +643,14 @@ ENTITY_PRECISION = {
     "ecosrvSoftVer": None,
 }
 
-# =============================================================================
-# ENTITY ICON MAPPINGS
-# =============================================================================
-ENTITY_ICON = {
-    "mode": "mdi:sync",
-    "fanPower": "mdi:fan",
-    "temCO": "mdi:thermometer-lines",
-    "statusCO": "mdi:heating",
-    "statusCWU": "mdi:water-boiler",
-    "thermostat": "mdi:thermostat",
-    "boilerPower": "mdi:gauge",
-    "boilerPowerKW": "mdi:gauge",
-    "fuelLevel": "mdi:gas-station",
-    "lambdaLevel": "mdi:lambda",
-    "lambdaSet": "mdi:lambda",
-    "lambdaStatus": "mdi:lambda",
-    "lighterWorks": "mdi:fire",
-    "workAt100": "mdi:counter",
-    "workAt50": "mdi:counter",
-    "workAt30": "mdi:counter",
-    "FeederWork": "mdi:counter",
-    "feederWorks": "mdi:screw-lag",
-    "FiringUpCount": "mdi:counter",
-    "quality": "mdi:signal",
-    "pumpCOWorks": "mdi:pump",
-    "fanWorks": "mdi:fan",
-    "additionalFeeder": "mdi:screw-lag",
-    "pumpFireplaceWorks": "mdi:pump",
-    "pumpCWUWorks": "mdi:pump",
-    "mixerPumpWorks": "mdi:pump",
-    "mixerPumpWorks1": "mdi:pump",
-    "mixerPumpWorks2": "mdi:pump",
-    "mixerPumpWorks3": "mdi:pump",
-    "mixerPumpWorks4": "mdi:pump",
-    "mixerPumpWorks5": "mdi:pump",
-    "mixerPumpWorks6": "mdi:pump",
-    "mixerTemp": "mdi:thermometer",
-    "mixerSetTemp": "mdi:thermometer",
-    "valveMixer1": "mdi:valve",
-    "servoMixer1": "mdi:valve",
-    "mixerTemp1": "mdi:thermometer",
-    "mixerTemp2": "mdi:thermometer",
-    "mixerTemp3": "mdi:thermometer",
-    "mixerTemp4": "mdi:thermometer",
-    "mixerTemp5": "mdi:thermometer",
-    "mixerTemp6": "mdi:thermometer",
-    "tempUpperBuffer": "mdi:thermometer",
-    "tempLowerBuffer": "mdi:thermometer",
-    "mainSrv": "mdi:server-network",
-    "wifi": "mdi:wifi",
-    "lan": "mdi:lan-connect",
-    "fuelConsumptionCalc": "mdi:calculator",
-    "ecosrvHttps": "mdi:lock",
-    "softVer": "mdi:alarm-panel-outline",
-    "controllerID": "mdi:alarm-panel-outline",
-    "moduleASoftVer": "mdi:raspberry-pi",
-    "moduleBSoftVer": "mdi:raspberry-pi",
-    "moduleCSoftVer": "mdi:raspberry-pi",
-    "moduleLambdaSoftVer": "mdi:raspberry-pi",
-    "modulePanelSoftVer": "mdi:alarm-panel-outline",
-    "moduleEcoSTERSoftVer": "mdi:raspberry-pi",
-    # ecoSTER thermostat icons
-    "ecoSterTemp1": "mdi:thermometer",
-    "ecoSterTemp2": "mdi:thermometer",
-    "ecoSterTemp3": "mdi:thermometer",
-    "ecoSterTemp4": "mdi:thermometer",
-    "ecoSterTemp5": "mdi:thermometer",
-    "ecoSterTemp6": "mdi:thermometer",
-    "ecoSterTemp7": "mdi:thermometer",
-    "ecoSterTemp8": "mdi:thermometer",
-    "ecoSterSetTemp1": "mdi:thermometer",
-    "ecoSterSetTemp2": "mdi:thermometer",
-    "ecoSterSetTemp3": "mdi:thermometer",
-    "ecoSterSetTemp4": "mdi:thermometer",
-    "ecoSterSetTemp5": "mdi:thermometer",
-    "ecoSterSetTemp6": "mdi:thermometer",
-    "ecoSterSetTemp7": "mdi:thermometer",
-    "ecoSterSetTemp8": "mdi:thermometer",
-    "ecoSterMode1": "mdi:thermostat",
-    "ecoSterMode2": "mdi:thermostat",
-    "ecoSterMode3": "mdi:thermostat",
-    "ecoSterMode4": "mdi:thermostat",
-    "ecoSterMode5": "mdi:thermostat",
-    "ecoSterMode6": "mdi:thermostat",
-    "ecoSterMode7": "mdi:thermostat",
-    "ecoSterMode8": "mdi:thermostat",
-    "ecoSterContacts1": "mdi:thermostat",
-    "ecoSterContacts2": "mdi:thermostat",
-    "ecoSterContacts3": "mdi:thermostat",
-    "ecoSterContacts4": "mdi:thermostat",
-    "ecoSterContacts5": "mdi:thermostat",
-    "ecoSterContacts6": "mdi:thermostat",
-    "ecoSterContacts7": "mdi:thermostat",
-    "ecoSterContacts8": "mdi:thermostat",
-    "ecoSterDaySched1": "mdi:calendar-clock",
-    "ecoSterDaySched2": "mdi:calendar-clock",
-    "ecoSterDaySched3": "mdi:calendar-clock",
-    "ecoSterDaySched4": "mdi:calendar-clock",
-    "ecoSterDaySched5": "mdi:calendar-clock",
-    "ecoSterDaySched6": "mdi:calendar-clock",
-    "ecoSterDaySched7": "mdi:calendar-clock",
-    "ecoSterDaySched8": "mdi:calendar-clock",
-    # ecoMAX360i
-    "PS": "mdi:power-plug",
-    "Circuit2thermostatTemp": "mdi:thermometer",
-    "TempClutch": "mdi:thermometer",
-    "Circuit3thermostatTemp": "mdi:thermometer",
-    "TempWthr": "mdi:thermometer",
-    "TempCircuit3": "mdi:thermometer",
-    "TempCircuit2": "mdi:thermometer",
-    "TempBuforUp": "mdi:thermometer",
-    "TempBuforDown": "mdi:thermometer",
-    "heatingUpperTemp": "mdi:thermometer",
-    "Circuit1thermostat": "mdi:thermometer",
-    "heating_work_state_pump4": "mdi:sync",
-    # ecoMAX850R2-X specific icons
-    "fuelConsum": "mdi:gas-station",
-    "fuelStream": "mdi:gas-station",
-    "tempBack": "mdi:thermometer",
-    "transmission": "mdi:transmission-tower",
-    "contactGZC": "mdi:connection",
-    "contactGZCActive": "mdi:connection",
-    "pumpCirculationWorks": "mdi:pump",
-    "pumpSolarWorks": "mdi:pump",
-    # ecoSOL500 specific icons
-    "T1": "mdi:thermometer",
-    "T2": "mdi:thermometer",
-    "T3": "mdi:thermometer",
-    "T4": "mdi:thermometer",
-    "T5": "mdi:thermometer",
-    "T6": "mdi:thermometer",
-    "TzCWU": "mdi:thermometer",
-    "P1": "mdi:pump",
-    "P2": "mdi:pump",
-    "H": "mdi:gauge",
-    "Uzysk_ca_kowity": "mdi:gauge",
-    # ecoSOL500 diagnostic icons
-    "ecosrvAddr": "mdi:server",
-    "routerType": "mdi:router-wireless",
-    "protocolType": "mdi:protocol",
-    "ecosrvSoftVer": "mdi:server-network",
-}
-
-# =============================================================================
-# ENTITY ICON OFF MAPPINGS
-# =============================================================================
-ENTITY_ICON_OFF = {
-    "pumpCOWorks": "mdi:pump-off",
-    "fanWorks": "mdi:fan-off",
-    "additionalFeeder": "mdi:screw-lag",
-    "pumpFireplaceWorks": "mdi:pump-off",
-    "pumpCWUWorks": "mdi:pump-off",
-    "mixerPumpWorks1": "mdi:pump-off",
-    "mixerPumpWorks2": "mdi:pump-off",
-    "mixerPumpWorks3": "mdi:pump-off",
-    "mixerPumpWorks4": "mdi:pump-off",
-    "mixerPumpWorks5": "mdi:pump-off",
-    "mixerPumpWorks6": "mdi:pump-off",
-    "statusCWU": "mdi:water-boiler-off",
-    "mainSrv": "mdi:server-network-off",
-    "wifi": "mdi:wifi-off",
-    "lan": "mdi:lan-disconnect",
-    "fuelConsumptionCalc": "mdi:calculator-off",
-    "ecosrvHttps": "mdi:lock-off",
-    "lighterWorks": "mdi:fire-off",
-    "thermostat": "mdi:thermostat-off",
-    # ecoMAX850R2-X specific off icons
-    "contactGZC": "mdi:connection-off",
-    "contactGZCActive": "mdi:connection-off",
-    "pumpCirculationWorks": "mdi:pump-off",
-    "pumpSolarWorks": "mdi:pump-off",
-    # ecoSTER thermostat off icons
-    "ecoSterContacts1": "mdi:thermostat-off",
-    "ecoSterContacts2": "mdi:thermostat-off",
-    "ecoSterContacts3": "mdi:thermostat-off",
-    "ecoSterContacts4": "mdi:thermostat-off",
-    "ecoSterContacts5": "mdi:thermostat-off",
-    "ecoSterContacts6": "mdi:thermostat-off",
-    "ecoSterContacts7": "mdi:thermostat-off",
-    "ecoSterContacts8": "mdi:thermostat-off",
-    "ecoSterDaySched1": "mdi:calendar-clock-off",
-    "ecoSterDaySched2": "mdi:calendar-clock-off",
-    "ecoSterDaySched3": "mdi:calendar-clock-off",
-    "ecoSterDaySched4": "mdi:calendar-clock-off",
-    "ecoSterDaySched5": "mdi:calendar-clock-off",
-    "ecoSterDaySched6": "mdi:calendar-clock-off",
-    "ecoSterDaySched7": "mdi:calendar-clock-off",
-    "ecoSterDaySched8": "mdi:calendar-clock-off",
-}
-
-# =============================================================================
-# ENTITY VALUE PROCESSORS
-# =============================================================================
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
 ENTITY_VALUE_PROCESSOR = {
-    "mode": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    "lambdaStatus": (
-        lambda x: (
-            "stop"
-            if x == 0
-            else ("start" if x == 1 else ("working" if x == 2 else STATE_UNKNOWN))
-        )
-    ),
-    "statusCWU": lambda x: "Not set" if x == NO_CWU_TEMP_SET_STATUS_CODE else "Set",
-    "thermostat": lambda x: "ON" if x == 1 else "OFF",
+    "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
+    "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
+    "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, STATE_UNKNOWN),
+    "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
+    "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
 }
 
 # =============================================================================
@@ -874,6 +675,7 @@ ENTITY_CATEGORY = {
     "ecosrvAddr": EntityCategory.DIAGNOSTIC,
     "routerType": EntityCategory.DIAGNOSTIC,
     "ecosrvSoftVer": EntityCategory.DIAGNOSTIC,
+    "moduleEcoSTERSoftVer": EntityCategory.DIAGNOSTIC,
 }
 
 # =============================================================================
@@ -892,4 +694,52 @@ ENTITY_MAX_VALUE = {
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
+}
+
+# Sensor value mappings for both display and icon support
+SENSOR_MODE_MAPPING: dict[int, str] = {
+    0: "off",
+    1: "manual",
+    2: "auto",
+    3: "service",
+    4: "test",
+    5: "pause",
+    6: "error",
+    7: "standby",
+    8: "emergency",
+    9: "maintenance",
+    10: "calibration",
+}
+
+SENSOR_LAMBDA_STATUS_MAPPING: dict[int, str] = {
+    0: "stop",
+    1: "start",
+    2: "working",
+    3: "error",
+    4: "maintenance",
+}
+
+SENSOR_STATUS_CWU_MAPPING: dict[int, str] = {
+    0: "not_set",
+    1: "set",
+    128: "no_temp_set",
+}
+
+SENSOR_STATUS_CO_MAPPING: dict[int, str] = {
+    0: "off",
+    1: "pause",
+    2: "reload",
+    3: "fire",
+    4: "fire",
+    5: "alert",
+    6: "alert",
+    7: "test_tube",
+    8: "stop_circle",
+    9: "gauge",
+    10: "help_circle",
+}
+
+SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
+    0: "off",
+    1: "on",
 }

@@ -51,13 +51,6 @@ class EconetSwitch(EconetEntity, SwitchEntity):
         self._attr_is_on = mode_value != 0
         self.async_write_ha_state()
 
-    @property
-    def icon(self) -> str | None:
-        """Return the icon to use in the frontend."""
-        if self.entity_description.key == "boiler_control":
-            return "mdi:fire-off" if not self.is_on else "mdi:fire"
-        return self.entity_description.icon
-
     @staticmethod
     def _raise_boiler_control_error(message: str) -> None:
         raise BoilerControlError(message)
@@ -102,7 +95,6 @@ def create_boiler_switch(
     entity_description = SwitchEntityDescription(
         key="boiler_control",
         name="Boiler On/Off",
-        icon="mdi:fire",  # Default icon (will be overridden by dynamic icon property)
         translation_key="boiler_control",
     )
 

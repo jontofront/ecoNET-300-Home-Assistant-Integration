@@ -13,7 +13,8 @@ def test_handle_coordinator_update_with_none_data():
     mock_coordinator.data = None
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -39,7 +40,8 @@ def test_handle_coordinator_update_with_none_reg_params():
     }
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -67,7 +69,8 @@ def test_handle_coordinator_update_with_valid_data():
     }
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -93,7 +96,8 @@ def test_handle_coordinator_update_with_missing_key():
     }
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -115,7 +119,8 @@ def test_entity_does_not_crash_with_none_data():
     mock_coordinator.data = None
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -138,7 +143,8 @@ def test_entity_does_not_crash_with_none_reg_params():
     }
 
     # Create entity instance
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )
@@ -175,7 +181,8 @@ def test_edge_cases():
         mock_coordinator = Mock()
         mock_coordinator.data = test_case["data"]
 
-        entity = EconetEntity(mock_coordinator)
+        mock_api = Mock()
+        entity = EconetEntity(mock_coordinator, mock_api)
         entity.entity_description = EconetSensorEntityDescription(
             key="tempCO", name="Boiler Temperature", process_val=lambda x: x
         )
@@ -193,7 +200,8 @@ def test_comprehensive_safety_checks():
     mock_coordinator = Mock()
     mock_coordinator.data = None
 
-    entity = EconetEntity(mock_coordinator)
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
     entity.entity_description = EconetSensorEntityDescription(
         key="tempCO", name="Boiler Temperature", process_val=lambda x: x
     )

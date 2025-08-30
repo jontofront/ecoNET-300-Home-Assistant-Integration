@@ -28,12 +28,6 @@
       "lighter_works": {
         "name": "Lighter"
       },
-      "weather_control": {
-        "name": "Weather control the boiler"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },
@@ -84,15 +78,6 @@
       },
       "lan": {
         "name": "LAN"
-      },
-      "lambda_status": {
-        "name": "Lambda sensor"
-      },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "status_cwu": {
-        "name": "Hot water status"
       },
       "contact_gzc": {
         "name": "GZC contact"
@@ -153,6 +138,12 @@
       },
       "ecoster_day_sched8": {
         "name": "Room thermostat 8 day schedule"
+      },
+      "fuel_consumption_calc": {
+        "name": "Fuel consumption calculator"
+      },
+      "ecosrv_https": {
+        "name": "ecoNET server HTTPS"
       }
     },
     "sensor": {
@@ -168,16 +159,14 @@
       "fan_power": {
         "name": "Fan power"
       },
-      "fan_works": {
-        "name": "Fan"
-      },
       "lambda_status": {
         "name": "Lambda status",
         "state": {
           "stop": "Stop",
           "start": "Start",
           "working": "Working",
-          "unknown": "Unknown"
+          "error": "Error",
+          "maintenance": "Maintenance"
         }
       },
       "lambda_set": {
@@ -189,17 +178,17 @@
       "status_co": {
         "name": "Central heating status",
         "state": {
-          "0": "Off",
-          "1": "Standby",
-          "2": "Starting",
-          "3": "Running",
-          "4": "Stopping",
-          "5": "Error",
-          "6": "Maintenance",
-          "7": "Test mode",
-          "8": "Emergency stop",
-          "9": "Calibration",
-          "10": "Unknown"
+          "off": "Off",
+          "pause": "Pause",
+          "reload": "Reload",
+          "fire": "Fire",
+          "alert": "Alert",
+          "test_tube": "Test tube",
+          "stop_circle": "Stop circle",
+          "gauge": "Gauge",
+          "help_circle": "Help circle",
+          "error": "Error",
+          "maintenance": "Maintenance"
         }
       },
       "work_at100": {
@@ -274,7 +263,12 @@
         "name": "Mixer 6 target temperature"
       },
       "status_cwu": {
-        "name": "Water heater status"
+        "name": "Water heater status",
+        "state": {
+          "not_set": "Not set",
+          "set": "Set",
+          "no_temp_set": "No set"
+        }
       },
       "quality": {
         "name": "Signal quality"
@@ -318,6 +312,9 @@
       "temp_cwu_set": {
         "name": "Water heater set temperature"
       },
+      "tz_cwu": {
+        "name": "Hot water temperature"
+      },
       "temp_upper_buffer": {
         "name": "Upper buffer temperature"
       },
@@ -336,17 +333,10 @@
       "temp_co_set": {
         "name": "Heating target temperature"
       },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
+
+
       "valve_mixer1": {
         "name": "Mixer 1 valve % open"
-      },
-      "weather_control": {
-        "name": "Weather control the boiler"
       },
       "ps": {
         "name": "PS"
@@ -501,12 +491,6 @@
       "uzysk_ca_kowity": {
         "name": "Total Heat Output"
       },
-      "fuel_consumption_calc": {
-        "name": "Fuel Consumption Calculator"
-      },
-      "ecosrv_https": {
-        "name": "ecoNET Server HTTPS"
-      },
       "ecosrv_addr": {
         "name": "ecoNET Server Address"
       },
@@ -518,6 +502,9 @@
       },
       "protocol_type": {
         "name": "Protocol Type"
+      },
+      "tem_co": {
+        "name": "Boiler Temperature"
       }
     }
   }

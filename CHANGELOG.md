@@ -1,5 +1,41 @@
 # Changelog
 
+## [v1.1.10] - 2025-01-27
+
+### Added
+
+- **Modern Icon Translation System**: Implemented comprehensive icon management using Home Assistant's recommended approach
+  - **New Icon Management**: All icons now managed through `icons.json` with proper translation keys
+  - **State-Based Icons**: Added dynamic icons that change based on entity state (status_co, status_cwu, mode, lambda_status)
+  - **Multi-Language Support**: Icons properly integrated with translation system for internationalization
+  - **Icon Validation**: All Material Design Icons validated and replaced invalid ones with proper alternatives
+
+### Changed
+
+- **Icon System Architecture**: Replaced old icon constants with modern translation-based approach
+
+  - **Before**: Icons defined in `const.py` as hardcoded constants
+  - **After**: Icons managed in `icons.json` with translation key mapping
+  - **Benefits**: Better maintainability, easier customization, Home Assistant best practices compliance
+
+- **Pre-commit Configuration**: Streamlined development workflow
+  - **Removed**: codespell hook that was causing false positives
+  - **Kept**: ruff (linting), ruff-format (formatting), mypy (type checking)
+  - **Impact**: Cleaner, faster pre-commit checks with focus on essential quality metrics
+
+### Fixed
+
+- **Invalid Material Design Icons**: Resolved 20+ non-existent icon references
+
+  - **Problem**: Many icons like `mdi:screw-lag`, `mdi:fire-off`, `mdi:gauge-off` didn't exist in MDI database
+  - **Solution**: Replaced with valid alternatives like `mdi:gauge`, `mdi:fire`, `mdi:conveyor-belt`
+  - **Impact**: All entities now display proper icons in Home Assistant UI
+
+- **Icon Display Issues**: Fixed entities not showing icons in UI
+  - **Problem**: Some entities like `feeder_works` and `contact_gzc` had missing or broken icons
+  - **Solution**: Implemented proper translation key mapping and icon validation
+  - **Impact**: Consistent icon display across all entity types
+
 ## [v1.1.9] - 2025-01-27
 
 ### Changed

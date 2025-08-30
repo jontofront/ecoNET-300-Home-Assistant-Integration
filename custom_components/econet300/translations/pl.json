@@ -25,12 +25,6 @@
       }
     },
     "binary_sensor": {
-      "weather_control": {
-        "name": "Sterowanie pogodowe kotła"
-      },
-      "unseal": {
-        "name": "Odpieczętowanie"
-      },
       "pump_co_works": {
         "name": "Pompa CO"
       },
@@ -78,15 +72,6 @@
       },
       "lan": {
         "name": "LAN"
-      },
-      "lambda_status": {
-        "name": "Czujnik Lambda"
-      },
-      "thermostat": {
-        "name": "Termostat"
-      },
-      "status_cwu": {
-        "name": "Status CWU"
       },
       "contact_gzc": {
         "name": "Styk GZC"
@@ -153,6 +138,12 @@
       },
       "ecoster_day_sched8": {
         "name": "Harmonogram dzienny termostatu 8"
+      },
+      "fuel_consumption_calc": {
+        "name": "Kalkulator zużycia paliwa"
+      },
+      "ecosrv_https": {
+        "name": "Serwer ecoNET HTTPS"
       }
     },
     "sensor": {
@@ -161,9 +152,6 @@
       },
       "fuel_level": {
         "name": "Poziom paliwa"
-      },
-      "fan_works": {
-        "name": "Nadmuch"
       },
       "fan_power": {
         "name": "Moc nadmuchu"
@@ -174,7 +162,8 @@
           "stop": "Stop",
           "start": "Start",
           "working": "Working",
-          "unknown": "Unknown"
+          "error": "Błąd",
+          "maintenance": "Konserwacja"
         }
       },
       "lambda_set": {
@@ -186,17 +175,17 @@
       "status_co": {
         "name": "Status ogrzewania",
         "state": {
-          "0": "Wyłączone",
-          "1": "Oczekiwanie",
-          "2": "Uruchamianie",
-          "3": "Praca",
-          "4": "Zatrzymywanie",
-          "5": "Błąd",
-          "6": "Konserwacja",
-          "7": "Tryb testowy",
-          "8": "Zatrzymanie awaryjne",
-          "9": "Kalibracja",
-          "10": "Nieznany"
+          "off": "Wyłączone",
+          "pause": "Pauza",
+          "reload": "Przeładowanie",
+          "fire": "Ogień",
+          "alert": "Alert",
+          "test_tube": "Rurka testowa",
+          "stop_circle": "Zatrzymanie",
+          "gauge": "Wskaźnik",
+          "help_circle": "Pomoc",
+          "error": "Błąd",
+          "maintenance": "Konserwacja"
         }
       },
       "soft_ver": {
@@ -260,7 +249,12 @@
         "name": "Temp. zadana mieszacza 6"
       },
       "status_cwu": {
-        "name": "Status CWU"
+        "name": "Status CWU",
+        "state": {
+          "not_set": "Nie ustawiono",
+          "set": "Ustawiono",
+          "no_temp_set": "Brak temperatury"
+        }
       },
       "mode": {
         "name": "Tryb pracy",
@@ -476,12 +470,6 @@
       "uzysk_ca_kowity": {
         "name": "Całkowity uzysk ciepła"
       },
-      "fuel_consumption_calc": {
-        "name": "Kalkulator zużycia paliwa"
-      },
-      "ecosrv_https": {
-        "name": "Serwer ecoNET HTTPS"
-      },
       "ecosrv_addr": {
         "name": "Adres serwera ecoNET"
       },
@@ -506,6 +494,9 @@
       "temp_cwu_set": {
         "name": "Temperatura zadana CWU"
       },
+      "tz_cwu": {
+        "name": "Temperatura CWU"
+      },
       "quality": {
         "name": "Jakość sygnału"
       },
@@ -517,6 +508,9 @@
       },
       "protocol_type": {
         "name": "Typ protokołu"
+      },
+      "tem_co": {
+        "name": "Temperatura kotła"
       }
     }
   }
