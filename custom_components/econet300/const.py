@@ -348,6 +348,16 @@ RMNEWPARAM_PARAMS = {
     # Example: "56", "57", etc.
 }
 
+# Control parameters that use the newParam endpoint with newParamName
+CONTROL_PARAMS = {
+    "BOILER_CONTROL",  # Boiler ON/OFF control
+    # Add other control parameters here
+    # Example: "PUMP_CONTROL", "FAN_CONTROL", etc.
+}
+
+# Individual control parameter constants
+BOILER_CONTROL = "BOILER_CONTROL"
+
 # =============================================================================
 # ENTITY UNIT MAPPINGS
 # =============================================================================

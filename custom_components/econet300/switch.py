@@ -12,7 +12,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
-from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
+from .const import BOILER_CONTROL, DOMAIN, SERVICE_API, SERVICE_COORDINATOR
 from .entity import EconetEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -59,33 +59,28 @@ class EconetSwitch(EconetEntity, SwitchEntity):
         """Turn the switch on."""
         try:
             # Use BOILER_CONTROL parameter: set to 1 to turn on
-            success = await self.api.set_param("BOILER_CONTROL", 1)
-            if success:
-                self._attr_is_on = True
-                self.async_write_ha_state()
-                _LOGGER.info("Boiler turned ON")
-            else:
-                _LOGGER.error("Failed to turn boiler ON - API returned failure")
+            success = await self.api.set_param(BOILER_CONTROL, 1)
+            if not success:
                 EconetSwitch._raise_boiler_control_error("Failed to turn boiler ON")
+            self._attr_is_on = True
+            self.async_write_ha_state()
+            _LOGGER.info("Boiler turned ON")
         except Exception as e:
             _LOGGER.error("Failed to turn boiler ON: %s", e)
             raise
 
     async def async_turn_off(self, **kwargs: Any) -> None:
-        """Turn the switch off."""
+        """Turn the boiler off."""
         try:
             # Use BOILER_CONTROL parameter: set to 0 to turn off
-            success = await self.api.set_param("BOILER_CONTROL", 0)
-            if success:
-                self._attr_is_on = False
-                self.async_write_ha_state()
-                _LOGGER.info("Boiler turned OFF")
-            else:
-                _LOGGER.error("Failed to turn boiler OFF - API returned failure")
+            success = await self.api.set_param(BOILER_CONTROL, 0)
+            if not success:
                 EconetSwitch._raise_boiler_control_error("Failed to turn boiler OFF")
+            self._attr_is_on = False
+            self.async_write_ha_state()
+            _LOGGER.info("Boiler turned OFF")
         except Exception as e:
-            _LOGGER.error("Failed to turn boiler OFF: %s", e)
-            raise
+            EconetSwitch._raise_boiler_control_error(f"Error turning boiler OFF: {e}")
 
 
 def create_boiler_switch(
