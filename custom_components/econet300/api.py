@@ -23,6 +23,7 @@ from .const import (
     API_SYS_PARAMS_PARAM_UID,
     API_SYS_PARAMS_URI,
     NUMBER_MAP,
+    RMNEWPARAM_PARAMS,
 )
 from .mem_cache import MemCache
 
@@ -211,13 +212,23 @@ class Econet300Api:
 
         # Use rmCurrNewParam for temperature setpoints (parameter keys like 1280)
         # Use newParam for control parameters (parameter names like BOILER_CONTROL)
+        # Use rmNewParam for special parameters that need newParamIndex (like heater mode 55)
         if param in NUMBER_MAP:
-            url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
-            _LOGGER.debug(
-                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
-                param,
-                url,
-            )
+            # Check if this parameter needs the rmNewParam endpoint
+            if param in RMNEWPARAM_PARAMS:
+                url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+                _LOGGER.debug(
+                    "Using rmNewParam endpoint for special parameter %s: %s",
+                    param,
+                    url,
+                )
+            else:
+                url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
+                _LOGGER.debug(
+                    "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
+                    param,
+                    url,
+                )
         elif param == "BOILER_CONTROL":
             url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
             _LOGGER.debug(

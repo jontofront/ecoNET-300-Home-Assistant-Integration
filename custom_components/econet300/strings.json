@@ -24,6 +24,11 @@
         "name": "Boiler On/Off"
       }
     },
+    "select": {
+      "heater_mode": {
+        "name": "Heater Mode"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Lighter"

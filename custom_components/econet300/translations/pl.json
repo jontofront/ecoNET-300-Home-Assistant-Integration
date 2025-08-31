@@ -24,6 +24,11 @@
         "name": "Kocioł Wł/Wył"
       }
     },
+    "select": {
+      "heater_mode": {
+        "name": "Tryb grzania"
+      }
+    },
     "binary_sensor": {
       "pump_co_works": {
         "name": "Pompa CO"
