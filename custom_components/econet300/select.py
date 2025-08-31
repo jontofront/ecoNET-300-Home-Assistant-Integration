@@ -11,7 +11,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
-from .const import HEATER_MODE_NAMES, HEATER_MODE_PARAM_INDEX, HEATER_MODE_VALUES
+from .const import (
+    DOMAIN,
+    HEATER_MODE_NAMES,
+    HEATER_MODE_PARAM_INDEX,
+    HEATER_MODE_VALUES,
+    SERVICE_API,
+    SERVICE_COORDINATOR,
+)
 from .entity import EconetEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -124,8 +131,36 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the select platform."""
-    coordinator = hass.data[config_entry.entry_id]["coordinator"]
-    api = hass.data[config_entry.entry_id]["api"]
+    _LOGGER.debug("Setting up select platform for entry: %s", config_entry.entry_id)
+
+    # Check if DOMAIN data exists
+    if DOMAIN not in hass.data:
+        _LOGGER.error("DOMAIN %s not found in hass.data", DOMAIN)
+        return
+
+    # Check if entry data exists
+    if config_entry.entry_id not in hass.data[DOMAIN]:
+        _LOGGER.error(
+            "Entry %s not found in hass.data[%s]", config_entry.entry_id, DOMAIN
+        )
+        return
+
+    entry_data = hass.data[DOMAIN][config_entry.entry_id]
+    _LOGGER.debug("Entry data keys: %s", list(entry_data.keys()))
+
+    # Check if required services exist
+    if SERVICE_COORDINATOR not in entry_data:
+        _LOGGER.error("SERVICE_COORDINATOR not found in entry data")
+        return
+
+    if SERVICE_API not in entry_data:
+        _LOGGER.error("SERVICE_API not found in entry data")
+        return
+
+    coordinator = entry_data[SERVICE_COORDINATOR]
+    api = entry_data[SERVICE_API]
+
+    _LOGGER.debug("Successfully retrieved coordinator and API")
 
     # Create heater mode select entity
     heater_mode_description = SelectEntityDescription(
@@ -138,4 +173,5 @@ async def async_setup_entry(
         EconetSelect(heater_mode_description, coordinator, api),
     ]
 
+    _LOGGER.info("Adding %d select entities", len(entities))
     async_add_entities(entities)

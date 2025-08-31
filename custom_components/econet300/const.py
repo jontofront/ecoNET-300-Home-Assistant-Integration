@@ -324,14 +324,14 @@ NUMBER_MAP = {
 # HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
 # =============================================================================
 HEATER_MODE_NAMES = {
-    0: "summer",
-    1: "winter",
+    0: "winter",
+    1: "summer",
     2: "auto",
 }
 
 HEATER_MODE_VALUES = {
-    "summer": 0,
-    "winter": 1,
+    "winter": 0,
+    "summer": 1,
     "auto": 2,
 }
 
