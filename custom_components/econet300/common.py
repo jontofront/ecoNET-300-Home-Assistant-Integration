@@ -12,7 +12,7 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ApiError, AuthError, Econet300Api
-from .const import DOMAIN
+from .const import DOMAIN, ECOSOL_CONTROLLER_IDS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,9 +24,7 @@ def skip_params_edits(sys_params: dict[str, Any]) -> bool:
     # Controllers that don't support rmCurrentDataParamsEdits endpoint
     unsupported_controllers = {
         "ecoMAX360i",  # Known to not support the endpoint
-        "ecoSOL 500",  # Solar collector - doesn't have this endpoint
-        "ecoSOL500",  # Alternative naming
-        "ecoSOL",  # Generic ecoSOL controllers
+        *ECOSOL_CONTROLLER_IDS,  # All ecoSOL controllers don't support this endpoint
         "ecoSter",  # ecoSter controllers
         "SControl MK1",  # SControl controllers
     }
