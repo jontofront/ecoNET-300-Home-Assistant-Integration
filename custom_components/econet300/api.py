@@ -212,7 +212,34 @@ class Econet300Api:
             return False
 
         # Get the appropriate endpoint URL
-        url = self._get_endpoint_url(param, value)
+        # Use rmCurrNewParam for temperature setpoints (parameter keys like 1280)
+        # Use newParam for control parameters (parameter names like BOILER_CONTROL)
+        # Use rmNewParam for special parameters that need newParamIndex (like heater mode 55)
+        if param in RMNEWPARAM_PARAMS:
+            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using rmNewParam endpoint for special parameter %s: %s",
+                param,
+                url,
+            )
+        elif param in NUMBER_MAP:
+            url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
+                param,
+                url,
+            )
+        elif param in CONTROL_PARAMS:
+            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using newParam endpoint for control parameter %s: %s", param, url
+            )
+        else:
+            # Default to newParam for unknown parameters
+            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using default newParam endpoint for parameter %s: %s", param, url
+            )
 
         # Make the API call
         data = await self._client.get(url)
@@ -228,59 +255,6 @@ class Econet300Api:
         await self._force_refresh_params_edits()
 
         return True
-
-    def _get_endpoint_url(self, param: str, value: Any) -> str:
-        """Get the appropriate endpoint URL for setting a parameter."""
-        # Define endpoint mapping for different parameter types
-        endpoint_mapping = {
-            # Special parameters that use rmNewParam with newParamIndex
-            "rmNewParam": lambda p,
-            v: f"{self.host}/econet/rmNewParam?newParamIndex={p}&newParamValue={v}",
-            # Temperature setpoints that use rmCurrNewParam with newParamKey
-            "rmCurrNewParam": lambda p,
-            v: f"{self.host}/econet/rmCurrNewParam?newParamKey={p}&newParamValue={v}",
-            # Control parameters that use newParam with newParamName
-            "newParam": lambda p,
-            v: f"{self.host}/econet/newParam?newParamName={p}&newParamValue={v}",
-        }
-
-        # Determine endpoint type using a more declarative approach
-        endpoint_type = self._determine_endpoint_type(param)
-
-        # Generate and return the URL
-        url = endpoint_mapping[endpoint_type](param, value)
-        _LOGGER.debug("Generated URL for %s: %s", param, url)
-        return url
-
-    def _determine_endpoint_type(self, param: str) -> str:
-        """Determine which endpoint type to use for a given parameter."""
-        # Special parameters that need rmNewParam endpoint
-        if param in RMNEWPARAM_PARAMS:
-            _LOGGER.debug(
-                "Parameter %s uses rmNewParam endpoint (special parameter)", param
-            )
-            return "rmNewParam"
-
-        # Temperature setpoints in NUMBER_MAP
-        if param in NUMBER_MAP:
-            _LOGGER.debug(
-                "Parameter %s uses rmCurrNewParam endpoint (temperature setpoint)",
-                param,
-            )
-            return "rmCurrNewParam"
-
-        # Control parameters like BOILER_CONTROL
-        if param in CONTROL_PARAMS:
-            _LOGGER.debug(
-                "Parameter %s uses newParam endpoint (control parameter)", param
-            )
-            return "newParam"
-
-        # Default for unknown parameters
-        _LOGGER.debug(
-            "Parameter %s uses default newParam endpoint (unknown parameter)", param
-        )
-        return "newParam"
 
     async def _force_refresh_params_edits(self):
         """Force refresh paramsEdits data by fetching fresh data and updating cache."""
