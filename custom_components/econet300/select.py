@@ -13,7 +13,6 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .const import (
     DOMAIN,
-    HEATER_MODE_NAMES,
     HEATER_MODE_PARAM_INDEX,
     HEATER_MODE_VALUES,
     SERVICE_API,
@@ -48,12 +47,26 @@ class EconetSelect(EconetEntity, SelectEntity):
     @property
     def options(self) -> list[str]:
         """Return the available options."""
-        return list(HEATER_MODE_VALUES.keys())
+        return list(HEATER_MODE_VALUES.values())
 
     @property
     def current_option(self) -> str | None:
-        """Return the currently selected option."""
+        """Return the current option."""
         return self._attr_current_option
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return entity specific state attributes."""
+        current_option = self._attr_current_option
+        heater_mode_value = (
+            get_heater_mode_value(current_option) if current_option else None
+        )
+
+        return {
+            "heater_mode_value": heater_mode_value,
+            "available_options": list(HEATER_MODE_VALUES.values()),
+            "api_parameter": HEATER_MODE_PARAM_INDEX,
+        }
 
     def _sync_state(self, value: Any) -> None:
         """Synchronize the state of the select entity."""
@@ -73,17 +86,28 @@ class EconetSelect(EconetEntity, SelectEntity):
                     numeric_value = heater_mode_value
 
                 # Map the numeric value to the option name
-                if numeric_value in HEATER_MODE_NAMES:
-                    self._attr_current_option = HEATER_MODE_NAMES[numeric_value]
+                if isinstance(numeric_value, (int, float)):
+                    option_name = HEATER_MODE_VALUES.get(int(numeric_value))
+                    if option_name is not None:
+                        self._attr_current_option = option_name
+                    else:
+                        self._attr_current_option = None
+                        _LOGGER.warning("Unknown heater mode value: %s", numeric_value)
                 else:
                     self._attr_current_option = None
-                    _LOGGER.warning("Unknown heater mode value: %s", numeric_value)
+                    _LOGGER.warning(
+                        "Invalid heater mode value type: %s", type(numeric_value)
+                    )
             else:
                 self._attr_current_option = None
                 _LOGGER.debug("Heater mode value not found in coordinator data")
         # Handle other select entities if needed
-        elif value is not None and value in HEATER_MODE_NAMES:
-            self._attr_current_option = HEATER_MODE_NAMES[value]
+        elif value is not None and isinstance(value, (int, float)):
+            option_name = HEATER_MODE_VALUES.get(int(value))
+            if option_name is not None:
+                self._attr_current_option = option_name
+            else:
+                self._attr_current_option = None
         else:
             self._attr_current_option = None
 
@@ -92,19 +116,37 @@ class EconetSelect(EconetEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
         try:
-            if option not in HEATER_MODE_VALUES:
-                self._raise_heater_mode_error(f"Invalid option: {option}")
-
             # Get the numeric value for the selected option
-            value = HEATER_MODE_VALUES[option]
+            value = get_heater_mode_value(option)
+            if value is None:
+                self._raise_heater_mode_error(f"Invalid option: {option}")
 
             # Use the parameter index (55) to set the value
             success = await self.api.set_param(HEATER_MODE_PARAM_INDEX, value)
 
             if success:
+                # Update the current option
+                old_option = self._attr_current_option
                 self._attr_current_option = option
+
+                # Log the change with context for better logbook entries
+                _LOGGER.info(
+                    "Heater mode changed from '%s' to '%s' (API value: %d)",
+                    old_option or "unknown",
+                    option,
+                    value,
+                )
+
+                # Write the state change to trigger Home Assistant's state change logging
                 self.async_write_ha_state()
-                _LOGGER.info("Heater mode changed to: %s", option)
+
+                # Additional context for debugging
+                _LOGGER.debug(
+                    "Heater mode state updated: %s -> %s (API value: %d)",
+                    old_option,
+                    option,
+                    value,
+                )
             else:
                 _LOGGER.error(
                     "Failed to change heater mode to %s - API returned failure", option
@@ -123,6 +165,19 @@ class EconetSelect(EconetEntity, SelectEntity):
     def _raise_heater_mode_error(message: str) -> None:
         """Raise a HeaterModeSelectError with the given message."""
         raise HeaterModeSelectError(message)
+
+
+def get_heater_mode_name(numeric_value: int) -> str | None:
+    """Convert numeric heater mode value to option name."""
+    return HEATER_MODE_VALUES.get(numeric_value)
+
+
+def get_heater_mode_value(option_name: str) -> int | None:
+    """Convert option name to numeric heater mode value for API."""
+    for value, name in HEATER_MODE_VALUES.items():
+        if name == option_name:
+            return value
+    return None
 
 
 async def async_setup_entry(

@@ -27,6 +27,15 @@
     "select": {
       "heater_mode": {
         "name": "Heater Mode"
+      },
+      "heater_mode_winter": {
+        "name": "Winter"
+      },
+      "heater_mode_summer": {
+        "name": "Summer"
+      },
+      "heater_mode_auto": {
+        "name": "Auto"
       }
     },
     "binary_sensor": {

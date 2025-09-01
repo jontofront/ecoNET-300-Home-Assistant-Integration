@@ -323,17 +323,17 @@ NUMBER_MAP = {
 # =============================================================================
 # HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
 # =============================================================================
-HEATER_MODE_NAMES = {
+# HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
+# =============================================================================
+# Note: Display names are now handled by the translation system
+# Numeric keys with option names for Home Assistant select entities
+
+HEATER_MODE_VALUES = {
     0: "winter",
     1: "summer",
     2: "auto",
 }
 
-HEATER_MODE_VALUES = {
-    "winter": 0,
-    "summer": 1,
-    "auto": 2,
-}
 
 # Heater mode parameter index (API parameter 55)
 HEATER_MODE_PARAM_INDEX = "55"
