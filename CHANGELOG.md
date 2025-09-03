@@ -1,5 +1,30 @@
 # Changelog
 
+## [v1.1.13] - 2025-01-29
+
+### Added
+
+- **Integration Diagnostics Support**: Added comprehensive diagnostics functionality for troubleshooting
+  - **Config Entry Diagnostics**: Download detailed configuration and system information
+  - **Device Diagnostics**: Download device-specific information including entity states and API data
+  - **Sensitive Data Protection**: Automatic redaction of sensitive information (passwords, UIDs, network details)
+  - **API Endpoint Data**: Raw data from all API endpoints (sysParams, regParams, regParamsData, paramEditData)
+  - **Entity Information**: Current values, units, and attributes for all entities
+  - **Integration Version**: Version information included in diagnostics output
+  - **Error Handling**: Robust error handling with graceful degradation
+  - **File Structure**: Diagnostics functionality properly separated into dedicated `diagnostics.py` file
+  - **Comprehensive Documentation**: Complete diagnostics guide with troubleshooting instructions and usage examples
+
+### Technical Changes
+
+- **New File**: `custom_components/econet300/diagnostics.py` - Dedicated diagnostics module
+- **New Documentation**: `docs/DIAGNOSTICS.md` - Comprehensive diagnostics documentation and troubleshooting guide
+- **Manifest Update**: Added `"diagnostics": true` to enable diagnostics support
+- **Comprehensive Testing**: Added test coverage for diagnostics functionality
+- **Code Quality**: Fixed linting issues and improved error handling
+- **Security**: Implemented sensitive data redaction for device UIDs, passwords, API keys, and network information
+- **Documentation**: Updated README.md with diagnostics section and link to detailed documentation
+
 ## [v1.1.12] - 2025-01-27
 
 ### Added
@@ -271,3 +296,11 @@
 - **Backward Compatibility**: No breaking changes, only fixes non-working functionality
 
 ## [v1.1.2] - 2025-01-XX
+
+### Key Versions
+
+- **v0.3.3** - Stable version by @pblxpt (original developer)
+- **v1.0.0** - Development version with enhanced API data retrieval
+- **v1.1.1** - Added boiler ON/OFF control switch functionality
+- **v1.1.3** - Critical fixes for temperature control and mixer setpoints
+- **v1.1.13** - Added comprehensive diagnostics support for troubleshooting

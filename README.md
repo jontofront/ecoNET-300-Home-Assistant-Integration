@@ -30,6 +30,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status
 - **Comprehensive API Access**: Access to 48 different API endpoints
 - **Multiple Entity Types**: Sensors, Binary Sensors, Switches, and Number entities
+- **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
 
 ### 🏠 Supported Devices
 
@@ -39,6 +40,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **ecoMAX860P2-N** boiler controller
 - **ecoMAX860P3-V** boiler controller
 - **ecoSOL500** solar collector system controller
+- **ecosol301**
 - **ecoSOL** solar thermal controller
 - **SControl MK1** control module
 - Other ecoNET300 compatible devices
@@ -335,6 +337,28 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 ---
 
+## 🔧 Diagnostics
+
+The integration includes comprehensive diagnostics support to help troubleshoot issues. Download detailed system information including entity states, API data, and configuration details.
+
+**📖 [Complete Diagnostics Documentation](docs/DIAGNOSTICS.md)**
+
+### Quick Start
+
+1. Go to **Settings > Devices & Services** in Home Assistant
+2. Find your **ecoNET300** integration
+3. Click the **Download diagnostics** button
+4. Share the redacted diagnostics file for support
+
+**Features:**
+
+- ✅ Automatic sensitive data redaction
+- ✅ Complete API endpoint data
+- ✅ Entity states and attributes
+- ✅ System configuration details
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -355,6 +379,7 @@ ecoNET-300-Home-Assistant-Integration/
 
 ### 📚 **Essential Documentation** (in `docs/`)
 
+- **DIAGNOSTICS.md** - Complete diagnostics documentation and troubleshooting guide
 - **API_V1_DOCUMENTATION.md** - Complete API documentation (consolidated)
 - **BOILER_CONTROL_README.md** - Boiler control documentation and setup
 - **CLOUD_TRANSLATIONS.md** - Cloud translations documentation and usage
@@ -371,15 +396,9 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
-### Key Versions
-
-- **v0.3.3** - Stable version by @pblxpt (original developer)
-- **v1.0.0** - Development version with enhanced API data retrieval
-- **v1.1.1** - Added boiler ON/OFF control switch functionality
-- **v1.1.3** - Critical fixes for temperature control and mixer setpoints
-
 ### Latest Features
 
+- **Diagnostics Support**: Comprehensive diagnostics for troubleshooting issues
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
@@ -409,8 +428,9 @@ Use the provided scripts in the `scripts/` directory to test API endpoints and v
 
 ## 🙏 Acknowledgments
 
-- **[@pblxpt](https://github.com/pblxpt)** - Original developer and maintainer up to v0.3.3
 - **[@jontofront](https://github.com/jontofront)** - Current maintainer and developer
+- **[@pblxpt](https://github.com/pblxpt)** - Original developer and maintainer up to v0.3.3
+- **[@KirilKurkianec](https://github.com/KirilKurkianec)** - Contributor and supporter
 - **ecoNET300 Community** - For testing, feedback, and support
 - **Plum Sp. z o.o.** - For creating the ecoNET300 system
 
