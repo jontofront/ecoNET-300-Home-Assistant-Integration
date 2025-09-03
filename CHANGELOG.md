@@ -19,7 +19,7 @@
 
 - **New File**: `custom_components/econet300/diagnostics.py` - Dedicated diagnostics module
 - **New Documentation**: `docs/DIAGNOSTICS.md` - Comprehensive diagnostics documentation and troubleshooting guide
-- **Manifest Update**: Added `"diagnostics": true` to enable diagnostics support
+- **Diagnostics Implementation**: Implemented `async_get_config_entry_diagnostics` and `async_get_device_diagnostics` functions
 - **Comprehensive Testing**: Added test coverage for diagnostics functionality
 - **Code Quality**: Fixed linting issues and improved error handling
 - **Security**: Implemented sensitive data redaction for device UIDs, passwords, API keys, and network information

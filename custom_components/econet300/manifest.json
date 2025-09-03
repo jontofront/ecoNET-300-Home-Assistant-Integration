@@ -14,6 +14,5 @@
   "requirements": [],
   "ssdp": [],
   "version": "1.1.13",
-  "zeroconf": [],
-  "diagnostics": true
+  "zeroconf": []
 }
