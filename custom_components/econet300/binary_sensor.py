@@ -17,6 +17,8 @@ from .common_functions import camel_to_snake
 from .const import (
     BINARY_SENSOR_MAP_KEY,
     DOMAIN,
+    ECOSOL_BINARY_SENSORS,
+    ECOSOL_CONTROLLER_IDS,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_CATEGORY,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
@@ -290,30 +292,28 @@ def create_ecoster_binary_sensors(
     return entities
 
 
-def create_ecosol500_binary_sensors(
-    coordinator: EconetDataCoordinator, api: Econet300Api
-):
-    """Create ecoSOL500-specific binary sensor entities."""
+def create_ecosol_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
+    """Create ecoSOL-specific binary sensor entities (ecoSOL 500, ecoSOL 301, etc.)."""
     entities: list[EconetBinarySensor] = []
     sys_params = coordinator.data.get("sysParams", {})
 
-    # Check if this is an ecoSOL500 controller
+    # Check if this is an ecoSOL controller
     controller_id = sys_params.get("controllerID", "")
-    if controller_id not in {"ecoSOL 500", "ecoSOL500"}:
-        _LOGGER.debug("Not an ecoSOL500 controller, skipping ecoSOL500 binary sensors")
+    if controller_id not in ECOSOL_CONTROLLER_IDS:
+        _LOGGER.debug("Not an ecoSOL controller, skipping ecoSOL binary sensors")
         return entities
 
-    _LOGGER.info("Creating ecoSOL500 binary sensors for controller: %s", controller_id)
+    _LOGGER.info("Creating ecoSOL binary sensors for controller: %s", controller_id)
 
-    # Get ecoSOL500 binary sensor keys
-    ecoSOL500_keys = BINARY_SENSOR_MAP_KEY.get("ecoSOL 500", set())
+    # Get ecoSOL binary sensor keys (same for all ecoSOL models)
+    ecoSOL_keys = ECOSOL_BINARY_SENSORS
 
     # Check data availability in both regParams and sysParams
     data_regParams = coordinator.data.get("regParams", {})
     data_sysParams = coordinator.data.get("sysParams", {})
 
-    for data_key in ecoSOL500_keys:
-        _LOGGER.debug("Processing ecoSOL500 binary sensor: %s", data_key)
+    for data_key in ecoSOL_keys:
+        _LOGGER.debug("Processing ecoSOL binary sensor: %s", data_key)
 
         # Check if data exists and is not None
         if data_key in data_regParams and data_regParams.get(data_key) is not None:
@@ -321,24 +321,20 @@ def create_ecosol500_binary_sensors(
                 create_binary_entity_description(data_key), coordinator, api
             )
             entities.append(entity)
-            _LOGGER.debug(
-                "Created ecoSOL500 binary sensor from regParams: %s", data_key
-            )
+            _LOGGER.debug("Created ecoSOL binary sensor from regParams: %s", data_key)
         elif data_key in data_sysParams and data_sysParams.get(data_key) is not None:
             entity = EconetBinarySensor(
                 create_binary_entity_description(data_key), coordinator, api
             )
             entities.append(entity)
-            _LOGGER.debug(
-                "Created ecoSOL500 binary sensor from sysParams: %s", data_key
-            )
+            _LOGGER.debug("Created ecoSOL binary sensor from sysParams: %s", data_key)
         else:
             _LOGGER.info(
-                "ecoSOL500 binary sensor %s not found or has no data, skipping",
+                "ecoSOL binary sensor %s not found or has no data, skipping",
                 data_key,
             )
 
-    _LOGGER.info("Created %d ecoSOL500 binary sensors", len(entities))
+    _LOGGER.info("Created %d ecoSOL binary sensors", len(entities))
     return entities
 
 
@@ -362,8 +358,8 @@ async def async_setup_entry(
     # Create ecoSTER binary sensors
     entities.extend(create_ecoster_binary_sensors(coordinator, api))
 
-    # Create ecoSOL500-specific binary sensors
-    entities.extend(create_ecosol500_binary_sensors(coordinator, api))
+    # Create ecoSOL-specific binary sensors (ecoSOL 500, ecoSOL 301, etc.)
+    entities.extend(create_ecosol_binary_sensors(coordinator, api))
 
     _LOGGER.info("Total binary sensor entities: %d", len(entities))
     async_add_entities(entities)

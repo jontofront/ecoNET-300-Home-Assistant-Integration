@@ -168,8 +168,8 @@ LAMBDA_SENSORS = {
     "lambdaLevel",
 }
 
-# ecoSOL 500 solar collector sensors
-ECOSOL500_SENSORS = {
+# ecoSOL solar collector sensors (ecoSOL 500, ecoSOL 301, etc.)
+ECOSOL_SENSORS = {
     # Temperature sensors
     "T1",  # Collector temperature
     "T2",  # Tank temperature
@@ -240,7 +240,8 @@ SENSOR_MAP_KEY = {
     "ecoMAX360i": ECOMAX360I_SENSORS,
     "ecoSter": ECOSTER_SENSORS,
     "lambda": LAMBDA_SENSORS,
-    "ecoSOL 500": ECOSOL500_SENSORS,
+    "ecoSOL 500": ECOSOL_SENSORS,
+    "ecoSOL 301": ECOSOL_SENSORS,  # ecoSOL 301 uses same sensors as ecoSOL 500
     "_default": DEFAULT_SENSORS,
 }
 
@@ -289,8 +290,8 @@ ECOSTER_BINARY_SENSORS = {
     "ecoSterDaySched8",
 }
 
-# ecoSOL 500 solar collector binary sensors
-ECOSOL500_BINARY_SENSORS = {
+# ecoSOL solar collector binary sensors (ecoSOL 500, ecoSOL 301, etc.)
+ECOSOL_BINARY_SENSORS = {
     "wifi",
     "lan",
     "mainSrv",
@@ -302,7 +303,15 @@ ECOSOL500_BINARY_SENSORS = {
 BINARY_SENSOR_MAP_KEY = {
     "_default": DEFAULT_BINARY_SENSORS,
     "ecoSter": ECOSTER_BINARY_SENSORS,
-    "ecoSOL 500": ECOSOL500_BINARY_SENSORS,
+    "ecoSOL 500": ECOSOL_BINARY_SENSORS,
+    "ecoSOL 301": ECOSOL_BINARY_SENSORS,  # ecoSOL 301 uses same binary sensors as ecoSOL 500
+}
+
+# Helper: Extract ecoSOL controller IDs for easy access
+ECOSOL_CONTROLLER_IDS = {
+    controller_id
+    for controller_id, sensor_set in BINARY_SENSOR_MAP_KEY.items()
+    if sensor_set == ECOSOL_BINARY_SENSORS
 }
 
 # =============================================================================
@@ -442,7 +451,7 @@ ENTITY_UNIT_MAP = {
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
-    # ecoSOL500 specific units
+    # ecoSOL specific units (ecoSOL 500, ecoSOL 301, etc.)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
     "T3": UnitOfTemperature.CELSIUS,
@@ -454,7 +463,7 @@ ENTITY_UNIT_MAP = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": PERCENTAGE,
-    # ecoSOL500 diagnostic units
+    # ecoSOL diagnostic units
     "ecosrvAddr": None,
     "softVer": None,
     "routerType": None,
@@ -564,7 +573,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
-    # ecoSOL500 specific device classes
+    # ecoSOL specific device classes (ecoSOL 500, ecoSOL 301, etc.)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
     "T3": SensorDeviceClass.TEMPERATURE,
@@ -576,7 +585,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
-    # ecoSOL500 diagnostic device classes
+    # ecoSOL diagnostic device classes
     "ecosrvAddr": None,
     "softVer": None,
     "routerType": None,
@@ -663,7 +672,7 @@ ENTITY_PRECISION = {
     "heatingUpperTemp": 1,
     "Circuit1thermostat": 1,
     "heating_work_state_pump4": None,
-    # ecoSOL500 specific precision
+    # ecoSOL specific precision (ecoSOL 500, ecoSOL 301, etc.)
     "T1": 1,
     "T2": 1,
     "T3": 1,
@@ -675,7 +684,7 @@ ENTITY_PRECISION = {
     "P2": None,
     "H": None,
     "Uzysk_ca_kowity": 1,
-    # ecoSOL500 diagnostic precision
+    # ecoSOL diagnostic precision
     "ecosrvAddr": None,
     "routerType": None,
     "protocolType": None,
