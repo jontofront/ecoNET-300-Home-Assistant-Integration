@@ -116,6 +116,7 @@
         "stdlib",
         "tzcwu",
         "uzysk",
+        "wlan",
         "wthr"
     ],
     "cSpell.ignorePaths": [
