@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.1.12] - 2025-01-27
+
+### Added
+
+- **Summer/Winter/Auto Mode Control**: Added comprehensive heater mode selection functionality
+  - **New Select Entity**: `select.heater_mode` for controlling boiler operation modes
+  - **Three Operation Modes**:
+    - **Winter Mode** (0): Full heating operation for cold weather
+    - **Summer Mode** (1): Hot water only operation for warm weather
+    - **Auto Mode** (2): Automatic mode selection based on conditions
+  - **API Integration**: Direct control via ecoNET API parameter 55
+  - **State Management**: Real-time mode synchronization with boiler controller
+  - **Logging**: Comprehensive logging for mode changes with context for Home Assistant logbook
+
+### Changed
+
+- **API Parameter Handling**: Enhanced API parameter handling for better reliability
+  - **Endpoint Mapping**: Improved parameter endpoint mapping for different parameter types
+  - **Error Handling**: Better error handling and validation for parameter changes
+  - **State Synchronization**: Improved state synchronization between Home Assistant and boiler controller
+
+### Technical Changes
+
+- **Select Platform**: Added new `select.py` platform for mode selection entities
+- **Constants**: Added `HEATER_MODE_VALUES` and `HEATER_MODE_PARAM_INDEX` constants
+- **Translation System**: Integrated heater mode options with Home Assistant translation system
+- **API Methods**: Enhanced `set_param()` method to handle different parameter types
+- **Entity Management**: Added proper entity lifecycle management for select entities
+
 ## [v1.1.10] - 2025-01-27
 
 ### Added
