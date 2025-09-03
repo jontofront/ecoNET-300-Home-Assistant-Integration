@@ -9,6 +9,11 @@
         }
       }
     },
+    "select": {
+      "heater_mode": {
+        "default": "mdi:thermostat"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "default": "mdi:fire",

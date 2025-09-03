@@ -326,7 +326,46 @@ NUMBER_MAP = {
     "1290": "mixerSetTemp4",  # Mixer 4 temperature setpoint
     "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
+    "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
 }
+
+# =============================================================================
+# HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
+# =============================================================================
+# HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
+# =============================================================================
+# Note: Display names are now handled by the translation system
+# Numeric keys with option names for Home Assistant select entities
+
+HEATER_MODE_VALUES = {
+    0: "winter",
+    1: "summer",
+    2: "auto",
+}
+
+
+# Heater mode parameter index (API parameter 55)
+HEATER_MODE_PARAM_INDEX = "55"
+
+# =============================================================================
+# PARAMETER ENDPOINT MAPPINGS
+# =============================================================================
+# Parameters that use the rmNewParam endpoint with newParamIndex
+RMNEWPARAM_PARAMS = {
+    "55",  # Heater mode (Summer/Winter/Auto)
+    # Add other parameters here that need rmNewParam endpoint
+    # Example: "56", "57", etc.
+}
+
+# Control parameters that use the newParam endpoint with newParamName
+CONTROL_PARAMS = {
+    "BOILER_CONTROL",  # Boiler ON/OFF control
+    # Add other control parameters here
+    # Example: "PUMP_CONTROL", "FAN_CONTROL", etc.
+}
+
+# Individual control parameter constants
+BOILER_CONTROL = "BOILER_CONTROL"
 
 # =============================================================================
 # ENTITY UNIT MAPPINGS

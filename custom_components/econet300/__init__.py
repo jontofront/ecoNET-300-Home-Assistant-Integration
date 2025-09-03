@@ -12,7 +12,13 @@ from .common import AuthError, EconetDataCoordinator
 from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
 from .mem_cache import MemCache
 
-PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.NUMBER, Platform.SWITCH]
+PLATFORMS: list[Platform] = [
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.SWITCH,
+    Platform.SELECT,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
