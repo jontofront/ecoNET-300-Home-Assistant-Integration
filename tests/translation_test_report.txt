@@ -1,0 +1,21 @@
+ecoNET300 Comprehensive Translation Test Report
+============================================================
+
+📊 SUMMARY STATISTICS
+------------------------------
+Original sensor keys: 0
+Original binary sensor keys: 0
+Original number keys: 0
+Snake_case sensor keys: 0
+Snake_case binary sensor keys: 0
+Snake_case number keys: 0
+
+📋 CONSISTENCY ISSUES
+------------------------------
+Missing in English: 6
+Missing in Polish: 3
+Missing in strings.json: 0
+
+============================================================
+⚠️  TOTAL ISSUES FOUND: 9
+============================================================

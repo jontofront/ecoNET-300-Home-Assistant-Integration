@@ -21,13 +21,15 @@ import sys
 _LOGGER = logging.getLogger(__name__)
 
 # Add the custom_components directory to the path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent / "custom_components" / "econet300")
+custom_components_path = str(
+    Path(__file__).parent.parent / "custom_components" / "econet300"
 )
+if custom_components_path not in sys.path:
+    sys.path.insert(0, custom_components_path)
 
 try:
-    from common_functions import camel_to_snake
-    from const import (
+    from common_functions import camel_to_snake  # type: ignore[import-untyped]
+    from const import (  # type: ignore[import-untyped]
         BINARY_SENSOR_MAP_KEY,
         DEFAULT_BINARY_SENSORS,
         DEFAULT_SENSORS,
@@ -690,19 +692,15 @@ def main():
     _LOGGER.info("")
 
     # STEP 6: Check icons exist
-    missing_sensor_icons = step_6_check_icons_exist(
-        sensor_keys, load_json_file(ICONS_FILE).keys()
-    )
+    icons_data = load_json_file(ICONS_FILE)
+    icon_keys = set(icons_data.keys()) if icons_data else set()
+    missing_sensor_icons = step_6_check_icons_exist(sensor_keys, icon_keys)
     _LOGGER.info("")
 
-    missing_binary_icons = step_6_check_icons_exist(
-        binary_sensor_keys, load_json_file(ICONS_FILE).keys()
-    )
+    missing_binary_icons = step_6_check_icons_exist(binary_sensor_keys, icon_keys)
     _LOGGER.info("")
 
-    missing_number_icons = step_6_check_icons_exist(
-        number_keys, load_json_file(ICONS_FILE).keys()
-    )
+    missing_number_icons = step_6_check_icons_exist(number_keys, icon_keys)
     _LOGGER.info("")
 
     # STEP 7: Check translation file consistency
