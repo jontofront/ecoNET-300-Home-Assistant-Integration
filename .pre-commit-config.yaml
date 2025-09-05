@@ -18,4 +18,3 @@ repos:
     rev: v0.9.32
     hooks:
       - id: pymarkdown
-        args: [--fix]
