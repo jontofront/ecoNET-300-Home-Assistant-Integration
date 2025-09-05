@@ -127,6 +127,7 @@
     "cSpell.ignorePaths": [
         "custom_components/econet300/translations/pl.json",
         "pyproject.toml",
-        "tests/**"
+        "tests/**",
+        ".codespellrc"
     ]
 }
