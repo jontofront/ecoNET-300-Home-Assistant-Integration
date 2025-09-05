@@ -10,57 +10,67 @@ This script checks:
 """
 
 import json
+import logging
 from pathlib import Path
+import re
 import sys
-from typing import Dict, List
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger(__name__)
 
 # Add the custom_components directory to the path
-sys.path.insert(
-    0, str(Path(__file__).parent.parent / "custom_components" / "econet300")
+custom_components_path = str(
+    Path(__file__).parent.parent / "custom_components" / "econet300"
 )
+sys.path.insert(0, custom_components_path)
 
 try:
-    from const import (
+    from const import (  # type: ignore[import-untyped]
         ENTITY_BINARY_DEVICE_CLASS_MAP,
         ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
         ENTITY_SENSOR_DEVICE_CLASS_MAP,
     )
 except ImportError as e:
-    print(f"Error importing constants: {e}")
+    logger.error("Error importing constants: %s", e)
+    logger.error("Tried to import from: %s", custom_components_path)
+    logger.error("Current sys.path: %s...", sys.path[:3])
     sys.exit(1)
 
 
-def load_json_file(file_path: Path) -> Dict:
+def load_json_file(file_path: Path) -> dict:
     """Load and parse a JSON file."""
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with file_path.open(encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"❌ File not found: {file_path}")
+        logger.error("❌ File not found: %s", file_path)
         return {}
     except json.JSONDecodeError as e:
-        print(f"❌ JSON decode error in {file_path}: {e}")
+        logger.error("❌ JSON decode error in %s: %s", file_path, e)
         return {}
 
 
 def camel_to_snake(name: str) -> str:
     """Convert camelCase to snake_case."""
-    import re
-
     name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
 def check_entity_translations(
-    entity_map: Dict,
+    entity_map: dict,
     entity_type: str,
-    strings_data: Dict,
-    en_data: Dict,
-    pl_data: Dict,
-    icons_data: Dict,
-) -> Dict[str, List[str]]:
+    strings_data: dict,
+    en_data: dict,
+    pl_data: dict,
+    icons_data: dict,
+) -> dict[str, list[str]]:
     """Check translations for a specific entity type."""
-    issues = {
+    issues: dict[str, list[str]] = {
         "missing_translations": [],
         "missing_in_en": [],
         "missing_in_pl": [],
@@ -112,9 +122,9 @@ def check_entity_translations(
 
 
 def main():
-    """Main test function."""
-    print("🔍 ecoNET300 Translation Test")
-    print("=" * 40)
+    """Run the main test function."""
+    logger.info("🔍 ecoNET300 Translation Test")
+    logger.info("=" * 40)
 
     # Define file paths
     base_dir = Path(__file__).parent.parent
@@ -124,24 +134,24 @@ def main():
     icons_file = base_dir / "custom_components" / "econet300" / "icons.json"
 
     # Load files
-    print("📁 Loading files...")
+    logger.info("📁 Loading files...")
     strings_data = load_json_file(strings_file)
     en_data = load_json_file(en_file)
     pl_data = load_json_file(pl_file)
     icons_data = load_json_file(icons_file)
 
     if not all([strings_data, en_data, pl_data, icons_data]):
-        print("❌ Failed to load required files")
+        logger.error("❌ Failed to load required files")
         return
 
-    print("✅ All files loaded successfully")
-    print()
+    logger.info("✅ All files loaded successfully")
+    logger.info("")
 
     # Check each entity type
-    print("🔍 Checking entity translations...")
+    logger.info("🔍 Checking entity translations...")
 
     # Sensors
-    print("\n📊 Checking SENSORS...")
+    logger.info("\n📊 Checking SENSORS...")
     sensor_issues = check_entity_translations(
         ENTITY_SENSOR_DEVICE_CLASS_MAP,
         "sensor",
@@ -152,7 +162,7 @@ def main():
     )
 
     # Binary Sensors
-    print("\n📊 Checking BINARY SENSORS...")
+    logger.info("\n📊 Checking BINARY SENSORS...")
     binary_issues = check_entity_translations(
         ENTITY_BINARY_DEVICE_CLASS_MAP,
         "binary_sensor",
@@ -163,7 +173,7 @@ def main():
     )
 
     # Numbers
-    print("\n📊 Checking NUMBERS...")
+    logger.info("\n📊 Checking NUMBERS...")
     number_issues = check_entity_translations(
         ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
         "number",
@@ -174,58 +184,58 @@ def main():
     )
 
     # Generate report
-    print("\n" + "=" * 40)
-    print("📋 TEST RESULTS")
-    print("=" * 40)
+    logger.info("\n%s", "=" * 40)
+    logger.info("📋 TEST RESULTS")
+    logger.info("=" * 40)
 
     all_issues = []
 
     # Sensor issues
     if any(sensor_issues.values()):
-        print("\n❌ SENSOR ISSUES:")
+        logger.warning("\n❌ SENSOR ISSUES:")
         for issue_type, issues in sensor_issues.items():
             if issues:
-                print(f"   {issue_type.upper()}:")
+                logger.warning("   %s:", issue_type.upper())
                 for issue in issues:
-                    print(f"     - {issue}")
+                    logger.warning("     - %s", issue)
                     all_issues.append(f"SENSOR: {issue}")
 
     # Binary sensor issues
     if any(binary_issues.values()):
-        print("\n❌ BINARY SENSOR ISSUES:")
+        logger.warning("\n❌ BINARY SENSOR ISSUES:")
         for issue_type, issues in binary_issues.items():
             if issues:
-                print(f"   {issue_type.upper()}:")
+                logger.warning("   %s:", issue_type.upper())
                 for issue in issues:
-                    print(f"     - {issue}")
+                    logger.warning("     - %s", issue)
                     all_issues.append(f"BINARY_SENSOR: {issue}")
 
     # Number issues
     if any(number_issues.values()):
-        print("\n❌ NUMBER ISSUES:")
+        logger.warning("\n❌ NUMBER ISSUES:")
         for issue_type, issues in number_issues.items():
             if issues:
-                print(f"   {issue_type.upper()}:")
+                logger.warning("   %s:", issue_type.upper())
                 for issue in issues:
-                    print(f"     - {issue}")
+                    logger.warning("     - %s", issue)
                     all_issues.append(f"NUMBER: {issue}")
 
     # Summary
-    print("\n" + "=" * 40)
+    logger.info("\n%s", "=" * 40)
     if not all_issues:
-        print("🎉 ALL TESTS PASSED! No issues found.")
+        logger.info("🎉 ALL TESTS PASSED! No issues found.")
     else:
-        print(f"⚠️  TOTAL ISSUES FOUND: {len(all_issues)}")
-        print("\n📄 Issues will be saved to: translation_issues.txt")
+        logger.warning("⚠️  TOTAL ISSUES FOUND: %s", len(all_issues))
+        logger.info("\n📄 Issues will be saved to: translation_issues.txt")
 
         # Save issues to file
-        with open(base_dir / "translation_issues.txt", "w", encoding="utf-8") as f:
+        with (base_dir / "translation_issues.txt").open("w", encoding="utf-8") as f:
             f.write("ecoNET300 Translation Issues Report\n")
             f.write("=" * 40 + "\n\n")
             for issue in all_issues:
                 f.write(f"{issue}\n")
 
-    print("=" * 40)
+    logger.info("=" * 40)
 
 
 if __name__ == "__main__":

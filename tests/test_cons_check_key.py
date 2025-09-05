@@ -26,7 +26,7 @@ sys.path.insert(0, str(BASE_DIR.parent / "custom_components" / "econet300"))
 
 # Try to import constants at module level
 try:
-    from const import (
+    from const import (  # type: ignore[import-untyped]
         DEFAULT_BINARY_SENSORS,
         DEFAULT_SENSORS,
         ENTITY_BINARY_DEVICE_CLASS_MAP,
