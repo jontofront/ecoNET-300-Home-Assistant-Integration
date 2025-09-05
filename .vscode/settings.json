@@ -94,6 +94,7 @@
         "asyncio",
         "bufor",
         "clientsession",
+        "codeowners",
         "consum",
         "Docstrings",
         "ECOMAX",
@@ -103,7 +104,9 @@
         "ecoster",
         "hass",
         "homeassistant",
+        "homekit",
         "isort",
+        "jontofront",
         "kowity",
         "lamda",
         "MILLIWATT",
@@ -113,14 +116,17 @@
         "sched",
         "setpoint",
         "setpoints",
+        "ssdp",
         "stdlib",
         "tzcwu",
         "uzysk",
         "wlan",
-        "wthr"
+        "wthr",
+        "zeroconf"
     ],
     "cSpell.ignorePaths": [
         "custom_components/econet300/translations/pl.json",
-        "pyproject.toml"
+        "pyproject.toml",
+        "tests/**"
     ]
 }
