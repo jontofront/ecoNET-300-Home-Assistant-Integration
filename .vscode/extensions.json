@@ -13,7 +13,6 @@
 
         // YAML Support
         "redhat.vscode-yaml",
-        "ms-azuretools.vscode-docker",
 
         // Git Integration
         "eamodio.gitlens",
