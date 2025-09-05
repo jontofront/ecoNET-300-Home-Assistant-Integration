@@ -15,7 +15,7 @@
   - **File Structure**: Diagnostics functionality properly separated into dedicated `diagnostics.py` file
   - **Comprehensive Documentation**: Complete diagnostics guide with troubleshooting instructions and usage examples
 
-### Technical Changes
+### Implementation Details
 
 - **New File**: `custom_components/econet300/diagnostics.py` - Dedicated diagnostics module
 - **New Documentation**: `docs/DIAGNOSTICS.md` - Comprehensive diagnostics documentation and troubleshooting guide
@@ -27,7 +27,7 @@
 
 ## [v1.1.12] - 2025-01-27
 
-### Added
+### v1.1.12 New Features
 
 - **Summer/Winter/Auto Mode Control**: Added comprehensive heater mode selection functionality
   - **New Select Entity**: `select.heater_mode` for controlling boiler operation modes
@@ -39,14 +39,14 @@
   - **State Management**: Real-time mode synchronization with boiler controller
   - **Logging**: Comprehensive logging for mode changes with context for Home Assistant logbook
 
-### Changed
+### v1.1.12 Improvements
 
 - **API Parameter Handling**: Enhanced API parameter handling for better reliability
   - **Endpoint Mapping**: Improved parameter endpoint mapping for different parameter types
   - **Error Handling**: Better error handling and validation for parameter changes
   - **State Synchronization**: Improved state synchronization between Home Assistant and boiler controller
 
-### Technical Changes
+### v1.1.12 Implementation Details
 
 - **Select Platform**: Added new `select.py` platform for mode selection entities
 - **Constants**: Added `HEATER_MODE_VALUES` and `HEATER_MODE_PARAM_INDEX` constants
@@ -56,7 +56,7 @@
 
 ## [v1.1.10] - 2025-01-27
 
-### Added
+### v1.1.10 New Features
 
 - **Modern Icon Translation System**: Implemented comprehensive icon management using Home Assistant's recommended approach
   - **New Icon Management**: All icons now managed through `icons.json` with proper translation keys
@@ -64,7 +64,7 @@
   - **Multi-Language Support**: Icons properly integrated with translation system for internationalization
   - **Icon Validation**: All Material Design Icons validated and replaced invalid ones with proper alternatives
 
-### Changed
+### v1.1.10 Architecture Changes
 
 - **Icon System Architecture**: Replaced old icon constants with modern translation-based approach
 
@@ -77,7 +77,7 @@
   - **Kept**: ruff (linting), ruff-format (formatting), mypy (type checking)
   - **Impact**: Cleaner, faster pre-commit checks with focus on essential quality metrics
 
-### Fixed
+### v1.1.10 Bug Fixes
 
 - **Invalid Material Design Icons**: Resolved 20+ non-existent icon references
 
@@ -92,12 +92,12 @@
 
 ## [v1.1.9] - 2025-01-27
 
-### Changed
+### v1.1.9 Improvements
 
 - **Logging Level Refactoring**: Major refactoring of logging levels throughout the integration
 - **VS Code Settings Optimization**: Streamlined development environment configuration
 
-### Fixed
+### v1.1.9 Bug Fixes
 
 - **Git Pre-commit Hook Issues**: Fixed file formatting issues that caused pre-commit hook failures
   - **Problem**: Pre-commit hooks were failing due to trailing whitespace and end-of-file formatting
@@ -105,7 +105,7 @@
   - **Impact**: All pre-commit hooks now pass successfully, ensuring code quality
   - **Files Modified**: `.vscode/settings.json`
 
-### Technical Changes
+### v1.1.9 Technical Changes
 
 - **Logging Refactoring**: Systematic review and adjustment of log levels across the codebase
 - **VS Code Configuration**: Streamlined Ruff settings to use native VS Code support
@@ -115,7 +115,7 @@
 
 ## [v1.1.8] - 2025-08-11
 
-### Fixed
+### Critical Fixes
 
 - **Critical Error Resolution**: Fixed `TypeError: argument of type 'NoneType' is not iterable` error
 
@@ -130,7 +130,7 @@
   - **Impact**: Better performance and stability for all controller types
   - **Files Modified**: `custom_components/econet300/common.py`
 
-### Added
+### v1.1.8 New Features
 
 - **Controller-Specific Endpoint Support**: Added intelligent detection of endpoint compatibility
 
@@ -145,14 +145,14 @@
   - **Logging**: Clear warnings when unexpected None values are encountered
   - **Graceful Degradation**: System continues working even when endpoints are unavailable
 
-### Changed
+### v1.1.8 Improvements
 
 - **Error Handling Strategy**: Changed from reactive error handling to proactive endpoint detection
   - **Before**: Made API calls first, then handled errors when they occurred
   - **After**: Check controller compatibility first, then make only supported API calls
   - **Benefits**: Faster startup, better performance, no crashes, cleaner logs
 
-### Technical Changes
+### v1.1.8 Implementation Details
 
 - **skip_params_edits Function**: Enhanced to detect all unsupported controller types
 - **Safety Checks**: Added multiple validation layers in entity update methods
@@ -161,7 +161,7 @@
 
 ## [v1.1.7] - 2025-08-08
 
-### Fixed
+### v1.1.7 Bug Fixes
 
 - **Entity Category Mapping**: Fixed binary sensor entity categories for better UI organization
   - **Problem**: Diagnostic entities like 'lan', 'wifi', 'mainSrv' were showing in Sensors section instead of Diagnostics
@@ -170,7 +170,7 @@
   - **Files Modified**: `custom_components/econet300/binary_sensor.py`
   - **Technical Details**: Added EntityCategory import and explicit entity_category property with proper type annotations
 
-### Technical Changes
+### v1.1.7 Implementation Details
 
 - **Type Annotations**: Fixed mypy type checking errors for \_attr_is_on property
 - **Entity Category Property**: Added explicit entity_category property to ensure proper category inheritance
@@ -178,7 +178,7 @@
 
 ## [v1.1.6] - 2025-08-08
 
-### Added
+### v1.1.6 New Features
 
 - **ecoSOL500 Solar Collector Support**: Added comprehensive support for ecoSOL500 solar collector controller
   - **New Device Type**: Full integration with ecoSOL500 solar collector capabilities
@@ -190,7 +190,7 @@
   - **Test Fixtures**: Added complete test fixtures for ecoSOL500 validation
   - **Translation Support**: Added proper translations for all ecoSOL500 sensors
 
-### Fixed
+### v1.1.6 Bug Fixes
 
 - **Entity Category Mapping**: Fixed binary sensor entity categories for better UI organization
   - **Problem**: Diagnostic entities like 'lan', 'wifi', 'mainSrv' were showing in Sensors section instead of Diagnostics
@@ -198,7 +198,7 @@
   - **Impact**: Diagnostic entities now appear in the correct Diagnostics section in Home Assistant UI
   - **Files Modified**: `custom_components/econet300/binary_sensor.py`
 
-### Changed
+### v1.1.6 Development Tools
 
 - **Code Quality Tools**: Enhanced development workflow with professional code quality tools
   - **Pre-commit Hooks**: Added comprehensive pre-commit configuration with debug statement prevention and docstring checks
@@ -206,7 +206,7 @@
   - **Security Analysis**: Added CodeQL security analysis workflow for automated vulnerability detection
   - **Files Modified**: `.pre-commit-config.yaml`, `.github/workflows/codeql.yml`
 
-### Technical Changes
+### v1.1.6 Implementation Details
 
 - **Constants Organization**: Added ecoSOL500-specific sensor mappings, device classes, units, and icons
 - **Entity Creation Logic**: Improved entity category handling for better UI organization
@@ -215,7 +215,7 @@
 
 ## [v1.1.5] - 2025-08-06
 
-### Added
+### v1.1.5 New Features
 
 - **ecoMAX850R2-X Support**: Added comprehensive support for the new ecoMAX850R2-X boiler controller
   - **New Device Type**: Full integration with ecoMAX850R2-X controller capabilities
@@ -224,7 +224,7 @@
   - **Documentation**: Created comprehensive documentation for ecoMAX850R2-X features and capabilities
   - **Test Fixtures**: Added complete test fixtures for ecoMAX850R2-X validation
 
-### Fixed
+### v1.1.5 Bug Fixes
 
 - **statusCO Sensor Translation**: Fixed missing translation for statusCO sensor causing "PLUM ecoNET300" display issue
   - **Problem**: statusCO sensor was missing translation key in sensor section
@@ -232,7 +232,7 @@
   - **Impact**: statusCO sensor now displays as "Central heating status" instead of raw translation key
   - **Files Modified**: Translation files in sensor section
 
-### Changed
+### v1.1.5 Architecture Changes
 
 - **ecoSTER as Separate Devices**: Refactored ecoSTER thermostats to be separate Home Assistant devices
   - **Device Structure**: Each ecoSTER thermostat (1-8) now appears as a separate device under the main controller
@@ -240,7 +240,7 @@
   - **Module Detection**: ecoSTER entities only created when moduleEcoSTERSoftVer is present in sysParams
   - **Files Modified**: `custom_components/econet300/entity.py`, `sensor.py`, `binary_sensor.py`
 
-### Technical Changes
+### v1.1.5 Implementation Details
 
 - **Constants Organization**: Reorganized sensor and binary sensor mappings for better device-specific support
 - **Translation Validation**: Added comprehensive validation logic and commit workflow documentation
@@ -249,13 +249,13 @@
 
 ## [v1.1.4] - 2025-01-XX
 
-### Changed
+### Version Update
 
 - **Version Update**: Updated version to 1.1.4
 
 ## [v1.1.3] - 2025-07-15
 
-### Added
+### v1.1.3 New Features
 
 - **Mixer Temperature Setpoints**: Added support for mixer temperature setpoints 1-6
   - **New Number Entities**: mixerSetTemp1 through mixerSetTemp6 (parameters 1287-1292)
@@ -263,14 +263,14 @@
   - **Smart Entity Creation**: Only creates entities for mixers that exist on your specific boiler model
   - **Files Modified**: `custom_components/econet300/const.py`, translation files
 
-### Changed
+### v1.1.3 Improvements
 
 - **Exception Handling**: Improved debugging by using general exception handling during development
   - **Better Error Visibility**: Catches all possible errors to help identify issues during testing
   - **Development Friendly**: Easier to debug unexpected API responses or network issues
   - **Files Modified**: `custom_components/econet300/api.py`
 
-### Technical Changes
+### v1.1.3 Implementation Details
 
 - **NUMBER_MAP**: Added mixer temperature setpoints 1287-1292
 - **Translation Files**: Updated strings.json, en.json, and pl.json with mixer setpoint translations
@@ -279,7 +279,7 @@
 
 ## [v1.1.2] - 2025-01-XX
 
-### Fixed
+### v1.1.2 Critical Fixes
 
 - **Temperature Control API Endpoint**: Fixed incorrect API endpoint for temperature setpoints
   - **Problem**: Integration was using `/econet/rmNewParam?newParamIndex={param}` which doesn't work
@@ -288,14 +288,14 @@
   - **Files Modified**: `custom_components/econet300/api.py`
   - **Technical Details**: Updated `set_param()` method to use correct endpoint format for NUMBER_MAP parameters
 
-### Technical Changes
+### v1.1.2 Implementation Details
 
 - **API Endpoint**: Changed from `rmNewParam` to `rmCurrNewParam` for temperature setpoints
 - **Parameter Format**: Changed from `newParamIndex` to `newParamKey` for temperature parameters
 - **Affected Parameters**: All temperature setpoints (1280=tempCOSet, 1281=tempCWUSet, 1287-1292=mixerSetTemp1-6)
 - **Backward Compatibility**: No breaking changes, only fixes non-working functionality
 
-## [v1.1.2] - 2025-01-XX
+## Version History Summary
 
 ### Key Versions
 
