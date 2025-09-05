@@ -14,3 +14,8 @@ repos:
       - id: mypy
         args: [--ignore-missing-imports]
         exclude: ^tests/
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.32
+    hooks:
+      - id: pymarkdown
+        args: [--fix]
