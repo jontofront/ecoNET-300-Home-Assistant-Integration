@@ -546,3 +546,30 @@ split-on-trailing-comma = false
 "tests/**/*.py" = ["INP001"]  # Ignore implicit namespace package warning for test files
 [tool.ruff.mccabe]
 max-complexity = 25
+
+[tool.pymarkdown]
+# Markdownlint configuration for ecoNET-300 project
+# See: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+# Line length - allow longer lines for changelog content
+MD013.line_length = 120
+MD013.code_blocks = false
+MD013.tables = false
+
+# Disable duplicate heading check for changelog files
+MD024 = false
+
+# Allow multiple consecutive blank lines in changelog
+MD012.maximum = 3
+
+# Allow emphasis in headers (for **bold** text)
+MD036.punctuation = ".,;:!"
+
+# Allow inline HTML if needed
+MD033 = false
+
+# Allow bare URLs
+MD034 = false
+
+# Allow trailing punctuation in headers
+MD026.punctuation = ".,;:!"
