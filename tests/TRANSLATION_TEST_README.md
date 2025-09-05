@@ -101,7 +101,7 @@ The test provides:
 
 ## Example Output
 
-```
+```text
 🔍 ecoNET300 Comprehensive Translation Test
 ============================================================
 Implementing step-by-step translation validation logic...
