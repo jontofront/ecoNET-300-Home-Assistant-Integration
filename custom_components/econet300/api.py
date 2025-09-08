@@ -11,6 +11,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .const import (
+    API_EDIT_PARAMS_DATA,
+    API_EDIT_PARAMS_URI,
     API_EDITABLE_PARAMS_LIMITS_DATA,
     API_EDITABLE_PARAMS_LIMITS_URI,
     API_REG_PARAMS_DATA_PARAM_DATA,
@@ -380,6 +382,22 @@ class Econet300Api:
         sysParams = await self._fetch_api_data_by_key(API_SYS_PARAMS_URI)
         _LOGGER.debug("Fetched sysParams data: %s", sysParams)
         return sysParams
+
+    async def fetch_edit_params(self) -> dict[str, Any] | None:
+        """Fetch and return the editParams data from ip/econet/editParams endpoint.
+
+        This endpoint is only supported by ecoMAX360 devices.
+        Other devices will return None.
+        """
+        _LOGGER.debug(
+            "fetch_edit_params called: Fetching editParams from host '%s'",
+            self.host,
+        )
+        editParams = await self._fetch_api_data_by_key(
+            API_EDIT_PARAMS_URI, API_EDIT_PARAMS_DATA
+        )
+        _LOGGER.debug("Fetched editParams data: %s", editParams)
+        return editParams
 
     async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""

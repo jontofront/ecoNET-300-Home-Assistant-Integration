@@ -41,6 +41,25 @@ def skip_params_edits(sys_params: dict[str, Any]) -> bool:
     return False
 
 
+def skip_edit_params(sys_params: dict[str, Any]) -> bool:
+    """Determine whether editParams should be skipped based on controllerID."""
+    controller_id = sys_params.get("controllerID")
+
+    # Only ecoMAX360i supports editParams endpoint
+    supported_controllers = {"ecoMAX360i"}
+
+    if controller_id not in supported_controllers:
+        _LOGGER.info(
+            "Skipping editParams due to controllerID: %s (endpoint not supported)",
+            controller_id,
+        )
+        return True
+
+    # Log which controllers do support the endpoint
+    _LOGGER.debug("Controller %s supports editParams endpoint", controller_id)
+    return False
+
+
 class EconetDataCoordinator(DataUpdateCoordinator):
     """Econet data coordinator to handle data updates."""
 
@@ -75,6 +94,13 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
         return key in self.data["paramsEdits"]
 
+    def has_edit_params_data(self, key: str) -> bool:
+        """Check if editParams data key is present in editParams."""
+        if self.data is None:
+            return False
+
+        return key in self.data["editParams"]
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint."""
 
@@ -91,6 +117,13 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 else:
                     params_edits = await self._api.fetch_param_edit_data()
 
+                # Determine whether to fetch editParams from ../econet/editParams
+                edit_params: dict[str, Any]
+                if sys_params is None or skip_edit_params(sys_params):
+                    edit_params = {}
+                else:
+                    edit_params = await self._api.fetch_edit_params() or {}
+
                 # Fetch regular parameters from ../econet/regParams
                 reg_params = await self._api.fetch_reg_params()
 
@@ -98,6 +131,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "sysParams": sys_params,
                     "regParams": reg_params,
                     "paramsEdits": params_edits,
+                    "editParams": edit_params,
                 }
         except AuthError as err:
             _LOGGER.error("Authentication error: %s", err)

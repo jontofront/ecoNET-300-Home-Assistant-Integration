@@ -72,6 +72,10 @@ API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
+# EditParams endpoint (ecoMAX360 specific)
+API_EDIT_PARAMS_URI = "editParams"
+API_EDIT_PARAMS_DATA = "data"  # editParams has data key with detailed parameter info
+
 # =============================================================================
 # OPERATION MODES AND STATUS MAPPINGS
 # =============================================================================
@@ -128,6 +132,22 @@ ECOMAX360I_SENSORS = {
     "heatingUpperTemp",
     "Circuit1thermostat",
     "heating_work_state_pump4",
+    # ecoMAX360 specific temperature circuit and buffer parameters
+    "Circuit1ComfortTemp",  # Parameter 238 - Circuit 1 Day Temperature
+    "Circuit1EcoTemp",  # Parameter 239 - Circuit 1 Night Temperature
+    "BufferTargetTemp",  # Parameter 183 - Buffer Target Temperature
+    "Circuit2ComfortTemp",  # Parameter 288 - Circuit 2 Day Temperature
+    "Circuit2EcoTemp",  # Parameter 289 - Circuit 2 Night Temperature
+    "Circuit3ComfortTemp",  # Parameter 339 - Circuit 3 Day Temperature
+    "Circuit3EcoTemp",  # Parameter 340 - Circuit 3 Night Temperature
+    "Circuit4ComfortTemp",  # Parameter 390 - Circuit 4 Day Temperature
+    "Circuit4EcoTemp",  # Parameter 391 - Circuit 4 Night Temperature
+    "Circuit5ComfortTemp",  # Parameter 441 - Circuit 5 Day Temperature
+    "Circuit5EcoTemp",  # Parameter 442 - Circuit 5 Night Temperature
+    "Circuit6ComfortTemp",  # Parameter 492 - Circuit 6 Day Temperature
+    "Circuit6EcoTemp",  # Parameter 493 - Circuit 6 Night Temperature
+    "Circuit7ComfortTemp",  # Parameter 543 - Circuit 7 Day Temperature
+    "Circuit7EcoTemp",  # Parameter 544 - Circuit 7 Night Temperature
 }
 
 # ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
@@ -317,7 +337,8 @@ ECOSOL_CONTROLLER_IDS = {
 # =============================================================================
 # NUMBER ENTITY MAPPINGS
 # =============================================================================
-NUMBER_MAP = {
+# Default number entities for most controllers
+DEFAULT_NUMBER_MAP = {
     "1280": "tempCOSet",  # Boiler temperature setpoint
     "1281": "tempCWUSet",  # Hot water temperature setpoint
     "1287": "mixerSetTemp1",  # Mixer 1 temperature setpoint
@@ -328,6 +349,37 @@ NUMBER_MAP = {
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
     "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
 }
+
+# ecoMAX360i specific number entities
+ECOMAX360I_NUMBER_MAP = {
+    "1280": "tempCOSet",  # Boiler temperature setpoint
+    "1281": "tempCWUSet",  # Hot water temperature setpoint
+    "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
+    # ecoMAX360 circuit temperature setpoints
+    "238": "Circuit1ComfortTemp",  # Circuit 1 Day Temperature
+    "239": "Circuit1EcoTemp",  # Circuit 1 Night Temperature
+    "288": "Circuit2ComfortTemp",  # Circuit 2 Day Temperature
+    "289": "Circuit2EcoTemp",  # Circuit 2 Night Temperature
+    "338": "Circuit3ComfortTemp",  # Circuit 3 Day Temperature
+    "339": "Circuit3EcoTemp",  # Circuit 3 Night Temperature
+    "946": "Circuit4ComfortTemp",  # Circuit 4 Day Temperature
+    "947": "Circuit4EcoTemp",  # Circuit 4 Night Temperature
+    "997": "Circuit5ComfortTemp",  # Circuit 5 Day Temperature
+    "998": "Circuit5EcoTemp",  # Circuit 5 Night Temperature
+    "755": "Circuit6ComfortTemp",  # Circuit 6 Day Temperature
+    "756": "Circuit6EcoTemp",  # Circuit 6 Night Temperature
+    "805": "Circuit7ComfortTemp",  # Circuit 7 Day Temperature
+    "806": "Circuit7EcoTemp",  # Circuit 7 Night Temperature
+}
+
+# Main number mapping by controller type
+NUMBER_MAP_KEY = {
+    "ecoMAX360i": ECOMAX360I_NUMBER_MAP,
+    "_default": DEFAULT_NUMBER_MAP,
+}
+
+# Legacy NUMBER_MAP for backward compatibility
+NUMBER_MAP = DEFAULT_NUMBER_MAP
 
 # =============================================================================
 # HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
@@ -451,6 +503,22 @@ ENTITY_UNIT_MAP = {
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
+    # ecoMAX360-cf8 specific temperature circuit and buffer parameters
+    "Circuit1ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1EcoTemp": UnitOfTemperature.CELSIUS,
+    "BufferTargetTemp": UnitOfTemperature.CELSIUS,
+    "Circuit2ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit2EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit3ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit3EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7EcoTemp": UnitOfTemperature.CELSIUS,
     # ecoSOL specific units (ecoSOL 500, ecoSOL 301, etc.)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
@@ -573,6 +641,22 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
+    # ecoMAX360-cf8 specific temperature circuit and buffer parameters
+    "Circuit1ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "BufferTargetTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit2ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit2EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit3ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit3EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7EcoTemp": SensorDeviceClass.TEMPERATURE,
     # ecoSOL specific device classes (ecoSOL 500, ecoSOL 301, etc.)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
@@ -600,6 +684,21 @@ ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP = {
     "tempCWUSet": NumberDeviceClass.TEMPERATURE,
     # ecoMAX850R2-X specific number entities
     "mixerSetTemp5": NumberDeviceClass.TEMPERATURE,
+    # ecoMAX360 circuit temperature setpoints
+    "Circuit1ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit1EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit2ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit2EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit3ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit3EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit4ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit4EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit5ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit5EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit6ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit6EcoTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit7ComfortTemp": NumberDeviceClass.TEMPERATURE,
+    "Circuit7EcoTemp": NumberDeviceClass.TEMPERATURE,
 }
 
 # Binary sensor device classes
@@ -652,6 +751,22 @@ ENTITY_PRECISION = {
     # ecoMAX360i
     "PS": None,
     "TempBuforDown": 1,
+    # ecoMAX360-cf8 specific temperature circuit and buffer parameters
+    "Circuit1ComfortTemp": 1,
+    "Circuit1EcoTemp": 1,
+    "BufferTargetTemp": 1,
+    "Circuit2ComfortTemp": 1,
+    "Circuit2EcoTemp": 1,
+    "Circuit3ComfortTemp": 1,
+    "Circuit3EcoTemp": 1,
+    "Circuit4ComfortTemp": 1,
+    "Circuit4EcoTemp": 1,
+    "Circuit5ComfortTemp": 1,
+    "Circuit5EcoTemp": 1,
+    "Circuit6ComfortTemp": 1,
+    "Circuit6EcoTemp": 1,
+    "Circuit7ComfortTemp": 1,
+    "Circuit7EcoTemp": 1,
     # ecoSTER thermostat precision
     "ecoSterTemp1": 1,
     "ecoSterTemp2": 1,
@@ -732,16 +847,61 @@ ENTITY_CATEGORY = {
 ENTITY_MIN_VALUE = {
     "tempCOSet": 27,
     "tempCWUSet": 20,
+    # ecoMAX360 circuit temperature setpoints
+    "Circuit1ComfortTemp": 10,
+    "Circuit1EcoTemp": 10,
+    "Circuit2ComfortTemp": 10,
+    "Circuit2EcoTemp": 10,
+    "Circuit3ComfortTemp": 10,
+    "Circuit3EcoTemp": 10,
+    "Circuit4ComfortTemp": 10,
+    "Circuit4EcoTemp": 10,
+    "Circuit5ComfortTemp": 10,
+    "Circuit5EcoTemp": 10,
+    "Circuit6ComfortTemp": 10,
+    "Circuit6EcoTemp": 10,
+    "Circuit7ComfortTemp": 10,
+    "Circuit7EcoTemp": 10,
 }
 
 ENTITY_MAX_VALUE = {
     "tempCOSet": 68,
     "tempCWUSet": 55,
+    # ecoMAX360 circuit temperature setpoints
+    "Circuit1ComfortTemp": 35,
+    "Circuit1EcoTemp": 35,
+    "Circuit2ComfortTemp": 35,
+    "Circuit2EcoTemp": 35,
+    "Circuit3ComfortTemp": 35,
+    "Circuit3EcoTemp": 35,
+    "Circuit4ComfortTemp": 35,
+    "Circuit4EcoTemp": 35,
+    "Circuit5ComfortTemp": 35,
+    "Circuit5EcoTemp": 35,
+    "Circuit6ComfortTemp": 35,
+    "Circuit6EcoTemp": 35,
+    "Circuit7ComfortTemp": 35,
+    "Circuit7EcoTemp": 35,
 }
 
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
+    # ecoMAX360 circuit temperature setpoints
+    "Circuit1ComfortTemp": 0.1,
+    "Circuit1EcoTemp": 0.1,
+    "Circuit2ComfortTemp": 0.1,
+    "Circuit2EcoTemp": 0.1,
+    "Circuit3ComfortTemp": 0.1,
+    "Circuit3EcoTemp": 0.1,
+    "Circuit4ComfortTemp": 0.1,
+    "Circuit4EcoTemp": 0.1,
+    "Circuit5ComfortTemp": 0.1,
+    "Circuit5EcoTemp": 0.1,
+    "Circuit6ComfortTemp": 0.1,
+    "Circuit6EcoTemp": 0.1,
+    "Circuit7ComfortTemp": 0.1,
+    "Circuit7EcoTemp": 0.1,
 }
 
 # Sensor value mappings for both display and icon support

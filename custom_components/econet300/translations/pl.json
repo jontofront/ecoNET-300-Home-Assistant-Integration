@@ -525,6 +525,48 @@
       },
       "tem_co": {
         "name": "Temperatura kotła"
+      },
+      "circuit1_comfort_temp": {
+        "name": "Temperatura obwodu 1 - dzień"
+      },
+      "circuit1_eco_temp": {
+        "name": "Temperatura obwodu 1 - noc"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Temperatura obwodu 2 - dzień"
+      },
+      "circuit2_eco_temp": {
+        "name": "Temperatura obwodu 2 - noc"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Temperatura obwodu 3 - dzień"
+      },
+      "circuit3_eco_temp": {
+        "name": "Temperatura obwodu 3 - noc"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Temperatura obwodu 4 - dzień"
+      },
+      "circuit4_eco_temp": {
+        "name": "Temperatura obwodu 4 - noc"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Temperatura obwodu 5 - dzień"
+      },
+      "circuit5_eco_temp": {
+        "name": "Temperatura obwodu 5 - noc"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Temperatura obwodu 6 - dzień"
+      },
+      "circuit6_eco_temp": {
+        "name": "Temperatura obwodu 6 - noc"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Temperatura obwodu 7 - dzień"
+      },
+      "circuit7_eco_temp": {
+        "name": "Temperatura obwodu 7 - noc"
       }
     }
   }

@@ -18,7 +18,7 @@ from .const import (
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_STEP,
     ENTITY_UNIT_MAP,
-    NUMBER_MAP,
+    NUMBER_MAP_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
@@ -27,7 +27,7 @@ from .entity import EconetEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class EconetNumberEntityDescription(NumberEntityDescription):
     """Describes ecoNET number entity."""
 
@@ -67,14 +67,19 @@ class EconetNumber(EconetEntity, NumberEntity):
             self._attr_native_value = value
             _LOGGER.debug("DEBUG: Using direct value: %s", self._attr_native_value)
 
-        map_key = NUMBER_MAP.get(self.entity_description.key)
+        # Get controller ID to determine which number mappings to use
+        sys_params = self.coordinator.data.get("sysParams", {})
+        controller_id = sys_params.get("controllerID", "_default")
+        number_map = NUMBER_MAP_KEY.get(controller_id, NUMBER_MAP_KEY["_default"])
+        map_key = number_map.get(self.entity_description.key)
 
         if map_key:
             self._set_value_limits(value)
         else:
             _LOGGER.error(
-                "ecoNETNumber _sync_state: map_key %s not found in NUMBER_MAP",
+                "ecoNETNumber _sync_state: map_key %s not found in NUMBER_MAP for controller %s",
                 self.entity_description.key,
+                controller_id,
             )
         # Ensure the state is updated in Home Assistant.
         self.async_write_ha_state()
@@ -152,24 +157,39 @@ def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
         return False
 
 
-def apply_limits(desc: EconetNumberEntityDescription, limits: Limits) -> None:
+def apply_limits(
+    desc: EconetNumberEntityDescription, limits: Limits
+) -> EconetNumberEntityDescription:
     """Set the native minimum and maximum values for the given entity description."""
-    desc.native_min_value = limits.min
-    desc.native_max_value = limits.max
-    _LOGGER.debug("Apply limits: %s", desc)
+    # Create a new instance with updated limits since the dataclass is frozen
+    return EconetNumberEntityDescription(
+        key=desc.key,
+        translation_key=desc.translation_key,
+        device_class=desc.device_class,
+        native_unit_of_measurement=desc.native_unit_of_measurement,
+        native_min_value=limits.min,
+        native_max_value=limits.max,
+        native_step=desc.native_step,
+    )
 
 
-def create_number_entity_description(key: str) -> EconetNumberEntityDescription:
+def create_number_entity_description(
+    key: str, controller_id: str
+) -> EconetNumberEntityDescription:
     """Create ecoNET300 number entity description."""
-    map_key = NUMBER_MAP.get(str(key), str(key))
-    _LOGGER.debug("Creating number entity for key: %s", map_key)
+    # Get device-specific number mapping
+    number_map = NUMBER_MAP_KEY.get(controller_id, NUMBER_MAP_KEY["_default"])
+    map_key = number_map.get(str(key), str(key))
+    _LOGGER.debug(
+        "Creating number entity for key: %s (controller: %s)", map_key, controller_id
+    )
     return EconetNumberEntityDescription(
         key=key,
         translation_key=camel_to_snake(map_key),
         device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
-        min_value=ENTITY_MIN_VALUE.get(map_key),
-        max_value=ENTITY_MAX_VALUE.get(map_key),
+        native_min_value=ENTITY_MIN_VALUE.get(map_key) or 0,
+        native_max_value=ENTITY_MAX_VALUE.get(map_key) or 100,
         native_step=ENTITY_STEP.get(map_key, 1),
     )
 
@@ -179,17 +199,28 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the sensor platform."""
+    """Set up the number platform."""
 
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
     entities: list[EconetNumber] = []
 
-    for key in NUMBER_MAP:
-        sys_params = coordinator.data.get("sysParams", {})
+    # Get controller ID to determine which number mappings to use
+    sys_params = coordinator.data.get("sysParams", {})
+    controller_id = sys_params.get("controllerID", "_default")
+
+    # Get device-specific number mapping
+    number_map = NUMBER_MAP_KEY.get(controller_id, NUMBER_MAP_KEY["_default"])
+    _LOGGER.info("Using number mapping for controller: %s", controller_id)
+
+    for key in number_map:
+        # Skip if paramsEdits is not supported for this controller
         if skip_params_edits(sys_params):
-            _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
+            _LOGGER.info(
+                "Skipping number entity setup for controllerID: %s (paramsEdits not supported)",
+                controller_id,
+            )
             continue
 
         number_limits = await api.get_param_limits(key)
@@ -201,8 +232,8 @@ async def async_setup_entry(
             continue
 
         if can_add(key, coordinator):
-            entity_description = create_number_entity_description(key)
-            apply_limits(entity_description, number_limits)
+            entity_description = create_number_entity_description(key, controller_id)
+            entity_description = apply_limits(entity_description, number_limits)
             entities.append(EconetNumber(entity_description, coordinator, api))
         else:
             _LOGGER.info(

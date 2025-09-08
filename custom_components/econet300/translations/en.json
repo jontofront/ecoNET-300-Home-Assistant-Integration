@@ -519,6 +519,48 @@
       },
       "tem_co": {
         "name": "Boiler Temperature"
+      },
+      "circuit1_comfort_temp": {
+        "name": "Circuit 1 Day Temperature"
+      },
+      "circuit1_eco_temp": {
+        "name": "Circuit 1 Night Temperature"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Circuit 2 Day Temperature"
+      },
+      "circuit2_eco_temp": {
+        "name": "Circuit 2 Night Temperature"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Circuit 3 Day Temperature"
+      },
+      "circuit3_eco_temp": {
+        "name": "Circuit 3 Night Temperature"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Circuit 4 Day Temperature"
+      },
+      "circuit4_eco_temp": {
+        "name": "Circuit 4 Night Temperature"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Circuit 5 Day Temperature"
+      },
+      "circuit5_eco_temp": {
+        "name": "Circuit 5 Night Temperature"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Circuit 6 Day Temperature"
+      },
+      "circuit6_eco_temp": {
+        "name": "Circuit 6 Night Temperature"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Circuit 7 Day Temperature"
+      },
+      "circuit7_eco_temp": {
+        "name": "Circuit 7 Night Temperature"
       }
     }
   }
