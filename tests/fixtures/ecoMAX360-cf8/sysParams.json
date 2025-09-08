@@ -1,0 +1,454 @@
+{
+    "regProd": 114,
+    "regAllowed": null,
+    "ecosrvPort": "443",
+    "mainSrv": true,
+    "modulePanelSoftVer": "S023.20_1.10",
+    "ecosrvSoftVer": "3.2.3881",
+    "moduleASoftVer": "S023.14",
+    "eth0": "0.0.0.0",
+    "tilesET": [
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_fan"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": "HDWTSetPoint",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit1EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit2BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit2ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit2EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit2MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit3BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit3ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit3EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit3MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit4BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit4ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit4EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit4MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit5BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit5ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit5EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit5MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit6BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit6MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit6ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit6EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": "Circuit7BaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit7MixerCoolBaseTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit7ComfortTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": "Circuit7EcoTemp",
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_temp"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_text"
+      },
+      {
+        "edname": null,
+        "type": "tile_pump"
+      }
+    ],
+    "etPasswords": {
+      "1": "******",
+      "2": "******",
+      "3": "******",
+      "4": "******"
+    },
+    "encryption": "psk2",
+    "schemaID": 1,
+    "wlan0": "192.1.8.111",
+    "remoteMenu": false,
+    "regType": 0,
+    "schema": {
+  
+    },
+    "regRefresh": 5,
+    "tiles": null,
+    "protocolType": "gm3_pomp",
+    "controllerID": "ecoMAX360i",
+    "moduleEcoSTERSoftVer": null,
+    "schedules": {
+  
+    },
+    "econetConfVer": "1.00",
+    "password": "*****",
+    "prodLogo": 114,
+    "fuelConsumptionCalc": false,
+    "regImgID": 0,
+    "settingsVer": 30058,
+    "signal": "-32",
+    "logFl": 0,
+    "etConfDesc": {
+      "lang": "",
+      "client": "114",
+      "regname": "ecoMAX360i"
+    },
+    "history": [
+      "AxenOutdoorTemp",
+      "AxenUpperPump",
+      "TempWthr",
+      "TempCWU",
+      "AxenOutgoingTemp",
+      "AxenCompressorFreq",
+      "AxenReturnTemp",
+      "flapValveStates",
+      "Circuit3thermostatTemp",
+      "Circuit5thermostatTemp",
+      "TempBuforUp",
+      "TempBuforDown",
+      "Circuit4thermostatTemp",
+      "Circuit7thermostatTemp",
+      "AxenWorkState",
+      "Circuit6thermostatTemp",
+      "Circuit1thermostat",
+      "Circuit2thermostatTemp",
+      "TempClutch",
+      "TempCircuit5",
+      "TempCircuit4",
+      "TempCircuit7",
+      "TempCircuit6",
+      "TempCircuit3",
+      "TempCircuit2",
+      "HeatSourceCalcPresetTemp"
+    ],
+    "uid": "*****",
+    "routerType": "mr3020-v3",
+    "etNewConfTrans": true,
+    "ecosrvAddr": "econet24.com",
+    "softVer": "3.2.3881",
+    "quality": 100,
+    "moduleCSoftVer": null,
+    "lan": false,
+    "moduleLambdaSoftVer": null,
+    "panelsNames": [],
+    "modulesVers": [
+      [
+        "lbModuleAVerCurr",
+        "S023.14",
+        1],
+      [
+        "lbPanelVer_100Curr",
+        "S023.20",
+        100]
+    ],
+    "key": "****",
+    "servicePassword": "******",
+    "ssid": "******",
+    "wifi": true,
+    "panelVer": "S023.20_1.10",
+    "alarms": [
+      {
+        "toDate": "2025-07-09 13:35:32",
+        "code": 20,
+        "fromDate": "2025-07-07 10:46:47",
+        "service": false
+      },
+      {
+        "toDate": "2025-07-07 10:46:47",
+        "code": 20,
+        "fromDate": "2025-07-07 10:39:34",
+        "service": false
+      },
+      {
+        "toDate": "2025-07-07 10:46:47",
+        "code": 159,
+        "fromDate": "2025-07-07 10:39:34",
+        "service": false
+      },
+      {
+        "toDate": "2025-07-07 10:39:34",
+        "code": 159,
+        "fromDate": "2025-07-07 09:11:45",
+        "service": false
+      },
+      {
+        "toDate": "2025-07-07 09:09:25",
+        "code": 20,
+        "fromDate": "2025-07-07 09:06:21",
+        "service": false
+      },
+      {
+        "toDate": "2025-07-07 09:06:21",
+        "code": 159,
+        "fromDate": "2025-07-04 09:06:49",
+        "service": false
+      }
+    ],
+    "login": "****",
+    "moduleBSoftVer": null,
+    "etConfVer": "S023.20_1.10"
+  }
+  

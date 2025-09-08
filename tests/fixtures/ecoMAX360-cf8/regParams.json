@@ -1,0 +1,1408 @@
+{
+    "settingsVer": 30061,
+    "editableParamsVer": 11760,
+    "schedulesVer": 0,
+    "remoteMenuVer": {
+  
+    },
+    "curr": {
+      "AxenOutdoorTemp": 23.2,
+      "AxenUpperPump": 0,
+      "TempWthr": 24.6,
+      "TempCWU": 42.4,
+      "PS": "S023.20",
+      "AxenOutgoingTemp": 23.9,
+      "AxenCompressorFreq": 0,
+      "AxenReturnTemp": 25,
+      "flapValveStates": 0,
+      "TempCircuit6": 999,
+      "Circuit5thermostatTemp": 0,
+      "TempBuforUp": null,
+      "TempBuforDown": 24.9,
+      "Circuit4thermostatTemp": 0,
+      "Circuit7thermostatTemp": 0,
+      "AxenWorkState": 1,
+      "Circuit6thermostatTemp": 0,
+      "Circuit1thermostat": 22.85,
+      "Circuit2thermostatTemp": 0,
+      "TempClutch": 23.9,
+      "TempCircuit5": 999,
+      "TempCircuit4": 999,
+      "TempCircuit7": 999,
+      "Circuit3thermostatTemp": 0,
+      "TempCircuit3": 999,
+      "TempCircuit2": 999,
+      "HeatSourceCalcPresetTemp": 25
+    },
+    "currUnits": {
+      "AxenOutgoingTemp": 1,
+      "AxenCompressorFreq": 70,
+      "TempClutch": 1,
+      "AxenReturnTemp": 1,
+      "AxenOutdoorTemp": 1,
+      "TempCWU": 1,
+      "TempBuforUp": 1,
+      "TempBuforDown": 1
+    },
+    "currNumbers": {
+      "AxenOutdoorTemp": 1143,
+      "AxenUpperPump": 1140,
+      "TempWthr": 68,
+      "TempCWU": 61,
+      "PS": 10010,
+      "AxenOutgoingTemp": 1134,
+      "AxenCompressorFreq": 1136,
+      "AxenReturnTemp": 1135,
+      "flapValveStates": 83,
+      "TempCircuit6": 72,
+      "Circuit5thermostatTemp": 1036,
+      "TempBuforUp": 62,
+      "TempBuforDown": 63,
+      "Circuit4thermostatTemp": 985,
+      "Circuit7thermostatTemp": 829,
+      "AxenWorkState": 1133,
+      "Circuit6thermostatTemp": 779,
+      "Circuit1thermostat": 277,
+      "Circuit2thermostatTemp": 327,
+      "TempClutch": 64,
+      "TempCircuit5": 71,
+      "TempCircuit4": 70,
+      "TempCircuit7": 73,
+      "Circuit3thermostatTemp": 899,
+      "TempCircuit3": 67,
+      "TempCircuit2": 66,
+      "HeatSourceCalcPresetTemp": 479
+    },
+    "schemaParams": {
+      "mieszacz_bufor_pellet": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "kociol_elektryczny": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "podloga4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "miesz3_otw": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "podloga2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "podloga3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_cyrkulacja_ON_CWU": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_klimakonwektor4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_klimakonwektor5": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_CWU": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_klimakonwektor1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_klimakonwektor2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_klimakonwektor3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ciepla": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_kociol_gazowy_ON": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "mieszacz_bufor_gazowy": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "reakcja_termostat5": [
+        [
+          [
+            "Nie grzej",
+            0, 1]
+        ],
+        false, true],
+      "otwarcie_m2": [
+        [
+          [
+            "0.0",
+            2, 0]
+        ],
+        true, true],
+      "reakcja_termostat3": [
+        [
+          [
+            "Nie grzej",
+            0, 1]
+        ],
+        false, true],
+      "temp_sprzeglo": [
+        [
+          [
+            "23.9",
+            1, 0]
+        ],
+        true, true],
+      "otwarcie_m4": [
+        [
+          [
+            "0.0",
+            2, 0]
+        ],
+        true, true],
+      "reakcja_termostat1": [
+        [
+          [
+            "Nie grzej",
+            0, 1]
+        ],
+        true, true],
+      "termostat5": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "termostat4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "termostat3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "termostat2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "termostat1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "termostat3-en": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_grzejnik1": [
+        [
+          [
+            "23.9",
+            1, 0]
+        ],
+        true, false],
+      "temp_termostat5": [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, true],
+      "temp_termostat4": [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, true],
+      "temp_termostat3": [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, true],
+      "temp_termostat2": [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, true],
+      "temp_termostat1": [
+        [
+          [
+            "22.9",
+            1, 0]
+        ],
+        true, true],
+      "podloga1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_grzejnik1_1": [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        true, false],
+      "CWU": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "kociol_olejowy": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "grzanie_CWU": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "temp_podloga4": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_podloga2": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_podloga3": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_podloga1": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "pompa_GZ1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, false],
+      "termostat1-en": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "bufor_gora": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "otwarcie_m3": [
+        [
+          [
+            "0.0",
+            2, 0]
+        ],
+        true, true],
+      "reakcja_termostat4": [
+        [
+          [
+            "Nie grzej",
+            0, 1]
+        ],
+        false, true],
+      "otwarcie_m5": [
+        [
+          [
+            "0.0",
+            2, 0]
+        ],
+        true, true],
+      "reakcja_termostat2": [
+        [
+          [
+            "Nie grzej",
+            0, 1]
+        ],
+        false, true],
+      "pompa_kociol_pellet_ON": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "grzejnik1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "grzejnik3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "grzejnik2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "grzejnik5": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "grzejnik4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_klimakonwektor5": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_klimakonwektor4": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "kociol_pellet": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "miesz2_otw": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "klimakonwektor1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "klimakonwektor3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "klimakonwektor2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "klimakonwektor5": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "cyrkulacja_CWU": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_CWU": [
+        [
+          [
+            "42.4",
+            1, 0]
+        ],
+        true, true],
+      "grzanie_bufor": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "kociol_gazowy": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_podloga4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_podloga1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_podloga3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_podloga2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "mieszacz_bufor": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_pogoda": [
+        [
+          [
+            "24.6",
+            1, 0]
+        ],
+        true, true],
+      "miesz5_otw": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_kociol_ON": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_bufor_dol": [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, true],
+      "Bufor": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "temp_bufor_gora": [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        true, true],
+      "temp_grzejnik3": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_grzejnik2": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_grzejnik5": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "temp_grzejnik4": [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        true, false],
+      "pompa_ON_grzejnik4": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_grzejnik5": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_grzejnik1": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_grzejnik2": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "pompa_ON_grzejnik3": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "miesz4_otw": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true],
+      "wyprowadzenia_kociol": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        true, true],
+      "termostat2-en": [
+        [
+          [
+            "S023.14",
+            0, 0]
+        ],
+        false, true]
+    },
+    "tilesParams": [
+      [
+        [
+          [
+            "1",
+            0, 1]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [0, 29, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "2",
+            0, 1]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [0, 12, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            30, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "1",
+            0, 1]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [25, 1, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "23.9",
+            1, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "24.6",
+            1, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "42.4",
+            1, 0]
+        ],
+        true, true, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5010],
+      [
+        [
+          [
+            "1",
+            0, 1]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        false, false, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5018],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5019],
+      [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        false, false, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5020],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5021],
+      [
+        [
+          [23.9, 1, 0]
+        ],
+        true, false, [
+          [50, 1, 0]
+        ],
+        "|",
+        0, 5022],
+      [
+        [
+          [
+            "22.9",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.5",
+            1, 0]
+        ],
+        "|",
+        0, 5023],
+      [
+        [
+          [
+            "22.9",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "17.0",
+            1, 0]
+        ],
+        "|",
+        0, 5024],
+      [
+        [
+          [
+            "---",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [110, 1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "24.9",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [23.9, 1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "24.0",
+            1, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5031],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5032],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5033],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5034],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5038],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5039],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5040],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5041],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5045],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5046],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5047],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5048],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5052],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5053],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5054],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5055],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5059],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5060],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5061],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5062],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [40, 1, 0]
+        ],
+        "|",
+        0, 5066],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, [
+          [20, 1, 0]
+        ],
+        "|",
+        0, 5067],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "21.0",
+            1, 0]
+        ],
+        "|",
+        0, 5068],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, [
+          [
+            "19.0",
+            1, 0]
+        ],
+        "|",
+        0, 5069],
+      [
+        [
+          [
+            "0.0",
+            1, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "999.0",
+            1, 0]
+        ],
+        false, false, null, null, null, null],
+      [
+        [
+          [
+            "12119.5",
+            11, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            7, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            7, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "0.0",
+            7, 0]
+        ],
+        true, false, null, null, null, null],
+      [
+        [
+          [
+            "1.2",
+            6, 0]
+        ],
+        true, true, null, null, null, null],
+      [
+        [
+          [
+            "1",
+            0, 1]
+        ],
+        true, true, null, null, null, null]
+    ]
+  }
+  
