@@ -409,9 +409,9 @@ async def async_setup_entry(
 
     def gather_entities(
         coordinator: EconetDataCoordinator, api: Econet300Api
-    ) -> list[EconetSensor]:
+    ) -> list[SensorEntity]:
         """Collect all sensor entities."""
-        entities = []
+        entities: list[SensorEntity] = []
         _LOGGER.info("Starting entity collection for sensors...")
 
         # Gather sensors dynamically based on the controller
