@@ -1,0 +1,541 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "Хост",
+          "username": "Ім'я користувача",
+          "password": "Пароль"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Не вдалося підключитися",
+      "invalid_auth": "Недійсна автентифікація",
+      "unknown": "Неочікувана помилка"
+    },
+    "abort": {
+      "already_configured": "Пристрій вже налаштований"
+    }
+  },
+  "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Котел Вкл/Вимк"
+      }
+    },
+    "select": {
+      "heater_mode": {
+        "name": "Режим опалення"
+      },
+      "heater_mode_winter": {
+        "name": "Зима"
+      },
+      "heater_mode_summer": {
+        "name": "Літо"
+      },
+      "heater_mode_auto": {
+        "name": "Авто"
+      }
+    },
+    "binary_sensor": {
+      "lighter_works": {
+        "name": "Запалювач"
+      },
+      "weather_control": {
+        "name": "Погодне керування котлом"
+      },
+      "unseal": {
+        "name": "Розгерметизація"
+      },
+      "pump_co_works": {
+        "name": "Насос СО"
+      },
+      "fan_works": {
+        "name": "Вентилятор"
+      },
+      "feeder_works": {
+        "name": "Подавач"
+      },
+      "additional_feeder": {
+        "name": "Додатковий подавач"
+      },
+      "pump_cwu_works": {
+        "name": "Насос ГВП"
+      },
+      "mixer_pump1": {
+        "name": "Насос змішувача 1"
+      },
+      "mixer_pump_works1": {
+        "name": "Насос змішувача 1"
+      },
+      "mixer_pump_works2": {
+        "name": "Насос змішувача 2"
+      },
+      "mixer_pump_works3": {
+        "name": "Насос змішувача 3"
+      },
+      "mixer_pump_works4": {
+        "name": "Насос змішувача 4"
+      },
+      "mixer_pump_works5": {
+        "name": "Насос змішувача 5"
+      },
+      "mixer_pump_works6": {
+        "name": "Насос змішувача 6"
+      },
+      "boiler_pump": {
+        "name": "Насос котла"
+      },
+      "main_srv": {
+        "name": "Сервер Econet24.com"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
+      },
+      "lambda_status": {
+        "name": "Лямбда датчик"
+      },
+      "contact_gzc": {
+        "name": "GZC контакт"
+      },
+      "contact_gzc_active": {
+        "name": "GZC контакт активний"
+      },
+      "pump_circulation_works": {
+        "name": "Циркуляційний насос працює"
+      },
+      "pump_solar_works": {
+        "name": "Сонячний насос працює"
+      },
+      "pump_fireplace_works": {
+        "name": "Камінний насос працює"
+      },
+      "ecoster_contacts1": {
+        "name": "Контакти кімнатного термостата 1"
+      },
+      "ecoster_contacts2": {
+        "name": "Контакти кімнатного термостата 2"
+      },
+      "ecoster_contacts3": {
+        "name": "Контакти кімнатного термостата 3"
+      },
+      "ecoster_contacts4": {
+        "name": "Контакти кімнатного термостата 4"
+      },
+      "ecoster_contacts5": {
+        "name": "Контакти кімнатного термостата 5"
+      },
+      "ecoster_contacts6": {
+        "name": "Контакти кімнатного термостата 6"
+      },
+      "ecoster_contacts7": {
+        "name": "Контакти кімнатного термостата 7"
+      },
+      "ecoster_contacts8": {
+        "name": "Контакти кімнатного термостата 8"
+      },
+      "ecoster_day_sched1": {
+        "name": "Денний розклад термостата 1"
+      },
+      "ecoster_day_sched2": {
+        "name": "Денний розклад термостата 2"
+      },
+      "ecoster_day_sched3": {
+        "name": "Денний розклад термостата 3"
+      },
+      "ecoster_day_sched4": {
+        "name": "Денний розклад термостата 4"
+      },
+      "ecoster_day_sched5": {
+        "name": "Денний розклад термостата 5"
+      },
+      "ecoster_day_sched6": {
+        "name": "Денний розклад термостата 6"
+      },
+      "ecoster_day_sched7": {
+        "name": "Денний розклад термостата 7"
+      },
+      "ecoster_day_sched8": {
+        "name": "Денний розклад термостата 8"
+      },
+      "fuel_consumption_calc": {
+        "name": "Калькулятор споживання палива"
+      },
+      "ecosrv_https": {
+        "name": "Сервер ecoNET HTTPS"
+      }
+    },
+    "sensor": {
+      "boiler_power": {
+        "name": "Потужність котла"
+      },
+      "boiler_power_kw": {
+        "name": "Потужність котла (кВт)"
+      },
+      "fuel_level": {
+        "name": "Рівень палива"
+      },
+      "fan_power": {
+        "name": "Потужність вентилятора"
+      },
+      "lambda_status": {
+        "name": "Лямбда статус",
+        "state": {
+          "stop": "Стоп",
+          "start": "Старт",
+          "working": "Працює",
+          "error": "Помилка",
+          "maintenance": "Обслуговування"
+        }
+      },
+      "lambda_set": {
+        "name": "Лямбда налаштування"
+      },
+      "lambda_level": {
+        "name": "Лямбда рівень"
+      },
+      "status_co": {
+        "name": "Статус центрального опалення",
+        "state": {
+          "off": "Вимкнено",
+          "pause": "Пауза",
+          "reload": "Перезавантаження",
+          "fire": "Вогонь",
+          "alert": "Тривога",
+          "test_tube": "Тестова трубка",
+          "stop_circle": "Зупинка",
+          "gauge": "Манометр",
+          "help_circle": "Допомога",
+          "error": "Помилка",
+          "maintenance": "Обслуговування"
+        }
+      },
+      "work_at100": {
+        "name": "Робота на 100%"
+      },
+      "work_at50": {
+        "name": "Робота на 50%"
+      },
+      "work_at30": {
+        "name": "Робота на 30%"
+      },
+      "feeder_work": {
+        "name": "Робота подавача"
+      },
+      "firing_up_count": {
+        "name": "Кількість розпалювань"
+      },
+      "soft_ver": {
+        "name": "Версія модуля ecoNET"
+      },
+      "controller_id": {
+        "name": "Назва контролера"
+      },
+      "module_a_soft_ver": {
+        "name": "Версія модуля A"
+      },
+      "module_b_soft_ver": {
+        "name": "Версія модуля B"
+      },
+      "module_c_soft_ver": {
+        "name": "Версія модуля C"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Версія модуля Lambda"
+      },
+      "module_panel_soft_ver": {
+        "name": "Версія модуля Panel"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Версія модуля ecoSTER"
+      },
+      "mode": {
+        "name": "Режим котла",
+        "state": {
+          "off": "Вимкнено",
+          "fire_up": "Розпалювання",
+          "operation": "Робота",
+          "work": "Працює",
+          "supervision": "Нагляд",
+          "halted": "Зупинено",
+          "stop": "Стоп",
+          "burning_off": "Затухання",
+          "manual": "Ручний",
+          "alarm": "Тривога",
+          "unsealing": "Розгерметизація",
+          "chimney": "Димар",
+          "stabilization": "Стабілізація",
+          "no_transmission": "Без передачі",
+          "unknown": "Невідомо"
+        }
+      },
+      "mixer_temp1": {
+        "name": "Температура змішувача 1"
+      },
+      "mixer_temp2": {
+        "name": "Температура змішувача 2"
+      },
+      "mixer_temp3": {
+        "name": "Температура змішувача 3"
+      },
+      "mixer_temp4": {
+        "name": "Температура змішувача 4"
+      },
+      "mixer_temp5": {
+        "name": "Температура змішувача 5"
+      },
+      "mixer_temp6": {
+        "name": "Температура змішувача 6"
+      },
+      "mixer_set_temp1": {
+        "name": "Задана температура змішувача 1"
+      },
+      "mixer_set_temp2": {
+        "name": "Задана температура змішувача 2"
+      },
+      "mixer_set_temp3": {
+        "name": "Задана температура змішувача 3"
+      },
+      "mixer_set_temp4": {
+        "name": "Задана температура змішувача 4"
+      },
+      "mixer_set_temp5": {
+        "name": "Задана температура змішувача 5"
+      },
+      "mixer_set_temp6": {
+        "name": "Задана температура змішувача 6"
+      },
+      "quality": {
+        "name": "Якість сигналу"
+      },
+      "signal": {
+        "name": "Сила сигналу"
+      },
+      "servo_mixer1": {
+        "name": "Позиція серво змішувача 1"
+      },
+      "temp_co": {
+        "name": "Температура опалення"
+      },
+      "temp_cwu": {
+        "name": "Температура водонагрівача"
+      },
+      "status_cwu": {
+        "name": "Статус водонагрівача",
+        "state": {
+          "not_set": "Не встановлено",
+          "set": "Встановлено",
+          "no_temp_set": "Без заданої температури"
+        }
+      },
+      "temp_cwu_set": {
+        "name": "Задана температура водонагрівача"
+      },
+      "tz_cwu": {
+        "name": "Температура гарячої води"
+      },
+      "temp_upper_buffer": {
+        "name": "Верхня температура буфера"
+      },
+      "temp_lower_buffer": {
+        "name": "Нижня температура буфера"
+      },
+      "temp_flue_gas": {
+        "name": "Температура димових газів"
+      },
+      "temp_external_sensor": {
+        "name": "Зовнішня температура"
+      },
+      "temp_feeder": {
+        "name": "Температура подавача"
+      },
+      "temp_co_set": {
+        "name": "Задана температура опалення"
+      },
+      "thermostat": {
+        "name": "Термостат"
+      },
+      "unseal": {
+        "name": "Розгерметизація"
+      },
+      "valve_mixer1": {
+        "name": "Клапан змішувача 1 % відкритий"
+      },
+      "weather_control": {
+        "name": "Погодне керування котлом"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Температура термостата контуру 2"
+      },
+      "temp_clutch": {
+        "name": "Температура зчеплення"
+      },
+      "circuit3thermostat_temp": {
+        "name": "Температура термостата контуру 3"
+      },
+      "temp_wthr": {
+        "name": "Погодна температура"
+      },
+      "temp_circuit3": {
+        "name": "Температура контуру 3"
+      },
+      "temp_circuit2": {
+        "name": "Температура контуру 2"
+      },
+      "temp_bufor_up": {
+        "name": "Верхня температура буфера"
+      },
+      "temp_bufor_down": {
+        "name": "Нижня температура буфера"
+      },
+      "heating_upper_temp": {
+        "name": "Верхня температура опалення"
+      },
+      "circuit1thermostat": {
+        "name": "Фактична температура контуру 1"
+      },
+      "heating_work_state_pump4": {
+        "name": "Стан роботи насоса опалення 4"
+      },
+      "fuel_consum": {
+        "name": "Споживання палива"
+      },
+      "fuel_stream": {
+        "name": "Потік палива"
+      },
+      "temp_back": {
+        "name": "Температура повернення"
+      },
+      "transmission": {
+        "name": "Передача"
+      },
+      "ecoster_temp1": {
+        "name": "Кімнатна температура 1"
+      },
+      "ecoster_temp2": {
+        "name": "Кімнатна температура 2"
+      },
+      "ecoster_temp3": {
+        "name": "Кімнатна температура 3"
+      },
+      "ecoster_temp4": {
+        "name": "Кімнатна температура 4"
+      },
+      "ecoster_temp5": {
+        "name": "Кімнатна температура 5"
+      },
+      "ecoster_temp6": {
+        "name": "Кімнатна температура 6"
+      },
+      "ecoster_temp7": {
+        "name": "Кімнатна температура 7"
+      },
+      "ecoster_temp8": {
+        "name": "Кімнатна температура 8"
+      },
+      "ecoster_mode1": {
+        "name": "Режим кімнатного термостата 1"
+      },
+      "ecoster_mode2": {
+        "name": "Режим кімнатного термостата 2"
+      },
+      "ecoster_mode3": {
+        "name": "Режим кімнатного термостата 3"
+      },
+      "ecoster_mode4": {
+        "name": "Режим кімнатного термостата 4"
+      },
+      "ecoster_mode5": {
+        "name": "Режим кімнатного термостата 5"
+      },
+      "ecoster_mode6": {
+        "name": "Режим кімнатного термостата 6"
+      },
+      "ecoster_mode7": {
+        "name": "Режим кімнатного термостата 7"
+      },
+      "ecoster_mode8": {
+        "name": "Режим кімнатного термостата 8"
+      },
+      "ecoster_set_temp1": {
+        "name": "Налаштування кімнатного термостата 1"
+      },
+      "ecoster_set_temp2": {
+        "name": "Налаштування кімнатного термостата 2"
+      },
+      "ecoster_set_temp3": {
+        "name": "Налаштування кімнатного термостата 3"
+      },
+      "ecoster_set_temp4": {
+        "name": "Налаштування кімнатного термостата 4"
+      },
+      "ecoster_set_temp5": {
+        "name": "Налаштування кімнатного термостата 5"
+      },
+      "ecoster_set_temp6": {
+        "name": "Налаштування кімнатного термостата 6"
+      },
+      "ecoster_set_temp7": {
+        "name": "Налаштування кімнатного термостата 7"
+      },
+      "ecoster_set_temp8": {
+        "name": "Налаштування кімнатного термостата 8"
+      },
+      "t1": {
+        "name": "Температура колектора"
+      },
+      "t2": {
+        "name": "Температура бака"
+      },
+      "t3": {
+        "name": "Температура бака"
+      },
+      "t4": {
+        "name": "Температура повернення"
+      },
+      "t5": {
+        "name": "Температура колектора - вимірювання потужності"
+      },
+      "t6": {
+        "name": "Температурний датчик"
+      },
+      "tzcwu": {
+        "name": "Температура ГВП"
+      },
+      "p1": {
+        "name": "Статус насоса 1"
+      },
+      "p2": {
+        "name": "Статус насоса 2"
+      },
+      "h": {
+        "name": "Статус виходу"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Загальний тепловий прибуток"
+      },
+      "ecosrv_addr": {
+        "name": "Адреса сервера ecoNET"
+      },
+      "ecosrv_soft_ver": {
+        "name": "Версія програмного забезпечення сервера ecoNET"
+      },
+      "router_type": {
+        "name": "Тип маршрутизатора"
+      },
+      "protocol_type": {
+        "name": "Тип протоколу"
+      },
+      "tem_co": {
+        "name": "Температура котла"
+      }
+    }
+  }
+}

@@ -1,0 +1,541 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "Hôte",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Échec de la connexion",
+      "invalid_auth": "Authentification invalide",
+      "unknown": "Erreur inattendue"
+    },
+    "abort": {
+      "already_configured": "L'appareil est déjà configuré"
+    }
+  },
+  "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Chaudière Marche/Arrêt"
+      }
+    },
+    "select": {
+      "heater_mode": {
+        "name": "Mode de chauffage"
+      },
+      "heater_mode_winter": {
+        "name": "Hiver"
+      },
+      "heater_mode_summer": {
+        "name": "Été"
+      },
+      "heater_mode_auto": {
+        "name": "Auto"
+      }
+    },
+    "binary_sensor": {
+      "lighter_works": {
+        "name": "Allumeur"
+      },
+      "weather_control": {
+        "name": "Contrôle météo de la chaudière"
+      },
+      "unseal": {
+        "name": "Déscellement"
+      },
+      "pump_co_works": {
+        "name": "Pompe CC"
+      },
+      "fan_works": {
+        "name": "Ventilateur"
+      },
+      "feeder_works": {
+        "name": "Dispositif d'alimentation"
+      },
+      "additional_feeder": {
+        "name": "Dispositif d'alimentation supplémentaire"
+      },
+      "pump_cwu_works": {
+        "name": "Pompe ECS"
+      },
+      "mixer_pump1": {
+        "name": "Pompe mélangeur 1"
+      },
+      "mixer_pump_works1": {
+        "name": "Pompe mélangeur 1"
+      },
+      "mixer_pump_works2": {
+        "name": "Pompe mélangeur 2"
+      },
+      "mixer_pump_works3": {
+        "name": "Pompe mélangeur 3"
+      },
+      "mixer_pump_works4": {
+        "name": "Pompe mélangeur 4"
+      },
+      "mixer_pump_works5": {
+        "name": "Pompe mélangeur 5"
+      },
+      "mixer_pump_works6": {
+        "name": "Pompe mélangeur 6"
+      },
+      "boiler_pump": {
+        "name": "Pompe chaudière"
+      },
+      "main_srv": {
+        "name": "Serveur Econet24.com"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
+      },
+      "lambda_status": {
+        "name": "Sonde Lambda"
+      },
+      "contact_gzc": {
+        "name": "Contact GZC"
+      },
+      "contact_gzc_active": {
+        "name": "Contact GZC actif"
+      },
+      "pump_circulation_works": {
+        "name": "Pompe de circulation en fonctionnement"
+      },
+      "pump_solar_works": {
+        "name": "Pompe solaire en fonctionnement"
+      },
+      "pump_fireplace_works": {
+        "name": "Pompe cheminée en fonctionnement"
+      },
+      "ecoster_contacts1": {
+        "name": "Contacts thermostat d'ambiance 1"
+      },
+      "ecoster_contacts2": {
+        "name": "Contacts thermostat d'ambiance 2"
+      },
+      "ecoster_contacts3": {
+        "name": "Contacts thermostat d'ambiance 3"
+      },
+      "ecoster_contacts4": {
+        "name": "Contacts thermostat d'ambiance 4"
+      },
+      "ecoster_contacts5": {
+        "name": "Contacts thermostat d'ambiance 5"
+      },
+      "ecoster_contacts6": {
+        "name": "Contacts thermostat d'ambiance 6"
+      },
+      "ecoster_contacts7": {
+        "name": "Contacts thermostat d'ambiance 7"
+      },
+      "ecoster_contacts8": {
+        "name": "Contacts thermostat d'ambiance 8"
+      },
+      "ecoster_day_sched1": {
+        "name": "Programme journalier thermostat 1"
+      },
+      "ecoster_day_sched2": {
+        "name": "Programme journalier thermostat 2"
+      },
+      "ecoster_day_sched3": {
+        "name": "Programme journalier thermostat 3"
+      },
+      "ecoster_day_sched4": {
+        "name": "Programme journalier thermostat 4"
+      },
+      "ecoster_day_sched5": {
+        "name": "Programme journalier thermostat 5"
+      },
+      "ecoster_day_sched6": {
+        "name": "Programme journalier thermostat 6"
+      },
+      "ecoster_day_sched7": {
+        "name": "Programme journalier thermostat 7"
+      },
+      "ecoster_day_sched8": {
+        "name": "Programme journalier thermostat 8"
+      },
+      "fuel_consumption_calc": {
+        "name": "Calculateur de consommation de combustible"
+      },
+      "ecosrv_https": {
+        "name": "Serveur ecoNET HTTPS"
+      }
+    },
+    "sensor": {
+      "boiler_power": {
+        "name": "Puissance chaudière"
+      },
+      "boiler_power_kw": {
+        "name": "Puissance chaudière (kW)"
+      },
+      "fuel_level": {
+        "name": "Niveau de combustible"
+      },
+      "fan_power": {
+        "name": "Puissance du ventilateur"
+      },
+      "lambda_status": {
+        "name": "Status Lambda",
+        "state": {
+          "stop": "Arrêt",
+          "start": "Démarrage",
+          "working": "Fonctionnement",
+          "error": "Erreur",
+          "maintenance": "Maintenance"
+        }
+      },
+      "lambda_set": {
+        "name": "Réglage Lambda"
+      },
+      "lambda_level": {
+        "name": "Sonde Lambda O2"
+      },
+      "status_co": {
+        "name": "Status chauffage central",
+        "state": {
+          "off": "Arrêté",
+          "pause": "Pause",
+          "reload": "Rechargement",
+          "fire": "Feu",
+          "alert": "Alerte",
+          "test_tube": "Tube d'essai",
+          "stop_circle": "Arrêt",
+          "gauge": "Jauge",
+          "help_circle": "Aide",
+          "error": "Erreur",
+          "maintenance": "Maintenance"
+        }
+      },
+      "work_at100": {
+        "name": "Fonctionnement à 100%"
+      },
+      "work_at50": {
+        "name": "Fonctionnement à 50%"
+      },
+      "work_at30": {
+        "name": "Fonctionnement à 30%"
+      },
+      "feeder_work": {
+        "name": "Fonctionnement dispositif d'alimentation"
+      },
+      "firing_up_count": {
+        "name": "Nombre d'allumages"
+      },
+      "soft_ver": {
+        "name": "Version module ecoNET"
+      },
+      "controller_id": {
+        "name": "Nom du contrôleur"
+      },
+      "module_a_soft_ver": {
+        "name": "Version module A"
+      },
+      "module_b_soft_ver": {
+        "name": "Version module B"
+      },
+      "module_c_soft_ver": {
+        "name": "Version module C"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Version module Lambda"
+      },
+      "module_panel_soft_ver": {
+        "name": "Version module Panel"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Version module ecoSTER"
+      },
+      "mode": {
+        "name": "Mode chaudière",
+        "state": {
+          "off": "Arrêté",
+          "fire_up": "Allumage",
+          "operation": "Fonctionnement",
+          "work": "Marche normale",
+          "supervision": "Surveillance",
+          "halted": "Arrêt",
+          "stop": "Stop",
+          "burning_off": "Extinction",
+          "manual": "Manuel",
+          "alarm": "Alarme",
+          "unsealing": "Déscellement",
+          "chimney": "Cheminée",
+          "stabilization": "Stabilisation",
+          "no_transmission": "Pas de transmission",
+          "unknown": "Inconnu"
+        }
+      },
+      "mixer_temp1": {
+        "name": "Température départ circuit mélangé 1"
+      },
+      "mixer_temp2": {
+        "name": "Température départ circuit mélangé 2"
+      },
+      "mixer_temp3": {
+        "name": "Température départ circuit mélangé 3"
+      },
+      "mixer_temp4": {
+        "name": "Température départ circuit mélangé 4"
+      },
+      "mixer_temp5": {
+        "name": "Température départ circuit mélangé 5"
+      },
+      "mixer_temp6": {
+        "name": "Température départ circuit mélangé 6"
+      },
+      "mixer_set_temp1": {
+        "name": "Température de consigne mélangeur 1"
+      },
+      "mixer_set_temp2": {
+        "name": "Température de consigne mélangeur 2"
+      },
+      "mixer_set_temp3": {
+        "name": "Température de consigne mélangeur 3"
+      },
+      "mixer_set_temp4": {
+        "name": "Température de consigne mélangeur 4"
+      },
+      "mixer_set_temp5": {
+        "name": "Température de consigne mélangeur 5"
+      },
+      "mixer_set_temp6": {
+        "name": "Température de consigne mélangeur 6"
+      },
+      "quality": {
+        "name": "Puissance du signal"
+      },
+      "signal": {
+        "name": "Force du signal"
+      },
+      "servo_mixer1": {
+        "name": "Position servo mélangeur 1"
+      },
+      "temp_co": {
+        "name": "Température chaudière"
+      },
+      "temp_cwu": {
+        "name": "Température ECS"
+      },
+      "status_cwu": {
+        "name": "Status ECS",
+        "state": {
+          "not_set": "Non défini",
+          "set": "Défini",
+          "no_temp_set": "Pas de température"
+        }
+      },
+      "temp_cwu_set": {
+        "name": "Température de consigne ECS"
+      },
+      "tz_cwu": {
+        "name": "Température ECS"
+      },
+      "temp_upper_buffer": {
+        "name": "Température haute du ballon tampon"
+      },
+      "temp_lower_buffer": {
+        "name": "Température basse du ballon tampon"
+      },
+      "temp_flue_gas": {
+        "name": "Température des fumées"
+      },
+      "temp_external_sensor": {
+        "name": "Température extérieure"
+      },
+      "temp_feeder": {
+        "name": "Température du dispositif d'alimentation"
+      },
+      "temp_co_set": {
+        "name": "Température de consigne chaudière"
+      },
+      "thermostat": {
+        "name": "Thermostat"
+      },
+      "unseal": {
+        "name": "Déscellement"
+      },
+      "valve_mixer1": {
+        "name": "Vanne mélangeur 1 % ouverte"
+      },
+      "weather_control": {
+        "name": "Contrôle météo de la chaudière"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Température thermostat circuit 2"
+      },
+      "temp_clutch": {
+        "name": "Température embrayage"
+      },
+      "circuit3thermostat_temp": {
+        "name": "Température thermostat circuit 3"
+      },
+      "temp_wthr": {
+        "name": "Température météo"
+      },
+      "temp_circuit3": {
+        "name": "Température circuit 3"
+      },
+      "temp_circuit2": {
+        "name": "Température circuit 2"
+      },
+      "temp_bufor_up": {
+        "name": "Température ballon haute"
+      },
+      "temp_bufor_down": {
+        "name": "Température ballon basse"
+      },
+      "heating_upper_temp": {
+        "name": "Température chauffage haute"
+      },
+      "circuit1thermostat": {
+        "name": "Température réelle circuit 1"
+      },
+      "heating_work_state_pump4": {
+        "name": "État fonctionnement pompe chauffage 4"
+      },
+      "fuel_consum": {
+        "name": "Consommation combustible"
+      },
+      "fuel_stream": {
+        "name": "Débit de combustible"
+      },
+      "temp_back": {
+        "name": "Température de retour"
+      },
+      "transmission": {
+        "name": "Transmission"
+      },
+      "ecoster_temp1": {
+        "name": "Température ambiante 1"
+      },
+      "ecoster_temp2": {
+        "name": "Température ambiante 2"
+      },
+      "ecoster_temp3": {
+        "name": "Température ambiante 3"
+      },
+      "ecoster_temp4": {
+        "name": "Température ambiante 4"
+      },
+      "ecoster_temp5": {
+        "name": "Température ambiante 5"
+      },
+      "ecoster_temp6": {
+        "name": "Température ambiante 6"
+      },
+      "ecoster_temp7": {
+        "name": "Température ambiante 7"
+      },
+      "ecoster_temp8": {
+        "name": "Température ambiante 8"
+      },
+      "ecoster_mode1": {
+        "name": "Mode thermostat d'ambiance 1"
+      },
+      "ecoster_mode2": {
+        "name": "Mode thermostat d'ambiance 2"
+      },
+      "ecoster_mode3": {
+        "name": "Mode thermostat d'ambiance 3"
+      },
+      "ecoster_mode4": {
+        "name": "Mode thermostat d'ambiance 4"
+      },
+      "ecoster_mode5": {
+        "name": "Mode thermostat d'ambiance 5"
+      },
+      "ecoster_mode6": {
+        "name": "Mode thermostat d'ambiance 6"
+      },
+      "ecoster_mode7": {
+        "name": "Mode thermostat d'ambiance 7"
+      },
+      "ecoster_mode8": {
+        "name": "Mode thermostat d'ambiance 8"
+      },
+      "ecoster_set_temp1": {
+        "name": "Température de consigne thermostat 1"
+      },
+      "ecoster_set_temp2": {
+        "name": "Température de consigne thermostat 2"
+      },
+      "ecoster_set_temp3": {
+        "name": "Température de consigne thermostat 3"
+      },
+      "ecoster_set_temp4": {
+        "name": "Température de consigne thermostat 4"
+      },
+      "ecoster_set_temp5": {
+        "name": "Température de consigne thermostat 5"
+      },
+      "ecoster_set_temp6": {
+        "name": "Température de consigne thermostat 6"
+      },
+      "ecoster_set_temp7": {
+        "name": "Température de consigne thermostat 7"
+      },
+      "ecoster_set_temp8": {
+        "name": "Température de consigne thermostat 8"
+      },
+      "t1": {
+        "name": "Température T1 - panneaux"
+      },
+      "t2": {
+        "name": "Température T2 – ballon"
+      },
+      "t3": {
+        "name": "Température T3 - ballon"
+      },
+      "t4": {
+        "name": "Température T4 – retour"
+      },
+      "t5": {
+        "name": "Température T5 - mesure de puissance"
+      },
+      "t6": {
+        "name": "Capteur de température"
+      },
+      "tzcwu": {
+        "name": "Température ECS"
+      },
+      "p1": {
+        "name": "État de fonctionnement pompe P1"
+      },
+      "p2": {
+        "name": "État de fonctionnement pompe P2"
+      },
+      "h": {
+        "name": "État de fonctionnement sortie H"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Récupération totale de chaleur"
+      },
+      "ecosrv_addr": {
+        "name": "Adresse serveur ecoNET"
+      },
+      "ecosrv_soft_ver": {
+        "name": "Version logiciel serveur ecoNET"
+      },
+      "router_type": {
+        "name": "Type routeur"
+      },
+      "protocol_type": {
+        "name": "Type protocole"
+      },
+      "tem_co": {
+        "name": "Température chaudière"
+      }
+    }
+  }
+}
