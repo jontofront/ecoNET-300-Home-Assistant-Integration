@@ -20,7 +20,7 @@ This test script implements a step-by-step logic to validate all entity translat
 
 ### 🌐 STEP 3: Extract Translation Keys from Files
 
-- Loads `strings.json`, `en.json`, and `pl.json`
+- Loads `strings.json`, `en.json`, `pl.json`, `cz.json`, `fr.json`, and `uk.json`
 - Extracts existing translation keys for each entity type
 - Identifies sensor, binary_sensor, number, and switch translations
 
@@ -43,8 +43,8 @@ This test script implements a step-by-step logic to validate all entity translat
 
 ### 📋 STEP 7: Check Translation File Consistency
 
-- Ensures all keys in `strings.json` exist in `en.json` and `pl.json`
-- Identifies missing English or Polish translations
+- Ensures all keys in `strings.json` exist in all translation files
+- Identifies missing translations in any language
 
 ### 🔑 STEP 8: Check Entity Type Mismatches
 
@@ -72,8 +72,8 @@ This test script implements a step-by-step logic to validate all entity translat
 
 ### Consistency Checks
 
-- Cross-references all three translation files
-- Identifies missing English or Polish translations
+- Cross-references all six translation files
+- Identifies missing translations in any language
 - Ensures entity type categorization is correct
 
 ### Step-by-Step Logic
@@ -149,6 +149,9 @@ This test should be run:
 - `custom_components/econet300/strings.json` - Base English strings
 - `custom_components/econet300/translations/en.json` - English translations
 - `custom_components/econet300/translations/pl.json` - Polish translations
+- `custom_components/econet300/translations/cz.json` - Czech translations
+- `custom_components/econet300/translations/fr.json` - French translations
+- `custom_components/econet300/translations/uk.json` - Ukrainian translations
 - `custom_components/econet300/icons.json` - Entity icons
 - `docs/cloud_translations/MANUAL_TRANSLATION_REFERENCE.md` - Cloud reference
 
