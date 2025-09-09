@@ -59,10 +59,8 @@ class EconetNumber(EconetEntity, NumberEntity):
 
         # Handle both dict and direct value
         if isinstance(value, dict) and "value" in value:
-            native_value = value.get("value")
-            self._attr_native_value = (
-                float(native_value) if native_value is not None else None
-            )
+            val = value.get("value")
+            self._attr_native_value = float(val) if val is not None else None
             _LOGGER.debug(
                 "DEBUG: Extracted value from dict: %s", self._attr_native_value
             )
@@ -116,10 +114,16 @@ class EconetNumber(EconetEntity, NumberEntity):
             return
 
         # Directly set min and max values based on fetched limits.
-        if number_limits.min is not None:
-            self._attr_native_min_value = float(number_limits.min)
-        if number_limits.max is not None:
-            self._attr_native_max_value = float(number_limits.max)
+        self._attr_native_min_value = (
+            float(number_limits.min)
+            if number_limits.min is not None
+            else self._attr_native_min_value
+        )
+        self._attr_native_max_value = (
+            float(number_limits.max)
+            if number_limits.max is not None
+            else self._attr_native_max_value
+        )
         _LOGGER.debug("Apply number limits: %s", self)
         self.async_write_ha_state()
 

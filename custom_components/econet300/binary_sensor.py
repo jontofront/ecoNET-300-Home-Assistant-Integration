@@ -163,10 +163,9 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     controller_id = data_sysParams.get("controllerID", None)
 
     # Get controller-specific binary sensor keys or fall back to default
-    if controller_id and controller_id in BINARY_SENSOR_MAP_KEY:
-        binary_sensor_keys = BINARY_SENSOR_MAP_KEY[controller_id].copy()
-    else:
-        binary_sensor_keys = BINARY_SENSOR_MAP_KEY["_default"].copy()
+    binary_sensor_keys = BINARY_SENSOR_MAP_KEY.get(
+        controller_id or "_default", BINARY_SENSOR_MAP_KEY["_default"]
+    ).copy()
 
     # Always filter out ecoSTER binary sensors from controller binary sensors since they are created as separate devices
     ecoSTER_binary_sensors = BINARY_SENSOR_MAP_KEY.get("ecoSter", set())
