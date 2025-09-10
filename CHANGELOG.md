@@ -1,6 +1,6 @@
 # Changelog
 
-## [v1.1.14] - 2025-01-29
+## [v1.1.14] - 2025-10-09
 
 ### New Features
 
@@ -29,7 +29,7 @@
   - **After**: Function properly handles all sensor entity types through base class inheritance
   - **Benefits**: Better type safety, cleaner code, and proper MyPy compliance
 
-## [v1.1.13] - 2025-01-29
+## [v1.1.13] - 2025-09-03
 
 ### Added
 
@@ -54,7 +54,7 @@
 - **Security**: Implemented sensitive data redaction for device UIDs, passwords, API keys, and network information
 - **Documentation**: Updated README.md with diagnostics section and link to detailed documentation
 
-## [v1.1.12] - 2025-01-27
+## [v1.1.12] - 2025-09-03
 
 ### v1.1.12 New Features
 
@@ -83,7 +83,7 @@
 - **API Methods**: Enhanced `set_param()` method to handle different parameter types
 - **Entity Management**: Added proper entity lifecycle management for select entities
 
-## [v1.1.10] - 2025-01-27
+## [v1.1.10] - 2025-08-30
 
 ### v1.1.10 New Features
 
@@ -119,7 +119,7 @@
   - **Solution**: Implemented proper translation key mapping and icon validation
   - **Impact**: Consistent icon display across all entity types
 
-## [v1.1.9] - 2025-01-27
+## [v1.1.9] - 2025-08-27
 
 ### v1.1.9 Improvements
 
