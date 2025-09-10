@@ -10,6 +10,15 @@ Snake_case sensor keys: 0
 Snake_case binary sensor keys: 0
 Snake_case number keys: 0
 
+📋 CONSISTENCY ISSUES
+------------------------------
+Missing in English: 3
+Missing in Polish: 3
+Missing in Czech: 1
+Missing in French: 1
+Missing in Ukrainian: 1
+Missing in strings.json: 0
+
 ============================================================
-🎉 ALL TESTS PASSED! No issues found.
+⚠️  TOTAL ISSUES FOUND: 9
 ============================================================

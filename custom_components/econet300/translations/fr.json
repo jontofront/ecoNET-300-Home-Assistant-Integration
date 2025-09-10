@@ -536,6 +536,29 @@
       "tem_co": {
         "name": "Température chaudière"
       }
+    },
+    "number": {
+      "co_heat_curve": {
+        "name": "Courbe de chauffage de la chaudière"
+      },
+      "mix_heat_curve1": {
+        "name": "Courbe de chauffage du circuit 1"
+      },
+      "mix_heat_curve2": {
+        "name": "Courbe de chauffage du circuit 2"
+      },
+      "mix_heat_curve3": {
+        "name": "Courbe de chauffage du circuit 3"
+      },
+      "mix_heat_curve4": {
+        "name": "Courbe de chauffage du circuit 4"
+      },
+      "mix_heat_curve5": {
+        "name": "Courbe de chauffage du circuit 5"
+      },
+      "mix_heat_curve6": {
+        "name": "Courbe de chauffage du circuit 6"
+      }
     }
   }
 }

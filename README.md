@@ -30,19 +30,20 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status
 - **Comprehensive API Access**: Access to 48 different API endpoints
 - **Multiple Entity Types**: Sensors, Binary Sensors, Switches, and Number entities
+- **Heating Curve Control**: Intuitive slider interface for heating curve parameters
 - **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
 
 ### 🌐 Language Support
 
 The integration supports **6 languages** with comprehensive translations:
 
-| Language | Code | Status | Coverage |
-|----------|------|--------|----------|
-| 🇬🇧 English | `en` | ✅ Complete | Base language |
-| 🇵🇱 Polish | `pl` | ✅ Complete | Full translation |
-| 🇨🇿 Czech | `cs` | ✅ Complete | 348 parameters |
-| 🇫🇷 French | `fr` | ✅ Complete | 876 parameters |
-| 🇺🇦 Ukrainian | `uk` | ✅ Complete | 855 parameters |
+| Language     | Code | Status      | Coverage         |
+| ------------ | ---- | ----------- | ---------------- |
+| 🇬🇧 English   | `en` | ✅ Complete | Base language    |
+| 🇵🇱 Polish    | `pl` | ✅ Complete | Full translation |
+| 🇨🇿 Czech     | `cs` | ✅ Complete | 348 parameters   |
+| 🇫🇷 French    | `fr` | ✅ Complete | 876 parameters   |
+| 🇺🇦 Ukrainian | `uk` | ✅ Complete | 855 parameters   |
 
 ### 🏠 Supported Devices
 
@@ -64,8 +65,9 @@ The integration supports **6 languages** with comprehensive translations:
 1. [Installation](#installation)
 2. [Configuration](#configuration)
 3. [Entities](#entities)
-4. [Contributing](#contributing)
-5. [Acknowledgments](#acknowledgments)
+4. [Heating Curve Parameters](#heating-curve-parameters)
+5. [Contributing](#contributing)
+6. [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -347,6 +349,34 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 </details>
 
+### Heating Curve Parameters
+
+The integration provides intuitive slider controls for heating curve parameters, allowing fine-tuning of heating behavior.
+
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
+
+| Entity Key         | Description           | UI Type | Endpoint               |
+| ------------------ | --------------------- | ------- | ---------------------- |
+| **Boiler Heating** |
+| `co_heat_curve`    | Boiler heating curve  | Slider  | `../econet/rmNewParam` |
+| **Mixer Heating**  |
+| `mix_heat_curve1`  | Mixer 1 heating curve | Slider  | `../econet/rmNewParam` |
+| `mix_heat_curve2`  | Mixer 2 heating curve | Slider  | `../econet/rmNewParam` |
+| `mix_heat_curve3`  | Mixer 3 heating curve | Slider  | `../econet/rmNewParam` |
+| `mix_heat_curve4`  | Mixer 4 heating curve | Slider  | `../econet/rmNewParam` |
+| `mix_heat_curve5`  | Mixer 5 heating curve | Slider  | `../econet/rmNewParam` |
+| `mix_heat_curve6`  | Mixer 6 heating curve | Slider  | `../econet/rmNewParam` |
+
+</details>
+
+**Features:**
+
+- **Slider Interface**: Intuitive slider controls for precise heating curve adjustment
+- **Fine-tuning**: Easy adjustment of heating characteristics for optimal comfort
+- **Real-time Control**: Immediate response to heating curve changes
+- **Smart UI**: Sliders provide better user experience than text input boxes
+
 ---
 
 ## 🔧 Diagnostics
@@ -413,6 +443,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Diagnostics Support**: Comprehensive diagnostics for troubleshooting issues
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
+- **Heating Curve Control**: Intuitive slider interface for heating curve parameters
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL 500 Support**: Solar collector system integration
@@ -464,4 +495,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2025-07-18 after completing the comprehensive API discovery process._
+_This README was last updated on 2025-01-10 after adding heating curve UI enhancements._

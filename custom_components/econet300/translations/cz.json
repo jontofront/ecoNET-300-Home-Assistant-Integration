@@ -536,6 +536,29 @@
       "tem_co": {
         "name": "Teplota kotle"
       }
+    },
+    "number": {
+      "co_heat_curve": {
+        "name": "Topná křivka kotle"
+      },
+      "mix_heat_curve1": {
+        "name": "Topná křivka oběhu 1"
+      },
+      "mix_heat_curve2": {
+        "name": "Topná křivka oběhu 2"
+      },
+      "mix_heat_curve3": {
+        "name": "Topná křivka oběhu 3"
+      },
+      "mix_heat_curve4": {
+        "name": "Topná křivka oběhu 4"
+      },
+      "mix_heat_curve5": {
+        "name": "Topná křivka oběhu 5"
+      },
+      "mix_heat_curve6": {
+        "name": "Topná křivka oběhu 6"
+      }
     }
   }
 }

@@ -1,12 +1,34 @@
 # Changelog
 
+## [v1.1.15] - 2025-01-10
+
+### New Features
+
+- **Heating Curve UI Enhancement**: Added slider mode for heating curve parameters
+  - **New Mode Mapping**: Added `ENTITY_NUMBER_SENSOR_MODE_MAP` for better UI experience
+  - **Slider Interface**: Heating curve parameters now display as sliders instead of text boxes
+  - **Affected Parameters**:
+    - `co_heat_curve` (Boiler heating curve)
+    - `mix_heat_curve1` through `mix_heat_curve6` (Mixer heating curves)
+  - **User Experience**: Sliders provide more intuitive fine-tuning of heating curve values
+  - **Type Safety**: Proper `NumberMode` enum usage with type annotations
+  - **Files Modified**: `custom_components/econet300/const.py`, `custom_components/econet300/number.py`
+
+### Technical Improvements
+
+- **Type Safety**: Enhanced type annotations for number entity mode mapping
+  - **Import Updates**: Added `NumberMode` import from Home Assistant components
+  - **Type Annotations**: Added proper type hints for `ENTITY_NUMBER_SENSOR_MODE_MAP`
+  - **Code Quality**: Improved type safety and MyPy compliance
+  - **Implementation**: Generic `number.py` already supported mode mapping, only needed configuration
+
 ## [v1.1.14] - 2025-01-10
 
 ### New Features
 
 - **Multi-language Support**: Added comprehensive translation support for 6 languages
   - **Czech (cs)**: Complete translation coverage with 348 parameters
-  - **French (fr)**: Complete translation coverage with 876 parameters  
+  - **French (fr)**: Complete translation coverage with 876 parameters
   - **Ukrainian (uk)**: Complete translation coverage with 855 parameters
   - **Enhanced Testing**: Updated all translation test scripts to validate all 6 languages
   - **Cloud Integration**: Translations sourced from official ecoNET cloud reference

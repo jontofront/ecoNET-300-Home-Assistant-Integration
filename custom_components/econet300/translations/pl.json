@@ -526,6 +526,29 @@
       "tem_co": {
         "name": "Temperatura kotła"
       }
+    },
+    "number": {
+      "co_heat_curve": {
+        "name": "Krzywa grzewcza kotła"
+      },
+      "mix_heat_curve1": {
+        "name": "Krzywa grzewcza obiegu 1"
+      },
+      "mix_heat_curve2": {
+        "name": "Krzywa grzewcza obiegu 2"
+      },
+      "mix_heat_curve3": {
+        "name": "Krzywa grzewcza obiegu 3"
+      },
+      "mix_heat_curve4": {
+        "name": "Krzywa grzewcza obiegu 4"
+      },
+      "mix_heat_curve5": {
+        "name": "Krzywa grzewcza obiegu 5"
+      },
+      "mix_heat_curve6": {
+        "name": "Krzywa grzewcza obiegu 6"
+      }
     }
   }
 }

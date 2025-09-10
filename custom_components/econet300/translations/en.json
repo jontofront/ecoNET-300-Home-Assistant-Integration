@@ -527,6 +527,29 @@
       "tem_co": {
         "name": "Boiler Temperature"
       }
+    },
+    "number": {
+      "co_heat_curve": {
+        "name": "Boiler heating curve"
+      },
+      "mix_heat_curve1": {
+        "name": "Heating curve cycle 1"
+      },
+      "mix_heat_curve2": {
+        "name": "Heating curve cycle 2"
+      },
+      "mix_heat_curve3": {
+        "name": "Heating curve cycle 3"
+      },
+      "mix_heat_curve4": {
+        "name": "Heating curve cycle 4"
+      },
+      "mix_heat_curve5": {
+        "name": "Heating curve cycle 5"
+      },
+      "mix_heat_curve6": {
+        "name": "Heating curve cycle 6"
+      }
     }
   }
 }
