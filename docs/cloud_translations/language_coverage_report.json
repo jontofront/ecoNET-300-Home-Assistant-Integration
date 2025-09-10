@@ -1,0 +1,189 @@
+{
+  "hu": {
+    "files_found_in": [
+      "econet_transp4.js"
+    ],
+    "total_translations": 389,
+    "sample_translations": [
+      "savingSchedule",
+      "scheduleSaved",
+      "copy"
+    ]
+  },
+  "nl": {
+    "files_found_in": [
+      "econet_transp2.js"
+    ],
+    "total_translations": 179,
+    "sample_translations": [
+      "save",
+      "settings",
+      "password"
+    ]
+  },
+  "es": {
+    "files_found_in": [
+      "econet_transp3.js"
+    ],
+    "total_translations": 864,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "bg": {
+    "files_found_in": [
+      "econet_transp3.js"
+    ],
+    "total_translations": 772,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "fr": {
+    "files_found_in": [
+      "econet_transp1.js"
+    ],
+    "total_translations": 876,
+    "sample_translations": [
+      "cookTitle",
+      "tempCO",
+      "fuelLevel"
+    ]
+  },
+  "lv": {
+    "files_found_in": [
+      "econet_transp4.js"
+    ],
+    "total_translations": 1033,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "cz": {
+    "files_found_in": [
+      "econet_transp2.js"
+    ],
+    "total_translations": 348,
+    "sample_translations": [
+      "save",
+      "apply",
+      "refresh"
+    ]
+  },
+  "pl": {
+    "files_found_in": [
+      "econet_transp1.js"
+    ],
+    "total_translations": 399,
+    "sample_translations": [
+      "savingSchedule",
+      "scheduleSaved",
+      "copy"
+    ]
+  },
+  "tr": {
+    "files_found_in": [
+      "econet_transp3.js"
+    ],
+    "total_translations": 962,
+    "sample_translations": [
+      "cookTitle",
+      "tempCO",
+      "fuelLevel"
+    ]
+  },
+  "hr": {
+    "files_found_in": [
+      "econet_transp4.js"
+    ],
+    "total_translations": 401,
+    "sample_translations": [
+      "user_parameters",
+      "service_parameters",
+      "regulator_parameters"
+    ]
+  },
+  "uk": {
+    "files_found_in": [
+      "econet_transp4.js"
+    ],
+    "total_translations": 855,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "en": {
+    "files_found_in": [
+      "econet_transp1.js"
+    ],
+    "total_translations": 399,
+    "sample_translations": [
+      "savingSchedule",
+      "scheduleSaved",
+      "copy"
+    ]
+  },
+  "it": {
+    "files_found_in": [
+      "econet_transp2.js"
+    ],
+    "total_translations": 770,
+    "sample_translations": [
+      "cookTitle",
+      "tempCO",
+      "fuelLevel"
+    ]
+  },
+  "ru": {
+    "files_found_in": [
+      "econet_transp3.js"
+    ],
+    "total_translations": 738,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "ro": {
+    "files_found_in": [
+      "econet_transp2.js"
+    ],
+    "total_translations": 768,
+    "sample_translations": [
+      "cookTitle",
+      "tempCO",
+      "fuelLevel"
+    ]
+  },
+  "de": {
+    "files_found_in": [
+      "econet_transp1.js"
+    ],
+    "total_translations": 993,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  },
+  "da": {
+    "files_found_in": [
+      "econet_transp2.js"
+    ],
+    "total_translations": 703,
+    "sample_translations": [
+      "tempCO",
+      "fuelLevel",
+      "tempCWU"
+    ]
+  }
+}

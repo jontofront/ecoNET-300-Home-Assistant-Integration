@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.1.14] - 2025-01-29
+
+### New Features
+
+- **Multi-language Support**: Added comprehensive translation support for 6 languages
+  - **Czech (cs)**: Complete translation coverage with 348 parameters
+  - **French (fr)**: Complete translation coverage with 876 parameters  
+  - **Ukrainian (uk)**: Complete translation coverage with 855 parameters
+  - **Enhanced Testing**: Updated all translation test scripts to validate all 6 languages
+  - **Cloud Integration**: Translations sourced from official ecoNET cloud reference
+  - **Files Added**: `custom_components/econet300/translations/cz.json`, `fr.json`, `uk.json`
+  - **Files Updated**: `scripts/check_translations.py`, `tests/test_translations_comprehensive.py`
+
+### Bug Fixes
+
+- **Type Compatibility Error**: Fixed MyPy type checking error in sensor platform
+  - **Problem**: `gather_entities` function had incompatible type annotations causing MyPy errors
+  - **Solution**: Updated return type from `list[EconetSensor]` to `list[SensorEntity]` to accommodate all sensor types
+  - **Impact**: Resolves type compatibility issues with MixerSensor, LambdaSensors, and EcoSterSensor entities
+  - **Files Modified**: `custom_components/econet300/sensor.py`
+  - **Technical Details**: Changed function signature to use base `SensorEntity` type instead of specific `EconetSensor` type
+
+### Technical Improvements
+
+- **Type Safety**: Improved type annotations for better code maintainability
+  - **Before**: Function expected only `EconetSensor` entities but was receiving mixed sensor types
+  - **After**: Function properly handles all sensor entity types through base class inheritance
+  - **Benefits**: Better type safety, cleaner code, and proper MyPy compliance
+
 ## [v1.1.13] - 2025-01-29
 
 ### Added

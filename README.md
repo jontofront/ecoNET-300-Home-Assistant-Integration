@@ -32,6 +32,18 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Multiple Entity Types**: Sensors, Binary Sensors, Switches, and Number entities
 - **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
 
+### 🌐 Language Support
+
+The integration supports **6 languages** with comprehensive translations:
+
+| Language | Code | Status | Coverage |
+|----------|------|--------|----------|
+| 🇬🇧 English | `en` | ✅ Complete | Base language |
+| 🇵🇱 Polish | `pl` | ✅ Complete | Full translation |
+| 🇨🇿 Czech | `cs` | ✅ Complete | 348 parameters |
+| 🇫🇷 French | `fr` | ✅ Complete | 876 parameters |
+| 🇺🇦 Ukrainian | `uk` | ✅ Complete | 855 parameters |
+
 ### 🏠 Supported Devices
 
 - **ecoMAX810P-L TOUCH** controller from [Plum Sp. z o.o.](https://www.plum.pl/)
@@ -404,7 +416,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL 500 Support**: Solar collector system integration
-- **Multi-language**: English and Polish translations
+- **Multi-language**: 6 language support (English, Polish, Czech, French, Ukrainian)
 
 ---
 

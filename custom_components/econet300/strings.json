@@ -96,9 +96,6 @@
       "lan": {
         "name": "LAN"
       },
-      "lambda_status": {
-        "name": "Lambda sensor"
-      },
       "contact_gzc": {
         "name": "GZC contact"
       },

@@ -80,6 +80,15 @@ EN_TRANSLATIONS = (
 PL_TRANSLATIONS = (
     BASE_DIR / "custom_components" / "econet300" / "translations" / "pl.json"
 )
+CZ_TRANSLATIONS = (
+    BASE_DIR / "custom_components" / "econet300" / "translations" / "cz.json"
+)
+FR_TRANSLATIONS = (
+    BASE_DIR / "custom_components" / "econet300" / "translations" / "fr.json"
+)
+UK_TRANSLATIONS = (
+    BASE_DIR / "custom_components" / "econet300" / "translations" / "uk.json"
+)
 ICONS_FILE = BASE_DIR / "custom_components" / "econet300" / "icons.json"
 CLOUD_TRANSLATIONS_REF = (
     BASE_DIR / "docs" / "cloud_translations" / "MANUAL_TRANSLATION_REFERENCE.md"
@@ -404,20 +413,26 @@ def step_6_check_icons_exist(entity_keys: set[str], icon_keys: set[str]) -> list
 
 
 def step_7_check_translation_files_consistency() -> dict[str, list[str]]:
-    """STEP 7: Check consistency between strings.json, en.json, and pl.json."""
+    """STEP 7: Check consistency between strings.json, en.json, pl.json, cz.json, fr.json, and uk.json."""
     _LOGGER.info("📋 STEP 7: Checking translation file consistency...")
 
     strings_data = load_json_file(STRINGS_FILE)
     en_data = load_json_file(EN_TRANSLATIONS)
     pl_data = load_json_file(PL_TRANSLATIONS)
+    cz_data = load_json_file(CZ_TRANSLATIONS)
+    fr_data = load_json_file(FR_TRANSLATIONS)
+    uk_data = load_json_file(UK_TRANSLATIONS)
 
     issues: dict[str, list[str]] = {
         "missing_in_en": [],
         "missing_in_pl": [],
+        "missing_in_cz": [],
+        "missing_in_fr": [],
+        "missing_in_uk": [],
         "missing_in_strings": [],
     }
 
-    # Check if all keys in strings.json exist in en.json and pl.json
+    # Check if all keys in strings.json exist in all translation files
     if "entity" in strings_data:
         for entity_type in ["sensor", "binary_sensor", "number", "switch"]:
             if entity_type in strings_data["entity"]:
@@ -436,8 +451,32 @@ def step_7_check_translation_files_consistency() -> dict[str, list[str]]:
                     ):
                         issues["missing_in_pl"].append(f"{entity_type}.{key}")
 
+                    # Check Czech translations
+                    if (
+                        entity_type not in cz_data.get("entity", {})
+                        or key not in cz_data["entity"][entity_type]
+                    ):
+                        issues["missing_in_cz"].append(f"{entity_type}.{key}")
+
+                    # Check French translations
+                    if (
+                        entity_type not in fr_data.get("entity", {})
+                        or key not in fr_data["entity"][entity_type]
+                    ):
+                        issues["missing_in_fr"].append(f"{entity_type}.{key}")
+
+                    # Check Ukrainian translations
+                    if (
+                        entity_type not in uk_data.get("entity", {})
+                        or key not in uk_data["entity"][entity_type]
+                    ):
+                        issues["missing_in_uk"].append(f"{entity_type}.{key}")
+
     _LOGGER.info("   ❌ Missing in English: %d", len(issues["missing_in_en"]))
     _LOGGER.info("   ❌ Missing in Polish: %d", len(issues["missing_in_pl"]))
+    _LOGGER.info("   ❌ Missing in Czech: %d", len(issues["missing_in_cz"]))
+    _LOGGER.info("   ❌ Missing in French: %d", len(issues["missing_in_fr"]))
+    _LOGGER.info("   ❌ Missing in Ukrainian: %d", len(issues["missing_in_uk"]))
     _LOGGER.info("   ❌ Missing in strings.json: %d", len(issues["missing_in_strings"]))
 
     return issues
@@ -569,6 +608,9 @@ def step_9_generate_comprehensive_report(
     total_consistency_issues = (
         len(consistency_issues["missing_in_en"])
         + len(consistency_issues["missing_in_pl"])
+        + len(consistency_issues["missing_in_cz"])
+        + len(consistency_issues["missing_in_fr"])
+        + len(consistency_issues["missing_in_uk"])
         + len(consistency_issues["missing_in_strings"])
     )
 
@@ -580,6 +622,15 @@ def step_9_generate_comprehensive_report(
         )
         report_lines.append(
             f"Missing in Polish: {len(consistency_issues['missing_in_pl'])}"
+        )
+        report_lines.append(
+            f"Missing in Czech: {len(consistency_issues['missing_in_cz'])}"
+        )
+        report_lines.append(
+            f"Missing in French: {len(consistency_issues['missing_in_fr'])}"
+        )
+        report_lines.append(
+            f"Missing in Ukrainian: {len(consistency_issues['missing_in_uk'])}"
         )
         report_lines.append(
             f"Missing in strings.json: {len(consistency_issues['missing_in_strings'])}"

@@ -13,6 +13,9 @@ import sys
 STRINGS_FILE = "custom_components/econet300/strings.json"
 EN_TRANSLATIONS = "custom_components/econet300/translations/en.json"
 PL_TRANSLATIONS = "custom_components/econet300/translations/pl.json"
+CZ_TRANSLATIONS = "custom_components/econet300/translations/cz.json"
+FR_TRANSLATIONS = "custom_components/econet300/translations/fr.json"
+UK_TRANSLATIONS = "custom_components/econet300/translations/uk.json"
 
 
 def load_json_file(file_path):
@@ -44,8 +47,11 @@ def check_translations():
     strings_data = load_json_file(STRINGS_FILE)
     en_data = load_json_file(EN_TRANSLATIONS)
     pl_data = load_json_file(PL_TRANSLATIONS)
+    cz_data = load_json_file(CZ_TRANSLATIONS)
+    fr_data = load_json_file(FR_TRANSLATIONS)
+    uk_data = load_json_file(UK_TRANSLATIONS)
 
-    if not all([strings_data, en_data, pl_data]):
+    if not all([strings_data, en_data, pl_data, cz_data, fr_data, uk_data]):
         print("❌ Failed to load one or more translation files")
         return False
 
@@ -59,11 +65,19 @@ def check_translations():
         strings_keys = get_entity_keys(strings_data, entity_type)
         en_keys = get_entity_keys(en_data, entity_type)
         pl_keys = get_entity_keys(pl_data, entity_type)
+        cz_keys = get_entity_keys(cz_data, entity_type)
+        fr_keys = get_entity_keys(fr_data, entity_type)
+        uk_keys = get_entity_keys(uk_data, entity_type)
 
         # Find missing keys
         missing_in_en = strings_keys - en_keys
         missing_in_pl = strings_keys - pl_keys
-        missing_in_strings = (en_keys | pl_keys) - strings_keys
+        missing_in_cz = strings_keys - cz_keys
+        missing_in_fr = strings_keys - fr_keys
+        missing_in_uk = strings_keys - uk_keys
+        missing_in_strings = (
+            en_keys | pl_keys | cz_keys | fr_keys | uk_keys
+        ) - strings_keys
 
         if missing_in_en:
             print(f"❌ Missing in en.json: {missing_in_en}")
@@ -73,11 +87,32 @@ def check_translations():
             print(f"❌ Missing in pl.json: {missing_in_pl}")
             all_good = False
 
+        if missing_in_cz:
+            print(f"❌ Missing in cz.json: {missing_in_cz}")
+            all_good = False
+
+        if missing_in_fr:
+            print(f"❌ Missing in fr.json: {missing_in_fr}")
+            all_good = False
+
+        if missing_in_uk:
+            print(f"❌ Missing in uk.json: {missing_in_uk}")
+            all_good = False
+
         if missing_in_strings:
             print(f"❌ Missing in strings.json: {missing_in_strings}")
             all_good = False
 
-        if not any([missing_in_en, missing_in_pl, missing_in_strings]):
+        if not any(
+            [
+                missing_in_en,
+                missing_in_pl,
+                missing_in_cz,
+                missing_in_fr,
+                missing_in_uk,
+                missing_in_strings,
+            ]
+        ):
             print(f"✅ {entity_type}: All translation files in sync")
 
     if all_good:

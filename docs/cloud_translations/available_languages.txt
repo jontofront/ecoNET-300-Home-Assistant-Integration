@@ -3,11 +3,16 @@ Available Languages in ecoNET Files:
 
 - bg
 - cz
+- da
+- de
 - en
+- es
+- fr
 - hr
 - hu
 - it
 - lv
+- nl
 - pl
 - ro
 - ru

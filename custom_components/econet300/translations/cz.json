@@ -1,0 +1,541 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "Host",
+          "username": "Uživatelské jméno",
+          "password": "Heslo"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nepodařilo se připojit",
+      "invalid_auth": "Neplatné ověření",
+      "unknown": "Neočekávaná chyba"
+    },
+    "abort": {
+      "already_configured": "Zařízení je již nakonfigurováno"
+    }
+  },
+  "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Kotel Zap/Vyp"
+      }
+    },
+    "select": {
+      "heater_mode": {
+        "name": "Režim topení"
+      },
+      "heater_mode_winter": {
+        "name": "Zima"
+      },
+      "heater_mode_summer": {
+        "name": "Léto"
+      },
+      "heater_mode_auto": {
+        "name": "Auto"
+      }
+    },
+    "binary_sensor": {
+      "lighter_works": {
+        "name": "Zapalovač"
+      },
+      "weather_control": {
+        "name": "Povětrnostní řízení kotle"
+      },
+      "unseal": {
+        "name": "Odepěťování"
+      },
+      "pump_co_works": {
+        "name": "Čerpadlo CO"
+      },
+      "fan_works": {
+        "name": "Ventilátor"
+      },
+      "feeder_works": {
+        "name": "Podavač"
+      },
+      "additional_feeder": {
+        "name": "Dodatečný podavač"
+      },
+      "pump_cwu_works": {
+        "name": "Čerpadlo TUV"
+      },
+      "mixer_pump1": {
+        "name": "Čerpadlo míchadla 1"
+      },
+      "mixer_pump_works1": {
+        "name": "Čerpadlo míchadla 1"
+      },
+      "mixer_pump_works2": {
+        "name": "Čerpadlo míchadla 2"
+      },
+      "mixer_pump_works3": {
+        "name": "Čerpadlo míchadla 3"
+      },
+      "mixer_pump_works4": {
+        "name": "Čerpadlo míchadla 4"
+      },
+      "mixer_pump_works5": {
+        "name": "Čerpadlo míchadla 5"
+      },
+      "mixer_pump_works6": {
+        "name": "Čerpadlo míchadla 6"
+      },
+      "boiler_pump": {
+        "name": "Čerpadlo kotle"
+      },
+      "main_srv": {
+        "name": "Server Econet24.com"
+      },
+      "wifi": {
+        "name": "Wi-Fi"
+      },
+      "lan": {
+        "name": "LAN"
+      },
+      "lambda_status": {
+        "name": "Lambda senzor"
+      },
+      "contact_gzc": {
+        "name": "GZC kontakt"
+      },
+      "contact_gzc_active": {
+        "name": "GZC kontakt aktivní"
+      },
+      "pump_circulation_works": {
+        "name": "Cirkulační čerpadlo pracuje"
+      },
+      "pump_solar_works": {
+        "name": "Solární čerpadlo pracuje"
+      },
+      "pump_fireplace_works": {
+        "name": "Krbové čerpadlo pracuje"
+      },
+      "ecoster_contacts1": {
+        "name": "Kontakty pokojového termostatu 1"
+      },
+      "ecoster_contacts2": {
+        "name": "Kontakty pokojového termostatu 2"
+      },
+      "ecoster_contacts3": {
+        "name": "Kontakty pokojového termostatu 3"
+      },
+      "ecoster_contacts4": {
+        "name": "Kontakty pokojového termostatu 4"
+      },
+      "ecoster_contacts5": {
+        "name": "Kontakty pokojového termostatu 5"
+      },
+      "ecoster_contacts6": {
+        "name": "Kontakty pokojového termostatu 6"
+      },
+      "ecoster_contacts7": {
+        "name": "Kontakty pokojového termostatu 7"
+      },
+      "ecoster_contacts8": {
+        "name": "Kontakty pokojového termostatu 8"
+      },
+      "ecoster_day_sched1": {
+        "name": "Denní rozvrh termostatu 1"
+      },
+      "ecoster_day_sched2": {
+        "name": "Denní rozvrh termostatu 2"
+      },
+      "ecoster_day_sched3": {
+        "name": "Denní rozvrh termostatu 3"
+      },
+      "ecoster_day_sched4": {
+        "name": "Denní rozvrh termostatu 4"
+      },
+      "ecoster_day_sched5": {
+        "name": "Denní rozvrh termostatu 5"
+      },
+      "ecoster_day_sched6": {
+        "name": "Denní rozvrh termostatu 6"
+      },
+      "ecoster_day_sched7": {
+        "name": "Denní rozvrh termostatu 7"
+      },
+      "ecoster_day_sched8": {
+        "name": "Denní rozvrh termostatu 8"
+      },
+      "fuel_consumption_calc": {
+        "name": "Kalkulačka spotřeby paliva"
+      },
+      "ecosrv_https": {
+        "name": "Server ecoNET HTTPS"
+      }
+    },
+    "sensor": {
+      "boiler_power": {
+        "name": "Výkon kotle"
+      },
+      "boiler_power_kw": {
+        "name": "Výkon kotle (kW)"
+      },
+      "fuel_level": {
+        "name": "Hladina paliva"
+      },
+      "fan_power": {
+        "name": "Výkon ventilátoru"
+      },
+      "lambda_status": {
+        "name": "Lambda status",
+        "state": {
+          "stop": "Stop",
+          "start": "Start",
+          "working": "Pracuje",
+          "error": "Chyba",
+          "maintenance": "Údržba"
+        }
+      },
+      "lambda_set": {
+        "name": "Lambda nastavení"
+      },
+      "lambda_level": {
+        "name": "Lambda úroveň"
+      },
+      "status_co": {
+        "name": "Status ústředního topení",
+        "state": {
+          "off": "Vypnuto",
+          "pause": "Pauza",
+          "reload": "Přenačtení",
+          "fire": "Oheň",
+          "alert": "Upozornění",
+          "test_tube": "Testovací trubice",
+          "stop_circle": "Zastavení",
+          "gauge": "Měřič",
+          "help_circle": "Nápověda",
+          "error": "Chyba",
+          "maintenance": "Údržba"
+        }
+      },
+      "work_at100": {
+        "name": "Práce na 100%"
+      },
+      "work_at50": {
+        "name": "Práce na 50%"
+      },
+      "work_at30": {
+        "name": "Práce na 30%"
+      },
+      "feeder_work": {
+        "name": "Práce podavače"
+      },
+      "firing_up_count": {
+        "name": "Počet rozpalování"
+      },
+      "soft_ver": {
+        "name": "Verze modulu ecoNET"
+      },
+      "controller_id": {
+        "name": "Název regulátoru"
+      },
+      "module_a_soft_ver": {
+        "name": "Verze modulu A"
+      },
+      "module_b_soft_ver": {
+        "name": "Verze modulu B"
+      },
+      "module_c_soft_ver": {
+        "name": "Verze modulu C"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Verze modulu Lambda"
+      },
+      "module_panel_soft_ver": {
+        "name": "Verze modulu Panel"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Verze modulu ecoSTER"
+      },
+      "mode": {
+        "name": "Režim kotle",
+        "state": {
+          "off": "Vypnuto",
+          "fire_up": "Rozpalování",
+          "operation": "Provoz",
+          "work": "Práce",
+          "supervision": "Dohled",
+          "halted": "Zastaveno",
+          "stop": "Stop",
+          "burning_off": "Dohasínání",
+          "manual": "Manuální",
+          "alarm": "Alarm",
+          "unsealing": "Odepěťování",
+          "chimney": "Komín",
+          "stabilization": "Stabilizace",
+          "no_transmission": "Bez přenosu",
+          "unknown": "Neznámý"
+        }
+      },
+      "mixer_temp1": {
+        "name": "Teplota míchadla 1"
+      },
+      "mixer_temp2": {
+        "name": "Teplota míchadla 2"
+      },
+      "mixer_temp3": {
+        "name": "Teplota míchadla 3"
+      },
+      "mixer_temp4": {
+        "name": "Teplota míchadla 4"
+      },
+      "mixer_temp5": {
+        "name": "Teplota míchadla 5"
+      },
+      "mixer_temp6": {
+        "name": "Teplota míchadla 6"
+      },
+      "mixer_set_temp1": {
+        "name": "Cílová teplota míchadla 1"
+      },
+      "mixer_set_temp2": {
+        "name": "Cílová teplota míchadla 2"
+      },
+      "mixer_set_temp3": {
+        "name": "Cílová teplota míchadla 3"
+      },
+      "mixer_set_temp4": {
+        "name": "Cílová teplota míchadla 4"
+      },
+      "mixer_set_temp5": {
+        "name": "Cílová teplota míchadla 5"
+      },
+      "mixer_set_temp6": {
+        "name": "Cílová teplota míchadla 6"
+      },
+      "quality": {
+        "name": "Kvalita signálu"
+      },
+      "signal": {
+        "name": "Síla signálu"
+      },
+      "servo_mixer1": {
+        "name": "Pozice serva míchadla 1"
+      },
+      "temp_co": {
+        "name": "Teplota topení"
+      },
+      "temp_cwu": {
+        "name": "Teplota ohřívače vody"
+      },
+      "status_cwu": {
+        "name": "Status ohřívače vody",
+        "state": {
+          "not_set": "Nenastaveno",
+          "set": "Nastaveno",
+          "no_temp_set": "Bez nastavené teploty"
+        }
+      },
+      "temp_cwu_set": {
+        "name": "Nastavená teplota ohřívače vody"
+      },
+      "tz_cwu": {
+        "name": "Teplota teplé vody"
+      },
+      "temp_upper_buffer": {
+        "name": "Horní teplota zásobníku"
+      },
+      "temp_lower_buffer": {
+        "name": "Dolní teplota zásobníku"
+      },
+      "temp_flue_gas": {
+        "name": "Teplota spalin"
+      },
+      "temp_external_sensor": {
+        "name": "Venkovní teplota"
+      },
+      "temp_feeder": {
+        "name": "Teplota podavače"
+      },
+      "temp_co_set": {
+        "name": "Cílová teplota topení"
+      },
+      "thermostat": {
+        "name": "Termostat"
+      },
+      "unseal": {
+        "name": "Odepěťování"
+      },
+      "valve_mixer1": {
+        "name": "Ventil míchadla 1 % otevřený"
+      },
+      "weather_control": {
+        "name": "Povětrnostní řízení kotle"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Teplota termostatu obvodu 2"
+      },
+      "temp_clutch": {
+        "name": "Teplota spojky"
+      },
+      "circuit3thermostat_temp": {
+        "name": "Teplota termostatu obvodu 3"
+      },
+      "temp_wthr": {
+        "name": "Povětrnostní teplota"
+      },
+      "temp_circuit3": {
+        "name": "Teplota obvodu 3"
+      },
+      "temp_circuit2": {
+        "name": "Teplota obvodu 2"
+      },
+      "temp_bufor_up": {
+        "name": "Horní teplota zásobníku"
+      },
+      "temp_bufor_down": {
+        "name": "Dolní teplota zásobníku"
+      },
+      "heating_upper_temp": {
+        "name": "Horní teplota topení"
+      },
+      "circuit1thermostat": {
+        "name": "Skutečná teplota obvodu 1"
+      },
+      "heating_work_state_pump4": {
+        "name": "Stav práce čerpadla topení 4"
+      },
+      "fuel_consum": {
+        "name": "Spotřeba paliva"
+      },
+      "fuel_stream": {
+        "name": "Tok paliva"
+      },
+      "temp_back": {
+        "name": "Návratová teplota"
+      },
+      "transmission": {
+        "name": "Přenos"
+      },
+      "ecoster_temp1": {
+        "name": "Pokojová teplota 1"
+      },
+      "ecoster_temp2": {
+        "name": "Pokojová teplota 2"
+      },
+      "ecoster_temp3": {
+        "name": "Pokojová teplota 3"
+      },
+      "ecoster_temp4": {
+        "name": "Pokojová teplota 4"
+      },
+      "ecoster_temp5": {
+        "name": "Pokojová teplota 5"
+      },
+      "ecoster_temp6": {
+        "name": "Pokojová teplota 6"
+      },
+      "ecoster_temp7": {
+        "name": "Pokojová teplota 7"
+      },
+      "ecoster_temp8": {
+        "name": "Pokojová teplota 8"
+      },
+      "ecoster_mode1": {
+        "name": "Režim pokojového termostatu 1"
+      },
+      "ecoster_mode2": {
+        "name": "Režim pokojového termostatu 2"
+      },
+      "ecoster_mode3": {
+        "name": "Režim pokojového termostatu 3"
+      },
+      "ecoster_mode4": {
+        "name": "Režim pokojového termostatu 4"
+      },
+      "ecoster_mode5": {
+        "name": "Režim pokojového termostatu 5"
+      },
+      "ecoster_mode6": {
+        "name": "Režim pokojového termostatu 6"
+      },
+      "ecoster_mode7": {
+        "name": "Režim pokojového termostatu 7"
+      },
+      "ecoster_mode8": {
+        "name": "Režim pokojového termostatu 8"
+      },
+      "ecoster_set_temp1": {
+        "name": "Nastavení pokojového termostatu 1"
+      },
+      "ecoster_set_temp2": {
+        "name": "Nastavení pokojového termostatu 2"
+      },
+      "ecoster_set_temp3": {
+        "name": "Nastavení pokojového termostatu 3"
+      },
+      "ecoster_set_temp4": {
+        "name": "Nastavení pokojového termostatu 4"
+      },
+      "ecoster_set_temp5": {
+        "name": "Nastavení pokojového termostatu 5"
+      },
+      "ecoster_set_temp6": {
+        "name": "Nastavení pokojového termostatu 6"
+      },
+      "ecoster_set_temp7": {
+        "name": "Nastavení pokojového termostatu 7"
+      },
+      "ecoster_set_temp8": {
+        "name": "Nastavení pokojového termostatu 8"
+      },
+      "t1": {
+        "name": "Teplota kolektoru"
+      },
+      "t2": {
+        "name": "Teplota nádrže"
+      },
+      "t3": {
+        "name": "Teplota nádrže"
+      },
+      "t4": {
+        "name": "Návratová teplota"
+      },
+      "t5": {
+        "name": "Teplota kolektoru - měření výkonu"
+      },
+      "t6": {
+        "name": "Teplotní senzor"
+      },
+      "tzcwu": {
+        "name": "Teplota teplé vody"
+      },
+      "p1": {
+        "name": "Status čerpadla 1"
+      },
+      "p2": {
+        "name": "Status čerpadla 2"
+      },
+      "h": {
+        "name": "Status výstupu"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Celkový tepelný zisk"
+      },
+      "ecosrv_addr": {
+        "name": "Adresa serveru ecoNET"
+      },
+      "ecosrv_soft_ver": {
+        "name": "Verze softwaru serveru ecoNET"
+      },
+      "router_type": {
+        "name": "Typ routeru"
+      },
+      "protocol_type": {
+        "name": "Typ protokolu"
+      },
+      "tem_co": {
+        "name": "Teplota kotle"
+      }
+    }
+  }
+}
