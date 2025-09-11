@@ -533,22 +533,22 @@
         "name": "Boiler heating curve"
       },
       "mix_heat_curve1": {
-        "name": "Heating curve cycle 1"
+        "name": "Mixer 1 heating curve"
       },
       "mix_heat_curve2": {
-        "name": "Heating curve cycle 2"
+        "name": "Mixer 2 heating curve"
       },
       "mix_heat_curve3": {
-        "name": "Heating curve cycle 3"
+        "name": "Mixer 3 heating curve"
       },
       "mix_heat_curve4": {
-        "name": "Heating curve cycle 4"
+        "name": "Mixer 4 heating curve"
       },
       "mix_heat_curve5": {
-        "name": "Heating curve cycle 5"
+        "name": "Mixer 5 heating curve"
       },
       "mix_heat_curve6": {
-        "name": "Heating curve cycle 6"
+        "name": "Mixer 6 heating curve"
       }
     }
   }

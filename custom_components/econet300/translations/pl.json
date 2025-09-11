@@ -532,22 +532,22 @@
         "name": "Krzywa grzewcza kotła"
       },
       "mix_heat_curve1": {
-        "name": "Krzywa grzewcza obiegu 1"
+        "name": "Mieszacz 1 krzywa grzewcza"
       },
       "mix_heat_curve2": {
-        "name": "Krzywa grzewcza obiegu 2"
+        "name": "Mieszacz 2 krzywa grzewcza"
       },
       "mix_heat_curve3": {
-        "name": "Krzywa grzewcza obiegu 3"
+        "name": "Mieszacz 3 krzywa grzewcza"
       },
       "mix_heat_curve4": {
-        "name": "Krzywa grzewcza obiegu 4"
+        "name": "Mieszacz 4 krzywa grzewcza"
       },
       "mix_heat_curve5": {
-        "name": "Krzywa grzewcza obiegu 5"
+        "name": "Mieszacz 5 krzywa grzewcza"
       },
       "mix_heat_curve6": {
-        "name": "Krzywa grzewcza obiegu 6"
+        "name": "Mieszacz 6 krzywa grzewcza"
       }
     }
   }

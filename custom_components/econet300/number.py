@@ -3,7 +3,11 @@
 from dataclasses import dataclass
 import logging
 
-from homeassistant.components.number import NumberEntity, NumberEntityDescription
+from homeassistant.components.number import (
+    NumberEntity,
+    NumberEntityDescription,
+    NumberMode,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -19,11 +23,14 @@ from .const import (
     ENTITY_NUMBER_SENSOR_MODE_MAP,
     ENTITY_STEP,
     ENTITY_UNIT_MAP,
+    MIXER_HEATING_CURVE_PARAMS,
     NUMBER_MAP,
+    RMNEWPARAM_PARAMS,
+    SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
-from .entity import EconetEntity
+from .entity import EconetEntity, MixerEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -161,6 +168,10 @@ class EconetNumber(EconetEntity, NumberEntity):
 
 def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
     """Check if a given entity can be added based on the availability of data in the coordinator."""
+    # For RMNEWPARAM_PARAMS, always allow creation (they're write-only parameters)
+    if key in RMNEWPARAM_PARAMS:
+        return True
+
     try:
         return (
             coordinator.has_param_edit_data(key)
@@ -194,12 +205,64 @@ def create_number_entity_description(
         key=key,
         translation_key=camel_to_snake(map_key),
         device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
-        mode=ENTITY_NUMBER_SENSOR_MODE_MAP.get(map_key),  # type: ignore[arg-type]
+        mode=ENTITY_NUMBER_SENSOR_MODE_MAP.get(map_key, NumberMode.BOX),  # type: ignore[arg-type]
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
         native_min_value=min_value,
         native_max_value=max_value,
         native_step=ENTITY_STEP.get(map_key, 1),
     )
+
+
+def create_mixer_heating_curve_entities(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[MixerEntity]:
+    """Create mixer heating curve number entities based on available mixers."""
+    entities: list[MixerEntity] = []
+    data_regParams = coordinator.data.get("regParams") or {}
+
+    # Mixer heating curve parameter IDs (83-88)
+    mixer_heating_curve_params = MIXER_HEATING_CURVE_PARAMS
+
+    for mixer_number, mixer_keys in SENSOR_MIXER_KEY.items():
+        # Check if this mixer has valid temperature data (same logic as other mixer entities)
+        if any(data_regParams.get(mixer_key) is None for mixer_key in mixer_keys):
+            _LOGGER.info(
+                "Mixer %d heating curve will not be created due to invalid temperature data.",
+                mixer_number,
+            )
+            continue
+
+        # Create heating curve entity for this mixer
+        param_id = str(82 + mixer_number)  # 83, 84, 85, 86, 87, 88
+        if int(param_id) not in mixer_heating_curve_params:
+            continue
+
+        # Add this parameter to RMNEWPARAM_PARAMS for proper handling
+        RMNEWPARAM_PARAMS.add(param_id)
+
+        map_key = f"mixHeatCurve{mixer_number}"
+
+        # Create entity description
+        entity_description = EconetNumberEntityDescription(
+            key=param_id,
+            translation_key=camel_to_snake(map_key),
+            native_unit_of_measurement=ENTITY_UNIT_MAP.get(map_key),
+            device_class=ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP.get(map_key),
+            mode=ENTITY_NUMBER_SENSOR_MODE_MAP.get(map_key, NumberMode.BOX),  # type: ignore[arg-type]
+            native_min_value=float(ENTITY_MIN_VALUE.get(map_key, 0.1)),
+            native_max_value=float(ENTITY_MAX_VALUE.get(map_key, 4.0)),
+            native_step=float(ENTITY_STEP.get(map_key, 0.1)),
+        )
+
+        # Create MixerEntity for this heating curve
+        entity = MixerEntity(entity_description, coordinator, api, mixer_number)
+        entities.append(entity)
+        _LOGGER.debug(
+            "Created mixer heating curve entity: %s for mixer %d", map_key, mixer_number
+        )
+
+    _LOGGER.info("Created %d mixer heating curve entities", len(entities))
+    return entities
 
 
 async def async_setup_entry(
@@ -212,21 +275,36 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities: list[EconetNumber] = []
+    entities: list[EconetNumber | MixerEntity] = []
 
-    for key in NUMBER_MAP:
+    # Create mixer heating curve entities dynamically
+    mixer_heating_curve_entities = create_mixer_heating_curve_entities(coordinator, api)
+    entities.extend(mixer_heating_curve_entities)
+
+    for key, map_key in NUMBER_MAP.items():
         sys_params = coordinator.data.get("sysParams", {})
         if skip_params_edits(sys_params):
             _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
             continue
 
-        number_limits = await api.get_param_limits(key)
-        if number_limits is None:
+        # For RMNEWPARAM_PARAMS, use default limits instead of API limits
+        if key in RMNEWPARAM_PARAMS:
+            number_limits = None  # Will use ENTITY_MIN_VALUE/ENTITY_MAX_VALUE in create_number_entity_description
             _LOGGER.info(
-                "Cannot add number entity: %s, numeric limits for this entity is None",
+                "Using default limits for RMNEWPARAM parameter %s: min=%s, max=%s, step=%s",
                 key,
+                ENTITY_MIN_VALUE.get(map_key, 0),
+                ENTITY_MAX_VALUE.get(map_key, 80),
+                ENTITY_STEP.get(map_key, 1),
             )
-            continue
+        else:
+            number_limits = await api.get_param_limits(key)
+            if number_limits is None:
+                _LOGGER.info(
+                    "Cannot add number entity: %s, numeric limits for this entity is None",
+                    key,
+                )
+                continue
 
         if can_add(key, coordinator):
             entity_description = create_number_entity_description(key, number_limits)

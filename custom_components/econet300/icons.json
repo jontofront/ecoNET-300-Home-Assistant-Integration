@@ -1131,6 +1131,29 @@
         "default": "mdi:water-boiler"
       }
     },
+    "number": {
+      "co_heat_curve": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve1": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve2": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve3": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve4": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve5": {
+        "default": "mdi:chart-line"
+      },
+      "mix_heat_curve6": {
+        "default": "mdi:chart-line"
+      }
+    },
     "diagnostic": {
       "module_a_soft_ver": {
         "default": "mdi:raspberry-pi"

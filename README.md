@@ -30,6 +30,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status
 - **Comprehensive API Access**: Access to 48 different API endpoints
 - **Multiple Entity Types**: Sensors, Binary Sensors, Switches, and Number entities
+- **Temperature Control**: Precise text box interface for temperature setpoint parameters
 - **Heating Curve Control**: Intuitive slider interface for heating curve parameters
 - **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
 
@@ -65,9 +66,10 @@ The integration supports **6 languages** with comprehensive translations:
 1. [Installation](#installation)
 2. [Configuration](#configuration)
 3. [Entities](#entities)
-4. [Heating Curve Parameters](#heating-curve-parameters)
-5. [Contributing](#contributing)
-6. [Acknowledgments](#acknowledgments)
+4. [Temperature Control](#temperature-control)
+5. [Heating Curve Parameters](#heating-curve-parameters)
+6. [Contributing](#contributing)
+7. [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -349,6 +351,35 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 </details>
 
+### Temperature Control
+
+The integration provides precise text box controls for temperature setpoint parameters, allowing exact temperature input.
+
+<details>
+  <summary>**👉 Click here to expand the table**</summary>
+
+| Entity Key         | Description           | UI Type | Endpoint               |
+| ------------------ | --------------------- | ------- | ---------------------- |
+| **Boiler Temperature** |
+| `tempCOSet`        | Boiler temperature setpoint | Box  | `../econet/rmNewParam` |
+| `tempCWUSet`       | Hot water temperature setpoint | Box  | `../econet/rmNewParam` |
+| **Mixer Temperature**  |
+| `mixerSetTemp1`    | Mixer 1 temperature setpoint | Box  | `../econet/rmNewParam` |
+| `mixerSetTemp2`    | Mixer 2 temperature setpoint | Box  | `../econet/rmNewParam` |
+| `mixerSetTemp3`    | Mixer 3 temperature setpoint | Box  | `../econet/rmNewParam` |
+| `mixerSetTemp4`    | Mixer 4 temperature setpoint | Box  | `../econet/rmNewParam` |
+| `mixerSetTemp5`    | Mixer 5 temperature setpoint | Box  | `../econet/rmNewParam` |
+| `mixerSetTemp6`    | Mixer 6 temperature setpoint | Box  | `../econet/rmNewParam` |
+
+</details>
+
+**Features:**
+
+- **Text Box Interface**: Precise text input controls for exact temperature values
+- **Fine-tuning**: Easy adjustment of temperature setpoints for optimal comfort
+- **Real-time Control**: Immediate response to temperature changes
+- **Precise Input**: Text boxes allow exact temperature input with decimal precision
+
 ### Heating Curve Parameters
 
 The integration provides intuitive slider controls for heating curve parameters, allowing fine-tuning of heating behavior.
@@ -359,14 +390,14 @@ The integration provides intuitive slider controls for heating curve parameters,
 | Entity Key         | Description           | UI Type | Endpoint               |
 | ------------------ | --------------------- | ------- | ---------------------- |
 | **Boiler Heating** |
-| `co_heat_curve`    | Boiler heating curve  | Slider  | `../econet/rmNewParam` |
+| `coHeatCurve`      | Boiler heating curve  | Slider  | `../econet/rmNewParam` |
 | **Mixer Heating**  |
-| `mix_heat_curve1`  | Mixer 1 heating curve | Slider  | `../econet/rmNewParam` |
-| `mix_heat_curve2`  | Mixer 2 heating curve | Slider  | `../econet/rmNewParam` |
-| `mix_heat_curve3`  | Mixer 3 heating curve | Slider  | `../econet/rmNewParam` |
-| `mix_heat_curve4`  | Mixer 4 heating curve | Slider  | `../econet/rmNewParam` |
-| `mix_heat_curve5`  | Mixer 5 heating curve | Slider  | `../econet/rmNewParam` |
-| `mix_heat_curve6`  | Mixer 6 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve1`    | Mixer 1 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve2`    | Mixer 2 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve3`    | Mixer 3 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve4`    | Mixer 4 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve5`    | Mixer 5 heating curve | Slider  | `../econet/rmNewParam` |
+| `mixHeatCurve6`    | Mixer 6 heating curve | Slider  | `../econet/rmNewParam` |
 
 </details>
 
@@ -443,6 +474,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Diagnostics Support**: Comprehensive diagnostics for troubleshooting issues
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
+- **Temperature Control**: Precise text box interface for temperature setpoint parameters
 - **Heating Curve Control**: Intuitive slider interface for heating curve parameters
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
 - **ecoSTER Integration**: Support for 8 room thermostats
@@ -495,4 +527,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2025-01-10 after adding heating curve UI enhancements._
+_This README was last updated on 2025-01-10 after adding temperature control text box enhancements._

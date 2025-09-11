@@ -542,22 +542,22 @@
         "name": "Topná křivka kotle"
       },
       "mix_heat_curve1": {
-        "name": "Topná křivka oběhu 1"
+        "name": "Míchač 1 topná křivka"
       },
       "mix_heat_curve2": {
-        "name": "Topná křivka oběhu 2"
+        "name": "Míchač 2 topná křivka"
       },
       "mix_heat_curve3": {
-        "name": "Topná křivka oběhu 3"
+        "name": "Míchač 3 topná křivka"
       },
       "mix_heat_curve4": {
-        "name": "Topná křivka oběhu 4"
+        "name": "Míchač 4 topná křivka"
       },
       "mix_heat_curve5": {
-        "name": "Topná křivka oběhu 5"
+        "name": "Míchač 5 topná křivka"
       },
       "mix_heat_curve6": {
-        "name": "Topná křivka oběhu 6"
+        "name": "Míchač 6 topná křivka"
       }
     }
   }

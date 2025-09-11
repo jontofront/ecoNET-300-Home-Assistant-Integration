@@ -99,6 +99,9 @@ AVAILABLE_NUMBER_OF_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 
+# Mixer heating curve parameter IDs (83-88)
+MIXER_HEATING_CURVE_PARAMS = {83, 84, 85, 86, 87, 88}
+
 # Dynamically generate SENSOR_MIXER_KEY
 SENSOR_MIXER_KEY = {
     i: {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
@@ -327,13 +330,8 @@ NUMBER_MAP = {
     "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
     "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
-    "112": "co_heat_curve",  # Boiler heating curve
-    "83": "mix_heat_curve1",  # Mixer 1 heating curve
-    "84": "mix_heat_curve2",  # Mixer 2 heating curve
-    "85": "mix_heat_curve3",  # Mixer 3 heating curve
-    "86": "mix_heat_curve4",  # Mixer 4 heating curve
-    "87": "mix_heat_curve5",  # Mixer 5 heating curve
-    "88": "mix_heat_curve6",  # Mixer 6 heating curve
+    "112": "coHeatCurve",  # Boiler heating curve
+    # Note: Mixer heating curves (83-88) are created dynamically based on available mixers
 }
 
 # =============================================================================
@@ -361,12 +359,7 @@ HEATER_MODE_PARAM_INDEX = "55"
 RMNEWPARAM_PARAMS = {
     "55",  # Heater mode (Summer/Winter/Auto)
     "112",  # Boiler heating curve
-    "83",  # Mixer 1 heating curve
-    "84",  # Mixer 2 heating curve
-    "85",  # Mixer 3 heating curve
-    "86",  # Mixer 4 heating curve
-    "87",  # Mixer 5 heating curve
-    "88",  # Mixer 6 heating curve
+    # Note: Mixer heating curves (83-88) are added dynamically based on available mixers
     # Add other parameters here that need rmNewParam endpoint
     # Example: "56", "57", etc.
 }
@@ -746,35 +739,31 @@ ENTITY_CATEGORY = {
 ENTITY_MIN_VALUE = {
     "tempCOSet": 27,
     "tempCWUSet": 20,
-    "co_heat_curve": 0.1,
-    **{f"mix_heat_curve{i}": 0.1 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
+    "coHeatCurve": 0.1,
+    **{f"mixHeatCurve{i}": 0.1 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
 }
 
 ENTITY_MAX_VALUE = {
     "tempCOSet": 68,
     "tempCWUSet": 55,
-    "co_heat_curve": 4.0,
-    **{f"mix_heat_curve{i}": 4.0 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
+    "coHeatCurve": 4.0,
+    **{f"mixHeatCurve{i}": 4.0 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
 }
 
 ENTITY_STEP = {
     "tempCOSet": 1,
     "tempCWUSet": 1,
-    "co_heat_curve": 0.1,
-    **{f"mix_heat_curve{i}": 0.1 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
+    "coHeatCurve": 0.1,
+    **{f"mixHeatCurve{i}": 0.1 for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)},
 }
 
 # =============================================================================
 # ENTITY MODE MAPPINGS
 # =============================================================================
-# Defines how the number should be displayed in the UI (box or slider)
-# Default is 'auto' which lets Home Assistant decide
+# Defines how the number should be displayed in the UI slider or box
 ENTITY_NUMBER_SENSOR_MODE_MAP: dict[str, NumberMode] = {
-    "co_heat_curve": NumberMode.SLIDER,  # Boiler heating curve - slider for fine tuning
-    **{
-        f"mix_heat_curve{i}": NumberMode.SLIDER
-        for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
-    },  # Mixer heating curves - sliders for fine tuning
+    # Note: All number entities default to BOX mode
+    # Only add entries here if you want SLIDER mode for specific entities
 }
 
 # Sensor value mappings for both display and icon support

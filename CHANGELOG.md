@@ -2,19 +2,28 @@
 
 ## [v1.1.15] - 2025-01-10
 
-### New Features
+### v1.1.15 New Features
 
-- **Heating Curve UI Enhancement**: Added slider mode for heating curve parameters
+- **Temperature Setpoint UI Enhancement**: Added box mode for temperature setpoint parameters
   - **New Mode Mapping**: Added `ENTITY_NUMBER_SENSOR_MODE_MAP` for better UI experience
-  - **Slider Interface**: Heating curve parameters now display as sliders instead of text boxes
+  - **Box Interface**: Temperature setpoint parameters now display as text boxes for precise input
   - **Affected Parameters**:
-    - `co_heat_curve` (Boiler heating curve)
-    - `mix_heat_curve1` through `mix_heat_curve6` (Mixer heating curves)
-  - **User Experience**: Sliders provide more intuitive fine-tuning of heating curve values
+    - `tempCOSet` (Boiler temperature setpoint)
+    - `tempCWUSet` (Hot water temperature setpoint)
+    - `mixerSetTemp1` through `mixerSetTemp6` (Mixer temperature setpoints)
+  - **User Experience**: Text boxes provide precise temperature input control
   - **Type Safety**: Proper `NumberMode` enum usage with type annotations
   - **Files Modified**: `custom_components/econet300/const.py`, `custom_components/econet300/number.py`
 
-### Technical Improvements
+- **Heating Curve Control**: Added slider mode for heating curve parameters
+  - **Slider Interface**: Heating curve parameters now display as sliders for fine-tuning
+  - **Affected Parameters**:
+    - `coHeatCurve` (Boiler heating curve)
+    - `mixHeatCurve1` through `mixHeatCurve6` (Mixer heating curves)
+  - **User Experience**: Sliders provide intuitive fine-tuning of heating curve values
+  - **API Integration**: Uses `rmNewParam` endpoint with `newParamIndex` and `newParamValue`
+
+### v1.1.15 Technical Improvements
 
 - **Type Safety**: Enhanced type annotations for number entity mode mapping
   - **Import Updates**: Added `NumberMode` import from Home Assistant components
@@ -22,9 +31,17 @@
   - **Code Quality**: Improved type safety and MyPy compliance
   - **Implementation**: Generic `number.py` already supported mode mapping, only needed configuration
 
+### v1.1.15 Bug Fixes
+
+- **Parameter Availability**: Restored heating curve parameters that are available as editable parameters
+  - **Issue**: Heating curve parameters (112, 83-88) were incorrectly removed as they are actually available
+  - **Solution**: Restored to `NUMBER_MAP`, `RMNEWPARAM_PARAMS`, and value limits
+  - **Impact**: Enables heating curve control functionality
+  - **Note**: These parameters work via `rmNewParam?newParamIndex=X&newParamValue=Y` endpoint
+
 ## [v1.1.14] - 2025-01-10
 
-### New Features
+### v1.1.14 New Features
 
 - **Multi-language Support**: Added comprehensive translation support for 6 languages
   - **Czech (cs)**: Complete translation coverage with 348 parameters
@@ -35,7 +52,7 @@
   - **Files Added**: `custom_components/econet300/translations/cz.json`, `fr.json`, `uk.json`
   - **Files Updated**: `scripts/check_translations.py`, `tests/test_translations_comprehensive.py`
 
-### Bug Fixes
+### v1.1.14 Bug Fixes
 
 - **Type Compatibility Error**: Fixed MyPy type checking error in sensor platform
   - **Problem**: `gather_entities` function had incompatible type annotations causing MyPy errors
@@ -44,7 +61,7 @@
   - **Files Modified**: `custom_components/econet300/sensor.py`
   - **Technical Details**: Changed function signature to use base `SensorEntity` type instead of specific `EconetSensor` type
 
-### Technical Improvements
+### v1.1.14 Technical Improvements
 
 - **Type Safety**: Improved type annotations for better code maintainability
   - **Before**: Function expected only `EconetSensor` entities but was receiving mixed sensor types
@@ -66,7 +83,7 @@
   - **File Structure**: Diagnostics functionality properly separated into dedicated `diagnostics.py` file
   - **Comprehensive Documentation**: Complete diagnostics guide with troubleshooting instructions and usage examples
 
-### Implementation Details
+### v1.1.13 Implementation Details
 
 - **New File**: `custom_components/econet300/diagnostics.py` - Dedicated diagnostics module
 - **New Documentation**: `docs/DIAGNOSTICS.md` - Comprehensive diagnostics documentation and troubleshooting guide

@@ -542,22 +542,22 @@
         "name": "Courbe de chauffage de la chaudière"
       },
       "mix_heat_curve1": {
-        "name": "Courbe de chauffage du circuit 1"
+        "name": "Mélangeur 1 courbe de chauffage"
       },
       "mix_heat_curve2": {
-        "name": "Courbe de chauffage du circuit 2"
+        "name": "Mélangeur 2 courbe de chauffage"
       },
       "mix_heat_curve3": {
-        "name": "Courbe de chauffage du circuit 3"
+        "name": "Mélangeur 3 courbe de chauffage"
       },
       "mix_heat_curve4": {
-        "name": "Courbe de chauffage du circuit 4"
+        "name": "Mélangeur 4 courbe de chauffage"
       },
       "mix_heat_curve5": {
-        "name": "Courbe de chauffage du circuit 5"
+        "name": "Mélangeur 5 courbe de chauffage"
       },
       "mix_heat_curve6": {
-        "name": "Courbe de chauffage du circuit 6"
+        "name": "Mélangeur 6 courbe de chauffage"
       }
     }
   }
