@@ -42,12 +42,6 @@
       "lighter_works": {
         "name": "Запалювач"
       },
-      "weather_control": {
-        "name": "Погодне керування котлом"
-      },
-      "unseal": {
-        "name": "Розгерметизація"
-      },
       "pump_co_works": {
         "name": "Насос СО"
       },

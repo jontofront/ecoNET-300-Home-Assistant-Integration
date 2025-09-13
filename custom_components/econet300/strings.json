@@ -42,12 +42,6 @@
       "lighter_works": {
         "name": "Lighter"
       },
-      "weather_control": {
-        "name": "Weather control the boiler"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
       "pump_co_works": {
         "name": "Pump CO"
       },

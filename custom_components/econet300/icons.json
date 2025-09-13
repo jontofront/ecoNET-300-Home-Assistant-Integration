@@ -296,20 +296,6 @@
           "on": "mdi:pump",
           "off": "mdi:pump"
         }
-      },
-      "unseal": {
-        "default": "mdi:lock",
-        "state": {
-          "on": "mdi:lock",
-          "off": "mdi:lock"
-        }
-      },
-      "weather_control": {
-        "default": "mdi:weather-partly-cloudy",
-        "state": {
-          "on": "mdi:weather-partly-cloudy",
-          "off": "mdi:weather-partly-cloudy"
-        }
       }
     },
     "sensor": {

@@ -42,12 +42,6 @@
       "lighter_works": {
         "name": "Allumeur"
       },
-      "weather_control": {
-        "name": "Contrôle météo de la chaudière"
-      },
-      "unseal": {
-        "name": "Déscellement"
-      },
       "pump_co_works": {
         "name": "Pompe CC"
       },
