@@ -3,3 +3,6 @@ draft
 .idea/
 .vscode/*
 .ruff_cache
+
+# Test reports directory
+tests/test_reports/
