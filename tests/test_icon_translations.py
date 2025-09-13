@@ -5,11 +5,33 @@ Currently focused on switch entity, but designed to be expanded
 for all entity types (sensor, binary_sensor, number, etc.).
 """
 
+import importlib
+from pathlib import Path
+import sys
 from unittest.mock import Mock
 
-from custom_components.econet300.api import Econet300Api
-from custom_components.econet300.common import EconetDataCoordinator
-from custom_components.econet300.switch import EconetSwitch, create_boiler_switch
+# Add the custom_components directory to the path
+custom_components_path = str(
+    Path(__file__).parent.parent / "custom_components" / "econet300"
+)
+if custom_components_path not in sys.path:
+    sys.path.insert(0, custom_components_path)
+
+# Also add the parent directory for the custom_components module
+parent_path = str(Path(__file__).parent.parent)
+if parent_path not in sys.path:
+    sys.path.insert(0, parent_path)
+
+# Import custom components after path setup
+api_module = importlib.import_module("custom_components.econet300.api")
+common_module = importlib.import_module("custom_components.econet300.common")
+switch_module = importlib.import_module("custom_components.econet300.switch")
+
+# Get the classes from the modules
+Econet300Api = api_module.Econet300Api
+EconetDataCoordinator = common_module.EconetDataCoordinator
+EconetSwitch = switch_module.EconetSwitch
+create_boiler_switch = switch_module.create_boiler_switch
 
 
 def test_switch_has_translation_key():

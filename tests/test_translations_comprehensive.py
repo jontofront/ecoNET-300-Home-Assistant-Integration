@@ -412,10 +412,114 @@ def step_6_check_icons_exist(entity_keys: set[str], icon_keys: set[str]) -> list
     return missing_icons
 
 
+def get_api_endpoint_info(key: str) -> dict[str, str]:
+    """Get API endpoint information for a given translation key."""
+    # Map of known translation keys to their API endpoints and values
+    api_mapping = {
+        "unseal": {
+            "endpoint": "tests/fixtures/ecoMAX810P-L/rmCurrentDataParams.json",
+            "parameter_id": "113",
+            "name": "Unseal",
+            "unit": "31",
+            "special": "1",
+            "description": "Binary sensor for unseal status (unit 31 = boolean)",
+        },
+        "weather_control": {
+            "endpoint": "tests/fixtures/ecoMAX810P-L/rmParamsData.json",
+            "parameter_indices": "79-82, 115",
+            "names": "Mixer 1-4 weather control, Weather control the boiler",
+            "values": "1, 1, 1, 1, 1",
+            "units": "31, 31, 31, 31, 31",
+            "ranges": "0-1, 0-1, 0-1, 0-1, 1-1",
+            "offsets": "13, 13, 13, 13, 16",
+            "description": "Binary sensors for weather control status (unit 31 = boolean)",
+        },
+    }
+
+    return api_mapping.get(
+        key, {"endpoint": "Unknown", "description": "No API mapping found"}
+    )
+
+
+def _check_translation_file_consistency(
+    strings_data: dict, translation_data: dict, language: str
+) -> list[str]:
+    """Check if all keys in strings.json exist in a specific translation file."""
+    missing_keys: list[str] = []
+
+    if "entity" in strings_data:
+        for entity_type in ["sensor", "binary_sensor", "number", "switch"]:
+            if entity_type in strings_data["entity"]:
+                missing_keys.extend(
+                    f"{entity_type}.{key}"
+                    for key in strings_data["entity"][entity_type]
+                    if (
+                        entity_type not in translation_data.get("entity", {})
+                        or key not in translation_data["entity"][entity_type]
+                    )
+                )
+
+    return missing_keys
+
+
+def _log_missing_translations_with_api_info(
+    missing_keys: list[str], language: str
+) -> None:
+    """Log missing translations with detailed API information."""
+    _LOGGER.info("   ❌ Missing in %s: %d", language, len(missing_keys))
+
+    if missing_keys:
+        for missing in sorted(missing_keys):
+            entity_type, key = missing.split(".", 1)
+            api_info = get_api_endpoint_info(key)
+            _LOGGER.info("      - %s", missing)
+            _LOGGER.info("        📁 Endpoint: %s", api_info.get("endpoint", "Unknown"))
+
+            # Log API information if available
+            if "parameter_id" in api_info:
+                _LOGGER.info("        🔑 Parameter ID: %s", api_info["parameter_id"])
+            if "parameter_indices" in api_info:
+                _LOGGER.info(
+                    "        🔑 Parameter Indices: %s", api_info["parameter_indices"]
+                )
+            if "name" in api_info:
+                _LOGGER.info("        📝 Name: %s", api_info["name"])
+            if "names" in api_info:
+                _LOGGER.info("        📝 Names: %s", api_info["names"])
+            if "value" in api_info:
+                _LOGGER.info("        💾 Value: %s", api_info["value"])
+            if "values" in api_info:
+                _LOGGER.info("        💾 Values: %s", api_info["values"])
+            if "unit" in api_info:
+                _LOGGER.info("        📏 Unit: %s", api_info["unit"])
+            if "units" in api_info:
+                _LOGGER.info("        📏 Units: %s", api_info["units"])
+            if "special" in api_info:
+                _LOGGER.info("        ⚙️ Special: %s", api_info["special"])
+            if "ranges" in api_info:
+                _LOGGER.info("        📊 Ranges: %s", api_info["ranges"])
+            if "offsets" in api_info:
+                _LOGGER.info("        🔧 Offsets: %s", api_info["offsets"])
+            _LOGGER.info(
+                "        📋 Description: %s",
+                api_info.get("description", "No description"),
+            )
+
+
+def _log_simple_missing_translations(missing_keys: list[str], language: str) -> None:
+    """Log missing translations without detailed API information."""
+    _LOGGER.info("   ❌ Missing in %s: %d", language, len(missing_keys))
+
+    if missing_keys:
+        for missing in sorted(missing_keys):
+            _LOGGER.info("      - %s", missing)
+
+
 def step_7_check_translation_files_consistency() -> dict[str, list[str]]:
     """STEP 7: Check consistency between strings.json, en.json, pl.json, cz.json, fr.json, and uk.json."""
     _LOGGER.info("📋 STEP 7: Checking translation file consistency...")
 
+    # Load all translation files
     strings_data = load_json_file(STRINGS_FILE)
     en_data = load_json_file(EN_TRANSLATIONS)
     pl_data = load_json_file(PL_TRANSLATIONS)
@@ -423,63 +527,233 @@ def step_7_check_translation_files_consistency() -> dict[str, list[str]]:
     fr_data = load_json_file(FR_TRANSLATIONS)
     uk_data = load_json_file(UK_TRANSLATIONS)
 
+    # Check consistency for each language
     issues: dict[str, list[str]] = {
-        "missing_in_en": [],
-        "missing_in_pl": [],
-        "missing_in_cz": [],
-        "missing_in_fr": [],
-        "missing_in_uk": [],
+        "missing_in_en": _check_translation_file_consistency(
+            strings_data, en_data, "English"
+        ),
+        "missing_in_pl": _check_translation_file_consistency(
+            strings_data, pl_data, "Polish"
+        ),
+        "missing_in_cz": _check_translation_file_consistency(
+            strings_data, cz_data, "Czech"
+        ),
+        "missing_in_fr": _check_translation_file_consistency(
+            strings_data, fr_data, "French"
+        ),
+        "missing_in_uk": _check_translation_file_consistency(
+            strings_data, uk_data, "Ukrainian"
+        ),
         "missing_in_strings": [],
     }
 
-    # Check if all keys in strings.json exist in all translation files
-    if "entity" in strings_data:
-        for entity_type in ["sensor", "binary_sensor", "number", "switch"]:
-            if entity_type in strings_data["entity"]:
-                for key in strings_data["entity"][entity_type]:
-                    # Check English translations
-                    if (
-                        entity_type not in en_data.get("entity", {})
-                        or key not in en_data["entity"][entity_type]
-                    ):
-                        issues["missing_in_en"].append(f"{entity_type}.{key}")
+    # Log results with detailed API information for English and Polish
+    _log_missing_translations_with_api_info(issues["missing_in_en"], "English")
+    _log_missing_translations_with_api_info(issues["missing_in_pl"], "Polish")
 
-                    # Check Polish translations
-                    if (
-                        entity_type not in pl_data.get("entity", {})
-                        or key not in pl_data["entity"][entity_type]
-                    ):
-                        issues["missing_in_pl"].append(f"{entity_type}.{key}")
-
-                    # Check Czech translations
-                    if (
-                        entity_type not in cz_data.get("entity", {})
-                        or key not in cz_data["entity"][entity_type]
-                    ):
-                        issues["missing_in_cz"].append(f"{entity_type}.{key}")
-
-                    # Check French translations
-                    if (
-                        entity_type not in fr_data.get("entity", {})
-                        or key not in fr_data["entity"][entity_type]
-                    ):
-                        issues["missing_in_fr"].append(f"{entity_type}.{key}")
-
-                    # Check Ukrainian translations
-                    if (
-                        entity_type not in uk_data.get("entity", {})
-                        or key not in uk_data["entity"][entity_type]
-                    ):
-                        issues["missing_in_uk"].append(f"{entity_type}.{key}")
-
-    _LOGGER.info("   ❌ Missing in English: %d", len(issues["missing_in_en"]))
-    _LOGGER.info("   ❌ Missing in Polish: %d", len(issues["missing_in_pl"]))
-    _LOGGER.info("   ❌ Missing in Czech: %d", len(issues["missing_in_cz"]))
-    _LOGGER.info("   ❌ Missing in French: %d", len(issues["missing_in_fr"]))
-    _LOGGER.info("   ❌ Missing in Ukrainian: %d", len(issues["missing_in_uk"]))
-    _LOGGER.info("   ❌ Missing in strings.json: %d", len(issues["missing_in_strings"]))
+    # Log results without detailed API information for other languages
+    _log_simple_missing_translations(issues["missing_in_cz"], "Czech")
+    _log_simple_missing_translations(issues["missing_in_fr"], "French")
+    _log_simple_missing_translations(issues["missing_in_uk"], "Ukrainian")
+    _log_simple_missing_translations(issues["missing_in_strings"], "strings.json")
 
     return issues
+
+
+def _generate_summary_statistics(
+    sensor_keys: set[str],
+    binary_sensor_keys: set[str],
+    number_keys: set[str],
+    sensor_snake: set[str],
+    binary_sensor_snake: set[str],
+    number_snake: set[str],
+) -> list[str]:
+    """Generate summary statistics section of the report."""
+    report_lines = []
+    report_lines.append("📊 SUMMARY STATISTICS")
+    report_lines.append("-" * 30)
+    report_lines.append(f"Original sensor keys: {len(sensor_keys)}")
+    report_lines.append(f"Original binary sensor keys: {len(binary_sensor_keys)}")
+    report_lines.append(f"Original number keys: {len(number_keys)}")
+    report_lines.append(f"Snake_case sensor keys: {len(sensor_snake)}")
+    report_lines.append(f"Snake_case binary sensor keys: {len(binary_sensor_snake)}")
+    report_lines.append(f"Snake_case number keys: {len(number_snake)}")
+    report_lines.append("")
+    return report_lines
+
+
+def _generate_translation_issues_section(
+    missing_sensor_trans: list[str],
+    missing_binary_trans: list[str],
+    missing_number_trans: list[str],
+) -> list[str]:
+    """Generate translation issues section of the report."""
+    report_lines = []
+    total_missing_translations = (
+        len(missing_sensor_trans)
+        + len(missing_binary_trans)
+        + len(missing_number_trans)
+    )
+
+    if total_missing_translations > 0:
+        report_lines.append("❌ TRANSLATION ISSUES")
+        report_lines.append("-" * 30)
+        report_lines.append(f"Missing sensor translations: {len(missing_sensor_trans)}")
+        report_lines.append(
+            f"Missing binary sensor translations: {len(missing_binary_trans)}"
+        )
+        report_lines.append(f"Missing number translations: {len(missing_number_trans)}")
+        report_lines.append("")
+
+        if missing_sensor_trans:
+            report_lines.append("Missing Sensor Translations:")
+            report_lines.extend(f"  - {item}" for item in sorted(missing_sensor_trans))
+            report_lines.append("")
+
+        if missing_binary_trans:
+            report_lines.append("Missing Binary Sensor Translations:")
+            report_lines.extend(f"  - {item}" for item in sorted(missing_binary_trans))
+            report_lines.append("")
+
+        if missing_number_trans:
+            report_lines.append("Missing Number Translations:")
+            report_lines.extend(f"  - {item}" for item in sorted(missing_number_trans))
+            report_lines.append("")
+
+    return report_lines
+
+
+def _generate_icon_issues_section(
+    missing_sensor_icons: list[str],
+    missing_binary_icons: list[str],
+    missing_number_icons: list[str],
+) -> list[str]:
+    """Generate icon issues section of the report."""
+    report_lines = []
+    total_missing_icons = (
+        len(missing_sensor_icons)
+        + len(missing_binary_icons)
+        + len(missing_number_icons)
+    )
+
+    if total_missing_icons > 0:
+        report_lines.append("🎨 ICON ISSUES")
+        report_lines.append("-" * 30)
+        report_lines.append(f"Missing sensor icons: {len(missing_sensor_icons)}")
+        report_lines.append(f"Missing binary sensor icons: {len(missing_binary_icons)}")
+        report_lines.append(f"Missing number icons: {len(missing_number_icons)}")
+        report_lines.append("")
+
+    return report_lines
+
+
+def _generate_detailed_missing_translations(
+    missing_keys: list[str], language: str
+) -> list[str]:
+    """Generate detailed missing translations with API information."""
+    report_lines = []
+    if missing_keys:
+        report_lines.append(f"Missing in {language}: {len(missing_keys)}")
+        for missing in sorted(missing_keys):
+            entity_type, key = missing.split(".", 1)
+            api_info = get_api_endpoint_info(key)
+            report_lines.append(f"  - {missing}")
+            report_lines.append(
+                f"    📁 Endpoint: {api_info.get('endpoint', 'Unknown')}"
+            )
+            if "parameter_id" in api_info:
+                report_lines.append(f"    🔑 Parameter ID: {api_info['parameter_id']}")
+            if "parameter_indices" in api_info:
+                report_lines.append(
+                    f"    🔑 Parameter Indices: {api_info['parameter_indices']}"
+                )
+            if "name" in api_info:
+                report_lines.append(f"    📝 Name: {api_info['name']}")
+            if "names" in api_info:
+                report_lines.append(f"    📝 Names: {api_info['names']}")
+            if "value" in api_info:
+                report_lines.append(f"    💾 Value: {api_info['value']}")
+            if "values" in api_info:
+                report_lines.append(f"    💾 Values: {api_info['values']}")
+            if "unit" in api_info:
+                report_lines.append(f"    📏 Unit: {api_info['unit']}")
+            if "units" in api_info:
+                report_lines.append(f"    📏 Units: {api_info['units']}")
+            if "special" in api_info:
+                report_lines.append(f"    ⚙️ Special: {api_info['special']}")
+            if "ranges" in api_info:
+                report_lines.append(f"    📊 Ranges: {api_info['ranges']}")
+            if "offsets" in api_info:
+                report_lines.append(f"    🔧 Offsets: {api_info['offsets']}")
+            report_lines.append(
+                f"    📋 Description: {api_info.get('description', 'No description')}"
+            )
+        report_lines.append("")
+    else:
+        report_lines.append(f"Missing in {language}: {len(missing_keys)}")
+    return report_lines
+
+
+def _generate_simple_missing_translations(
+    missing_keys: list[str], language: str
+) -> list[str]:
+    """Generate simple missing translations without API information."""
+    report_lines = []
+    if missing_keys:
+        report_lines.append(f"Missing in {language}: {len(missing_keys)}")
+        report_lines.extend(f"  - {missing}" for missing in sorted(missing_keys))
+        report_lines.append("")
+    else:
+        report_lines.append(f"Missing in {language}: {len(missing_keys)}")
+    return report_lines
+
+
+def _generate_consistency_issues_section(
+    consistency_issues: dict[str, list[str]],
+) -> list[str]:
+    """Generate consistency issues section of the report."""
+    report_lines = []
+    total_consistency_issues = (
+        len(consistency_issues["missing_in_en"])
+        + len(consistency_issues["missing_in_pl"])
+        + len(consistency_issues["missing_in_cz"])
+        + len(consistency_issues["missing_in_fr"])
+        + len(consistency_issues["missing_in_uk"])
+        + len(consistency_issues["missing_in_strings"])
+    )
+
+    if total_consistency_issues > 0:
+        report_lines.append("📋 CONSISTENCY ISSUES")
+        report_lines.append("-" * 30)
+
+        # Missing in English and Polish (with detailed API info)
+        report_lines.extend(
+            _generate_detailed_missing_translations(
+                consistency_issues["missing_in_en"], "English"
+            )
+        )
+        report_lines.extend(
+            _generate_detailed_missing_translations(
+                consistency_issues["missing_in_pl"], "Polish"
+            )
+        )
+
+        # Missing in other languages (simple format)
+        for lang_key, lang_name in [
+            ("missing_in_cz", "Czech"),
+            ("missing_in_fr", "French"),
+            ("missing_in_uk", "Ukrainian"),
+            ("missing_in_strings", "strings.json"),
+        ]:
+            report_lines.extend(
+                _generate_simple_missing_translations(
+                    consistency_issues[lang_key], lang_name
+                )
+            )
+
+        report_lines.append("")
+
+    return report_lines
 
 
 def step_8_check_entity_type_mismatches(
@@ -546,96 +820,31 @@ def step_9_generate_comprehensive_report(
     report_lines.append("=" * 60)
     report_lines.append("")
 
-    # Summary statistics
-    report_lines.append("📊 SUMMARY STATISTICS")
-    report_lines.append("-" * 30)
-    report_lines.append(f"Original sensor keys: {len(sensor_keys)}")
-    report_lines.append(f"Original binary sensor keys: {len(binary_sensor_keys)}")
-    report_lines.append(f"Original number keys: {len(number_keys)}")
-    report_lines.append(f"Snake_case sensor keys: {len(sensor_snake)}")
-    report_lines.append(f"Snake_case binary sensor keys: {len(binary_sensor_snake)}")
-    report_lines.append(f"Snake_case number keys: {len(number_snake)}")
-    report_lines.append("")
-
-    # Translation issues
-    total_missing_translations = (
-        len(missing_sensor_trans)
-        + len(missing_binary_trans)
-        + len(missing_number_trans)
+    # Generate each section using helper functions
+    report_lines.extend(
+        _generate_summary_statistics(
+            sensor_keys,
+            binary_sensor_keys,
+            number_keys,
+            sensor_snake,
+            binary_sensor_snake,
+            number_snake,
+        )
     )
 
-    if total_missing_translations > 0:
-        report_lines.append("❌ TRANSLATION ISSUES")
-        report_lines.append("-" * 30)
-        report_lines.append(f"Missing sensor translations: {len(missing_sensor_trans)}")
-        report_lines.append(
-            f"Missing binary sensor translations: {len(missing_binary_trans)}"
+    report_lines.extend(
+        _generate_translation_issues_section(
+            missing_sensor_trans, missing_binary_trans, missing_number_trans
         )
-        report_lines.append(f"Missing number translations: {len(missing_number_trans)}")
-        report_lines.append("")
-
-        if missing_sensor_trans:
-            report_lines.append("Missing Sensor Translations:")
-            report_lines.extend(f"  - {item}" for item in sorted(missing_sensor_trans))
-            report_lines.append("")
-
-        if missing_binary_trans:
-            report_lines.append("Missing Binary Sensor Translations:")
-            report_lines.extend(f"  - {item}" for item in sorted(missing_binary_trans))
-            report_lines.append("")
-
-        if missing_number_trans:
-            report_lines.append("Missing Number Translations:")
-            report_lines.extend(f"  - {item}" for item in sorted(missing_number_trans))
-            report_lines.append("")
-
-    # Icon issues
-    total_missing_icons = (
-        len(missing_sensor_icons)
-        + len(missing_binary_icons)
-        + len(missing_number_icons)
     )
 
-    if total_missing_icons > 0:
-        report_lines.append("🎨 ICON ISSUES")
-        report_lines.append("-" * 30)
-        report_lines.append(f"Missing sensor icons: {len(missing_sensor_icons)}")
-        report_lines.append(f"Missing binary sensor icons: {len(missing_binary_icons)}")
-        report_lines.append(f"Missing number icons: {len(missing_number_icons)}")
-        report_lines.append("")
-
-    # Consistency issues
-    total_consistency_issues = (
-        len(consistency_issues["missing_in_en"])
-        + len(consistency_issues["missing_in_pl"])
-        + len(consistency_issues["missing_in_cz"])
-        + len(consistency_issues["missing_in_fr"])
-        + len(consistency_issues["missing_in_uk"])
-        + len(consistency_issues["missing_in_strings"])
+    report_lines.extend(
+        _generate_icon_issues_section(
+            missing_sensor_icons, missing_binary_icons, missing_number_icons
+        )
     )
 
-    if total_consistency_issues > 0:
-        report_lines.append("📋 CONSISTENCY ISSUES")
-        report_lines.append("-" * 30)
-        report_lines.append(
-            f"Missing in English: {len(consistency_issues['missing_in_en'])}"
-        )
-        report_lines.append(
-            f"Missing in Polish: {len(consistency_issues['missing_in_pl'])}"
-        )
-        report_lines.append(
-            f"Missing in Czech: {len(consistency_issues['missing_in_cz'])}"
-        )
-        report_lines.append(
-            f"Missing in French: {len(consistency_issues['missing_in_fr'])}"
-        )
-        report_lines.append(
-            f"Missing in Ukrainian: {len(consistency_issues['missing_in_uk'])}"
-        )
-        report_lines.append(
-            f"Missing in strings.json: {len(consistency_issues['missing_in_strings'])}"
-        )
-        report_lines.append("")
+    report_lines.extend(_generate_consistency_issues_section(consistency_issues))
 
     # Entity type mismatches
     if entity_type_mismatches:
@@ -660,6 +869,19 @@ def step_9_generate_comprehensive_report(
                 report_lines.append("")
 
     # Total issues
+    total_missing_translations = (
+        len(missing_sensor_trans)
+        + len(missing_binary_trans)
+        + len(missing_number_trans)
+    )
+    total_missing_icons = (
+        len(missing_sensor_icons)
+        + len(missing_binary_icons)
+        + len(missing_number_icons)
+    )
+    total_consistency_issues = sum(
+        len(issues) for issues in consistency_issues.values()
+    )
     total_issues = (
         total_missing_translations
         + total_missing_icons
@@ -795,7 +1017,8 @@ def main():
     _LOGGER.info(report_content)
 
     # Save detailed report to file
-    report_file = BASE_DIR / "tests" / "translation_test_report.txt"
+    report_file = BASE_DIR / "tests" / "test_reports" / "translation_test_report.txt"
+    report_file.parent.mkdir(exist_ok=True)
     with report_file.open("w", encoding="utf-8") as f:
         f.write(report_content)
 
