@@ -344,8 +344,11 @@ HEATER_MODE_VALUES = {
 }
 
 
-# Heater mode parameter index (API parameter 55)
+# Heater mode winter/summer/auto parameter index (API parameter 55) - for writing settings
 HEATER_MODE_PARAM_INDEX = "55"
+
+# Heater mode winter/summer/auto current state parameter (API parameter 2049) - for reading current state
+HEATER_MODE_CURRENT_STATE_PARAM = "2049"
 
 # =============================================================================
 # PARAMETER ENDPOINT MAPPINGS

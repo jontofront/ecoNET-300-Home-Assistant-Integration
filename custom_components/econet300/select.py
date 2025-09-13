@@ -5,7 +5,7 @@ from typing import Any
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -13,6 +13,7 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .const import (
     DOMAIN,
+    HEATER_MODE_CURRENT_STATE_PARAM,
     HEATER_MODE_PARAM_INDEX,
     HEATER_MODE_VALUES,
     SERVICE_API,
@@ -62,54 +63,107 @@ class EconetSelect(EconetEntity, SelectEntity):
             get_heater_mode_value(current_option) if current_option else None
         )
 
-        return {
-            "heater_mode_value": heater_mode_value,
-            "available_options": list(HEATER_MODE_VALUES.values()),
-            "api_parameter": HEATER_MODE_PARAM_INDEX,
-        }
-
-    def _sync_state(self, value: Any) -> None:
-        """Synchronize the state of the select entity."""
-        # For heater mode, we need to get the value from the parameter index 55
-        # The value comes from the coordinator data
-        if self.entity_description.key == "heater_mode":
-            # Get the value from the parameter index 55
-            heater_mode_value = self.coordinator.data.get("paramsEdits", {}).get(
-                HEATER_MODE_PARAM_INDEX
+        # Get current state from regParamsData if available
+        current_state_value = None
+        if self.coordinator.data is not None:
+            reg_params_data = self.coordinator.data.get("regParamsData", {})
+            current_state_value = reg_params_data.get(
+                int(HEATER_MODE_CURRENT_STATE_PARAM)
             )
 
-            if heater_mode_value is not None:
-                # Extract the actual value if it's a dict
-                if isinstance(heater_mode_value, dict) and "value" in heater_mode_value:
-                    numeric_value = heater_mode_value["value"]
-                else:
-                    numeric_value = heater_mode_value
+        return {
+            "heater_mode_value": heater_mode_value,
+            "current_state_value": current_state_value,
+            "available_options": list(HEATER_MODE_VALUES.values()),
+            "setting_parameter": HEATER_MODE_PARAM_INDEX,
+            "current_state_parameter": HEATER_MODE_CURRENT_STATE_PARAM,
+        }
 
-                # Map the numeric value to the option name
-                if isinstance(numeric_value, (int, float)):
-                    option_name = HEATER_MODE_VALUES.get(int(numeric_value))
-                    if option_name is not None:
-                        self._attr_current_option = option_name
+    async def async_added_to_hass(self):
+        """Handle added to hass - override to check regParamsData for heater_mode."""
+        _LOGGER.debug(
+            "🏠 async_added_to_hass called for: %s", self.entity_description.key
+        )
+
+        if self.entity_description.key == "heater_mode":
+            _LOGGER.debug("🔥 Processing heater_mode in async_added_to_hass")
+            # For heater mode, get current state from regParamsData parameter 2049
+            if self.coordinator.data is not None:
+                _LOGGER.debug("📊 Coordinator data available")
+                reg_params_data = self.coordinator.data.get("regParamsData", {})
+                _LOGGER.debug("📋 regParamsData: %s", reg_params_data)
+                heater_mode_value = reg_params_data.get(
+                    int(HEATER_MODE_CURRENT_STATE_PARAM)
+                )
+                _LOGGER.debug(
+                    "🎯 Heater mode current state (2049): %s", heater_mode_value
+                )
+
+                if heater_mode_value is not None:
+                    if heater_mode_value in HEATER_MODE_VALUES:
+                        self._attr_current_option = HEATER_MODE_VALUES[
+                            heater_mode_value
+                        ]
+                        _LOGGER.debug(
+                            "✅ Set current_option to: %s", self._attr_current_option
+                        )
                     else:
                         self._attr_current_option = None
-                        _LOGGER.warning("Unknown heater mode value: %s", numeric_value)
+                        _LOGGER.warning(
+                            "Unknown heater mode value: %s", heater_mode_value
+                        )
                 else:
                     self._attr_current_option = None
-                    _LOGGER.warning(
-                        "Invalid heater mode value type: %s", type(numeric_value)
-                    )
+                    _LOGGER.debug("❌ No heater mode current state found")
             else:
-                self._attr_current_option = None
-                _LOGGER.debug("Heater mode value not found in coordinator data")
-        # Handle other select entities if needed
-        elif value is not None and isinstance(value, (int, float)):
-            option_name = HEATER_MODE_VALUES.get(int(value))
-            if option_name is not None:
-                self._attr_current_option = option_name
-            else:
-                self._attr_current_option = None
+                _LOGGER.debug("❌ Coordinator data is None")
         else:
-            self._attr_current_option = None
+            # For other entities, use standard logic
+            _LOGGER.debug(
+                "🔄 Using standard logic for: %s", self.entity_description.key
+            )
+            await super().async_added_to_hass()
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        _LOGGER.debug(
+            "🔄 _handle_coordinator_update called for: %s", self.entity_description.key
+        )
+
+        if self.coordinator.data is None:
+            _LOGGER.debug("❌ Coordinator data is None")
+            return
+
+        # For heater mode, get current state from regParamsData parameter 2049
+        if self.entity_description.key == "heater_mode":
+            _LOGGER.debug("🔥 Processing heater_mode in _handle_coordinator_update")
+            reg_params_data = self.coordinator.data.get("regParamsData", {})
+            _LOGGER.debug("📋 regParamsData: %s", reg_params_data)
+            heater_mode_value = reg_params_data.get(
+                int(HEATER_MODE_CURRENT_STATE_PARAM)
+            )
+            _LOGGER.debug("🎯 Heater mode current state (2049): %s", heater_mode_value)
+
+            if heater_mode_value is not None:
+                # Map numeric value to option name
+                if heater_mode_value in HEATER_MODE_VALUES:
+                    self._attr_current_option = HEATER_MODE_VALUES[heater_mode_value]
+                    _LOGGER.debug(
+                        "✅ Updated current_option to: %s", self._attr_current_option
+                    )
+                else:
+                    self._attr_current_option = None
+                    _LOGGER.warning("Unknown heater mode value: %s", heater_mode_value)
+            else:
+                self._attr_current_option = None
+                _LOGGER.debug("❌ No heater mode current state found")
+        else:
+            # For other entities, use standard logic
+            _LOGGER.debug(
+                "🔄 Using standard logic for: %s", self.entity_description.key
+            )
+            super()._handle_coordinator_update()
 
         self.async_write_ha_state()
 
