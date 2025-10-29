@@ -170,7 +170,12 @@ class EconetNumber(EconetEntity, NumberEntity):
             )
             return
 
-        if not await self.api.set_param(self.entity_description.key, value):
+        # Convert to int if the value has no fractional part
+        # This ensures parameters that only accept integers (like SummerOn/SummerOff)
+        # receive integers, while fractional values (like 0.3 for heat curves) stay as floats
+        api_value = int(value) if value == int(value) else value
+
+        if not await self.api.set_param(self.entity_description.key, api_value):
             _LOGGER.warning("Setting value failed")
             return
 
