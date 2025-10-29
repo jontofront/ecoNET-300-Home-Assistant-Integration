@@ -133,6 +133,12 @@ ECOMAX360I_SENSORS = {
     "Circuit1thermostat",
     "heating_work_state_pump4",
     "flapValveStates",  # 3-way valve state: 0=CH (Central Heating), 3=DHW (Domestic Hot Water)
+    # Heat pump (Axen) sensors
+    "AxenOutdoorTemp",  # Heat pump outdoor temperature
+    "AxenOutgoingTemp",  # Heat pump supply/outgoing temperature
+    "AxenReturnTemp",  # Heat pump return temperature
+    "AxenCompressorFreq",  # Heat pump compressor frequency (Hz)
+    "AxenWorkState",  # Heat pump operating state
     # ecoMAX360 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp",  # Parameter 238 - Circuit 1 Day Temperature
     "Circuit1EcoTemp",  # Parameter 239 - Circuit 1 Night Temperature
@@ -505,6 +511,12 @@ ENTITY_UNIT_MAP = {
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
     "flapValveStates": None,  # 3-way valve state (numeric: 0=CH, 3=DHW)
+    # Heat pump (Axen) units
+    "AxenOutdoorTemp": UnitOfTemperature.CELSIUS,
+    "AxenOutgoingTemp": UnitOfTemperature.CELSIUS,
+    "AxenReturnTemp": UnitOfTemperature.CELSIUS,
+    "AxenCompressorFreq": "Hz",
+    "AxenWorkState": None,
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit1EcoTemp": UnitOfTemperature.CELSIUS,
@@ -553,6 +565,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "statusCO": None,
     "statusCWU": None,
     "flapValveStates": None,  # 3-way valve state (not a measurement)
+    "AxenWorkState": None,  # Heat pump work state (not a measurement)
     "softVer": None,
     "controllerID": None,
     "moduleASoftVer": None,
@@ -645,6 +658,12 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
     "flapValveStates": SensorDeviceClass.ENUM,  # 3-way valve state
+    # Heat pump (Axen) device classes
+    "AxenOutdoorTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenOutgoingTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenReturnTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenCompressorFreq": SensorDeviceClass.FREQUENCY,
+    "AxenWorkState": SensorDeviceClass.ENUM,
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1EcoTemp": SensorDeviceClass.TEMPERATURE,
@@ -756,6 +775,12 @@ ENTITY_PRECISION = {
     "PS": None,
     "TempBuforDown": 1,
     "flapValveStates": 0,  # 3-way valve state (integer value)
+    # Heat pump (Axen) precision
+    "AxenOutdoorTemp": 1,
+    "AxenOutgoingTemp": 1,
+    "AxenReturnTemp": 1,
+    "AxenCompressorFreq": 0,
+    "AxenWorkState": 0,
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": 1,
     "Circuit1EcoTemp": 1,
@@ -819,6 +844,7 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, STATE_UNKNOWN),
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
+    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(x, STATE_UNKNOWN),
 }
 
 # =============================================================================
@@ -955,4 +981,9 @@ SENSOR_STATUS_CO_MAPPING: dict[int, str] = {
 SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
     0: "off",
     1: "on",
+}
+
+SENSOR_FLAP_VALVE_STATES_MAPPING: dict[int, str] = {
+    0: "CH",  # Central Heating
+    3: "DHW",  # Domestic Hot Water
 }

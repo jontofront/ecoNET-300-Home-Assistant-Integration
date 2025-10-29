@@ -171,7 +171,26 @@
         "name": "Moc nadmuchu"
       },
       "flap_valve_states": {
-        "name": "Stan zaworu 3-drogowego"
+        "name": "Stan zaworu 3-drogowego",
+        "state": {
+          "ch": "Centralne ogrzewanie",
+          "dhw": "Ciepła woda"
+        }
+      },
+      "axen_outdoor_temp": {
+        "name": "Temperatura zewnętrzna pompy ciepła"
+      },
+      "axen_outgoing_temp": {
+        "name": "Temperatura zasilania pompy ciepła"
+      },
+      "axen_return_temp": {
+        "name": "Temperatura powrotu pompy ciepła"
+      },
+      "axen_compressor_freq": {
+        "name": "Częstotliwość sprężarki pompy ciepła"
+      },
+      "axen_work_state": {
+        "name": "Status pompy ciepła"
       },
       "lambda_status": {
         "name": "Lambda status",
