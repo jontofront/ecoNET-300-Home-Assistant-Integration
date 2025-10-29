@@ -108,12 +108,12 @@ async def async_setup_entry(
     api: Econet300Api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
     # Create boiler control switch
-    boiler_switch = create_boiler_switch(coordinator, api)
+    # boiler_switch = create_boiler_switch(coordinator, api)
 
-    # Add the switch entity
-    async_add_entities([boiler_switch])
+    # # Add the switch entity
+    # async_add_entities([boiler_switch])
 
-    # Update the switch state based on current data
-    if coordinator.data and "mode" in coordinator.data:
-        mode_value = coordinator.data["mode"]
-        boiler_switch.update_state_from_mode(mode_value)
+    # # Update the switch state based on current data
+    # if coordinator.data and "mode" in coordinator.data:
+    #     mode_value = coordinator.data["mode"]
+    #     boiler_switch.update_state_from_mode(mode_value)

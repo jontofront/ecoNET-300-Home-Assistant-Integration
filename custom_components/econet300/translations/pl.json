@@ -41,6 +41,22 @@
           "night_mode": "Tryb nocny",
           "schedule": "Harmonogram"
         }
+      },
+      "system_work_mode": {
+        "name": "Tryb pracy systemu",
+        "state": {
+          "summer": "Lato",
+          "winter": "Zima",
+          "auto": "Automatyczny"
+        }
+      },
+      "dhw_work_mode": {
+        "name": "Tryb ciepłej wody",
+        "state": {
+          "off": "Wyłączony",
+          "on": "Włączony",
+          "schedule": "Harmonogram"
+        }
       }
     },
     "binary_sensor": {
@@ -638,6 +654,9 @@
       },
       "circuit1_curveshift": {
         "name": "Przesunięcie krzywej obwodu 1"
+      },
+      "mix_circ1_heat_curve_fan_coil": {
+        "name": "Krzywa grzewcza fan coil obwodu 1"
       },
       "circuit2_comfort_temp": {
         "name": "Temperatura obwodu 2 - dzień"

@@ -41,6 +41,22 @@
                     "night_mode": "Night Mode",
                     "schedule": "Schedule"
                 }
+            },
+            "system_work_mode": {
+                "name": "System Work Mode",
+                "state": {
+                    "summer": "Summer",
+                    "winter": "Winter",
+                    "auto": "Auto"
+                }
+            },
+            "dhw_work_mode": {
+                "name": "Hot Water Mode",
+                "state": {
+                    "off": "Off",
+                    "on": "On",
+                    "schedule": "Schedule"
+                }
             }
         },
         "binary_sensor": {
@@ -648,6 +664,9 @@
             },
             "circuit1_curveshift": {
                 "name": "Circuit 1 Curve Shift"
+            },
+            "mix_circ1_heat_curve_fan_coil": {
+                "name": "Circuit 1 Fan Coil Heat Curve"
             },
             "circuit2_comfort_temp": {
                 "name": "Circuit 2 Day Temperature"

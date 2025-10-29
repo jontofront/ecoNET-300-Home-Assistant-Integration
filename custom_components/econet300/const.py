@@ -372,6 +372,7 @@ ECOMAX360I_NUMBER_MAP = {
     "261": "Circuit1BaseTemp",  # Circuit 1 Base/Max Temperature (24-75°C)
     "273": "Circuit1CurveRadiator",  # Circuit 1 Heating Curve Slope (0-4)
     "275": "Circuit1Curveshift",  # Circuit 1 Curve Parallel Shift (-20 to 20)
+    "586": "MixCirc1HeatCurveFanCoil",  # Circuit 1 Fan Coil Heat Curve (0-4)
     # Disabled circuits (uncomment as needed)
     # "288": "Circuit2ComfortTemp",  # Circuit 2 Day Temperature
     # "289": "Circuit2EcoTemp",  # Circuit 2 Night Temperature
@@ -417,12 +418,27 @@ CIRCUIT1_WORK_STATE_VALUES = {
     2: "night_mode",
     3: "schedule",
 }
-CIRCUIT1_WORK_STATE_PARAM_INDEX = "236"
+
+# System Work Mode - API parameter 162 (ecoMAX360i)
+SYSTEM_WORK_MODE_VALUES = {
+    1: "summer",
+    2: "winter",
+    6: "auto",
+}
+
+# DHW/Hot Water Work Mode - API parameter 119 (ecoMAX360i)
+DHW_WORK_MODE_VALUES = {
+    0: "off",
+    1: "on",
+    2: "schedule",
+}
 
 # Select entity mapping by controller type
 SELECT_MAP_KEY = {
     "ecoMAX360i": {
         "236": ("circuit1_work_state", CIRCUIT1_WORK_STATE_VALUES),
+        "162": ("system_work_mode", SYSTEM_WORK_MODE_VALUES),
+        "119": ("dhw_work_mode", DHW_WORK_MODE_VALUES),
     },
     "_default": {
         "55": ("heater_mode", HEATER_MODE_VALUES),
@@ -944,6 +960,9 @@ ENTITY_STEP = {
     # ecoMAX360 circuit temperature setpoints
     "Circuit1ComfortTemp": 0.1,
     "Circuit1EcoTemp": 0.1,
+    "Circuit1DownHist": 0.1,
+    "Circuit1CurveRadiator": 0.1,
+    "MixCirc1HeatCurveFanCoil": 0.1,
     "Circuit2ComfortTemp": 0.1,
     "Circuit2EcoTemp": 0.1,
     "Circuit3ComfortTemp": 0.1,
