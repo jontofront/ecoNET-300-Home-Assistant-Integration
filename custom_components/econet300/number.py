@@ -99,8 +99,16 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Set native min and max values for the entity."""
         # editParams uses 'minv'/'maxv', paramsEdits uses 'min'/'max'
         if isinstance(value, dict):
-            self._attr_native_min_value = value.get("minv") or value.get("min")
-            self._attr_native_max_value = value.get("maxv") or value.get("max")
+            # Check for editParams format first (minv/maxv)
+            if "minv" in value:
+                self._attr_native_min_value = value["minv"]
+            elif "min" in value:
+                self._attr_native_min_value = value["min"]
+
+            if "maxv" in value:
+                self._attr_native_max_value = value["maxv"]
+            elif "max" in value:
+                self._attr_native_max_value = value["max"]
         _LOGGER.debug(
             "ecoNETNumber _set_value_limits: min=%s, max=%s",
             self._attr_native_min_value,
@@ -162,7 +170,7 @@ class EconetNumber(EconetEntity, NumberEntity):
             )
             return
 
-        if not await self.api.set_param(self.entity_description.key, int(value)):
+        if not await self.api.set_param(self.entity_description.key, value):
             _LOGGER.warning("Setting value failed")
             return
 
