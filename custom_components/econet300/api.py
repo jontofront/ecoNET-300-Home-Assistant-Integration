@@ -114,7 +114,7 @@ class EconetClient:
                         return None
 
                     data = await resp.json()
-                    _LOGGER.debug("Fetched data: %s", data)
+                    _LOGGER.debug("Fetched data: for URL: %s", url)
                     return data
 
             except TimeoutError:
@@ -378,7 +378,7 @@ class Econet300Api:
             )
             return {}
         else:
-            _LOGGER.debug("Fetched regParamsData: %s", regParamsData)
+            _LOGGER.debug("Fetched regParamsData")
             return regParamsData
 
     async def fetch_param_edit_data(self):
@@ -407,7 +407,7 @@ class Econet300Api:
         regParams = await self._fetch_api_data_by_key(
             API_REG_PARAMS_URI, API_REG_PARAMS_PARAM_DATA
         )
-        _LOGGER.debug("Fetched regParams data: %s", regParams)
+        _LOGGER.debug("Fetched regParams data")
         _LOGGER.debug("Type of regParams: %s", type(regParams))
         return regParams
 
@@ -419,7 +419,7 @@ class Econet300Api:
             API_SYS_PARAMS_URI,
         )
         sysParams = await self._fetch_api_data_by_key(API_SYS_PARAMS_URI)
-        _LOGGER.debug("Fetched sysParams data: %s", sysParams)
+        _LOGGER.debug("Fetched sysParams data:")
         return sysParams
 
     async def fetch_edit_params(self) -> dict[str, Any] | None:

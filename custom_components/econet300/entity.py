@@ -167,10 +167,10 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.info(
                 "async_added_to_hass: editParams was None, defaulting to empty dict"
             )
-        _LOGGER.debug("async_sysParams: %s", sys_params)
-        _LOGGER.debug("async_regParams: %s", reg_params)
-        _LOGGER.debug("async_paramsEdits: %s", params_edits)
-        _LOGGER.debug("async_editParams: %s", edit_params)
+        # _LOGGER.debug("async_sysParams: %s", sys_params)
+        # _LOGGER.debug("async_regParams: %s", reg_params)
+        # _LOGGER.debug("async_paramsEdits: %s", params_edits)
+        # _LOGGER.debug("async_editParams: %s", edit_params)
 
         # Check the available keys in all sources
         sys_keys = sys_params.keys() if sys_params is not None else []
