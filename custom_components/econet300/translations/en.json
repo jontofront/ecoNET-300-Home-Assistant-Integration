@@ -658,6 +658,9 @@
       "mix_circ1_heat_curve_fan_coil": {
         "name": "Circuit 1 Fan Coil Heat Curve"
       },
+      "circuit1_mixer_cool_base_temp": {
+        "name": "Circuit 1 Cooling Base Temperature"
+      },
       "circuit2_comfort_temp": {
         "name": "Circuit 2 Day Temperature"
       },

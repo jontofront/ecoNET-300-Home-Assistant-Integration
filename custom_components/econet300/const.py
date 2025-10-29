@@ -376,6 +376,7 @@ ECOMAX360I_NUMBER_MAP = {
     "273": "Circuit1CurveRadiator",  # Circuit 1 Heating Curve Slope (0-4)
     "275": "Circuit1Curveshift",  # Circuit 1 Curve Parallel Shift (-20 to 20)
     "586": "MixCirc1HeatCurveFanCoil",  # Circuit 1 Fan Coil Heat Curve (0-4)
+    "739": "Circuit1MixerCoolBaseTemp",  # Circuit 1 Cooling Base Temperature (7-30°C)
     # Disabled circuits (uncomment as needed)
     # "288": "Circuit2ComfortTemp",  # Circuit 2 Day Temperature
     # "289": "Circuit2EcoTemp",  # Circuit 2 Night Temperature

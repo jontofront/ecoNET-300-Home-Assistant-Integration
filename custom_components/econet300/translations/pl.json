@@ -664,6 +664,9 @@
       "mix_circ1_heat_curve_fan_coil": {
         "name": "Krzywa grzewcza fan coil obwodu 1"
       },
+      "circuit1_mixer_cool_base_temp": {
+        "name": "Temperatura bazowa chłodzenia obwodu 1"
+      },
       "circuit2_comfort_temp": {
         "name": "Temperatura obwodu 2 - dzień"
       },
