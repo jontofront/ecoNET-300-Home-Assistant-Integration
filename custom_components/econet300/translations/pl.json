@@ -170,6 +170,9 @@
       "fan_power": {
         "name": "Moc nadmuchu"
       },
+      "flap_valve_states": {
+        "name": "Stan zaworu 3-drogowego"
+      },
       "lambda_status": {
         "name": "Lambda status",
         "state": {

@@ -132,6 +132,7 @@ ECOMAX360I_SENSORS = {
     "heatingUpperTemp",
     "Circuit1thermostat",
     "heating_work_state_pump4",
+    "flapValveStates",  # 3-way valve state: 0=CH (Central Heating), 3=DHW (Domestic Hot Water)
     # ecoMAX360 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp",  # Parameter 238 - Circuit 1 Day Temperature
     "Circuit1EcoTemp",  # Parameter 239 - Circuit 1 Night Temperature
@@ -503,6 +504,7 @@ ENTITY_UNIT_MAP = {
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
+    "flapValveStates": None,  # 3-way valve state (numeric: 0=CH, 3=DHW)
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit1EcoTemp": UnitOfTemperature.CELSIUS,
@@ -550,6 +552,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "thermostat": None,
     "statusCO": None,
     "statusCWU": None,
+    "flapValveStates": None,  # 3-way valve state (not a measurement)
     "softVer": None,
     "controllerID": None,
     "moduleASoftVer": None,
@@ -641,6 +644,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
+    "flapValveStates": SensorDeviceClass.ENUM,  # 3-way valve state
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1EcoTemp": SensorDeviceClass.TEMPERATURE,
@@ -751,6 +755,7 @@ ENTITY_PRECISION = {
     # ecoMAX360i
     "PS": None,
     "TempBuforDown": 1,
+    "flapValveStates": 0,  # 3-way valve state (integer value)
     # ecoMAX360-cf8 specific temperature circuit and buffer parameters
     "Circuit1ComfortTemp": 1,
     "Circuit1EcoTemp": 1,

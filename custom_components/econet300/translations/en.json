@@ -173,6 +173,9 @@
       "fan_power": {
         "name": "Fan power"
       },
+      "flap_valve_states": {
+        "name": "3-way valve state"
+      },
       "lambda_status": {
         "name": "Lambda status",
         "state": {

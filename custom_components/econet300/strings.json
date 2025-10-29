@@ -1,583 +1,586 @@
 {
-  "config": {
-    "step": {
-      "user": {
-        "data": {
-          "host": "[%key:common::config_flow::data::host%]",
-          "username": "[%key:common::config_flow::data::username%]",
-          "password": "[%key:common::config_flow::data::password%]"
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "host": "[%key:common::config_flow::data::host%]",
+                    "username": "[%key:common::config_flow::data::username%]",
+                    "password": "[%key:common::config_flow::data::password%]"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+            "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+            "unknown": "[%key:common::config_flow::error::unknown%]"
+        },
+        "abort": {
+            "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
         }
-      }
     },
-    "error": {
-      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
-      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
-      "unknown": "[%key:common::config_flow::error::unknown%]"
-    },
-    "abort": {
-      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    "entity": {
+        "switch": {
+            "boiler_control": {
+                "name": "Boiler On/Off"
+            }
+        },
+        "select": {
+            "heater_mode": {
+                "name": "Heater Mode"
+            },
+            "heater_mode_winter": {
+                "name": "Winter"
+            },
+            "heater_mode_summer": {
+                "name": "Summer"
+            },
+            "heater_mode_auto": {
+                "name": "Auto"
+            }
+        },
+        "binary_sensor": {
+            "lighter_works": {
+                "name": "Lighter"
+            },
+            "weather_control": {
+                "name": "Weather control the boiler"
+            },
+            "unseal": {
+                "name": "Unseal"
+            },
+            "pump_co_works": {
+                "name": "Pump CO"
+            },
+            "fan_works": {
+                "name": "Fan"
+            },
+            "feeder_works": {
+                "name": "Feeder"
+            },
+            "additional_feeder": {
+                "name": "Additional feeder"
+            },
+            "pump_cwu_works": {
+                "name": "Pump CWU"
+            },
+            "mixer_pump1": {
+                "name": "Mixer 1 pump"
+            },
+            "mixer_pump_works1": {
+                "name": "Mixer 1 pump"
+            },
+            "mixer_pump_works2": {
+                "name": "Mixer 2 pump"
+            },
+            "mixer_pump_works3": {
+                "name": "Mixer 3 pump"
+            },
+            "mixer_pump_works4": {
+                "name": "Mixer 4 pump"
+            },
+            "mixer_pump_works5": {
+                "name": "Mixer 5 pump"
+            },
+            "mixer_pump_works6": {
+                "name": "Mixer 6 pump"
+            },
+            "boiler_pump": {
+                "name": "Boiler pump"
+            },
+            "main_srv": {
+                "name": "Econet24.com server"
+            },
+            "wifi": {
+                "name": "Wi-Fi"
+            },
+            "lan": {
+                "name": "LAN"
+            },
+            "lambda_status": {
+                "name": "Lambda sensor"
+            },
+            "contact_gzc": {
+                "name": "GZC contact"
+            },
+            "contact_gzc_active": {
+                "name": "GZC contact active"
+            },
+            "pump_circulation_works": {
+                "name": "Circulation pump working"
+            },
+            "pump_solar_works": {
+                "name": "Solar pump working"
+            },
+            "pump_fireplace_works": {
+                "name": "Fireplace pump working"
+            },
+            "ecoster_contacts1": {
+                "name": "Room thermostat 1 contacts"
+            },
+            "ecoster_contacts2": {
+                "name": "Room thermostat 2 contacts"
+            },
+            "ecoster_contacts3": {
+                "name": "Room thermostat 3 contacts"
+            },
+            "ecoster_contacts4": {
+                "name": "Room thermostat 4 contacts"
+            },
+            "ecoster_contacts5": {
+                "name": "Room thermostat 5 contacts"
+            },
+            "ecoster_contacts6": {
+                "name": "Room thermostat 6 contacts"
+            },
+            "ecoster_contacts7": {
+                "name": "Room thermostat 7 contacts"
+            },
+            "ecoster_contacts8": {
+                "name": "Room thermostat 8 contacts"
+            },
+            "ecoster_day_sched1": {
+                "name": "Room thermostat 1 day schedule"
+            },
+            "ecoster_day_sched2": {
+                "name": "Room thermostat 2 day schedule"
+            },
+            "ecoster_day_sched3": {
+                "name": "Room thermostat 3 day schedule"
+            },
+            "ecoster_day_sched4": {
+                "name": "Room thermostat 4 day schedule"
+            },
+            "ecoster_day_sched5": {
+                "name": "Room thermostat 5 day schedule"
+            },
+            "ecoster_day_sched6": {
+                "name": "Room thermostat 6 day schedule"
+            },
+            "ecoster_day_sched7": {
+                "name": "Room thermostat 7 day schedule"
+            },
+            "ecoster_day_sched8": {
+                "name": "Room thermostat 8 day schedule"
+            },
+            "fuel_consumption_calc": {
+                "name": "Fuel consumption calculator"
+            },
+            "ecosrv_https": {
+                "name": "ecoNET server HTTPS"
+            }
+        },
+        "sensor": {
+            "boiler_power": {
+                "name": "Boiler output"
+            },
+            "boiler_power_kw": {
+                "name": "Boiler power"
+            },
+            "fuel_level": {
+                "name": "Fuel level"
+            },
+            "fan_power": {
+                "name": "Fan power"
+            },
+            "flap_valve_states": {
+                "name": "3-way valve state"
+            },
+            "lambda_status": {
+                "name": "Lambda status",
+                "state": {
+                    "stop": "Stop",
+                    "start": "Start",
+                    "working": "Working",
+                    "error": "Error",
+                    "maintenance": "Maintenance"
+                }
+            },
+            "lambda_set": {
+                "name": "Lambda set"
+            },
+            "lambda_level": {
+                "name": "Lambda level"
+            },
+            "status_co": {
+                "name": "Central heating status",
+                "state": {
+                    "off": "Off",
+                    "pause": "Pause",
+                    "reload": "Reload",
+                    "fire": "Fire",
+                    "alert": "Alert",
+                    "test_tube": "Test tube",
+                    "stop_circle": "Stop circle",
+                    "gauge": "Gauge",
+                    "help_circle": "Help circle",
+                    "error": "Error",
+                    "maintenance": "Maintenance"
+                }
+            },
+            "work_at100": {
+                "name": "Work at 100%"
+            },
+            "work_at50": {
+                "name": "Work at 50%"
+            },
+            "work_at30": {
+                "name": "Work at 30%"
+            },
+            "feeder_work": {
+                "name": "Feeder work"
+            },
+            "firing_up_count": {
+                "name": "Firing up count"
+            },
+            "soft_ver": {
+                "name": "Module ecoNET version"
+            },
+            "controller_id": {
+                "name": "Controller name"
+            },
+            "module_a_soft_ver": {
+                "name": "Module A version"
+            },
+            "module_b_soft_ver": {
+                "name": "Module B version"
+            },
+            "module_c_soft_ver": {
+                "name": "Module C version"
+            },
+            "module_lambda_soft_ver": {
+                "name": "Module Lambda version"
+            },
+            "module_panel_soft_ver": {
+                "name": "Module Panel version"
+            },
+            "module_ecoster_soft_ver": {
+                "name": "Module ecoSTER version"
+            },
+            "mode": {
+                "name": "Boiler mode",
+                "state": {
+                    "off": "[%key:common::state::off%]",
+                    "fire_up": "Fire up",
+                    "operation": "Operation",
+                    "work": "Work",
+                    "supervision": "Supervision",
+                    "halted": "Halted",
+                    "stop": "Stop",
+                    "burning_off": "Burning off",
+                    "manual": "Manual",
+                    "alarm": "Alarm",
+                    "unsealing": "Unsealing",
+                    "chimney": "Chimney",
+                    "stabilization": "Stabilization",
+                    "no_transmission": "No transmission",
+                    "unknown": "Unknown"
+                }
+            },
+            "mixer_temp1": {
+                "name": "Mixer 1 temperature"
+            },
+            "mixer_temp2": {
+                "name": "Mixer 2 temperature"
+            },
+            "mixer_temp3": {
+                "name": "Mixer 3 temperature"
+            },
+            "mixer_temp4": {
+                "name": "Mixer 4 temperature"
+            },
+            "mixer_temp5": {
+                "name": "Mixer 5 temperature"
+            },
+            "mixer_temp6": {
+                "name": "Mixer 6 temperature"
+            },
+            "mixer_set_temp1": {
+                "name": "Mixer 1 target temperature"
+            },
+            "mixer_set_temp2": {
+                "name": "Mixer 2 target temperature"
+            },
+            "mixer_set_temp3": {
+                "name": "Mixer 3 target temperature"
+            },
+            "mixer_set_temp4": {
+                "name": "Mixer 4 target temperature"
+            },
+            "mixer_set_temp5": {
+                "name": "Mixer 5 target temperature"
+            },
+            "mixer_set_temp6": {
+                "name": "Mixer 6 target temperature"
+            },
+            "quality": {
+                "name": "Signal quality"
+            },
+            "signal": {
+                "name": "Signal strength"
+            },
+            "servo_mixer1": {
+                "name": "Mixer 1 servo position"
+            },
+            "temp_co": {
+                "name": "Heating temperature"
+            },
+            "temp_cwu": {
+                "name": "Water heater temperature"
+            },
+            "status_cwu": {
+                "name": "Water heater status",
+                "state": {
+                    "not_set": "Not set",
+                    "set": "Set",
+                    "no_temp_set": "No set"
+                }
+            },
+            "temp_cwu_set": {
+                "name": "Water heater set temperature"
+            },
+            "tz_cwu": {
+                "name": "Hot water temperature"
+            },
+            "temp_upper_buffer": {
+                "name": "Upper buffer temperature"
+            },
+            "temp_lower_buffer": {
+                "name": "Lower buffer temperature"
+            },
+            "temp_flue_gas": {
+                "name": "Flue gas temperature"
+            },
+            "temp_external_sensor": {
+                "name": "Outside temperature"
+            },
+            "temp_feeder": {
+                "name": "Feeder temperature"
+            },
+            "temp_co_set": {
+                "name": "Heating target temperature"
+            },
+            "thermostat": {
+                "name": "Thermostat"
+            },
+            "unseal": {
+                "name": "Unseal"
+            },
+            "valve_mixer1": {
+                "name": "Mixer 1 valve % open"
+            },
+            "weather_control": {
+                "name": "Weather control the boiler"
+            },
+            "ps": {
+                "name": "PS"
+            },
+            "circuit2thermostat_temp": {
+                "name": "Circuit 2 thermostat temp."
+            },
+            "temp_clutch": {
+                "name": "Flow Temperature"
+            },
+            "circuit3thermostat_temp": {
+                "name": "Circuit 3 thermostat temp."
+            },
+            "temp_wthr": {
+                "name": "Outside Temperature"
+            },
+            "temp_circuit3": {
+                "name": "Circuit 3 temp."
+            },
+            "temp_circuit2": {
+                "name": "Circuit 2 temp."
+            },
+            "temp_bufor_up": {
+                "name": "Upper buffer temp."
+            },
+            "temp_bufor_down": {
+                "name": "Buffer lower temp."
+            },
+            "heating_upper_temp": {
+                "name": "Heating upper temp."
+            },
+            "circuit1thermostat": {
+                "name": "Circuit 1 actual temp."
+            },
+            "heating_work_state_pump4": {
+                "name": "Heating work state pump 4"
+            },
+            "fuel_consum": {
+                "name": "Fuel consumption"
+            },
+            "fuel_stream": {
+                "name": "Fuel stream"
+            },
+            "temp_back": {
+                "name": "Return temperature"
+            },
+            "transmission": {
+                "name": "Transmission"
+            },
+            "ecoster_temp1": {
+                "name": "Room temperature 1"
+            },
+            "ecoster_temp2": {
+                "name": "Room temperature 2"
+            },
+            "ecoster_temp3": {
+                "name": "Room temperature 3"
+            },
+            "ecoster_temp4": {
+                "name": "Room temperature 4"
+            },
+            "ecoster_temp5": {
+                "name": "Room temperature 5"
+            },
+            "ecoster_temp6": {
+                "name": "Room temperature 6"
+            },
+            "ecoster_temp7": {
+                "name": "Room temperature 7"
+            },
+            "ecoster_temp8": {
+                "name": "Room temperature 8"
+            },
+            "ecoster_mode1": {
+                "name": "Room thermostat 1 mode"
+            },
+            "ecoster_mode2": {
+                "name": "Room thermostat 2 mode"
+            },
+            "ecoster_mode3": {
+                "name": "Room thermostat 3 mode"
+            },
+            "ecoster_mode4": {
+                "name": "Room thermostat 4 mode"
+            },
+            "ecoster_mode5": {
+                "name": "Room thermostat 5 mode"
+            },
+            "ecoster_mode6": {
+                "name": "Room thermostat 6 mode"
+            },
+            "ecoster_mode7": {
+                "name": "Room thermostat 7 mode"
+            },
+            "ecoster_mode8": {
+                "name": "Room thermostat 8 mode"
+            },
+            "ecoster_set_temp1": {
+                "name": "Room thermostat 1 setpoint"
+            },
+            "ecoster_set_temp2": {
+                "name": "Room thermostat 2 setpoint"
+            },
+            "ecoster_set_temp3": {
+                "name": "Room thermostat 3 setpoint"
+            },
+            "ecoster_set_temp4": {
+                "name": "Room thermostat 4 setpoint"
+            },
+            "ecoster_set_temp5": {
+                "name": "Room thermostat 5 setpoint"
+            },
+            "ecoster_set_temp6": {
+                "name": "Room thermostat 6 setpoint"
+            },
+            "ecoster_set_temp7": {
+                "name": "Room thermostat 7 setpoint"
+            },
+            "ecoster_set_temp8": {
+                "name": "Room thermostat 8 setpoint"
+            },
+            "t1": {
+                "name": "Collector Temperature"
+            },
+            "t2": {
+                "name": "Tank Temperature"
+            },
+            "t3": {
+                "name": "Tank Temperature"
+            },
+            "t4": {
+                "name": "Return Temperature"
+            },
+            "t5": {
+                "name": "Collector Temperature - Power Measurement"
+            },
+            "t6": {
+                "name": "Temperature Sensor"
+            },
+            "tzcwu": {
+                "name": "Hot Water Temperature"
+            },
+            "p1": {
+                "name": "Pump 1 Status"
+            },
+            "p2": {
+                "name": "Pump 2 Status"
+            },
+            "h": {
+                "name": "Output Status"
+            },
+            "uzysk_ca_kowity": {
+                "name": "Total Heat Output"
+            },
+            "ecosrv_addr": {
+                "name": "ecoNET Server Address"
+            },
+            "ecosrv_soft_ver": {
+                "name": "ecoNET Server Software Ver."
+            },
+            "router_type": {
+                "name": "Router Type"
+            },
+            "protocol_type": {
+                "name": "Protocol Type"
+            },
+            "tem_co": {
+                "name": "Boiler Temperature"
+            },
+            "circuit1_comfort_temp": {
+                "name": "Circuit 1 Day Temperature"
+            },
+            "circuit1_eco_temp": {
+                "name": "Circuit 1 Night Temperature"
+            },
+            "circuit2_comfort_temp": {
+                "name": "Circuit 2 Day Temperature"
+            },
+            "circuit2_eco_temp": {
+                "name": "Circuit 2 Night Temperature"
+            },
+            "circuit3_comfort_temp": {
+                "name": "Circuit 3 Day Temperature"
+            },
+            "circuit3_eco_temp": {
+                "name": "Circuit 3 Night Temperature"
+            },
+            "circuit4_comfort_temp": {
+                "name": "Circuit 4 Day Temperature"
+            },
+            "circuit4_eco_temp": {
+                "name": "Circuit 4 Night Temperature"
+            },
+            "circuit5_comfort_temp": {
+                "name": "Circuit 5 Day Temperature"
+            },
+            "circuit5_eco_temp": {
+                "name": "Circuit 5 Night Temperature"
+            },
+            "circuit6_comfort_temp": {
+                "name": "Circuit 6 Day Temperature"
+            },
+            "circuit6_eco_temp": {
+                "name": "Circuit 6 Night Temperature"
+            },
+            "circuit7_comfort_temp": {
+                "name": "Circuit 7 Day Temperature"
+            },
+            "circuit7_eco_temp": {
+                "name": "Circuit 7 Night Temperature"
+            }
+        }
     }
-  },
-  "entity": {
-    "switch": {
-      "boiler_control": {
-        "name": "Boiler On/Off"
-      }
-    },
-    "select": {
-      "heater_mode": {
-        "name": "Heater Mode"
-      },
-      "heater_mode_winter": {
-        "name": "Winter"
-      },
-      "heater_mode_summer": {
-        "name": "Summer"
-      },
-      "heater_mode_auto": {
-        "name": "Auto"
-      }
-    },
-    "binary_sensor": {
-      "lighter_works": {
-        "name": "Lighter"
-      },
-      "weather_control": {
-        "name": "Weather control the boiler"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
-      "pump_co_works": {
-        "name": "Pump CO"
-      },
-      "fan_works": {
-        "name": "Fan"
-      },
-      "feeder_works": {
-        "name": "Feeder"
-      },
-      "additional_feeder": {
-        "name": "Additional feeder"
-      },
-      "pump_cwu_works": {
-        "name": "Pump CWU"
-      },
-      "mixer_pump1": {
-        "name": "Mixer 1 pump"
-      },
-      "mixer_pump_works1": {
-        "name": "Mixer 1 pump"
-      },
-      "mixer_pump_works2": {
-        "name": "Mixer 2 pump"
-      },
-      "mixer_pump_works3": {
-        "name": "Mixer 3 pump"
-      },
-      "mixer_pump_works4": {
-        "name": "Mixer 4 pump"
-      },
-      "mixer_pump_works5": {
-        "name": "Mixer 5 pump"
-      },
-      "mixer_pump_works6": {
-        "name": "Mixer 6 pump"
-      },
-      "boiler_pump": {
-        "name": "Boiler pump"
-      },
-      "main_srv": {
-        "name": "Econet24.com server"
-      },
-      "wifi": {
-        "name": "Wi-Fi"
-      },
-      "lan": {
-        "name": "LAN"
-      },
-      "lambda_status": {
-        "name": "Lambda sensor"
-      },
-      "contact_gzc": {
-        "name": "GZC contact"
-      },
-      "contact_gzc_active": {
-        "name": "GZC contact active"
-      },
-      "pump_circulation_works": {
-        "name": "Circulation pump working"
-      },
-      "pump_solar_works": {
-        "name": "Solar pump working"
-      },
-      "pump_fireplace_works": {
-        "name": "Fireplace pump working"
-      },
-      "ecoster_contacts1": {
-        "name": "Room thermostat 1 contacts"
-      },
-      "ecoster_contacts2": {
-        "name": "Room thermostat 2 contacts"
-      },
-      "ecoster_contacts3": {
-        "name": "Room thermostat 3 contacts"
-      },
-      "ecoster_contacts4": {
-        "name": "Room thermostat 4 contacts"
-      },
-      "ecoster_contacts5": {
-        "name": "Room thermostat 5 contacts"
-      },
-      "ecoster_contacts6": {
-        "name": "Room thermostat 6 contacts"
-      },
-      "ecoster_contacts7": {
-        "name": "Room thermostat 7 contacts"
-      },
-      "ecoster_contacts8": {
-        "name": "Room thermostat 8 contacts"
-      },
-      "ecoster_day_sched1": {
-        "name": "Room thermostat 1 day schedule"
-      },
-      "ecoster_day_sched2": {
-        "name": "Room thermostat 2 day schedule"
-      },
-      "ecoster_day_sched3": {
-        "name": "Room thermostat 3 day schedule"
-      },
-      "ecoster_day_sched4": {
-        "name": "Room thermostat 4 day schedule"
-      },
-      "ecoster_day_sched5": {
-        "name": "Room thermostat 5 day schedule"
-      },
-      "ecoster_day_sched6": {
-        "name": "Room thermostat 6 day schedule"
-      },
-      "ecoster_day_sched7": {
-        "name": "Room thermostat 7 day schedule"
-      },
-      "ecoster_day_sched8": {
-        "name": "Room thermostat 8 day schedule"
-      },
-      "fuel_consumption_calc": {
-        "name": "Fuel consumption calculator"
-      },
-      "ecosrv_https": {
-        "name": "ecoNET server HTTPS"
-      }
-    },
-    "sensor": {
-      "boiler_power": {
-        "name": "Boiler output"
-      },
-      "boiler_power_kw": {
-        "name": "Boiler power"
-      },
-      "fuel_level": {
-        "name": "Fuel level"
-      },
-      "fan_power": {
-        "name": "Fan power"
-      },
-      "lambda_status": {
-        "name": "Lambda status",
-        "state": {
-          "stop": "Stop",
-          "start": "Start",
-          "working": "Working",
-          "error": "Error",
-          "maintenance": "Maintenance"
-        }
-      },
-      "lambda_set": {
-        "name": "Lambda set"
-      },
-      "lambda_level": {
-        "name": "Lambda level"
-      },
-      "status_co": {
-        "name": "Central heating status",
-        "state": {
-          "off": "Off",
-          "pause": "Pause",
-          "reload": "Reload",
-          "fire": "Fire",
-          "alert": "Alert",
-          "test_tube": "Test tube",
-          "stop_circle": "Stop circle",
-          "gauge": "Gauge",
-          "help_circle": "Help circle",
-          "error": "Error",
-          "maintenance": "Maintenance"
-        }
-      },
-      "work_at100": {
-        "name": "Work at 100%"
-      },
-      "work_at50": {
-        "name": "Work at 50%"
-      },
-      "work_at30": {
-        "name": "Work at 30%"
-      },
-      "feeder_work": {
-        "name": "Feeder work"
-      },
-      "firing_up_count": {
-        "name": "Firing up count"
-      },
-      "soft_ver": {
-        "name": "Module ecoNET version"
-      },
-      "controller_id": {
-        "name": "Controller name"
-      },
-      "module_a_soft_ver": {
-        "name": "Module A version"
-      },
-      "module_b_soft_ver": {
-        "name": "Module B version"
-      },
-      "module_c_soft_ver": {
-        "name": "Module C version"
-      },
-      "module_lambda_soft_ver": {
-        "name": "Module Lambda version"
-      },
-      "module_panel_soft_ver": {
-        "name": "Module Panel version"
-      },
-      "module_ecoster_soft_ver": {
-        "name": "Module ecoSTER version"
-      },
-      "mode": {
-        "name": "Boiler mode",
-        "state": {
-          "off": "[%key:common::state::off%]",
-          "fire_up": "Fire up",
-          "operation": "Operation",
-          "work": "Work",
-          "supervision": "Supervision",
-          "halted": "Halted",
-          "stop": "Stop",
-          "burning_off": "Burning off",
-          "manual": "Manual",
-          "alarm": "Alarm",
-          "unsealing": "Unsealing",
-          "chimney": "Chimney",
-          "stabilization": "Stabilization",
-          "no_transmission": "No transmission",
-          "unknown": "Unknown"
-        }
-      },
-      "mixer_temp1": {
-        "name": "Mixer 1 temperature"
-      },
-      "mixer_temp2": {
-        "name": "Mixer 2 temperature"
-      },
-      "mixer_temp3": {
-        "name": "Mixer 3 temperature"
-      },
-      "mixer_temp4": {
-        "name": "Mixer 4 temperature"
-      },
-      "mixer_temp5": {
-        "name": "Mixer 5 temperature"
-      },
-      "mixer_temp6": {
-        "name": "Mixer 6 temperature"
-      },
-      "mixer_set_temp1": {
-        "name": "Mixer 1 target temperature"
-      },
-      "mixer_set_temp2": {
-        "name": "Mixer 2 target temperature"
-      },
-      "mixer_set_temp3": {
-        "name": "Mixer 3 target temperature"
-      },
-      "mixer_set_temp4": {
-        "name": "Mixer 4 target temperature"
-      },
-      "mixer_set_temp5": {
-        "name": "Mixer 5 target temperature"
-      },
-      "mixer_set_temp6": {
-        "name": "Mixer 6 target temperature"
-      },
-      "quality": {
-        "name": "Signal quality"
-      },
-      "signal": {
-        "name": "Signal strength"
-      },
-      "servo_mixer1": {
-        "name": "Mixer 1 servo position"
-      },
-      "temp_co": {
-        "name": "Heating temperature"
-      },
-      "temp_cwu": {
-        "name": "Water heater temperature"
-      },
-      "status_cwu": {
-        "name": "Water heater status",
-        "state": {
-          "not_set": "Not set",
-          "set": "Set",
-          "no_temp_set": "No set"
-        }
-      },
-      "temp_cwu_set": {
-        "name": "Water heater set temperature"
-      },
-      "tz_cwu": {
-        "name": "Hot water temperature"
-      },
-      "temp_upper_buffer": {
-        "name": "Upper buffer temperature"
-      },
-      "temp_lower_buffer": {
-        "name": "Lower buffer temperature"
-      },
-      "temp_flue_gas": {
-        "name": "Flue gas temperature"
-      },
-      "temp_external_sensor": {
-        "name": "Outside temperature"
-      },
-      "temp_feeder": {
-        "name": "Feeder temperature"
-      },
-      "temp_co_set": {
-        "name": "Heating target temperature"
-      },
-      "thermostat": {
-        "name": "Thermostat"
-      },
-      "unseal": {
-        "name": "Unseal"
-      },
-      "valve_mixer1": {
-        "name": "Mixer 1 valve % open"
-      },
-      "weather_control": {
-        "name": "Weather control the boiler"
-      },
-      "ps": {
-        "name": "PS"
-      },
-      "circuit2thermostat_temp": {
-        "name": "Circuit 2 thermostat temp."
-      },
-      "temp_clutch": {
-        "name": "Clutch temp."
-      },
-      "circuit3thermostat_temp": {
-        "name": "Circuit 3 thermostat temp."
-      },
-      "temp_wthr": {
-        "name": "Weather temp."
-      },
-      "temp_circuit3": {
-        "name": "Circuit 3 temp."
-      },
-      "temp_circuit2": {
-        "name": "Circuit 2 temp."
-      },
-      "temp_bufor_up": {
-        "name": "Upper buffer temp."
-      },
-      "temp_bufor_down": {
-        "name": "Buffer lower temp."
-      },
-      "heating_upper_temp": {
-        "name": "Heating upper temp."
-      },
-      "circuit1thermostat": {
-        "name": "Circuit 1 actual temp."
-      },
-      "heating_work_state_pump4": {
-        "name": "Heating work state pump 4"
-      },
-      "fuel_consum": {
-        "name": "Fuel consumption"
-      },
-      "fuel_stream": {
-        "name": "Fuel stream"
-      },
-      "temp_back": {
-        "name": "Return temperature"
-      },
-      "transmission": {
-        "name": "Transmission"
-      },
-      "ecoster_temp1": {
-        "name": "Room temperature 1"
-      },
-      "ecoster_temp2": {
-        "name": "Room temperature 2"
-      },
-      "ecoster_temp3": {
-        "name": "Room temperature 3"
-      },
-      "ecoster_temp4": {
-        "name": "Room temperature 4"
-      },
-      "ecoster_temp5": {
-        "name": "Room temperature 5"
-      },
-      "ecoster_temp6": {
-        "name": "Room temperature 6"
-      },
-      "ecoster_temp7": {
-        "name": "Room temperature 7"
-      },
-      "ecoster_temp8": {
-        "name": "Room temperature 8"
-      },
-      "ecoster_mode1": {
-        "name": "Room thermostat 1 mode"
-      },
-      "ecoster_mode2": {
-        "name": "Room thermostat 2 mode"
-      },
-      "ecoster_mode3": {
-        "name": "Room thermostat 3 mode"
-      },
-      "ecoster_mode4": {
-        "name": "Room thermostat 4 mode"
-      },
-      "ecoster_mode5": {
-        "name": "Room thermostat 5 mode"
-      },
-      "ecoster_mode6": {
-        "name": "Room thermostat 6 mode"
-      },
-      "ecoster_mode7": {
-        "name": "Room thermostat 7 mode"
-      },
-      "ecoster_mode8": {
-        "name": "Room thermostat 8 mode"
-      },
-      "ecoster_set_temp1": {
-        "name": "Room thermostat 1 setpoint"
-      },
-      "ecoster_set_temp2": {
-        "name": "Room thermostat 2 setpoint"
-      },
-      "ecoster_set_temp3": {
-        "name": "Room thermostat 3 setpoint"
-      },
-      "ecoster_set_temp4": {
-        "name": "Room thermostat 4 setpoint"
-      },
-      "ecoster_set_temp5": {
-        "name": "Room thermostat 5 setpoint"
-      },
-      "ecoster_set_temp6": {
-        "name": "Room thermostat 6 setpoint"
-      },
-      "ecoster_set_temp7": {
-        "name": "Room thermostat 7 setpoint"
-      },
-      "ecoster_set_temp8": {
-        "name": "Room thermostat 8 setpoint"
-      },
-      "t1": {
-        "name": "Collector Temperature"
-      },
-      "t2": {
-        "name": "Tank Temperature"
-      },
-      "t3": {
-        "name": "Tank Temperature"
-      },
-      "t4": {
-        "name": "Return Temperature"
-      },
-      "t5": {
-        "name": "Collector Temperature - Power Measurement"
-      },
-      "t6": {
-        "name": "Temperature Sensor"
-      },
-      "tzcwu": {
-        "name": "Hot Water Temperature"
-      },
-      "p1": {
-        "name": "Pump 1 Status"
-      },
-      "p2": {
-        "name": "Pump 2 Status"
-      },
-      "h": {
-        "name": "Output Status"
-      },
-      "uzysk_ca_kowity": {
-        "name": "Total Heat Output"
-      },
-      "ecosrv_addr": {
-        "name": "ecoNET Server Address"
-      },
-      "ecosrv_soft_ver": {
-        "name": "ecoNET Server Software Ver."
-      },
-      "router_type": {
-        "name": "Router Type"
-      },
-      "protocol_type": {
-        "name": "Protocol Type"
-      },
-      "tem_co": {
-        "name": "Boiler Temperature"
-      },
-      "circuit1_comfort_temp": {
-        "name": "Circuit 1 Day Temperature"
-      },
-      "circuit1_eco_temp": {
-        "name": "Circuit 1 Night Temperature"
-      },
-      "circuit2_comfort_temp": {
-        "name": "Circuit 2 Day Temperature"
-      },
-      "circuit2_eco_temp": {
-        "name": "Circuit 2 Night Temperature"
-      },
-      "circuit3_comfort_temp": {
-        "name": "Circuit 3 Day Temperature"
-      },
-      "circuit3_eco_temp": {
-        "name": "Circuit 3 Night Temperature"
-      },
-      "circuit4_comfort_temp": {
-        "name": "Circuit 4 Day Temperature"
-      },
-      "circuit4_eco_temp": {
-        "name": "Circuit 4 Night Temperature"
-      },
-      "circuit5_comfort_temp": {
-        "name": "Circuit 5 Day Temperature"
-      },
-      "circuit5_eco_temp": {
-        "name": "Circuit 5 Night Temperature"
-      },
-      "circuit6_comfort_temp": {
-        "name": "Circuit 6 Day Temperature"
-      },
-      "circuit6_eco_temp": {
-        "name": "Circuit 6 Night Temperature"
-      },
-      "circuit7_comfort_temp": {
-        "name": "Circuit 7 Day Temperature"
-      },
-      "circuit7_eco_temp": {
-        "name": "Circuit 7 Night Temperature"
-      }
-    }
-  }
 }
