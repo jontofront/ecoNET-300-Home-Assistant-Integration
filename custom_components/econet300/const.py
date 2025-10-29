@@ -359,24 +359,32 @@ DEFAULT_NUMBER_MAP = {
 
 # ecoMAX360i specific number entities
 ECOMAX360I_NUMBER_MAP = {
-    "1280": "tempCOSet",  # Boiler temperature setpoint
-    "1281": "tempCWUSet",  # Hot water temperature setpoint
-    "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
-    # ecoMAX360 circuit temperature setpoints
-    "238": "Circuit1ComfortTemp",  # Circuit 1 Day Temperature
-    "239": "Circuit1EcoTemp",  # Circuit 1 Night Temperature
-    "288": "Circuit2ComfortTemp",  # Circuit 2 Day Temperature
-    "289": "Circuit2EcoTemp",  # Circuit 2 Night Temperature
-    "338": "Circuit3ComfortTemp",  # Circuit 3 Day Temperature
-    "339": "Circuit3EcoTemp",  # Circuit 3 Night Temperature
-    "946": "Circuit4ComfortTemp",  # Circuit 4 Day Temperature
-    "947": "Circuit4EcoTemp",  # Circuit 4 Night Temperature
-    "997": "Circuit5ComfortTemp",  # Circuit 5 Day Temperature
-    "998": "Circuit5EcoTemp",  # Circuit 5 Night Temperature
-    "755": "Circuit6ComfortTemp",  # Circuit 6 Day Temperature
-    "756": "Circuit6EcoTemp",  # Circuit 6 Night Temperature
-    "805": "Circuit7ComfortTemp",  # Circuit 7 Day Temperature
-    "806": "Circuit7EcoTemp",  # Circuit 7 Night Temperature
+    # Hot Water / DHW parameters
+    "103": "HDWTSetPoint",  # Hot water temperature setpoint (35-60°C)
+    "104": "HDWTSetPointDownHist",  # Hot water hysteresis (5-18°C)
+    "136": "HDWLegionSetPoint",  # Legionella protection temperature (60-80°C)
+    "137": "HDWLegionDay",  # Legionella protection day of week (0-6)
+    "138": "HDWLegionHour",  # Legionella protection hour (0-23)
+    # Circuit 1 temperature setpoints
+    "238": "Circuit1ComfortTemp",  # Circuit 1 Day Temperature (10-35°C)
+    "239": "Circuit1EcoTemp",  # Circuit 1 Night Temperature (10-35°C)
+    "240": "Circuit1DownHist",  # Circuit 1 Hysteresis (0-5°C)
+    "261": "Circuit1BaseTemp",  # Circuit 1 Base/Max Temperature (24-75°C)
+    "273": "Circuit1CurveRadiator",  # Circuit 1 Heating Curve Slope (0-4)
+    "275": "Circuit1Curveshift",  # Circuit 1 Curve Parallel Shift (-20 to 20)
+    # Disabled circuits (uncomment as needed)
+    # "288": "Circuit2ComfortTemp",  # Circuit 2 Day Temperature
+    # "289": "Circuit2EcoTemp",  # Circuit 2 Night Temperature
+    # "338": "Circuit3ComfortTemp",  # Circuit 3 Day Temperature
+    # "339": "Circuit3EcoTemp",  # Circuit 3 Night Temperature
+    # "946": "Circuit4ComfortTemp",  # Circuit 4 Day Temperature
+    # "947": "Circuit4EcoTemp",  # Circuit 4 Night Temperature
+    # "997": "Circuit5ComfortTemp",  # Circuit 5 Day Temperature
+    # "998": "Circuit5EcoTemp",  # Circuit 5 Night Temperature
+    # "755": "Circuit6ComfortTemp",  # Circuit 6 Day Temperature
+    # "756": "Circuit6EcoTemp",  # Circuit 6 Night Temperature
+    # "805": "Circuit7ComfortTemp",  # Circuit 7 Day Temperature
+    # "806": "Circuit7EcoTemp",  # Circuit 7 Night Temperature
 }
 
 # Main number mapping by controller type
@@ -389,22 +397,37 @@ NUMBER_MAP_KEY = {
 NUMBER_MAP = DEFAULT_NUMBER_MAP
 
 # =============================================================================
-# HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
-# =============================================================================
-# HEATER SUMMER/WINTER/AUTO MODE MAPPINGS
+# SELECT ENTITY MAPPINGS
 # =============================================================================
 # Note: Display names are now handled by the translation system
 # Numeric keys with option names for Home Assistant select entities
 
+# Heater mode (Summer/Winter/Auto) - API parameter 55
 HEATER_MODE_VALUES = {
     0: "winter",
     1: "summer",
     2: "auto",
 }
-
-
-# Heater mode parameter index (API parameter 55)
 HEATER_MODE_PARAM_INDEX = "55"
+
+# Circuit 1 Work State - API parameter 236 (ecoMAX360i)
+CIRCUIT1_WORK_STATE_VALUES = {
+    0: "off",
+    1: "day_mode",
+    2: "night_mode",
+    3: "schedule",
+}
+CIRCUIT1_WORK_STATE_PARAM_INDEX = "236"
+
+# Select entity mapping by controller type
+SELECT_MAP_KEY = {
+    "ecoMAX360i": {
+        "236": ("circuit1_work_state", CIRCUIT1_WORK_STATE_VALUES),
+    },
+    "_default": {
+        "55": ("heater_mode", HEATER_MODE_VALUES),
+    },
+}
 
 # =============================================================================
 # PARAMETER ENDPOINT MAPPINGS

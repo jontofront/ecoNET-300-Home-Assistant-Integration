@@ -10,11 +10,14 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import Econet300Api
-from .common import EconetDataCoordinator
+from .common import EconetDataCoordinator, skip_edit_params, skip_params_edits
 from .const import (
+    CIRCUIT1_WORK_STATE_PARAM_INDEX,
+    CIRCUIT1_WORK_STATE_VALUES,
     DOMAIN,
     HEATER_MODE_PARAM_INDEX,
     HEATER_MODE_VALUES,
+    SELECT_MAP_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
@@ -37,17 +40,21 @@ class EconetSelect(EconetEntity, SelectEntity):
         entity_description: SelectEntityDescription,
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
+        param_index: str,
+        value_mapping: dict[int, str],
     ):
         """Initialize a new ecoNET select entity."""
         self.entity_description = entity_description
         self.api = api
+        self._param_index = param_index
+        self._value_mapping = value_mapping
         self._attr_current_option = None
         super().__init__(coordinator, api)
 
     @property
     def options(self) -> list[str]:
         """Return the available options."""
-        return list(HEATER_MODE_VALUES.values())
+        return list(self._value_mapping.values())
 
     @property
     def current_option(self) -> str | None:
@@ -58,58 +65,63 @@ class EconetSelect(EconetEntity, SelectEntity):
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return entity specific state attributes."""
         current_option = self._attr_current_option
-        heater_mode_value = (
-            get_heater_mode_value(current_option) if current_option else None
+        numeric_value = (
+            self._get_numeric_value(current_option) if current_option else None
         )
 
         return {
-            "heater_mode_value": heater_mode_value,
-            "available_options": list(HEATER_MODE_VALUES.values()),
-            "api_parameter": HEATER_MODE_PARAM_INDEX,
+            "numeric_value": numeric_value,
+            "available_options": list(self._value_mapping.values()),
+            "api_parameter": self._param_index,
         }
+
+    def _get_numeric_value(self, option_name: str) -> int | None:
+        """Convert option name to numeric value for API."""
+        for value, name in self._value_mapping.items():
+            if name == option_name:
+                return value
+        return None
+
+    def _get_option_name(self, numeric_value: int) -> str | None:
+        """Convert numeric value to option name."""
+        return self._value_mapping.get(numeric_value)
 
     def _sync_state(self, value: Any) -> None:
         """Synchronize the state of the select entity."""
-        # For heater mode, we need to get the value from the parameter index 55
-        # The value comes from the coordinator data
-        if self.entity_description.key == "heater_mode":
-            # Get the value from the parameter index 55
-            heater_mode_value = self.coordinator.data.get("paramsEdits", {}).get(
-                HEATER_MODE_PARAM_INDEX
-            )
+        # Value is already extracted from the appropriate data source by the base entity class
+        # It could be from editParams or paramsEdits depending on controller type
 
-            if heater_mode_value is not None:
-                # Extract the actual value if it's a dict
-                if isinstance(heater_mode_value, dict) and "value" in heater_mode_value:
-                    numeric_value = heater_mode_value["value"]
-                else:
-                    numeric_value = heater_mode_value
+        if value is not None:
+            # Extract the actual value if it's a dict
+            if isinstance(value, dict) and "value" in value:
+                numeric_value = value["value"]
+            else:
+                numeric_value = value
 
-                # Map the numeric value to the option name
-                if isinstance(numeric_value, (int, float)):
-                    option_name = HEATER_MODE_VALUES.get(int(numeric_value))
-                    if option_name is not None:
-                        self._attr_current_option = option_name
-                    else:
-                        self._attr_current_option = None
-                        _LOGGER.warning("Unknown heater mode value: %s", numeric_value)
+            # Map the numeric value to the option name using our value mapping
+            if isinstance(numeric_value, (int, float)):
+                option_name = self._get_option_name(int(numeric_value))
+                if option_name is not None:
+                    self._attr_current_option = option_name
                 else:
                     self._attr_current_option = None
                     _LOGGER.warning(
-                        "Invalid heater mode value type: %s", type(numeric_value)
+                        "Unknown value %s for select entity %s",
+                        numeric_value,
+                        self.entity_description.key,
                     )
             else:
                 self._attr_current_option = None
-                _LOGGER.debug("Heater mode value not found in coordinator data")
-        # Handle other select entities if needed
-        elif value is not None and isinstance(value, (int, float)):
-            option_name = HEATER_MODE_VALUES.get(int(value))
-            if option_name is not None:
-                self._attr_current_option = option_name
-            else:
-                self._attr_current_option = None
+                _LOGGER.warning(
+                    "Invalid value type %s for select entity %s",
+                    type(numeric_value),
+                    self.entity_description.key,
+                )
         else:
             self._attr_current_option = None
+            _LOGGER.debug(
+                "Value not found for select entity %s", self.entity_description.key
+            )
 
         self.async_write_ha_state()
 
@@ -117,12 +129,12 @@ class EconetSelect(EconetEntity, SelectEntity):
         """Change the selected option."""
         try:
             # Get the numeric value for the selected option
-            value = get_heater_mode_value(option)
+            value = self._get_numeric_value(option)
             if value is None:
-                self._raise_heater_mode_error(f"Invalid option: {option}")
+                self._raise_select_error(f"Invalid option: {option}")
 
-            # Use the parameter index (55) to set the value
-            success = await self.api.set_param(HEATER_MODE_PARAM_INDEX, value)
+            # Use the parameter index to set the value
+            success = await self.api.set_param(self._param_index, value)
 
             if success:
                 # Update the current option
@@ -131,7 +143,8 @@ class EconetSelect(EconetEntity, SelectEntity):
 
                 # Log the change with context for better logbook entries
                 _LOGGER.info(
-                    "Heater mode changed from '%s' to '%s' (API value: %d)",
+                    "%s changed from '%s' to '%s' (API value: %d)",
+                    self.entity_description.key,
                     old_option or "unknown",
                     option,
                     value,
@@ -142,42 +155,34 @@ class EconetSelect(EconetEntity, SelectEntity):
 
                 # Additional context for debugging
                 _LOGGER.debug(
-                    "Heater mode state updated: %s -> %s (API value: %d)",
+                    "%s state updated: %s -> %s (API value: %d)",
+                    self.entity_description.key,
                     old_option,
                     option,
                     value,
                 )
             else:
                 _LOGGER.error(
-                    "Failed to change heater mode to %s - API returned failure", option
+                    "Failed to change %s to %s - API returned failure",
+                    self.entity_description.key,
+                    option,
                 )
-                self._raise_heater_mode_error(
-                    f"Failed to change heater mode to {option}"
+                self._raise_select_error(
+                    f"Failed to change {self.entity_description.key} to {option}"
                 )
 
         except Exception as e:
-            _LOGGER.error("Failed to change heater mode to %s: %s", option, e)
+            _LOGGER.error(
+                "Failed to change %s to %s: %s", self.entity_description.key, option, e
+            )
             raise HeaterModeSelectError(
-                f"Failed to change heater mode to {option}"
+                f"Failed to change {self.entity_description.key} to {option}"
             ) from e
 
     @staticmethod
-    def _raise_heater_mode_error(message: str) -> None:
+    def _raise_select_error(message: str) -> None:
         """Raise a HeaterModeSelectError with the given message."""
         raise HeaterModeSelectError(message)
-
-
-def get_heater_mode_name(numeric_value: int) -> str | None:
-    """Convert numeric heater mode value to option name."""
-    return HEATER_MODE_VALUES.get(numeric_value)
-
-
-def get_heater_mode_value(option_name: str) -> int | None:
-    """Convert option name to numeric heater mode value for API."""
-    for value, name in HEATER_MODE_VALUES.items():
-        if name == option_name:
-            return value
-    return None
 
 
 async def async_setup_entry(
@@ -217,16 +222,51 @@ async def async_setup_entry(
 
     _LOGGER.debug("Successfully retrieved coordinator and API")
 
-    # Create heater mode select entity
-    heater_mode_description = SelectEntityDescription(
-        key="heater_mode",
-        translation_key="heater_mode",
-        icon="mdi:thermostat",
-    )
+    # Get controller ID to determine which select entities to create
+    sys_params = coordinator.data.get("sysParams", {})
+    controller_id = sys_params.get("controllerID", "_default")
+    _LOGGER.info("Setting up select entities for controller: %s", controller_id)
 
-    entities = [
-        EconetSelect(heater_mode_description, coordinator, api),
-    ]
+    # Get select mapping for this controller
+    select_map = SELECT_MAP_KEY.get(controller_id, SELECT_MAP_KEY["_default"])
+
+    entities = []
+    for param_index, (entity_key, value_mapping) in select_map.items():
+        # Check if parameter exists in coordinator data
+        has_params_edits = not skip_params_edits(sys_params)
+        has_edit_params = not skip_edit_params(sys_params)
+
+        # Check if data exists for this parameter
+        param_exists = False
+        if has_edit_params:
+            edit_params = coordinator.data.get("editParams", {})
+            param_exists = param_index in edit_params
+        elif has_params_edits:
+            params_edits = coordinator.data.get("paramsEdits", {})
+            param_exists = param_index in params_edits
+
+        if not param_exists:
+            _LOGGER.debug(
+                "Parameter %s not found in coordinator data, skipping select entity %s",
+                param_index,
+                entity_key,
+            )
+            continue
+
+        # Create select entity description
+        entity_description = SelectEntityDescription(
+            key=entity_key,
+            translation_key=entity_key,
+            icon="mdi:dip-switch" if "work_state" in entity_key else "mdi:thermostat",
+        )
+
+        # Create select entity
+        entities.append(
+            EconetSelect(
+                entity_description, coordinator, api, param_index, value_mapping
+            )
+        )
+        _LOGGER.debug("Created select entity: %s (param: %s)", entity_key, param_index)
 
     _LOGGER.info("Adding %d select entities", len(entities))
     async_add_entities(entities)

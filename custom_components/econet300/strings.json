@@ -26,16 +26,21 @@
         },
         "select": {
             "heater_mode": {
-                "name": "Heater Mode"
+                "name": "Heater Mode",
+                "state": {
+                    "winter": "Winter",
+                    "summer": "Summer",
+                    "auto": "Auto"
+                }
             },
-            "heater_mode_winter": {
-                "name": "Winter"
-            },
-            "heater_mode_summer": {
-                "name": "Summer"
-            },
-            "heater_mode_auto": {
-                "name": "Auto"
+            "circuit1_work_state": {
+                "name": "Circuit 1 Work Mode",
+                "state": {
+                    "off": "Off",
+                    "day_mode": "Day Mode",
+                    "night_mode": "Night Mode",
+                    "schedule": "Schedule"
+                }
             }
         },
         "binary_sensor": {
@@ -611,11 +616,38 @@
             "heater_mode": {
                 "name": "Heater Mode"
             },
+            "hdwt_set_point": {
+                "name": "Hot Water Temperature Setpoint"
+            },
+            "hdwt_set_point_down_hist": {
+                "name": "Hot Water Hysteresis"
+            },
+            "hdw_legion_set_point": {
+                "name": "Legionella Protection Temperature"
+            },
+            "hdw_legion_day": {
+                "name": "Legionella Protection Day"
+            },
+            "hdw_legion_hour": {
+                "name": "Legionella Protection Hour"
+            },
             "circuit1_comfort_temp": {
                 "name": "Circuit 1 Day Temperature"
             },
             "circuit1_eco_temp": {
                 "name": "Circuit 1 Night Temperature"
+            },
+            "circuit1_down_hist": {
+                "name": "Circuit 1 Hysteresis"
+            },
+            "circuit1_base_temp": {
+                "name": "Circuit 1 Base Temperature"
+            },
+            "circuit1_curve_radiator": {
+                "name": "Circuit 1 Heating Curve Slope"
+            },
+            "circuit1_curveshift": {
+                "name": "Circuit 1 Curve Shift"
             },
             "circuit2_comfort_temp": {
                 "name": "Circuit 2 Day Temperature"

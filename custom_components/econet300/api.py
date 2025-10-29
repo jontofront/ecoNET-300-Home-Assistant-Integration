@@ -266,19 +266,36 @@ class Econet300Api:
         return True
 
     async def _force_refresh_params_edits(self):
-        """Force refresh paramsEdits data by fetching fresh data and updating cache."""
+        """Force refresh editable parameters data by fetching fresh data and updating cache.
+
+        For ecoMAX360i: refreshes editParams endpoint
+        For other controllers: refreshes rmCurrentDataParamsEdits endpoint
+        """
         try:
-            _LOGGER.debug("Force refreshing paramsEdits data")
-            fresh_data = await self._fetch_api_data_by_key(
-                API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
-            )
-            if fresh_data:
-                self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, fresh_data)
-                _LOGGER.debug("Successfully refreshed paramsEdits data: %s", fresh_data)
+            # ecoMAX360i uses editParams endpoint
+            if self._model_id == "ecoMAX360i":
+                _LOGGER.debug("Force refreshing editParams data for ecoMAX360i")
+                fresh_data = await self._fetch_api_data_by_key(
+                    API_EDIT_PARAMS_URI, API_EDIT_PARAMS_DATA
+                )
+                if fresh_data:
+                    self._cache.set(API_EDIT_PARAMS_DATA, fresh_data)
+                    _LOGGER.debug("Successfully refreshed editParams data")
+                else:
+                    _LOGGER.info("Failed to refresh editParams data")
+            # Other controllers use rmCurrentDataParamsEdits endpoint
             else:
-                _LOGGER.info("Failed to refresh paramsEdits data")
+                _LOGGER.debug("Force refreshing paramsEdits data")
+                fresh_data = await self._fetch_api_data_by_key(
+                    API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+                )
+                if fresh_data:
+                    self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, fresh_data)
+                    _LOGGER.debug("Successfully refreshed paramsEdits data")
+                else:
+                    _LOGGER.info("Failed to refresh paramsEdits data")
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-            _LOGGER.error("Error refreshing paramsEdits data: %s", e)
+            _LOGGER.error("Error refreshing editable parameters data: %s", e)
 
     async def get_param_limits_from_edit_params(self, param: str):
         """Fetch parameter limits from editParams endpoint (used by ecoMAX360i).

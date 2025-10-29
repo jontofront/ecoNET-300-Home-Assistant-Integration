@@ -26,16 +26,21 @@
     },
     "select": {
       "heater_mode": {
-        "name": "Tryb grzania"
+        "name": "Tryb grzania",
+        "state": {
+          "winter": "Zima",
+          "summer": "Lato",
+          "auto": "Auto"
+        }
       },
-      "heater_mode_winter": {
-        "name": "Zima"
-      },
-      "heater_mode_summer": {
-        "name": "Lato"
-      },
-      "heater_mode_auto": {
-        "name": "Auto"
+      "circuit1_work_state": {
+        "name": "Tryb pracy obwodu 1",
+        "state": {
+          "off": "Wyłączony",
+          "day_mode": "Tryb dzienny",
+          "night_mode": "Tryb nocny",
+          "schedule": "Harmonogram"
+        }
       }
     },
     "binary_sensor": {
@@ -601,11 +606,38 @@
       "heater_mode": {
         "name": "Tryb grzewczy"
       },
+      "hdwt_set_point": {
+        "name": "Temperatura zadana ciepłej wody"
+      },
+      "hdwt_set_point_down_hist": {
+        "name": "Histereza ciepłej wody"
+      },
+      "hdw_legion_set_point": {
+        "name": "Temperatura ochrony antylegionellowej"
+      },
+      "hdw_legion_day": {
+        "name": "Dzień ochrony antylegionellowej"
+      },
+      "hdw_legion_hour": {
+        "name": "Godzina ochrony antylegionellowej"
+      },
       "circuit1_comfort_temp": {
         "name": "Temperatura obwodu 1 - dzień"
       },
       "circuit1_eco_temp": {
         "name": "Temperatura obwodu 1 - noc"
+      },
+      "circuit1_down_hist": {
+        "name": "Histereza obwodu 1"
+      },
+      "circuit1_base_temp": {
+        "name": "Temperatura bazowa obwodu 1"
+      },
+      "circuit1_curve_radiator": {
+        "name": "Nachylenie krzywej grzewczej obwodu 1"
+      },
+      "circuit1_curveshift": {
+        "name": "Przesunięcie krzywej obwodu 1"
       },
       "circuit2_comfort_temp": {
         "name": "Temperatura obwodu 2 - dzień"
