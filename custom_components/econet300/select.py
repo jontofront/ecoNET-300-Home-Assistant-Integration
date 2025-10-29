@@ -108,19 +108,20 @@ class EconetSelect(EconetEntity, SelectEntity):
                     _LOGGER.warning(
                         "Unknown value %s for select entity %s",
                         numeric_value,
-                        self.entity_description.key,
+                        self.entity_description.translation_key,
                     )
             else:
                 self._attr_current_option = None
                 _LOGGER.warning(
                     "Invalid value type %s for select entity %s",
                     type(numeric_value),
-                    self.entity_description.key,
+                    self.entity_description.translation_key,
                 )
         else:
             self._attr_current_option = None
             _LOGGER.debug(
-                "Value not found for select entity %s", self.entity_description.key
+                "Value not found for select entity %s",
+                self.entity_description.translation_key,
             )
 
         self.async_write_ha_state()
@@ -144,7 +145,7 @@ class EconetSelect(EconetEntity, SelectEntity):
                 # Log the change with context for better logbook entries
                 _LOGGER.info(
                     "%s changed from '%s' to '%s' (API value: %d)",
-                    self.entity_description.key,
+                    self.entity_description.translation_key,
                     old_option or "unknown",
                     option,
                     value,
@@ -156,7 +157,7 @@ class EconetSelect(EconetEntity, SelectEntity):
                 # Additional context for debugging
                 _LOGGER.debug(
                     "%s state updated: %s -> %s (API value: %d)",
-                    self.entity_description.key,
+                    self.entity_description.translation_key,
                     old_option,
                     option,
                     value,
@@ -164,19 +165,22 @@ class EconetSelect(EconetEntity, SelectEntity):
             else:
                 _LOGGER.error(
                     "Failed to change %s to %s - API returned failure",
-                    self.entity_description.key,
+                    self.entity_description.translation_key,
                     option,
                 )
                 self._raise_select_error(
-                    f"Failed to change {self.entity_description.key} to {option}"
+                    f"Failed to change {self.entity_description.translation_key} to {option}"
                 )
 
         except Exception as e:
             _LOGGER.error(
-                "Failed to change %s to %s: %s", self.entity_description.key, option, e
+                "Failed to change %s to %s: %s",
+                self.entity_description.translation_key,
+                option,
+                e,
             )
             raise HeaterModeSelectError(
-                f"Failed to change {self.entity_description.key} to {option}"
+                f"Failed to change {self.entity_description.translation_key} to {option}"
             ) from e
 
     @staticmethod
@@ -254,8 +258,9 @@ async def async_setup_entry(
             continue
 
         # Create select entity description
+        # Use param_index as key so base entity can find data in coordinator
         entity_description = SelectEntityDescription(
-            key=entity_key,
+            key=param_index,
             translation_key=entity_key,
             icon="mdi:dip-switch" if "work_state" in entity_key else "mdi:thermostat",
         )
