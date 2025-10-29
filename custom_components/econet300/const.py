@@ -365,6 +365,9 @@ ECOMAX360I_NUMBER_MAP = {
     "136": "HDWLegionSetPoint",  # Legionella protection temperature (60-80°C)
     "137": "HDWLegionDay",  # Legionella protection day of week (0-6)
     "138": "HDWLegionHour",  # Legionella protection hour (0-23)
+    # System auto mode temperature thresholds
+    "702": "SummerOn",  # Outdoor temp threshold to activate summer mode (26-30°C)
+    "703": "SummerOff",  # Outdoor temp threshold to deactivate summer mode (0-26°C)
     # Circuit 1 temperature setpoints
     "238": "Circuit1ComfortTemp",  # Circuit 1 Day Temperature (10-35°C)
     "239": "Circuit1EcoTemp",  # Circuit 1 Night Temperature (10-35°C)

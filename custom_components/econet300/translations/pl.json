@@ -637,6 +637,12 @@
       "hdw_legion_hour": {
         "name": "Godzina ochrony antylegionellowej"
       },
+      "summer_on": {
+        "name": "Temperatura aktywacji trybu letniego"
+      },
+      "summer_off": {
+        "name": "Temperatura dezaktywacji trybu letniego"
+      },
       "circuit1_comfort_temp": {
         "name": "Temperatura obwodu 1 - dzień"
       },

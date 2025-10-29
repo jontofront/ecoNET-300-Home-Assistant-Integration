@@ -631,6 +631,12 @@
       "hdw_legion_hour": {
         "name": "Legionella Protection Hour"
       },
+      "summer_on": {
+        "name": "Summer Mode Activation Temperature"
+      },
+      "summer_off": {
+        "name": "Summer Mode Deactivation Temperature"
+      },
       "circuit1_comfort_temp": {
         "name": "Circuit 1 Day Temperature"
       },
