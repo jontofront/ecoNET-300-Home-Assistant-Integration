@@ -280,8 +280,45 @@ class Econet300Api:
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             _LOGGER.error("Error refreshing paramsEdits data: %s", e)
 
+    async def get_param_limits_from_edit_params(self, param: str):
+        """Fetch parameter limits from editParams endpoint (used by ecoMAX360i).
+
+        editParams structure uses 'minv'/'maxv' keys instead of 'min'/'max'.
+        """
+        if not param:
+            _LOGGER.info("Parameter name is None. Unable to fetch limits.")
+            return None
+
+        # Fetch editParams data if not cached
+        if not self._cache.exists(API_EDIT_PARAMS_DATA):
+            edit_params = await self.fetch_edit_params()
+            if edit_params:
+                self._cache.set(API_EDIT_PARAMS_DATA, edit_params)
+
+        # Retrieve from cache
+        limits = self._cache.get(API_EDIT_PARAMS_DATA)
+
+        if limits is None or param not in limits:
+            _LOGGER.info(
+                "Limits for parameter '%s' do not exist in editParams",
+                param,
+            )
+            return None
+
+        # editParams uses minv/maxv keys
+        curr_limits = limits[param]
+        _LOGGER.debug("Limits (min=%s, max=%s) for edit param '%s' retrieved successfully from editParams", curr_limits["minv"], curr_limits["maxv"], param)
+        return Limits(curr_limits["minv"], curr_limits["maxv"])
+
     async def get_param_limits(self, param: str):
-        """Fetch and return the limits for a particular parameter from the Econet 300 API, using a cache for efficient retrieval if available."""
+        """Fetch parameter limits from rmCurrentDataParamsEdits endpoint (used by most controllers).
+
+        This endpoint uses 'min'/'max' keys.
+        """
+        if not param:
+            _LOGGER.info("Parameter name is None. Unable to fetch limits.")
+            return None
+
         if not self._cache.exists(API_EDITABLE_PARAMS_LIMITS_DATA):
             try:
                 # Attempt to fetch the API data
@@ -313,11 +350,6 @@ class Econet300Api:
         # Retrieve limits from the cache
         limits = self._cache.get(API_EDITABLE_PARAMS_LIMITS_DATA)
 
-        if not param:
-            _LOGGER.info("Parameter name is None. Unable to fetch limits.")
-            return None
-
-        # editParams uses IDs as keys, so no conversion needed
         if limits is None or param not in limits:
             _LOGGER.info(
                 "Limits for parameter '%s' do not exist. Available limits: %s",
@@ -326,10 +358,9 @@ class Econet300Api:
             )
             return None
 
-        # Extract and log the limits
+        # Extract and log the limits (uses min/max keys)
         curr_limits = limits[param]
-        # Remove sensitive data from debug logging to prevent information disclosure
-        _LOGGER.debug("Limits for edit param '%s' retrieved successfully", param)
+        _LOGGER.debug("Limits for edit param '%s' retrieved successfully from paramsEdits", param)
         return Limits(curr_limits["min"], curr_limits["max"])
 
     async def fetch_reg_params_data(self) -> dict[str, Any] | None:
@@ -404,7 +435,7 @@ class Econet300Api:
         editParams = await self._fetch_api_data_by_key(
             API_EDIT_PARAMS_URI, API_EDIT_PARAMS_DATA
         )
-        _LOGGER.debug("Fetched editParams data: %s", editParams)
+        _LOGGER.debug("Fetched editParams data")
         return editParams
 
     async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):

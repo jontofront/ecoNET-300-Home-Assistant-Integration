@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .api import Limits
-from .common import Econet300Api, EconetDataCoordinator, skip_params_edits
+from .common import Econet300Api, EconetDataCoordinator, skip_edit_params, skip_params_edits
 from .common_functions import camel_to_snake
 from .const import (
     DOMAIN,
@@ -42,10 +42,14 @@ class EconetNumber(EconetEntity, NumberEntity):
         entity_description: EconetNumberEntityDescription,
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
+        has_params_edits: bool,
+        has_edit_params: bool,
     ):
         """Initialize a new ecoNET number entity."""
         self.entity_description = entity_description
         self.api = api
+        self.has_params_edits = has_params_edits
+        self.has_edit_params = has_edit_params
         super().__init__(coordinator, api)
 
     def _sync_state(self, value):
@@ -83,22 +87,43 @@ class EconetNumber(EconetEntity, NumberEntity):
             )
         # Ensure the state is updated in Home Assistant.
         self.async_write_ha_state()
-        # Create an asynchronous task for setting the limits.
-        self.hass.async_create_task(self.async_set_limits_values())
+
+        # For editParams, limits are in the value dict, no need to fetch separately
+        # For paramsEdits, limits might not be in the value, so fetch if needed
+        if not self.has_edit_params and self.has_params_edits:
+            # Only fetch limits if we don't already have them from the value
+            if self._attr_native_min_value is None or self._attr_native_max_value is None:
+                self.hass.async_create_task(self.async_set_limits_values())
 
     def _set_value_limits(self, value):
         """Set native min and max values for the entity."""
-        self._attr_native_min_value = value.get("min")
-        self._attr_native_max_value = value.get("max")
+        # editParams uses 'minv'/'maxv', paramsEdits uses 'min'/'max'
+        if isinstance(value, dict):
+            self._attr_native_min_value = value.get("minv") or value.get("min")
+            self._attr_native_max_value = value.get("maxv") or value.get("max")
         _LOGGER.debug(
             "ecoNETNumber _set_value_limits: min=%s, max=%s",
             self._attr_native_min_value,
             self._attr_native_max_value,
         )
 
+    async def _get_param_limits(self, key: str):
+        """Get parameter limits using the appropriate method based on controller type."""
+        if self.has_edit_params:
+            # Use editParams endpoint (ecoMAX360i)
+            _LOGGER.debug("Fetching limits from editParams for key: %s", key)
+            return await self.api.get_param_limits_from_edit_params(key)
+        elif self.has_params_edits:
+            # Use rmCurrentDataParamsEdits endpoint (most controllers)
+            _LOGGER.debug("Fetching limits from paramsEdits for key: %s", key)
+            return await self.api.get_param_limits(key)
+        else:
+            _LOGGER.warning("No parameter editing support available for key: %s", key)
+            return None
+
     async def async_set_limits_values(self):
         """Async Sync number limits."""
-        number_limits = await self.api.get_param_limits(self.entity_description.key)
+        number_limits = await self._get_param_limits(self.entity_description.key)
         _LOGGER.debug("Number limits retrieved: %s", number_limits)
 
         if not number_limits:
@@ -145,14 +170,28 @@ class EconetNumber(EconetEntity, NumberEntity):
         self.async_write_ha_state()
 
 
-def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
+def can_add(
+    key: str,
+    coordinator: EconetDataCoordinator,
+    has_params_edits: bool,
+    has_edit_params: bool,
+) -> bool:
     """Check if a given entity can be added based on the availability of data in the coordinator."""
     try:
-        # editParams uses IDs as keys, so no conversion needed
-        return (
-            coordinator.has_param_edit_data(key)
-            and coordinator.data["paramsEdits"][key]
-        )
+        if has_edit_params:
+            # For ecoMAX360i: check editParams data
+            return (
+                coordinator.has_edit_params_data(key)
+                and coordinator.data["editParams"][key]
+            )
+        elif has_params_edits:
+            # For most controllers: check paramsEdits data
+            return (
+                coordinator.has_param_edit_data(key)
+                and coordinator.data["paramsEdits"][key]
+            )
+        else:
+            return False
     except KeyError as e:
         _LOGGER.error("KeyError in can_add: %s", e)
         return False
@@ -215,16 +254,46 @@ async def async_setup_entry(
     number_map = NUMBER_MAP_KEY.get(controller_id, NUMBER_MAP_KEY["_default"])
     _LOGGER.info("Using number mapping for controller: %s", controller_id)
 
-    for key in number_map:
-        # Skip if paramsEdits is not supported for this controller
-        if skip_params_edits(sys_params):
-            _LOGGER.info(
-                "Skipping number entity setup for controllerID: %s (paramsEdits not supported)",
-                controller_id,
-            )
-            continue
+    # Check if this controller supports parameter editing at all
+    # paramsEdits (rmCurrentDataParamsEdits endpoint) OR editParams (editParams endpoint)
+    has_params_edits = not skip_params_edits(sys_params)
+    has_edit_params = not skip_edit_params(sys_params)
 
-        number_limits = await api.get_param_limits(key)
+    if not has_params_edits and not has_edit_params:
+        _LOGGER.info(
+            "Skipping number entity setup for controllerID: %s (neither paramsEdits nor editParams supported)",
+            controller_id,
+        )
+        return async_add_entities([])
+
+    _LOGGER.info(
+        "Controller %s supports parameter editing - paramsEdits: %s, editParams: %s",
+        controller_id,
+        has_params_edits,
+        has_edit_params,
+    )
+
+    for key in number_map:
+        # Get limits using the appropriate method based on controller type
+        number_limits = None
+
+        if has_edit_params:
+            # For editParams, get limits directly from coordinator data (already fetched)
+            edit_params = coordinator.data.get("editParams", {})
+            if key in edit_params:
+                param_data = edit_params[key]
+                if isinstance(param_data, dict) and "minv" in param_data and "maxv" in param_data:
+                    number_limits = Limits(param_data["minv"], param_data["maxv"])
+                    _LOGGER.debug(
+                        "Extracted limits for %s from editParams: min=%s, max=%s",
+                        key,
+                        number_limits.min,
+                        number_limits.max,
+                    )
+        elif has_params_edits:
+            # For paramsEdits, use the API method (needs separate fetch)
+            number_limits = await api.get_param_limits(key)
+
         if number_limits is None:
             _LOGGER.info(
                 "Cannot add number entity: %s, numeric limits for this entity is None",
@@ -232,10 +301,18 @@ async def async_setup_entry(
             )
             continue
 
-        if can_add(key, coordinator):
+        if can_add(key, coordinator, has_params_edits, has_edit_params):
             entity_description = create_number_entity_description(key, controller_id)
             entity_description = apply_limits(entity_description, number_limits)
-            entities.append(EconetNumber(entity_description, coordinator, api))
+            entities.append(
+                EconetNumber(
+                    entity_description,
+                    coordinator,
+                    api,
+                    has_params_edits,
+                    has_edit_params,
+                )
+            )
         else:
             _LOGGER.info(
                 "Cannot add number entity - availability key: %s does not exist",

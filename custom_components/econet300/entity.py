@@ -73,6 +73,7 @@ class EconetEntity(CoordinatorEntity):
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
+        edit_params = self.coordinator.data.get("editParams", {})
 
         # Safety check: ensure all data sources are always dicts
         if sys_params is None:
@@ -84,13 +85,17 @@ class EconetEntity(CoordinatorEntity):
         if params_edits is None:
             params_edits = {}
             _LOGGER.info("paramsEdits was None, defaulting to empty dict")
+        if edit_params is None:
+            edit_params = {}
+            _LOGGER.info("editParams was None, defaulting to empty dict")
 
         _LOGGER.debug(
-            "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s",
+            "DEBUG: Looking for key '%s' in data sources - sysParams: %s, regParams: %s, paramsEdits: %s, editParams: %s",
             self.entity_description.key,
             self.entity_description.key in sys_params,
             self.entity_description.key in reg_params,
             self.entity_description.key in params_edits,
+            self.entity_description.key in edit_params,
         )
 
         value = None
@@ -103,6 +108,9 @@ class EconetEntity(CoordinatorEntity):
         elif self.entity_description.key in params_edits:
             value = params_edits[self.entity_description.key]
             _LOGGER.debug("DEBUG: Found in paramsEdits: %s", value)
+        elif self.entity_description.key in edit_params:
+            value = edit_params[self.entity_description.key]
+            _LOGGER.debug("DEBUG: Found in editParams: %s", value)
 
         if value is None:
             _LOGGER.debug("Value for key %s is None", self.entity_description.key)
@@ -132,10 +140,11 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.info("Coordinator data is None, skipping setup")
             return
 
-        # Retrieve sysParams and regParams paramsEdits data
+        # Retrieve sysParams and regParams paramsEdits editParams data
         sys_params = self.coordinator.data.get("sysParams", {})
         reg_params = self.coordinator.data.get("regParams", {})
         params_edits = self.coordinator.data.get("paramsEdits", {})
+        edit_params = self.coordinator.data.get("editParams", {})
 
         # Safety check: ensure all data sources are always dicts
         if sys_params is None:
@@ -153,30 +162,42 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.info(
                 "async_added_to_hass: paramsEdits was None, defaulting to empty dict"
             )
+        if edit_params is None:
+            edit_params = {}
+            _LOGGER.info(
+                "async_added_to_hass: editParams was None, defaulting to empty dict"
+            )
         _LOGGER.debug("async_sysParams: %s", sys_params)
         _LOGGER.debug("async_regParams: %s", reg_params)
         _LOGGER.debug("async_paramsEdits: %s", params_edits)
+        _LOGGER.debug("async_editParams: %s", edit_params)
 
         # Check the available keys in all sources
         sys_keys = sys_params.keys() if sys_params is not None else []
         reg_keys = reg_params.keys() if reg_params is not None else []
-        edit_keys = params_edits.keys() if params_edits is not None else []
+        params_edit_keys = params_edits.keys() if params_edits is not None else []
+        edit_param_keys = edit_params.keys() if edit_params is not None else []
         _LOGGER.debug("Available keys in sysParams: %s", sys_keys)
         _LOGGER.debug("Available keys in regParams: %s", reg_keys)
-        _LOGGER.debug("Available keys in paramsEdits: %s", edit_keys)
+        _LOGGER.debug("Available keys in paramsEdits: %s", params_edit_keys)
+        _LOGGER.debug("Available keys in editParams: %s", edit_param_keys)
 
         # Expected key from entity_description
         expected_key = self.entity_description.key
         _LOGGER.debug("Expected key: %s", expected_key)
 
-        # Retrieve the value from sysParams or regParams  or paramsEdits
+        # Retrieve the value from sysParams or regParams or paramsEdits or editParams
         value = (
             sys_params.get(expected_key)
             if sys_params.get(expected_key) is not None
             else (
                 reg_params.get(expected_key)
                 if reg_params.get(expected_key) is not None
-                else params_edits.get(expected_key)
+                else (
+                    params_edits.get(expected_key)
+                    if params_edits.get(expected_key) is not None
+                    else edit_params.get(expected_key)
+                )
             )
         )
 
@@ -184,11 +205,12 @@ class EconetEntity(CoordinatorEntity):
             _LOGGER.debug("Found key '%s' with value: %s", expected_key, value)
         else:
             _LOGGER.info(
-                "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s",
+                "Data key: %s was expected to exist but it doesn't. Available sysParams keys: %s, regParams keys: %s, paramsEdits keys: %s, editParams keys: %s",
                 expected_key,
                 sys_keys,
                 reg_keys,
-                edit_keys,
+                params_edit_keys,
+                edit_param_keys,
             )
             return
 
