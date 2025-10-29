@@ -148,6 +148,7 @@ class EconetNumber(EconetEntity, NumberEntity):
 def can_add(key: str, coordinator: EconetDataCoordinator) -> bool:
     """Check if a given entity can be added based on the availability of data in the coordinator."""
     try:
+        # editParams uses IDs as keys, so no conversion needed
         return (
             coordinator.has_param_edit_data(key)
             and coordinator.data["paramsEdits"][key]

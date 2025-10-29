@@ -26,6 +26,7 @@ from .const import (
     API_SYS_PARAMS_URI,
     CONTROL_PARAMS,
     NUMBER_MAP,
+    NUMBER_MAP_KEY,
     RMNEWPARAM_PARAMS,
 )
 from .mem_cache import MemCache
@@ -213,11 +214,17 @@ class Econet300Api:
             )
             return False
 
-        # Get the appropriate endpoint URL
-        # Use rmCurrNewParam for temperature setpoints (parameter keys like 1280)
-        # Use newParam for control parameters (parameter names like BOILER_CONTROL)
-        # Use rmNewParam for special parameters that need newParamIndex (like heater mode 55)
-        if param in RMNEWPARAM_PARAMS:
+        # ecoMAX360i uses /econet/newParam with parameter NAMES (not IDs)
+        # Convert ID to NAME using the number map
+        if self._model_id == "ecoMAX360i":
+            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using newParam endpoint for ecoMAX360i parameter name: %s: %s",
+                param,
+                url,
+            )
+        # Other controllers use ID-based endpoints
+        elif param in RMNEWPARAM_PARAMS:
             url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using rmNewParam endpoint for special parameter %s: %s",
@@ -310,6 +317,7 @@ class Econet300Api:
             _LOGGER.info("Parameter name is None. Unable to fetch limits.")
             return None
 
+        # editParams uses IDs as keys, so no conversion needed
         if limits is None or param not in limits:
             _LOGGER.info(
                 "Limits for parameter '%s' do not exist. Available limits: %s",
