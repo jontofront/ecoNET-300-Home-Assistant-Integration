@@ -29,6 +29,11 @@
         "name": "Tryb grzania"
       }
     },
+    "water_heater": {
+      "huw_water_heater": {
+        "name": "Podgrzewacz wody"
+      }
+    },
     "binary_sensor": {
       "pump_co_works": {
         "name": "Pompa CO"

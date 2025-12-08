@@ -41,7 +41,6 @@ from .const import (
     API_SYS_PARAMS_URI,
     CONTROL_PARAMS,
     NUMBER_MAP,
-    RMNEWPARAM_PARAMS,
 )
 from .mem_cache import MemCache
 
@@ -220,7 +219,14 @@ class Econet300Api:
             setattr(self, attr_name, sys_params[param_key])
 
     async def set_param(self, param, value) -> bool:
-        """Set param value in Econet300 API."""
+        """Set param value in Econet300 API.
+
+        Dynamically determines the correct endpoint based on parameter type:
+        - Numeric string (e.g., "49", "55") -> rmNewParam?newParamIndex={param}
+        - Legacy setpoints in NUMBER_MAP (e.g., "1280") -> rmCurrNewParam?newParamKey={param}
+        - Control parameters (e.g., "BOILER_CONTROL") -> newParam?newParamName={param}
+        - Default -> newParam?newParamName={param}
+        """
         if param is None:
             _LOGGER.info(
                 "Requested param set for: '%s' but mapping for this param does not exist",
@@ -228,31 +234,32 @@ class Econet300Api:
             )
             return False
 
-        # Get the appropriate endpoint URL
-        # Use rmCurrNewParam for temperature setpoints (parameter keys like 1280)
-        # Use newParam for control parameters (parameter names like BOILER_CONTROL)
-        # Use rmNewParam for special parameters that need newParamIndex (like heater mode 55)
-        if param in RMNEWPARAM_PARAMS:
+        # Determine endpoint dynamically based on parameter format
+        # Check if param is a numeric string (from merged data parameters)
+        if isinstance(param, str) and param.isdigit():
+            # Numeric parameter ID from merged data -> use rmNewParam
             url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
             _LOGGER.debug(
-                "Using rmNewParam endpoint for special parameter %s: %s",
+                "Using rmNewParam endpoint for parameter ID %s: %s",
                 param,
                 url,
             )
         elif param in NUMBER_MAP:
+            # Legacy setpoint parameters (1280, 1281, etc.) -> use rmCurrNewParam
             url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
             _LOGGER.debug(
-                "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
+                "Using rmCurrNewParam endpoint for setpoint parameter %s: %s",
                 param,
                 url,
             )
         elif param in CONTROL_PARAMS:
+            # Control parameters (BOILER_CONTROL, etc.) -> use newParam with name
             url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using newParam endpoint for control parameter %s: %s", param, url
             )
         else:
-            # Default to newParam for unknown parameters
+            # Default: assume it's a parameter name -> use newParam with name
             url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using default newParam endpoint for parameter %s: %s", param, url

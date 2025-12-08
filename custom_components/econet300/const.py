@@ -363,6 +363,8 @@ NUMBER_MAP = {
     "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
     "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
+    # Note: HUW parameters (49, 53, 59, 60, 61) are auto-generated from "HUW settings" category
+    # via dynamic entity system - no manual mapping needed
 }
 
 # =============================================================================
@@ -409,12 +411,10 @@ HEATER_MODE_CURRENT_STATE_PARAM = SELECT_KEY_GET_INDEX["heaterMode"]
 # =============================================================================
 # PARAMETER ENDPOINT MAPPINGS
 # =============================================================================
-# Parameters that use the rmNewParam endpoint with newParamIndex
-RMNEWPARAM_PARAMS = {
-    "55",  # Heater mode (Summer/Winter/Auto)
-    # Add other parameters here that need rmNewParam endpoint
-    # Example: "56", "57", etc.
-}
+# Note: RMNEWPARAM_PARAMS is no longer needed - endpoint is determined dynamically
+# by checking if parameter is a numeric string (from merged data)
+# Legacy constant kept for backward compatibility but not used
+RMNEWPARAM_PARAMS: set[str] = set()
 
 # Control parameters that use the newParam endpoint with newParamName
 CONTROL_PARAMS = {
@@ -425,6 +425,21 @@ CONTROL_PARAMS = {
 
 # Individual control parameter constants
 BOILER_CONTROL = "BOILER_CONTROL"
+
+# =============================================================================
+# HUW (HOT WATER) PARAMETER CONSTANTS
+# =============================================================================
+# HUW category name from rmCatsNames endpoint
+# Used to identify HUW parameters by category field (most reliable method)
+HUW_CATEGORY_NAME = "HUW settings"
+
+# HUW name pattern for searching parameters (like SQL LIKE '%HUW%')
+# Used to find all parameters where name contains "HUW"
+HUW_NAME_PATTERN = "HUW"
+
+# Note: HUW parameters are now discovered dynamically by searching for HUW_CATEGORY_NAME
+# in the category field (added by _add_parameter_categories from rmStructure).
+# Parameters are found in "HUW settings" category and auto-generated as entities.
 
 # =============================================================================
 # DYNAMIC ENTITY UNIT MAPPINGS

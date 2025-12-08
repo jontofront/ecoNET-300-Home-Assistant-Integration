@@ -1028,14 +1028,6 @@ def _create_dynamic_entity_from_param(
         )
         return None
 
-    # Skip advanced parameters if show_advanced is False
-    if not show_advanced:
-        _LOGGER.debug(
-            "Skipping advanced parameter %s - show_advanced_parameters is False",
-            param_id,
-        )
-        return None
-
     if not should_be_number_entity(param):
         return None
 
@@ -1043,6 +1035,14 @@ def _create_dynamic_entity_from_param(
     category = param.get("category", "")
     param_type = get_parameter_type_from_category(category)
     param_name = param.get("name", f"Parameter {param_id}")
+
+    # Skip advanced parameters if show_advanced is False
+    if param_type == "advanced" and not show_advanced:
+        _LOGGER.debug(
+            "Skipping advanced parameter %s - show_advanced_parameters is False",
+            param_id,
+        )
+        return None
 
     _LOGGER.info(
         "DEBUG: Parameter %s qualifies as number entity: name=%s, unit_name=%s, edit=%s, category=%s, type=%s",

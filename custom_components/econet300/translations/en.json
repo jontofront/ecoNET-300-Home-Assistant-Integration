@@ -29,6 +29,11 @@
         "name": "Heater Mode"
       }
     },
+    "water_heater": {
+      "huw_water_heater": {
+        "name": "Hot Water Heater"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Lighter"
