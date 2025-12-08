@@ -1036,11 +1036,13 @@ def _create_dynamic_entity_from_param(
     param_type = get_parameter_type_from_category(category)
     param_name = param.get("name", f"Parameter {param_id}")
 
-    # Skip advanced parameters if show_advanced is False
-    if param_type == "advanced" and not show_advanced:
-        _LOGGER.debug(
-            "Skipping advanced parameter %s - show_advanced_parameters is False",
+    # Skip advanced and service parameters if show_advanced is False
+    if param_type in ("advanced", "service") and not show_advanced:
+        _LOGGER.info(
+            "Skipping %s parameter %s (%s) - show_advanced_parameters is False",
+            param_type,
             param_id,
+            param_name,
         )
         return None
 
@@ -1155,8 +1157,45 @@ async def _create_dynamic_entities_from_merged_data(
             )
 
     number_entity_count = 0
+    advanced_count = 0
+    service_count = 0
+    skipped_advanced_count = 0
+    skipped_service_count = 0
+    category_stats: dict[str, int] = {}  # Track categories found
+
     for param_id, param in merged_data["parameters"].items():
         _LOGGER.debug("DEBUG: Processing parameter %s: %s", param_id, param)
+
+        # Check parameter type before creating entity
+        category = param.get("category", "")
+        param_type = get_parameter_type_from_category(category)
+
+        # Track category statistics
+        if category:
+            category_stats[category] = category_stats.get(category, 0) + 1
+
+        if param_type == "advanced":
+            advanced_count += 1
+            if not show_advanced:
+                skipped_advanced_count += 1
+                _LOGGER.info(
+                    "Skipping advanced parameter %s (%s) in category '%s' - show_advanced_parameters is False",
+                    param_id,
+                    param.get("name", "Unknown"),
+                    category,
+                )
+                continue
+        elif param_type == "service":
+            service_count += 1
+            if not show_advanced:
+                skipped_service_count += 1
+                _LOGGER.info(
+                    "Skipping service parameter %s (%s) in category '%s' - show_advanced_parameters is False",
+                    param_id,
+                    param.get("name", "Unknown"),
+                    category,
+                )
+                continue
 
         entity = _create_dynamic_entity_from_param(
             param_id, param, coordinator, api, basic_param_ids, show_advanced
@@ -1165,19 +1204,36 @@ async def _create_dynamic_entities_from_merged_data(
             entities.append(entity)
             number_entity_count += 1
 
+    # Log category statistics
+    if category_stats:
+        _LOGGER.info(
+            "Category statistics: %s",
+            ", ".join(
+                f"{cat}: {count}" for cat, count in sorted(category_stats.items())
+            ),
+        )
+
     _LOGGER.info(
-        "DEBUG: Found %d parameters that qualify as number entities",
+        "DEBUG: Found %d parameters that qualify as number entities (advanced: %d/%d, service: %d/%d)",
         number_entity_count,
+        advanced_count - skipped_advanced_count,
+        advanced_count,
+        service_count - skipped_service_count,
+        service_count,
     )
     if show_advanced:
         _LOGGER.info(
-            "Created %d advanced dynamic number entities (show_advanced_parameters=True)",
+            "Created %d dynamic number entities including %d advanced and %d service (show_advanced_parameters=True)",
             len(entities),
+            advanced_count,
+            service_count,
         )
     else:
         _LOGGER.info(
-            "Skipped advanced dynamic entities (show_advanced_parameters=False). "
-            "Only basic NUMBER_MAP entities are shown."
+            "Created %d dynamic number entities, skipped %d advanced and %d service entities (show_advanced_parameters=False)",
+            len(entities),
+            skipped_advanced_count,
+            skipped_service_count,
         )
 
     return entities
@@ -1246,6 +1302,11 @@ async def async_setup_entry(
     options = dict(entry.options) if entry.options else {}  # type: ignore[arg-type]
     show_advanced = options.get("show_advanced_parameters", False)
     enable_dynamic = options.get("enable_dynamic_entities", True)
+    _LOGGER.info(
+        "Entity creation options: show_advanced_parameters=%s, enable_dynamic_entities=%s",
+        show_advanced,
+        enable_dynamic,
+    )
 
     # Define basic parameter IDs from NUMBER_MAP (always shown)
     basic_param_ids = set(NUMBER_MAP.keys())
