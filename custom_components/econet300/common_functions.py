@@ -60,17 +60,20 @@ def get_parameter_type_from_category(category_name: str | None) -> str:
     if not category_name:
         return "basic"
 
-    category_lower = category_name.lower()
+    category_lower = category_name.lower().strip()
 
-    # Service categories
+    # Service categories - check for "service" keyword
+    # Examples: "Service Settings", "Service counters", "Service information"
     if "service" in category_lower:
         return "service"
 
-    # Advanced categories
+    # Advanced categories - check for "advanced" keyword
+    # Examples: "Advanced settings"
     if "advanced" in category_lower:
         return "advanced"
 
     # Basic categories (user-friendly)
+    # Examples: "Boiler settings", "HUW settings", "Mixer 1 settings", etc.
     return "basic"
 
 

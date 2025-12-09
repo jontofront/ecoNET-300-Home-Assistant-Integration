@@ -222,8 +222,8 @@ class Econet300Api:
         """Set param value in Econet300 API.
 
         Dynamically determines the correct endpoint based on parameter type:
-        - Numeric string (e.g., "49", "55") -> rmNewParam?newParamIndex={param}
-        - Legacy setpoints in NUMBER_MAP (e.g., "1280") -> rmCurrNewParam?newParamKey={param}
+        - Legacy setpoints in NUMBER_MAP (e.g., "1280", "1281", "55") -> rmCurrNewParam?newParamKey={param}
+        - Numeric string not in NUMBER_MAP (e.g., "49") -> rmNewParam?newParamIndex={param}
         - Control parameters (e.g., "BOILER_CONTROL") -> newParam?newParamName={param}
         - Default -> newParam?newParamName={param}
         """
@@ -235,20 +235,20 @@ class Econet300Api:
             return False
 
         # Determine endpoint dynamically based on parameter format
-        # Check if param is a numeric string (from merged data parameters)
-        if isinstance(param, str) and param.isdigit():
-            # Numeric parameter ID from merged data -> use rmNewParam
-            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
-            _LOGGER.debug(
-                "Using rmNewParam endpoint for parameter ID %s: %s",
-                param,
-                url,
-            )
-        elif param in NUMBER_MAP:
+        # Check NUMBER_MAP first (before isdigit check) to handle legacy setpoints correctly
+        if param in NUMBER_MAP:
             # Legacy setpoint parameters (1280, 1281, etc.) -> use rmCurrNewParam
             url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using rmCurrNewParam endpoint for setpoint parameter %s: %s",
+                param,
+                url,
+            )
+        elif isinstance(param, str) and param.isdigit():
+            # Numeric parameter ID from merged data (not in NUMBER_MAP) -> use rmNewParam
+            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+            _LOGGER.debug(
+                "Using rmNewParam endpoint for parameter ID %s: %s",
                 param,
                 url,
             )
@@ -1351,11 +1351,22 @@ class Econet300Api:
             # Always add category information (for dynamic entity generation)
             category_count = 0
             if categories:
+                _LOGGER.info(
+                    "Adding category information: %d categories available, %d parameters to process",
+                    len(categories),
+                    len(parameters_dict),
+                )
                 category_count = self._add_parameter_categories(
                     parameters_dict, structure, categories
                 )
-                _LOGGER.debug(
-                    "Added category information to %d parameters", category_count
+                _LOGGER.info(
+                    "Added category information to %d out of %d parameters",
+                    category_count,
+                    len(parameters_dict),
+                )
+            else:
+                _LOGGER.warning(
+                    "No categories available - category-based entity organization will not work"
                 )
 
             # Add lock status to parameters
@@ -1587,7 +1598,14 @@ class Econet300Api:
 
         """
         if not categories:
+            _LOGGER.debug("No categories available for parameter categorization")
             return 0
+
+        _LOGGER.debug(
+            "Starting category mapping: %d categories available, %d parameters to map",
+            len(categories),
+            len(parameters_dict),
+        )
 
         # Map parameter numbers to their categories
         # Structure: type 7 = category, type 1 = parameter
@@ -1606,11 +1624,39 @@ class Econet300Api:
                 # This is a category - store it
                 if isinstance(entry_index, int) and entry_index < len(categories):
                     current_category_index = entry_index
+                    category_name = categories[entry_index]
+                    _LOGGER.debug(
+                        "Found category: index=%d, name='%s'",
+                        entry_index,
+                        category_name,
+                    )
+                else:
+                    _LOGGER.debug(
+                        "Skipping invalid category index: %d (categories length: %d)",
+                        entry_index if isinstance(entry_index, int) else "not int",
+                        len(categories),
+                    )
             elif entry_type == 1:  # Parameter
                 # This is a parameter - map it to current category
                 if isinstance(entry_index, int) and current_category_index is not None:
                     category_name = categories[current_category_index]
                     param_to_category[entry_index] = category_name
+                    _LOGGER.debug(
+                        "Mapped parameter %d to category '%s' (category index: %d)",
+                        entry_index,
+                        category_name,
+                        current_category_index,
+                    )
+                elif isinstance(entry_index, int):
+                    _LOGGER.debug(
+                        "Parameter %d has no category (current_category_index is None)",
+                        entry_index,
+                    )
+
+        _LOGGER.debug(
+            "Category mapping complete: %d parameters mapped to categories",
+            len(param_to_category),
+        )
 
         # Add category to parameters
         category_count = 0
@@ -1619,7 +1665,18 @@ class Econet300Api:
             if isinstance(param_number, int) and param_number in param_to_category:
                 param["category"] = param_to_category[param_number]
                 category_count += 1
+            elif isinstance(param_number, int):
+                _LOGGER.debug(
+                    "Parameter number %d (name: %s) not found in category mapping",
+                    param_number,
+                    param.get("name", "Unknown"),
+                )
 
+        _LOGGER.info(
+            "Added category information to %d out of %d parameters",
+            category_count,
+            len(parameters_dict),
+        )
         return category_count
 
     def _add_parameter_locks(

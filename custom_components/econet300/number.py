@@ -1014,7 +1014,7 @@ def _create_dynamic_entity_from_param(
         coordinator: Data coordinator
         api: API instance
         basic_param_ids: Set of basic parameter IDs to skip
-        show_advanced: Whether to show advanced parameters
+        show_advanced: Whether to show advanced and service parameters
 
     Returns:
         Created entity or None if skipped
@@ -1129,7 +1129,7 @@ async def _create_dynamic_entities_from_merged_data(
         coordinator: Data coordinator
         api: API instance
         basic_param_ids: Set of basic parameter IDs to skip
-        show_advanced: Whether to show advanced parameters
+        show_advanced: Whether to show advanced and service parameters
 
     Returns:
         List of dynamic entities
@@ -1156,6 +1156,44 @@ async def _create_dynamic_entities_from_merged_data(
                 param.get("category", "No category"),
             )
 
+    # Log all service/advanced parameters found for debugging
+    service_params_found = []
+    advanced_params_found = []
+    for param_id, param in merged_data["parameters"].items():
+        category = param.get("category", "")
+        param_type = get_parameter_type_from_category(category)
+        if param_type == "service":
+            service_params_found.append(
+                (param_id, param.get("name", "Unknown"), category)
+            )
+        elif param_type == "advanced":
+            advanced_params_found.append(
+                (param_id, param.get("name", "Unknown"), category)
+            )
+
+    if service_params_found:
+        _LOGGER.info(
+            "Found %d service parameters in merged data: %s",
+            len(service_params_found),
+            ", ".join(
+                [
+                    f"{name} (id:{param_id}, cat:{cat})"
+                    for param_id, name, cat in service_params_found[:10]
+                ]
+            ),
+        )
+    if advanced_params_found:
+        _LOGGER.info(
+            "Found %d advanced parameters in merged data: %s",
+            len(advanced_params_found),
+            ", ".join(
+                [
+                    f"{name} (id:{param_id}, cat:{cat})"
+                    for param_id, name, cat in advanced_params_found[:10]
+                ]
+            ),
+        )
+
     number_entity_count = 0
     advanced_count = 0
     service_count = 0
@@ -1169,10 +1207,28 @@ async def _create_dynamic_entities_from_merged_data(
         # Check parameter type before creating entity
         category = param.get("category", "")
         param_type = get_parameter_type_from_category(category)
+        param_name = param.get("name", "Unknown")
 
         # Track category statistics
         if category:
             category_stats[category] = category_stats.get(category, 0) + 1
+        else:
+            # Log parameters without category for debugging
+            _LOGGER.debug(
+                "Parameter %s (%s) has no category field",
+                param_id,
+                param_name,
+            )
+
+        # Log service/advanced parameters at INFO level for visibility
+        if param_type in ("advanced", "service"):
+            _LOGGER.info(
+                "Found %s parameter %s (%s) in category '%s'",
+                param_type,
+                param_id,
+                param_name,
+                category or "No category",
+            )
 
         if param_type == "advanced":
             advanced_count += 1
@@ -1181,7 +1237,7 @@ async def _create_dynamic_entities_from_merged_data(
                 _LOGGER.info(
                     "Skipping advanced parameter %s (%s) in category '%s' - show_advanced_parameters is False",
                     param_id,
-                    param.get("name", "Unknown"),
+                    param_name,
                     category,
                 )
                 continue
@@ -1192,7 +1248,7 @@ async def _create_dynamic_entities_from_merged_data(
                 _LOGGER.info(
                     "Skipping service parameter %s (%s) in category '%s' - show_advanced_parameters is False",
                     param_id,
-                    param.get("name", "Unknown"),
+                    param_name,
                     category,
                 )
                 continue
@@ -1221,20 +1277,14 @@ async def _create_dynamic_entities_from_merged_data(
         service_count - skipped_service_count,
         service_count,
     )
-    if show_advanced:
-        _LOGGER.info(
-            "Created %d dynamic number entities including %d advanced and %d service (show_advanced_parameters=True)",
-            len(entities),
-            advanced_count,
-            service_count,
-        )
-    else:
-        _LOGGER.info(
-            "Created %d dynamic number entities, skipped %d advanced and %d service entities (show_advanced_parameters=False)",
-            len(entities),
-            skipped_advanced_count,
-            skipped_service_count,
-        )
+    _LOGGER.info(
+        "Created %d dynamic number entities (advanced: %d/%d shown, service: %d/%d shown)",
+        len(entities),
+        advanced_count - skipped_advanced_count,
+        advanced_count,
+        service_count - skipped_service_count,
+        service_count,
+    )
 
     return entities
 
@@ -1303,7 +1353,7 @@ async def async_setup_entry(
     show_advanced = options.get("show_advanced_parameters", False)
     enable_dynamic = options.get("enable_dynamic_entities", True)
     _LOGGER.info(
-        "Entity creation options: show_advanced_parameters=%s, enable_dynamic_entities=%s",
+        "Entity creation options: show_advanced_parameters=%s (controls both advanced and service), enable_dynamic_entities=%s",
         show_advanced,
         enable_dynamic,
     )
@@ -1326,11 +1376,20 @@ async def async_setup_entry(
         _LOGGER.info("Dynamic entities disabled in options, skipping dynamic creation")
         return async_add_entities(entities)
 
-    try:
-        merged_data = await api.fetch_merged_rm_data_with_names_descs_and_structure()
-    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-        _LOGGER.warning("Failed to fetch merged parameter data: %s", e)
-        merged_data = None
+    # Use merged data from coordinator (already fetched during coordinator refresh)
+    # This ensures consistency with other platforms like water_heater
+    merged_data = coordinator.data.get("mergedData") if coordinator.data else None
+
+    # Fallback: fetch if not available in coordinator (shouldn't happen normally)
+    if not merged_data:
+        _LOGGER.warning("mergedData not found in coordinator, fetching directly...")
+        try:
+            merged_data = (
+                await api.fetch_merged_rm_data_with_names_descs_and_structure()
+            )
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
+            _LOGGER.warning("Failed to fetch merged parameter data: %s", e)
+            merged_data = None
 
     if merged_data and "parameters" in merged_data:
         # Create dynamic entities from merged data

@@ -9,6 +9,7 @@ from typing import Any
 from homeassistant.components.water_heater import (
     WaterHeaterEntity,
     WaterHeaterEntityDescription,
+    WaterHeaterEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import UnitOfTemperature
@@ -50,6 +51,7 @@ class EconetWaterHeater(EconetEntity, WaterHeaterEntity):
         self._attr_max_temp = 55.0  # Default maximum
         self._attr_operation_list: list[str] = ["off", "on"]
         self._attr_current_operation = "off"
+        self._attr_supported_features = WaterHeaterEntityFeature.TARGET_TEMPERATURE
         # Cache parameter ID found dynamically
         self._huw_preset_temp_param_id: str | None = None
         super().__init__(coordinator, api)
