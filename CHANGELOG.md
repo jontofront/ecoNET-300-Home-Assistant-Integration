@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.1.17] - 2025-12-29
+
+### 🚀 New Features
+
+- TBD
+
+### 🐛 Bug Fixes
+
+- TBD
+
+---
+
 ## [v1.1.16] - 2025-12-29
 
 ### 🚀 New Features

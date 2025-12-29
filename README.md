@@ -408,7 +408,7 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
-### Latest Features (v1.1.16)
+### Latest Features (v1.1.17)
 
 - **🔄 Reconfigure Flow**: Update IP/credentials without removing integration (Settings → Devices & Services → ecoNET300 → ⋮ → Reconfigure)
 - **Diagnostics Support**: Comprehensive diagnostics for troubleshooting issues
@@ -465,4 +465,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2025-12-29 for version 1.1.16._
+_This README was last updated on 2025-12-29 for version 1.1.17._
