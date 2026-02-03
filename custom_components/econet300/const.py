@@ -32,6 +32,7 @@ from homeassistant.const import (
 DOMAIN = "econet300"
 SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
+SERVICE_FUEL_TRACKER = "fuel_tracker"
 
 # =============================================================================
 # COORDINATOR CONFIGURATION CONSTANTS

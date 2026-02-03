@@ -189,6 +189,15 @@ Starting with v1.2.0, the integration automatically discovers **165+ additional 
 
 **📖 [Complete Entity Reference](docs/ENTITIES.md)** - Full list of all entities with descriptions
 
+### Fuel Consumption Tracking
+
+The `fuel_stream` sensor provides current fuel consumption rate in **kg/h**. To track total consumption:
+
+1. Use Home Assistant's **Riemann Sum Integration Helper** to convert rate → total
+2. Add a **Utility Meter** for daily/weekly/monthly tracking
+
+**📖 [Fuel Consumption Guide](docs/FUEL_CONSUMPTION.md)** - Step-by-step setup instructions
+
 ---
 
 ## 🔧 Diagnostics
@@ -234,6 +243,7 @@ ecoNET-300-Home-Assistant-Integration/
 ### 📚 **Essential Documentation** (in `docs/`)
 
 - **[ENTITIES.md](docs/ENTITIES.md)** - Complete entity reference (sensors, switches, numbers)
+- **[FUEL_CONSUMPTION.md](docs/FUEL_CONSUMPTION.md)** - Track total fuel consumption with Riemann Sum helper
 - **[MIGRATION.md](docs/MIGRATION.md)** - Migration guide for upgrading between versions
 - **[DIAGNOSTICS.md](docs/DIAGNOSTICS.md)** - Diagnostics documentation and troubleshooting
 - **[DYNAMIC_ENTITY_VALIDATION.md](docs/DYNAMIC_ENTITY_VALIDATION.md)** - Dynamic entity system (v1.2.0+)

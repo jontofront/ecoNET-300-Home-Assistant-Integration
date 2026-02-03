@@ -2,19 +2,22 @@
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import logging
 from typing import Any
 
 from homeassistant.components.sensor import (
+    RestoreSensor,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.const import EntityCategory, UnitOfMass
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
@@ -32,6 +35,7 @@ from .const import (
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
+    SERVICE_FUEL_TRACKER,
     STATE_CLASS_MAP,
 )
 from .entity import (
@@ -43,6 +47,107 @@ from .entity import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+# Maximum time delta in seconds to prevent incorrect spikes after long gaps
+MAX_TIME_DELTA_SECONDS = 300  # 5 minutes
+
+
+class FuelConsumptionTracker:
+    """Track total fuel consumption by integrating fuel stream rate over time.
+
+    This class accumulates fuel consumption (kg) from a fuel stream rate (kg/h)
+    by calculating the integral over time between updates.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the fuel consumption tracker."""
+        self._total: float = 0.0
+        self._last_reset: datetime | None = None
+        self._last_update: datetime | None = None
+
+    @property
+    def total(self) -> float:
+        """Return the total fuel consumption in kg."""
+        return round(self._total, 3)
+
+    @property
+    def last_reset(self) -> datetime | None:
+        """Return the timestamp of the last reset."""
+        return self._last_reset
+
+    @property
+    def last_update(self) -> datetime | None:
+        """Return the timestamp of the last update."""
+        return self._last_update
+
+    def restore(
+        self,
+        total: float | None,
+        last_reset: datetime | None,
+    ) -> None:
+        """Restore the tracker state from persistent storage."""
+        if total is not None:
+            self._total = float(total)
+        if last_reset is not None:
+            self._last_reset = last_reset
+        _LOGGER.debug(
+            "Restored fuel consumption tracker: total=%.3f kg, last_reset=%s",
+            self._total,
+            self._last_reset,
+        )
+
+    def update(self, fuel_stream_kgh: float | None) -> float:
+        """Update the total consumption based on current fuel stream rate."""
+        now = datetime.now(timezone.utc)
+
+        # Skip if fuel stream is None or zero (boiler off)
+        if fuel_stream_kgh is None or fuel_stream_kgh <= 0:
+            self._last_update = now
+            return self._total
+
+        # Calculate consumption since last update
+        if self._last_update is not None:
+            delta_seconds = (now - self._last_update).total_seconds()
+
+            # Cap the delta to prevent incorrect spikes after long gaps
+            if delta_seconds > MAX_TIME_DELTA_SECONDS:
+                _LOGGER.debug(
+                    "Time delta %.1fs exceeds max %.1fs, capping",
+                    delta_seconds,
+                    MAX_TIME_DELTA_SECONDS,
+                )
+                delta_seconds = MAX_TIME_DELTA_SECONDS
+
+            if delta_seconds > 0:
+                # Calculate consumption: rate (kg/h) * time (h)
+                delta_hours = delta_seconds / 3600
+                consumption = fuel_stream_kgh * delta_hours
+                self._total += consumption
+
+                _LOGGER.debug(
+                    "Fuel consumption update: rate=%.3f kg/h, delta=%.1fs, "
+                    "added=%.4f kg, total=%.3f kg",
+                    fuel_stream_kgh,
+                    delta_seconds,
+                    consumption,
+                    self._total,
+                )
+
+        self._last_update = now
+        return self._total
+
+    def reset(self) -> None:
+        """Reset the fuel consumption counter to zero."""
+        self._total = 0.0
+        self._last_reset = datetime.now(timezone.utc)
+        self._last_update = self._last_reset
+        _LOGGER.info("Fuel consumption reset at %s", self._last_reset)
+
+    def calibrate(self, value: float) -> None:
+        """Calibrate the fuel consumption counter to a specific value."""
+        self._total = value
+        self._last_update = datetime.now(timezone.utc)
+        _LOGGER.info("Fuel consumption calibrated to %.3f kg", value)
 
 
 @dataclass(frozen=True)
@@ -254,6 +359,139 @@ class InformationDynamicSensor(EconetEntity, SensorEntity):
                 break
 
         return None
+
+
+# Custom device class for fuel consumption meter to allow targeting with services
+DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
+
+
+class FuelConsumptionTotalSensor(RestoreSensor, CoordinatorEntity):
+    """Sensor that tracks total fuel consumption by integrating fuel stream rate.
+
+    This sensor calculates total fuel consumption (kg) by integrating the
+    fuelStream rate (kg/h) over time. It persists across restarts using
+    RestoreSensor. Reset and calibration are available via service actions.
+    """
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "fuel_consumption_total"
+    _attr_device_class = DEVICE_CLASS_FUEL_METER  # type: ignore[assignment]
+    _attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_suggested_display_precision = 2
+    _attr_icon = "mdi:weight-kilogram"
+    _unrecorded_attributes = frozenset({"burned_since_last_update"})
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        tracker: FuelConsumptionTracker,
+    ) -> None:
+        """Initialize the fuel consumption total sensor.
+
+        Args:
+            coordinator: The data update coordinator
+            api: The ecoNET API instance
+            tracker: The fuel consumption tracker instance
+
+        """
+        super().__init__(coordinator)
+        self._api = api
+        self._tracker = tracker
+        self._attr_unique_id = f"{api.uid}_fuel_consumption_total"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device info for the main boiler device."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self._api.uid)},
+            name=self._api.model_id,
+            manufacturer="Plum",
+            model=self._api.model_id,
+            sw_version=self._api.sw_rev,
+        )
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the current total fuel consumption."""
+        return self._tracker.total
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return extra state attributes."""
+        attrs: dict[str, Any] = {}
+        if self._tracker.last_update:
+            attrs["last_update"] = self._tracker.last_update.isoformat()
+        if self._tracker.last_reset:
+            attrs["meter_reset_time"] = self._tracker.last_reset.isoformat()
+        return attrs
+
+    async def async_reset_meter(self) -> None:
+        """Reset the fuel consumption meter to zero."""
+        _LOGGER.info("Resetting fuel consumption meter")
+        self._tracker.reset()
+        self.async_write_ha_state()
+
+    async def async_calibrate_meter(self, value: float) -> None:
+        """Calibrate the fuel consumption meter to a specific value."""
+        _LOGGER.info("Calibrating fuel consumption meter to %.3f kg", value)
+        self._tracker.calibrate(value)
+        self.async_write_ha_state()
+
+    async def async_added_to_hass(self) -> None:
+        """Handle entity added to Home Assistant."""
+        await super().async_added_to_hass()
+
+        # Restore previous state
+        last_sensor_data = await self.async_get_last_sensor_data()
+        if last_sensor_data is not None and last_sensor_data.native_value is not None:
+            native_val = last_sensor_data.native_value
+            total_value: float | None = None
+            if isinstance(native_val, (int, float)):
+                total_value = float(native_val)
+            elif isinstance(native_val, str):
+                try:
+                    total_value = float(native_val)
+                except ValueError:
+                    total_value = None
+
+            # Get last_reset from stored state attributes
+            last_state = await self.async_get_last_state()
+            last_reset_value: datetime | None = None
+            if last_state and last_state.attributes:
+                last_reset_str = last_state.attributes.get("last_reset")
+                if last_reset_str:
+                    try:
+                        last_reset_value = datetime.fromisoformat(last_reset_str)
+                    except (ValueError, TypeError):
+                        last_reset_value = None
+
+            _LOGGER.info(
+                "Restoring fuel consumption sensor: value=%s, last_reset=%s",
+                total_value,
+                last_reset_value,
+            )
+            self._tracker.restore(
+                total=total_value,
+                last_reset=last_reset_value,
+            )
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        reg_params = self.coordinator.data.get("regParams", {})
+        if reg_params is None:
+            return
+
+        fuel_stream = reg_params.get("fuelStream")
+        self._tracker.update(fuel_stream)
+
+        # Update HA state
+        self.async_write_ha_state()
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
@@ -613,6 +851,27 @@ async def async_setup_entry(
 
     # Collect entities synchronously
     entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
+
+    # Create fuel consumption total sensor if fuelStream is available
+    if (
+        coordinator.data
+        and coordinator.data.get("regParams", {}).get("fuelStream") is not None
+    ):
+        # Get or create the fuel tracker
+        if SERVICE_FUEL_TRACKER not in hass.data[DOMAIN][entry.entry_id]:
+            hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_TRACKER] = (
+                FuelConsumptionTracker()
+            )
+            _LOGGER.info("Created new FuelConsumptionTracker")
+
+        tracker = hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_TRACKER]
+        fuel_consumption_sensor = FuelConsumptionTotalSensor(coordinator, api, tracker)
+        entities.append(fuel_consumption_sensor)
+        _LOGGER.info("Created FuelConsumptionTotalSensor")
+    else:
+        _LOGGER.info(
+            "fuelStream not available, FuelConsumptionTotalSensor will not be created"
+        )
 
     # Add entities to Home Assistant
     async_add_entities(entities)

@@ -1,4 +1,20 @@
 {
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Resetuj licznik paliwa",
+      "description": "Resetuje licznik zużycia paliwa do zera."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Kalibruj licznik paliwa",
+      "description": "Ustawia licznik zużycia paliwa na określoną wartość.",
+      "fields": {
+        "value": {
+          "name": "Wartość",
+          "description": "Wartość do ustawienia na liczniku (w kg)."
+        }
+      }
+    }
+  },
   "exceptions": {
     "parameter_locked": {
       "message": "Nie można zmienić wartości: {lock_reason}"
@@ -339,6 +355,9 @@
       },
       "fuel_level": {
         "name": "Poziom paliwa"
+      },
+      "fuel_consumption_total": {
+        "name": "Całkowite zużycie paliwa"
       },
       "fan_power": {
         "name": "Moc nadmuchu"
