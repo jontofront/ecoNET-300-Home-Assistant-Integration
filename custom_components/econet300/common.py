@@ -81,6 +81,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         self._config_entry = config_entry
         self._options = options or {}
         self._consecutive_failures = 0
+        self._rm_supported: bool | None = None
 
     def has_sys_data(self, key: str) -> bool:
         """Check if data key is present in sysParams."""
@@ -124,25 +125,34 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 # Fetch regParamsData from ../econet/regParamsData
                 reg_params_data = await self._api.fetch_reg_params_data()
 
-                # Optionally fetch RM... endpoint data for enhanced functionality
-                # These provide structured data used by the ecoNET24 web interface
-                rm_data = await self._fetch_rm_endpoint_data()
+                # Probe once whether RM API is supported (legacy-only modules return 404/timeout)
+                if self._rm_supported is None:
+                    self._rm_supported = await self._api.probe_rm_support()
+                    if not self._rm_supported:
+                        _LOGGER.info(
+                            "RM endpoint not available (legacy-only module), skipping merged data"
+                        )
 
-                # Fetch merged parameter data for dynamic entities
-                # Pass sys_params to enable service authentication if available
-                merged_data = None
-                try:
-                    merged_data = await self._api.fetch_merged_rm_data(
-                        sys_params=sys_params,
-                    )
-                    _LOGGER.info(
-                        "Coordinator fetched merged data: %s parameters",
-                        len(merged_data.get("parameters", {})) if merged_data else 0,
-                    )
-                except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-                    _LOGGER.warning(
-                        "Failed to fetch merged parameter data in coordinator: %s", e
-                    )
+                if self._rm_supported:
+                    # Fetch RM... endpoint data for enhanced functionality
+                    rm_data = await self._fetch_rm_endpoint_data()
+                    # Fetch merged parameter data for dynamic entities
+                    merged_data = None
+                    try:
+                        merged_data = await self._api.fetch_merged_rm_data(
+                            sys_params=sys_params,
+                        )
+                        _LOGGER.info(
+                            "Coordinator fetched merged data: %s parameters",
+                            len(merged_data.get("parameters", {})) if merged_data else 0,
+                        )
+                    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
+                        _LOGGER.warning(
+                            "Failed to fetch merged parameter data in coordinator: %s", e
+                        )
+                else:
+                    rm_data = {}
+                    merged_data = None
 
                 result = {
                     "sysParams": sys_params,

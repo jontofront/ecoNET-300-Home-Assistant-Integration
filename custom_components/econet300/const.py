@@ -40,6 +40,9 @@ SERVICE_FUEL_TRACKER = "fuel_tracker"
 # Number of consecutive failures before creating a repair issue
 CONSECUTIVE_FAILURES_THRESHOLD = 5
 
+# Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
+RM_PROBE_TIMEOUT_SEC = 2
+
 # RM endpoint dataset keys for data coordinator (order matches tasks list)
 RM_CORE_DATASET_KEYS = [
     "currentDataParams",

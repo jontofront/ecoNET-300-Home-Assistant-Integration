@@ -44,6 +44,7 @@ from .const import (
     CACHE_STATIC_METADATA_TTL,
     CONTROL_PARAMS,
     NUMBER_MAP,
+    RM_PROBE_TIMEOUT_SEC,
     RM_STRUCTURE_TYPE_CATEGORY,
     RM_STRUCTURE_TYPE_DATA_REF,
     RM_STRUCTURE_TYPE_MENU_GROUP,
@@ -165,6 +166,24 @@ class EconetClient:
             "Failed to fetch data from %s after %d attempts", _sanitize_url_for_logging(url), max_attempts
         )
         return None
+
+    async def get_with_short_timeout(self, url: str, timeout_sec: float = 2):
+        """Fetch data with a short timeout (single attempt, no retries).
+
+        Used to check if an endpoint is available; legacy-only modules return 404 or
+        timeout. Caller can use this to skip full fetches when the endpoint is absent.
+        """
+        try:
+            async with await self._session.get(
+                url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+            ) as resp:
+                if resp.status in (HTTPStatus.UNAUTHORIZED, HTTPStatus.NOT_FOUND):
+                    return None
+                if resp.status != HTTPStatus.OK:
+                    return None
+                return await resp.json()
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError):
+            return None
 
     async def get_with_fix_quotes(self, url):
         r"""Fetch data with preprocessing to fix malformed JSON quote escaping.
@@ -770,6 +789,22 @@ class Econet300Api:
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
             _LOGGER.error("Error fetching parameter data: %s", e)
             return None
+
+    async def probe_rm_support(self) -> bool:
+        """Probe rmParamsData with short timeout to detect legacy-only modules (no RM API).
+
+        Returns True if the endpoint responds with valid data, False on 404/timeout/error.
+        Used to skip RM and mergedData fetches on devices that do not support them.
+        """
+        url = f"{self.host}/econet/{API_RM_PARAMS_DATA_URI}?uid={self.uid}"
+        data = await self._client.get_with_short_timeout(
+            url, timeout_sec=RM_PROBE_TIMEOUT_SEC
+        )
+        if data is None:
+            return False
+        if not isinstance(data, dict) or API_RM_DATA_KEY not in data:
+            return False
+        return True
 
     async def fetch_rm_params_descs(self, lang: str = "en") -> dict[str, Any] | None:
         """Fetch parameter descriptions from rmParamsDescs endpoint.
