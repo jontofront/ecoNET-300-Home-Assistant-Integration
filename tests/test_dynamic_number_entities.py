@@ -19,16 +19,19 @@ from custom_components.econet300.number import (
 )
 
 # List of fixtures to test - only those with mergedData.json
-FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L"]
+FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O"]
 
 # All available fixtures for basic tests
 ALL_FIXTURES = [
     "ecoMAX810P-L",
     "ecoMAX360",
+    "ecoMAX360-cf8",
     "ecoSOL",
     "SControl MK1",
     "ecoMAX850R2-X",
+    "ecoMAX860D3-HB",
     "ecoMAX860P2-N",
+    "ecoMAX860P3-O",
     "ecoMAX860P3-V",
     "ecoSOL500",
 ]
@@ -430,7 +433,7 @@ class TestMultipleFixtures:
     @pytest.mark.parametrize(
         ("fixture_name", "expected_keys"),
         [
-            ("ecoMAX810P-L", ["controllerID", "uid", "swRevision"]),
+            ("ecoMAX810P-L", ["controllerID", "uid", "softVer"]),
             ("ecoMAX360", ["controllerID", "uid"]),
             ("ecoSOL", ["controllerID", "uid"]),
             ("SControl MK1", ["controllerID", "uid"]),
@@ -461,8 +464,11 @@ class TestMultipleFixtures:
         [
             ("ecoMAX810P-L", "ecoMAX"),
             ("ecoMAX360", "ecoMAX"),
+            ("ecoMAX360-cf8", "ecoMAX"),
             ("ecoMAX850R2-X", "ecoMAX"),
+            ("ecoMAX860D3-HB", "ecoMAX"),
             ("ecoMAX860P2-N", "ecoMAX"),
+            ("ecoMAX860P3-O", "ecoMAX"),
             ("ecoMAX860P3-V", "ecoMAX"),
             ("ecoSOL", "ecoSOL"),
             ("ecoSOL500", "ecoSOL"),

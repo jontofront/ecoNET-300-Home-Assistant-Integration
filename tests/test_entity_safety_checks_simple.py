@@ -20,13 +20,11 @@ def test_handle_coordinator_update_with_none_data():
     )
     entity.api = Mock()
 
-    # This should not crash - it should log info and return early
-    with patch("custom_components.econet300.entity._LOGGER") as mock_logger:
+    # Should not crash; returns early without calling _lookup_value
+    with patch.object(entity, "_lookup_value") as mock_lookup:
         # ruff: noqa: SLF001
         entity._handle_coordinator_update()
-
-        # Verify info log was called
-        mock_logger.info.assert_called_with("Coordinator data is None, skipping update")
+        mock_lookup.assert_not_called()
 
 
 def test_handle_coordinator_update_with_none_reg_params():
