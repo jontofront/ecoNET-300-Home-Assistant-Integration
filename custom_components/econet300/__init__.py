@@ -16,6 +16,7 @@ from .api import make_api
 from .common import AuthError, EconetDataCoordinator
 from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
 from .mem_cache import MemCache
+from .sensor import DEVICE_CLASS_FUEL_METER, FuelConsumptionTotalSensor
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -82,17 +83,18 @@ async def async_setup_services(hass: HomeAssistant) -> None:
     @callback
     def async_get_fuel_meter_entity(entity_id: str):
         """Get the fuel meter entity from entity_id."""
-        from .sensor import DEVICE_CLASS_FUEL_METER, FuelConsumptionTotalSensor
-
         entity_registry = er.async_get(hass)
         entity_entry = entity_registry.async_get(entity_id)
 
         if entity_entry is None:
             _LOGGER.error("Entity %s not found", entity_id)
             return None
+        if entity_entry.original_device_class != DEVICE_CLASS_FUEL_METER:
+            _LOGGER.error("Entity %s is not a fuel meter", entity_id)
+            return None
 
         # Find the entity in all config entries
-        for entry_id, entry_data in hass.data.get(DOMAIN, {}).items():
+        for entry_data in hass.data.get(DOMAIN, {}).values():
             coordinator = entry_data.get(SERVICE_COORDINATOR)
             if coordinator is None:
                 continue

@@ -5,10 +5,11 @@ from __future__ import annotations
 import asyncio
 from datetime import timedelta
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import aiohttp
 from aiohttp import ClientError
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.issue_registry import (
     IssueSeverity,
@@ -25,9 +26,6 @@ from .const import (
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
 )
-
-if TYPE_CHECKING:
-    from homeassistant.config_entries import ConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
