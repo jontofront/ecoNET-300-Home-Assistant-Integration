@@ -1,4 +1,20 @@
 {
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Réinitialiser le compteur de combustible",
+      "description": "Réinitialise le compteur de consommation de combustible à zéro."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Calibrer le compteur de combustible",
+      "description": "Définit le compteur de consommation de combustible à une valeur spécifique.",
+      "fields": {
+        "value": {
+          "name": "Valeur",
+          "description": "La valeur à définir pour le compteur (en kg)."
+        }
+      }
+    }
+  },
   "exceptions": {
     "parameter_locked": {
       "message": "Impossible de modifier la valeur : {lock_reason}"
@@ -238,6 +254,9 @@
       },
       "fuel_level": {
         "name": "Niveau de combustible"
+      },
+      "fuel_consumption_total": {
+        "name": "Consommation totale de combustible"
       },
       "fan_power": {
         "name": "Puissance du ventilateur"

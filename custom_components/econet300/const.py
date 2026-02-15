@@ -32,7 +32,14 @@ from homeassistant.const import (
 DOMAIN = "econet300"
 SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
-SERVICE_FUEL_TRACKER = "fuel_tracker"
+SERVICE_FUEL_SENSOR = "fuel_sensor"
+
+# Custom device class for fuel consumption meter to allow targeting with services
+DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
+
+# Max sub-interval (seconds) for fuel consumption integration.
+# If fuelStream does not change within this period, integration is still triggered.
+FUEL_MAX_SUB_INTERVAL_SECONDS = 300
 
 # =============================================================================
 # COORDINATOR CONFIGURATION CONSTANTS

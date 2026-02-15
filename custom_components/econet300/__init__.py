@@ -14,9 +14,15 @@ import voluptuous as vol
 
 from .api import make_api
 from .common import AuthError, EconetDataCoordinator
-from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
+from .const import (
+    DEVICE_CLASS_FUEL_METER,
+    DOMAIN,
+    SERVICE_API,
+    SERVICE_COORDINATOR,
+    SERVICE_FUEL_SENSOR,
+)
 from .mem_cache import MemCache
-from .sensor import DEVICE_CLASS_FUEL_METER, FuelConsumptionTotalSensor
+from .sensor import FuelConsumptionTotalSensor
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -81,7 +87,9 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         return
 
     @callback
-    def async_get_fuel_meter_entity(entity_id: str):
+    def async_get_fuel_meter_entity(
+        entity_id: str,
+    ) -> FuelConsumptionTotalSensor | None:
         """Get the fuel meter entity from entity_id."""
         entity_registry = er.async_get(hass)
         entity_entry = entity_registry.async_get(entity_id)
@@ -93,19 +101,19 @@ async def async_setup_services(hass: HomeAssistant) -> None:
             _LOGGER.error("Entity %s is not a fuel meter", entity_id)
             return None
 
-        # Find the entity in all config entries
+        # Look up via stored reference in hass.data
         for entry_data in hass.data.get(DOMAIN, {}).values():
-            coordinator = entry_data.get(SERVICE_COORDINATOR)
-            if coordinator is None:
+            if not isinstance(entry_data, dict):
                 continue
+            fuel_sensor = entry_data.get(SERVICE_FUEL_SENSOR)
+            if (
+                isinstance(fuel_sensor, FuelConsumptionTotalSensor)
+                and hasattr(fuel_sensor, "entity_id")
+                and fuel_sensor.entity_id == entity_id
+            ):
+                return fuel_sensor
 
-            # Check if this coordinator has our fuel meter entity
-            for entity in coordinator.async_contexts():
-                if hasattr(entity, "entity_id") and entity.entity_id == entity_id:
-                    if isinstance(entity, FuelConsumptionTotalSensor):
-                        return entity
-
-        _LOGGER.error("Fuel meter entity %s not found in any coordinator", entity_id)
+        _LOGGER.error("Fuel meter entity %s not found in any config entry", entity_id)
         return None
 
     async def async_handle_reset_fuel_meter(call: ServiceCall) -> None:

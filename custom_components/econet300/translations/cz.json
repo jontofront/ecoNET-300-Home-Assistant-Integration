@@ -1,4 +1,20 @@
 {
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Resetovat měřič paliva",
+      "description": "Resetuje měřič spotřeby paliva na nulu."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Kalibrovat měřič paliva",
+      "description": "Nastaví měřič spotřeby paliva na konkrétní hodnotu.",
+      "fields": {
+        "value": {
+          "name": "Hodnota",
+          "description": "Hodnota pro nastavení měřiče (v kg)."
+        }
+      }
+    }
+  },
   "exceptions": {
     "parameter_locked": {
       "message": "Nelze změnit hodnotu: {lock_reason}"
@@ -247,6 +263,9 @@
       },
       "fuel_level": {
         "name": "Hladina paliva"
+      },
+      "fuel_consumption_total": {
+        "name": "Celková spotřeba paliva"
       },
       "fan_power": {
         "name": "Výkon ventilátoru"
