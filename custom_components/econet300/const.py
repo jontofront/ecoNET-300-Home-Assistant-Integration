@@ -32,12 +32,23 @@ from homeassistant.const import (
 DOMAIN = "econet300"
 SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
+SERVICE_FUEL_SENSOR = "fuel_sensor"
+
+# Custom device class for fuel consumption meter to allow targeting with services
+DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
+
+# Max sub-interval (seconds) for fuel consumption integration.
+# If fuelStream does not change within this period, integration is still triggered.
+FUEL_MAX_SUB_INTERVAL_SECONDS = 300
 
 # =============================================================================
 # COORDINATOR CONFIGURATION CONSTANTS
 # =============================================================================
 # Number of consecutive failures before creating a repair issue
 CONSECUTIVE_FAILURES_THRESHOLD = 5
+
+# Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
+RM_PROBE_TIMEOUT_SEC = 2
 
 # RM endpoint dataset keys for data coordinator (order matches tasks list)
 RM_CORE_DATASET_KEYS = [
@@ -519,6 +530,7 @@ UNIT_NAME_TO_HA_UNIT = {
     "min.": UnitOfTime.MINUTES,
     "h.": UnitOfTime.HOURS,
     "kg": UnitOfMass.KILOGRAMS,
+    "kg/h": "kg/h",  # Mass flow rate for fuel stream
     "kW": UnitOfPower.KILO_WATT,
     "r/min": "r/min",  # Custom unit for revolutions per minute
 }
@@ -569,7 +581,7 @@ ENTITY_UNIT_MAP = {
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
     # ecoMAX850R2-X specific units
     "fuelConsum": PERCENTAGE,
-    "fuelStream": PERCENTAGE,
+    "fuelStream": "kg/h",  # Mass flow rate (confirmed from ecoNET cloud API)
     "transmission": None,
     # ecoSTER thermostat units
     "ecoSterTemp1": UnitOfTemperature.CELSIUS,
@@ -707,7 +719,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "transmission": SensorDeviceClass.ENUM,
     # ecoMAX850R2-X specific device classes
     "fuelConsum": SensorDeviceClass.POWER_FACTOR,
-    "fuelStream": SensorDeviceClass.POWER_FACTOR,
+    # fuelStream: No device class - HA has no SensorDeviceClass for mass flow rate (kg/h)
     # ecoSTER thermostat device classes
     "ecoSterTemp1": SensorDeviceClass.TEMPERATURE,
     "ecoSterTemp2": SensorDeviceClass.TEMPERATURE,

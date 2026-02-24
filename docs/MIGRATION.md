@@ -239,10 +239,11 @@ Entity IDs should remain stable between versions. If you notice changes:
 
 If the 165+ dynamic entities don't appear:
 
-1. **Check controller support**: Not all controllers support `mergedData` API
+1. **Check controller support**: Not all controllers support the RM/mergedData API
 2. **Supported controllers**: ecoMAX810P-L, ecoMAX850R2-X, ecoMAX860P2-N, ecoMAX860P3-V
 3. **Unsupported controllers**: ecoSOL500, ecoSOL, SControl MK1, ecoMAX360i (limited support)
-4. **Review logs**: Search for "mergedData" in Home Assistant logs
+4. **Legacy-only modules**: Some ecoNET300 module firmware (e.g. v3.2.3879 on ecoMAX860D3-HB) only exposes sysParams, regParams, regParamsData. The integration auto-detects this (2s probe) and runs with legacy entities only; you will see "RM endpoint not available (legacy-only module)" in the logs. This is expected and the integration works normally with fewer entities.
+5. **Review logs**: Search for "mergedData" or "RM endpoint" in Home Assistant logs
 
 ### Getting Help
 

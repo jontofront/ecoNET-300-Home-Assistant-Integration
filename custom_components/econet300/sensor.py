@@ -2,36 +2,58 @@
 
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
+from decimal import Decimal, InvalidOperation
 import logging
-from typing import Any
+from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
+    RestoreSensor,
     SensorEntity,
     SensorEntityDescription,
+    SensorExtraStoredData,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.const import STATE_UNAVAILABLE, EntityCategory, UnitOfMass
+from homeassistant.core import (
+    CALLBACK_TYPE,
+    Event,
+    EventStateChangedData,
+    EventStateReportedData,
+    HomeAssistant,
+    State,
+    callback,
+)
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.event import (
+    async_call_later,
+    async_track_state_change_event,
+    async_track_state_report_event,
+)
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
     COMPONENT_LAMBDA,
+    DEVICE_CLASS_FUEL_METER,
+    DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
+    FUEL_MAX_SUB_INTERVAL_SECONDS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
+    SERVICE_FUEL_SENSOR,
     STATE_CLASS_MAP,
 )
 from .entity import (
@@ -39,10 +61,14 @@ from .entity import (
     EcoSterEntity,
     LambdaEntity,
     MixerEntity,
+    _create_base_device_info,
     get_device_info_for_component,
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+# Unit time divisor: convert seconds to hours for kg/h integration
+_UNIT_TIME_HOURS: Final = Decimal(3600)
 
 
 @dataclass(frozen=True)
@@ -254,6 +280,377 @@ class InformationDynamicSensor(EconetEntity, SensorEntity):
                 break
 
         return None
+
+
+def _decimal_state(state: str | None) -> Decimal | None:
+    """Try to parse a state string as Decimal, returning None on failure."""
+    try:
+        return Decimal(state)  # type: ignore[arg-type]
+    except (InvalidOperation, TypeError):
+        return None
+
+
+@dataclass
+class FuelConsumptionExtraStoredData(SensorExtraStoredData):
+    """Extra stored data for the fuel consumption sensor."""
+
+    source_entity: str | None
+    last_valid_state: Decimal | None
+
+    def as_dict(self) -> dict[str, Any]:
+        """Return a dict representation of the stored data."""
+        data = super().as_dict()
+        data["source_entity"] = self.source_entity
+        data["last_valid_state"] = (
+            str(self.last_valid_state) if self.last_valid_state else None
+        )
+        return data
+
+    @classmethod
+    def from_dict(cls, restored: dict[str, Any]) -> Self | None:
+        """Initialize stored data from a dict."""
+        extra = SensorExtraStoredData.from_dict(restored)
+        if extra is None:
+            return None
+
+        source_entity = restored.get("source_entity")
+
+        try:
+            last_valid_state = (
+                Decimal(str(restored["last_valid_state"]))
+                if restored.get("last_valid_state")
+                else None
+            )
+        except (InvalidOperation, TypeError):
+            _LOGGER.error("Could not restore last_valid_state")
+            return None
+
+        return cls(
+            extra.native_value,
+            extra.native_unit_of_measurement,
+            source_entity,
+            last_valid_state,
+        )
+
+
+class _IntegrationTrigger:
+    """Track what triggered the last integration."""
+
+    STATE_EVENT = "state_event"
+    TIME_ELAPSED = "time_elapsed"
+
+
+class FuelConsumptionTotalSensor(RestoreSensor):
+    """Sensor that tracks total fuel consumption via Riemann sum integration.
+
+    Integrates the fuelStream rate sensor (kg/h) over time using the
+    trapezoidal method. Follows HA Core IntegrationSensor patterns.
+    Persists across restarts using RestoreSensor.
+    Reset and calibration are available via service actions.
+    """
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "fuel_consumption_total"
+    _attr_device_class = DEVICE_CLASS_FUEL_METER  # type: ignore[assignment]
+    _attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
+    _attr_state_class = SensorStateClass.TOTAL
+    _attr_should_poll = False
+    _attr_suggested_display_precision = 2
+    _attr_icon = "mdi:weight-kilogram"
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        source_entity_id: str,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the fuel consumption total sensor.
+
+        Args:
+            hass: The Home Assistant instance
+            source_entity_id: Entity ID of the fuelStream source sensor
+            api: The ecoNET API instance
+
+        """
+        self.hass = hass
+        self._source_entity_id = source_entity_id
+        self._api = api
+        self._attr_unique_id = f"{api.uid}_fuel_consumption_total"
+        self._state: Decimal | None = None
+        self._last_valid_state: Decimal | None = None
+        self._last_reset_dt: datetime | None = None
+        self._last_integration_time: datetime = datetime.now(tz=UTC)
+        self._last_integration_trigger = _IntegrationTrigger.STATE_EVENT
+        self._max_sub_interval = timedelta(seconds=FUEL_MAX_SUB_INTERVAL_SECONDS)
+        self._max_sub_interval_exceeded_callback: CALLBACK_TYPE = lambda *args: None
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device info for the main boiler device."""
+        return _create_base_device_info(
+            api=self._api,
+            identifier=self._api.uid,
+            name=DEVICE_INFO_CONTROLLER_NAME,
+            include_model_id=True,
+            include_hw_version=True,
+        )
+
+    @property
+    def native_value(self) -> Decimal | None:
+        """Return the current total fuel consumption."""
+        if isinstance(self._state, Decimal):
+            return round(self._state, 3)
+        return self._state
+
+    @property
+    def last_reset(self) -> datetime | None:
+        """Return the time of the last meter reset."""
+        return self._last_reset_dt
+
+    @property
+    def extra_state_attributes(self) -> dict[str, str] | None:
+        """Return extra state attributes."""
+        return {"source": self._source_entity_id}
+
+    @property
+    def extra_restore_state_data(self) -> FuelConsumptionExtraStoredData:
+        """Return sensor-specific state data to be restored."""
+        return FuelConsumptionExtraStoredData(
+            self.native_value,
+            self.native_unit_of_measurement,
+            self._source_entity_id,
+            self._last_valid_state,
+        )
+
+    async def async_get_last_sensor_data(
+        self,
+    ) -> FuelConsumptionExtraStoredData | None:
+        """Restore fuel consumption sensor extra stored data."""
+        if (restored := await self.async_get_last_extra_data()) is None:
+            return None
+        return FuelConsumptionExtraStoredData.from_dict(restored.as_dict())
+
+    async def async_reset_meter(self) -> None:
+        """Reset the fuel consumption meter to zero."""
+        _LOGGER.info("Resetting fuel consumption meter")
+        self._state = Decimal(0)
+        self._last_valid_state = Decimal(0)
+        self._last_reset_dt = datetime.now(tz=UTC)
+        self.async_write_ha_state()
+
+    async def async_calibrate_meter(self, value: float) -> None:
+        """Calibrate the fuel consumption meter to a specific value."""
+        _LOGGER.info("Calibrating fuel consumption meter to %.3f kg", value)
+        self._state = Decimal(str(value))
+        self._last_valid_state = self._state
+        self.async_write_ha_state()
+
+    async def async_added_to_hass(self) -> None:
+        """Handle entity added to Home Assistant."""
+        await super().async_added_to_hass()
+
+        # Restore previous state
+        if (last_sensor_data := await self.async_get_last_sensor_data()) is not None:
+            self._state = (
+                Decimal(str(last_sensor_data.native_value))
+                if last_sensor_data.native_value
+                else last_sensor_data.last_valid_state
+            )
+            self._last_valid_state = last_sensor_data.last_valid_state
+            _LOGGER.debug(
+                "Restored state %s and last_valid_state %s",
+                self._state,
+                self._last_valid_state,
+            )
+
+        # Restore last_reset from state attributes
+        last_state = await self.async_get_last_state()
+        if last_state and last_state.attributes:
+            last_reset_str = last_state.attributes.get("last_reset")
+            if last_reset_str:
+                try:
+                    self._last_reset_dt = datetime.fromisoformat(last_reset_str)
+                except (ValueError, TypeError):
+                    self._last_reset_dt = None
+
+        # Schedule max_sub_interval check for initial source state
+        source_state = self.hass.states.get(self._source_entity_id)
+        self._schedule_max_sub_interval_if_numeric(source_state)
+        self.async_on_remove(self._cancel_max_sub_interval_callback)
+
+        # Listen to fuelStream sensor state changes
+        self.async_on_remove(
+            async_track_state_change_event(
+                self.hass,
+                self._source_entity_id,
+                self._on_state_change_event,
+            )
+        )
+        self.async_on_remove(
+            async_track_state_report_event(
+                self.hass,
+                self._source_entity_id,
+                self._on_state_report_event,
+            )
+        )
+
+    # ------------------------------------------------------------------
+    # Integration callbacks
+    # ------------------------------------------------------------------
+
+    @callback
+    def _on_state_change_event(self, event: Event[EventStateChangedData]) -> None:
+        """Handle source sensor state change."""
+        self._cancel_max_sub_interval_callback()
+        try:
+            self._integrate(
+                old_timestamp=None,
+                new_timestamp=None,
+                old_state=event.data["old_state"],
+                new_state=event.data["new_state"],
+            )
+            self._last_integration_trigger = _IntegrationTrigger.STATE_EVENT
+            self._last_integration_time = datetime.now(tz=UTC)
+        finally:
+            self._schedule_max_sub_interval_if_numeric(event.data["new_state"])
+
+    @callback
+    def _on_state_report_event(self, event: Event[EventStateReportedData]) -> None:
+        """Handle source sensor state report (value unchanged but reported)."""
+        new_state = event.data["new_state"]
+        self._cancel_max_sub_interval_callback()
+        try:
+            self._integrate(
+                old_timestamp=event.data["old_last_reported"],
+                new_timestamp=new_state.last_reported if new_state else None,
+                old_state=None,
+                new_state=new_state,
+            )
+            self._last_integration_trigger = _IntegrationTrigger.STATE_EVENT
+            self._last_integration_time = datetime.now(tz=UTC)
+        finally:
+            self._schedule_max_sub_interval_if_numeric(new_state)
+
+    def _integrate(
+        self,
+        old_timestamp: datetime | None,
+        new_timestamp: datetime | None,
+        old_state: State | None,
+        new_state: State | None,
+    ) -> None:
+        """Perform trapezoidal integration between two states."""
+        if new_state is None:
+            return
+
+        if new_state.state == STATE_UNAVAILABLE:
+            self._attr_available = False
+            self.async_write_ha_state()
+            return
+
+        self._attr_available = True
+
+        if old_state:
+            # State changed - use old_state from event
+            new_timestamp = new_state.last_updated
+            old_state_str = old_state.state
+            old_timestamp = old_state.last_reported
+        else:
+            # State reported without change
+            old_state_str = new_state.state
+
+        if old_timestamp is None and old_state is None:
+            # First state, nothing to integrate yet
+            self.async_write_ha_state()
+            return
+
+        # Validate both states as Decimal
+        old_dec = _decimal_state(old_state_str)
+        new_dec = _decimal_state(new_state.state)
+        if old_dec is None or new_dec is None:
+            self.async_write_ha_state()
+            return
+
+        if old_timestamp is None or new_timestamp is None:
+            self.async_write_ha_state()
+            return
+
+        # Calculate elapsed time based on last trigger type
+        if self._last_integration_trigger == _IntegrationTrigger.STATE_EVENT:
+            elapsed_seconds = Decimal(
+                str((new_timestamp - old_timestamp).total_seconds())
+            )
+        else:
+            elapsed_seconds = Decimal(
+                str((new_timestamp - self._last_integration_time).total_seconds())
+            )
+
+        if elapsed_seconds <= 0:
+            return
+
+        # Trapezoidal: (old + new) / 2 * elapsed_hours
+        area = (old_dec + new_dec) / 2 * elapsed_seconds / _UNIT_TIME_HOURS
+
+        if isinstance(self._state, Decimal):
+            self._state += area
+        else:
+            self._state = area
+
+        self._last_valid_state = self._state
+
+        _LOGGER.debug(
+            "Fuel integration: old=%.3f, new=%.3f, dt=%.1fs, "
+            "area=%.6f kg, total=%.3f kg",
+            old_dec,
+            new_dec,
+            elapsed_seconds,
+            area,
+            self._state,
+        )
+        self.async_write_ha_state()
+
+    # ------------------------------------------------------------------
+    # Max sub-interval: integrate even when source is constant
+    # ------------------------------------------------------------------
+
+    def _schedule_max_sub_interval_if_numeric(self, source_state: State | None) -> None:
+        """Schedule integration if source stays constant beyond max_sub_interval."""
+        if (
+            source_state is not None
+            and (source_dec := _decimal_state(source_state.state)) is not None
+        ):
+
+            @callback
+            def _on_max_sub_interval_exceeded(now: datetime) -> None:
+                """Integrate assuming constant rate, then reschedule."""
+                elapsed_seconds = Decimal(
+                    str((now - self._last_integration_time).total_seconds())
+                )
+                # Constant rate: area = rate * elapsed_hours
+                area = source_dec * elapsed_seconds / _UNIT_TIME_HOURS
+
+                if isinstance(self._state, Decimal):
+                    self._state += area
+                else:
+                    self._state = area
+
+                self._last_valid_state = self._state
+                self.async_write_ha_state()
+
+                self._last_integration_time = datetime.now(tz=UTC)
+                self._last_integration_trigger = _IntegrationTrigger.TIME_ELAPSED
+
+                # Reschedule for another interval
+                self._schedule_max_sub_interval_if_numeric(source_state)
+
+            self._max_sub_interval_exceeded_callback = async_call_later(
+                self.hass,
+                self._max_sub_interval,
+                _on_max_sub_interval_exceeded,
+            )
+
+    def _cancel_max_sub_interval_callback(self) -> None:
+        """Cancel any pending max_sub_interval callback."""
+        self._max_sub_interval_exceeded_callback()
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
@@ -613,6 +1010,37 @@ async def async_setup_entry(
 
     # Collect entities synchronously
     entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
+
+    # Create fuel consumption total sensor if fuelStream is available
+    if (
+        coordinator.data
+        and coordinator.data.get("regParams", {}).get("fuelStream") is not None
+    ):
+        # Resolve the fuelStream sensor entity_id from registry
+        registry = er.async_get(hass)
+        fuel_stream_unique_id = f"{api.uid}_fuelStream"
+        source_entity_id = registry.async_get_entity_id(
+            "sensor", DOMAIN, fuel_stream_unique_id
+        )
+
+        if source_entity_id:
+            fuel_sensor = FuelConsumptionTotalSensor(hass, source_entity_id, api)
+            entities.append(fuel_sensor)
+            # Store reference for service lookups
+            hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_SENSOR] = fuel_sensor
+            _LOGGER.info(
+                "Created FuelConsumptionTotalSensor (source: %s)", source_entity_id
+            )
+        else:
+            _LOGGER.warning(
+                "fuelStream sensor entity not found in registry "
+                "(unique_id: %s), FuelConsumptionTotalSensor will not be created",
+                fuel_stream_unique_id,
+            )
+    else:
+        _LOGGER.info(
+            "fuelStream not available, FuelConsumptionTotalSensor will not be created"
+        )
 
     # Add entities to Home Assistant
     async_add_entities(entities)

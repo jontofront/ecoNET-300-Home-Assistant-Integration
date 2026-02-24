@@ -1,5 +1,34 @@
 # Changelog
 
+## [v1.2.1] - 2026-02-24
+
+### 🚀 New Features
+
+- **Fuel Consumption Tracking**: New `fuel_consumption_total` sensor that tracks total fuel usage in kg
+  - Integrates the `fuelStream` rate sensor (kg/h) over time using trapezoidal method
+  - Persists across Home Assistant restarts
+  - New services: **Reset meter** and **Calibrate meter** to manage the counter
+- **Legacy Device Support**: Automatic detection of devices that don't support RM endpoints
+  - Devices without RM API support (older firmware) are now handled gracefully
+  - No more errors or timeouts for legacy modules
+
+### 🐛 Bug Fixes
+
+- **Boiler ON/OFF Switch Not Updating**: Fixed bug where the switch stopped updating after initial load
+  - Switch now correctly reflects boiler state on every poll cycle
+  - Manually turning off the boiler is now properly detected
+- **Boiler Switch State Logic**: Improved ON/OFF detection using operation mode mapping
+  - Unknown or unexpected mode values now safely default to OFF
+
+### 📦 New Device Support
+
+- Added test fixtures for **ecoMAX860D3-HB**
+- Added test fixtures for **ecoMAX860P3-O**
+- Added test fixtures for **ecoMAX360-cf8**
+- Added test fixtures for **SControl EM892**
+
+---
+
 ## [v1.2.0] - 2025-01-28
 
 ### 🚀 New Features

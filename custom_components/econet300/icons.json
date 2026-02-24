@@ -822,6 +822,9 @@
       "fuel_stream": {
         "default": "mdi:gas-station"
       },
+      "fuel_consumption_total": {
+        "default": "mdi:weight-kilogram"
+      },
       "heating_upper_temp": {
         "default": "mdi:thermometer",
         "range": {

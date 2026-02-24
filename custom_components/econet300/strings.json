@@ -1,4 +1,20 @@
 {
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Reset fuel meter",
+      "description": "Resets the fuel consumption meter to zero."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Calibrate fuel meter",
+      "description": "Sets the fuel consumption meter to a specific value.",
+      "fields": {
+        "value": {
+          "name": "Value",
+          "description": "The value to set the meter to (in kg)."
+        }
+      }
+    }
+  },
   "exceptions": {
     "parameter_locked": {
       "message": "Cannot change value: {lock_reason}"
@@ -342,6 +358,9 @@
       },
       "fuel_level": {
         "name": "Fuel level"
+      },
+      "fuel_consumption_total": {
+        "name": "Fuel Consumption Total"
       },
       "fan_power": {
         "name": "Fan power"

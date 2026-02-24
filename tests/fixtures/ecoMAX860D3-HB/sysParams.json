@@ -1,0 +1,391 @@
+{
+  "regProd": 48,
+  "regAllowed": true,
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "modulePanelSoftVer": "4.14.43",
+  "ecosrvSoftVer": "3.2.3879",
+  "moduleASoftVer": "4.34.46.K1",
+  "eth0": "**REDACTED**",
+  "tilesET": null,
+  "etPasswords": {},
+  "encryption": "psk2",
+  "schemaID": 21,
+  "wlan0": "**REDACTED**",
+  "remoteMenu": true,
+  "regType": 0,
+  "schema": {},
+  "regRefresh": 5,
+  "tiles": [
+    {
+      "minValue_": 0,
+      "idx": 0,
+      "seqNo_": 1,
+      "bit_": null,
+      "type_": "tile_text",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "mode",
+      "extra_": "CAN_TURN_OFF_BOILER"
+    },
+    {
+      "minValue_": 0,
+      "idx": 1,
+      "seqNo_": 8,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 450,
+      "memberName_": "tempFlueGas"
+    },
+    {
+      "minValue_": 0,
+      "idx": 2,
+      "seqNo_": 9,
+      "bit_": null,
+      "type_": "tile_text_icon",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "lambdaLevel"
+    },
+    {
+      "minValue_": 0,
+      "idx": 3,
+      "seqNo_": 10,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCOSet",
+      "maxValue_": 100,
+      "memberName_": "tempCO"
+    },
+    {
+      "minValue_": 0,
+      "idx": 4,
+      "seqNo_": 14,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempUpperBuffer"
+    },
+    {
+      "minValue_": 0,
+      "idx": 5,
+      "seqNo_": 15,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempLowerBuffer"
+    }
+  ],
+  "protocolType": "em",
+  "controllerID": "ecoMAX860D3-HB",
+  "moduleEcoSTERSoftVer": null,
+  "schedules": {
+    "ecomaxSchedules": {
+      "mixer5TZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "boilerWorkTZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ]
+    }
+  },
+  "econetConfVer": null,
+  "password": "**REDACTED**",
+  "prodLogo": 48,
+  "fuelConsumptionCalc": true,
+  "regImgID": 2,
+  "settingsVer": 20354,
+  "signal": "-44",
+  "logFl": 0,
+  "etConfDesc": null,
+  "history": [],
+  "uid": "**REDACTED**",
+  "routerType": "mr3020-v3",
+  "etNewConfTrans": false,
+  "ecosrvAddr": "econet24.com",
+  "softVer": "3.2.3879",
+  "quality": 88,
+  "moduleCSoftVer": null,
+  "lan": false,
+  "moduleLambdaSoftVer": "0.0.26",
+  "panelsNames": [],
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "4.34.46",
+      13052
+    ],
+    [
+      "lbPanelModuleVerCurr",
+      "4.14.43",
+      13308
+    ],
+    [
+      "lbLambdaModuleVerCurr",
+      "0.0.26",
+      31
+    ]
+  ],
+  "key": "**REDACTED**",
+  "servicePassword": "c6001d5b2ac3df314204a8f9d7a00e1503c9aba0fd4538645de4bf4cc7e2555cfe9ff9d0236bf327ed3e907849a98df4d330c4bea551017d465b4c1d9b80bcb0",
+  "ssid": "**REDACTED**",
+  "wifi": true,
+  "panelVer": null,
+  "alarms": [
+    {
+      "toDate": "2025-11-26 09:10:01",
+      "code": 0,
+      "fromDate": "2025-11-26 08:41:49",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-21 12:52:21",
+      "code": 0,
+      "fromDate": "2025-11-21 12:52:19",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-21 12:09:58",
+      "code": 0,
+      "fromDate": "2025-11-21 12:09:53",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-20 10:29:58",
+      "code": 0,
+      "fromDate": "2025-11-20 10:27:23",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-01 16:15:16",
+      "code": 0,
+      "fromDate": "2025-11-01 16:14:34",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-27 10:16:25",
+      "code": 0,
+      "fromDate": "2025-10-27 10:16:23",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-27 10:09:10",
+      "code": 0,
+      "fromDate": "2025-10-27 10:09:08",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-22 09:53:42",
+      "code": 0,
+      "fromDate": "2025-10-22 09:52:13",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-22 09:50:08",
+      "code": 0,
+      "fromDate": "2025-10-22 09:42:01",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-12 13:31:02",
+      "code": 0,
+      "fromDate": "2025-10-12 13:31:01",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-12 12:25:16",
+      "code": 0,
+      "fromDate": "2025-10-12 12:25:14",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-12 10:50:30",
+      "code": 0,
+      "fromDate": "2025-10-12 10:50:25",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-11 04:44:33",
+      "code": 0,
+      "fromDate": "2025-10-11 04:44:17",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-09 08:53:20",
+      "code": 0,
+      "fromDate": "2025-10-09 08:53:15",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-07 09:21:56",
+      "code": 0,
+      "fromDate": "2025-10-07 09:21:53",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-05 15:34:10",
+      "code": 0,
+      "fromDate": "2025-10-05 15:34:06",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-05 11:46:02",
+      "code": 0,
+      "fromDate": "2025-10-05 11:45:58",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-03 15:14:51",
+      "code": 0,
+      "fromDate": "2025-10-03 15:14:35",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-02 19:40:14",
+      "code": 0,
+      "fromDate": "2025-10-02 19:33:10",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-02 19:31:34",
+      "code": 0,
+      "fromDate": "2025-10-02 19:17:41",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-18 11:13:04",
+      "code": 0,
+      "fromDate": "2000-01-01 00:00:00",
+      "service": false
+    }
+  ],
+  "login": "admin",
+  "moduleBSoftVer": null,
+  "etConfVer": null
+}

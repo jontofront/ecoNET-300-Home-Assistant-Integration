@@ -1,4 +1,20 @@
 {
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Скинути лічильник палива",
+      "description": "Скидає лічильник витрати палива до нуля."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Калібрувати лічильник палива",
+      "description": "Встановлює лічильник витрати палива на конкретне значення.",
+      "fields": {
+        "value": {
+          "name": "Значення",
+          "description": "Значення для встановлення лічильника (в кг)."
+        }
+      }
+    }
+  },
   "exceptions": {
     "parameter_locked": {
       "message": "Неможливо змінити значення: {lock_reason}"
@@ -238,6 +254,9 @@
       },
       "fuel_level": {
         "name": "Рівень палива"
+      },
+      "fuel_consumption_total": {
+        "name": "Загальне споживання палива"
       },
       "fan_power": {
         "name": "Потужність вентилятора"

@@ -12,15 +12,18 @@ import sys
 ALL_FIXTURES = [
     "ecoMAX810P-L",
     "ecoMAX360",
+    "ecoMAX360-cf8",
     "ecoSOL",
     "SControl MK1",
     "ecoMAX850R2-X",
+    "ecoMAX860D3-HB",
     "ecoMAX860P2-N",
+    "ecoMAX860P3-O",
     "ecoMAX860P3-V",
     "ecoSOL500",
 ]
 
-FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L"]
+FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O"]
 
 
 def load_fixture(fixture_name: str, filename: str) -> dict | None:

@@ -9,7 +9,7 @@ from typing import Any
 
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
+from homeassistant.const import STATE_OFF, EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -27,6 +27,7 @@ from .const import (
     BOILER_CONTROL,
     DOMAIN,
     MIXER_RELATED_KEYWORDS,
+    OPERATION_MODE_NAMES,
     SERVICE_API,
     SERVICE_COORDINATOR,
 )
@@ -64,12 +65,32 @@ class EconetSwitch(EconetEntity, SwitchEntity):
         self._attr_is_on = False
         super().__init__(coordinator, api)
 
-    def _sync_state(self, value: Any) -> None:
-        """Synchronize the state of the switch entity."""
-        # Use mode parameter from regParams: 0 = OFF, anything else = ON
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator.
+
+        Overrides the base class because the boiler switch reads its state
+        from regParams["mode"] rather than a key matching entity_description.key.
+        Without this override, _lookup_value() returns None for "boiler_control"
+        and _sync_state() is never called.
+        """
+        if self.coordinator.data is None:
+            return
         reg_params = self.coordinator.data.get("regParams", {})
-        mode_value = reg_params.get("mode", 0) if isinstance(reg_params, dict) else 0
-        self._attr_is_on = mode_value != 0
+        if not isinstance(reg_params, dict):
+            return
+        mode_value = reg_params.get("mode")
+        if mode_value is None:
+            return
+        self._sync_state(mode_value)
+
+    def _sync_state(self, value: Any) -> None:
+        """Synchronize the state of the switch entity.
+
+        Uses OPERATION_MODE_NAMES to resolve the mode value.
+        Mode 0 maps to STATE_OFF; any other known mode is considered ON.
+        """
+        self._attr_is_on = OPERATION_MODE_NAMES.get(value, STATE_OFF) != STATE_OFF
         self.async_write_ha_state()
 
     @staticmethod
@@ -488,17 +509,10 @@ async def async_setup_entry(
     entities: list[SwitchEntity] = []
 
     # Create boiler control switch (static)
-    boiler_switch = create_boiler_switch(coordinator, api)
-    entities.append(boiler_switch)
+    # Initial state is synced automatically via _handle_coordinator_update()
+    # once the entity is added to Home Assistant.
+    entities.append(create_boiler_switch(coordinator, api))
     _LOGGER.info("Created 1 static switch entity (boiler control)")
-
-    # Set initial state from coordinator data (without calling async_write_ha_state
-    # since entity is not yet added to HA - the state will be synced on first update)
-    reg_params = coordinator.data.get("regParams", {}) if coordinator.data else {}
-    if isinstance(reg_params, dict) and "mode" in reg_params:
-        mode_value = reg_params["mode"]
-        # Set state directly without triggering HA state write
-        boiler_switch._attr_is_on = mode_value != 0  # noqa: SLF001
 
     # Create dynamic switch entities from mergedData
     dynamic_switches = create_dynamic_switches(coordinator, api)

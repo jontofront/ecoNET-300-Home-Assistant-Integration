@@ -37,9 +37,17 @@ ruff check custom_components/econet300/
 
 ### DRY - Don't Repeat Yourself
 
+- **FIRST search existing code** before writing anything new
 - **Avoid duplicate code** - Extract common functionality into reusable functions or classes
 - **Single source of truth** - Each piece of knowledge should exist in one place
 - **Refactor repeated patterns** - If you copy-paste code more than once, extract it
+
+**Before writing new code, always check:**
+
+- `entity.py` - `_create_base_device_info()`, base entity classes, shared device info
+- `common_functions.py` - Utility functions, validation helpers
+- `const.py` - Constants, mapping dictionaries, device info constants
+- Existing factory functions (e.g., `create_sensor_entity_description`)
 
 **Examples:**
 

@@ -1,0 +1,23 @@
+---
+reset_fuel_meter:
+  target:
+    entity:
+      integration: "econet300"
+      device_class: "econet300__fuel_meter"
+
+calibrate_fuel_meter:
+  target:
+    entity:
+      integration: "econet300"
+      device_class: "econet300__fuel_meter"
+  fields:
+    value:
+      example: "100.0"
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 1000000
+          step: 0.001
+          unit_of_measurement: "kg"
+          mode: box
