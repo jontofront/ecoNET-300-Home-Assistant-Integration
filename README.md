@@ -258,8 +258,10 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 
 ### What's New in v1.2.1
 
-- **Boiler Switch Fix**: Fixed critical bug where boiler ON/OFF switch never updated after initial load
-- **Improved State Detection**: Switch now uses `OPERATION_MODE_NAMES` for reliable ON/OFF state
+- **Fuel Consumption Tracking**: New sensor that tracks total fuel usage (kg) with reset/calibrate services
+- **Boiler Switch Fix**: Fixed bug where ON/OFF switch stopped updating after initial load
+- **Legacy Device Support**: Older devices without RM API now handled gracefully
+- **New Devices**: Added support for ecoMAX860D3-HB, ecoMAX860P3-O, SControl EM892
 
 ### What's New in v1.2.0
 

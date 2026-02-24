@@ -2,15 +2,30 @@
 
 ## [v1.2.1] - 2026-02-24
 
+### 🚀 New Features
+
+- **Fuel Consumption Tracking**: New `fuel_consumption_total` sensor that tracks total fuel usage in kg
+  - Integrates the `fuelStream` rate sensor (kg/h) over time using trapezoidal method
+  - Persists across Home Assistant restarts
+  - New services: **Reset meter** and **Calibrate meter** to manage the counter
+- **Legacy Device Support**: Automatic detection of devices that don't support RM endpoints
+  - Devices without RM API support (older firmware) are now handled gracefully
+  - No more errors or timeouts for legacy modules
+
 ### 🐛 Bug Fixes
 
-- **Boiler ON/OFF Switch Not Updating**: Fixed critical bug where the boiler switch never reflected state changes from the coordinator
-  - **Problem**: Base class `_lookup_value()` searched for key `"boiler_control"` in `regParams`/`sysParams`, which doesn't exist, so `_sync_state()` was never called after initial setup
-  - **Solution**: Override `_handle_coordinator_update()` in `EconetSwitch` to read `regParams["mode"]` directly
-  - **Impact**: Switch now correctly updates every 60s poll cycle, including when boiler is turned off manually
-- **Boiler Switch ON/OFF Logic**: Use `OPERATION_MODE_NAMES` with `STATE_OFF` to determine switch state instead of raw `mode != 0` check
-  - **Before**: Unknown mode values defaulted to ON
-  - **After**: Unknown mode values safely default to OFF via `OPERATION_MODE_NAMES` mapping
+- **Boiler ON/OFF Switch Not Updating**: Fixed bug where the switch stopped updating after initial load
+  - Switch now correctly reflects boiler state on every poll cycle
+  - Manually turning off the boiler is now properly detected
+- **Boiler Switch State Logic**: Improved ON/OFF detection using operation mode mapping
+  - Unknown or unexpected mode values now safely default to OFF
+
+### 📦 New Device Support
+
+- Added test fixtures for **ecoMAX860D3-HB**
+- Added test fixtures for **ecoMAX860P3-O**
+- Added test fixtures for **ecoMAX360-cf8**
+- Added test fixtures for **SControl EM892**
 
 ---
 
