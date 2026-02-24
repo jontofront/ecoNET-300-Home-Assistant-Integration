@@ -256,6 +256,11 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
+### What's New in v1.2.1
+
+- **Boiler Switch Fix**: Fixed critical bug where boiler ON/OFF switch never updated after initial load
+- **Improved State Detection**: Switch now uses `OPERATION_MODE_NAMES` for reliable ON/OFF state
+
 ### What's New in v1.2.0
 
 - **Dynamic Entity System**: 165+ entities auto-discovered from `mergedData` API endpoint
@@ -321,4 +326,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2025-01-28 with v1.2.0 release._
+_This README was last updated on 2026-02-24 with v1.2.1 release._
