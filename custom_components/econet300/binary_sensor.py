@@ -28,6 +28,7 @@ from .common_functions import (
 from .const import (
     BINARY_SENSOR_MAP_KEY,
     CDP_BINARY_RUNNING_KEYWORDS,
+    CDP_SPECIAL_DIAGNOSTIC,
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
@@ -497,7 +498,9 @@ def create_current_data_binary_sensors(
         device_class = _infer_binary_device_class(name)
 
         special = param.get("special", 0)
-        entity_category = EntityCategory.DIAGNOSTIC if special > 0 else None
+        entity_category = (
+            EntityCategory.DIAGNOSTIC if special in CDP_SPECIAL_DIAGNOSTIC else None
+        )
 
         description = EconetBinarySensorEntityDescription(
             key=entity_key,

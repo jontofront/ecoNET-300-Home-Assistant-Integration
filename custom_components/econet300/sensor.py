@@ -49,6 +49,7 @@ from .common_functions import (
 )
 from .const import (
     CDP_DEFAULT_PRECISION,
+    CDP_SPECIAL_DIAGNOSTIC,
     CDP_UNIT_PRECISION,
     CDP_UNIT_TO_SENSOR_DEVICE_CLASS,
     COMPONENT_LAMBDA,
@@ -1095,7 +1096,9 @@ def create_current_data_sensors(
         device_class = _resolve_cdp_device_class(unit_name)
 
         special = param.get("special", 0)
-        entity_category = EntityCategory.DIAGNOSTIC if special > 0 else None
+        entity_category = (
+            EntityCategory.DIAGNOSTIC if special in CDP_SPECIAL_DIAGNOSTIC else None
+        )
 
         description = EconetSensorEntityDescription(
             key=entity_key,
