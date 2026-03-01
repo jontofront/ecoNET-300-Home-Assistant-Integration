@@ -96,8 +96,13 @@ def _cleanup_ghost_devices(
     devices with identifier (DOMAIN, "default-uid"). These ghost devices
     persist in the device registry even after the API recovers.
     """
-    device_reg = dr.async_get(hass)
-    ghost_identifiers = {
+    try:
+        device_reg = dr.async_get(hass)
+    except Exception:  # noqa: BLE001
+        _LOGGER.debug("Device registry not available, skipping ghost cleanup")
+        return
+
+    ghost_identifiers: set[tuple[str, str]] = {
         (DOMAIN, "default-uid"),
         (DOMAIN, "default-uid-huw"),
         (DOMAIN, "default-uid-buffer"),
@@ -113,7 +118,10 @@ def _cleanup_ghost_devices(
 
     removed = 0
     for ghost_id in ghost_identifiers:
-        device = device_reg.async_get_device(identifiers={ghost_id})
+        try:
+            device = device_reg.async_get_device(identifiers={ghost_id})
+        except (AttributeError, TypeError):
+            continue
         if device is not None:
             _LOGGER.warning(
                 "Removing ghost device %s (identifier: %s) created by failed init",
