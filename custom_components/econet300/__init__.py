@@ -15,6 +15,7 @@ import voluptuous as vol
 from .api import make_api
 from .common import AuthError, EconetDataCoordinator
 from .const import (
+    AVAILABLE_NUMBER_OF_MIXERS,
     DEVICE_CLASS_FUEL_METER,
     DOMAIN,
     SERVICE_API,
@@ -109,8 +110,8 @@ def _cleanup_ghost_devices(
         (DOMAIN, "default-uid-lambda"),
         (DOMAIN, "default-uid-solar"),
     }
-    # Also cover mixer ghost devices (up to 4 mixers)
-    for i in range(1, 5):
+    # Also cover mixer ghost devices (up to AVAILABLE_NUMBER_OF_MIXERS)
+    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
         ghost_identifiers.add((DOMAIN, f"default-uid-mixer-{i}"))
     # Also cover ecoster ghost devices (up to 8)
     for i in range(1, 9):
