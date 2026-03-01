@@ -94,19 +94,46 @@
   "options": {
     "step": {
       "init": {
-        "title": "ecoNET300 Options",
+        "menu_options": {
+          "connection_settings": "Connection Settings",
+          "custom_entities": "Custom Entities"
+        }
+      },
+      "connection_settings": {
+        "title": "Connection Settings",
         "description": "Update your ecoNET300 connection settings",
         "data": {
           "host": "[%key:common::config_flow::data::host%]",
           "username": "[%key:common::config_flow::data::username%]",
           "password": "[%key:common::config_flow::data::password%]"
         }
+      },
+      "custom_entities": {
+        "title": "Custom Entities",
+        "description": "Select the type of parameters you want to browse from regParamsData.",
+        "data": {
+          "type_filter": "Parameter type"
+        }
+      },
+      "select_params": {
+        "title": "Select Parameters",
+        "description": "Choose raw regParamsData IDs to expose as entities. Values and types are shown as hints.",
+        "data": {
+          "selected_params": "Available parameters"
+        }
+      },
+      "name_entities": {
+        "title": "Name Your Entities",
+        "description": "Assign custom names to the selected parameters. These will appear as entity names in Home Assistant."
       }
     },
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
       "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
       "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "no_unmapped_params": "No unmapped parameters available. All regParamsData IDs are already covered by existing entities."
     }
   },
   "entity": {
