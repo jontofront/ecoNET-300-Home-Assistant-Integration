@@ -278,7 +278,9 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 self.hass.async_create_task(
                     self.hass.config_entries.async_reload(self.config_entry.entry_id)
                 )
-                return self.async_create_entry(title="", data={})
+                return self.async_create_entry(
+                    title="", data=dict(self.config_entry.options)
+                )
 
         options_schema = vol.Schema(
             {
@@ -367,15 +369,11 @@ class EconetOptionsFlowHandler(OptionsFlow):
         self._selected_ids = user_input.get("selected_params", [])
 
         if not self._selected_ids:
-            # User deselected everything -- clear custom entities
             new_options = {**self.config_entry.options, CONF_CUSTOM_ENTITIES: {}}
-            self.hass.config_entries.async_update_entry(
-                self.config_entry, options=new_options
-            )
             self.hass.async_create_task(
                 self.hass.config_entries.async_reload(self.config_entry.entry_id)
             )
-            return self.async_create_entry(title="", data={})
+            return self.async_create_entry(title="", data=new_options)
 
         return await self.async_step_name_entities()
 
@@ -410,13 +408,10 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 **self.config_entry.options,
                 CONF_CUSTOM_ENTITIES: custom_entities,
             }
-            self.hass.config_entries.async_update_entry(
-                self.config_entry, options=new_options
-            )
             self.hass.async_create_task(
                 self.hass.config_entries.async_reload(self.config_entry.entry_id)
             )
-            return self.async_create_entry(title="", data={})
+            return self.async_create_entry(title="", data=new_options)
 
         # Build schema with a text field per selected ID
         schema_dict: dict[vol.Marker, Any] = {}
