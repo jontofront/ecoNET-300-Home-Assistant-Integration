@@ -1,9 +1,7 @@
 {
   "domain": "econet300",
   "name": "ecoNET300",
-  "codeowners": [
-    "@jontofront"
-  ],
+  "codeowners": ["@jontofront"],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration",
