@@ -94,19 +94,46 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opcje ecoNET300",
+        "menu_options": {
+          "connection_settings": "Ustawienia połączenia",
+          "custom_entities": "Własne encje"
+        }
+      },
+      "connection_settings": {
+        "title": "Ustawienia połączenia",
         "description": "Zaktualizuj ustawienia połączenia ecoNET300",
         "data": {
           "host": "Host",
           "username": "Nazwa użytkownika",
           "password": "Hasło"
         }
+      },
+      "custom_entities": {
+        "title": "Własne encje",
+        "description": "Wybierz typ parametrów do przeglądania z regParamsData.",
+        "data": {
+          "type_filter": "Typ parametru"
+        }
+      },
+      "select_params": {
+        "title": "Wybierz parametry",
+        "description": "Wybierz surowe identyfikatory regParamsData, które mają być widoczne jako encje. Wartości i typy są pokazane jako podpowiedzi.",
+        "data": {
+          "selected_params": "Dostępne parametry"
+        }
+      },
+      "name_entities": {
+        "title": "Nazwij swoje encje",
+        "description": "Przypisz własne nazwy do wybranych parametrów. Będą one widoczne jako nazwy encji w Home Assistant."
       }
     },
     "error": {
       "cannot_connect": "Błąd połączenia",
       "invalid_auth": "Błąd autoryzacji",
       "unknown": "Niespodziewany błąd"
+    },
+    "abort": {
+      "no_unmapped_params": "Brak niezmapowanych parametrów. Wszystkie identyfikatory regParamsData są już obsługiwane przez istniejące encje."
     }
   },
   "entity": {

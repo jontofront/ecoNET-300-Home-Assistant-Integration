@@ -536,6 +536,78 @@ UNIT_NAME_TO_HA_UNIT = {
 }
 
 # =============================================================================
+# CURRENT DATA PARAMS (CDP) DYNAMIC ENTITY CONSTANTS
+# =============================================================================
+# All constants below relate to the rmCurrentDataParams endpoint and the
+# dynamic entity creation pipeline that merges it with regParamsData.
+
+# --- Unit indices (from rmParamsUnitsNames endpoint) -------------------------
+# Maps unit index from rmCurrentDataParams to human-readable unit string.
+UNIT_INDEX_TO_NAME: dict[int, str] = {
+    0: "",
+    1: "°C",
+    2: "sek.",
+    3: "min.",
+    4: "h.",
+    5: "%",
+    6: "kg",
+    7: "kW",
+    8: "r/min",
+    31: "",  # Boolean/state indicator (no unit)
+}
+
+# Unit index that indicates a boolean/state parameter (binary sensor)
+CDP_UNIT_BINARY_STATE: int = 31
+
+# --- "special" field filtering -----------------------------------------------
+# Values of the rmCurrentDataParams "special" field that should be skipped.
+# special=7: mode-like entries with empty names (internal use only)
+CDP_SPECIAL_SKIP: set[int] = {7}
+
+# --- Static entity deduplication ---------------------------------------------
+# regParamsData IDs already handled by static entities (number, select).
+# These are skipped during dynamic entity creation to avoid duplicates.
+STATIC_REGPARAMS_DATA_IDS: set[str] = (
+    set(NUMBER_MAP.keys())
+    | set(SELECT_KEY_POST_INDEX.values())
+    | set(SELECT_KEY_GET_INDEX.values())
+)
+
+# --- Device class inference for dynamic sensors ------------------------------
+# Maps unit string → HA SensorDeviceClass for CDP sensors.
+CDP_UNIT_TO_SENSOR_DEVICE_CLASS: dict[str, str] = {
+    "°C": "temperature",
+    "kW": "power",
+}
+
+# --- Device class inference for dynamic binary sensors -----------------------
+# Name keywords that indicate BinarySensorDeviceClass.RUNNING.
+CDP_BINARY_RUNNING_KEYWORDS: tuple[str, ...] = (
+    "pump",
+    "fan",
+    "feeder",
+    "servo",
+    "motor",
+)
+
+# --- Display precision for dynamic sensors -----------------------------------
+# Maps unit string → suggested_display_precision for CDP sensors.
+CDP_UNIT_PRECISION: dict[str, int] = {
+    "°C": 1,
+}
+CDP_DEFAULT_PRECISION: int = 0
+
+# =============================================================================
+# CUSTOM ENTITY SELECTOR (Options Flow)
+# =============================================================================
+# Key used inside entry.options to store user-defined custom entities.
+CONF_CUSTOM_ENTITIES = "custom_entities"
+
+# Entity type constants for custom entity classification.
+CUSTOM_ENTITY_TYPE_SENSOR = "sensor"
+CUSTOM_ENTITY_TYPE_BINARY_SENSOR = "binary_sensor"
+
+# =============================================================================
 # ENTITY UNIT MAPPINGS
 # =============================================================================
 # By default all sensors unit_of_measurement are None

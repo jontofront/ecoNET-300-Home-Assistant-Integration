@@ -152,6 +152,27 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     rm_data = {}
                     merged_data = None
 
+                # Build currentDataMerged: join rmCurrentDataParams metadata
+                # with live values from regParamsData (same numeric ID space).
+                current_data_merged: dict[str, dict] = {}
+                current_data_params = (
+                    rm_data.get("currentDataParams", {}) if rm_data else {}
+                )
+                if current_data_params and reg_params_data:
+                    for param_id, metadata in current_data_params.items():
+                        if not isinstance(metadata, dict):
+                            continue
+                        current_data_merged[param_id] = {
+                            "name": metadata.get("name", ""),
+                            "unit": metadata.get("unit", 0),
+                            "special": metadata.get("special", 0),
+                            "value": reg_params_data.get(param_id),
+                        }
+                    _LOGGER.debug(
+                        "Built currentDataMerged with %d parameters",
+                        len(current_data_merged),
+                    )
+
                 result = {
                     "sysParams": sys_params,
                     "regParams": reg_params,
@@ -159,6 +180,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "paramsEdits": params_edits,
                     "rmData": rm_data,
                     "mergedData": merged_data,
+                    "currentDataMerged": current_data_merged,
                 }
 
                 # Debug: Log merged data structure
