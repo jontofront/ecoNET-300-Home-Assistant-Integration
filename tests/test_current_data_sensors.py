@@ -495,8 +495,8 @@ class TestEcomax810PLSpecific:
         assert param["name"] == "Feeder temperature"
         assert classify_current_data_param(param) == "sensor"
 
-    def test_valve_mixer_1_in_sensor_factory(self, merged):
-        """Sensor factory should include cdp_139_valve_mixer_1."""
+    def test_oxygen_in_sensor_factory(self, merged):
+        """Sensor factory should include cdp_154_oxygen."""
         from custom_components.econet300.sensor import create_current_data_sensors
 
         coordinator = _make_coordinator(merged)
@@ -505,7 +505,7 @@ class TestEcomax810PLSpecific:
 
         entities = create_current_data_sensors(coordinator, api)
         keys = [e.entity_description.key for e in entities]
-        assert "cdp_139_valve_mixer_1" in keys
+        assert "cdp_154_oxygen" in keys
 
     def test_lighter_in_binary_factory(self, merged):
         """Binary sensor factory should include cdp_1_lighter."""

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 import logging
+import re
 from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
@@ -42,7 +43,9 @@ from .common_functions import (
     camel_to_snake,
     classify_current_data_param,
     get_entity_component,
+    get_validated_entity_component,
     is_regparams_data_id_mapped,
+    mixer_exists,
 )
 from .const import (
     CDP_DEFAULT_PRECISION,
@@ -1000,6 +1003,14 @@ class CurrentDataSensor(EconetEntity, SensorEntity):
         self._attr_native_value = None
         super().__init__(coordinator, api)
 
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info based on entity component."""
+        component = getattr(self.entity_description, "component", None)
+        if component:
+            return get_device_info_for_component(component, self.api)
+        return super().device_info
+
     def _lookup_value(self) -> Any:
         """Look up value from currentDataMerged."""
         if self.coordinator.data is None:
@@ -1060,11 +1071,27 @@ def create_current_data_sensors(
             continue
 
         name = param.get("name", "").strip()
+
+        # Skip entities for non-existent mixers
+        mixer_match = re.search(r"mixer\s*(\d+)", name.lower())
+        if mixer_match:
+            mixer_num = int(mixer_match.group(1))
+            if not mixer_exists(coordinator.data, mixer_num):
+                _LOGGER.debug(
+                    "Skipping CDP sensor %s - mixer %d not connected",
+                    name,
+                    mixer_num,
+                )
+                continue
+
         unit_idx = param.get("unit", 0)
         unit_name = UNIT_INDEX_TO_NAME.get(unit_idx, "")
         ha_unit = UNIT_NAME_TO_HA_UNIT.get(unit_name) if unit_name else None
 
         entity_key = build_current_data_entity_key(param_id, name)
+        component = get_validated_entity_component(
+            name, entity_key, coordinator_data=coordinator.data
+        )
         device_class = _resolve_cdp_device_class(unit_name)
 
         special = param.get("special", 0)
@@ -1080,6 +1107,7 @@ def create_current_data_sensors(
                 unit_name, CDP_DEFAULT_PRECISION
             ),
             entity_category=entity_category,
+            component=component,
             has_entity_name=True,
         )
 
