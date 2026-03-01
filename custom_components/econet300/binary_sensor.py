@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 import logging
-import re
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
@@ -21,14 +20,11 @@ from .common_functions import (
     camel_to_snake,
     classify_current_data_param,
     get_entity_component,
-    get_validated_entity_component,
     is_regparams_data_id_mapped,
-    mixer_exists,
 )
 from .const import (
     BINARY_SENSOR_MAP_KEY,
     CDP_BINARY_RUNNING_KEYWORDS,
-    CDP_SPECIAL_DIAGNOSTIC,
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
@@ -420,14 +416,6 @@ class CurrentDataBinarySensor(EconetEntity, BinarySensorEntity):
         self._attr_is_on: bool | None = None
         super().__init__(coordinator, api)
 
-    @property
-    def device_info(self) -> DeviceInfo | None:
-        """Return device info based on entity component."""
-        component = getattr(self.entity_description, "component", None)
-        if component:
-            return get_device_info_for_component(component, self.api)
-        return super().device_info
-
     def _lookup_value(self):
         """Look up value from currentDataMerged."""
         if self.coordinator.data is None:
@@ -478,34 +466,17 @@ def create_current_data_binary_sensors(
             continue
 
         name = param.get("name", "").strip()
-
-        # Skip entities for non-existent mixers
-        mixer_match = re.search(r"mixer\s*(\d+)", name.lower())
-        if mixer_match:
-            mixer_num = int(mixer_match.group(1))
-            if not mixer_exists(coordinator.data, mixer_num):
-                _LOGGER.debug(
-                    "Skipping CDP binary sensor %s - mixer %d not connected",
-                    name,
-                    mixer_num,
-                )
-                continue
-
         entity_key = build_current_data_entity_key(param_id, name)
-        component = get_validated_entity_component(
-            name, entity_key, coordinator_data=coordinator.data
-        )
         device_class = _infer_binary_device_class(name)
 
         special = param.get("special", 0)
-        entity_category = EntityCategory.DIAGNOSTIC if special in CDP_SPECIAL_DIAGNOSTIC else None
+        entity_category = EntityCategory.DIAGNOSTIC if special > 0 else None
 
         description = EconetBinarySensorEntityDescription(
             key=entity_key,
             name=name,
             device_class=device_class,
             entity_category=entity_category,
-            component=component,
             has_entity_name=True,
         )
 

@@ -6,7 +6,7 @@ rmCurrentDataParams.json and regParamsData.json files.
 
 import json
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -71,26 +71,11 @@ CDP_DEVICES: list[str] = sorted(
 )
 
 
-def _make_coordinator(
-    current_data_merged: dict,
-    reg_params: dict | None = None,
-) -> MagicMock:
-    """Build a mock coordinator with currentDataMerged and regParams data."""
+def _make_coordinator(current_data_merged: dict) -> MagicMock:
+    """Build a mock coordinator with currentDataMerged data."""
     coordinator = MagicMock()
-    coordinator.data = {
-        "currentDataMerged": current_data_merged,
-        "regParams": reg_params or {},
-    }
+    coordinator.data = {"currentDataMerged": current_data_merged}
     return coordinator
-
-
-def _load_reg_params(device_dir: Path) -> dict:
-    """Load regParams 'curr' section from a device fixture (matches API behavior)."""
-    path = device_dir / "regParams.json"
-    if not path.exists():
-        return {}
-    raw = _load_json(path)
-    return raw.get("curr", raw) if isinstance(raw, dict) else {}
 
 
 # =============================================================================
@@ -345,8 +330,7 @@ class TestCreateCurrentDataSensorsMultiDevice:
         from custom_components.econet300.sensor import create_current_data_sensors
 
         merged = _build_merged(FIXTURES_ROOT / device)
-        reg_params = _load_reg_params(FIXTURES_ROOT / device)
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -359,8 +343,7 @@ class TestCreateCurrentDataSensorsMultiDevice:
         from custom_components.econet300.sensor import create_current_data_sensors
 
         merged = _build_merged(FIXTURES_ROOT / device)
-        reg_params = _load_reg_params(FIXTURES_ROOT / device)
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -378,8 +361,7 @@ class TestCreateCurrentDataSensorsMultiDevice:
         from custom_components.econet300.sensor import create_current_data_sensors
 
         merged = _build_merged(FIXTURES_ROOT / device)
-        reg_params = _load_reg_params(FIXTURES_ROOT / device)
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -411,8 +393,7 @@ class TestCreateCurrentDataBinarySensorsMultiDevice:
         )
 
         merged = _build_merged(FIXTURES_ROOT / device)
-        reg_params = _load_reg_params(FIXTURES_ROOT / device)
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -427,8 +408,7 @@ class TestCreateCurrentDataBinarySensorsMultiDevice:
         )
 
         merged = _build_merged(FIXTURES_ROOT / device)
-        reg_params = _load_reg_params(FIXTURES_ROOT / device)
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -496,11 +476,6 @@ class TestEcomax810PLSpecific:
         """Return currentDataMerged from ecoMAX810P-L."""
         return _build_merged(FIXTURES_ROOT / "ecoMAX810P-L")
 
-    @pytest.fixture
-    def reg_params(self) -> dict:
-        """Return regParams from ecoMAX810P-L."""
-        return _load_reg_params(FIXTURES_ROOT / "ecoMAX810P-L")
-
     def test_valve_mixer_1_is_sensor(self, merged):
         """ID 139 (Valve mixer 1, unit=5, value=59) → sensor."""
         param = merged["139"]
@@ -520,11 +495,11 @@ class TestEcomax810PLSpecific:
         assert param["name"] == "Feeder temperature"
         assert classify_current_data_param(param) == "sensor"
 
-    def test_valve_mixer_1_in_sensor_factory(self, merged, reg_params):
-        """Sensor factory should include cdp_139_valve_mixer_1 (mixer 1 exists)."""
+    def test_valve_mixer_1_in_sensor_factory(self, merged):
+        """Sensor factory should include cdp_139_valve_mixer_1."""
         from custom_components.econet300.sensor import create_current_data_sensors
 
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
@@ -532,361 +507,19 @@ class TestEcomax810PLSpecific:
         keys = [e.entity_description.key for e in entities]
         assert "cdp_139_valve_mixer_1" in keys
 
-    def test_unseal_in_binary_factory(self, merged, reg_params):
-        """Binary sensor factory should include cdp_113_unseal (not in static overlap)."""
+    def test_lighter_in_binary_factory(self, merged):
+        """Binary sensor factory should include cdp_1_lighter."""
         from custom_components.econet300.binary_sensor import (
             create_current_data_binary_sensors,
         )
 
-        coordinator = _make_coordinator(merged, reg_params)
+        coordinator = _make_coordinator(merged)
         api = MagicMock()
         api.uid = "test_uid"
 
         entities = create_current_data_binary_sensors(coordinator, api)
         keys = [e.entity_description.key for e in entities]
-        assert "cdp_113_unseal" in keys
-
-
-# =============================================================================
-# Mixer skip tests — non-existent mixers should be excluded
-# =============================================================================
-
-
-class TestMixerSkip:
-    """Entities for non-existent mixers must not be created."""
-
-    MIXER_1_ONLY_REG_PARAMS = {
-        "mixerTemp1": 32.95,
-        "mixerTemp2": None,
-        "mixerTemp3": None,
-        "mixerTemp4": None,
-    }
-
-    @staticmethod
-    def _mixer_merged():
-        """Minimal currentDataMerged with mixer 1-4 sensor + binary entries."""
-        return {
-            "139": {"name": "Valve mixer 1", "unit": 5, "special": 0, "value": 59},
-            "140": {"name": "Valve mixer 2", "unit": 5, "special": 0, "value": 0},
-            "141": {"name": "Valve mixer 3", "unit": 5, "special": 0, "value": 0},
-            "142": {"name": "Valve mixer 4", "unit": 5, "special": 0, "value": 0},
-            "200": {"name": "Pump mixer 1", "unit": 31, "special": 0, "value": True},
-            "201": {"name": "Pump mixer 2", "unit": 31, "special": 0, "value": False},
-            "202": {"name": "Pump mixer 3", "unit": 31, "special": 0, "value": False},
-            "203": {"name": "Pump mixer 4", "unit": 31, "special": 0, "value": False},
-        }
-
-    def test_sensor_mixer_1_created(self):
-        """Sensor for mixer 1 should be created (mixer 1 connected)."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        coordinator = _make_coordinator(
-            self._mixer_merged(), self.MIXER_1_ONLY_REG_PARAMS
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        assert "cdp_139_valve_mixer_1" in keys
-
-    def test_sensor_mixer_2_skipped(self):
-        """Sensor for mixer 2 should be skipped (mixer 2 not connected)."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        coordinator = _make_coordinator(
-            self._mixer_merged(), self.MIXER_1_ONLY_REG_PARAMS
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        assert "cdp_140_valve_mixer_2" not in keys
-        assert "cdp_141_valve_mixer_3" not in keys
-        assert "cdp_142_valve_mixer_4" not in keys
-
-    def test_binary_sensor_mixer_1_created(self):
-        """Binary sensor for mixer 1 should be created (mixer 1 connected)."""
-        from custom_components.econet300.binary_sensor import (
-            create_current_data_binary_sensors,
-        )
-
-        coordinator = _make_coordinator(
-            self._mixer_merged(), self.MIXER_1_ONLY_REG_PARAMS
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_binary_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        assert "cdp_200_pump_mixer_1" in keys
-
-    def test_binary_sensor_mixer_2_3_4_skipped(self):
-        """Binary sensors for mixer 2/3/4 should be skipped."""
-        from custom_components.econet300.binary_sensor import (
-            create_current_data_binary_sensors,
-        )
-
-        coordinator = _make_coordinator(
-            self._mixer_merged(), self.MIXER_1_ONLY_REG_PARAMS
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_binary_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        assert "cdp_201_pump_mixer_2" not in keys
-        assert "cdp_202_pump_mixer_3" not in keys
-        assert "cdp_203_pump_mixer_4" not in keys
-
-    def test_all_mixers_created_when_all_connected(self):
-        """All mixer sensors created when all 4 mixers are connected."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        all_mixers_reg = {
-            "mixerTemp1": 32.0,
-            "mixerTemp2": 28.0,
-            "mixerTemp3": 30.0,
-            "mixerTemp4": 25.0,
-        }
-        coordinator = _make_coordinator(self._mixer_merged(), all_mixers_reg)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        assert "cdp_139_valve_mixer_1" in keys
-        assert "cdp_140_valve_mixer_2" in keys
-        assert "cdp_141_valve_mixer_3" in keys
-        assert "cdp_142_valve_mixer_4" in keys
-
-    def test_ecomax810p_l_fixture_skips_mixer_2_3_4(self):
-        """ecoMAX810P-L fixture has only mixer 1 — mixer 2/3/4 entities skipped."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = _build_merged(FIXTURES_ROOT / "ecoMAX810P-L")
-        reg_params = _load_reg_params(FIXTURES_ROOT / "ecoMAX810P-L")
-        coordinator = _make_coordinator(merged, reg_params)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        keys = {e.entity_description.key for e in entities}
-        mixer_2_3_4_keys = [k for k in keys if "mixer_2" in k or "mixer_3" in k or "mixer_4" in k]
-        assert mixer_2_3_4_keys == [], f"Unexpected mixer 2/3/4 sensors: {mixer_2_3_4_keys}"
-
-
-# =============================================================================
-# Component assignment tests — entities go to correct sub-devices
-# =============================================================================
-
-
-class TestComponentAssignment:
-    """Entities should be assigned to the correct sub-device component."""
-
-    def test_mixer_1_sensor_has_mixer_1_component(self):
-        """Mixer 1 sensor should have component='mixer_1'."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = {
-            "139": {"name": "Valve mixer 1", "unit": 5, "special": 0, "value": 59},
-        }
-        reg_params = {"mixerTemp1": 32.0}
-        coordinator = _make_coordinator(merged, reg_params)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "mixer_1"
-
-    def test_huw_sensor_has_huw_component(self):
-        """HUW-related sensor should have component='huw'."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = {
-            "500": {"name": "HUW temperature", "unit": 1, "special": 0, "value": 45.0},
-        }
-        coordinator = _make_coordinator(merged)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "huw"
-
-    def test_buffer_sensor_has_buffer_component(self):
-        """Buffer-related sensor should have component='buffer'."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = {
-            "600": {
-                "name": "Upper buffer temperature",
-                "unit": 1,
-                "special": 0,
-                "value": 50.0,
-            },
-        }
-        coordinator = _make_coordinator(merged)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "buffer"
-
-    def test_lambda_sensor_has_lambda_component(self):
-        """Lambda-related sensor should have component='lambda'."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = {
-            "700": {"name": "Lambda level", "unit": 5, "special": 0, "value": 1.2},
-        }
-        coordinator = _make_coordinator(merged)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "lambda"
-
-    def test_boiler_sensor_has_boiler_component(self):
-        """Generic sensor should have component='boiler' (default)."""
-        from custom_components.econet300.sensor import create_current_data_sensors
-
-        merged = {
-            "9999": {
-                "name": "Custom boiler sensor",
-                "unit": 1,
-                "special": 1,
-                "value": 24.0,
-            },
-        }
-        coordinator = _make_coordinator(merged)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "boiler"
-
-    def test_binary_mixer_1_has_mixer_1_component(self):
-        """Mixer 1 binary sensor should have component='mixer_1'."""
-        from custom_components.econet300.binary_sensor import (
-            create_current_data_binary_sensors,
-        )
-
-        merged = {
-            "200": {"name": "Pump mixer 1", "unit": 31, "special": 0, "value": True},
-        }
-        reg_params = {"mixerTemp1": 32.0}
-        coordinator = _make_coordinator(merged, reg_params)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_binary_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "mixer_1"
-
-    def test_binary_huw_has_huw_component(self):
-        """HUW-related binary sensor should have component='huw'."""
-        from custom_components.econet300.binary_sensor import (
-            create_current_data_binary_sensors,
-        )
-
-        merged = {
-            "300": {"name": "HUW pump", "unit": 31, "special": 0, "value": False},
-        }
-        coordinator = _make_coordinator(merged)
-        api = MagicMock()
-        api.uid = "test_uid"
-
-        entities = create_current_data_binary_sensors(coordinator, api)
-        assert len(entities) == 1
-        assert entities[0].entity_description.component == "huw"
-
-
-# =============================================================================
-# Device info override tests
-# =============================================================================
-
-
-class TestDeviceInfoOverride:
-    """Verify CDP entities use device_info from component."""
-
-    def test_current_data_sensor_device_info_delegates_to_component(self):
-        """CurrentDataSensor with component should call get_device_info_for_component."""
-        from custom_components.econet300.sensor import (
-            CurrentDataSensor,
-            EconetSensorEntityDescription,
-        )
-
-        desc = EconetSensorEntityDescription(
-            key="cdp_139_valve_mixer_1",
-            name="Valve mixer 1",
-            component="mixer_1",
-            has_entity_name=True,
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-        coordinator = _make_coordinator({})
-
-        with patch(
-            "custom_components.econet300.sensor.get_device_info_for_component"
-        ) as mock_get_di:
-            mock_get_di.return_value = {"identifiers": {("econet300", "test_uid-mixer-1")}}
-            sensor = CurrentDataSensor(desc, coordinator, api, "139")
-            di = sensor.device_info
-            mock_get_di.assert_called_once_with("mixer_1", api)
-            assert di is not None
-
-    def test_current_data_sensor_device_info_no_component(self):
-        """CurrentDataSensor without component should use base device_info."""
-        from custom_components.econet300.sensor import (
-            CurrentDataSensor,
-            EconetSensorEntityDescription,
-        )
-
-        desc = EconetSensorEntityDescription(
-            key="cdp_26_feeder_temperature",
-            name="Feeder temperature",
-            has_entity_name=True,
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-        coordinator = _make_coordinator({})
-
-        sensor = CurrentDataSensor(desc, coordinator, api, "26")
-        di = sensor.device_info
-        # Should fall through to super().device_info (base EconetEntity)
-        assert di is not None or di is None  # Just verify no crash
-
-    def test_current_data_binary_sensor_device_info_delegates(self):
-        """CurrentDataBinarySensor with component should call get_device_info_for_component."""
-        from custom_components.econet300.binary_sensor import (
-            CurrentDataBinarySensor,
-            EconetBinarySensorEntityDescription,
-        )
-
-        desc = EconetBinarySensorEntityDescription(
-            key="cdp_200_pump_mixer_1",
-            name="Pump mixer 1",
-            component="mixer_1",
-            has_entity_name=True,
-        )
-        api = MagicMock()
-        api.uid = "test_uid"
-        coordinator = _make_coordinator({})
-
-        with patch(
-            "custom_components.econet300.binary_sensor.get_device_info_for_component"
-        ) as mock_get_di:
-            mock_get_di.return_value = {"identifiers": {("econet300", "test_uid-mixer-1")}}
-            sensor = CurrentDataBinarySensor(desc, coordinator, api, "200")
-            di = sensor.device_info
-            mock_get_di.assert_called_once_with("mixer_1", api)
-            assert di is not None
+        assert "cdp_1_lighter" in keys
 
 
 # =============================================================================
