@@ -315,12 +315,25 @@ class Econet300Api:
         return self._hw_version
 
     async def init(self):
-        """Econet300 API initialization."""
+        """Econet300 API initialization.
+
+        Raises:
+            ConnectionError: If sysParams cannot be fetched (device offline/unreachable).
+            ValueError: If uid is missing from sysParams (critical for device identity).
+
+        """
         sys_params = await self.fetch_sys_params()
 
         if sys_params is None:
-            _LOGGER.warning("Failed to fetch system parameters (device offline?)")
-            return
+            raise ConnectionError(
+                "Failed to fetch system parameters - device offline or unreachable"
+            )
+
+        # UID is mandatory - without it, entities register under a ghost device
+        if API_SYS_PARAMS_PARAM_UID not in sys_params:
+            raise ValueError(
+                "System parameters missing 'uid' - cannot establish device identity"
+            )
 
         # Set system parameters by HA device properties
         self._set_device_property(sys_params, API_SYS_PARAMS_PARAM_UID, "_uid", "UUID")

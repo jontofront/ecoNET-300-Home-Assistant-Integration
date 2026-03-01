@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.helpers.issue_registry import async_delete_issue
 import voluptuous as vol
 
@@ -71,13 +71,62 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryAuthFailed("Client not authenticated") from auth_error
     except TimeoutError as timeout_error:
         raise ConfigEntryNotReady("Target not found") from timeout_error
+    except (ConnectionError, ValueError) as init_error:
+        raise ConfigEntryNotReady(
+            "Device not ready - cannot fetch system parameters"
+        ) from init_error
     else:
+        # Clean up ghost devices created by failed API inits (uid = "default-uid")
+        _cleanup_ghost_devices(hass, entry, api.uid)
+
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
         # Register services if not already registered
         await async_setup_services(hass)
 
         return True
+
+
+def _cleanup_ghost_devices(
+    hass: HomeAssistant, entry: ConfigEntry, real_uid: str
+) -> None:
+    """Remove orphaned devices created by failed API inits with default-uid.
+
+    When api.init() previously failed silently, entities registered under
+    devices with identifier (DOMAIN, "default-uid"). These ghost devices
+    persist in the device registry even after the API recovers.
+    """
+    device_reg = dr.async_get(hass)
+    ghost_identifiers = {
+        (DOMAIN, "default-uid"),
+        (DOMAIN, "default-uid-huw"),
+        (DOMAIN, "default-uid-buffer"),
+        (DOMAIN, "default-uid-lambda"),
+        (DOMAIN, "default-uid-solar"),
+    }
+    # Also cover mixer ghost devices (up to 4 mixers)
+    for i in range(1, 5):
+        ghost_identifiers.add((DOMAIN, f"default-uid-mixer-{i}"))
+    # Also cover ecoster ghost devices (up to 8)
+    for i in range(1, 9):
+        ghost_identifiers.add((DOMAIN, f"default-uid-ecoster-{i}"))
+
+    removed = 0
+    for ghost_id in ghost_identifiers:
+        device = device_reg.async_get_device(identifiers={ghost_id})
+        if device is not None:
+            _LOGGER.warning(
+                "Removing ghost device %s (identifier: %s) created by failed init",
+                device.name,
+                ghost_id,
+            )
+            device_reg.async_remove_device(device.id)
+            removed += 1
+
+    if removed:
+        _LOGGER.info(
+            "Cleaned up %d ghost device(s) - real device uid: %s", removed, real_uid
+        )
 
 
 async def async_setup_services(hass: HomeAssistant) -> None:
