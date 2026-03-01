@@ -564,6 +564,11 @@ CDP_UNIT_BINARY_STATE: int = 31
 # special=7: mode-like entries with empty names (internal use only)
 CDP_SPECIAL_SKIP: set[int] = {7}
 
+# Values of the "special" field that mark an entity as EntityCategory.DIAGNOSTIC.
+# special=5: network status (Server, Wifi status)
+# special=6: network config (Encryption)
+CDP_SPECIAL_DIAGNOSTIC: set[int] = {5, 6}
+
 # --- Static entity deduplication ---------------------------------------------
 # regParamsData IDs already handled by static entities (number, select).
 # These are skipped during dynamic entity creation to avoid duplicates.
