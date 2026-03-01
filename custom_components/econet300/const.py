@@ -570,12 +570,47 @@ CDP_SPECIAL_SKIP: set[int] = {7}
 CDP_SPECIAL_DIAGNOSTIC: set[int] = {5, 6}
 
 # --- Static entity deduplication ---------------------------------------------
-# regParamsData IDs already handled by static entities (number, select).
+# regParamsData IDs already handled by static entities.
 # These are skipped during dynamic entity creation to avoid duplicates.
+
+# IDs that overlap with regParams-based static sensors / binary sensors.
+# Maps: regParamsData numeric ID → corresponding regParams camelCase key.
+CDP_REGPARAMS_STATIC_OVERLAP_IDS: set[str] = {
+    # Sensors (overlap with DEFAULT_SENSORS)
+    "26",     # Feeder temperature → tempFeeder
+    "28",     # Weather temperature → tempExternalSensor
+    "114",    # Fuel level → fuelLevel
+    "117",    # Boiler thermostat → thermostat
+    "1024",   # Boiler temperature → tempCO
+    "1025",   # HUW temperature → tempCWU
+    "1028",   # Upper buffer temperature → tempUpperBuffer
+    "1029",   # Lower buffer temperature → tempLowerBuffer
+    "1030",   # Emission temperature → tempFlueGas
+    "1794",   # Burner output → boilerPower
+    # Mixer temperature sensors → mixerTemp1-6
+    "1031",   # Temp. mixer 1 → mixerTemp1
+    "1032",   # Temp. mixer 2 → mixerTemp2
+    "1033",   # Temp. mixer 3 → mixerTemp3
+    "1034",   # Temp. mixer 4 → mixerTemp4
+    # Binary sensors (overlap with DEFAULT_BINARY_SENSORS)
+    "1",      # Lighter → lighterWorks
+    "1536",   # Fan → fanWorks
+    "1538",   # Feeder → feederWorks
+    "1541",   # Boiler pump → pumpCOWorks
+    "1542",   # HUW pump → pumpCWUWorks
+    "1543",   # Circulating pump → pumpCirculationWorks
+    # Mixer pump binary sensors → mixerPumpWorks1-4
+    "1544",   # Pump mixer 1 → mixerPumpWorks1
+    "1547",   # Pump mixer 2 → mixerPumpWorks2
+    "1550",   # Pump mixer 3 → mixerPumpWorks3
+    "1553",   # Pump mixer 4 → mixerPumpWorks4
+}
+
 STATIC_REGPARAMS_DATA_IDS: set[str] = (
     set(NUMBER_MAP.keys())
     | set(SELECT_KEY_POST_INDEX.values())
     | set(SELECT_KEY_GET_INDEX.values())
+    | CDP_REGPARAMS_STATIC_OVERLAP_IDS
 )
 
 # --- Device class inference for dynamic sensors ------------------------------

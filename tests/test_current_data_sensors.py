@@ -532,8 +532,8 @@ class TestEcomax810PLSpecific:
         keys = [e.entity_description.key for e in entities]
         assert "cdp_139_valve_mixer_1" in keys
 
-    def test_lighter_in_binary_factory(self, merged, reg_params):
-        """Binary sensor factory should include cdp_1_lighter."""
+    def test_unseal_in_binary_factory(self, merged, reg_params):
+        """Binary sensor factory should include cdp_113_unseal (not in static overlap)."""
         from custom_components.econet300.binary_sensor import (
             create_current_data_binary_sensors,
         )
@@ -544,7 +544,7 @@ class TestEcomax810PLSpecific:
 
         entities = create_current_data_binary_sensors(coordinator, api)
         keys = [e.entity_description.key for e in entities]
-        assert "cdp_1_lighter" in keys
+        assert "cdp_113_unseal" in keys
 
 
 # =============================================================================
@@ -756,8 +756,8 @@ class TestComponentAssignment:
         from custom_components.econet300.sensor import create_current_data_sensors
 
         merged = {
-            "26": {
-                "name": "Feeder temperature",
+            "9999": {
+                "name": "Custom boiler sensor",
                 "unit": 1,
                 "special": 1,
                 "value": 24.0,
