@@ -9,18 +9,17 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components"))
 
 try:
     from econet300.const import (  # type: ignore[import-untyped]
-        API_EDIT_PARAM_URI,
-        API_EDITABLE_PARAMS_LIMITS_URI,
+        API_NEW_PARAM_URI,
         API_REG_PARAMS_DATA_URI,
         API_REG_PARAMS_URI,
         API_RM_ALARMS_NAMES_URI,
-        API_RM_CATS_DESCS_URI,
-        API_RM_CATS_NAMES_URI,
+        API_RM_CURR_NEW_PARAM_URI,
         API_RM_CURRENT_DATA_PARAMS_EDITS_URI,
         API_RM_CURRENT_DATA_PARAMS_URI,
         API_RM_EXISTING_LANGS_URI,
         API_RM_LANGS_URI,
         API_RM_LOCKS_NAMES_URI,
+        API_RM_NEW_PARAM_URI,
         API_RM_PARAMS_DATA_URI,
         API_RM_PARAMS_DESCS_URI,
         API_RM_PARAMS_ENUMS_URI,
@@ -54,8 +53,10 @@ def main():
     # Parameter editing endpoints
     print("\n[PARAMETER EDITING ENDPOINTS]")
     edit_endpoints = [
-        ("Edit Parameter", API_EDIT_PARAM_URI),
-        ("Editable Parameters Limits", API_EDITABLE_PARAMS_LIMITS_URI),
+        ("Save Parameter by Key", API_RM_CURR_NEW_PARAM_URI),
+        ("Save Parameter by Index", API_RM_NEW_PARAM_URI),
+        ("Legacy Parameter Edit", API_NEW_PARAM_URI),
+        ("Editable Parameters Limits", API_RM_CURRENT_DATA_PARAMS_EDITS_URI),
     ]
 
     for name, endpoint in edit_endpoints:
@@ -70,8 +71,6 @@ def main():
         ("Parameter Descriptions", API_RM_PARAMS_DESCS_URI),
         ("Parameter Enumerations", API_RM_PARAMS_ENUMS_URI),
         ("Parameter Units", API_RM_PARAMS_UNITS_NAMES_URI),
-        ("Category Names", API_RM_CATS_NAMES_URI),
-        ("Category Descriptions", API_RM_CATS_DESCS_URI),
         ("Menu Structure", API_RM_STRUCTURE_URI),
         ("Current Parameters", API_RM_CURRENT_DATA_PARAMS_URI),
         ("Editable Parameters", API_RM_CURRENT_DATA_PARAMS_EDITS_URI),
@@ -84,13 +83,8 @@ def main():
     for name, endpoint in rm_endpoints:
         print(f"  • {name}: {endpoint}")
 
-    # Legacy/special endpoints
-    print("\n[LEGACY/SPECIAL ENDPOINTS]")
-    print("  • rmNewParam (parameter editing by index)")
-    print("  • newParam (legacy parameter editing)")
-
     # Summary
-    total_endpoints = len(endpoints) + len(edit_endpoints) + len(rm_endpoints) + 2
+    total_endpoints = len(endpoints) + len(edit_endpoints) + len(rm_endpoints)
     print(f"\n[TOTAL ENDPOINTS: {total_endpoints}]")
 
     print("\n[USAGE]")

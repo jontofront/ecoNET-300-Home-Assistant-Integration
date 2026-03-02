@@ -5,12 +5,10 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 import logging
-import re
 from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
     RestoreSensor,
-    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorExtraStoredData,
@@ -38,20 +36,9 @@ from homeassistant.helpers.event import (
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
-from .common_functions import (
-    build_current_data_entity_key,
-    camel_to_snake,
-    classify_current_data_param,
-    get_entity_component,
-    get_validated_entity_component,
-    is_regparams_data_id_mapped,
-    mixer_exists,
-)
+from .common_functions import camel_to_snake, get_entity_component
 from .const import (
-    CDP_DEFAULT_PRECISION,
-    CDP_SPECIAL_DIAGNOSTIC,
-    CDP_UNIT_PRECISION,
-    CDP_UNIT_TO_SENSOR_DEVICE_CLASS,
+    API_REG_PARAMS_URI,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
     DEVICE_CLASS_FUEL_METER,
@@ -70,8 +57,6 @@ from .const import (
     SERVICE_COORDINATOR,
     SERVICE_FUEL_SENSOR,
     STATE_CLASS_MAP,
-    UNIT_INDEX_TO_NAME,
-    UNIT_NAME_TO_HA_UNIT,
 )
 from .entity import (
     EconetEntity,
@@ -985,8 +970,13 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
     return entities
 
 
-class CurrentDataSensor(EconetEntity, SensorEntity):
-    """Dynamic sensor created from rmCurrentDataParams + regParamsData."""
+# =============================================================================
+# Unified custom sensors (user-selected via Options Flow)
+# =============================================================================
+
+
+class CustomSensor(EconetEntity, SensorEntity):
+    """Sensor created from a user-selected parameter across any endpoint."""
 
     entity_description: EconetSensorEntityDescription
 
@@ -995,12 +985,14 @@ class CurrentDataSensor(EconetEntity, SensorEntity):
         entity_description: EconetSensorEntityDescription,
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
-        param_id: str,
+        source: str,
+        param_key: str,
     ):
-        """Initialize a CurrentData dynamic sensor."""
+        """Initialize a custom sensor."""
         self.entity_description = entity_description
         self.api = api
-        self._param_id = param_id
+        self._source = source
+        self._param_key = param_key
         self._attr_native_value = None
         super().__init__(coordinator, api)
 
@@ -1013,14 +1005,12 @@ class CurrentDataSensor(EconetEntity, SensorEntity):
         return super().device_info
 
     def _lookup_value(self) -> Any:
-        """Look up value from currentDataMerged."""
+        """Look up value from the configured data source."""
         if self.coordinator.data is None:
             return None
-        cdm = self.coordinator.data.get("currentDataMerged", {})
-        entry = cdm.get(self._param_id)
-        if entry is None:
-            return None
-        return entry.get("value")
+        if self._source == API_REG_PARAMS_URI:
+            return self.coordinator.data.get("regParams", {}).get(self._param_key)
+        return self.coordinator.data.get("regParamsData", {}).get(self._param_key)
 
     def _sync_state(self, value) -> None:
         """Synchronize the sensor state."""
@@ -1034,169 +1024,48 @@ class CurrentDataSensor(EconetEntity, SensorEntity):
         self.async_write_ha_state()
 
 
-def _resolve_cdp_device_class(unit_name: str) -> SensorDeviceClass | None:
-    """Return a HA SensorDeviceClass for a CDP unit string, or None."""
-    dc_str = CDP_UNIT_TO_SENSOR_DEVICE_CLASS.get(unit_name)
-    if dc_str is None:
-        return None
-    try:
-        return SensorDeviceClass(dc_str)
-    except ValueError:
-        return None
-
-
-def create_current_data_sensors(
-    coordinator: EconetDataCoordinator, api: Econet300Api
-) -> list[CurrentDataSensor]:
-    """Create dynamic sensor entities from currentDataMerged."""
-    entities: list[CurrentDataSensor] = []
-
-    if coordinator.data is None:
-        return entities
-
-    cdm = coordinator.data.get("currentDataMerged", {})
-    if not cdm:
-        _LOGGER.debug("No currentDataMerged data, skipping CDP sensors")
-        return entities
-
-    for param_id, param in cdm.items():
-        if not isinstance(param, dict):
-            continue
-
-        # Skip IDs already covered by static entities
-        if is_regparams_data_id_mapped(param_id):
-            continue
-
-        classification = classify_current_data_param(param)
-        if classification != "sensor":
-            continue
-
-        name = param.get("name", "").strip()
-
-        # Skip entities for non-existent mixers
-        mixer_match = re.search(r"mixer\s*(\d+)", name.lower())
-        if mixer_match:
-            mixer_num = int(mixer_match.group(1))
-            if not mixer_exists(coordinator.data, mixer_num):
-                _LOGGER.debug(
-                    "Skipping CDP sensor %s - mixer %d not connected",
-                    name,
-                    mixer_num,
-                )
-                continue
-
-        unit_idx = param.get("unit", 0)
-        unit_name = UNIT_INDEX_TO_NAME.get(unit_idx, "")
-        ha_unit = UNIT_NAME_TO_HA_UNIT.get(unit_name) if unit_name else None
-
-        entity_key = build_current_data_entity_key(param_id, name)
-        component = get_validated_entity_component(
-            name, entity_key, coordinator_data=coordinator.data
-        )
-        device_class = _resolve_cdp_device_class(unit_name)
-
-        special = param.get("special", 0)
-        entity_category = (
-            EntityCategory.DIAGNOSTIC if special in CDP_SPECIAL_DIAGNOSTIC else None
-        )
-
-        description = EconetSensorEntityDescription(
-            key=entity_key,
-            name=name,
-            native_unit_of_measurement=ha_unit,
-            device_class=device_class,
-            state_class=SensorStateClass.MEASUREMENT,
-            suggested_display_precision=CDP_UNIT_PRECISION.get(
-                unit_name, CDP_DEFAULT_PRECISION
-            ),
-            entity_category=entity_category,
-            component=component,
-            has_entity_name=True,
-        )
-
-        entities.append(CurrentDataSensor(description, coordinator, api, param_id))
-
-    _LOGGER.info("Created %d CDP dynamic sensors", len(entities))
-    return entities
-
-
-# =============================================================================
-# Custom regParamsData sensors (user-selected via Options Flow)
-# =============================================================================
-
-
-class CustomRegParamSensor(EconetEntity, SensorEntity):
-    """Sensor created from a user-selected raw regParamsData ID."""
-
-    entity_description: EconetSensorEntityDescription
-
-    def __init__(
-        self,
-        entity_description: EconetSensorEntityDescription,
-        coordinator: EconetDataCoordinator,
-        api: Econet300Api,
-        param_id: str,
-    ):
-        """Initialize a custom regParamsData sensor."""
-        self.entity_description = entity_description
-        self.api = api
-        self._param_id = param_id
-        self._attr_native_value = None
-        super().__init__(coordinator, api)
-
-    def _lookup_value(self) -> Any:
-        """Look up value from regParamsData."""
-        if self.coordinator.data is None:
-            return None
-        rpd = self.coordinator.data.get("regParamsData", {})
-        return rpd.get(self._param_id)
-
-    def _sync_state(self, value) -> None:
-        """Synchronize the sensor state."""
-        if value is not None:
-            try:
-                self._attr_native_value = float(value)
-            except (ValueError, TypeError):
-                self._attr_native_value = None
-        else:
-            self._attr_native_value = None
-        self.async_write_ha_state()
-
-
-def create_custom_regparam_sensors(
+def create_custom_sensors(
     coordinator: EconetDataCoordinator,
     api: Econet300Api,
     custom_entities: dict[str, dict[str, str]],
-) -> list[CustomRegParamSensor]:
-    """Create sensor entities from user-selected regParamsData IDs.
+) -> list[CustomSensor]:
+    """Create sensor entities from user-selected parameters.
 
     Args:
         coordinator: The data coordinator.
         api: The device API.
         custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
-            shaped as {param_id: {"name": str, "entity_type": str}}.
+            shaped as {unique_id: {"source": str, "key": str, "name": str,
+            "entity_type": str, "component": str, "entity_category": str|None}}.
 
     """
-    entities: list[CustomRegParamSensor] = []
+    entities: list[CustomSensor] = []
 
-    for param_id, cfg in custom_entities.items():
+    for _uid, cfg in custom_entities.items():
         if cfg.get("entity_type") != "sensor":
             continue
 
-        name = cfg.get("name", f"Parameter {param_id}")
-        entity_key = f"custom_{param_id}"
+        name = cfg.get("name", f"Parameter {cfg.get('key', _uid)}")
+        source = cfg.get("source", "regParamsData")
+        param_key = cfg.get("key", _uid)
+        component = cfg.get("component")
+        entity_key = f"custom_{source}_{param_key}"
+
+        cat_str = cfg.get("entity_category")
+        entity_category = EntityCategory.DIAGNOSTIC if cat_str == "diagnostic" else None
 
         description = EconetSensorEntityDescription(
             key=entity_key,
             name=name,
             state_class=SensorStateClass.MEASUREMENT,
-            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_category=entity_category,
+            component=component,
             has_entity_name=True,
         )
 
-        entities.append(CustomRegParamSensor(description, coordinator, api, param_id))
+        entities.append(CustomSensor(description, coordinator, api, source, param_key))
 
-    _LOGGER.info("Created %d custom regParamsData sensors", len(entities))
+    _LOGGER.info("Created %d custom sensors", len(entities))
     return entities
 
 
@@ -1234,18 +1103,11 @@ async def async_setup_entry(
         _LOGGER.info("Collected %d ecoSTER sensors", len(ecoster_sensors))
         entities.extend(ecoster_sensors)
 
-        # Gather dynamic CDP sensors (rmCurrentDataParams + regParamsData)
-        cdp_sensors = create_current_data_sensors(coordinator, api)
-        _LOGGER.info("Collected %d CDP dynamic sensors", len(cdp_sensors))
-        entities.extend(cdp_sensors)
-
         # Gather user-defined custom sensors from Options Flow
         custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
         if custom_cfg:
-            custom_sensors = create_custom_regparam_sensors(
-                coordinator, api, custom_cfg
-            )
-            _LOGGER.info("Collected %d custom regParam sensors", len(custom_sensors))
+            custom_sensors = create_custom_sensors(coordinator, api, custom_cfg)
+            _LOGGER.info("Collected %d custom sensors", len(custom_sensors))
             entities.extend(custom_sensors)
 
         _LOGGER.info("Total entities collected: %d", len(entities))

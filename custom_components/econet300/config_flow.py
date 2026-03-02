@@ -15,14 +15,20 @@ import voluptuous as vol
 from .api import make_api
 from .common import AuthError
 from .const import (
+    API_REG_PARAMS_DATA_URI,
+    API_REG_PARAMS_URI,
+    API_RM_CURRENT_DATA_PARAMS_URI,
     CONF_CUSTOM_ENTITIES,
     CONF_ENTRY_DESCRIPTION,
     CONF_ENTRY_TITLE,
+    CUSTOM_ENTITY_COMPONENTS,
     CUSTOM_ENTITY_TYPE_BINARY_SENSOR,
     CUSTOM_ENTITY_TYPE_SENSOR,
     DOMAIN,
     SERVICE_COORDINATOR,
     STATIC_REGPARAMS_DATA_IDS,
+    STATIC_REGPARAMS_KEYS,
+    UNIT_INDEX_TO_NAME,
 )
 from .mem_cache import MemCache
 
@@ -168,64 +174,99 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-def _classify_regparam_value(value: Any) -> str:
-    """Classify a regParamsData value as sensor or binary_sensor."""
-    if isinstance(value, bool):
-        return CUSTOM_ENTITY_TYPE_BINARY_SENSOR
-    return CUSTOM_ENTITY_TYPE_SENSOR
-
-
-def _get_unmapped_regparams(
+def _get_unmapped_keys(
     coordinator_data: dict[str, Any] | None,
+    source: str,
 ) -> dict[str, Any]:
-    """Return regParamsData entries not covered by static or CDP entities.
+    """Return keys from the given endpoint not already covered by static entities.
 
-    Returns a dict of {param_id: raw_value} for IDs that have no
-    RM metadata (not in currentDataMerged) and no static mapping.
+    Args:
+        coordinator_data: Full coordinator data dict.
+        source: One of API_REG_PARAMS_URI, API_REG_PARAMS_DATA_URI,
+                or API_RM_CURRENT_DATA_PARAMS_URI.
+
+    Returns:
+        Dict of {key: display_info} for keys available for custom selection.
+
     """
     if coordinator_data is None:
         return {}
 
-    reg_params_data = coordinator_data.get("regParamsData")
-    if not reg_params_data or not isinstance(reg_params_data, dict):
-        return {}
+    if source == API_REG_PARAMS_URI:
+        reg_params = coordinator_data.get("regParams")
+        if not reg_params or not isinstance(reg_params, dict):
+            return {}
+        return {
+            k: v
+            for k, v in reg_params.items()
+            if k not in STATIC_REGPARAMS_KEYS and v is not None
+        }
 
-    cdm_ids = set(coordinator_data.get("currentDataMerged", {}).keys())
+    if source == API_REG_PARAMS_DATA_URI:
+        rpd = coordinator_data.get("regParamsData")
+        if not rpd or not isinstance(rpd, dict):
+            return {}
+        rm_data = coordinator_data.get("rmData") or {}
+        cdp_ids = set((rm_data.get("currentDataParams") or {}).keys())
+        return {
+            k: v
+            for k, v in rpd.items()
+            if k not in STATIC_REGPARAMS_DATA_IDS and k not in cdp_ids and v is not None
+        }
 
-    unmapped: dict[str, Any] = {}
-    for param_id, value in reg_params_data.items():
-        if param_id in STATIC_REGPARAMS_DATA_IDS:
-            continue
-        if param_id in cdm_ids:
-            continue
-        if value is None:
-            continue
-        unmapped[param_id] = value
+    if source == API_RM_CURRENT_DATA_PARAMS_URI:
+        rm_data = coordinator_data.get("rmData") or {}
+        cdp = rm_data.get("currentDataParams")
+        if not cdp or not isinstance(cdp, dict):
+            return {}
+        return {
+            k: v
+            for k, v in cdp.items()
+            if k not in STATIC_REGPARAMS_DATA_IDS and isinstance(v, dict)
+        }
 
-    return unmapped
+    return {}
 
 
 def _build_multiselect_options(
     unmapped: dict[str, Any],
-    type_filter: str | None = None,
+    source: str,
 ) -> dict[str, str]:
-    """Build {param_id: label} dict for the multi-select UI.
+    """Build {key: label} dict for the multi-select UI.
 
     Args:
-        unmapped: Output of _get_unmapped_regparams.
-        type_filter: If set, only include IDs matching this entity type.
+        unmapped: Output of _get_unmapped_keys.
+        source: Endpoint source identifier.
 
     """
     options: dict[str, str] = {}
-    for param_id, value in sorted(unmapped.items(), key=lambda x: int(x[0])):
-        detected_type = _classify_regparam_value(value)
-        if type_filter and detected_type != type_filter:
-            continue
-        type_hint = type(value).__name__
-        display_val = str(value)
-        if len(display_val) > 30:
-            display_val = display_val[:27] + "..."
-        options[param_id] = f"ID {param_id}: {display_val} ({type_hint})"
+
+    if source == API_REG_PARAMS_URI:
+        for key in sorted(unmapped):
+            val = unmapped[key]
+            display_val = str(val)[:30]
+            options[key] = f"{key}: {display_val}"
+        return options
+
+    if source == API_REG_PARAMS_DATA_URI:
+        for key in sorted(unmapped, key=int):
+            val = unmapped[key]
+            type_hint = type(val).__name__
+            display_val = str(val)[:30]
+            options[key] = f"ID {key}: {display_val} ({type_hint})"
+        return options
+
+    if source == API_RM_CURRENT_DATA_PARAMS_URI:
+        for key in sorted(unmapped, key=int):
+            meta = unmapped[key]
+            name = meta.get("name", "?")
+            unit_idx = meta.get("unit", 0)
+            unit_name = UNIT_INDEX_TO_NAME.get(unit_idx, "")
+            options[key] = (
+                f"ID {key}: {name} ({unit_name})" if unit_name else f"ID {key}: {name}"
+            )
+        return options
+
     return options
 
 
@@ -234,7 +275,10 @@ class EconetOptionsFlowHandler(OptionsFlow):
 
     def __init__(self) -> None:
         """Initialize the options flow."""
-        self._selected_ids: list[str] = []
+        self._selected_source: str = API_REG_PARAMS_URI
+        self._selected_keys: list[str] = []
+        self._configure_index: int = 0
+        self._entity_configs: dict[str, dict[str, Any]] = {}
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -246,7 +290,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
         )
 
     # ------------------------------------------------------------------
-    # Connection settings (moved from old async_step_init)
+    # Connection settings
     # ------------------------------------------------------------------
     async def async_step_connection_settings(
         self, user_input: dict[str, Any] | None = None
@@ -301,23 +345,23 @@ class EconetOptionsFlowHandler(OptionsFlow):
         )
 
     # ------------------------------------------------------------------
-    # Custom entities: type filter
+    # Custom entities: Step 1 – select endpoint
     # ------------------------------------------------------------------
     async def async_step_custom_entities(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Let user choose parameter type filter before browsing IDs."""
+        """Let user choose which API endpoint to browse."""
         if user_input is not None:
-            type_filter = user_input.get("type_filter", "all")
-            return await self._show_param_selection(type_filter)
+            self._selected_source = user_input.get("endpoint", API_REG_PARAMS_URI)
+            return await self._show_key_selection()
 
         schema = vol.Schema(
             {
-                vol.Required("type_filter", default="all"): vol.In(
+                vol.Required("endpoint", default=API_REG_PARAMS_URI): vol.In(
                     {
-                        "all": "All parameters",
-                        CUSTOM_ENTITY_TYPE_SENSOR: "Numeric only (sensor)",
-                        CUSTOM_ENTITY_TYPE_BINARY_SENSOR: "Boolean only (binary sensor)",
+                        API_REG_PARAMS_URI: "regParams (named parameters)",
+                        API_REG_PARAMS_DATA_URI: "regParamsData (numeric IDs)",
+                        API_RM_CURRENT_DATA_PARAMS_URI: "rmCurrentDataParams (with metadata)",
                     }
                 ),
             }
@@ -328,20 +372,27 @@ class EconetOptionsFlowHandler(OptionsFlow):
             data_schema=schema,
         )
 
-    async def _show_param_selection(self, type_filter: str) -> ConfigFlowResult:
-        """Show multi-select of available regParamsData IDs."""
+    # ------------------------------------------------------------------
+    # Custom entities: Step 2 – select keys
+    # ------------------------------------------------------------------
+    async def _show_key_selection(self) -> ConfigFlowResult:
+        """Show multi-select of available keys from the chosen endpoint."""
         coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id][
             SERVICE_COORDINATOR
         ]
-        unmapped = _get_unmapped_regparams(coordinator.data)
-        filter_val = type_filter if type_filter != "all" else None
-        available = _build_multiselect_options(unmapped, filter_val)
+        unmapped = _get_unmapped_keys(coordinator.data, self._selected_source)
+        available = _build_multiselect_options(unmapped, self._selected_source)
 
         if not available:
             return self.async_abort(reason="no_unmapped_params")
 
         existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
-        already_selected = [pid for pid in existing if pid in available]
+        already_selected = [
+            cfg["key"]
+            for cfg in existing.values()
+            if cfg.get("source") == self._selected_source
+            and cfg.get("key") in available
+        ]
 
         schema = vol.Schema(
             {
@@ -356,79 +407,128 @@ class EconetOptionsFlowHandler(OptionsFlow):
             data_schema=schema,
         )
 
-    # ------------------------------------------------------------------
-    # Custom entities: ID selection
-    # ------------------------------------------------------------------
     async def async_step_select_params(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle selected parameter IDs."""
+        """Handle selected parameter keys."""
         if user_input is None:
-            return await self._show_param_selection("all")
+            return await self._show_key_selection()
 
-        self._selected_ids = user_input.get("selected_params", [])
+        self._selected_keys = user_input.get("selected_params", [])
 
-        if not self._selected_ids:
-            new_options = {**self.config_entry.options, CONF_CUSTOM_ENTITIES: {}}
+        if not self._selected_keys:
+            # Remove all custom entities for this source, keep others
+            existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
+            kept = {
+                uid: cfg
+                for uid, cfg in existing.items()
+                if cfg.get("source") != self._selected_source
+            }
+            new_options = {**self.config_entry.options, CONF_CUSTOM_ENTITIES: kept}
             self.hass.async_create_task(
                 self.hass.config_entries.async_reload(self.config_entry.entry_id)
             )
             return self.async_create_entry(title="", data=new_options)
 
-        return await self.async_step_name_entities()
+        self._configure_index = 0
+        self._entity_configs = {}
+        return await self.async_step_configure_entity()
 
     # ------------------------------------------------------------------
-    # Custom entities: naming step
+    # Custom entities: Step 3 – per-key configuration
     # ------------------------------------------------------------------
-    async def async_step_name_entities(
+    async def async_step_configure_entity(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Let user assign custom names to selected IDs."""
-        coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id][
-            SERVICE_COORDINATOR
-        ]
-        unmapped = _get_unmapped_regparams(coordinator.data)
-        existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
-
+        """Configure each selected key: name, component, type, category."""
         if user_input is not None:
-            custom_entities: dict[str, dict[str, str]] = {}
-            for param_id in self._selected_ids:
-                name_key = f"name_{param_id}"
-                name = user_input.get(name_key, f"Parameter {param_id}").strip()
-                if not name:
-                    name = f"Parameter {param_id}"
-                raw_value = unmapped.get(param_id)
-                entity_type = _classify_regparam_value(raw_value)
-                custom_entities[param_id] = {
-                    "name": name,
-                    "entity_type": entity_type,
-                }
-
-            new_options = {
-                **self.config_entry.options,
-                CONF_CUSTOM_ENTITIES: custom_entities,
+            key = self._selected_keys[self._configure_index]
+            uid = f"{self._selected_source}:{key}"
+            self._entity_configs[uid] = {
+                "source": self._selected_source,
+                "key": key,
+                "name": user_input.get("name", f"Parameter {key}").strip()
+                or f"Parameter {key}",
+                "component": user_input.get("component", "boiler"),
+                "entity_type": user_input.get("entity_type", CUSTOM_ENTITY_TYPE_SENSOR),
+                "entity_category": user_input.get("entity_category"),
             }
-            self.hass.async_create_task(
-                self.hass.config_entries.async_reload(self.config_entry.entry_id)
-            )
-            return self.async_create_entry(title="", data=new_options)
+            self._configure_index += 1
 
-        # Build schema with a text field per selected ID
-        schema_dict: dict[vol.Marker, Any] = {}
-        for param_id in self._selected_ids:
-            old_name = existing.get(param_id, {}).get("name", f"Parameter {param_id}")
-            schema_dict[
+            if self._configure_index >= len(self._selected_keys):
+                return await self._save_custom_entities()
+
+        key = self._selected_keys[self._configure_index]
+        default_name = self._get_default_name(key)
+        existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
+        uid = f"{self._selected_source}:{key}"
+        old_cfg = existing.get(uid, {})
+
+        schema = vol.Schema(
+            {
+                vol.Required("name", default=old_cfg.get("name", default_name)): str,
+                vol.Required(
+                    "component", default=old_cfg.get("component", "boiler")
+                ): vol.In(CUSTOM_ENTITY_COMPONENTS),
+                vol.Required(
+                    "entity_type",
+                    default=old_cfg.get("entity_type", CUSTOM_ENTITY_TYPE_SENSOR),
+                ): vol.In(
+                    {
+                        CUSTOM_ENTITY_TYPE_SENSOR: "Sensor",
+                        CUSTOM_ENTITY_TYPE_BINARY_SENSOR: "Binary sensor",
+                    }
+                ),
                 vol.Optional(
-                    f"name_{param_id}",
-                    default=old_name,
-                    description={"suggested_value": old_name},
-                )
-            ] = str
+                    "entity_category",
+                    default=old_cfg.get("entity_category"),
+                ): vol.In(
+                    {
+                        None: "Default (no category)",
+                        "diagnostic": "Diagnostic",
+                    }
+                ),
+            }
+        )
 
         return self.async_show_form(
-            step_id="name_entities",
-            data_schema=vol.Schema(schema_dict),
+            step_id="configure_entity",
+            data_schema=schema,
+            description_placeholders={"key": key, "source": self._selected_source},
         )
+
+    def _get_default_name(self, key: str) -> str:
+        """Determine default display name for a key based on source."""
+        if self._selected_source == API_RM_CURRENT_DATA_PARAMS_URI:
+            coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id][
+                SERVICE_COORDINATOR
+            ]
+            rm_data = (coordinator.data or {}).get("rmData") or {}
+            cdp = rm_data.get("currentDataParams") or {}
+            meta = cdp.get(key)
+            if isinstance(meta, dict) and meta.get("name"):
+                return meta["name"]
+        if self._selected_source == API_REG_PARAMS_URI:
+            return key
+        return f"Parameter {key}"
+
+    async def _save_custom_entities(self) -> ConfigFlowResult:
+        """Persist configured entities and reload integration."""
+        existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
+
+        # Keep entities from other sources, replace entities for current source
+        kept = {
+            uid: cfg
+            for uid, cfg in existing.items()
+            if cfg.get("source") != self._selected_source
+        }
+        kept.update(self._entity_configs)
+
+        new_options = {**self.config_entry.options, CONF_CUSTOM_ENTITIES: kept}
+        self.hass.async_create_task(
+            self.hass.config_entries.async_reload(self.config_entry.entry_id)
+        )
+        return self.async_create_entry(title="", data=new_options)
 
 
 class CannotConnect(HomeAssistantError):

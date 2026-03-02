@@ -15,8 +15,6 @@ import re
 
 from .const import (
     AVAILABLE_NUMBER_OF_MIXERS,
-    CDP_SPECIAL_SKIP,
-    CDP_UNIT_BINARY_STATE,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -25,6 +23,8 @@ from .const import (
     COMPONENT_MIXER_2,
     COMPONENT_MIXER_3,
     COMPONENT_MIXER_4,
+    COMPONENT_MIXER_5,
+    COMPONENT_MIXER_6,
     COMPONENT_SOLAR,
     DEFAULT_COMPONENT_STATUS,
     STATIC_REGPARAMS_DATA_IDS,
@@ -532,6 +532,8 @@ def detect_connected_components(reg_params: dict | None) -> dict[str, bool]:
         COMPONENT_MIXER_2: is_connected("mixerTemp2"),
         COMPONENT_MIXER_3: is_connected("mixerTemp3"),
         COMPONENT_MIXER_4: is_connected("mixerTemp4"),
+        COMPONENT_MIXER_5: is_connected("mixerTemp5"),
+        COMPONENT_MIXER_6: is_connected("mixerTemp6"),
         COMPONENT_LAMBDA: reg_params.get("lambdaStatus") is not None,
         COMPONENT_BUFFER: is_connected("tempUpperBuffer")
         or is_connected("tempLowerBuffer"),
@@ -557,7 +559,7 @@ def get_entity_component(
         sequence_num: Sequence number for duplicate parameters (1-4 for mixers)
 
     Returns:
-        Component identifier: "boiler", "huw", "mixer_1" through "mixer_4",
+        Component identifier: "boiler", "huw", "mixer_1" through "mixer_6",
         "lambda", "buffer", or "solar"
 
     """
@@ -573,8 +575,10 @@ def get_entity_component(
         COMPONENT_MIXER_2,
         COMPONENT_MIXER_3,
         COMPONENT_MIXER_4,
+        COMPONENT_MIXER_5,
+        COMPONENT_MIXER_6,
     ]
-    for i in range(1, 5):
+    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
         if f"mixer{i}" in text or f"mixer {i}" in text or f"mixer_{i}" in text:
             return mixer_components[i - 1]
 
@@ -751,78 +755,14 @@ def get_duplicate_entity_key(
     return f"{base_key}_{sequence_num}"
 
 
-# =============================================================================
-# CURRENT DATA PARAMS (CDP) DYNAMIC ENTITY HELPERS
-# =============================================================================
-
-
-def classify_current_data_param(param: dict) -> str:
-    """Classify a currentDataMerged parameter as sensor, binary_sensor, or skip.
-
-    Args:
-        param: Dictionary with keys: name, unit, special, value
-
-    Returns:
-        "sensor", "binary_sensor", or "skip"
-
-    """
-    name = param.get("name", "")
-    value = param.get("value")
-    unit = param.get("unit", 0)
-    special = param.get("special", 0)
-
-    # Skip entries with no name or special values that should be skipped
-    if not name or not name.strip():
-        return "skip"
-
-    if special in CDP_SPECIAL_SKIP:
-        return "skip"
-
-    # Skip null/None values (parameter not available on this device)
-    if value is None:
-        return "skip"
-
-    # Skip string values (not numeric data)
-    if isinstance(value, str):
-        return "skip"
-
-    # Boolean/state unit with boolean-like value → binary sensor
-    if unit == CDP_UNIT_BINARY_STATE and isinstance(value, (bool, int)):
-        return "binary_sensor"
-
-    # Numeric values with a real unit → sensor
-    if isinstance(value, (int, float)):
-        return "sensor"
-
-    return "skip"
-
-
 def is_regparams_data_id_mapped(param_id: str) -> bool:
     """Check if a regParamsData ID is already handled by a static entity.
 
     Args:
-        param_id: The string ID from regParamsData / currentDataMerged
+        param_id: The string ID from regParamsData
 
     Returns:
         True if the ID is in NUMBER_MAP, SELECT_KEY_POST_INDEX, or SELECT_KEY_GET_INDEX
 
     """
     return param_id in STATIC_REGPARAMS_DATA_IDS
-
-
-def build_current_data_entity_key(param_id: str, name: str) -> str:
-    """Build a unique entity key for a currentDataMerged parameter.
-
-    Format: cdp_{param_id}_{snake_name}
-    The cdp prefix avoids collisions with existing static entities.
-
-    Args:
-        param_id: The numeric ID as a string (e.g., "139")
-        name: Human-readable parameter name (e.g., "Valve mixer 1")
-
-    Returns:
-        Entity key like "cdp_139_valve_mixer_1"
-
-    """
-    snake = re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
-    return f"cdp_{param_id}_{snake}"

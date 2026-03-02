@@ -17,18 +17,21 @@ from .common_functions import generate_translation_key
 from .const import (
     API_EDITABLE_PARAMS_LIMITS_DATA,
     API_EDITABLE_PARAMS_LIMITS_URI,
+    API_NEW_PARAM_URI,
     API_REG_PARAMS_DATA_PARAM_DATA,
     API_REG_PARAMS_DATA_URI,
     API_REG_PARAMS_PARAM_DATA,
     API_REG_PARAMS_URI,
     API_RM_ACCESS_URI,
     API_RM_ALARMS_NAMES_URI,
+    API_RM_CURR_NEW_PARAM_URI,
     API_RM_CURRENT_DATA_PARAMS_EDITS_URI,
     API_RM_CURRENT_DATA_PARAMS_URI,
     API_RM_DATA_KEY,
     API_RM_EXISTING_LANGS_URI,
     API_RM_LANGS_URI,
     API_RM_LOCKS_NAMES_URI,
+    API_RM_NEW_PARAM_URI,
     API_RM_PARAMS_DATA_URI,
     API_RM_PARAMS_DESCS_URI,
     API_RM_PARAMS_ENUMS_URI,
@@ -120,14 +123,21 @@ class EconetClient:
 
         while attempt <= max_attempts:
             try:
-                _LOGGER.debug("Fetching data from URL: %s (Attempt %d)", _sanitize_url_for_logging(url), attempt)
+                _LOGGER.debug(
+                    "Fetching data from URL: %s (Attempt %d)",
+                    _sanitize_url_for_logging(url),
+                    attempt,
+                )
 
                 async with await self._session.get(
                     url, auth=self._auth, timeout=ClientTimeout(total=15)
                 ) as resp:
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
-                        _LOGGER.error("Unauthorized access to URL: %s", _sanitize_url_for_logging(url))
+                        _LOGGER.error(
+                            "Unauthorized access to URL: %s",
+                            _sanitize_url_for_logging(url),
+                        )
                         raise AuthError
 
                     if resp.status != HTTPStatus.OK:
@@ -163,7 +173,9 @@ class EconetClient:
                 await asyncio.sleep(1)
             attempt += 1
         _LOGGER.error(
-            "Failed to fetch data from %s after %d attempts", _sanitize_url_for_logging(url), max_attempts
+            "Failed to fetch data from %s after %d attempts",
+            _sanitize_url_for_logging(url),
+            max_attempts,
         )
         return None
 
@@ -215,7 +227,10 @@ class EconetClient:
                 ) as resp:
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
-                        _LOGGER.error("Unauthorized access to URL: %s", _sanitize_url_for_logging(url))
+                        _LOGGER.error(
+                            "Unauthorized access to URL: %s",
+                            _sanitize_url_for_logging(url),
+                        )
                         raise AuthError
 
                     if resp.status != HTTPStatus.OK:
@@ -253,7 +268,10 @@ class EconetClient:
                         try:
                             return json.loads(raw_text)
                         except json.JSONDecodeError:
-                            _LOGGER.error("Failed to parse JSON from URL: %s", _sanitize_url_for_logging(url))
+                            _LOGGER.error(
+                                "Failed to parse JSON from URL: %s",
+                                _sanitize_url_for_logging(url),
+                            )
                             return None
                     else:
                         _LOGGER.debug("Fetched and fixed data successfully")
@@ -264,7 +282,9 @@ class EconetClient:
                 await asyncio.sleep(1)
             attempt += 1
         _LOGGER.error(
-            "Failed to fetch data from %s after %d attempts", _sanitize_url_for_logging(url), max_attempts
+            "Failed to fetch data from %s after %d attempts",
+            _sanitize_url_for_logging(url),
+            max_attempts,
         )
         return None
 
@@ -374,7 +394,7 @@ class Econet300Api:
         # Use newParam for control parameters (parameter names like BOILER_CONTROL)
         # Use rmNewParam for special parameters that need newParamIndex (like heater mode 55)
         if param in RMNEWPARAM_PARAMS:
-            url = f"{self.host}/econet/rmNewParam?newParamIndex={param}&newParamValue={value}"
+            url = f"{self.host}/econet/{API_RM_NEW_PARAM_URI}?newParamIndex={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using rmNewParam endpoint for special parameter %s: %s",
                 param,
@@ -382,7 +402,7 @@ class Econet300Api:
             )
         elif param in NUMBER_MAP:
             # param is a key like "1287"
-            url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param}&newParamValue={value}"
+            url = f"{self.host}/econet/{API_RM_CURR_NEW_PARAM_URI}?newParamKey={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using rmCurrNewParam endpoint for temperature setpoint %s: %s",
                 param,
@@ -391,7 +411,7 @@ class Econet300Api:
         elif param in NUMBER_MAP.values():
             # param is a value like "mixerSetTemp1" - find the key
             param_key = next(k for k, v in NUMBER_MAP.items() if v == param)
-            url = f"{self.host}/econet/rmCurrNewParam?newParamKey={param_key}&newParamValue={value}"
+            url = f"{self.host}/econet/{API_RM_CURR_NEW_PARAM_URI}?newParamKey={param_key}&newParamValue={value}"
             _LOGGER.debug(
                 "Using rmCurrNewParam endpoint for %s (key=%s): %s",
                 param,
@@ -399,13 +419,12 @@ class Econet300Api:
                 url,
             )
         elif param in CONTROL_PARAMS:
-            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            url = f"{self.host}/econet/{API_NEW_PARAM_URI}?newParamName={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using newParam endpoint for control parameter %s: %s", param, url
             )
         else:
-            # Default to newParam for unknown parameters
-            url = f"{self.host}/econet/newParam?newParamName={param}&newParamValue={value}"
+            url = f"{self.host}/econet/{API_NEW_PARAM_URI}?newParamName={param}&newParamValue={value}"
             _LOGGER.debug(
                 "Using default newParam endpoint for parameter %s: %s", param, url
             )
@@ -447,7 +466,7 @@ class Econet300Api:
         # API may silently ignore values like "56.0" for integer parameters (mult=1)
         formatted_value: int | float = int(value) if value == int(value) else value
 
-        url = f"{self.host}/econet/rmNewParam?newParamIndex={param_index}&newParamValue={formatted_value}"
+        url = f"{self.host}/econet/{API_RM_NEW_PARAM_URI}?newParamIndex={param_index}&newParamValue={formatted_value}"
         _LOGGER.debug(
             "Setting parameter by index %s to value %s: %s",
             param_index,
@@ -496,7 +515,8 @@ class Econet300Api:
             try:
                 # Attempt to fetch the API data
                 limits = await self._fetch_api_data_by_key(
-                    API_EDITABLE_PARAMS_LIMITS_URI, API_EDITABLE_PARAMS_LIMITS_DATA
+                    API_EDITABLE_PARAMS_LIMITS_URI,
+                    API_EDITABLE_PARAMS_LIMITS_DATA,
                 )
                 # Cache the fetched data
                 self._cache.set(API_EDITABLE_PARAMS_LIMITS_DATA, limits)

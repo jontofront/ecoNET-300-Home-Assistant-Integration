@@ -2,10 +2,8 @@
 
 from dataclasses import dataclass
 import logging
-import re
 
 from homeassistant.components.binary_sensor import (
-    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
@@ -16,19 +14,10 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
-from .common_functions import (
-    build_current_data_entity_key,
-    camel_to_snake,
-    classify_current_data_param,
-    get_entity_component,
-    get_validated_entity_component,
-    is_regparams_data_id_mapped,
-    mixer_exists,
-)
+from .common_functions import camel_to_snake, get_entity_component
 from .const import (
+    API_REG_PARAMS_URI,
     BINARY_SENSOR_MAP_KEY,
-    CDP_BINARY_RUNNING_KEYWORDS,
-    CDP_SPECIAL_DIAGNOSTIC,
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
@@ -401,8 +390,13 @@ def create_ecosol_binary_sensors(coordinator: EconetDataCoordinator, api: Econet
     return entities
 
 
-class CurrentDataBinarySensor(EconetEntity, BinarySensorEntity):
-    """Dynamic binary sensor created from rmCurrentDataParams + regParamsData."""
+# =============================================================================
+# Unified custom binary sensors (user-selected via Options Flow)
+# =============================================================================
+
+
+class CustomBinarySensor(EconetEntity, BinarySensorEntity):
+    """Binary sensor created from a user-selected parameter across any endpoint."""
 
     entity_description: EconetBinarySensorEntityDescription
 
@@ -411,12 +405,14 @@ class CurrentDataBinarySensor(EconetEntity, BinarySensorEntity):
         entity_description: EconetBinarySensorEntityDescription,
         coordinator: EconetDataCoordinator,
         api: Econet300Api,
-        param_id: str,
+        source: str,
+        param_key: str,
     ):
-        """Initialize a CurrentData dynamic binary sensor."""
+        """Initialize a custom binary sensor."""
         self.entity_description = entity_description
         self.api = api
-        self._param_id = param_id
+        self._source = source
+        self._param_key = param_key
         self._attr_is_on: bool | None = None
         super().__init__(coordinator, api)
 
@@ -429,14 +425,12 @@ class CurrentDataBinarySensor(EconetEntity, BinarySensorEntity):
         return super().device_info
 
     def _lookup_value(self):
-        """Look up value from currentDataMerged."""
+        """Look up value from the configured data source."""
         if self.coordinator.data is None:
             return None
-        cdm = self.coordinator.data.get("currentDataMerged", {})
-        entry = cdm.get(self._param_id)
-        if entry is None:
-            return None
-        return entry.get("value")
+        if self._source == API_REG_PARAMS_URI:
+            return self.coordinator.data.get("regParams", {}).get(self._param_key)
+        return self.coordinator.data.get("regParamsData", {}).get(self._param_key)
 
     def _sync_state(self, value) -> None:
         """Synchronize the binary sensor state."""
@@ -444,153 +438,49 @@ class CurrentDataBinarySensor(EconetEntity, BinarySensorEntity):
         self.async_write_ha_state()
 
 
-def _infer_binary_device_class(name: str) -> BinarySensorDeviceClass | None:
-    """Infer BinarySensorDeviceClass from parameter name patterns."""
-    name_lower = name.lower()
-    if any(kw in name_lower for kw in CDP_BINARY_RUNNING_KEYWORDS):
-        return BinarySensorDeviceClass.RUNNING
-    return None
+def create_custom_binary_sensors(
+    coordinator: EconetDataCoordinator,
+    api: Econet300Api,
+    custom_entities: dict[str, dict[str, str]],
+) -> list[CustomBinarySensor]:
+    """Create binary sensor entities from user-selected parameters.
 
+    Args:
+        coordinator: The data coordinator.
+        api: The device API.
+        custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
+            shaped as {unique_id: {"source": str, "key": str, "name": str,
+            "entity_type": str, "component": str, "entity_category": str|None}}.
 
-def create_current_data_binary_sensors(
-    coordinator: EconetDataCoordinator, api: Econet300Api
-) -> list[CurrentDataBinarySensor]:
-    """Create dynamic binary sensor entities from currentDataMerged."""
-    entities: list[CurrentDataBinarySensor] = []
+    """
+    entities: list[CustomBinarySensor] = []
 
-    if coordinator.data is None:
-        return entities
-
-    cdm = coordinator.data.get("currentDataMerged", {})
-    if not cdm:
-        _LOGGER.debug("No currentDataMerged data, skipping CDP binary sensors")
-        return entities
-
-    for param_id, param in cdm.items():
-        if not isinstance(param, dict):
+    for _uid, cfg in custom_entities.items():
+        if cfg.get("entity_type") != "binary_sensor":
             continue
 
-        if is_regparams_data_id_mapped(param_id):
-            continue
+        name = cfg.get("name", f"Parameter {cfg.get('key', _uid)}")
+        source = cfg.get("source", "regParamsData")
+        param_key = cfg.get("key", _uid)
+        component = cfg.get("component")
+        entity_key = f"custom_{source}_{param_key}"
 
-        classification = classify_current_data_param(param)
-        if classification != "binary_sensor":
-            continue
-
-        name = param.get("name", "").strip()
-
-        # Skip entities for non-existent mixers
-        mixer_match = re.search(r"mixer\s*(\d+)", name.lower())
-        if mixer_match:
-            mixer_num = int(mixer_match.group(1))
-            if not mixer_exists(coordinator.data, mixer_num):
-                _LOGGER.debug(
-                    "Skipping CDP binary sensor %s - mixer %d not connected",
-                    name,
-                    mixer_num,
-                )
-                continue
-
-        entity_key = build_current_data_entity_key(param_id, name)
-        component = get_validated_entity_component(
-            name, entity_key, coordinator_data=coordinator.data
-        )
-        device_class = _infer_binary_device_class(name)
-
-        special = param.get("special", 0)
-        entity_category = (
-            EntityCategory.DIAGNOSTIC if special in CDP_SPECIAL_DIAGNOSTIC else None
-        )
+        cat_str = cfg.get("entity_category")
+        entity_category = EntityCategory.DIAGNOSTIC if cat_str == "diagnostic" else None
 
         description = EconetBinarySensorEntityDescription(
             key=entity_key,
             name=name,
-            device_class=device_class,
             entity_category=entity_category,
             component=component,
             has_entity_name=True,
         )
 
         entities.append(
-            CurrentDataBinarySensor(description, coordinator, api, param_id)
+            CustomBinarySensor(description, coordinator, api, source, param_key)
         )
 
-    _LOGGER.info("Created %d CDP dynamic binary sensors", len(entities))
-    return entities
-
-
-# =============================================================================
-# Custom regParamsData binary sensors (user-selected via Options Flow)
-# =============================================================================
-
-
-class CustomRegParamBinarySensor(EconetEntity, BinarySensorEntity):
-    """Binary sensor created from a user-selected raw regParamsData ID."""
-
-    entity_description: EconetBinarySensorEntityDescription
-
-    def __init__(
-        self,
-        entity_description: EconetBinarySensorEntityDescription,
-        coordinator: EconetDataCoordinator,
-        api: Econet300Api,
-        param_id: str,
-    ):
-        """Initialize a custom regParamsData binary sensor."""
-        self.entity_description = entity_description
-        self.api = api
-        self._param_id = param_id
-        self._attr_is_on: bool | None = None
-        super().__init__(coordinator, api)
-
-    def _lookup_value(self):
-        """Look up value from regParamsData."""
-        if self.coordinator.data is None:
-            return None
-        rpd = self.coordinator.data.get("regParamsData", {})
-        return rpd.get(self._param_id)
-
-    def _sync_state(self, value) -> None:
-        """Synchronize the binary sensor state."""
-        self._attr_is_on = bool(value)
-        self.async_write_ha_state()
-
-
-def create_custom_regparam_binary_sensors(
-    coordinator: EconetDataCoordinator,
-    api: Econet300Api,
-    custom_entities: dict[str, dict[str, str]],
-) -> list[CustomRegParamBinarySensor]:
-    """Create binary sensor entities from user-selected regParamsData IDs.
-
-    Args:
-        coordinator: The data coordinator.
-        api: The device API.
-        custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
-            shaped as {param_id: {"name": str, "entity_type": str}}.
-
-    """
-    entities: list[CustomRegParamBinarySensor] = []
-
-    for param_id, cfg in custom_entities.items():
-        if cfg.get("entity_type") != "binary_sensor":
-            continue
-
-        name = cfg.get("name", f"Parameter {param_id}")
-        entity_key = f"custom_{param_id}"
-
-        description = EconetBinarySensorEntityDescription(
-            key=entity_key,
-            name=name,
-            entity_category=EntityCategory.DIAGNOSTIC,
-            has_entity_name=True,
-        )
-
-        entities.append(
-            CustomRegParamBinarySensor(description, coordinator, api, param_id)
-        )
-
-    _LOGGER.info("Created %d custom regParamsData binary sensors", len(entities))
+    _LOGGER.info("Created %d custom binary sensors", len(entities))
     return entities
 
 
@@ -607,8 +497,7 @@ async def async_setup_entry(
         EconetBinarySensor
         | MixerBinarySensor
         | EcoSterBinarySensor
-        | CurrentDataBinarySensor
-        | CustomRegParamBinarySensor
+        | CustomBinarySensor
     ] = []
 
     # Create standard binary sensors (including controller-specific ones)
@@ -623,15 +512,10 @@ async def async_setup_entry(
     # Create ecoSOL-specific binary sensors (ecoSOL 500, ecoSOL 301, etc.)
     entities.extend(create_ecosol_binary_sensors(coordinator, api))
 
-    # Create dynamic CDP binary sensors (rmCurrentDataParams + regParamsData)
-    entities.extend(create_current_data_binary_sensors(coordinator, api))
-
     # Create user-defined custom binary sensors from Options Flow
     custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
     if custom_cfg:
-        entities.extend(
-            create_custom_regparam_binary_sensors(coordinator, api, custom_cfg)
-        )
+        entities.extend(create_custom_binary_sensors(coordinator, api, custom_cfg))
 
     _LOGGER.info("Total binary sensor entities: %d", len(entities))
     async_add_entities(entities)

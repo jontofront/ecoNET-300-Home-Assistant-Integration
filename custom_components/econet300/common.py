@@ -142,36 +142,18 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                         )
                         _LOGGER.info(
                             "Coordinator fetched merged data: %s parameters",
-                            len(merged_data.get("parameters", {})) if merged_data else 0,
+                            len(merged_data.get("parameters", {}))
+                            if merged_data
+                            else 0,
                         )
                     except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
                         _LOGGER.warning(
-                            "Failed to fetch merged parameter data in coordinator: %s", e
+                            "Failed to fetch merged parameter data in coordinator: %s",
+                            e,
                         )
                 else:
                     rm_data = {}
                     merged_data = None
-
-                # Build currentDataMerged: join rmCurrentDataParams metadata
-                # with live values from regParamsData (same numeric ID space).
-                current_data_merged: dict[str, dict] = {}
-                current_data_params = (
-                    rm_data.get("currentDataParams", {}) if rm_data else {}
-                )
-                if current_data_params and reg_params_data:
-                    for param_id, metadata in current_data_params.items():
-                        if not isinstance(metadata, dict):
-                            continue
-                        current_data_merged[param_id] = {
-                            "name": metadata.get("name", ""),
-                            "unit": metadata.get("unit", 0),
-                            "special": metadata.get("special", 0),
-                            "value": reg_params_data.get(param_id),
-                        }
-                    _LOGGER.debug(
-                        "Built currentDataMerged with %d parameters",
-                        len(current_data_merged),
-                    )
 
                 result = {
                     "sysParams": sys_params,
@@ -180,7 +162,6 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "paramsEdits": params_edits,
                     "rmData": rm_data,
                     "mergedData": merged_data,
-                    "currentDataMerged": current_data_merged,
                 }
 
                 # Debug: Log merged data structure

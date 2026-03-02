@@ -100,6 +100,8 @@ COMPONENT_MIXER_1 = "mixer_1"
 COMPONENT_MIXER_2 = "mixer_2"
 COMPONENT_MIXER_3 = "mixer_3"
 COMPONENT_MIXER_4 = "mixer_4"
+COMPONENT_MIXER_5 = "mixer_5"
+COMPONENT_MIXER_6 = "mixer_6"
 COMPONENT_LAMBDA = "lambda"
 COMPONENT_BUFFER = "buffer"
 COMPONENT_SOLAR = "solar"
@@ -112,6 +114,8 @@ DEFAULT_COMPONENT_STATUS: dict[str, bool] = {
     COMPONENT_MIXER_2: False,
     COMPONENT_MIXER_3: False,
     COMPONENT_MIXER_4: False,
+    COMPONENT_MIXER_5: False,
+    COMPONENT_MIXER_6: False,
     COMPONENT_LAMBDA: False,
     COMPONENT_BUFFER: False,
     COMPONENT_SOLAR: False,
@@ -139,8 +143,10 @@ API_REG_PARAMS_PARAM_DATA = "curr"
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
+# Legacy parameter modification endpoint (non-RM, uses newParamName)
+API_NEW_PARAM_URI = "newParam"
+
 # Editable parameters
-API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
@@ -536,12 +542,8 @@ UNIT_NAME_TO_HA_UNIT = {
 }
 
 # =============================================================================
-# CURRENT DATA PARAMS (CDP) DYNAMIC ENTITY CONSTANTS
+# UNIT MAPPINGS (shared by dynamic entity helpers)
 # =============================================================================
-# All constants below relate to the rmCurrentDataParams endpoint and the
-# dynamic entity creation pipeline that merges it with regParamsData.
-
-# --- Unit indices (from rmParamsUnitsNames endpoint) -------------------------
 # Maps unit index from rmCurrentDataParams to human-readable unit string.
 UNIT_INDEX_TO_NAME: dict[int, str] = {
     0: "",
@@ -556,51 +558,30 @@ UNIT_INDEX_TO_NAME: dict[int, str] = {
     31: "",  # Boolean/state indicator (no unit)
 }
 
-# Unit index that indicates a boolean/state parameter (binary sensor)
-CDP_UNIT_BINARY_STATE: int = 31
-
-# --- "special" field filtering -----------------------------------------------
-# Values of the rmCurrentDataParams "special" field that should be skipped.
-# special=7: mode-like entries with empty names (internal use only)
-CDP_SPECIAL_SKIP: set[int] = {7}
-
-# Values of the "special" field that indicate a DIAGNOSTIC entity category.
-# special=5: internal counters, special=6: diagnostic/debug parameters.
-# All other non-zero values (e.g., special=1) are normal operational entities.
-CDP_SPECIAL_DIAGNOSTIC: set[int] = {5, 6}
-
 # --- Static entity deduplication ---------------------------------------------
 # regParamsData IDs already handled by static entities (number, select).
-# These are skipped during dynamic entity creation to avoid duplicates.
+# These are skipped in the Options Flow key listing to avoid duplicates.
 STATIC_REGPARAMS_DATA_IDS: set[str] = (
     set(NUMBER_MAP.keys())
     | set(SELECT_KEY_POST_INDEX.values())
     | set(SELECT_KEY_GET_INDEX.values())
 )
 
-# --- Device class inference for dynamic sensors ------------------------------
-# Maps unit string → HA SensorDeviceClass for CDP sensors.
-CDP_UNIT_TO_SENSOR_DEVICE_CLASS: dict[str, str] = {
-    "°C": "temperature",
-    "kW": "power",
-}
-
-# --- Device class inference for dynamic binary sensors -----------------------
-# Name keywords that indicate BinarySensorDeviceClass.RUNNING.
-CDP_BINARY_RUNNING_KEYWORDS: tuple[str, ...] = (
-    "pump",
-    "fan",
-    "feeder",
-    "servo",
-    "motor",
+# All static regParams keys (sensors + binary sensors across all controllers).
+# Used to filter already-mapped keys in the Options Flow when selecting
+# custom entities from the regParams endpoint.
+STATIC_REGPARAMS_KEYS: set[str] = (
+    DEFAULT_SENSORS
+    | DEFAULT_BINARY_SENSORS
+    | ECOMAX360I_SENSORS
+    | ECOSTER_SENSORS
+    | LAMBDA_SENSORS
+    | ECOSOL_SENSORS
+    | ECOSOL_BINARY_SENSORS
+    | ECOSTER_BINARY_SENSORS
+    | set().union(*SENSOR_MIXER_KEY.values())
+    | MIXER_PUMP_BINARY_SENSOR_KEYS
 )
-
-# --- Display precision for dynamic sensors -----------------------------------
-# Maps unit string → suggested_display_precision for CDP sensors.
-CDP_UNIT_PRECISION: dict[str, int] = {
-    "°C": 1,
-}
-CDP_DEFAULT_PRECISION: int = 0
 
 # =============================================================================
 # CUSTOM ENTITY SELECTOR (Options Flow)
@@ -611,6 +592,11 @@ CONF_CUSTOM_ENTITIES = "custom_entities"
 # Entity type constants for custom entity classification.
 CUSTOM_ENTITY_TYPE_SENSOR = "sensor"
 CUSTOM_ENTITY_TYPE_BINARY_SENSOR = "binary_sensor"
+
+# Component choices for the Options Flow dropdown, built from DEFAULT_COMPONENT_STATUS.
+CUSTOM_ENTITY_COMPONENTS: dict[str, str] = {
+    key: key.replace("_", " ").title() for key in DEFAULT_COMPONENT_STATUS
+}
 
 # =============================================================================
 # ENTITY UNIT MAPPINGS

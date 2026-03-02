@@ -110,21 +110,27 @@
       },
       "custom_entities": {
         "title": "Custom Entities",
-        "description": "Select the type of parameters you want to browse from regParamsData.",
+        "description": "Select the API endpoint to browse for custom entities.",
         "data": {
-          "type_filter": "Parameter type"
+          "endpoint": "API endpoint"
         }
       },
       "select_params": {
         "title": "Select Parameters",
-        "description": "Choose raw regParamsData IDs to expose as entities. Values and types are shown as hints.",
+        "description": "Choose parameters to expose as entities. Already-mapped static parameters are excluded.",
         "data": {
           "selected_params": "Available parameters"
         }
       },
-      "name_entities": {
-        "title": "Name Your Entities",
-        "description": "Assign custom names to the selected parameters. These will appear as entity names in Home Assistant."
+      "configure_entity": {
+        "title": "Configure Entity",
+        "description": "Configure entity for {key} from {source}.",
+        "data": {
+          "name": "Entity name",
+          "component": "Device group",
+          "entity_type": "Entity type",
+          "entity_category": "Entity category"
+        }
       }
     },
     "error": {
@@ -133,7 +139,7 @@
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {
-      "no_unmapped_params": "No unmapped parameters available. All regParamsData IDs are already covered by existing entities."
+      "no_unmapped_params": "No unmapped parameters available for the selected endpoint."
     }
   },
   "entity": {
