@@ -29,6 +29,9 @@ from custom_components.econet300.const import (
     STATIC_REGPARAMS_DATA_IDS,
     STATIC_REGPARAMS_KEYS,
 )
+from homeassistant.components.sensor import SensorDeviceClass
+from homeassistant.const import UnitOfTemperature
+
 from custom_components.econet300.sensor import (
     CustomSensor,
     create_custom_sensors,
@@ -379,6 +382,99 @@ class TestCreateCustomSensors:
         }
         entities = create_custom_sensors(coordinator, api, config)
         assert entities[0].entity_description.component == "mixer_1"
+
+    def test_native_unit_applied(self):
+        """Sensor with native_unit set should have native_unit_of_measurement."""
+        coordinator = _make_coordinator(reg_params={"tempCustom": 55.5})
+        api = _make_api()
+        config = {
+            "regParams:tempCustom": {
+                "source": "regParams",
+                "key": "tempCustom",
+                "name": "Custom Temp",
+                "entity_type": "sensor",
+                "native_unit": "°C",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert (
+            entities[0].entity_description.native_unit_of_measurement
+            == UnitOfTemperature.CELSIUS
+        )
+
+    def test_device_class_applied(self):
+        """Sensor with device_class set should have correct device_class."""
+        coordinator = _make_coordinator(reg_params={"tempCustom": 55.5})
+        api = _make_api()
+        config = {
+            "regParams:tempCustom": {
+                "source": "regParams",
+                "key": "tempCustom",
+                "name": "Custom Temp",
+                "entity_type": "sensor",
+                "device_class": "temperature",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert (
+            entities[0].entity_description.device_class
+            == SensorDeviceClass.TEMPERATURE
+        )
+
+    def test_precision_applied(self):
+        """Sensor with precision set should have suggested_display_precision."""
+        coordinator = _make_coordinator(reg_params={"tempCustom": 55.5})
+        api = _make_api()
+        config = {
+            "regParams:tempCustom": {
+                "source": "regParams",
+                "key": "tempCustom",
+                "name": "Custom Temp",
+                "entity_type": "sensor",
+                "precision": 1,
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0].entity_description.suggested_display_precision == 1
+
+    def test_all_sensor_properties_applied(self):
+        """Sensor with all three properties set."""
+        coordinator = _make_coordinator(reg_params={"tempCustom": 55.5})
+        api = _make_api()
+        config = {
+            "regParams:tempCustom": {
+                "source": "regParams",
+                "key": "tempCustom",
+                "name": "Custom Temp",
+                "entity_type": "sensor",
+                "native_unit": "°C",
+                "device_class": "temperature",
+                "precision": 2,
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        desc = entities[0].entity_description
+        assert desc.native_unit_of_measurement == UnitOfTemperature.CELSIUS
+        assert desc.device_class == SensorDeviceClass.TEMPERATURE
+        assert desc.suggested_display_precision == 2
+
+    def test_none_sensor_properties_default(self):
+        """Sensor without sensor-specific properties should have None defaults."""
+        coordinator = _make_coordinator(reg_params={"tempCustom": 55.5})
+        api = _make_api()
+        config = {
+            "regParams:tempCustom": {
+                "source": "regParams",
+                "key": "tempCustom",
+                "name": "Custom Temp",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        desc = entities[0].entity_description
+        assert desc.native_unit_of_measurement is None
+        assert desc.device_class is None
+        assert desc.suggested_display_precision is None
 
 
 # ============================================================================
