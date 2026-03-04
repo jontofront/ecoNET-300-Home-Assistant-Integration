@@ -67,9 +67,10 @@ The integration supports **6 languages** with comprehensive translations:
 1. [Installation](#installation)
 2. [Upgrading](#upgrading)
 3. [Configuration](#configuration)
-4. [Entities](#entities)
-5. [Contributing](#contributing)
-6. [Acknowledgments](#acknowledgments)
+4. [Custom Entities](#custom-entities)
+5. [Entities](#entities)
+6. [Contributing](#contributing)
+7. [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -162,6 +163,25 @@ Apart from using 'My button' (in case it doesn't work) you can also perform the 
 ![Success](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/success.png)
 
 </details>
+
+### Custom Entities
+
+After initial setup, you can add extra sensors from the integration's configuration options. This allows you to expose additional parameters that are not included by default.
+
+1. Go to **Settings > Devices & Services** in Home Assistant.
+2. Find your **ecoNET300** integration and click the **Configure** button (gear icon).
+3. Select **Custom Entities**.
+
+![Custom Entities configure](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_configure.png)
+
+4. Browse the list of available parameters discovered from your device.
+5. Select the parameters you want to add as sensors (e.g., Feeder temperature, Weather temperature, Fuel level, Boiler thermostat, Room thermostat mixer, Valve mixer).
+6. Optionally select a parameter from the **Available parameters** dropdown to add as a dedicated entity.
+7. Click **Submit**.
+
+![Custom Entities selection](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_selection.png)
+
+The selected parameters will be created as sensor entities and available immediately in Home Assistant.
 
 ---
 
@@ -328,4 +348,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-02-24 with v1.2.1 release._
+_This README was last updated on 2026-03-04 with v1.2.2a2 release._
