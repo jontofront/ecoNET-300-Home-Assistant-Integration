@@ -1,6 +1,6 @@
 ---
 description: Master coding rules checklist - always check first
-globs: 
+globs:
 alwaysApply: true
 ---
 
@@ -48,15 +48,6 @@ alwaysApply: true
 4. **NEVER duplicate constants** - if two constants have the same value, keep one and remove the other
 5. **NEVER create a new list/dict of components** - reuse `DEFAULT_COMPONENT_STATUS` keys or `COMPONENT_*` constants
 6. **Check `AVAILABLE_NUMBER_OF_MIXERS`** before hardcoding mixer ranges like `range(1, 5)`
-
-**Key constant groups to check:**
-
-- `COMPONENT_*` - Device component identifiers (boiler, huw, mixer_1-6, lambda, buffer, solar)
-- `DEFAULT_COMPONENT_STATUS` - All known components with default status
-- `API_*_URI` - All API endpoint URIs (never hardcode endpoint strings)
-- `SENSOR_MAP_KEY`, `BINARY_SENSOR_MAP_KEY` - Entity key mappings per controller
-- `NUMBER_MAP`, `SELECT_KEY_*` - Editable parameter mappings
-- `AVAILABLE_NUMBER_OF_MIXERS` - Max mixer count (use instead of hardcoded `4`, `5`, or `6`)
 
 ### 6. 🚨 ALWAYS CHECK FOR REUSABLE CODE
 
@@ -130,14 +121,16 @@ When writing or editing Markdown files (`.md`), follow these rules:
 
 ```markdown
 # ✅ CORRECT
+
 | Column 1 | Column 2 | Column 3 |
 | -------- | -------- | -------- |
 | Value 1  | Value 2  | Value 3  |
 
 # ❌ WRONG - inconsistent spacing
-|Column 1|Column 2|Column 3|
-|--------|--------|--------|
-|Value 1|Value 2|Value 3|
+
+| Column 1 | Column 2 | Column 3 |
+| -------- | -------- | -------- |
+| Value 1  | Value 2  | Value 3  |
 ```
 
 **MD036 - No emphasis as heading:**
