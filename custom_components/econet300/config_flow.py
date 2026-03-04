@@ -24,6 +24,9 @@ from .const import (
     CUSTOM_ENTITY_COMPONENTS,
     CUSTOM_ENTITY_TYPE_BINARY_SENSOR,
     CUSTOM_ENTITY_TYPE_SENSOR,
+    CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS,
+    CUSTOM_SENSOR_PRECISION_OPTIONS,
+    CUSTOM_SENSOR_UNIT_OPTIONS,
     DOMAIN,
     SERVICE_COORDINATOR,
     STATIC_REGPARAMS_DATA_IDS,
@@ -453,10 +456,11 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 "entity_type": user_input.get("entity_type", CUSTOM_ENTITY_TYPE_SENSOR),
                 "entity_category": user_input.get("entity_category"),
             }
-            self._configure_index += 1
 
-            if self._configure_index >= len(self._selected_keys):
-                return await self._save_custom_entities()
+            if user_input.get("entity_type") == CUSTOM_ENTITY_TYPE_SENSOR:
+                return await self.async_step_configure_sensor()
+
+            return await self._advance_or_save()
 
         key = self._selected_keys[self._configure_index]
         default_name = self._get_default_name(key)
@@ -496,6 +500,61 @@ class EconetOptionsFlowHandler(OptionsFlow):
             data_schema=schema,
             description_placeholders={"key": key, "source": self._selected_source},
         )
+
+    # ------------------------------------------------------------------
+    # Custom entities: Step 3b – sensor-specific configuration
+    # ------------------------------------------------------------------
+    async def async_step_configure_sensor(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Configure sensor-specific properties: unit, device class, precision."""
+        if user_input is not None:
+            key = self._selected_keys[self._configure_index]
+            uid = f"{self._selected_source}:{key}"
+            self._entity_configs[uid].update(
+                {
+                    "native_unit": user_input.get("native_unit"),
+                    "device_class": user_input.get("device_class"),
+                    "precision": user_input.get("precision"),
+                }
+            )
+            return await self._advance_or_save()
+
+        key = self._selected_keys[self._configure_index]
+        uid = f"{self._selected_source}:{key}"
+        existing = self.config_entry.options.get(CONF_CUSTOM_ENTITIES, {})
+        old_cfg = existing.get(uid, {})
+
+        schema = vol.Schema(
+            {
+                vol.Optional(
+                    "native_unit",
+                    default=old_cfg.get("native_unit"),
+                ): vol.In(CUSTOM_SENSOR_UNIT_OPTIONS),
+                vol.Optional(
+                    "device_class",
+                    default=old_cfg.get("device_class"),
+                ): vol.In(CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS),
+                vol.Optional(
+                    "precision",
+                    default=old_cfg.get("precision"),
+                ): vol.In(CUSTOM_SENSOR_PRECISION_OPTIONS),
+            }
+        )
+
+        entity_name = self._entity_configs.get(uid, {}).get("name", key)
+        return self.async_show_form(
+            step_id="configure_sensor",
+            data_schema=schema,
+            description_placeholders={"name": entity_name},
+        )
+
+    async def _advance_or_save(self) -> ConfigFlowResult:
+        """Advance to the next key or save if all keys are configured."""
+        self._configure_index += 1
+        if self._configure_index >= len(self._selected_keys):
+            return await self._save_custom_entities()
+        return await self.async_step_configure_entity()
 
     def _get_default_name(self, key: str) -> str:
         """Determine default display name for a key based on source."""

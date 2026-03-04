@@ -131,6 +131,15 @@
           "entity_type": "Typ encji",
           "entity_category": "Kategoria encji"
         }
+      },
+      "configure_sensor": {
+        "title": "Konfiguracja sensora",
+        "description": "Konfiguruj właściwości sensora dla \"{name}\".",
+        "data": {
+          "native_unit": "Jednostka miary",
+          "device_class": "Klasa urządzenia",
+          "precision": "Precyzja wyświetlania"
+        }
       }
     },
     "error": {

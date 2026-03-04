@@ -598,6 +598,33 @@ CUSTOM_ENTITY_COMPONENTS: dict[str, str] = {
     key: key.replace("_", " ").title() for key in DEFAULT_COMPONENT_STATUS
 }
 
+# Sensor-specific options for the Options Flow configure_sensor step.
+CUSTOM_SENSOR_UNIT_OPTIONS: dict[str | None, str] = {
+    None: "None (auto)",
+    **{unit: unit for unit in UNIT_NAME_TO_HA_UNIT},
+}
+
+CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS: dict[str | None, str] = {
+    None: "None (auto)",
+    SensorDeviceClass.TEMPERATURE: "Temperature",
+    SensorDeviceClass.POWER: "Power",
+    SensorDeviceClass.POWER_FACTOR: "Power factor",
+    SensorDeviceClass.ENERGY: "Energy",
+    SensorDeviceClass.HUMIDITY: "Humidity",
+    SensorDeviceClass.PRESSURE: "Pressure",
+    SensorDeviceClass.DURATION: "Duration",
+    SensorDeviceClass.SIGNAL_STRENGTH: "Signal strength",
+    SensorDeviceClass.WEIGHT: "Weight",
+}
+
+CUSTOM_SENSOR_PRECISION_OPTIONS: dict[int | None, str] = {
+    None: "Auto",
+    0: "0 (integer)",
+    1: "0.0",
+    2: "0.00",
+    3: "0.000",
+}
+
 # =============================================================================
 # ENTITY UNIT MAPPINGS
 # =============================================================================

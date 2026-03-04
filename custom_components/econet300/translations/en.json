@@ -131,6 +131,15 @@
           "entity_type": "Entity type",
           "entity_category": "Entity category"
         }
+      },
+      "configure_sensor": {
+        "title": "Configure Sensor",
+        "description": "Configure sensor properties for \"{name}\".",
+        "data": {
+          "native_unit": "Unit of measurement",
+          "device_class": "Device class",
+          "precision": "Display precision"
+        }
       }
     },
     "error": {

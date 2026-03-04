@@ -9,6 +9,7 @@ from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
     RestoreSensor,
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorExtraStoredData,
@@ -57,6 +58,7 @@ from .const import (
     SERVICE_COORDINATOR,
     SERVICE_FUEL_SENSOR,
     STATE_CLASS_MAP,
+    UNIT_NAME_TO_HA_UNIT,
 )
 from .entity import (
     EconetEntity,
@@ -1027,7 +1029,7 @@ class CustomSensor(EconetEntity, SensorEntity):
 def create_custom_sensors(
     coordinator: EconetDataCoordinator,
     api: Econet300Api,
-    custom_entities: dict[str, dict[str, str]],
+    custom_entities: dict[str, dict[str, Any]],
 ) -> list[CustomSensor]:
     """Create sensor entities from user-selected parameters.
 
@@ -1036,7 +1038,9 @@ def create_custom_sensors(
         api: The device API.
         custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
             shaped as {unique_id: {"source": str, "key": str, "name": str,
-            "entity_type": str, "component": str, "entity_category": str|None}}.
+            "entity_type": str, "component": str, "entity_category": str|None,
+            "native_unit": str|None, "device_class": str|None,
+            "precision": int|None}}.
 
     """
     entities: list[CustomSensor] = []
@@ -1054,9 +1058,22 @@ def create_custom_sensors(
         cat_str = cfg.get("entity_category")
         entity_category = EntityCategory.DIAGNOSTIC if cat_str == "diagnostic" else None
 
+        native_unit_key = cfg.get("native_unit")
+        native_unit = (
+            UNIT_NAME_TO_HA_UNIT.get(native_unit_key) if native_unit_key else None
+        )
+
+        device_class_str = cfg.get("device_class")
+        device_class = SensorDeviceClass(device_class_str) if device_class_str else None
+
+        precision = cfg.get("precision")
+
         description = EconetSensorEntityDescription(
             key=entity_key,
             name=name,
+            native_unit_of_measurement=native_unit,
+            device_class=device_class,
+            suggested_display_precision=precision,
             state_class=SensorStateClass.MEASUREMENT,
             entity_category=entity_category,
             component=component,
