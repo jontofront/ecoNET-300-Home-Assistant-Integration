@@ -218,19 +218,20 @@ OPERATION_MODE_NAMES = {
 # =============================================================================
 # MIXER CONFIGURATION CONSTANTS
 # =============================================================================
-AVAILABLE_NUMBER_OF_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
+NUMBER_OF_AVAILABLE_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
+NUMBER_OF_AVAILABLE_ECOSTERS = 8  # Supports up to 8 ecoSTER thermostats
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 
 # Dynamically generate SENSOR_MIXER_KEY
 SENSOR_MIXER_KEY = {
     i: {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
 }
 
 # Mixer pump binary sensor keys
 MIXER_PUMP_BINARY_SENSOR_KEYS = {
-    f"mixerPumpWorks{i}" for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+    f"mixerPumpWorks{i}" for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
 }
 
 # Keywords that indicate mixer-related parameters for duplicate entity filtering

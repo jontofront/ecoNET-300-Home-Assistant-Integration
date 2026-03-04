@@ -34,7 +34,7 @@ from .common_functions import (
     validate_parameter_data,
 )
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     DEVICE_INFO_ADVANCED_PARAMETERS_NAME,
     DEVICE_INFO_MANUFACTURER,
     DEVICE_INFO_MODEL,
@@ -631,7 +631,7 @@ def is_mixer_related_entity(param_name: str, param_key: str) -> tuple[bool, int 
         match = re.search(pattern, param_name.lower())
         if match:
             mixer_num = int(match.group(1))
-            if 1 <= mixer_num <= AVAILABLE_NUMBER_OF_MIXERS:
+            if 1 <= mixer_num <= NUMBER_OF_AVAILABLE_MIXERS:
                 return True, mixer_num
 
     # Check parameter key for mixer patterns
@@ -644,7 +644,7 @@ def is_mixer_related_entity(param_name: str, param_key: str) -> tuple[bool, int 
         match = re.search(pattern, param_key.lower())
         if match:
             mixer_num = int(match.group(1))
-            if 1 <= mixer_num <= AVAILABLE_NUMBER_OF_MIXERS:
+            if 1 <= mixer_num <= NUMBER_OF_AVAILABLE_MIXERS:
                 return True, mixer_num
 
     return False, None

@@ -47,7 +47,7 @@ alwaysApply: true
 3. **NEVER hardcode component strings** like `"mixer_1"` - use `COMPONENT_*` constants
 4. **NEVER duplicate constants** - if two constants have the same value, keep one and remove the other
 5. **NEVER create a new list/dict of components** - reuse `DEFAULT_COMPONENT_STATUS` keys or `COMPONENT_*` constants
-6. **Check `AVAILABLE_NUMBER_OF_MIXERS`** before hardcoding mixer ranges like `range(1, 5)`
+6. **Check `NUMBER_OF_AVAILABLE_MIXERS`** before hardcoding mixer ranges like `range(1, 5)`
 
 ### 6. 🚨 ALWAYS CHECK FOR REUSABLE CODE
 

@@ -14,7 +14,7 @@ import logging
 import re
 
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -112,7 +112,7 @@ def extract_device_group_from_name(
     mixer_match = re.search(r"mixer\s*(\d+)", name_lower)
     if mixer_match:
         mixer_num = int(mixer_match.group(1))
-        if 1 <= mixer_num <= AVAILABLE_NUMBER_OF_MIXERS:
+        if 1 <= mixer_num <= NUMBER_OF_AVAILABLE_MIXERS:
             if for_information:
                 # Information mixer devices use formula: 15 + mixer_num
                 return 15 + mixer_num, f"Information mixer {mixer_num}"
@@ -578,7 +578,7 @@ def get_entity_component(
         COMPONENT_MIXER_5,
         COMPONENT_MIXER_6,
     ]
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
+    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
         if f"mixer{i}" in text or f"mixer {i}" in text or f"mixer_{i}" in text:
             return mixer_components[i - 1]
 

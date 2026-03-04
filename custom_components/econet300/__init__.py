@@ -15,9 +15,10 @@ import voluptuous as vol
 from .api import make_api
 from .common import AuthError, EconetDataCoordinator
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
     DEVICE_CLASS_FUEL_METER,
     DOMAIN,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     SERVICE_API,
     SERVICE_COORDINATOR,
     SERVICE_FUEL_SENSOR,
@@ -109,9 +110,9 @@ def _cleanup_ghost_devices(
         (DOMAIN, "default-uid-lambda"),
         (DOMAIN, "default-uid-solar"),
     }
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1):
+    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
         ghost_identifiers.add((DOMAIN, f"default-uid-mixer-{i}"))
-    for i in range(1, 9):
+    for i in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
         ghost_identifiers.add((DOMAIN, f"default-uid-ecoster-{i}"))
 
     removed = 0

@@ -302,7 +302,7 @@ class Econet300Api:
         self._hw_version = "default-hw-version"
 
     @classmethod
-    async def create(cls, client: EconetClient, cache: MemCache):
+    async def create(cls, client: EconetClient, cache: MemCache) -> "Econet300Api":
         """Create and return initial object."""
         c = cls(client, cache)
         await c.init()
@@ -2189,7 +2189,7 @@ class Econet300Api:
         return smart_enum_count
 
 
-async def make_api(hass: HomeAssistant, cache: MemCache, data: dict):
+async def make_api(hass: HomeAssistant, cache: MemCache, data: dict) -> Econet300Api:
     """Create api object."""
     return await Econet300Api.create(
         EconetClient(
