@@ -40,6 +40,7 @@ from .common import EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
     API_REG_PARAMS_URI,
+    API_RM_CURRENT_DATA_PARAMS_URI,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
     DEVICE_CLASS_FUEL_METER,
@@ -51,6 +52,7 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
     SENSOR_MIXER_KEY,
@@ -925,7 +927,7 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         coordinator_data = {}
 
     # Create ecoSTER sensors for each thermostat (1-8)
-    for thermostat_idx in range(1, 9):  # 1-8
+    for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
         # Create temperature sensor
         temp_key = f"ecoSterTemp{thermostat_idx}"
         if temp_key in coordinator_data and coordinator_data.get(temp_key) is not None:
@@ -1012,6 +1014,10 @@ class CustomSensor(EconetEntity, SensorEntity):
             return None
         if self._source == API_REG_PARAMS_URI:
             return self.coordinator.data.get("regParams", {}).get(self._param_key)
+        if self._source == API_RM_CURRENT_DATA_PARAMS_URI:
+            cdp = self.coordinator.data.get("rmData", {}).get("currentDataParams", {})
+            param = cdp.get(self._param_key)
+            return param.get("value") if isinstance(param, dict) else param
         return self.coordinator.data.get("regParamsData", {}).get(self._param_key)
 
     def _sync_state(self, value) -> None:

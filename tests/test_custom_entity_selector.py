@@ -306,8 +306,10 @@ class TestCreateCustomSensors:
         assert entities[0]._lookup_value() == 42  # noqa: SLF001
 
     def test_lookup_value_rmcurrentdata(self):
-        """RmCurrentDataParams shares ID space with regParamsData."""
-        coordinator = _make_coordinator(reg_params_data={"139": 7.3})
+        """RmCurrentDataParams reads from rmData.currentDataParams."""
+        coordinator = _make_coordinator(
+            rm_data={"currentDataParams": {"139": {"value": 7.3, "name": "Weather"}}}
+        )
         api = _make_api()
         config = {
             "rmCurrentDataParams:139": {
