@@ -823,5 +823,14 @@
         "name": "Temperatura kotła"
       }
     }
+  },
+  "system_health": {
+    "info": {
+      "host": "Host",
+      "controller_model": "Model sterownika",
+      "software_version": "Wersja oprogramowania",
+      "hardware_version": "Wersja sprzętowa",
+      "can_reach_device": "Dostępność urządzenia"
+    }
   }
 }

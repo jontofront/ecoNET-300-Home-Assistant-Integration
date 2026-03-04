@@ -3,7 +3,7 @@
   "name": "ecoNET300",
   "codeowners": ["@jontofront"],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": ["system_health"],
   "documentation": "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration",
   "homekit": {},
   "iot_class": "local_polling",

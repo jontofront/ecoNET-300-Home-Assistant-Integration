@@ -823,5 +823,14 @@
         "name": "Boiler Temperature"
       }
     }
+  },
+  "system_health": {
+    "info": {
+      "host": "Host",
+      "controller_model": "Controller model",
+      "software_version": "Software version",
+      "hardware_version": "Hardware version",
+      "can_reach_device": "Can reach device"
+    }
   }
 }
