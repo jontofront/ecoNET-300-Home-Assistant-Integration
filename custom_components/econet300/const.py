@@ -34,6 +34,9 @@ SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
 SERVICE_FUEL_SENSOR = "fuel_sensor"
 
+# regParams key for the fuel flow rate sensor (kg/h).
+SENSOR_FUEL_STREAM = "fuelStream"
+
 # Custom device class for fuel consumption meter to allow targeting with services
 DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
 
@@ -359,7 +362,7 @@ DEFAULT_SENSORS = {
     "moduleEcoSTERSoftVer",
     # ecoMAX850R2-X specific sensors
     "fuelConsum",
-    "fuelStream",
+    SENSOR_FUEL_STREAM,
     "tempBack",
     "transmission",
     "statusCO",
@@ -722,7 +725,7 @@ ENTITY_UNIT_MAP = {
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
     # ecoMAX850R2-X specific units
     "fuelConsum": PERCENTAGE,
-    "fuelStream": "kg/h",  # Mass flow rate (confirmed from ecoNET cloud API)
+    SENSOR_FUEL_STREAM: "kg/h",  # Mass flow rate (confirmed from ecoNET cloud API)
     "transmission": None,
     # ecoSTER thermostat units
     "ecoSterTemp1": UnitOfTemperature.CELSIUS,

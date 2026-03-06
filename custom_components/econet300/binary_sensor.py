@@ -430,14 +430,14 @@ class CustomBinarySensor(EconetEntity, BinarySensorEntity):
         if self.coordinator.data is None:
             return None
         if self._source == API_REG_PARAMS_URI:
-            return self.coordinator.data.get("regParams", {}).get(self._param_key)
+            return (self.coordinator.data.get("regParams") or {}).get(self._param_key)
         # Both regParamsData and rmCurrentDataParams share the same numeric
         # ID space.  Try regParamsData first, then rmCurrentDataParams metadata.
-        rpd = self.coordinator.data.get("regParamsData", {}) or {}
+        rpd = self.coordinator.data.get("regParamsData") or {}
         rpd_value = rpd.get(self._param_key)
         if rpd_value is not None:
             return rpd_value
-        cdp = self.coordinator.data.get("rmData", {}).get("currentDataParams", {})
+        cdp = (self.coordinator.data.get("rmData") or {}).get("currentDataParams") or {}
         param = cdp.get(self._param_key)
         return param.get("value") if isinstance(param, dict) else param
 

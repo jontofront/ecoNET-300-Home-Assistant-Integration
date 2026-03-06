@@ -54,6 +54,7 @@ from .const import (
     FUEL_MAX_SUB_INTERVAL_SECONDS,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     SENSOR_ENUM_OPTIONS,
+    SENSOR_FUEL_STREAM,
     SENSOR_MAP_KEY,
     SENSOR_MIXER_KEY,
     SERVICE_API,
@@ -367,21 +368,19 @@ class FuelConsumptionTotalSensor(RestoreSensor):
     def __init__(
         self,
         hass: HomeAssistant,
-        source_entity_id: str,
         api: Econet300Api,
     ) -> None:
         """Initialize the fuel consumption total sensor.
 
         Args:
             hass: The Home Assistant instance
-            source_entity_id: Entity ID of the fuelStream source sensor
             api: The ecoNET API instance
 
         """
         self.hass = hass
-        self._source_entity_id = source_entity_id
+        self._source_entity_id: str | None = None
         self._api = api
-        self._attr_unique_id = f"{api.uid}_fuel_consumption_total"
+        self._attr_unique_id = f"{api.uid}-fuel_consumption_total"
         self._state: Decimal | None = None
         self._last_valid_state: Decimal | None = None
         self._last_reset_dt: datetime | None = None
@@ -414,7 +413,7 @@ class FuelConsumptionTotalSensor(RestoreSensor):
         return self._last_reset_dt
 
     @property
-    def extra_state_attributes(self) -> dict[str, str] | None:
+    def extra_state_attributes(self) -> dict[str, str | None] | None:
         """Return extra state attributes."""
         return {"source": self._source_entity_id}
 
@@ -454,6 +453,21 @@ class FuelConsumptionTotalSensor(RestoreSensor):
     async def async_added_to_hass(self) -> None:
         """Handle entity added to Home Assistant."""
         await super().async_added_to_hass()
+
+        # Resolve the fuelStream source entity_id from the registry.
+        # All entities are registered by the time async_added_to_hass runs.
+        registry = er.async_get(self.hass)
+        source_unique_id = f"{self._api.uid}-{SENSOR_FUEL_STREAM}"
+        self._source_entity_id = registry.async_get_entity_id(
+            "sensor", DOMAIN, source_unique_id
+        )
+        if not self._source_entity_id:
+            _LOGGER.warning(
+                "fuelStream sensor not found in registry (unique_id: %s), "
+                "fuel consumption tracking will not work",
+                source_unique_id,
+            )
+            return
 
         # Restore previous state
         if (last_sensor_data := await self.async_get_last_sensor_data()) is not None:
@@ -1013,7 +1027,7 @@ class CustomSensor(EconetEntity, SensorEntity):
         if self.coordinator.data is None:
             return None
         if self._source == API_REG_PARAMS_URI:
-            return self.coordinator.data.get("regParams", {}).get(self._param_key)
+            return (self.coordinator.data.get("regParams") or {}).get(self._param_key)
         # Both regParamsData and rmCurrentDataParams share the same numeric
         # ID space.  Use the full fallback chain for either source.
         return self._lookup_cdp_value()
@@ -1218,35 +1232,22 @@ async def async_setup_entry(
     # Collect entities synchronously
     entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
 
-    # Create fuel consumption total sensor if fuelStream is available
+    # Create fuel consumption total sensor if fuelStream is available.
+    # Source entity_id is resolved later in async_added_to_hass (after
+    # all entities are registered in HA) to avoid a race condition.
     if (
         coordinator.data
-        and coordinator.data.get("regParams", {}).get("fuelStream") is not None
+        and (coordinator.data.get("regParams") or {}).get(SENSOR_FUEL_STREAM)
+        is not None
     ):
-        # Resolve the fuelStream sensor entity_id from registry
-        registry = er.async_get(hass)
-        fuel_stream_unique_id = f"{api.uid}_fuelStream"
-        source_entity_id = registry.async_get_entity_id(
-            "sensor", DOMAIN, fuel_stream_unique_id
-        )
-
-        if source_entity_id:
-            fuel_sensor = FuelConsumptionTotalSensor(hass, source_entity_id, api)
-            entities.append(fuel_sensor)
-            # Store reference for service lookups
-            hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_SENSOR] = fuel_sensor
-            _LOGGER.info(
-                "Created FuelConsumptionTotalSensor (source: %s)", source_entity_id
-            )
-        else:
-            _LOGGER.warning(
-                "fuelStream sensor entity not found in registry "
-                "(unique_id: %s), FuelConsumptionTotalSensor will not be created",
-                fuel_stream_unique_id,
-            )
+        fuel_sensor = FuelConsumptionTotalSensor(hass, api)
+        entities.append(fuel_sensor)
+        hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_SENSOR] = fuel_sensor
+        _LOGGER.info("Created FuelConsumptionTotalSensor")
     else:
         _LOGGER.info(
-            "fuelStream not available, FuelConsumptionTotalSensor will not be created"
+            "%s not available, FuelConsumptionTotalSensor will not be created",
+            SENSOR_FUEL_STREAM,
         )
 
     # Add entities to Home Assistant
