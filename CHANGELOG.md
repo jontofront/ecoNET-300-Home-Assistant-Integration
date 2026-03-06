@@ -1,5 +1,32 @@
 # Changelog
 
+## [v1.2.2] - 2026-02-15
+
+### ✨ New Features
+
+- **Custom Entity Selector**: Create your own sensors and binary sensors from any parameter available on your ecoNET device — directly from the Home Assistant UI, no code changes needed
+  - Choose from **regParams** (named parameters) or **regParamsData** (numeric IDs with names)
+  - Configure each entity: friendly name, device group, entity type, category
+  - For sensors: set unit, device class, and display precision
+  - All custom entities appear immediately after saving
+
+### 🐛 Bug Fixes
+
+- **Fuel consumption sensor not working**: Fixed a race condition and unique ID mismatch that prevented `FuelConsumptionTotalSensor` from being created
+- **Duplicate number entity IDs**: Dynamic entities from `mergedData` no longer collide with static number entities
+- **"Unknown" state for custom entities**: Entities configured from `regParamsData` now correctly resolve their values
+- **NoneType crash on startup**: Safely handle missing `regParams` data during initialization
+
+### 🔧 Improvements
+
+- Merged `regParamsData` and `rmCurrentDataParams` into a single endpoint for easier entity selection
+- Enriched parameter labels showing names, units, and current values
+- Static sensors and binary sensors automatically filtered from selection list to prevent duplicates
+- Replaced all hardcoded `fuelStream` strings with `SENSOR_FUEL_STREAM` constant
+- Updated README with new Custom Entity Selector screenshots
+
+---
+
 ## [v1.2.1] - 2026-02-24
 
 ### 🚀 New Features
@@ -545,3 +572,6 @@
 - **v1.1.1** - Added boiler ON/OFF control switch functionality
 - **v1.1.3** - Critical fixes for temperature control and mixer setpoints
 - **v1.1.13** - Added comprehensive diagnostics support for troubleshooting
+- **v1.2.0** - Dynamic entity system, mixer support, parameter locking
+- **v1.2.1** - Fuel consumption tracking, legacy device support
+- **v1.2.2** - Custom Entity Selector, fuel sensor fixes
