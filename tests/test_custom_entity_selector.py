@@ -2,9 +2,10 @@
 
 Covers:
 - Helper functions (_get_unmapped_keys, _build_multiselect_options)
-- CustomSensor factory and _lookup_value for all 3 sources
-- CustomBinarySensor factory and _lookup_value for all 3 sources
+- CustomSensor factory and _lookup_value for all sources
+- CustomBinarySensor factory and _lookup_value for all sources
 - Device grouping via component in entity descriptions
+- Backwards compatibility with legacy rmCurrentDataParams source
 """
 
 import json
@@ -25,17 +26,16 @@ from custom_components.econet300.config_flow import (
 from custom_components.econet300.const import (
     API_REG_PARAMS_DATA_URI,
     API_REG_PARAMS_URI,
-    API_RM_CURRENT_DATA_PARAMS_URI,
+    STATIC_CDP_IDS,
     STATIC_REGPARAMS_DATA_IDS,
     STATIC_REGPARAMS_KEYS,
 )
-from homeassistant.components.sensor import SensorDeviceClass
-from homeassistant.const import UnitOfTemperature
-
 from custom_components.econet300.sensor import (
     CustomSensor,
     create_custom_sensors,
 )
+from homeassistant.components.sensor import SensorDeviceClass
+from homeassistant.const import UnitOfTemperature
 
 FIXTURES_ROOT = Path(__file__).parent / "fixtures"
 
@@ -53,6 +53,8 @@ def _make_coordinator(
     reg_params: dict[str, Any] | None = None,
     reg_params_data: dict[str, Any] | None = None,
     rm_data: dict[str, Any] | None = None,
+    params_edits: dict[str, Any] | None = None,
+    merged_data: dict[str, Any] | None = None,
 ) -> MagicMock:
     """Create a mock coordinator with the given data."""
     coordinator = MagicMock()
@@ -60,6 +62,8 @@ def _make_coordinator(
         "regParams": reg_params or {},
         "regParamsData": reg_params_data or {},
         "rmData": rm_data or {},
+        "paramsEdits": params_edits or {},
+        "mergedData": merged_data,
     }
     return coordinator
 
@@ -106,12 +110,12 @@ class TestGetUnmappedKeysRegParams:
 
 
 # ============================================================================
-# _get_unmapped_keys tests — regParamsData
+# _get_unmapped_keys tests — regParamsData (merged with rmCurrentDataParams)
 # ============================================================================
 
 
 class TestGetUnmappedKeysRegParamsData:
-    """Test filtering of unmapped regParamsData IDs."""
+    """Test filtering of merged regParamsData + rmCurrentDataParams IDs."""
 
     def test_returns_empty_for_none_data(self):
         assert _get_unmapped_keys(None, API_REG_PARAMS_DATA_URI) == {}
@@ -128,17 +132,59 @@ class TestGetUnmappedKeysRegParamsData:
         assert static_id not in result
         assert "99999" in result
 
-    def test_filters_out_cdp_ids(self):
-        """IDs already in rmData.currentDataParams should be excluded."""
+    def test_merges_cdp_metadata_with_rpd_values(self):
+        """IDs present in both rpd and cdp should be merged with metadata."""
         data = {
             "regParamsData": {"10": 42, "20": 100},
-            "rmData": {"currentDataParams": {"10": {"name": "test"}}},
+            "rmData": {"currentDataParams": {"10": {"name": "Temperature"}}},
         }
         result = _get_unmapped_keys(data, API_REG_PARAMS_DATA_URI)
-        assert "10" not in result
+        assert "10" in result
         assert "20" in result
+        assert isinstance(result["10"], dict)
+        assert result["10"]["name"] == "Temperature"
+        assert result["10"]["_rpd_value"] == 42
 
-    def test_filters_out_null_values(self):
+    def test_cdp_only_ids_included(self):
+        """IDs present only in cdp (not in rpd) should be included."""
+        data = {
+            "regParamsData": {},
+            "rmData": {"currentDataParams": {"50": {"name": "CDP only"}}},
+        }
+        result = _get_unmapped_keys(data, API_REG_PARAMS_DATA_URI)
+        assert "50" in result
+        assert result["50"]["name"] == "CDP only"
+
+    def test_rpd_only_ids_included(self):
+        """IDs present only in rpd (no cdp metadata) should be included."""
+        data = {
+            "regParamsData": {"77": 99},
+            "rmData": {},
+        }
+        result = _get_unmapped_keys(data, API_REG_PARAMS_DATA_URI)
+        assert "77" in result
+        assert result["77"] == 99
+
+    def test_filters_out_static_cdp_ids(self):
+        """IDs in STATIC_CDP_IDS should be excluded."""
+        if not STATIC_CDP_IDS:
+            pytest.skip("No static CDP IDs defined")
+        static_id = next(iter(STATIC_CDP_IDS))
+        data = {
+            "regParamsData": {},
+            "rmData": {
+                "currentDataParams": {
+                    static_id: {"name": "Static"},
+                    "99999": {"name": "Dynamic"},
+                }
+            },
+        }
+        result = _get_unmapped_keys(data, API_REG_PARAMS_DATA_URI)
+        assert static_id not in result
+        assert "99999" in result
+
+    def test_filters_null_rpd_without_cdp_metadata(self):
+        """rpd-only entries with None value and no cdp metadata are excluded."""
         data = {
             "regParamsData": {"10": None, "20": 42},
             "rmData": {},
@@ -146,50 +192,6 @@ class TestGetUnmappedKeysRegParamsData:
         result = _get_unmapped_keys(data, API_REG_PARAMS_DATA_URI)
         assert "10" not in result
         assert "20" in result
-
-
-# ============================================================================
-# _get_unmapped_keys tests — rmCurrentDataParams
-# ============================================================================
-
-
-class TestGetUnmappedKeysRmCurrentData:
-    """Test filtering of unmapped rmCurrentDataParams keys."""
-
-    def test_returns_empty_for_none_data(self):
-        assert _get_unmapped_keys(None, API_RM_CURRENT_DATA_PARAMS_URI) == {}
-
-    def test_returns_empty_for_missing_rm_data(self):
-        assert _get_unmapped_keys({"rmData": {}}, API_RM_CURRENT_DATA_PARAMS_URI) == {}
-
-    def test_filters_out_static_ids(self):
-        if not STATIC_REGPARAMS_DATA_IDS:
-            pytest.skip("No static IDs defined")
-        static_id = next(iter(STATIC_REGPARAMS_DATA_IDS))
-        data = {
-            "rmData": {
-                "currentDataParams": {
-                    static_id: {"name": "Static Param"},
-                    "99999": {"name": "Dynamic Param"},
-                }
-            }
-        }
-        result = _get_unmapped_keys(data, API_RM_CURRENT_DATA_PARAMS_URI)
-        assert static_id not in result
-        assert "99999" in result
-
-    def test_only_dict_values_included(self):
-        data = {
-            "rmData": {
-                "currentDataParams": {
-                    "10": {"name": "Good"},
-                    "20": "not_a_dict",
-                }
-            }
-        }
-        result = _get_unmapped_keys(data, API_RM_CURRENT_DATA_PARAMS_URI)
-        assert "10" in result
-        assert "20" not in result
 
 
 # ============================================================================
@@ -221,22 +223,32 @@ class TestBuildMultiselectOptions:
         keys = list(result.keys())
         assert keys == ["5", "20", "100"]
 
-    def test_regparamsdata_shows_type(self):
+    def test_regparamsdata_plain_value_shows_type(self):
+        """Plain rpd entries (no cdp metadata) show value and type."""
         unmapped = {"10": 42}
         result = _build_multiselect_options(unmapped, API_REG_PARAMS_DATA_URI)
         assert "int" in result["10"]
         assert "42" in result["10"]
 
-    def test_rmcurrentdata_shows_name_and_unit(self):
-        unmapped = {"10": {"name": "Temperature", "unit": 1}}
-        result = _build_multiselect_options(unmapped, API_RM_CURRENT_DATA_PARAMS_URI)
+    def test_regparamsdata_with_metadata_shows_name(self):
+        """Merged entries with cdp metadata show friendly name."""
+        unmapped = {"10": {"name": "Temperature", "unit": 1, "_rpd_value": 42}}
+        result = _build_multiselect_options(unmapped, API_REG_PARAMS_DATA_URI)
         assert "Temperature" in result["10"]
         assert "°C" in result["10"]
+        assert "42" in result["10"]
 
-    def test_rmcurrentdata_no_unit(self):
-        unmapped = {"10": {"name": "Counter", "unit": 0}}
-        result = _build_multiselect_options(unmapped, API_RM_CURRENT_DATA_PARAMS_URI)
+    def test_regparamsdata_metadata_no_unit(self):
+        """Merged entries without unit omit the unit part."""
+        unmapped = {"10": {"name": "Counter", "unit": 0, "_rpd_value": None}}
+        result = _build_multiselect_options(unmapped, API_REG_PARAMS_DATA_URI)
         assert "Counter" in result["10"]
+
+    def test_regparamsdata_metadata_no_rpd_value(self):
+        """Merged entries without rpd value still show the name."""
+        unmapped = {"10": {"name": "CDP Only Param", "unit": 0, "_rpd_value": None}}
+        result = _build_multiselect_options(unmapped, API_REG_PARAMS_DATA_URI)
+        assert "CDP Only Param" in result["10"]
 
 
 # ============================================================================
@@ -292,6 +304,7 @@ class TestCreateCustomSensors:
         assert entities[0]._lookup_value() == 55.5  # noqa: SLF001
 
     def test_lookup_value_regparamsdata(self):
+        """Value from regParamsData source resolves via the fallback chain."""
         coordinator = _make_coordinator(reg_params_data={"10": 42})
         api = _make_api()
         config = {
@@ -305,22 +318,118 @@ class TestCreateCustomSensors:
         entities = create_custom_sensors(coordinator, api, config)
         assert entities[0]._lookup_value() == 42  # noqa: SLF001
 
-    def test_lookup_value_rmcurrentdata(self):
-        """RmCurrentDataParams reads from rmData.currentDataParams."""
+    def test_lookup_value_cdp_via_id_mapping(self):
+        """CDP lookup resolves via CDP_ID_TO_REGPARAMS mapping to regParams."""
         coordinator = _make_coordinator(
-            rm_data={"currentDataParams": {"139": {"value": 7.3, "name": "Weather"}}}
+            reg_params={"tempCO": 82.5},
+            rm_data={"currentDataParams": {"1024": {"name": "Boiler temperature"}}},
+        )
+        api = _make_api()
+        config = {
+            "rmCurrentDataParams:1024": {
+                "source": "rmCurrentDataParams",
+                "key": "1024",
+                "name": "Boiler temperature",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() == 82.5  # noqa: SLF001
+
+    def test_lookup_value_cdp_via_name_heuristic(self):
+        """CDP lookup falls back to name-to-camelCase heuristic for unmapped IDs."""
+        coordinator = _make_coordinator(
+            reg_params={"valveMixer1": 45.0},
+            rm_data={"currentDataParams": {"139": {"name": "Valve mixer 1"}}},
         )
         api = _make_api()
         config = {
             "rmCurrentDataParams:139": {
                 "source": "rmCurrentDataParams",
                 "key": "139",
-                "name": "Weather Temp",
+                "name": "Valve mixer 1",
                 "entity_type": "sensor",
             }
         }
         entities = create_custom_sensors(coordinator, api, config)
-        assert entities[0]._lookup_value() == 7.3  # noqa: SLF001
+        assert entities[0]._lookup_value() == 45.0  # noqa: SLF001
+
+    def test_lookup_value_via_regparamsdata_direct(self):
+        """Fallback step 3: value resolved from regParamsData by numeric ID."""
+        coordinator = _make_coordinator(
+            reg_params_data={"139": 59},
+            rm_data={"currentDataParams": {"139": {"name": "Valve mixer 1"}}},
+        )
+        api = _make_api()
+        config = {
+            "regParamsData:139": {
+                "source": "regParamsData",
+                "key": "139",
+                "name": "Valve mixer 1",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() == 59  # noqa: SLF001
+
+    def test_lookup_value_cdp_via_params_edits(self):
+        """CDP lookup falls back to paramsEdits when regParams has no match."""
+        coordinator = _make_coordinator(
+            rm_data={"currentDataParams": {"9999": {"name": "Unknown param"}}},
+            params_edits={"9999": {"value": 12.3, "min": 0, "max": 100}},
+        )
+        api = _make_api()
+        config = {
+            "rmCurrentDataParams:9999": {
+                "source": "rmCurrentDataParams",
+                "key": "9999",
+                "name": "Unknown param",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() == 12.3  # noqa: SLF001
+
+    def test_lookup_value_cdp_via_merged_data_name(self):
+        """CDP lookup falls back to mergedData name search when other sources fail."""
+        coordinator = _make_coordinator(
+            rm_data={"currentDataParams": {"9999": {"name": "Alarm level"}}},
+            merged_data={
+                "parameters": {
+                    "139": {"name": "Alarm level", "value": 10},
+                    "140": {"name": "Other param", "value": 99},
+                }
+            },
+        )
+        api = _make_api()
+        config = {
+            "rmCurrentDataParams:9999": {
+                "source": "rmCurrentDataParams",
+                "key": "9999",
+                "name": "Alarm level",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() == 10  # noqa: SLF001
+
+    def test_lookup_value_cdp_returns_none_when_unavailable(self):
+        """CDP lookup returns None when no source has the value."""
+        coordinator = _make_coordinator(
+            rm_data={"currentDataParams": {"9999": {"name": "Unknown param"}}},
+            merged_data={"parameters": {"0": {"name": "Other", "value": 5}}},
+        )
+        api = _make_api()
+        config = {
+            "rmCurrentDataParams:9999": {
+                "source": "rmCurrentDataParams",
+                "key": "9999",
+                "name": "Unknown param",
+                "entity_type": "sensor",
+            }
+        }
+        entities = create_custom_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() is None  # noqa: SLF001
 
     def test_lookup_value_missing(self):
         coordinator = _make_coordinator(reg_params_data={"10": 42})
@@ -419,8 +528,7 @@ class TestCreateCustomSensors:
         }
         entities = create_custom_sensors(coordinator, api, config)
         assert (
-            entities[0].entity_description.device_class
-            == SensorDeviceClass.TEMPERATURE
+            entities[0].entity_description.device_class == SensorDeviceClass.TEMPERATURE
         )
 
     def test_precision_applied(self):
@@ -542,6 +650,24 @@ class TestCreateCustomBinarySensors:
         }
         entities = create_custom_binary_sensors(coordinator, api, config)
         assert entities[0]._lookup_value() is False  # noqa: SLF001
+
+    def test_lookup_value_binary_cdp_fallback(self):
+        """Binary sensor with rmCurrentDataParams source falls back to rpd."""
+        coordinator = _make_coordinator(
+            reg_params_data={"20": True},
+            rm_data={"currentDataParams": {"20": {"name": "Pump"}}},
+        )
+        api = _make_api()
+        config = {
+            "rmCurrentDataParams:20": {
+                "source": "rmCurrentDataParams",
+                "key": "20",
+                "name": "Pump",
+                "entity_type": "binary_sensor",
+            }
+        }
+        entities = create_custom_binary_sensors(coordinator, api, config)
+        assert entities[0]._lookup_value() is True  # noqa: SLF001
 
     def test_component_stored_in_description(self):
         coordinator = _make_coordinator(reg_params_data={"20": True})

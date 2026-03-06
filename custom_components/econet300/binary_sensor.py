@@ -17,7 +17,6 @@ from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
     API_REG_PARAMS_URI,
-    API_RM_CURRENT_DATA_PARAMS_URI,
     BINARY_SENSOR_MAP_KEY,
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
@@ -432,11 +431,15 @@ class CustomBinarySensor(EconetEntity, BinarySensorEntity):
             return None
         if self._source == API_REG_PARAMS_URI:
             return self.coordinator.data.get("regParams", {}).get(self._param_key)
-        if self._source == API_RM_CURRENT_DATA_PARAMS_URI:
-            cdp = self.coordinator.data.get("rmData", {}).get("currentDataParams", {})
-            param = cdp.get(self._param_key)
-            return param.get("value") if isinstance(param, dict) else param
-        return self.coordinator.data.get("regParamsData", {}).get(self._param_key)
+        # Both regParamsData and rmCurrentDataParams share the same numeric
+        # ID space.  Try regParamsData first, then rmCurrentDataParams metadata.
+        rpd = self.coordinator.data.get("regParamsData", {}) or {}
+        rpd_value = rpd.get(self._param_key)
+        if rpd_value is not None:
+            return rpd_value
+        cdp = self.coordinator.data.get("rmData", {}).get("currentDataParams", {})
+        param = cdp.get(self._param_key)
+        return param.get("value") if isinstance(param, dict) else param
 
     def _sync_state(self, value) -> None:
         """Synchronize the binary sensor state."""

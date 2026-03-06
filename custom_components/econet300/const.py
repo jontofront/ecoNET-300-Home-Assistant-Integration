@@ -584,6 +584,56 @@ STATIC_REGPARAMS_KEYS: set[str] = (
     | MIXER_PUMP_BINARY_SENSOR_KEYS
 )
 
+# --- rmCurrentDataParams ID → regParams key mapping --------------------------
+# The rmCurrentDataParams endpoint provides only metadata (name, unit, special)
+# but NOT current values.  The actual live values are in regParams under
+# camelCase keys.  This mapping allows CustomSensor to read the value from
+# regParams when the user creates a custom entity from rmCurrentDataParams.
+CDP_ID_TO_REGPARAMS: dict[str, str] = {
+    # Monitoring – temperatures
+    "1024": "tempCO",
+    "1025": "tempCWU",
+    "1028": "tempUpperBuffer",
+    "1029": "tempLowerBuffer",
+    "1030": "tempFlueGas",
+    "1031": "mixerTemp1",
+    "1032": "mixerTemp2",
+    "1033": "mixerTemp3",
+    "1034": "mixerTemp4",
+    # Monitoring – low-ID sensors
+    "1": "lighter",
+    "26": "tempFeeder",
+    "28": "tempExternalSensor",
+    "114": "fuelLevel",
+    "117": "thermostat",
+    # Monitoring – pumps / actuators
+    "1536": "fan",
+    "1538": "feeder",
+    "1540": "feeder2Additional",
+    "1541": "pumpCO",
+    "1542": "pumpCWU",
+    "1543": "pumpCirculation",
+    "1544": "mixerPumpWorks1",
+    "1547": "mixerPumpWorks2",
+    "1550": "mixerPumpWorks3",
+    "1553": "mixerPumpWorks4",
+    # Monitoring – burner
+    "1794": "boilerPower",
+    # Setpoints (editable) – also in NUMBER_MAP but kept for completeness
+    "1280": "tempCOSet",
+    "1281": "tempCWUSet",
+    "1287": "mixerSetTemp1",
+    "1288": "mixerSetTemp2",
+    "1289": "mixerSetTemp3",
+    "1290": "mixerSetTemp4",
+}
+
+# IDs from rmCurrentDataParams that already have static entities.
+# Used to filter the Options Flow to prevent duplicate entity creation.
+STATIC_CDP_IDS: set[str] = set(CDP_ID_TO_REGPARAMS.keys()) & {
+    k for k, v in CDP_ID_TO_REGPARAMS.items() if v in STATIC_REGPARAMS_KEYS
+}
+
 # =============================================================================
 # CUSTOM ENTITY SELECTOR (Options Flow)
 # =============================================================================

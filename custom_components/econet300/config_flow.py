@@ -17,7 +17,6 @@ from .common import AuthError
 from .const import (
     API_REG_PARAMS_DATA_URI,
     API_REG_PARAMS_URI,
-    API_RM_CURRENT_DATA_PARAMS_URI,
     CONF_CUSTOM_ENTITIES,
     CONF_ENTRY_DESCRIPTION,
     CONF_ENTRY_TITLE,
@@ -29,6 +28,7 @@ from .const import (
     CUSTOM_SENSOR_UNIT_OPTIONS,
     DOMAIN,
     SERVICE_COORDINATOR,
+    STATIC_CDP_IDS,
     STATIC_REGPARAMS_DATA_IDS,
     STATIC_REGPARAMS_KEYS,
     UNIT_INDEX_TO_NAME,
@@ -185,8 +185,7 @@ def _get_unmapped_keys(
 
     Args:
         coordinator_data: Full coordinator data dict.
-        source: One of API_REG_PARAMS_URI, API_REG_PARAMS_DATA_URI,
-                or API_RM_CURRENT_DATA_PARAMS_URI.
+        source: One of API_REG_PARAMS_URI or API_REG_PARAMS_DATA_URI.
 
     Returns:
         Dict of {key: display_info} for keys available for custom selection.
@@ -208,25 +207,26 @@ def _get_unmapped_keys(
     if source == API_REG_PARAMS_DATA_URI:
         rpd = coordinator_data.get("regParamsData")
         if not rpd or not isinstance(rpd, dict):
-            return {}
-        rm_data = coordinator_data.get("rmData") or {}
-        cdp_ids = set((rm_data.get("currentDataParams") or {}).keys())
-        return {
-            k: v
-            for k, v in rpd.items()
-            if k not in STATIC_REGPARAMS_DATA_IDS and k not in cdp_ids and v is not None
-        }
+            rpd = {}
 
-    if source == API_RM_CURRENT_DATA_PARAMS_URI:
+        # rmCurrentDataParams shares the same ID space and provides
+        # friendly names/metadata for numeric IDs in regParamsData.
         rm_data = coordinator_data.get("rmData") or {}
-        cdp = rm_data.get("currentDataParams")
-        if not cdp or not isinstance(cdp, dict):
-            return {}
-        return {
-            k: v
-            for k, v in cdp.items()
-            if k not in STATIC_REGPARAMS_DATA_IDS and isinstance(v, dict)
-        }
+        cdp = rm_data.get("currentDataParams") or {}
+
+        # Merge: include IDs from both sources, skip already-static ones
+        combined: dict[str, Any] = {}
+        all_ids = set(rpd.keys()) | set(cdp.keys())
+        for k in all_ids:
+            if k in STATIC_REGPARAMS_DATA_IDS or k in STATIC_CDP_IDS:
+                continue
+            meta = cdp.get(k)
+            value = rpd.get(k)
+            if meta and isinstance(meta, dict):
+                combined[k] = {**meta, "_rpd_value": value}
+            elif value is not None:
+                combined[k] = value
+        return combined
 
     return {}
 
@@ -254,20 +254,19 @@ def _build_multiselect_options(
     if source == API_REG_PARAMS_DATA_URI:
         for key in sorted(unmapped, key=int):
             val = unmapped[key]
-            type_hint = type(val).__name__
-            display_val = str(val)[:30]
-            options[key] = f"ID {key}: {display_val} ({type_hint})"
-        return options
-
-    if source == API_RM_CURRENT_DATA_PARAMS_URI:
-        for key in sorted(unmapped, key=int):
-            meta = unmapped[key]
-            name = meta.get("name", "?")
-            unit_idx = meta.get("unit", 0)
-            unit_name = UNIT_INDEX_TO_NAME.get(unit_idx, "")
-            options[key] = (
-                f"ID {key}: {name} ({unit_name})" if unit_name else f"ID {key}: {name}"
-            )
+            if isinstance(val, dict):
+                name = val.get("name", "?")
+                unit_idx = val.get("unit", 0)
+                unit_name = UNIT_INDEX_TO_NAME.get(unit_idx, "")
+                rpd_val = val.get("_rpd_value")
+                label = f"ID {key}: {name}"
+                if unit_name:
+                    label += f" ({unit_name})"
+                if rpd_val is not None:
+                    label += f" = {str(rpd_val)[:15]}"
+                options[key] = label
+            else:
+                options[key] = f"ID {key}: {str(val)[:30]} ({type(val).__name__})"
         return options
 
     return options
@@ -363,8 +362,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 vol.Required("endpoint", default=API_REG_PARAMS_URI): vol.In(
                     {
                         API_REG_PARAMS_URI: "regParams (named parameters)",
-                        API_REG_PARAMS_DATA_URI: "regParamsData (numeric IDs)",
-                        API_RM_CURRENT_DATA_PARAMS_URI: "rmCurrentDataParams (with metadata)",
+                        API_REG_PARAMS_DATA_URI: "regParamsData (numeric IDs with names)",
                     }
                 ),
             }
@@ -558,7 +556,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
 
     def _get_default_name(self, key: str) -> str:
         """Determine default display name for a key based on source."""
-        if self._selected_source == API_RM_CURRENT_DATA_PARAMS_URI:
+        if self._selected_source == API_REG_PARAMS_DATA_URI:
             coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id][
                 SERVICE_COORDINATOR
             ]
@@ -567,6 +565,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
             meta = cdp.get(key)
             if isinstance(meta, dict) and meta.get("name"):
                 return meta["name"]
+            return f"Parameter {key}"
         if self._selected_source == API_REG_PARAMS_URI:
             return key
         return f"Parameter {key}"

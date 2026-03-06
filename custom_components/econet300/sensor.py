@@ -40,7 +40,7 @@ from .common import EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
     API_REG_PARAMS_URI,
-    API_RM_CURRENT_DATA_PARAMS_URI,
+    CDP_ID_TO_REGPARAMS,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
     DEVICE_CLASS_FUEL_METER,
@@ -1014,11 +1014,87 @@ class CustomSensor(EconetEntity, SensorEntity):
             return None
         if self._source == API_REG_PARAMS_URI:
             return self.coordinator.data.get("regParams", {}).get(self._param_key)
-        if self._source == API_RM_CURRENT_DATA_PARAMS_URI:
-            cdp = self.coordinator.data.get("rmData", {}).get("currentDataParams", {})
-            param = cdp.get(self._param_key)
-            return param.get("value") if isinstance(param, dict) else param
-        return self.coordinator.data.get("regParamsData", {}).get(self._param_key)
+        # Both regParamsData and rmCurrentDataParams share the same numeric
+        # ID space.  Use the full fallback chain for either source.
+        return self._lookup_cdp_value()
+
+    def _lookup_cdp_value(self) -> Any:
+        """Resolve a rmCurrentDataParams value via multiple fallback sources.
+
+        The rmCurrentDataParams endpoint only provides metadata (name, unit,
+        special) — not current values.  The actual values live in regParams
+        (named keys) or regParamsData (numeric IDs that share the same ID
+        space as rmCurrentDataParams).
+
+        Fallback order:
+          1. CDP_ID_TO_REGPARAMS known mapping → regParams
+          2. Name-to-camelCase heuristic → regParams
+          3. regParamsData direct ID lookup (same ID space as CDP)
+          4. paramsEdits (editable parameters with a value field)
+          5. mergedData name-based search (configuration parameters)
+        """
+        reg_params = self.coordinator.data.get("regParams", {}) or {}
+
+        # 1. Try known ID → regParams mapping
+        rp_key = CDP_ID_TO_REGPARAMS.get(self._param_key)
+        if rp_key and rp_key in reg_params:
+            return reg_params[rp_key]
+
+        # 2. Try name-based heuristic: convert CDP name to camelCase regParams key
+        cdp_meta = (
+            self.coordinator.data.get("rmData", {})
+            .get("currentDataParams", {})
+            .get(self._param_key)
+        )
+        cdp_name = cdp_meta.get("name", "") if isinstance(cdp_meta, dict) else ""
+        if cdp_name:
+            guessed_key = self._cdp_name_to_camel(cdp_name)
+            if guessed_key and guessed_key in reg_params:
+                return reg_params[guessed_key]
+
+        # 3. regParamsData shares the same numeric ID space as rmCurrentDataParams
+        rpd = self.coordinator.data.get("regParamsData", {}) or {}
+        rpd_value = rpd.get(self._param_key)
+        if rpd_value is not None:
+            return rpd_value
+
+        # 4. Fall back to paramsEdits (editable parameters with a value field)
+        edits = self.coordinator.data.get("paramsEdits", {}) or {}
+        edit_param = edits.get(self._param_key)
+        if isinstance(edit_param, dict) and "value" in edit_param:
+            return edit_param["value"]
+
+        # 5. Search mergedData parameters by exact name match
+        merged = self.coordinator.data.get("mergedData")
+        if cdp_name and isinstance(merged, dict):
+            for param in merged.get("parameters", {}).values():
+                if isinstance(param, dict) and param.get("name") == cdp_name:
+                    return param.get("value")
+
+        _LOGGER.debug(
+            "CDP param %s (%s) could not be resolved from any data source",
+            self._param_key,
+            cdp_name or "unknown",
+        )
+        return None
+
+    @staticmethod
+    def _cdp_name_to_camel(name: str) -> str | None:
+        """Convert an rmCurrentDataParams name to a likely regParams camelCase key.
+
+        Examples:
+            "Valve mixer 1"  → "valveMixer1"
+            "Servo mixer 2"  → "servoMixer2"
+            "Lighter"        → "lighter"
+            "Fan"            → "fan"
+
+        """
+        if not name:
+            return None
+        parts = name.split()
+        if not parts:
+            return None
+        return parts[0].lower() + "".join(p.capitalize() for p in parts[1:])
 
     def _sync_state(self, value) -> None:
         """Synchronize the sensor state."""
