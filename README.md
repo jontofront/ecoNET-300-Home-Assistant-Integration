@@ -168,20 +168,26 @@ Apart from using 'My button' (in case it doesn't work) you can also perform the 
 
 After initial setup, you can add extra sensors from the integration's configuration options. This allows you to expose additional parameters that are not included by default.
 
-1. Go to **Settings > Devices & Services** in Home Assistant.
-2. Find your **ecoNET300** integration and click the **Configure** button (gear icon).
-3. Select **Custom Entities**.
+**Step 1.** Go to **Settings > Devices & Services**, find your **ecoNET300** integration and click **Configure**. Select **Custom Entities**.
 
-![Custom Entities configure](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_configure.png)
+![Custom Entities menu](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_menu.png)
 
-4. Browse the list of available parameters discovered from your device.
-5. Select the parameters you want to add as sensors (e.g., Feeder temperature, Weather temperature, Fuel level, Boiler thermostat, Room thermostat mixer, Valve mixer).
-6. Optionally select a parameter from the **Available parameters** dropdown to add as a dedicated entity.
-7. Click **Submit**.
+**Step 2.** Choose the API endpoint to browse:
 
-![Custom Entities selection](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_selection.png)
+- **regParams** — named parameters (e.g. temperatures, statuses)
+- **regParamsData** — numeric IDs with names from the device
 
-The selected parameters will be created as sensor entities and available immediately in Home Assistant.
+![Choose endpoint](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_endpoint.png)
+
+**Step 3.** Select the parameters you want to add. The list shows all available parameters discovered from your device that are not already mapped.
+
+![Select parameters](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_select.png)
+
+**Step 4.** Configure each entity — set the name, device group, entity type (sensor / binary sensor), and category. For sensors you can also set unit, device class, and display precision.
+
+![Configure entity](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_configure_entity.png)
+
+The selected parameters will be created as entities and available immediately in Home Assistant.
 
 ---
 
