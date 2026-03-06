@@ -9,6 +9,7 @@ from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
     RestoreSensor,
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorExtraStoredData,
@@ -38,7 +39,10 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
+    API_REG_PARAMS_URI,
+    CDP_ID_TO_REGPARAMS,
     COMPONENT_LAMBDA,
+    CONF_CUSTOM_ENTITIES,
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
@@ -48,13 +52,16 @@ from .const import (
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
     SENSOR_ENUM_OPTIONS,
+    SENSOR_FUEL_STREAM,
     SENSOR_MAP_KEY,
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     SERVICE_FUEL_SENSOR,
     STATE_CLASS_MAP,
+    UNIT_NAME_TO_HA_UNIT,
 )
 from .entity import (
     EconetEntity,
@@ -361,21 +368,19 @@ class FuelConsumptionTotalSensor(RestoreSensor):
     def __init__(
         self,
         hass: HomeAssistant,
-        source_entity_id: str,
         api: Econet300Api,
     ) -> None:
         """Initialize the fuel consumption total sensor.
 
         Args:
             hass: The Home Assistant instance
-            source_entity_id: Entity ID of the fuelStream source sensor
             api: The ecoNET API instance
 
         """
         self.hass = hass
-        self._source_entity_id = source_entity_id
+        self._source_entity_id: str | None = None
         self._api = api
-        self._attr_unique_id = f"{api.uid}_fuel_consumption_total"
+        self._attr_unique_id = f"{api.uid}-fuel_consumption_total"
         self._state: Decimal | None = None
         self._last_valid_state: Decimal | None = None
         self._last_reset_dt: datetime | None = None
@@ -408,7 +413,7 @@ class FuelConsumptionTotalSensor(RestoreSensor):
         return self._last_reset_dt
 
     @property
-    def extra_state_attributes(self) -> dict[str, str] | None:
+    def extra_state_attributes(self) -> dict[str, str | None] | None:
         """Return extra state attributes."""
         return {"source": self._source_entity_id}
 
@@ -448,6 +453,21 @@ class FuelConsumptionTotalSensor(RestoreSensor):
     async def async_added_to_hass(self) -> None:
         """Handle entity added to Home Assistant."""
         await super().async_added_to_hass()
+
+        # Resolve the fuelStream source entity_id from the registry.
+        # All entities are registered by the time async_added_to_hass runs.
+        registry = er.async_get(self.hass)
+        source_unique_id = f"{self._api.uid}-{SENSOR_FUEL_STREAM}"
+        self._source_entity_id = registry.async_get_entity_id(
+            "sensor", DOMAIN, source_unique_id
+        )
+        if not self._source_entity_id:
+            _LOGGER.warning(
+                "fuelStream sensor not found in registry (unique_id: %s), "
+                "fuel consumption tracking will not work",
+                source_unique_id,
+            )
+            return
 
         # Restore previous state
         if (last_sensor_data := await self.async_get_last_sensor_data()) is not None:
@@ -921,7 +941,7 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         coordinator_data = {}
 
     # Create ecoSTER sensors for each thermostat (1-8)
-    for thermostat_idx in range(1, 9):  # 1-8
+    for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
         # Create temperature sensor
         temp_key = f"ecoSterTemp{thermostat_idx}"
         if temp_key in coordinator_data and coordinator_data.get(temp_key) is not None:
@@ -968,6 +988,200 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
     return entities
 
 
+# =============================================================================
+# Unified custom sensors (user-selected via Options Flow)
+# =============================================================================
+
+
+class CustomSensor(EconetEntity, SensorEntity):
+    """Sensor created from a user-selected parameter across any endpoint."""
+
+    entity_description: EconetSensorEntityDescription
+
+    def __init__(
+        self,
+        entity_description: EconetSensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        source: str,
+        param_key: str,
+    ):
+        """Initialize a custom sensor."""
+        self.entity_description = entity_description
+        self.api = api
+        self._source = source
+        self._param_key = param_key
+        self._attr_native_value = None
+        super().__init__(coordinator, api)
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info based on entity component."""
+        component = getattr(self.entity_description, "component", None)
+        if component:
+            return get_device_info_for_component(component, self.api)
+        return super().device_info
+
+    def _lookup_value(self) -> Any:
+        """Look up value from the configured data source."""
+        if self.coordinator.data is None:
+            return None
+        if self._source == API_REG_PARAMS_URI:
+            return (self.coordinator.data.get("regParams") or {}).get(self._param_key)
+        # Both regParamsData and rmCurrentDataParams share the same numeric
+        # ID space.  Use the full fallback chain for either source.
+        return self._lookup_cdp_value()
+
+    def _lookup_cdp_value(self) -> Any:
+        """Resolve a rmCurrentDataParams value via multiple fallback sources.
+
+        The rmCurrentDataParams endpoint only provides metadata (name, unit,
+        special) — not current values.  The actual values live in regParams
+        (named keys) or regParamsData (numeric IDs that share the same ID
+        space as rmCurrentDataParams).
+
+        Fallback order:
+          1. CDP_ID_TO_REGPARAMS known mapping → regParams
+          2. Name-to-camelCase heuristic → regParams
+          3. regParamsData direct ID lookup (same ID space as CDP)
+          4. paramsEdits (editable parameters with a value field)
+          5. mergedData name-based search (configuration parameters)
+        """
+        reg_params = self.coordinator.data.get("regParams", {}) or {}
+
+        # 1. Try known ID → regParams mapping
+        rp_key = CDP_ID_TO_REGPARAMS.get(self._param_key)
+        if rp_key and rp_key in reg_params:
+            return reg_params[rp_key]
+
+        # 2. Try name-based heuristic: convert CDP name to camelCase regParams key
+        cdp_meta = (
+            self.coordinator.data.get("rmData", {})
+            .get("currentDataParams", {})
+            .get(self._param_key)
+        )
+        cdp_name = cdp_meta.get("name", "") if isinstance(cdp_meta, dict) else ""
+        if cdp_name:
+            guessed_key = self._cdp_name_to_camel(cdp_name)
+            if guessed_key and guessed_key in reg_params:
+                return reg_params[guessed_key]
+
+        # 3. regParamsData shares the same numeric ID space as rmCurrentDataParams
+        rpd = self.coordinator.data.get("regParamsData", {}) or {}
+        rpd_value = rpd.get(self._param_key)
+        if rpd_value is not None:
+            return rpd_value
+
+        # 4. Fall back to paramsEdits (editable parameters with a value field)
+        edits = self.coordinator.data.get("paramsEdits", {}) or {}
+        edit_param = edits.get(self._param_key)
+        if isinstance(edit_param, dict) and "value" in edit_param:
+            return edit_param["value"]
+
+        # 5. Search mergedData parameters by exact name match
+        merged = self.coordinator.data.get("mergedData")
+        if cdp_name and isinstance(merged, dict):
+            for param in merged.get("parameters", {}).values():
+                if isinstance(param, dict) and param.get("name") == cdp_name:
+                    return param.get("value")
+
+        _LOGGER.debug(
+            "CDP param %s (%s) could not be resolved from any data source",
+            self._param_key,
+            cdp_name or "unknown",
+        )
+        return None
+
+    @staticmethod
+    def _cdp_name_to_camel(name: str) -> str | None:
+        """Convert an rmCurrentDataParams name to a likely regParams camelCase key.
+
+        Examples:
+            "Valve mixer 1"  → "valveMixer1"
+            "Servo mixer 2"  → "servoMixer2"
+            "Lighter"        → "lighter"
+            "Fan"            → "fan"
+
+        """
+        if not name:
+            return None
+        parts = name.split()
+        if not parts:
+            return None
+        return parts[0].lower() + "".join(p.capitalize() for p in parts[1:])
+
+    def _sync_state(self, value) -> None:
+        """Synchronize the sensor state."""
+        if value is not None:
+            try:
+                self._attr_native_value = float(value)
+            except (ValueError, TypeError):
+                self._attr_native_value = None
+        else:
+            self._attr_native_value = None
+        self.async_write_ha_state()
+
+
+def create_custom_sensors(
+    coordinator: EconetDataCoordinator,
+    api: Econet300Api,
+    custom_entities: dict[str, dict[str, Any]],
+) -> list[CustomSensor]:
+    """Create sensor entities from user-selected parameters.
+
+    Args:
+        coordinator: The data coordinator.
+        api: The device API.
+        custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
+            shaped as {unique_id: {"source": str, "key": str, "name": str,
+            "entity_type": str, "component": str, "entity_category": str|None,
+            "native_unit": str|None, "device_class": str|None,
+            "precision": int|None}}.
+
+    """
+    entities: list[CustomSensor] = []
+
+    for _uid, cfg in custom_entities.items():
+        if cfg.get("entity_type") != "sensor":
+            continue
+
+        name = cfg.get("name", f"Parameter {cfg.get('key', _uid)}")
+        source = cfg.get("source", "regParamsData")
+        param_key = cfg.get("key", _uid)
+        component = cfg.get("component")
+        entity_key = f"custom_{source}_{param_key}"
+
+        cat_str = cfg.get("entity_category")
+        entity_category = EntityCategory.DIAGNOSTIC if cat_str == "diagnostic" else None
+
+        native_unit_key = cfg.get("native_unit")
+        native_unit = (
+            UNIT_NAME_TO_HA_UNIT.get(native_unit_key) if native_unit_key else None
+        )
+
+        device_class_str = cfg.get("device_class")
+        device_class = SensorDeviceClass(device_class_str) if device_class_str else None
+
+        precision = cfg.get("precision")
+
+        description = EconetSensorEntityDescription(
+            key=entity_key,
+            name=name,
+            native_unit_of_measurement=native_unit,
+            device_class=device_class,
+            suggested_display_precision=precision,
+            state_class=SensorStateClass.MEASUREMENT,
+            entity_category=entity_category,
+            component=component,
+            has_entity_name=True,
+        )
+
+        entities.append(CustomSensor(description, coordinator, api, source, param_key))
+
+    _LOGGER.info("Created %d custom sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -1002,6 +1216,13 @@ async def async_setup_entry(
         _LOGGER.info("Collected %d ecoSTER sensors", len(ecoster_sensors))
         entities.extend(ecoster_sensors)
 
+        # Gather user-defined custom sensors from Options Flow
+        custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
+        if custom_cfg:
+            custom_sensors = create_custom_sensors(coordinator, api, custom_cfg)
+            _LOGGER.info("Collected %d custom sensors", len(custom_sensors))
+            entities.extend(custom_sensors)
+
         _LOGGER.info("Total entities collected: %d", len(entities))
         return entities
 
@@ -1011,35 +1232,22 @@ async def async_setup_entry(
     # Collect entities synchronously
     entities = await hass.async_add_executor_job(gather_entities, coordinator, api)
 
-    # Create fuel consumption total sensor if fuelStream is available
+    # Create fuel consumption total sensor if fuelStream is available.
+    # Source entity_id is resolved later in async_added_to_hass (after
+    # all entities are registered in HA) to avoid a race condition.
     if (
         coordinator.data
-        and coordinator.data.get("regParams", {}).get("fuelStream") is not None
+        and (coordinator.data.get("regParams") or {}).get(SENSOR_FUEL_STREAM)
+        is not None
     ):
-        # Resolve the fuelStream sensor entity_id from registry
-        registry = er.async_get(hass)
-        fuel_stream_unique_id = f"{api.uid}_fuelStream"
-        source_entity_id = registry.async_get_entity_id(
-            "sensor", DOMAIN, fuel_stream_unique_id
-        )
-
-        if source_entity_id:
-            fuel_sensor = FuelConsumptionTotalSensor(hass, source_entity_id, api)
-            entities.append(fuel_sensor)
-            # Store reference for service lookups
-            hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_SENSOR] = fuel_sensor
-            _LOGGER.info(
-                "Created FuelConsumptionTotalSensor (source: %s)", source_entity_id
-            )
-        else:
-            _LOGGER.warning(
-                "fuelStream sensor entity not found in registry "
-                "(unique_id: %s), FuelConsumptionTotalSensor will not be created",
-                fuel_stream_unique_id,
-            )
+        fuel_sensor = FuelConsumptionTotalSensor(hass, api)
+        entities.append(fuel_sensor)
+        hass.data[DOMAIN][entry.entry_id][SERVICE_FUEL_SENSOR] = fuel_sensor
+        _LOGGER.info("Created FuelConsumptionTotalSensor")
     else:
         _LOGGER.info(
-            "fuelStream not available, FuelConsumptionTotalSensor will not be created"
+            "%s not available, FuelConsumptionTotalSensor will not be created",
+            SENSOR_FUEL_STREAM,
         )
 
     # Add entities to Home Assistant

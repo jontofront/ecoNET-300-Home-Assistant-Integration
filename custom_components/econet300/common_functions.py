@@ -14,7 +14,7 @@ import logging
 import re
 
 from .const import (
-    AVAILABLE_NUMBER_OF_MIXERS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -23,8 +23,11 @@ from .const import (
     COMPONENT_MIXER_2,
     COMPONENT_MIXER_3,
     COMPONENT_MIXER_4,
+    COMPONENT_MIXER_5,
+    COMPONENT_MIXER_6,
     COMPONENT_SOLAR,
     DEFAULT_COMPONENT_STATUS,
+    STATIC_REGPARAMS_DATA_IDS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -109,7 +112,7 @@ def extract_device_group_from_name(
     mixer_match = re.search(r"mixer\s*(\d+)", name_lower)
     if mixer_match:
         mixer_num = int(mixer_match.group(1))
-        if 1 <= mixer_num <= AVAILABLE_NUMBER_OF_MIXERS:
+        if 1 <= mixer_num <= NUMBER_OF_AVAILABLE_MIXERS:
             if for_information:
                 # Information mixer devices use formula: 15 + mixer_num
                 return 15 + mixer_num, f"Information mixer {mixer_num}"
@@ -529,6 +532,8 @@ def detect_connected_components(reg_params: dict | None) -> dict[str, bool]:
         COMPONENT_MIXER_2: is_connected("mixerTemp2"),
         COMPONENT_MIXER_3: is_connected("mixerTemp3"),
         COMPONENT_MIXER_4: is_connected("mixerTemp4"),
+        COMPONENT_MIXER_5: is_connected("mixerTemp5"),
+        COMPONENT_MIXER_6: is_connected("mixerTemp6"),
         COMPONENT_LAMBDA: reg_params.get("lambdaStatus") is not None,
         COMPONENT_BUFFER: is_connected("tempUpperBuffer")
         or is_connected("tempLowerBuffer"),
@@ -554,7 +559,7 @@ def get_entity_component(
         sequence_num: Sequence number for duplicate parameters (1-4 for mixers)
 
     Returns:
-        Component identifier: "boiler", "huw", "mixer_1" through "mixer_4",
+        Component identifier: "boiler", "huw", "mixer_1" through "mixer_6",
         "lambda", "buffer", or "solar"
 
     """
@@ -570,8 +575,10 @@ def get_entity_component(
         COMPONENT_MIXER_2,
         COMPONENT_MIXER_3,
         COMPONENT_MIXER_4,
+        COMPONENT_MIXER_5,
+        COMPONENT_MIXER_6,
     ]
-    for i in range(1, 5):
+    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
         if f"mixer{i}" in text or f"mixer {i}" in text or f"mixer_{i}" in text:
             return mixer_components[i - 1]
 
@@ -746,3 +753,16 @@ def get_duplicate_entity_key(
 
     # Fallback: use simple numbering
     return f"{base_key}_{sequence_num}"
+
+
+def is_regparams_data_id_mapped(param_id: str) -> bool:
+    """Check if a regParamsData ID is already handled by a static entity.
+
+    Args:
+        param_id: The string ID from regParamsData
+
+    Returns:
+        True if the ID is in NUMBER_MAP, SELECT_KEY_POST_INDEX, or SELECT_KEY_GET_INDEX
+
+    """
+    return param_id in STATIC_REGPARAMS_DATA_IDS

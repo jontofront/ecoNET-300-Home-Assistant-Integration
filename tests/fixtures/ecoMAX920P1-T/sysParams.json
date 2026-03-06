@@ -1,0 +1,1229 @@
+{
+  "regProd": 18,
+  "regAllowed": true,
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "modulePanelSoftVer": "11.10.19",
+  "ecosrvSoftVer": "3.2.3879",
+  "moduleASoftVer": "11.11.36.P1",
+  "eth0": "**REDACTED**",
+  "tilesET": null,
+  "etPasswords": {},
+  "encryption": "psk2",
+  "schemaID": 23,
+  "wlan0": "**REDACTED**",
+  "remoteMenu": false,
+  "regType": 0,
+  "schema": {},
+  "regRefresh": 5,
+  "tiles": [
+    {
+      "minValue_": 0,
+      "idx": 0,
+      "seqNo_": 1,
+      "bit_": null,
+      "type_": "tile_text",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "mode",
+      "extra_": "CAN_TURN_OFF_BOILER"
+    },
+    {
+      "minValue_": 0,
+      "idx": 1,
+      "seqNo_": 6,
+      "bit_": null,
+      "type_": "tile_fan",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fanPower"
+    },
+    {
+      "minValue_": 0,
+      "idx": 2,
+      "seqNo_": 8,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 450,
+      "memberName_": "tempFlueGas"
+    },
+    {
+      "minValue_": 0,
+      "idx": 3,
+      "seqNo_": 10,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCOSet",
+      "maxValue_": 100,
+      "memberName_": "tempCO"
+    },
+    {
+      "minValue_": 0,
+      "idx": 4,
+      "seqNo_": 12,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCWUSet",
+      "maxValue_": 100,
+      "memberName_": "tempCWU",
+      "extra_": null
+    },
+    {
+      "minValue_": -35,
+      "idx": 5,
+      "seqNo_": 13,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 40,
+      "memberName_": "tempExternalSensor"
+    },
+    {
+      "minValue_": 0,
+      "idx": 6,
+      "seqNo_": 16,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "mixerSetTemp1",
+      "maxValue_": 100,
+      "memberName_": "mixerTemp1",
+      "extra_": null
+    },
+    {
+      "minValue_": 0,
+      "idx": 7,
+      "seqNo_": 100000,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempFeeder"
+    },
+    {
+      "minValue_": 0,
+      "idx": 8,
+      "seqNo_": 100000,
+      "bit_": null,
+      "type_": "tile_temp_wave",
+      "name_": "eSTER_x40",
+      "setMemberName_": "ecoSterSetTemp1",
+      "maxValue_": 100,
+      "memberName_": "ecoSterTemp1",
+      "extra_": {
+        "index": "1",
+        "addParameters": "STER_MODE_1;WORK_MODE_H_1",
+        "tempSelection": "ecoSterContacts1"
+      }
+    }
+  ],
+  "protocolType": "em",
+  "controllerID": "ecoMAX920P1-T",
+  "moduleEcoSTERSoftVer": "1.21.31",
+  "schedules": {
+    "ecomaxSchedules": {
+      "mixer6TZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "circPumpTZ": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          1,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "cwuTZ": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          31,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          254
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          1,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          10,
+          0,
+          20
+        ]
+      ],
+      "boilerTZ": [
+        [
+          0,
+          3,
+          240,
+          127,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          1,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          1,
+          3,
+          0,
+          20
+        ]
+      ],
+      "boilerWorkTZ": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "thermostat1TZ": [
+        [
+          0,
+          1,
+          192,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          192,
+          1,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          192,
+          1,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          192,
+          1,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          192,
+          1,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          192,
+          1,
+          255,
+          248
+        ],
+        [
+          0,
+          1,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "mixer1TZ": [
+        [
+          0,
+          1,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          15,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          7,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          0,
+          255,
+          255,
+          255,
+          252
+        ],
+        [
+          0,
+          20,
+          0,
+          20
+        ]
+      ]
+    }
+  },
+  "econetConfVer": null,
+  "password": "**REDACTED**",
+  "prodLogo": 18,
+  "fuelConsumptionCalc": false,
+  "regImgID": 7,
+  "settingsVer": 41695,
+  "signal": "-57",
+  "logFl": 0,
+  "etConfDesc": null,
+  "history": [],
+  "uid": "**REDACTED**",
+  "routerType": "mr3020-v3",
+  "etNewConfTrans": false,
+  "ecosrvAddr": "econet24.com",
+  "softVer": "3.2.3879",
+  "quality": 70,
+  "moduleCSoftVer": null,
+  "lan": false,
+  "moduleLambdaSoftVer": null,
+  "panelsNames": {
+    "2": [
+      "eSTER_x40"
+    ]
+  },
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "11.11.36",
+      214
+    ],
+    [
+      "lbPanelModuleVerCurr",
+      "11.10.19",
+      215
+    ],
+    [
+      "lbEcoSTERModuleVer1Curr",
+      "1.21.31",
+      14844
+    ]
+  ],
+  "key": "**REDACTED**",
+  "servicePassword": "**REDACTED**",
+  "ssid": "**REDACTED**",
+  "wifi": true,
+  "panelVer": null,
+  "alarms": [
+    {
+      "toDate": "2026-01-14 08:53:45",
+      "code": 7,
+      "fromDate": "2026-01-14 04:06:33",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-28 10:06:09",
+      "code": 0,
+      "fromDate": "2025-12-28 10:05:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-28 04:41:16",
+      "code": 0,
+      "fromDate": "2025-12-28 04:40:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-10 00:13:54",
+      "code": 0,
+      "fromDate": "2025-11-10 00:13:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-09 23:53:42",
+      "code": 4,
+      "fromDate": "2025-11-09 22:07:49",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-08 19:28:27",
+      "code": 0,
+      "fromDate": "2025-11-08 17:02:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-10 21:07:27",
+      "code": 0,
+      "fromDate": "2025-10-10 20:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-17 00:54:50",
+      "code": 0,
+      "fromDate": "2025-07-17 00:26:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-24 14:28:16",
+      "code": 0,
+      "fromDate": "2025-06-24 14:08:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-22 21:50:48",
+      "code": 7,
+      "fromDate": "2025-05-22 21:47:26",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-11 00:01:09",
+      "code": 0,
+      "fromDate": "2025-04-11 00:00:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 23:46:09",
+      "code": 0,
+      "fromDate": "2025-04-10 23:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 23:14:47",
+      "code": 0,
+      "fromDate": "2025-04-10 23:14:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 22:06:52",
+      "code": 7,
+      "fromDate": "2025-04-10 22:06:45",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 21:14:26",
+      "code": 7,
+      "fromDate": "2025-04-10 21:12:15",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 20:19:54",
+      "code": 7,
+      "fromDate": "2025-04-10 20:13:09",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 19:21:47",
+      "code": 7,
+      "fromDate": "2025-04-10 19:19:18",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 18:27:58",
+      "code": 7,
+      "fromDate": "2025-04-10 18:18:52",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 17:27:31",
+      "code": 7,
+      "fromDate": "2025-04-10 17:20:41",
+      "service": false
+    },
+    {
+      "toDate": "2025-04-10 15:57:10",
+      "code": 4,
+      "fromDate": "2025-04-10 15:53:53",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-15 07:25:47",
+      "code": 0,
+      "fromDate": "2025-03-15 06:28:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 23:40:49",
+      "code": 0,
+      "fromDate": "2025-03-08 23:40:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 23:36:12",
+      "code": 0,
+      "fromDate": "2025-03-08 23:22:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 23:12:22",
+      "code": 0,
+      "fromDate": "2025-03-08 21:44:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 21:03:38",
+      "code": 0,
+      "fromDate": "2025-03-08 20:16:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 20:15:54",
+      "code": 0,
+      "fromDate": "2025-03-08 20:15:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 18:51:52",
+      "code": 0,
+      "fromDate": "2025-03-08 18:17:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-08 12:25:36",
+      "code": 0,
+      "fromDate": "2025-03-08 12:25:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-03-01 11:56:03",
+      "code": 0,
+      "fromDate": "2025-03-01 11:26:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-02-19 19:39:34",
+      "code": 0,
+      "fromDate": "2025-02-19 19:39:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-01-11 17:12:13",
+      "code": 0,
+      "fromDate": "2025-01-11 17:09:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-15 00:02:29",
+      "code": 0,
+      "fromDate": "2024-11-15 00:02:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-14 23:37:09",
+      "code": 7,
+      "fromDate": "2024-11-14 23:36:13",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-14 22:44:49",
+      "code": 7,
+      "fromDate": "2024-11-14 22:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-14 20:12:39",
+      "code": 4,
+      "fromDate": "2024-11-14 20:07:06",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-11 14:47:54",
+      "code": 0,
+      "fromDate": "2024-11-11 12:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-08 19:18:25",
+      "code": 7,
+      "fromDate": "2024-11-08 19:17:02",
+      "service": false
+    },
+    {
+      "toDate": "2024-11-08 16:00:30",
+      "code": 7,
+      "fromDate": "2024-11-08 15:57:14",
+      "service": false
+    },
+    {
+      "toDate": "2024-10-12 21:03:48",
+      "code": 0,
+      "fromDate": "2024-10-12 21:03:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-09-30 19:32:11",
+      "code": 0,
+      "fromDate": "2024-09-30 18:53:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-07-13 04:38:48",
+      "code": 0,
+      "fromDate": "2024-07-13 02:30:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-07-11 18:18:46",
+      "code": 0,
+      "fromDate": "2024-07-11 18:14:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-07-01 13:46:17",
+      "code": 0,
+      "fromDate": "2024-07-01 13:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-07-01 13:37:07",
+      "code": 0,
+      "fromDate": "2024-07-01 13:36:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-07-01 13:31:07",
+      "code": 0,
+      "fromDate": "2024-07-01 13:12:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-06-03 12:36:32",
+      "code": 0,
+      "fromDate": "2024-06-03 10:03:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-16 22:43:52",
+      "code": 7,
+      "fromDate": "2024-05-16 22:42:23",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-16 12:11:27",
+      "code": 7,
+      "fromDate": "2024-05-16 12:08:09",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-06 19:38:19",
+      "code": 0,
+      "fromDate": "2024-05-06 19:35:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-06 19:34:24",
+      "code": 0,
+      "fromDate": "2024-05-06 19:33:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-06 19:32:54",
+      "code": 0,
+      "fromDate": "2024-05-06 19:31:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-05-06 19:30:37",
+      "code": 0,
+      "fromDate": "2024-05-06 19:29:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-04-25 15:37:32",
+      "code": 7,
+      "fromDate": "2024-04-25 15:30:37",
+      "service": false
+    },
+    {
+      "toDate": "2024-04-25 12:05:31",
+      "code": 4,
+      "fromDate": "2024-04-25 11:25:57",
+      "service": false
+    },
+    {
+      "toDate": "2024-03-24 09:41:54",
+      "code": 7,
+      "fromDate": "2024-03-24 09:41:49",
+      "service": false
+    },
+    {
+      "toDate": "2024-03-24 08:50:04",
+      "code": 0,
+      "fromDate": "2024-03-24 08:43:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-03-24 07:28:56",
+      "code": 7,
+      "fromDate": "2024-03-24 07:20:58",
+      "service": false
+    },
+    {
+      "toDate": "2024-02-26 09:00:16",
+      "code": 0,
+      "fromDate": "2024-02-26 09:00:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-02-18 01:42:33",
+      "code": 0,
+      "fromDate": "2024-02-18 01:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-20 17:41:41",
+      "code": 0,
+      "fromDate": "2024-01-20 17:41:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-20 17:22:43",
+      "code": 0,
+      "fromDate": "2024-01-20 17:20:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-20 17:09:49",
+      "code": 0,
+      "fromDate": "2024-01-20 17:09:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-20 10:12:48",
+      "code": 0,
+      "fromDate": "2024-01-20 09:54:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-17 17:18:10",
+      "code": 7,
+      "fromDate": "2024-01-17 17:17:53",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-17 16:23:01",
+      "code": 7,
+      "fromDate": "2024-01-17 16:11:33",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-10 23:22:24",
+      "code": 0,
+      "fromDate": "2024-01-10 23:22:00",
+      "service": false
+    },
+    {
+      "toDate": "2024-01-10 17:52:11",
+      "code": 0,
+      "fromDate": "2024-01-10 17:52:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-12-19 23:15:41",
+      "code": 7,
+      "fromDate": "2023-12-19 23:15:32",
+      "service": false
+    },
+    {
+      "toDate": "2023-12-19 22:25:35",
+      "code": 7,
+      "fromDate": "2023-12-19 22:21:59",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-07 19:20:02",
+      "code": 0,
+      "fromDate": "2023-11-07 18:22:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-10-26 08:54:25",
+      "code": 0,
+      "fromDate": "2023-10-26 08:54:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-10-22 12:45:23",
+      "code": 0,
+      "fromDate": "2023-10-22 12:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-10-19 08:52:39",
+      "code": 0,
+      "fromDate": "2023-10-19 08:52:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-18 21:42:34",
+      "code": 0,
+      "fromDate": "2023-09-18 21:34:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-18 21:31:58",
+      "code": 0,
+      "fromDate": "2023-09-18 20:09:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 18:26:00",
+      "code": 7,
+      "fromDate": "2023-09-16 18:25:33",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 17:33:58",
+      "code": 0,
+      "fromDate": "2023-09-16 17:33:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 17:32:43",
+      "code": 7,
+      "fromDate": "2023-09-16 17:32:09",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 16:40:46",
+      "code": 7,
+      "fromDate": "2023-09-16 16:35:06",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 15:43:45",
+      "code": 7,
+      "fromDate": "2023-09-16 15:42:42",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 14:51:20",
+      "code": 7,
+      "fromDate": "2023-09-16 14:42:17",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 13:45:12",
+      "code": 0,
+      "fromDate": "2023-09-16 13:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-16 11:12:10",
+      "code": 7,
+      "fromDate": "2023-09-16 10:58:10",
+      "service": false
+    },
+    {
+      "toDate": "2023-09-02 18:38:42",
+      "code": 0,
+      "fromDate": "2023-09-02 17:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-26 13:46:50",
+      "code": 0,
+      "fromDate": "2023-08-26 13:46:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-07 15:50:28",
+      "code": 0,
+      "fromDate": "2023-08-07 15:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-07 15:23:27",
+      "code": 0,
+      "fromDate": "2023-08-07 15:23:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-07 15:20:26",
+      "code": 0,
+      "fromDate": "2023-08-07 15:20:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-07 15:20:00",
+      "code": 0,
+      "fromDate": "2023-08-07 15:19:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-08-06 17:22:28",
+      "code": 0,
+      "fromDate": "2023-08-06 17:22:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-06-06 22:14:46",
+      "code": 0,
+      "fromDate": "2023-06-06 22:14:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-09 19:59:29",
+      "code": 0,
+      "fromDate": "2023-05-09 19:59:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-28 09:47:12",
+      "code": 0,
+      "fromDate": "2023-04-28 09:47:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-06 19:59:26",
+      "code": 0,
+      "fromDate": "2023-04-06 19:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-02 14:14:29",
+      "code": 0,
+      "fromDate": "2023-04-02 13:16:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-01-24 18:58:09",
+      "code": 7,
+      "fromDate": "2023-01-24 18:58:03",
+      "service": false
+    },
+    {
+      "toDate": "2023-01-24 18:05:19",
+      "code": 0,
+      "fromDate": "2023-01-24 17:57:00",
+      "service": false
+    },
+    {
+      "toDate": "2023-01-24 13:25:03",
+      "code": 7,
+      "fromDate": "2023-01-24 13:21:13",
+      "service": false
+    },
+    {
+      "toDate": "2023-01-04 23:31:16",
+      "code": 7,
+      "fromDate": "2023-01-04 23:31:11",
+      "service": false
+    },
+    {
+      "toDate": "2023-01-04 22:45:40",
+      "code": 7,
+      "fromDate": "2023-01-04 22:43:17",
+      "service": false
+    }
+  ],
+  "login": "admin",
+  "moduleBSoftVer": null,
+  "etConfVer": null
+}

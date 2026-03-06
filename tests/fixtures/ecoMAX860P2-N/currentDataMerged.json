@@ -1,0 +1,524 @@
+{
+    "216": {
+        "name": "Servo mixer 2",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "217": {
+        "name": "Servo mixer 3",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "214": {
+        "name": "Valve mixer 5",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "215": {
+        "name": "Servo mixer 1",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "212": {
+        "name": "Valve mixer 3",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "213": {
+        "name": "Valve mixer 4",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "210": {
+        "name": "Valve mixer 1",
+        "unit": 5,
+        "special": 0,
+        "value": 85
+    },
+    "211": {
+        "name": "Valve mixer 2",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "218": {
+        "name": "Servo mixer 4",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "219": {
+        "name": "Servo mixer 5",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "166": {
+        "name": "ecoLAMBDA error.",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1547": {
+        "name": "Pump mixer 2",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1544": {
+        "name": "Pump mixer 1",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1542": {
+        "name": "HUW pump",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1543": {
+        "name": "Circulating pump",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1540": {
+        "name": "Additional feeder",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1541": {
+        "name": "Boiler pump",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "221": {
+        "name": "Valve mixer 2",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "220": {
+        "name": "Valve mixer 1",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "1793": {
+        "name": "Burner output",
+        "unit": 7,
+        "special": 1,
+        "value": 9.94184017181397
+    },
+    "1792": {
+        "name": "",
+        "unit": 31,
+        "special": 7,
+        "value": 2
+    },
+    "1550": {
+        "name": "Pump mixer 3",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1553": {
+        "name": "Pump mixer 4",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "59": {
+        "name": "Return temperature",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1556": {
+        "name": "Pump mixer 5",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "55": {
+        "name": "Flame",
+        "unit": 5,
+        "special": 1,
+        "value": 93.9120864868164
+    },
+    "54": {
+        "name": "Movable grate load",
+        "unit": 12,
+        "special": 1,
+        "value": 0
+    },
+    "56": {
+        "name": "Pressure",
+        "unit": 9,
+        "special": 1,
+        "value": 0
+    },
+    "191": {
+        "name": "Room thermostat mixer 4",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "190": {
+        "name": "Room thermostat mixer 3",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "192": {
+        "name": "Room thermostat mixer 5",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "3": {
+        "name": "Poker",
+        "unit": 31,
+        "special": 24,
+        "value": false
+    },
+    "245": {
+        "name": "Gateway:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.168.0.1"
+    },
+    "244": {
+        "name": "Mask:",
+        "unit": 0,
+        "special": 0,
+        "value": "255.255.255.0"
+    },
+    "247": {
+        "name": "Encryption:",
+        "unit": 31,
+        "special": 6,
+        "value": 4
+    },
+    "246": {
+        "name": "Server:",
+        "unit": 31,
+        "special": 5,
+        "value": 1
+    },
+    "241": {
+        "name": "Gateway:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.168.0.1"
+    },
+    "240": {
+        "name": "Mask:",
+        "unit": 0,
+        "special": 0,
+        "value": "255.255.255.0"
+    },
+    "243": {
+        "name": "IP:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.168.0.103"
+    },
+    "242": {
+        "name": "Server:",
+        "unit": 31,
+        "special": 5,
+        "value": 1
+    },
+    "249": {
+        "name": "Wifi status:",
+        "unit": 31,
+        "special": 5,
+        "value": 1
+    },
+    "248": {
+        "name": "Signal strenght:",
+        "unit": 5,
+        "special": 0,
+        "value": 36
+    },
+    "1537": {
+        "name": "Exhaust fan",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1536": {
+        "name": "Fan",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1538": {
+        "name": "Feeder",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "251": {
+        "name": "SSID:",
+        "unit": 0,
+        "special": 0,
+        "value": "TP-Link"
+    },
+    "2": {
+        "name": "Poker",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "187": {
+        "name": "Boiler thermostat",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "184": {
+        "name": "Fuel level",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1032": {
+        "name": "Temp. mixer 2",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1033": {
+        "name": "Temp. mixer 3",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1030": {
+        "name": "Emission temperature",
+        "unit": 1,
+        "special": 1,
+        "value": 100.768943786621
+    },
+    "1031": {
+        "name": "Temp. mixer 1",
+        "unit": 1,
+        "special": 1,
+        "value": 49.8418350219727
+    },
+    "1034": {
+        "name": "Temp. mixer 4",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1035": {
+        "name": "Temp. mixer 5",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "229": {
+        "name": "Exhaust fan",
+        "unit": 5,
+        "special": 0,
+        "value": 33
+    },
+    "228": {
+        "name": "Oxygen",
+        "unit": 5,
+        "special": 1,
+        "value": 0
+    },
+    "165": {
+        "name": "ecoLAMBDA sensor calibration in progress.",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "225": {
+        "name": "Oxygen",
+        "unit": 31,
+        "special": 2,
+        "value": 0
+    },
+    "224": {
+        "name": "Valve mixer 5",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "223": {
+        "name": "Valve mixer 4",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "222": {
+        "name": "Valve mixer 3",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "162": {
+        "name": "CAUTION!\\nLow fuel level.",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "163": {
+        "name": "CAUTION!\\nUnsuccessful attempt to load the tank.",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1025": {
+        "name": "HUW temperature",
+        "unit": 1,
+        "special": 1,
+        "value": 44.341178894043
+    },
+    "1024": {
+        "name": "Boiler temperature",
+        "unit": 1,
+        "special": 1,
+        "value": 53.4409255981445
+    },
+    "1027": {
+        "name": "Weather temperature",
+        "unit": 1,
+        "special": 1,
+        "value": 2.90543365478516
+    },
+    "189": {
+        "name": "Room thermostat mixer 2",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "188": {
+        "name": "Room thermostat mixer 1",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1029": {
+        "name": "Lower buffer temperature",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1028": {
+        "name": "Upper buffer temperature",
+        "unit": 1,
+        "special": 1,
+        "value": 35.2784080505371
+    },
+    "238": {
+        "name": "Number of resets",
+        "unit": 4,
+        "special": 0,
+        "value": 295
+    },
+    "239": {
+        "name": "IP:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.168.0.103"
+    },
+    "234": {
+        "name": "Work at 50%",
+        "unit": 4,
+        "special": 0,
+        "value": 4279
+    },
+    "235": {
+        "name": "Work at 30%",
+        "unit": 4,
+        "special": 0,
+        "value": 4696
+    },
+    "236": {
+        "name": "Feeder work",
+        "unit": 4,
+        "special": 0,
+        "value": 2159
+    },
+    "237": {
+        "name": "Firing-up count",
+        "unit": 0,
+        "special": 0,
+        "value": 8683
+    },
+    "233": {
+        "name": "Work at 100%",
+        "unit": 4,
+        "special": 0,
+        "value": 8423
+    },
+    "1": {
+        "name": "Lighter",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "5": {
+        "name": "Circulating pump",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1290": {
+        "name": "Preset temp. mixer 4",
+        "unit": 1,
+        "special": 0,
+        "value": 35
+    },
+    "1291": {
+        "name": "Preset temp. mixer 5",
+        "unit": 1,
+        "special": 0,
+        "value": 35
+    },
+    "1287": {
+        "name": "Preset temp. mixer 1",
+        "unit": 1,
+        "special": 0,
+        "value": 49
+    },
+    "1281": {
+        "name": "HUW preset temperature",
+        "unit": 1,
+        "special": 0,
+        "value": 45
+    },
+    "1280": {
+        "name": "Preset boiler temperature",
+        "unit": 1,
+        "special": 0,
+        "value": 65
+    },
+    "1289": {
+        "name": "Preset temp. mixer 3",
+        "unit": 1,
+        "special": 0,
+        "value": 35
+    },
+    "1288": {
+        "name": "Preset temp. mixer 2",
+        "unit": 1,
+        "special": 0,
+        "value": 35
+    }
+}

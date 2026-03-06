@@ -92,6 +92,7 @@
     "ecosol",
     "ecosrv",
     "ecoster",
+    "ECOSTERS",
     "editability",
     "HACS",
     "hass",
@@ -113,6 +114,8 @@
     "pblxpt",
     "Polski",
     "pyproject",
+    "regparam",
+    "regparams",
     "rmcats",
     "RMNEWPARAM",
     "sched",
@@ -125,7 +128,7 @@
     "wlan",
     "wthr",
     "zeroconf"
-],
+  ],
   "cSpell.ignorePaths": [
     "custom_components/econet300/translations/pl.json",
     "pyproject.toml",

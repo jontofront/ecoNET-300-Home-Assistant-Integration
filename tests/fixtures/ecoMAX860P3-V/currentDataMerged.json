@@ -1,0 +1,1250 @@
+{
+    "165": {
+        "name": "",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "133": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "132": {
+        "name": "Термостат котел",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "131": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "130": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "136": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "135": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "134": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "139": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 33
+    },
+    "138": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 5
+    },
+    "166": {
+        "name": "",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "24": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1547": {
+        "name": "Помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "26": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1545": {
+        "name": "Смесител",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1542": {
+        "name": "БГВ помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1543": {
+        "name": "Циркул. помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "22": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1541": {
+        "name": "Помпа на котела",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "28": {
+        "name": "Пламък",
+        "unit": 5,
+        "special": 1,
+        "value": 99.9951400756836
+    },
+    "29": {
+        "name": "Подв.скара натов.",
+        "unit": 12,
+        "special": 1,
+        "value": 0.0
+    },
+    "1548": {
+        "name": "Смесител",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1549": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "4": {
+        "name": "Покер активен",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "161": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "8": {
+        "name": "",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "163": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "11": {
+        "name": "Темп. на котел",
+        "unit": 1,
+        "special": 0,
+        "value": 2510
+    },
+    "1798": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "10": {
+        "name": "Темп. дим. газове",
+        "unit": 1,
+        "special": 0,
+        "value": 4213
+    },
+    "1793": {
+        "name": "Мощност котел",
+        "unit": 7,
+        "special": 1,
+        "value": 2.8698525428771973
+    },
+    "1792": {
+        "name": "",
+        "unit": 31,
+        "special": 7,
+        "value": 3
+    },
+    "1027": {
+        "name": "Външна темп.",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1795": {
+        "name": "Вент.свеж. в.",
+        "unit": 5,
+        "special": 0,
+        "value": 49
+    },
+    "1794": {
+        "name": "Мощност котел",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "120": {
+        "name": "",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "121": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "122": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "123": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "124": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "125": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "126": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "127": {
+        "name": "Внимание!",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "128": {
+        "name": "",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "129": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "167": {
+        "name": "",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "1551": {
+        "name": "Смесител",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1550": {
+        "name": "Помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1553": {
+        "name": "Помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1552": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1555": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1554": {
+        "name": "Смесител",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "55": {
+        "name": "Подв.скара натов.",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "51": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "50": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "53": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "52": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "198": {
+        "name": "SSID:",
+        "unit": 0,
+        "special": 0,
+        "value": "Hall_01"
+    },
+    "195": {
+        "name": "Сила на сигнала:",
+        "unit": 0,
+        "special": 0,
+        "value": 60
+    },
+    "194": {
+        "name": "Защита:",
+        "unit": 31,
+        "special": 6,
+        "value": 4
+    },
+    "197": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 13
+    },
+    "196": {
+        "name": "WiFi статус:",
+        "unit": 31,
+        "special": 5,
+        "value": 1
+    },
+    "191": {
+        "name": "Mask:",
+        "unit": 0,
+        "special": 0,
+        "value": "255.255.255.0"
+    },
+    "190": {
+        "name": "IP:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.1.1.100"
+    },
+    "193": {
+        "name": "Server:",
+        "unit": 31,
+        "special": 5,
+        "value": 1
+    },
+    "192": {
+        "name": "Gate:",
+        "unit": 0,
+        "special": 0,
+        "value": "192.1.1.1"
+    },
+    "115": {
+        "name": "Няма гориво",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "114": {
+        "name": "Неуспешно зареждане на бункера",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "88": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "89": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "111": {
+        "name": "Венти.при разпа.",
+        "unit": 8,
+        "special": 0,
+        "value": 800
+    },
+    "110": {
+        "name": "Вент. дим. в.",
+        "unit": 8,
+        "special": 0,
+        "value": 0
+    },
+    "113": {
+        "name": "Внимание!!! НИСКО НИВО НА ГОРИB.",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "112": {
+        "name": "вент.дим.в. за разпа.",
+        "unit": 8,
+        "special": 0,
+        "value": 550
+    },
+    "82": {
+        "name": "Горна темп. буфер",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "83": {
+        "name": "Външен сензор",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "80": {
+        "name": "Температура",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "81": {
+        "name": "Долна темп. буфер",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "86": {
+        "name": "Температура",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "87": {
+        "name": "Темп. вр. вода",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "84": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "85": {
+        "name": "Температура",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "117": {
+        "name": "ecoLAMBDA грешка        ",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "3": {
+        "name": "Силата на покера",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "7": {
+        "name": "Допълнителен шнек",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1546": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "25": {
+        "name": "Темп. вр. вода",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1544": {
+        "name": "Помпа",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "108": {
+        "name": "Вент. дим. в.",
+        "unit": 5,
+        "special": 0,
+        "value": 25
+    },
+    "27": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "102": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "20": {
+        "name": "Горна темп. буфер",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "100": {
+        "name": "Повреда",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "101": {
+        "name": "Повреда",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "106": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "107": {
+        "name": "Дебит на гориво",
+        "unit": 9,
+        "special": 1,
+        "value": 0.5978859663009644
+    },
+    "104": {
+        "name": "Ниво на гориво",
+        "unit": 5,
+        "special": 0,
+        "value": 50
+    },
+    "105": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "39": {
+        "name": "Пламък",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "38": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1540": {
+        "name": "Допълнителен шнек",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "33": {
+        "name": "",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "32": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "30": {
+        "name": "Темп. вр. вода",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "21": {
+        "name": "Външен сензор",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "2048": {
+        "name": "Режим на помп.БГВ:",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "34": {
+        "name": "Термостат котел",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1537": {
+        "name": "Вент. дим. в.",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1536": {
+        "name": "Вент.свеж. в.",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "109": {
+        "name": "Вент.свеж. в.",
+        "unit": 8,
+        "special": 0,
+        "value": 963
+    },
+    "162": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "1539": {
+        "name": "Шнек 2",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1538": {
+        "name": "Шнек",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "179": {
+        "name": "Работа 100%:",
+        "unit": 4,
+        "special": 0,
+        "value": 2533
+    },
+    "178": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "175": {
+        "name": "Максимална",
+        "unit": 0,
+        "special": 0,
+        "value": 1
+    },
+    "174": {
+        "name": "Минимална",
+        "unit": 0,
+        "special": 0,
+        "value": 1
+    },
+    "173": {
+        "name": "Кислород",
+        "unit": 5,
+        "special": 1,
+        "value": 0.0
+    },
+    "172": {
+        "name": "Кислород",
+        "unit": 5,
+        "special": 1,
+        "value": 0.0
+    },
+    "171": {
+        "name": "Кислород",
+        "unit": 5,
+        "special": 0,
+        "value": 62
+    },
+    "170": {
+        "name": "Кислород",
+        "unit": 31,
+        "special": 2,
+        "value": 0
+    },
+    "23": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "182": {
+        "name": "Работа Шнек:",
+        "unit": 4,
+        "special": 0,
+        "value": 1290
+    },
+    "180": {
+        "name": "Работа 50%:",
+        "unit": 4,
+        "special": 0,
+        "value": 736
+    },
+    "181": {
+        "name": "Работа 30%:",
+        "unit": 4,
+        "special": 0,
+        "value": 557
+    },
+    "186": {
+        "name": "IP:",
+        "unit": 0,
+        "special": 0,
+        "value": "0.0.0.0"
+    },
+    "187": {
+        "name": "Mask:",
+        "unit": 0,
+        "special": 0,
+        "value": "0.0.0.0"
+    },
+    "184": {
+        "name": "Брой запалвания:",
+        "unit": 0,
+        "special": 0,
+        "value": 4472
+    },
+    "6": {
+        "name": "Допълнителен шнек",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "1032": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1033": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1030": {
+        "name": "Темп. дим. газове",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "189": {
+        "name": "Server:",
+        "unit": 31,
+        "special": 5,
+        "value": 0
+    },
+    "1034": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "185": {
+        "name": "Брой рестарти:",
+        "unit": 0,
+        "special": 0,
+        "value": 377
+    },
+    "99": {
+        "name": "Повреда",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "98": {
+        "name": "Прегряване",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "168": {
+        "name": "",
+        "unit": 31,
+        "special": 3,
+        "value": false
+    },
+    "90": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "93": {
+        "name": "Превишена",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "92": {
+        "name": "Превишена",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "160": {
+        "name": "Задвижване/Серво",
+        "unit": 31,
+        "special": 4,
+        "value": 0
+    },
+    "94": {
+        "name": "Повреда",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "97": {
+        "name": "Аларми 7",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "96": {
+        "name": "Аларми 5",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "1025": {
+        "name": "БГВ температура",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1024": {
+        "name": "Темп. на котел",
+        "unit": 1,
+        "special": 1,
+        "value": 59.42982482910156
+    },
+    "13": {
+        "name": "Външна темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 4213
+    },
+    "1031": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "15": {
+        "name": "Подв.скара натов.",
+        "unit": 1,
+        "special": 0,
+        "value": 192
+    },
+    "14": {
+        "name": "БГВ температура",
+        "unit": 1,
+        "special": 0,
+        "value": 4213
+    },
+    "17": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "16": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "19": {
+        "name": "Долна темп. буфер",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "18": {
+        "name": "Температура",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "188": {
+        "name": "Gate:",
+        "unit": 0,
+        "special": 0,
+        "value": "0.0.0.0"
+    },
+    "1029": {
+        "name": "Долна темп. буфер",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "1028": {
+        "name": "Горна темп. буфер",
+        "unit": 1,
+        "special": 1,
+        "value": null
+    },
+    "2": {
+        "name": "Чистене тубус",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "116": {
+        "name": "ecoLAMBDA калибриране      ",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "103": {
+        "name": " ",
+        "unit": 3,
+        "special": 0,
+        "value": 0
+    },
+    "151": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": null
+    },
+    "150": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": null
+    },
+    "153": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "152": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "155": {
+        "name": "Смесител",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "154": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "157": {
+        "name": "Смесител",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "156": {
+        "name": "Смесител",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "158": {
+        "name": "Смесител",
+        "unit": 5,
+        "special": 0,
+        "value": 0
+    },
+    "2049": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "48": {
+        "name": "Термостат котел",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "49": {
+        "name": "",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "40": {
+        "name": "Подв.скара натов.",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "118": {
+        "name": "Повреда на шнек",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "1": {
+        "name": "Запалка",
+        "unit": 31,
+        "special": 1,
+        "value": false
+    },
+    "5": {
+        "name": "Допълнителен шнек",
+        "unit": 31,
+        "special": 1,
+        "value": true
+    },
+    "9": {
+        "name": "Пламък",
+        "unit": 5,
+        "special": 0,
+        "value": 197
+    },
+    "1290": {
+        "name": "Зададена темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 40
+    },
+    "146": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "147": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "144": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "145": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "142": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 1
+    },
+    "143": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "140": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 41
+    },
+    "141": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 69
+    },
+    "148": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": 0
+    },
+    "149": {
+        "name": "",
+        "unit": 0,
+        "special": 0,
+        "value": null
+    },
+    "77": {
+        "name": "БГВ температура",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "76": {
+        "name": "Външна темп.",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "75": {
+        "name": "Темп. на котел",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "74": {
+        "name": "Темп. дим. газове",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "73": {
+        "name": "Пламък",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "72": {
+        "name": "Подв.скара натов.",
+        "unit": 31,
+        "special": 0,
+        "value": false
+    },
+    "79": {
+        "name": "Температура",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "78": {
+        "name": "",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    },
+    "1285": {
+        "name": "Долна темп. буфер",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1284": {
+        "name": "Горна темп. буфер",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1287": {
+        "name": "Зададена темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 40
+    },
+    "1286": {
+        "name": "Темп. дим. газове",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1281": {
+        "name": "БГВ температура",
+        "unit": 1,
+        "special": 0,
+        "value": 45
+    },
+    "1280": {
+        "name": "Темп. на котел",
+        "unit": 1,
+        "special": 0,
+        "value": 65
+    },
+    "1283": {
+        "name": "Външна темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "1289": {
+        "name": "Зададена темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 40
+    },
+    "1288": {
+        "name": "Зададена темп.",
+        "unit": 1,
+        "special": 0,
+        "value": 40
+    },
+    "41": {
+        "name": "Темп. вр. вода",
+        "unit": 1,
+        "special": 0,
+        "value": 0
+    },
+    "12": {
+        "name": "Термостат котел",
+        "unit": 31,
+        "special": 0,
+        "value": true
+    }
+}

@@ -142,11 +142,14 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                         )
                         _LOGGER.info(
                             "Coordinator fetched merged data: %s parameters",
-                            len(merged_data.get("parameters", {})) if merged_data else 0,
+                            len(merged_data.get("parameters", {}))
+                            if merged_data
+                            else 0,
                         )
                     except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
                         _LOGGER.warning(
-                            "Failed to fetch merged parameter data in coordinator: %s", e
+                            "Failed to fetch merged parameter data in coordinator: %s",
+                            e,
                         )
                 else:
                     rm_data = {}

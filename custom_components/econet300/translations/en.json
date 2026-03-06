@@ -94,12 +94,51 @@
   "options": {
     "step": {
       "init": {
-        "title": "ecoNET300 Options",
+        "menu_options": {
+          "connection_settings": "Connection Settings",
+          "custom_entities": "Custom Entities"
+        }
+      },
+      "connection_settings": {
+        "title": "Connection Settings",
         "description": "Update your ecoNET300 connection settings",
         "data": {
           "host": "Host",
           "username": "Username",
           "password": "Password"
+        }
+      },
+      "custom_entities": {
+        "title": "Custom Entities",
+        "description": "Select the API endpoint to browse for custom entities.",
+        "data": {
+          "endpoint": "API endpoint"
+        }
+      },
+      "select_params": {
+        "title": "Select Parameters",
+        "description": "Choose parameters to expose as entities. Already-mapped static parameters are excluded.",
+        "data": {
+          "selected_params": "Available parameters"
+        }
+      },
+      "configure_entity": {
+        "title": "Configure Entity",
+        "description": "Configure entity for {key} from {source}.",
+        "data": {
+          "name": "Entity name",
+          "component": "Device group",
+          "entity_type": "Entity type",
+          "entity_category": "Entity category"
+        }
+      },
+      "configure_sensor": {
+        "title": "Configure Sensor",
+        "description": "Configure sensor properties for \"{name}\".",
+        "data": {
+          "native_unit": "Unit of measurement",
+          "device_class": "Device class",
+          "precision": "Display precision"
         }
       }
     },
@@ -107,6 +146,9 @@
       "cannot_connect": "Failed to connect",
       "invalid_auth": "Invalid authentication",
       "unknown": "Unexpected error"
+    },
+    "abort": {
+      "no_unmapped_params": "No unmapped parameters available for the selected endpoint."
     }
   },
   "entity": {
@@ -780,6 +822,15 @@
       "tem_co": {
         "name": "Boiler Temperature"
       }
+    }
+  },
+  "system_health": {
+    "info": {
+      "host": "Host",
+      "controller_model": "Controller model",
+      "software_version": "Software version",
+      "hardware_version": "Hardware version",
+      "can_reach_device": "Can reach device"
     }
   }
 }

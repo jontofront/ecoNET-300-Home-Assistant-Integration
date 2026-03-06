@@ -16,13 +16,16 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import camel_to_snake, get_entity_component
 from .const import (
+    API_REG_PARAMS_URI,
     BINARY_SENSOR_MAP_KEY,
+    CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
     ECOSOL_CONTROLLER_IDS,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_CATEGORY,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -169,7 +172,11 @@ def create_binary_entity_description(key: str) -> EconetBinarySensorEntityDescri
         component=component,
         # No icon or icon_off - Home Assistant will use icons.json automatically
     )
-    _LOGGER.debug("create_binary_entity_description: %s (component=%s)", entity_description, component)
+    _LOGGER.debug(
+        "create_binary_entity_description: %s (component=%s)",
+        entity_description,
+        component,
+    )
     return entity_description
 
 
@@ -301,7 +308,7 @@ def create_ecoster_binary_sensors(
     coordinator_data = coordinator.data.get("regParams", {})
 
     # Create ecoSTER binary sensors for each thermostat (1-8)
-    for thermostat_idx in range(1, 9):  # 1-8
+    for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
         # Create contacts sensor
         contacts_key = f"ecoSterContacts{thermostat_idx}"
         if (
@@ -384,6 +391,108 @@ def create_ecosol_binary_sensors(coordinator: EconetDataCoordinator, api: Econet
     return entities
 
 
+# =============================================================================
+# Unified custom binary sensors (user-selected via Options Flow)
+# =============================================================================
+
+
+class CustomBinarySensor(EconetEntity, BinarySensorEntity):
+    """Binary sensor created from a user-selected parameter across any endpoint."""
+
+    entity_description: EconetBinarySensorEntityDescription
+
+    def __init__(
+        self,
+        entity_description: EconetBinarySensorEntityDescription,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        source: str,
+        param_key: str,
+    ):
+        """Initialize a custom binary sensor."""
+        self.entity_description = entity_description
+        self.api = api
+        self._source = source
+        self._param_key = param_key
+        self._attr_is_on: bool | None = None
+        super().__init__(coordinator, api)
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info based on entity component."""
+        component = getattr(self.entity_description, "component", None)
+        if component:
+            return get_device_info_for_component(component, self.api)
+        return super().device_info
+
+    def _lookup_value(self):
+        """Look up value from the configured data source."""
+        if self.coordinator.data is None:
+            return None
+        if self._source == API_REG_PARAMS_URI:
+            return (self.coordinator.data.get("regParams") or {}).get(self._param_key)
+        # Both regParamsData and rmCurrentDataParams share the same numeric
+        # ID space.  Try regParamsData first, then rmCurrentDataParams metadata.
+        rpd = self.coordinator.data.get("regParamsData") or {}
+        rpd_value = rpd.get(self._param_key)
+        if rpd_value is not None:
+            return rpd_value
+        cdp = (self.coordinator.data.get("rmData") or {}).get("currentDataParams") or {}
+        param = cdp.get(self._param_key)
+        return param.get("value") if isinstance(param, dict) else param
+
+    def _sync_state(self, value) -> None:
+        """Synchronize the binary sensor state."""
+        self._attr_is_on = bool(value)
+        self.async_write_ha_state()
+
+
+def create_custom_binary_sensors(
+    coordinator: EconetDataCoordinator,
+    api: Econet300Api,
+    custom_entities: dict[str, dict[str, str]],
+) -> list[CustomBinarySensor]:
+    """Create binary sensor entities from user-selected parameters.
+
+    Args:
+        coordinator: The data coordinator.
+        api: The device API.
+        custom_entities: Dict from entry.options[CONF_CUSTOM_ENTITIES],
+            shaped as {unique_id: {"source": str, "key": str, "name": str,
+            "entity_type": str, "component": str, "entity_category": str|None}}.
+
+    """
+    entities: list[CustomBinarySensor] = []
+
+    for _uid, cfg in custom_entities.items():
+        if cfg.get("entity_type") != "binary_sensor":
+            continue
+
+        name = cfg.get("name", f"Parameter {cfg.get('key', _uid)}")
+        source = cfg.get("source", "regParamsData")
+        param_key = cfg.get("key", _uid)
+        component = cfg.get("component")
+        entity_key = f"custom_{source}_{param_key}"
+
+        cat_str = cfg.get("entity_category")
+        entity_category = EntityCategory.DIAGNOSTIC if cat_str == "diagnostic" else None
+
+        description = EconetBinarySensorEntityDescription(
+            key=entity_key,
+            name=name,
+            entity_category=entity_category,
+            component=component,
+            has_entity_name=True,
+        )
+
+        entities.append(
+            CustomBinarySensor(description, coordinator, api, source, param_key)
+        )
+
+    _LOGGER.info("Created %d custom binary sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -393,7 +502,12 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id][SERVICE_COORDINATOR]
     api = hass.data[DOMAIN][entry.entry_id][SERVICE_API]
 
-    entities: list[EconetBinarySensor | MixerBinarySensor | EcoSterBinarySensor] = []
+    entities: list[
+        EconetBinarySensor
+        | MixerBinarySensor
+        | EcoSterBinarySensor
+        | CustomBinarySensor
+    ] = []
 
     # Create standard binary sensors (including controller-specific ones)
     entities.extend(create_binary_sensors(coordinator, api))
@@ -406,6 +520,11 @@ async def async_setup_entry(
 
     # Create ecoSOL-specific binary sensors (ecoSOL 500, ecoSOL 301, etc.)
     entities.extend(create_ecosol_binary_sensors(coordinator, api))
+
+    # Create user-defined custom binary sensors from Options Flow
+    custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
+    if custom_cfg:
+        entities.extend(create_custom_binary_sensors(coordinator, api, custom_cfg))
 
     _LOGGER.info("Total binary sensor entities: %d", len(entities))
     async_add_entities(entities)

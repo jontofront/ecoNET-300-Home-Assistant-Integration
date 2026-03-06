@@ -1,11 +1,9 @@
 {
   "domain": "econet300",
   "name": "ecoNET300",
-  "codeowners": [
-    "@jontofront"
-  ],
+  "codeowners": ["@jontofront"],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": ["system_health"],
   "documentation": "https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration",
   "homekit": {},
   "iot_class": "local_polling",
@@ -13,6 +11,6 @@
   "quality_scale": "silver",
   "requirements": [],
   "ssdp": [],
-  "version": "1.2.1",
+  "version": "1.2.2a4",
   "zeroconf": []
 }

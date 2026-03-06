@@ -67,9 +67,10 @@ The integration supports **6 languages** with comprehensive translations:
 1. [Installation](#installation)
 2. [Upgrading](#upgrading)
 3. [Configuration](#configuration)
-4. [Entities](#entities)
-5. [Contributing](#contributing)
-6. [Acknowledgments](#acknowledgments)
+4. [Custom Entities](#custom-entities)
+5. [Entities](#entities)
+6. [Contributing](#contributing)
+7. [Acknowledgments](#acknowledgments)
 
 ---
 
@@ -162,6 +163,31 @@ Apart from using 'My button' (in case it doesn't work) you can also perform the 
 ![Success](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/success.png)
 
 </details>
+
+### Custom Entities
+
+After initial setup, you can add extra sensors from the integration's configuration options. This allows you to expose additional parameters that are not included by default.
+
+**Step 1.** Go to **Settings > Devices & Services**, find your **ecoNET300** integration and click **Configure**. Select **Custom Entities**.
+
+![Custom Entities menu](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_menu.png)
+
+**Step 2.** Choose the API endpoint to browse:
+
+- **regParams** — named parameters (e.g. temperatures, statuses)
+- **regParamsData** — numeric IDs with names from the device
+
+![Choose endpoint](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_endpoint.png)
+
+**Step 3.** Select the parameters you want to add. The list shows all available parameters discovered from your device that are not already mapped.
+
+![Select parameters](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_select.png)
+
+**Step 4.** Configure each entity — set the name, device group, entity type (sensor / binary sensor), and category. For sensors you can also set unit, device class, and display precision.
+
+![Configure entity](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_configure_entity.png)
+
+The selected parameters will be created as entities and available immediately in Home Assistant.
 
 ---
 
@@ -328,4 +354,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-02-24 with v1.2.1 release._
+_This README was last updated on 2026-03-04 with v1.2.2a2 release._

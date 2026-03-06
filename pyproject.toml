@@ -543,6 +543,8 @@ split-on-trailing-comma = false
     "PLC0415", # Allow imports inside functions for test isolation
     "E402",    # Allow imports not at top of file for path manipulation
     "I001",    # Ignore import sorting in test files with dynamic imports
+    "D102",    # Test methods don't need docstrings
+    "SLF001",  # Allow private member access in tests
 ]
 "scripts/**/*.py" = [
     "T20",    # Allow print statements in utility scripts

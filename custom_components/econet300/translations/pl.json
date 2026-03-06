@@ -94,12 +94,51 @@
   "options": {
     "step": {
       "init": {
-        "title": "Opcje ecoNET300",
+        "menu_options": {
+          "connection_settings": "Ustawienia połączenia",
+          "custom_entities": "Własne encje"
+        }
+      },
+      "connection_settings": {
+        "title": "Ustawienia połączenia",
         "description": "Zaktualizuj ustawienia połączenia ecoNET300",
         "data": {
           "host": "Host",
           "username": "Nazwa użytkownika",
           "password": "Hasło"
+        }
+      },
+      "custom_entities": {
+        "title": "Własne encje",
+        "description": "Wybierz endpoint API do przeglądania własnych encji.",
+        "data": {
+          "endpoint": "Endpoint API"
+        }
+      },
+      "select_params": {
+        "title": "Wybierz parametry",
+        "description": "Wybierz parametry, które mają być widoczne jako encje. Już zmapowane parametry statyczne są wykluczone.",
+        "data": {
+          "selected_params": "Dostępne parametry"
+        }
+      },
+      "configure_entity": {
+        "title": "Konfiguracja encji",
+        "description": "Konfiguruj encję dla {key} z {source}.",
+        "data": {
+          "name": "Nazwa encji",
+          "component": "Grupa urządzenia",
+          "entity_type": "Typ encji",
+          "entity_category": "Kategoria encji"
+        }
+      },
+      "configure_sensor": {
+        "title": "Konfiguracja sensora",
+        "description": "Konfiguruj właściwości sensora dla \"{name}\".",
+        "data": {
+          "native_unit": "Jednostka miary",
+          "device_class": "Klasa urządzenia",
+          "precision": "Precyzja wyświetlania"
         }
       }
     },
@@ -107,6 +146,9 @@
       "cannot_connect": "Błąd połączenia",
       "invalid_auth": "Błąd autoryzacji",
       "unknown": "Niespodziewany błąd"
+    },
+    "abort": {
+      "no_unmapped_params": "Brak niezmapowanych parametrów dla wybranego endpointu."
     }
   },
   "entity": {
@@ -780,6 +822,15 @@
       "tem_co": {
         "name": "Temperatura kotła"
       }
+    }
+  },
+  "system_health": {
+    "info": {
+      "host": "Host",
+      "controller_model": "Model sterownika",
+      "software_version": "Wersja oprogramowania",
+      "hardware_version": "Wersja sprzętowa",
+      "can_reach_device": "Dostępność urządzenia"
     }
   }
 }

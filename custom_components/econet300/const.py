@@ -34,6 +34,9 @@ SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
 SERVICE_FUEL_SENSOR = "fuel_sensor"
 
+# regParams key for the fuel flow rate sensor (kg/h).
+SENSOR_FUEL_STREAM = "fuelStream"
+
 # Custom device class for fuel consumption meter to allow targeting with services
 DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
 
@@ -100,6 +103,8 @@ COMPONENT_MIXER_1 = "mixer_1"
 COMPONENT_MIXER_2 = "mixer_2"
 COMPONENT_MIXER_3 = "mixer_3"
 COMPONENT_MIXER_4 = "mixer_4"
+COMPONENT_MIXER_5 = "mixer_5"
+COMPONENT_MIXER_6 = "mixer_6"
 COMPONENT_LAMBDA = "lambda"
 COMPONENT_BUFFER = "buffer"
 COMPONENT_SOLAR = "solar"
@@ -112,6 +117,8 @@ DEFAULT_COMPONENT_STATUS: dict[str, bool] = {
     COMPONENT_MIXER_2: False,
     COMPONENT_MIXER_3: False,
     COMPONENT_MIXER_4: False,
+    COMPONENT_MIXER_5: False,
+    COMPONENT_MIXER_6: False,
     COMPONENT_LAMBDA: False,
     COMPONENT_BUFFER: False,
     COMPONENT_SOLAR: False,
@@ -139,8 +146,10 @@ API_REG_PARAMS_PARAM_DATA = "curr"
 API_REG_PARAMS_DATA_URI = "regParamsData"
 API_REG_PARAMS_DATA_PARAM_DATA = "data"
 
+# Legacy parameter modification endpoint (non-RM, uses newParamName)
+API_NEW_PARAM_URI = "newParam"
+
 # Editable parameters
-API_EDIT_PARAM_URI = "rmCurrNewParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
@@ -212,19 +221,20 @@ OPERATION_MODE_NAMES = {
 # =============================================================================
 # MIXER CONFIGURATION CONSTANTS
 # =============================================================================
-AVAILABLE_NUMBER_OF_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
+NUMBER_OF_AVAILABLE_MIXERS = 6  # Supports up to 6 mixers (ecoMAX850R2-X has 5)
+NUMBER_OF_AVAILABLE_ECOSTERS = 8  # Supports up to 8 ecoSTER thermostats
 MIXER_AVAILABILITY_KEY = "mixerTemp"
 MIXER_SET_AVAILABILITY_KEY = "mixerSetTemp"
 
 # Dynamically generate SENSOR_MIXER_KEY
 SENSOR_MIXER_KEY = {
     i: {f"{MIXER_AVAILABILITY_KEY}{i}", f"{MIXER_SET_AVAILABILITY_KEY}{i}"}
-    for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
 }
 
 # Mixer pump binary sensor keys
 MIXER_PUMP_BINARY_SENSOR_KEYS = {
-    f"mixerPumpWorks{i}" for i in range(1, AVAILABLE_NUMBER_OF_MIXERS + 1)
+    f"mixerPumpWorks{i}" for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
 }
 
 # Keywords that indicate mixer-related parameters for duplicate entity filtering
@@ -352,7 +362,7 @@ DEFAULT_SENSORS = {
     "moduleEcoSTERSoftVer",
     # ecoMAX850R2-X specific sensors
     "fuelConsum",
-    "fuelStream",
+    SENSOR_FUEL_STREAM,
     "tempBack",
     "transmission",
     "statusCO",
@@ -536,6 +546,140 @@ UNIT_NAME_TO_HA_UNIT = {
 }
 
 # =============================================================================
+# UNIT MAPPINGS (shared by dynamic entity helpers)
+# =============================================================================
+# Maps unit index from rmCurrentDataParams to human-readable unit string.
+UNIT_INDEX_TO_NAME: dict[int, str] = {
+    0: "",
+    1: "°C",
+    2: "sek.",
+    3: "min.",
+    4: "h.",
+    5: "%",
+    6: "kg",
+    7: "kW",
+    8: "r/min",
+    31: "",  # Boolean/state indicator (no unit)
+}
+
+# --- Static entity deduplication ---------------------------------------------
+# regParamsData IDs already handled by static entities (number, select).
+# These are skipped in the Options Flow key listing to avoid duplicates.
+STATIC_REGPARAMS_DATA_IDS: set[str] = (
+    set(NUMBER_MAP.keys())
+    | set(SELECT_KEY_POST_INDEX.values())
+    | set(SELECT_KEY_GET_INDEX.values())
+)
+
+# All static regParams keys (sensors + binary sensors across all controllers).
+# Used to filter already-mapped keys in the Options Flow when selecting
+# custom entities from the regParams endpoint.
+STATIC_REGPARAMS_KEYS: set[str] = (
+    DEFAULT_SENSORS
+    | DEFAULT_BINARY_SENSORS
+    | ECOMAX360I_SENSORS
+    | ECOSTER_SENSORS
+    | LAMBDA_SENSORS
+    | ECOSOL_SENSORS
+    | ECOSOL_BINARY_SENSORS
+    | ECOSTER_BINARY_SENSORS
+    | set().union(*SENSOR_MIXER_KEY.values())
+    | MIXER_PUMP_BINARY_SENSOR_KEYS
+)
+
+# --- rmCurrentDataParams ID → regParams key mapping --------------------------
+# The rmCurrentDataParams endpoint provides only metadata (name, unit, special)
+# but NOT current values.  The actual live values are in regParams under
+# camelCase keys.  This mapping allows CustomSensor to read the value from
+# regParams when the user creates a custom entity from rmCurrentDataParams.
+CDP_ID_TO_REGPARAMS: dict[str, str] = {
+    # Monitoring – temperatures
+    "1024": "tempCO",
+    "1025": "tempCWU",
+    "1028": "tempUpperBuffer",
+    "1029": "tempLowerBuffer",
+    "1030": "tempFlueGas",
+    "1031": "mixerTemp1",
+    "1032": "mixerTemp2",
+    "1033": "mixerTemp3",
+    "1034": "mixerTemp4",
+    # Monitoring – low-ID sensors
+    "1": "lighter",
+    "26": "tempFeeder",
+    "28": "tempExternalSensor",
+    "114": "fuelLevel",
+    "117": "thermostat",
+    # Monitoring – pumps / actuators
+    "1536": "fan",
+    "1538": "feeder",
+    "1540": "feeder2Additional",
+    "1541": "pumpCO",
+    "1542": "pumpCWU",
+    "1543": "pumpCirculation",
+    "1544": "mixerPumpWorks1",
+    "1547": "mixerPumpWorks2",
+    "1550": "mixerPumpWorks3",
+    "1553": "mixerPumpWorks4",
+    # Monitoring – burner
+    "1794": "boilerPower",
+    # Setpoints (editable) – also in NUMBER_MAP but kept for completeness
+    "1280": "tempCOSet",
+    "1281": "tempCWUSet",
+    "1287": "mixerSetTemp1",
+    "1288": "mixerSetTemp2",
+    "1289": "mixerSetTemp3",
+    "1290": "mixerSetTemp4",
+}
+
+# IDs from rmCurrentDataParams that already have static entities.
+# Used to filter the Options Flow to prevent duplicate entity creation.
+STATIC_CDP_IDS: set[str] = set(CDP_ID_TO_REGPARAMS.keys()) & {
+    k for k, v in CDP_ID_TO_REGPARAMS.items() if v in STATIC_REGPARAMS_KEYS
+}
+
+# =============================================================================
+# CUSTOM ENTITY SELECTOR (Options Flow)
+# =============================================================================
+# Key used inside entry.options to store user-defined custom entities.
+CONF_CUSTOM_ENTITIES = "custom_entities"
+
+# Entity type constants for custom entity classification.
+CUSTOM_ENTITY_TYPE_SENSOR = "sensor"
+CUSTOM_ENTITY_TYPE_BINARY_SENSOR = "binary_sensor"
+
+# Component choices for the Options Flow dropdown, built from DEFAULT_COMPONENT_STATUS.
+CUSTOM_ENTITY_COMPONENTS: dict[str, str] = {
+    key: key.replace("_", " ").title() for key in DEFAULT_COMPONENT_STATUS
+}
+
+# Sensor-specific options for the Options Flow configure_sensor step.
+CUSTOM_SENSOR_UNIT_OPTIONS: dict[str | None, str] = {
+    None: "None (auto)",
+    **{unit: unit for unit in UNIT_NAME_TO_HA_UNIT},
+}
+
+CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS: dict[str | None, str] = {
+    None: "None (auto)",
+    SensorDeviceClass.TEMPERATURE: "Temperature",
+    SensorDeviceClass.POWER: "Power",
+    SensorDeviceClass.POWER_FACTOR: "Power factor",
+    SensorDeviceClass.ENERGY: "Energy",
+    SensorDeviceClass.HUMIDITY: "Humidity",
+    SensorDeviceClass.PRESSURE: "Pressure",
+    SensorDeviceClass.DURATION: "Duration",
+    SensorDeviceClass.SIGNAL_STRENGTH: "Signal strength",
+    SensorDeviceClass.WEIGHT: "Weight",
+}
+
+CUSTOM_SENSOR_PRECISION_OPTIONS: dict[int | None, str] = {
+    None: "Auto",
+    0: "0 (integer)",
+    1: "0.0",
+    2: "0.00",
+    3: "0.000",
+}
+
+# =============================================================================
 # ENTITY UNIT MAPPINGS
 # =============================================================================
 # By default all sensors unit_of_measurement are None
@@ -581,7 +725,7 @@ ENTITY_UNIT_MAP = {
     "mixerSetTemp": UnitOfTemperature.CELSIUS,
     # ecoMAX850R2-X specific units
     "fuelConsum": PERCENTAGE,
-    "fuelStream": "kg/h",  # Mass flow rate (confirmed from ecoNET cloud API)
+    SENSOR_FUEL_STREAM: "kg/h",  # Mass flow rate (confirmed from ecoNET cloud API)
     "transmission": None,
     # ecoSTER thermostat units
     "ecoSterTemp1": UnitOfTemperature.CELSIUS,

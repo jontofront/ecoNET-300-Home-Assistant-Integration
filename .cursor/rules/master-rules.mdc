@@ -1,6 +1,6 @@
 ---
 description: Master coding rules checklist - always check first
-globs: 
+globs:
 alwaysApply: true
 ---
 
@@ -38,7 +38,18 @@ alwaysApply: true
 - **Use fixture data** as source of truth for API behavior
 - **Never document without checking** actual response examples
 
-### 5. 🚨 ALWAYS CHECK FOR REUSABLE CODE FIRST
+### 5. 🚨 ALWAYS CHECK CONSTANTS BEFORE WRITING CODE
+
+**BEFORE writing ANY new constant, dictionary, endpoint string, or component reference:**
+
+1. **Read `const.py` FIRST** - Search for existing constants that match what you need
+2. **NEVER hardcode endpoint strings** in `api.py` or anywhere else - use `API_*_URI` constants
+3. **NEVER hardcode component strings** like `"mixer_1"` - use `COMPONENT_*` constants
+4. **NEVER duplicate constants** - if two constants have the same value, keep one and remove the other
+5. **NEVER create a new list/dict of components** - reuse `DEFAULT_COMPONENT_STATUS` keys or `COMPONENT_*` constants
+6. **Check `NUMBER_OF_AVAILABLE_MIXERS`** before hardcoding mixer ranges like `range(1, 5)`
+
+### 6. 🚨 ALWAYS CHECK FOR REUSABLE CODE
 
 **Before writing ANY new code, search the existing codebase for reusable functions, classes, and utilities.**
 
@@ -63,7 +74,7 @@ alwaysApply: true
 - Entity has custom attributes not in standard mapping dictionaries
 - Fundamentally different data flow pattern
 
-### 6. ALWAYS USE PROPER PATTERNS
+### 7. ALWAYS USE PROPER PATTERNS
 
 - **DRY (Don't Repeat Yourself)** - Extract common functionality, avoid duplicate code
 - **KISS (Keep It Simple, Stupid)** - Prefer simple, readable solutions over complex ones
@@ -71,7 +82,7 @@ alwaysApply: true
 - Test your changes
 - Use Ruff for code formatting and linting
 
-### 7. 🚨 CRITICAL CODE STYLE RULES
+### 8. 🚨 CRITICAL CODE STYLE RULES
 
 - **ALWAYS use Ruff** for formatting and linting
 - **NEVER use Black, isort, or flake8**
@@ -79,7 +90,7 @@ alwaysApply: true
 - **NEVER have whitespace in blank lines** (W293 rule)
 - **ALWAYS run `ruff check .` before committing**
 
-### 8. 📝 MARKDOWNLINT RULES FOR DOCUMENTATION
+### 9. 📝 MARKDOWNLINT RULES FOR DOCUMENTATION
 
 When writing or editing Markdown files (`.md`), follow these rules:
 
@@ -110,14 +121,16 @@ When writing or editing Markdown files (`.md`), follow these rules:
 
 ```markdown
 # ✅ CORRECT
+
 | Column 1 | Column 2 | Column 3 |
 | -------- | -------- | -------- |
 | Value 1  | Value 2  | Value 3  |
 
 # ❌ WRONG - inconsistent spacing
-|Column 1|Column 2|Column 3|
-|--------|--------|--------|
-|Value 1|Value 2|Value 3|
+
+| Column 1 | Column 2 | Column 3 |
+| -------- | -------- | -------- |
+| Value 1  | Value 2  | Value 3  |
 ```
 
 **MD036 - No emphasis as heading:**
@@ -136,7 +149,7 @@ When writing or editing Markdown files (`.md`), follow these rules:
 - One blank line before and after code blocks
 - One blank line before and after headings
 
-### 9. ALWAYS CHECK BEFORE COMMITTING
+### 10. ALWAYS CHECK BEFORE COMMITTING
 
 - Run `ruff check .` to catch style issues
 - Run `ruff format .` to auto-format code
@@ -146,7 +159,7 @@ When writing or editing Markdown files (`.md`), follow these rules:
 - **Check markdown files** pass markdownlint
 - Test your changes work as expected
 
-### 10. 📝 COMMIT MESSAGE GUIDELINES
+### 11. 📝 COMMIT MESSAGE GUIDELINES
 
 - **Keep commit messages SHORT and concise** (50 chars or less for subject)
 - **Use conventional commit format**: `type: short description`
@@ -171,7 +184,7 @@ chore: update dependencies
 - ❌ Vague messages like "fix bug" or "update code"
 - ❌ Multiple unrelated changes in one commit
 
-### 11. DYNAMIC ENTITY CHANGES
+### 12. DYNAMIC ENTITY CHANGES
 
 When modifying dynamic entity creation from `mergedData` API:
 
