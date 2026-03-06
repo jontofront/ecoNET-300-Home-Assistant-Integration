@@ -34,7 +34,6 @@ from .common_functions import (
     validate_parameter_data,
 )
 from .const import (
-    NUMBER_OF_AVAILABLE_MIXERS,
     DEVICE_INFO_ADVANCED_PARAMETERS_NAME,
     DEVICE_INFO_MANUFACTURER,
     DEVICE_INFO_MODEL,
@@ -48,6 +47,7 @@ from .const import (
     MIXER_RELATED_KEYWORDS,
     MIXER_SET_AVAILABILITY_KEY,
     NUMBER_MAP,
+    NUMBER_OF_AVAILABLE_MIXERS,
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -808,7 +808,9 @@ def create_dynamic_number_entity_description(
     translation_key = param_key
 
     # Generate entity key - use override if provided (for duplicates)
-    entity_key = entity_key_override or param_key
+    # Guard against collision with static NUMBER_MAP keys (e.g., "1280")
+    base_key = entity_key_override or param_key
+    entity_key = f"dyn_{base_key}" if base_key in NUMBER_MAP else base_key
 
     # Use display_name override if provided (for duplicates)
     name = display_name or param.get("name", f"Parameter {param_id}")
