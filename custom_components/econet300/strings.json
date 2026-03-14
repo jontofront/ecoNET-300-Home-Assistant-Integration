@@ -673,6 +673,87 @@
       "heating_work_state_pump4": {
         "name": "Heating work state pump 4"
       },
+      "flap_valve_states": {
+        "name": "3-way valve state",
+        "state": {
+          "central_heating": "Central heating",
+          "domestic_hot_water": "Domestic hot water",
+          "unknown": "Unknown"
+        }
+      },
+      "heat_demanded": {
+        "name": "Heat demanded",
+        "state": {
+          "heat": "Heat",
+          "off": "[%key:common::state::off%]",
+          "unknown": "Unknown"
+        }
+      },
+      "water_pump_running": {
+        "name": "Water pump",
+        "state": {
+          "on": "[%key:common::state::on%]",
+          "unknown": "Unknown",
+          "off": "[%key:common::state::off%]"
+        }
+      },
+      "axen_outdoor_temp": {
+        "name": "Heat pump outdoor temperature"
+      },
+      "axen_outgoing_temp": {
+        "name": "Heat pump supply temperature"
+      },
+      "axen_return_temp": {
+        "name": "Heat pump return temperature"
+      },
+      "axen_compressor_freq": {
+        "name": "Heat pump compressor frequency"
+      },
+      "circuit1_comfort_temp": {
+        "name": "Circuit 1 day temperature"
+      },
+      "circuit1_eco_temp": {
+        "name": "Circuit 1 night temperature"
+      },
+      "buffer_target_temp": {
+        "name": "Buffer target temperature"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Circuit 2 day temperature"
+      },
+      "circuit2_eco_temp": {
+        "name": "Circuit 2 night temperature"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Circuit 3 day temperature"
+      },
+      "circuit3_eco_temp": {
+        "name": "Circuit 3 night temperature"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Circuit 4 day temperature"
+      },
+      "circuit4_eco_temp": {
+        "name": "Circuit 4 night temperature"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Circuit 5 day temperature"
+      },
+      "circuit5_eco_temp": {
+        "name": "Circuit 5 night temperature"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Circuit 6 day temperature"
+      },
+      "circuit6_eco_temp": {
+        "name": "Circuit 6 night temperature"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Circuit 7 day temperature"
+      },
+      "circuit7_eco_temp": {
+        "name": "Circuit 7 night temperature"
+      },
       "fuel_consum": {
         "name": "Fuel consumption"
       },

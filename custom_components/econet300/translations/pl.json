@@ -747,6 +747,87 @@
       "heating_work_state_pump4": {
         "name": "Stan pracy pompy ogrzewania 4"
       },
+      "flap_valve_states": {
+        "name": "Stan zaworu 3-drogowego",
+        "state": {
+          "central_heating": "Ogrzewanie centralne",
+          "domestic_hot_water": "Ciepła woda użytkowa",
+          "unknown": "Nieznany"
+        }
+      },
+      "heat_demanded": {
+        "name": "Zapotrzebowanie na ciepło",
+        "state": {
+          "heat": "Grzanie",
+          "off": "Wyłączony",
+          "unknown": "Nieznany"
+        }
+      },
+      "water_pump_running": {
+        "name": "Pompa obiegowa",
+        "state": {
+          "on": "Włączony",
+          "unknown": "Nieznany",
+          "off": "Wyłączony"
+        }
+      },
+      "axen_outdoor_temp": {
+        "name": "Pompa ciepła temp. zewnętrzna"
+      },
+      "axen_outgoing_temp": {
+        "name": "Pompa ciepła temp. zasilania"
+      },
+      "axen_return_temp": {
+        "name": "Pompa ciepła temp. powrotu"
+      },
+      "axen_compressor_freq": {
+        "name": "Pompa ciepła częstotliwość sprężarki"
+      },
+      "circuit1_comfort_temp": {
+        "name": "Obwód 1 temp. dzienna"
+      },
+      "circuit1_eco_temp": {
+        "name": "Obwód 1 temp. nocna"
+      },
+      "buffer_target_temp": {
+        "name": "Temperatura zadana bufora"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Obwód 2 temp. dzienna"
+      },
+      "circuit2_eco_temp": {
+        "name": "Obwód 2 temp. nocna"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Obwód 3 temp. dzienna"
+      },
+      "circuit3_eco_temp": {
+        "name": "Obwód 3 temp. nocna"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Obwód 4 temp. dzienna"
+      },
+      "circuit4_eco_temp": {
+        "name": "Obwód 4 temp. nocna"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Obwód 5 temp. dzienna"
+      },
+      "circuit5_eco_temp": {
+        "name": "Obwód 5 temp. nocna"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Obwód 6 temp. dzienna"
+      },
+      "circuit6_eco_temp": {
+        "name": "Obwód 6 temp. nocna"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Obwód 7 temp. dzienna"
+      },
+      "circuit7_eco_temp": {
+        "name": "Obwód 7 temp. nocna"
+      },
       "t1": {
         "name": "Temperatura kolektora"
       },
