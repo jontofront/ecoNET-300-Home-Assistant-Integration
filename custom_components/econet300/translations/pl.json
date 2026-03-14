@@ -13,6 +13,20 @@
           "description": "Wartość do ustawienia na liczniku (w kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Pobierz harmonogram",
+      "description": "Pobiera zdekodowany harmonogram kotła z urządzenia.",
+      "fields": {
+        "schedule_type": {
+          "name": "Typ harmonogramu",
+          "description": "Harmonogram do pobrania (np. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Dzień tygodnia",
+          "description": "Dzień tygodnia. Zwraca wszystkie dni, jeśli pominięty."
+        }
+      }
     }
   },
   "exceptions": {

@@ -3,25 +3,45 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    ServiceResponse,
+    SupportsResponse,
+    callback,
+)
+from homeassistant.exceptions import (
+    ConfigEntryAuthFailed,
+    ConfigEntryNotReady,
+    ServiceValidationError,
+)
 from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.helpers.issue_registry import async_delete_issue
 import voluptuous as vol
 
 from .api import make_api
 from .common import AuthError, EconetDataCoordinator
+from .common_functions import (
+    decode_ecomax_schedule_day,
+    decode_ecomax_schedule_metadata,
+    summarize_schedule_slots,
+)
 from .const import (
     DEVICE_CLASS_FUEL_METER,
     DOMAIN,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
+    SCHEDULE_TYPE_MAP,
+    SCHEDULE_TYPE_REVERSE_MAP,
+    SCHEDULE_WEEKDAYS,
     SERVICE_API,
     SERVICE_COORDINATOR,
     SERVICE_FUEL_SENSOR,
+    SERVICE_GET_SCHEDULE,
 )
 from .mem_cache import MemCache
 from .sensor import FuelConsumptionTotalSensor
@@ -40,10 +60,17 @@ PLATFORMS: list[Platform] = [
 SERVICE_RESET_FUEL_METER = "reset_fuel_meter"
 SERVICE_CALIBRATE_FUEL_METER = "calibrate_fuel_meter"
 
-# Service schema
+# Service schemas
 SERVICE_CALIBRATE_SCHEMA = vol.Schema(
     {
         vol.Required("value"): vol.Coerce(float),
+    }
+)
+
+SERVICE_GET_SCHEDULE_SCHEMA = vol.Schema(
+    {
+        vol.Required("schedule_type"): str,
+        vol.Optional("weekday"): vol.In(SCHEDULE_WEEKDAYS),
     }
 )
 
@@ -136,6 +163,66 @@ def _cleanup_ghost_devices(
         )
 
 
+def _find_ecomax_schedules(hass: HomeAssistant) -> dict[str, Any]:
+    """Find ecomaxSchedules data from the first available coordinator."""
+    for entry_data in hass.data.get(DOMAIN, {}).values():
+        if not isinstance(entry_data, dict):
+            continue
+        coordinator = entry_data.get(SERVICE_COORDINATOR)
+        if coordinator and coordinator.data:
+            sys_params = coordinator.data.get("sysParams") or {}
+            raw_schedules = sys_params.get("schedules") or {}
+            schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
+            if schedules:
+                return schedules
+    return {}
+
+
+def _decode_single_day(
+    tz_key: str, friendly_name: str, weekday: str, schedule_data: list, metadata: dict
+) -> dict[str, Any]:
+    """Decode a single weekday from a schedule."""
+    day_idx = SCHEDULE_WEEKDAYS.index(weekday)
+    if day_idx >= len(schedule_data) - 1:
+        raise ServiceValidationError(
+            f"Day index {day_idx} out of range for schedule '{friendly_name}'"
+        )
+    slots = decode_ecomax_schedule_day(schedule_data[day_idx])
+    return {
+        "schedule": {
+            "type": friendly_name,
+            "api_key": tz_key,
+            "weekday": weekday,
+            "metadata": metadata,
+            "slots": slots,
+            "summary": summarize_schedule_slots(slots),
+        }
+    }
+
+
+def _decode_all_days(
+    tz_key: str, friendly_name: str, schedule_data: list, metadata: dict
+) -> dict[str, Any]:
+    """Decode all 7 weekdays from a schedule."""
+    days: dict[str, Any] = {}
+    for idx, day_name in enumerate(SCHEDULE_WEEKDAYS):
+        if idx >= len(schedule_data) - 1:
+            break
+        slots = decode_ecomax_schedule_day(schedule_data[idx])
+        days[day_name] = {
+            "slots": slots,
+            "summary": summarize_schedule_slots(slots),
+        }
+    return {
+        "schedule": {
+            "type": friendly_name,
+            "api_key": tz_key,
+            "metadata": metadata,
+            "days": days,
+        }
+    }
+
+
 async def async_setup_services(hass: HomeAssistant) -> None:
     """Set up integration services."""
     # Only register services once
@@ -198,6 +285,34 @@ async def async_setup_services(hass: HomeAssistant) -> None:
                 await entity.async_calibrate_meter(value)
                 _LOGGER.info("Calibrated fuel meter %s to %.3f kg", entity_id, value)
 
+    async def async_handle_get_schedule(call: ServiceCall) -> ServiceResponse:
+        """Handle get_schedule service call."""
+        schedule_type: str = call.data["schedule_type"]
+        weekday: str | None = call.data.get("weekday")
+        tz_key = SCHEDULE_TYPE_MAP.get(schedule_type, schedule_type)
+
+        schedules = _find_ecomax_schedules(hass)
+        if not schedules:
+            raise ServiceValidationError("No schedule data available from the device")
+
+        if tz_key not in schedules:
+            available = [SCHEDULE_TYPE_REVERSE_MAP.get(k, k) for k in schedules]
+            raise ServiceValidationError(
+                f"Schedule '{schedule_type}' not found. "
+                f"Available: {', '.join(sorted(available))}"
+            )
+
+        schedule_data: list = schedules[tz_key]
+        friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(tz_key, tz_key)
+        metadata_raw = schedule_data[-1] if len(schedule_data) > 7 else []
+        metadata = decode_ecomax_schedule_metadata(metadata_raw)
+
+        if weekday is not None:
+            return _decode_single_day(
+                tz_key, friendly_name, weekday, schedule_data, metadata
+            )
+        return _decode_all_days(tz_key, friendly_name, schedule_data, metadata)
+
     hass.services.async_register(
         DOMAIN,
         SERVICE_RESET_FUEL_METER,
@@ -209,6 +324,14 @@ async def async_setup_services(hass: HomeAssistant) -> None:
         SERVICE_CALIBRATE_FUEL_METER,
         async_handle_calibrate_fuel_meter,
         schema=SERVICE_CALIBRATE_SCHEMA,
+    )
+
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_GET_SCHEDULE,
+        async_handle_get_schedule,
+        schema=SERVICE_GET_SCHEDULE_SCHEMA,
+        supports_response=SupportsResponse.ONLY,
     )
 
 

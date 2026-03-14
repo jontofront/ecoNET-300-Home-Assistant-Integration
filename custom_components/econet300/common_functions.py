@@ -10,11 +10,12 @@ For detailed documentation on the validation layer and entity type detection,
 see: docs/DYNAMIC_ENTITY_VALIDATION.md
 """
 
+from __future__ import annotations
+
 import logging
 import re
 
 from .const import (
-    NUMBER_OF_AVAILABLE_MIXERS,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -27,6 +28,7 @@ from .const import (
     COMPONENT_MIXER_6,
     COMPONENT_SOLAR,
     DEFAULT_COMPONENT_STATUS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     STATIC_REGPARAMS_DATA_IDS,
 )
 
@@ -766,3 +768,102 @@ def is_regparams_data_id_mapped(param_id: str) -> bool:
 
     """
     return param_id in STATIC_REGPARAMS_DATA_IDS
+
+
+# =============================================================================
+# Schedule decoding helpers (ecoMAX "em" protocol bitmask schedules)
+# =============================================================================
+
+
+def decode_ecomax_schedule_day(day_bytes: list[int]) -> list[dict]:
+    """Decode a 6-byte ecoMAX day schedule into 48 half-hour time slots.
+
+    Each byte encodes 8 half-hour slots as bits (MSB-first).
+    6 bytes x 8 bits = 48 slots = 24 hours.
+
+    Args:
+        day_bytes: List of 6 integers (0-255), one per 4-hour block.
+
+    Returns:
+        List of 48 dicts with "start", "end", and "active" keys.
+
+    """
+    slots: list[dict] = []
+    for byte_idx, byte_val in enumerate(day_bytes):
+        bits = format(byte_val, "08b")
+        for bit_idx, bit in enumerate(bits):
+            slot_number = byte_idx * 8 + bit_idx
+            hour = slot_number // 2
+            minute = (slot_number % 2) * 30
+            end_minute = minute + 30
+            end_hour = hour + end_minute // 60
+            end_minute = end_minute % 60
+            slots.append(
+                {
+                    "start": f"{hour:02d}:{minute:02d}",
+                    "end": f"{end_hour:02d}:{end_minute:02d}",
+                    "active": bit == "1",
+                }
+            )
+    return slots
+
+
+def decode_ecomax_schedule_metadata(metadata: list[int] | None) -> dict:
+    """Extract metadata from the 8th element of an ecoMAX schedule array.
+
+    The metadata array has 4 values:
+        [on_off_mode, decrease_value, min_decrease, max_decrease]
+
+    Args:
+        metadata: List of 4 integers, or None.
+
+    Returns:
+        Dictionary with decoded metadata fields.
+
+    """
+    if not metadata or len(metadata) < 4:
+        return {}
+    return {
+        "on_off_mode": metadata[0],
+        "decrease_value": metadata[1],
+        "min_decrease": metadata[2],
+        "max_decrease": metadata[3],
+    }
+
+
+def summarize_schedule_slots(slots: list[dict]) -> str:
+    """Generate a human-readable summary of active time ranges.
+
+    Merges consecutive active slots into ranges like "06:00-12:00, 20:00-00:00".
+
+    Args:
+        slots: List of slot dicts from decode_ecomax_schedule_day.
+
+    Returns:
+        Comma-separated string of active time ranges, or "all_off" / "all_on".
+
+    """
+    if not slots:
+        return "all_off"
+
+    active_count = sum(1 for s in slots if s["active"])
+    if active_count == 0:
+        return "all_off"
+    if active_count == len(slots):
+        return "all_on"
+
+    ranges: list[str] = []
+    range_start: str | None = None
+
+    for slot in slots:
+        if slot["active"] and range_start is None:
+            range_start = slot["start"]
+        elif not slot["active"] and range_start is not None:
+            ranges.append(f"{range_start}-{slot['start']}")
+            range_start = None
+
+    # Close final range if it extends to midnight
+    if range_start is not None:
+        ranges.append(f"{range_start}-00:00")
+
+    return ", ".join(ranges)

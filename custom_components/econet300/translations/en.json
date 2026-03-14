@@ -13,6 +13,20 @@
           "description": "The value to set the meter to (in kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Get schedule",
+      "description": "Retrieves a decoded boiler schedule from the device.",
+      "fields": {
+        "schedule_type": {
+          "name": "Schedule type",
+          "description": "Schedule to retrieve (e.g. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Weekday",
+          "description": "Day of the week. Returns all days if omitted."
+        }
+      }
     }
   },
   "exceptions": {
