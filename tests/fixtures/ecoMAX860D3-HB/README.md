@@ -11,6 +11,7 @@ This directory contains test fixtures for the **ecoMAX860D3-HB** ecoNET device.
 - `regParams.json` - Extracted from diagnostic file
 - `regParamsData.json` - Extracted from diagnostic file
 - `rmCurrentDataParamsEdits.json` - Extracted from diagnostic file
+- `rmData.json` - Extracted from diagnostic file
 - `sysParams.json` - Extracted from diagnostic file
 
 ## Source

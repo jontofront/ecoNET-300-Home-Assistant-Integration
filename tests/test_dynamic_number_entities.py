@@ -434,6 +434,7 @@ class TestMultipleFixtures:
         ("fixture_name", "expected_keys"),
         [
             ("ecoMAX810P-L", ["controllerID", "uid", "softVer"]),
+            ("ecoMAX860D3-HB", ["controllerID", "uid", "softVer"]),
             ("ecoMAX360", ["controllerID", "uid"]),
             ("ecoSOL", ["controllerID", "uid"]),
             ("SControl MK1", ["controllerID", "uid"]),

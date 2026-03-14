@@ -115,6 +115,7 @@ class TestSensorMappingLogic:
     def test_unknown_controllers_use_default_sensors(self):
         """Test that unknown controllers use DEFAULT_SENSORS mapping."""
         unknown_controllers = [
+            "ecoMAX860D3-HB",
             "ecoMAX860P4-O MINI MATIC",
             "ecoMAX850R2-X",
             "ecoMAX810P-L TOUCH",
