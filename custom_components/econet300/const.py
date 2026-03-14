@@ -53,6 +53,12 @@ CONSECUTIVE_FAILURES_THRESHOLD = 5
 # Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
 RM_PROBE_TIMEOUT_SEC = 2
 
+# Coordinator update timeouts (seconds)
+# First update: static metadata cache is cold -> 6+ parallel RM API calls needed
+UPDATE_TIMEOUT_FIRST_SEC = 120
+# Subsequent updates: only dynamic data fetched (cached metadata reused)
+UPDATE_TIMEOUT_SEC = 30
+
 # RM endpoint dataset keys for data coordinator (order matches tasks list)
 RM_CORE_DATASET_KEYS = [
     "currentDataParams",

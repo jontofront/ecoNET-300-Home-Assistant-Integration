@@ -25,6 +25,8 @@ from .const import (
     ECOSOL_CONTROLLER_IDS,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
+    UPDATE_TIMEOUT_FIRST_SEC,
+    UPDATE_TIMEOUT_SEC,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -106,8 +108,17 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
         _LOGGER.debug("Fetching data from API")
 
+        # First update needs a longer timeout: static metadata cache is cold
+        # and RM endpoints require 6+ parallel API calls to populate it.
+        # Subsequent updates only fetch dynamic data (~1 API call) so 30s is plenty.
+        timeout = (
+            UPDATE_TIMEOUT_FIRST_SEC
+            if self._rm_supported is None
+            else UPDATE_TIMEOUT_SEC
+        )
+
         try:
-            async with asyncio.timeout(10):
+            async with asyncio.timeout(timeout):
                 # Fetch system parameters from ../econet/sysParams
                 sys_params = await self._api.fetch_sys_params()
 
