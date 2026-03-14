@@ -1,5 +1,7 @@
 """Tests for ecoMAX schedule bitmask decoder functions."""
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
 
@@ -150,12 +152,12 @@ class TestDecodeEcomaxScheduleMetadata:
 
     def test_empty_metadata(self):
         """Empty or short metadata returns empty dict."""
-        assert decode_ecomax_schedule_metadata([]) == {}
-        assert decode_ecomax_schedule_metadata([1, 2]) == {}
+        assert decode_ecomax_schedule_metadata([]) == {}  # noqa: PLC1901
+        assert decode_ecomax_schedule_metadata([1, 2]) == {}  # noqa: PLC1901
 
     def test_none_metadata(self):
         """None metadata returns empty dict."""
-        assert decode_ecomax_schedule_metadata(None) == {}
+        assert decode_ecomax_schedule_metadata(None) == {}  # noqa: PLC1901
 
 
 class TestSummarizeScheduleSlots:
