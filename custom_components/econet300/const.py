@@ -54,6 +54,11 @@ CONSECUTIVE_FAILURES_THRESHOLD = 5
 # Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
 RM_PROBE_TIMEOUT_SEC = 2
 
+# Max concurrent HTTP requests to the ecoNET module.
+# The module runs on a TP-Link MR3020 with very limited resources;
+# too many parallel connections cause timeouts (see GitHub issue #210).
+MAX_CONCURRENT_API_REQUESTS = 3
+
 # Coordinator update timeouts (seconds)
 # First update: static metadata cache is cold -> 6+ parallel RM API calls needed
 UPDATE_TIMEOUT_FIRST_SEC = 120

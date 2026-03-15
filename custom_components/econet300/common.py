@@ -195,7 +195,15 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             _LOGGER.error("API error: %s", err)
             self._on_failed_update()
             raise UpdateFailed(f"Error communicating with API: {err}") from err
-        except (asyncio.TimeoutError, ClientError) as err:
+        except asyncio.TimeoutError as err:
+            _LOGGER.warning(
+                "Update timed out after %ds (device slow or overloaded?): %s",
+                timeout,
+                err,
+            )
+            self._on_failed_update()
+            raise UpdateFailed(f"Update timed out after {timeout}s: {err}") from err
+        except ClientError as err:
             _LOGGER.warning("Connection failed (device offline?): %s", err)
             self._on_failed_update()
             raise UpdateFailed(f"Connection failed: {err}") from err

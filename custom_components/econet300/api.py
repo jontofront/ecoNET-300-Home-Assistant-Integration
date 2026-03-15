@@ -46,6 +46,7 @@ from .const import (
     CACHE_KEY_STATIC_METADATA,
     CACHE_STATIC_METADATA_TTL,
     CONTROL_PARAMS,
+    MAX_CONCURRENT_API_REQUESTS,
     NUMBER_MAP,
     RM_PROBE_TIMEOUT_SEC,
     RM_STRUCTURE_TYPE_CATEGORY,
@@ -110,6 +111,9 @@ class EconetClient:
         self._auth = BasicAuth(username, password)
         self._model_id = "default-model-id"
         self._sw_revision = "default-sw-revision"
+        # Throttle concurrent requests to avoid overwhelming the ecoNET module
+        # (small embedded device with limited web server capacity, see #210)
+        self._semaphore = asyncio.Semaphore(MAX_CONCURRENT_API_REQUESTS)
 
     @property
     def host(self) -> str:
@@ -129,9 +133,12 @@ class EconetClient:
                     attempt,
                 )
 
-                async with await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=15)
-                ) as resp:
+                async with (
+                    self._semaphore,
+                    await self._session.get(
+                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                    ) as resp,
+                ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
                         _LOGGER.error(
@@ -186,9 +193,12 @@ class EconetClient:
         timeout. Caller can use this to skip full fetches when the endpoint is absent.
         """
         try:
-            async with await self._session.get(
-                url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
-            ) as resp:
+            async with (
+                self._semaphore,
+                await self._session.get(
+                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                ) as resp,
+            ):
                 if resp.status in (HTTPStatus.UNAUTHORIZED, HTTPStatus.NOT_FOUND):
                     return None
                 if resp.status != HTTPStatus.OK:
@@ -222,9 +232,12 @@ class EconetClient:
                     attempt,
                 )
 
-                async with await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=15)
-                ) as resp:
+                async with (
+                    self._semaphore,
+                    await self._session.get(
+                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                    ) as resp,
+                ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
                     if resp.status == HTTPStatus.UNAUTHORIZED:
                         _LOGGER.error(
