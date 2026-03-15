@@ -1273,7 +1273,9 @@ SENSOR_ENUM_OPTIONS: dict[str, list[str]] = {
     # ecoMAX360i enum options
     "flapValveStates": [*SENSOR_FLAP_VALVE_STATES_MAPPING.values(), STATE_UNKNOWN],
     "HeatDemanded": [*SENSOR_HEAT_DEMANDED_MAPPING.values(), STATE_UNKNOWN],
-    "WaterPumpRunning": [*SENSOR_WATER_PUMP_RUNNING_MAPPING.values(), STATE_UNKNOWN],
+    "WaterPumpRunning": list(
+        dict.fromkeys([*SENSOR_WATER_PUMP_RUNNING_MAPPING.values(), STATE_UNKNOWN])
+    ),
 }
 
 # =============================================================================
