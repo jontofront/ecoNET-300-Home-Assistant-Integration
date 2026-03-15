@@ -14,8 +14,10 @@ from __future__ import annotations
 
 import logging
 import re
+from typing import Any
 
 from .const import (
+    ALARM_CODE_CONTINUES,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -867,3 +869,107 @@ def summarize_schedule_slots(slots: list[dict]) -> str:
         ranges.append(f"{range_start}-00:00")
 
     return ", ".join(ranges)
+
+
+# =============================================================================
+# Alarm parsing helpers (sysParams.alarms + rmAlarmsNames)
+# =============================================================================
+
+
+def parse_alarm_entry(
+    alarm: dict[str, Any],
+    alarm_names: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Parse a single alarm entry from sysParams.alarms.
+
+    Resolves the numeric alarm code to a human-readable description using
+    the rmAlarmsNames mapping. Handles both int and string code types.
+
+    Args:
+        alarm: Raw alarm dict with code, fromDate, toDate, service keys.
+        alarm_names: Optional code-to-description mapping from rmAlarmsNames.
+
+    Returns:
+        Enriched alarm dict with description, is_active, and original fields.
+
+    """
+    code = alarm.get("code")
+    code_str = str(code) if code is not None else "unknown"
+
+    description = f"Alarm {code_str}"
+    if alarm_names and code_str in alarm_names:
+        description = alarm_names[code_str].replace("\\n", " ").strip()
+
+    to_date = alarm.get("toDate")
+
+    return {
+        "alarm_code": code,
+        "description": description,
+        "from_date": alarm.get("fromDate"),
+        "to_date": to_date,
+        "is_active": to_date is None,
+        "service": alarm.get("service", False),
+    }
+
+
+def get_latest_alarm(
+    alarms: list[dict[str, Any]],
+    alarm_names: dict[str, str] | None = None,
+) -> dict[str, Any] | None:
+    """Get the most recent alarm entry, parsed with description.
+
+    The alarms array from sysParams is ordered most-recent-first.
+
+    Args:
+        alarms: List of alarm dicts from sysParams.alarms.
+        alarm_names: Optional code-to-description mapping from rmAlarmsNames.
+
+    Returns:
+        Parsed alarm dict for the most recent entry, or None if empty.
+
+    """
+    if not alarms:
+        return None
+    return parse_alarm_entry(alarms[0], alarm_names)
+
+
+def get_active_alarm(
+    alarms: list[dict[str, Any]],
+    alarm_names: dict[str, str] | None = None,
+) -> dict[str, Any] | None:
+    """Get the currently active alarm (toDate is None), if any.
+
+    When toDate is null/None the alarm is still ongoing. Code 255 means
+    "Alarm continues!" in the rmAlarmsNames mapping.
+
+    Args:
+        alarms: List of alarm dicts from sysParams.alarms.
+        alarm_names: Optional code-to-description mapping from rmAlarmsNames.
+
+    Returns:
+        Parsed alarm dict for the active alarm, or None if no alarm is active.
+
+    """
+    for alarm in alarms:
+        if alarm.get("toDate") is None:
+            parsed = parse_alarm_entry(alarm, alarm_names)
+            # Override description for code 255 (continuation marker)
+            if str(alarm.get("code")) == str(ALARM_CODE_CONTINUES) and alarm_names:
+                parsed["description"] = alarm_names.get(
+                    str(ALARM_CODE_CONTINUES), parsed["description"]
+                )
+            return parsed
+    return None
+
+
+def has_active_alarm(alarms: list[dict[str, Any]]) -> bool:
+    """Check if any alarm in the list is currently active.
+
+    Args:
+        alarms: List of alarm dicts from sysParams.alarms.
+
+    Returns:
+        True if any alarm has toDate == None (still active).
+
+    """
+    return any(alarm.get("toDate") is None for alarm in alarms)

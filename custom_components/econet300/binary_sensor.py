@@ -2,19 +2,21 @@
 
 from dataclasses import dataclass
 import logging
+from typing import Any
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
-from .common_functions import camel_to_snake, get_entity_component
+from .common_functions import camel_to_snake, get_active_alarm, get_entity_component
 from .const import (
     API_REG_PARAMS_URI,
     BINARY_SENSOR_MAP_KEY,
@@ -493,6 +495,87 @@ def create_custom_binary_sensors(
     return entities
 
 
+# =============================================================================
+# Alarm binary sensor (sysParams.alarms active detection)
+# =============================================================================
+
+
+class AlarmActiveBinarySensor(EconetEntity, BinarySensorEntity):
+    """Binary sensor that is ON when any alarm is currently active (toDate is null)."""
+
+    _attr_has_entity_name = True
+    _attr_device_class = BinarySensorDeviceClass.PROBLEM
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the alarm active binary sensor."""
+        self.entity_description = BinarySensorEntityDescription(
+            key="alarm_active",
+            translation_key="alarm_active",
+        )
+        self.api = api
+        self._active_alarm: dict[str, Any] | None = None
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated alarm data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        alarms: list[dict[str, Any]] = sys_params.get("alarms", [])
+        alarm_names: dict[str, str] = (self.coordinator.data.get("rmData") or {}).get(
+            "alarmsNames"
+        ) or {}
+
+        active = get_active_alarm(alarms, alarm_names)
+        self._active_alarm = active
+        self._attr_is_on = active is not None
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return active alarm details as extra state attributes."""
+        if self._active_alarm is None:
+            return {}
+        return {
+            "active_alarm_code": self._active_alarm.get("alarm_code"),
+            "active_alarm_description": self._active_alarm.get("description"),
+            "active_since": self._active_alarm.get("from_date"),
+        }
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+def create_alarm_binary_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[AlarmActiveBinarySensor]:
+    """Create alarm binary sensor entities from sysParams.alarms data.
+
+    Only creates entities if alarm data is present in the coordinator.
+    """
+    entities: list[AlarmActiveBinarySensor] = []
+
+    if coordinator.data is None:
+        return entities
+
+    sys_params = coordinator.data.get("sysParams") or {}
+    if "alarms" not in sys_params:
+        _LOGGER.debug("No alarms key in sysParams, skipping alarm binary sensors")
+        return entities
+
+    entities.append(AlarmActiveBinarySensor(coordinator, api))
+    _LOGGER.info("Created %d alarm binary sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -507,6 +590,7 @@ async def async_setup_entry(
         | MixerBinarySensor
         | EcoSterBinarySensor
         | CustomBinarySensor
+        | AlarmActiveBinarySensor
     ] = []
 
     # Create standard binary sensors (including controller-specific ones)
@@ -520,6 +604,9 @@ async def async_setup_entry(
 
     # Create ecoSOL-specific binary sensors (ecoSOL 500, ecoSOL 301, etc.)
     entities.extend(create_ecosol_binary_sensors(coordinator, api))
+
+    # Create alarm binary sensors from sysParams.alarms
+    entities.extend(create_alarm_binary_sensors(coordinator, api))
 
     # Create user-defined custom binary sensors from Options Flow
     custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})

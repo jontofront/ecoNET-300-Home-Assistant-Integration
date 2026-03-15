@@ -211,6 +211,12 @@ RM_STRUCTURE_TYPE_DATA_REF = 3  # Data reference (read-only, has data_id)
 RM_STRUCTURE_TYPE_MENU_GROUP = 7  # Menu group/header (resets pass_index)
 
 # =============================================================================
+# ALARM CODE CONSTANTS
+# =============================================================================
+ALARM_CODE_POWER_OUTAGE = 0
+ALARM_CODE_CONTINUES = 255
+
+# =============================================================================
 # OPERATION MODES AND STATUS MAPPINGS
 # =============================================================================
 OPERATION_MODE_NAMES = {

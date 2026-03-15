@@ -308,6 +308,13 @@
           "on": "mdi:pump",
           "off": "mdi:pump"
         }
+      },
+      "alarm_active": {
+        "default": "mdi:alert-circle",
+        "state": {
+          "on": "mdi:alert-circle",
+          "off": "mdi:alert-circle-check-outline"
+        }
       }
     },
     "sensor": {
@@ -1165,6 +1172,12 @@
       },
       "transmission": {
         "default": "mdi:antenna"
+      },
+      "last_alarm": {
+        "default": "mdi:alert-circle"
+      },
+      "alarm_count": {
+        "default": "mdi:counter"
       }
     }
   }

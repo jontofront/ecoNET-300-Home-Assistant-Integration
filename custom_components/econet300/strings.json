@@ -204,6 +204,9 @@
       },
       "alarms": {
         "name": "Alarms"
+      },
+      "alarm_active": {
+        "name": "Alarm Active"
       }
     },
     "number": {
@@ -916,6 +919,12 @@
       },
       "tem_co": {
         "name": "Boiler Temperature"
+      },
+      "last_alarm": {
+        "name": "Last Alarm"
+      },
+      "alarm_count": {
+        "name": "Alarm Count"
       }
     }
   },

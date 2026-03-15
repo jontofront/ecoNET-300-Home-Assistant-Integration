@@ -558,3 +558,176 @@ class TestDuplicateNaming:
         result = get_duplicate_display_name("Thermostat control", 1, description)
         assert result == "Thermostat control (Circuit 1)"
 
+
+# =============================================================================
+# Alarm helper tests
+# =============================================================================
+
+
+class TestParseAlarmEntry:
+    """Tests for parse_alarm_entry function."""
+
+    def test_basic_alarm_with_names(self):
+        """Test parsing an alarm with a name mapping."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {
+            "code": 0,
+            "fromDate": "2025-12-14 19:04:16",
+            "toDate": "2025-12-14 19:08:27",
+            "service": False,
+        }
+        names = {"0": "Power outage", "7": "Unsuccessful boiler firing-up attempt."}
+
+        result = parse_alarm_entry(alarm, names)
+        assert result["alarm_code"] == 0
+        assert result["description"] == "Power outage"
+        assert result["from_date"] == "2025-12-14 19:04:16"
+        assert result["to_date"] == "2025-12-14 19:08:27"
+        assert result["is_active"] is False
+        assert result["service"] is False
+
+    def test_alarm_with_string_code(self):
+        """Test parsing alarm where code is a string (older API format)."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {
+            "code": "7",
+            "fromDate": "2024-10-15 23:18:10",
+            "toDate": "2024-10-15 23:37:05",
+        }
+        names = {"7": "Unsuccessful boiler firing-up attempt.\\nEmpty the ashtray."}
+
+        result = parse_alarm_entry(alarm, names)
+        assert result["alarm_code"] == "7"
+        assert "Unsuccessful" in result["description"]
+        assert "\\n" not in result["description"]
+
+    def test_active_alarm_to_date_none(self):
+        """Test that toDate=None is detected as active alarm."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {
+            "code": 1,
+            "fromDate": "2131-07-15 00:42:35",
+            "toDate": None,
+            "service": False,
+        }
+        result = parse_alarm_entry(alarm, {"1": "Boiler temperature sensor damage."})
+        assert result["is_active"] is True
+        assert result["to_date"] is None
+
+    def test_alarm_without_name_mapping(self):
+        """Test fallback description when no name mapping is provided."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {"code": 42, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
+        result = parse_alarm_entry(alarm, None)
+        assert result["description"] == "Alarm 42"
+
+    def test_alarm_unknown_code(self):
+        """Test fallback when code is not in the name mapping."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {"code": 99, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
+        result = parse_alarm_entry(alarm, {"0": "Power outage"})
+        assert result["description"] == "Alarm 99"
+
+    def test_alarm_missing_service_defaults_false(self):
+        """Test that missing service field defaults to False."""
+        from custom_components.econet300.common_functions import parse_alarm_entry
+
+        alarm = {"code": 0, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
+        result = parse_alarm_entry(alarm, None)
+        assert result["service"] is False
+
+
+class TestGetLatestAlarm:
+    """Tests for get_latest_alarm function."""
+
+    def test_returns_first_alarm(self):
+        """Test that the first alarm (most recent) is returned."""
+        from custom_components.econet300.common_functions import get_latest_alarm
+
+        alarms = [
+            {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
+            {"code": 7, "fromDate": "2025-11-29", "toDate": "2025-11-29"},
+        ]
+        result = get_latest_alarm(alarms, {"0": "Power outage"})
+        assert result is not None
+        assert result["alarm_code"] == 0
+        assert result["description"] == "Power outage"
+
+    def test_empty_alarms_returns_none(self):
+        """Test that empty list returns None."""
+        from custom_components.econet300.common_functions import get_latest_alarm
+
+        assert get_latest_alarm([], None) is None
+
+    def test_none_alarms_returns_none(self):
+        """Test that None-like input returns None."""
+        from custom_components.econet300.common_functions import get_latest_alarm
+
+        assert get_latest_alarm([], {}) is None
+
+
+class TestGetActiveAlarm:
+    """Tests for get_active_alarm function."""
+
+    def test_detects_active_alarm(self):
+        """Test detection of an active alarm (toDate is None)."""
+        from custom_components.econet300.common_functions import get_active_alarm
+
+        alarms = [
+            {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
+            {"code": 1, "fromDate": "2025-11-29", "toDate": None},
+        ]
+        result = get_active_alarm(alarms, {"1": "Boiler temperature sensor damage."})
+        assert result is not None
+        assert result["is_active"] is True
+        assert result["alarm_code"] == 1
+
+    def test_no_active_alarm(self):
+        """Test that no active alarm returns None."""
+        from custom_components.econet300.common_functions import get_active_alarm
+
+        alarms = [
+            {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
+            {"code": 7, "fromDate": "2025-11-29", "toDate": "2025-11-29"},
+        ]
+        assert get_active_alarm(alarms, {}) is None
+
+    def test_empty_alarms(self):
+        """Test empty alarms list returns None."""
+        from custom_components.econet300.common_functions import get_active_alarm
+
+        assert get_active_alarm([], {}) is None
+
+
+class TestHasActiveAlarm:
+    """Tests for has_active_alarm function."""
+
+    def test_has_active_alarm_true(self):
+        """Test returns True when an active alarm exists."""
+        from custom_components.econet300.common_functions import has_active_alarm
+
+        alarms = [
+            {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
+            {"code": 1, "fromDate": "2025-11-29", "toDate": None},
+        ]
+        assert has_active_alarm(alarms) is True
+
+    def test_has_active_alarm_false(self):
+        """Test returns False when no active alarm exists."""
+        from custom_components.econet300.common_functions import has_active_alarm
+
+        alarms = [
+            {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
+        ]
+        assert has_active_alarm(alarms) is False
+
+    def test_empty_alarms(self):
+        """Test returns False for empty alarms list."""
+        from custom_components.econet300.common_functions import has_active_alarm
+
+        assert has_active_alarm([]) is False

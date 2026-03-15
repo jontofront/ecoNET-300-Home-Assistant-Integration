@@ -204,6 +204,9 @@
       },
       "alarms": {
         "name": "Alarmy"
+      },
+      "alarm_active": {
+        "name": "Alarm aktywny"
       }
     },
     "number": {
@@ -916,6 +919,12 @@
       },
       "tem_co": {
         "name": "Temperatura kotła"
+      },
+      "last_alarm": {
+        "name": "Ostatni alarm"
+      },
+      "alarm_count": {
+        "name": "Liczba alarmów"
       }
     }
   },

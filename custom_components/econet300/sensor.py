@@ -37,7 +37,12 @@ from homeassistant.helpers.event import (
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
-from .common_functions import camel_to_snake, get_entity_component
+from .common_functions import (
+    camel_to_snake,
+    get_entity_component,
+    get_latest_alarm,
+    parse_alarm_entry,
+)
 from .const import (
     API_REG_PARAMS_URI,
     CDP_ID_TO_REGPARAMS,
@@ -1182,6 +1187,139 @@ def create_custom_sensors(
     return entities
 
 
+# =============================================================================
+# Alarm sensors (sysParams.alarms + rmAlarmsNames)
+# =============================================================================
+
+
+class LastAlarmSensor(EconetEntity, SensorEntity):
+    """Sensor showing the most recent alarm from sysParams.alarms."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the last alarm sensor."""
+        self.entity_description = SensorEntityDescription(
+            key="last_alarm",
+            translation_key="last_alarm",
+        )
+        self.api = api
+        self._alarm_attrs: dict[str, Any] = {}
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated alarm data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        alarms: list[dict[str, Any]] = sys_params.get("alarms", [])
+        alarm_names: dict[str, str] = (self.coordinator.data.get("rmData") or {}).get(
+            "alarmsNames"
+        ) or {}
+
+        latest = get_latest_alarm(alarms, alarm_names)
+        if latest is None:
+            self._attr_native_value = "No alarms"
+            self._alarm_attrs = {}
+        else:
+            self._attr_native_value = latest["description"]
+            self._alarm_attrs = latest
+
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return alarm details as extra state attributes."""
+        attrs = dict(self._alarm_attrs)
+        # Add total alarm count
+        if self.coordinator.data:
+            sys_params = self.coordinator.data.get("sysParams") or {}
+            attrs["alarm_count"] = len(sys_params.get("alarms", []))
+        return attrs
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+class AlarmCountSensor(EconetEntity, SensorEntity):
+    """Sensor showing total number of alarms in sysParams history."""
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_state_class = SensorStateClass.TOTAL
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the alarm count sensor."""
+        self.entity_description = SensorEntityDescription(
+            key="alarm_count",
+            translation_key="alarm_count",
+        )
+        self.api = api
+        self._recent_alarms: list[dict[str, Any]] = []
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated alarm data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        alarms: list[dict[str, Any]] = sys_params.get("alarms", [])
+        alarm_names: dict[str, str] = (self.coordinator.data.get("rmData") or {}).get(
+            "alarmsNames"
+        ) or {}
+
+        self._attr_native_value = len(alarms)
+        self._recent_alarms = [parse_alarm_entry(a, alarm_names) for a in alarms[:5]]
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return recent alarms as extra state attributes."""
+        return {"recent_alarms": self._recent_alarms}
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+def create_alarm_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SensorEntity]:
+    """Create alarm sensor entities from sysParams.alarms data.
+
+    Only creates entities if alarm data is present in the coordinator.
+    """
+    entities: list[SensorEntity] = []
+
+    if coordinator.data is None:
+        return entities
+
+    sys_params = coordinator.data.get("sysParams") or {}
+    if "alarms" not in sys_params:
+        _LOGGER.debug("No alarms key in sysParams, skipping alarm sensors")
+        return entities
+
+    entities.append(LastAlarmSensor(coordinator, api))
+    entities.append(AlarmCountSensor(coordinator, api))
+    _LOGGER.info("Created %d alarm sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -1215,6 +1353,11 @@ async def async_setup_entry(
         ecoster_sensors = create_ecoster_sensors(coordinator, api)
         _LOGGER.info("Collected %d ecoSTER sensors", len(ecoster_sensors))
         entities.extend(ecoster_sensors)
+
+        # Gather alarm sensors from sysParams.alarms
+        alarm_sensors = create_alarm_sensors(coordinator, api)
+        _LOGGER.info("Collected %d alarm sensors", len(alarm_sensors))
+        entities.extend(alarm_sensors)
 
         # Gather user-defined custom sensors from Options Flow
         custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
