@@ -13,6 +13,20 @@
           "description": "La valeur à définir pour le compteur (en kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Obtenir le programme",
+      "description": "Récupère un programme horaire décodé depuis l'appareil.",
+      "fields": {
+        "schedule_type": {
+          "name": "Type de programme",
+          "description": "Programme à récupérer (ex. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Jour de la semaine",
+          "description": "Jour de la semaine. Renvoie tous les jours si omis."
+        }
+      }
     }
   },
   "exceptions": {

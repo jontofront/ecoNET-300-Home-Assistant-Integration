@@ -13,6 +13,20 @@
           "description": "Значення для встановлення лічильника (в кг)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Отримати розклад",
+      "description": "Отримує декодований розклад котла з пристрою.",
+      "fields": {
+        "schedule_type": {
+          "name": "Тип розкладу",
+          "description": "Розклад для отримання (напр. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "День тижня",
+          "description": "День тижня. Повертає всі дні, якщо не вказано."
+        }
+      }
     }
   },
   "exceptions": {

@@ -13,6 +13,20 @@
           "description": "Hodnota pro nastavení měřiče (v kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Získat rozvrh",
+      "description": "Načte dekódovaný rozvrh kotle ze zařízení.",
+      "fields": {
+        "schedule_type": {
+          "name": "Typ rozvrhu",
+          "description": "Rozvrh k načtení (např. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Den v týdnu",
+          "description": "Den v týdnu. Vrátí všechny dny, pokud není zadáno."
+        }
+      }
     }
   },
   "exceptions": {
