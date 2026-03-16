@@ -1196,6 +1196,7 @@ class LastAlarmSensor(EconetEntity, SensorEntity):
     """Sensor showing the most recent alarm from sysParams.alarms."""
 
     _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(
         self,
