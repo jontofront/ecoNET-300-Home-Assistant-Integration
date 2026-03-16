@@ -183,7 +183,8 @@ def _decode_single_day(
 ) -> dict[str, Any]:
     """Decode a single weekday from a schedule."""
     day_idx = SCHEDULE_WEEKDAYS.index(weekday)
-    if day_idx >= len(schedule_data) - 1:
+    num_days = min(len(schedule_data), 7)
+    if day_idx >= num_days:
         raise ServiceValidationError(
             f"Day index {day_idx} out of range for schedule '{friendly_name}'"
         )
@@ -204,9 +205,10 @@ def _decode_all_days(
     tz_key: str, friendly_name: str, schedule_data: list, metadata: dict
 ) -> dict[str, Any]:
     """Decode all 7 weekdays from a schedule."""
+    num_days = min(len(schedule_data), 7)
     days: dict[str, Any] = {}
     for idx, day_name in enumerate(SCHEDULE_WEEKDAYS):
-        if idx >= len(schedule_data) - 1:
+        if idx >= num_days:
             break
         slots = decode_ecomax_schedule_day(schedule_data[idx])
         days[day_name] = {
