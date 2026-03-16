@@ -1255,7 +1255,7 @@ class AlarmCountSensor(EconetEntity, SensorEntity):
 
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.DIAGNOSTIC
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(
         self,
