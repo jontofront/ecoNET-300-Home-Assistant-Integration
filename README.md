@@ -30,7 +30,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Boiler Control**: Turn your boiler ON/OFF directly from Home Assistant
 - **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status
 - **Comprehensive API Access**: Access to 80+ API endpoints
-- **Multiple Entity Types**: Sensors, Binary Sensors, Switches, Select, and Number entities
+- **Multiple Entity Types**: Sensors, Binary Sensors, Events, Switches, Select, and Number entities
 - **Parameter Locking**: Device-side locks reflected in Home Assistant UI
 - **Repair Issues**: Automatic connection failure detection with one-click fix
 - **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
@@ -195,13 +195,14 @@ The selected parameters will be created as entities and available immediately in
 
 The integration provides multiple entity types:
 
-| Type           | Count | Description                      |
-| -------------- | ----- | -------------------------------- |
-| Sensors        | 50+   | Temperature, status, system info |
-| Binary Sensors | 25+   | Pumps, fans, connections         |
-| Switches       | 1     | Boiler ON/OFF control            |
-| Select         | 1+    | Heater mode, dynamic parameters  |
-| Number         | 15+   | Temperature setpoints            |
+| Type           | Count | Description                       |
+| -------------- | ----- | --------------------------------- |
+| Sensors        | 50+   | Temperature, status, alarms       |
+| Binary Sensors | 25+   | Pumps, fans, connections, alarms  |
+| Events         | 1     | Boiler alarm triggered / cleared  |
+| Switches       | 1     | Boiler ON/OFF control             |
+| Select         | 1+    | Heater mode, dynamic parameters   |
+| Number         | 15+   | Temperature setpoints             |
 
 ### Dynamic Entities (v1.2.0+)
 
@@ -269,6 +270,7 @@ ecoNET-300-Home-Assistant-Integration/
 ### 📚 **Essential Documentation** (in `docs/`)
 
 - **[ENTITIES.md](docs/ENTITIES.md)** - Complete entity reference (sensors, switches, numbers)
+- **[ALARMS_AND_EVENTS.md](docs/ALARMS_AND_EVENTS.md)** - Alarm monitoring, event entity, and automation examples
 - **[FUEL_CONSUMPTION.md](docs/FUEL_CONSUMPTION.md)** - Track total fuel consumption with Riemann Sum helper
 - **[MIGRATION.md](docs/MIGRATION.md)** - Migration guide for upgrading between versions
 - **[DIAGNOSTICS.md](docs/DIAGNOSTICS.md)** - Diagnostics documentation and troubleshooting
@@ -281,6 +283,19 @@ ecoNET-300-Home-Assistant-Integration/
 ## 📋 Versions
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
+
+### What's New in v1.2.3
+
+- **Alarm Monitoring** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Alarm sensors, binary sensor, and event entity — **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)**
+- **ecoMAX360i Sensors**: Flap valve, heat demand, Axen heat pump temps, circuit comfort/eco setpoints
+- **Schedule Service**: Read ecoMAX schedules via `econet300.get_schedule`
+- **API Throttling**: Concurrency limit prevents module overload ([#210](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/210))
+
+### What's New in v1.2.2
+
+- **Custom Entity Selector**: Create sensors/binary sensors from any device parameter via the UI
+- **Fuel Consumption Fix**: Race condition and unique ID mismatch resolved
+- **Duplicate Entity Fix**: Dynamic entities no longer collide with static number entities
 
 ### What's New in v1.2.1
 
@@ -303,6 +318,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
+- **[Alarm Monitoring](docs/ALARMS_AND_EVENTS.md)**: Real-time alarm sensors and event entity for push notifications
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL 500 Support**: Solar collector system integration
 - **Multi-language**: 6 language support (English, Polish, Czech, French, Ukrainian)
@@ -354,4 +370,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-03-04 with v1.2.2a2 release._
+_This README was last updated on 2026-03-15 with v1.2.3-beta.1 release._

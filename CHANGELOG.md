@@ -1,5 +1,30 @@
 # Changelog
 
+## [v1.2.3-beta.1] - 2026-03-15
+
+### ✨ New Features
+
+- **Alarm Sensors** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Real-time alarm monitoring from `sysParams.alarms` + `rmAlarmsNames`
+  - **Last Alarm** sensor: shows the most recent alarm description with full details in attributes
+  - **Alarm Count** sensor: total number of alarms with the 5 most recent in attributes
+  - **Alarm Active** binary sensor: ON when any alarm is currently active (device class: `problem`)
+  - **Boiler Alarm** event entity: fires `alarm_triggered` / `alarm_cleared` events for instant notification automations
+- **ecoMAX360i Sensors**: Added flap valve states, heat demanded, water pump running, Axen heat pump temperatures, circuit comfort/eco setpoints
+- **Schedule Service**: New `econet300.get_schedule` service to read ecoMAX heating schedules (boiler, mixers, thermostats, water heater)
+
+### 🔧 Improvements
+
+- **API Throttling**: Added semaphore-based concurrency limit (max 3 parallel requests) to prevent overwhelming the ecoNET module ([#210](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/210))
+- **Update Timeouts**: First update gets 120s timeout (cold cache), subsequent updates 30s
+- **Legacy Number Entities**: Simplified fallback — mixer entities only (basic entities already created by `_create_basic_entities`)
+- **PLATFORMS list**: Sorted alphabetically, added `Platform.EVENT`
+
+### 📖 Documentation
+
+- **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)** — entity details, automation examples (push notifications, persistent alerts, logbook logging)
+
+---
+
 ## [v1.2.2] - 2026-02-15
 
 ### ✨ New Features
