@@ -209,6 +209,11 @@
         "name": "Alarm Active"
       }
     },
+    "event": {
+      "boiler_alarm": {
+        "name": "Boiler Alarm"
+      }
+    },
     "number": {
       "parametr_b_fuzzylogic": {
         "name": "Parameter B FuzzyLogic"

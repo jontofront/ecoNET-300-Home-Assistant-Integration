@@ -317,6 +317,11 @@
         }
       }
     },
+    "event": {
+      "boiler_alarm": {
+        "default": "mdi:alert-circle-outline"
+      }
+    },
     "sensor": {
       "mode": {
         "default": "mdi:sync",

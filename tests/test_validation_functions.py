@@ -1,15 +1,24 @@
 """Tests for parameter validation functions in common_functions.py."""
 
+from unittest.mock import MagicMock, patch
+
 import pytest
 
 from custom_components.econet300.common_functions import (
+    get_active_alarm,
+    get_duplicate_display_name,
+    get_duplicate_entity_key,
+    get_latest_alarm,
     get_lock_reason,
+    has_active_alarm,
     is_binary_enum,
     is_parameter_locked,
+    parse_alarm_entry,
     should_be_select_entity,
     should_be_switch_entity,
     validate_parameter_data,
 )
+from custom_components.econet300.event import BoilerAlarmEvent
 
 
 class TestValidateParameterData:
@@ -484,10 +493,6 @@ class TestDuplicateNaming:
 
     def test_mixer_description_display_name(self):
         """Test that mixer description produces (Mixer X) format."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_display_name,
-        )
-
         description = "Setting parameter on YES value closes the mixer actuator"
         result = get_duplicate_display_name("Off by thermostat", 1, description)
         assert result == "Off by thermostat (Mixer 1)"
@@ -497,10 +502,6 @@ class TestDuplicateNaming:
 
     def test_mixer_description_entity_key(self):
         """Test that mixer description produces _mixer_X format."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_entity_key,
-        )
-
         description = "The higher the value, the faster the mixer reaches"
         result = get_duplicate_entity_key("proportional_range", 1, description)
         assert result == "proportional_range_mixer_1"
@@ -510,10 +511,6 @@ class TestDuplicateNaming:
 
     def test_huw_description_display_name(self):
         """Test that HUW/hot water description produces (HUW X) format."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_display_name,
-        )
-
         description = "Temperature to which the hot water tank will be heated"
         result = get_duplicate_display_name("HUW preset", 1, description)
         assert result == "HUW preset"  # First one doesn't need suffix
@@ -523,11 +520,6 @@ class TestDuplicateNaming:
 
     def test_fallback_numbering(self):
         """Test that unknown descriptions fall back to simple numbering."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_display_name,
-            get_duplicate_entity_key,
-        )
-
         description = "Some unknown parameter description"
         result = get_duplicate_display_name("Parameter", 3, description)
         assert result == "Parameter 3"
@@ -537,11 +529,6 @@ class TestDuplicateNaming:
 
     def test_no_description_fallback(self):
         """Test that missing description falls back to simple numbering."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_display_name,
-            get_duplicate_entity_key,
-        )
-
         result = get_duplicate_display_name("Parameter", 2, None)
         assert result == "Parameter 2"
 
@@ -550,10 +537,6 @@ class TestDuplicateNaming:
 
     def test_thermostat_circuit_naming(self):
         """Test that room thermostat description produces (Circuit X) format."""
-        from custom_components.econet300.common_functions import (
-            get_duplicate_display_name,
-        )
-
         description = "Controls the room thermostat connection"
         result = get_duplicate_display_name("Thermostat control", 1, description)
         assert result == "Thermostat control (Circuit 1)"
@@ -569,7 +552,6 @@ class TestParseAlarmEntry:
 
     def test_basic_alarm_with_names(self):
         """Test parsing an alarm with a name mapping."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {
             "code": 0,
@@ -589,7 +571,6 @@ class TestParseAlarmEntry:
 
     def test_alarm_with_string_code(self):
         """Test parsing alarm where code is a string (older API format)."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {
             "code": "7",
@@ -605,7 +586,6 @@ class TestParseAlarmEntry:
 
     def test_active_alarm_to_date_none(self):
         """Test that toDate=None is detected as active alarm."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {
             "code": 1,
@@ -619,7 +599,6 @@ class TestParseAlarmEntry:
 
     def test_alarm_without_name_mapping(self):
         """Test fallback description when no name mapping is provided."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {"code": 42, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
         result = parse_alarm_entry(alarm, None)
@@ -627,7 +606,6 @@ class TestParseAlarmEntry:
 
     def test_alarm_unknown_code(self):
         """Test fallback when code is not in the name mapping."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {"code": 99, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
         result = parse_alarm_entry(alarm, {"0": "Power outage"})
@@ -635,7 +613,6 @@ class TestParseAlarmEntry:
 
     def test_alarm_missing_service_defaults_false(self):
         """Test that missing service field defaults to False."""
-        from custom_components.econet300.common_functions import parse_alarm_entry
 
         alarm = {"code": 0, "fromDate": "2025-01-01", "toDate": "2025-01-02"}
         result = parse_alarm_entry(alarm, None)
@@ -647,7 +624,6 @@ class TestGetLatestAlarm:
 
     def test_returns_first_alarm(self):
         """Test that the first alarm (most recent) is returned."""
-        from custom_components.econet300.common_functions import get_latest_alarm
 
         alarms = [
             {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
@@ -660,13 +636,11 @@ class TestGetLatestAlarm:
 
     def test_empty_alarms_returns_none(self):
         """Test that empty list returns None."""
-        from custom_components.econet300.common_functions import get_latest_alarm
 
         assert get_latest_alarm([], None) is None
 
     def test_none_alarms_returns_none(self):
         """Test that None-like input returns None."""
-        from custom_components.econet300.common_functions import get_latest_alarm
 
         assert get_latest_alarm([], {}) is None
 
@@ -676,7 +650,6 @@ class TestGetActiveAlarm:
 
     def test_detects_active_alarm(self):
         """Test detection of an active alarm (toDate is None)."""
-        from custom_components.econet300.common_functions import get_active_alarm
 
         alarms = [
             {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
@@ -689,7 +662,6 @@ class TestGetActiveAlarm:
 
     def test_no_active_alarm(self):
         """Test that no active alarm returns None."""
-        from custom_components.econet300.common_functions import get_active_alarm
 
         alarms = [
             {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
@@ -699,7 +671,6 @@ class TestGetActiveAlarm:
 
     def test_empty_alarms(self):
         """Test empty alarms list returns None."""
-        from custom_components.econet300.common_functions import get_active_alarm
 
         assert get_active_alarm([], {}) is None
 
@@ -709,7 +680,6 @@ class TestHasActiveAlarm:
 
     def test_has_active_alarm_true(self):
         """Test returns True when an active alarm exists."""
-        from custom_components.econet300.common_functions import has_active_alarm
 
         alarms = [
             {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
@@ -719,7 +689,6 @@ class TestHasActiveAlarm:
 
     def test_has_active_alarm_false(self):
         """Test returns False when no active alarm exists."""
-        from custom_components.econet300.common_functions import has_active_alarm
 
         alarms = [
             {"code": 0, "fromDate": "2025-12-14", "toDate": "2025-12-14"},
@@ -728,6 +697,178 @@ class TestHasActiveAlarm:
 
     def test_empty_alarms(self):
         """Test returns False for empty alarms list."""
-        from custom_components.econet300.common_functions import has_active_alarm
 
         assert has_active_alarm([]) is False
+
+
+class TestBoilerAlarmEventDetection:
+    """Tests for BoilerAlarmEvent new-alarm detection logic."""
+
+    def _make_entity(self, alarms, alarm_names=None):
+        """Create a BoilerAlarmEvent with mocked coordinator and api."""
+
+        coordinator = MagicMock()
+        coordinator.data = {
+            "sysParams": {"alarms": alarms},
+            "rmData": {"alarmsNames": alarm_names or {}},
+        }
+
+        api = MagicMock()
+        api.uid = "test-uid"
+
+        with patch.object(BoilerAlarmEvent, "__init__", lambda self, *a, **kw: None):
+            entity = BoilerAlarmEvent.__new__(BoilerAlarmEvent)
+
+        entity.coordinator = coordinator
+        entity.api = api
+        entity._previous_alarm_count = None
+        entity._previous_latest_from_date = None
+        entity._previous_had_active = None
+        entity.async_write_ha_state = MagicMock()
+        return entity
+
+    def _update_alarms(self, entity, mock_trigger, alarms, alarm_names=None):
+        """Update coordinator data and call handler."""
+        entity.coordinator.data = {
+            "sysParams": {"alarms": alarms},
+            "rmData": {"alarmsNames": alarm_names or {}},
+        }
+        entity._handle_coordinator_update()
+
+    def test_first_update_does_not_trigger_event(self):
+        """First coordinator update should not fire any event (initial load)."""
+
+        alarms = [
+            {"code": 1, "fromDate": "2025-12-14 10:00:00", "toDate": None},
+        ]
+        entity = self._make_entity(alarms)
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.assert_not_called()
+
+        assert entity._previous_alarm_count == 1
+
+    def test_new_alarm_triggers_event(self):
+        """A new alarm appearing should fire alarm_triggered."""
+
+        initial_alarms = [
+            {
+                "code": 1,
+                "fromDate": "2025-12-14 10:00:00",
+                "toDate": "2025-12-14 10:05:00",
+            },
+        ]
+        entity = self._make_entity(initial_alarms)
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.reset_mock()
+
+            new_alarms = [
+                {"code": 2, "fromDate": "2025-12-14 11:00:00", "toDate": None},
+                {
+                    "code": 1,
+                    "fromDate": "2025-12-14 10:00:00",
+                    "toDate": "2025-12-14 10:05:00",
+                },
+            ]
+            self._update_alarms(
+                entity, mock_trigger, new_alarms, {"2": "Boiler\\noverheat"}
+            )
+
+            mock_trigger.assert_called_once()
+            call_args = mock_trigger.call_args
+            assert call_args[0][0] == "alarm_triggered"
+            assert call_args[0][1]["alarm_code"] == 2
+            assert call_args[0][1]["description"] == "Boiler overheat"
+            assert call_args[0][1]["is_active"] is True
+
+    def test_same_alarms_no_event(self):
+        """No change in alarms should not fire any event."""
+
+        alarms = [
+            {"code": 1, "fromDate": "2025-12-14 10:00:00", "toDate": None},
+        ]
+        entity = self._make_entity(alarms)
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.reset_mock()
+
+            self._update_alarms(entity, mock_trigger, alarms)
+            mock_trigger.assert_not_called()
+
+    def test_alarm_cleared_fires_event(self):
+        """Active alarm being cleared should fire alarm_cleared."""
+
+        active_alarms = [
+            {"code": 1, "fromDate": "2025-12-14 10:00:00", "toDate": None},
+        ]
+        entity = self._make_entity(active_alarms)
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.reset_mock()
+
+            cleared_alarms = [
+                {
+                    "code": 1,
+                    "fromDate": "2025-12-14 10:00:00",
+                    "toDate": "2025-12-14 10:30:00",
+                },
+            ]
+            self._update_alarms(entity, mock_trigger, cleared_alarms)
+            mock_trigger.assert_called_once_with("alarm_cleared")
+
+    def test_new_alarm_takes_priority_over_cleared(self):
+        """When a new alarm appears and old one clears simultaneously, only alarm_triggered fires."""
+
+        active_alarms = [
+            {"code": 1, "fromDate": "2025-12-14 10:00:00", "toDate": None},
+        ]
+        entity = self._make_entity(active_alarms)
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.reset_mock()
+
+            new_and_cleared = [
+                {
+                    "code": 2,
+                    "fromDate": "2025-12-14 11:00:00",
+                    "toDate": "2025-12-14 11:05:00",
+                },
+                {
+                    "code": 1,
+                    "fromDate": "2025-12-14 10:00:00",
+                    "toDate": "2025-12-14 10:30:00",
+                },
+            ]
+            self._update_alarms(entity, mock_trigger, new_and_cleared)
+
+            mock_trigger.assert_called_once()
+            assert mock_trigger.call_args[0][0] == "alarm_triggered"
+
+    def test_no_data_does_nothing(self):
+        """Coordinator data being None should not fire events or crash."""
+
+        entity = self._make_entity([])
+        mock_coordinator = MagicMock(data=None)
+        entity.coordinator = mock_coordinator
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.assert_not_called()
+
+    def test_empty_alarms_to_empty_no_event(self):
+        """Going from empty to empty should not fire any event."""
+
+        entity = self._make_entity([])
+
+        with patch.object(BoilerAlarmEvent, "_trigger_event") as mock_trigger:
+            entity._handle_coordinator_update()
+            mock_trigger.reset_mock()
+
+            self._update_alarms(entity, mock_trigger, [])
+            mock_trigger.assert_not_called()
