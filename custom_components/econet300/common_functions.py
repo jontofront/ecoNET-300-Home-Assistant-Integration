@@ -17,7 +17,6 @@ import re
 from typing import Any
 
 from .const import (
-    ALARM_CODE_CONTINUES,
     COMPONENT_BOILER,
     COMPONENT_BUFFER,
     COMPONENT_HUW,
@@ -952,13 +951,7 @@ def get_active_alarm(
     """
     for alarm in alarms:
         if alarm.get("toDate") is None:
-            parsed = parse_alarm_entry(alarm, alarm_names)
-            # Override description for code 255 (continuation marker)
-            if str(alarm.get("code")) == str(ALARM_CODE_CONTINUES) and alarm_names:
-                parsed["description"] = alarm_names.get(
-                    str(ALARM_CODE_CONTINUES), parsed["description"]
-                )
-            return parsed
+            return parse_alarm_entry(alarm, alarm_names)
     return None
 
 
