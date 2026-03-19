@@ -1151,11 +1151,11 @@ ENTITY_VALUE_PROCESSOR = {
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
     # ecoMAX360i-specific processors
     "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(
-        int(x), STATE_UNKNOWN
+        x, STATE_UNKNOWN
     ),
-    "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(int(x), STATE_UNKNOWN),
+    "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(x, STATE_UNKNOWN),
     "WaterPumpRunning": lambda x: SENSOR_WATER_PUMP_RUNNING_MAPPING.get(
-        int(x), STATE_UNKNOWN
+        x, STATE_UNKNOWN
     ),
 }
 
