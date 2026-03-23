@@ -197,7 +197,7 @@ The integration provides multiple entity types:
 
 | Type           | Count | Description                       |
 | -------------- | ----- | --------------------------------- |
-| Sensors        | 50+   | Temperature, status, alarms       |
+| Sensors        | 50+   | Temperature, status, alarms, schedules |
 | Binary Sensors | 25+   | Pumps, fans, connections, alarms  |
 | Events         | 1     | Boiler alarm triggered / cleared  |
 | Switches       | 1     | Boiler ON/OFF control             |
@@ -286,6 +286,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 
 ### What's New in v1.2.3
 
+- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes — display with a Markdown card
 - **Alarm Monitoring** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Alarm sensors, binary sensor, and event entity — **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)**
 - **ecoMAX360i Sensors**: Flap valve, heat demand, Axen heat pump temps, circuit comfort/eco setpoints
 - **Schedule Service**: Read ecoMAX schedules via `econet300.get_schedule`
@@ -318,6 +319,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
+- **Schedule Sensors**: View configured heating schedules directly in Home Assistant
 - **[Alarm Monitoring](docs/ALARMS_AND_EVENTS.md)**: Real-time alarm sensors and event entity for push notifications
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL 500 Support**: Solar collector system integration
@@ -370,4 +372,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-03-15 with v1.2.3-beta.1 release._
+_This README was last updated on 2026-03-16 with v1.2.3-beta.3 release._
