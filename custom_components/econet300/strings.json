@@ -930,6 +930,66 @@
       },
       "alarm_count": {
         "name": "Alarm Count"
+      },
+      "schedule_boiler": {
+        "name": "Boiler schedule"
+      },
+      "schedule_boiler_clean": {
+        "name": "Boiler cleaning schedule"
+      },
+      "schedule_boiler_work": {
+        "name": "Boiler work schedule"
+      },
+      "schedule_circulation_pump": {
+        "name": "Circulation pump schedule"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Exchanger cleaning schedule"
+      },
+      "schedule_mixer_1": {
+        "name": "Mixer 1 schedule"
+      },
+      "schedule_mixer_2": {
+        "name": "Mixer 2 schedule"
+      },
+      "schedule_mixer_3": {
+        "name": "Mixer 3 schedule"
+      },
+      "schedule_mixer_4": {
+        "name": "Mixer 4 schedule"
+      },
+      "schedule_mixer_5": {
+        "name": "Mixer 5 schedule"
+      },
+      "schedule_mixer_6": {
+        "name": "Mixer 6 schedule"
+      },
+      "schedule_mixer_7": {
+        "name": "Mixer 7 schedule"
+      },
+      "schedule_mixer_8": {
+        "name": "Mixer 8 schedule"
+      },
+      "schedule_mixer_9": {
+        "name": "Mixer 9 schedule"
+      },
+      "schedule_mixer_10": {
+        "name": "Mixer 10 schedule"
+      },
+      "schedule_thermostat_1": {
+        "name": "Thermostat 1 schedule"
+      },
+      "schedule_thermostat_2": {
+        "name": "Thermostat 2 schedule"
+      },
+      "schedule_thermostat_3": {
+        "name": "Thermostat 3 schedule"
+      },
+      "schedule_water_heater": {
+        "name": "Water heater schedule"
+      },
+      "schedule_water_heater_2": {
+        "name": "Water heater 2 schedule"
       }
     }
   },

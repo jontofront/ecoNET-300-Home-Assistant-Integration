@@ -645,6 +645,66 @@
       },
       "tem_co": {
         "name": "Température chaudière"
+      },
+      "schedule_boiler": {
+        "name": "Programme chaudière"
+      },
+      "schedule_boiler_clean": {
+        "name": "Programme nettoyage chaudière"
+      },
+      "schedule_boiler_work": {
+        "name": "Programme fonctionnement chaudière"
+      },
+      "schedule_circulation_pump": {
+        "name": "Programme pompe de circulation"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Programme nettoyage échangeur"
+      },
+      "schedule_mixer_1": {
+        "name": "Programme mélangeur 1"
+      },
+      "schedule_mixer_2": {
+        "name": "Programme mélangeur 2"
+      },
+      "schedule_mixer_3": {
+        "name": "Programme mélangeur 3"
+      },
+      "schedule_mixer_4": {
+        "name": "Programme mélangeur 4"
+      },
+      "schedule_mixer_5": {
+        "name": "Programme mélangeur 5"
+      },
+      "schedule_mixer_6": {
+        "name": "Programme mélangeur 6"
+      },
+      "schedule_mixer_7": {
+        "name": "Programme mélangeur 7"
+      },
+      "schedule_mixer_8": {
+        "name": "Programme mélangeur 8"
+      },
+      "schedule_mixer_9": {
+        "name": "Programme mélangeur 9"
+      },
+      "schedule_mixer_10": {
+        "name": "Programme mélangeur 10"
+      },
+      "schedule_thermostat_1": {
+        "name": "Programme thermostat 1"
+      },
+      "schedule_thermostat_2": {
+        "name": "Programme thermostat 2"
+      },
+      "schedule_thermostat_3": {
+        "name": "Programme thermostat 3"
+      },
+      "schedule_water_heater": {
+        "name": "Programme chauffe-eau"
+      },
+      "schedule_water_heater_2": {
+        "name": "Programme chauffe-eau 2"
       }
     }
   }

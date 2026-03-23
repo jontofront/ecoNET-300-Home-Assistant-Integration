@@ -645,6 +645,66 @@
       },
       "tem_co": {
         "name": "Температура котла"
+      },
+      "schedule_boiler": {
+        "name": "Розклад котла"
+      },
+      "schedule_boiler_clean": {
+        "name": "Розклад очищення котла"
+      },
+      "schedule_boiler_work": {
+        "name": "Розклад роботи котла"
+      },
+      "schedule_circulation_pump": {
+        "name": "Розклад циркуляційного насоса"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Розклад очищення теплообмінника"
+      },
+      "schedule_mixer_1": {
+        "name": "Розклад змішувача 1"
+      },
+      "schedule_mixer_2": {
+        "name": "Розклад змішувача 2"
+      },
+      "schedule_mixer_3": {
+        "name": "Розклад змішувача 3"
+      },
+      "schedule_mixer_4": {
+        "name": "Розклад змішувача 4"
+      },
+      "schedule_mixer_5": {
+        "name": "Розклад змішувача 5"
+      },
+      "schedule_mixer_6": {
+        "name": "Розклад змішувача 6"
+      },
+      "schedule_mixer_7": {
+        "name": "Розклад змішувача 7"
+      },
+      "schedule_mixer_8": {
+        "name": "Розклад змішувача 8"
+      },
+      "schedule_mixer_9": {
+        "name": "Розклад змішувача 9"
+      },
+      "schedule_mixer_10": {
+        "name": "Розклад змішувача 10"
+      },
+      "schedule_thermostat_1": {
+        "name": "Розклад термостата 1"
+      },
+      "schedule_thermostat_2": {
+        "name": "Розклад термостата 2"
+      },
+      "schedule_thermostat_3": {
+        "name": "Розклад термостата 3"
+      },
+      "schedule_water_heater": {
+        "name": "Розклад водонагрівача"
+      },
+      "schedule_water_heater_2": {
+        "name": "Розклад водонагрівача 2"
       }
     }
   }
