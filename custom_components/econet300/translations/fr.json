@@ -647,13 +647,13 @@
         "name": "Température chaudière"
       },
       "schedule_boiler": {
-        "name": "Programme chaudière"
+        "name": "Programme chauffage"
       },
       "schedule_boiler_clean": {
-        "name": "Programme nettoyage chaudière"
+        "name": "Programme nettoyage"
       },
       "schedule_boiler_work": {
-        "name": "Programme fonctionnement chaudière"
+        "name": "Programme fonctionnement"
       },
       "schedule_circulation_pump": {
         "name": "Programme pompe de circulation"

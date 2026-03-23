@@ -932,13 +932,13 @@
         "name": "Alarm Count"
       },
       "schedule_boiler": {
-        "name": "Boiler schedule"
+        "name": "Heating schedule"
       },
       "schedule_boiler_clean": {
-        "name": "Boiler cleaning schedule"
+        "name": "Cleaning schedule"
       },
       "schedule_boiler_work": {
-        "name": "Boiler work schedule"
+        "name": "Work schedule"
       },
       "schedule_circulation_pump": {
         "name": "Circulation pump schedule"

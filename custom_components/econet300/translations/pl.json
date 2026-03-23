@@ -932,13 +932,13 @@
         "name": "Liczba alarmów"
       },
       "schedule_boiler": {
-        "name": "Harmonogram kotła"
+        "name": "Harmonogram ogrzewania"
       },
       "schedule_boiler_clean": {
-        "name": "Harmonogram czyszczenia kotła"
+        "name": "Harmonogram czyszczenia"
       },
       "schedule_boiler_work": {
-        "name": "Harmonogram pracy kotła"
+        "name": "Harmonogram pracy"
       },
       "schedule_circulation_pump": {
         "name": "Harmonogram pompy cyrkulacyjnej"

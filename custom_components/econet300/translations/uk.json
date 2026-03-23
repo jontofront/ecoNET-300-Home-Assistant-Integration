@@ -647,13 +647,13 @@
         "name": "Температура котла"
       },
       "schedule_boiler": {
-        "name": "Розклад котла"
+        "name": "Розклад опалення"
       },
       "schedule_boiler_clean": {
-        "name": "Розклад очищення котла"
+        "name": "Розклад очищення"
       },
       "schedule_boiler_work": {
-        "name": "Розклад роботи котла"
+        "name": "Розклад роботи"
       },
       "schedule_circulation_pump": {
         "name": "Розклад циркуляційного насоса"

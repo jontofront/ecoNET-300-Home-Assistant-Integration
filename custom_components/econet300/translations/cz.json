@@ -656,13 +656,13 @@
         "name": "Teplota kotle"
       },
       "schedule_boiler": {
-        "name": "Rozvrh kotle"
+        "name": "Rozvrh vytápění"
       },
       "schedule_boiler_clean": {
-        "name": "Rozvrh čištění kotle"
+        "name": "Rozvrh čištění"
       },
       "schedule_boiler_work": {
-        "name": "Rozvrh provozu kotle"
+        "name": "Rozvrh provozu"
       },
       "schedule_circulation_pump": {
         "name": "Rozvrh cirkulačního čerpadla"
