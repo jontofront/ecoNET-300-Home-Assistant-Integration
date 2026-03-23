@@ -270,6 +270,7 @@ ecoNET-300-Home-Assistant-Integration/
 ### 📚 **Essential Documentation** (in `docs/`)
 
 - **[ENTITIES.md](docs/ENTITIES.md)** - Complete entity reference (sensors, switches, numbers)
+- **[SCHEDULES.md](docs/SCHEDULES.md)** - How to display heating schedules on your dashboard
 - **[ALARMS_AND_EVENTS.md](docs/ALARMS_AND_EVENTS.md)** - Alarm monitoring, event entity, and automation examples
 - **[FUEL_CONSUMPTION.md](docs/FUEL_CONSUMPTION.md)** - Track total fuel consumption with Riemann Sum helper
 - **[MIGRATION.md](docs/MIGRATION.md)** - Migration guide for upgrading between versions
