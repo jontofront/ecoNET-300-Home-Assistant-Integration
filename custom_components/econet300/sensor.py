@@ -27,6 +27,7 @@ from homeassistant.core import (
     callback,
 )
 from homeassistant.helpers import entity_registry as er
+import homeassistant.util.dt as dt_util
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import (
@@ -1390,16 +1391,21 @@ class ScheduleSensor(EconetEntity, SensorEntity):
 
         self._day_summaries = summaries
 
+        # on_off_mode 0 = schedule disabled by the device toggle
+        schedule_enabled = self._metadata.get("on_off_mode", 1) != 0
+
         # Python weekday (Mon=0 .. Sun=6) → SCHEDULE_WEEKDAYS index (Sun=0 .. Sat=6)
-        today_idx = (datetime.now().weekday() + 1) % 7
+        today_idx = (dt_util.now().weekday() + 1) % 7
         today_name = SCHEDULE_WEEKDAYS[today_idx]
-        self._attr_native_value = summaries.get(today_name, "unknown")
+        today_summary = summaries.get(today_name, "unknown")
+        self._attr_native_value = today_summary if schedule_enabled else f"OFF ({today_summary})"
         self.async_write_ha_state()
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return per-day summaries and schedule metadata."""
         attrs: dict[str, Any] = dict(self._day_summaries)
+        attrs["schedule_enabled"] = self._metadata.get("on_off_mode", 1) != 0
         if self._metadata:
             attrs["metadata"] = self._metadata
         return attrs
