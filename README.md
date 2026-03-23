@@ -287,7 +287,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 
 ### What's New in v1.2.3
 
-- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes — display with a Markdown card
+- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes — **[Schedules Guide](docs/SCHEDULES.md)**
 - **Alarm Monitoring** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Alarm sensors, binary sensor, and event entity — **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)**
 - **ecoMAX360i Sensors**: Flap valve, heat demand, Axen heat pump temps, circuit comfort/eco setpoints
 - **Schedule Service**: Read ecoMAX schedules via `econet300.get_schedule`

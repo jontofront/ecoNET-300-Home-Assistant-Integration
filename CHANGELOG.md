@@ -4,7 +4,7 @@
 
 ### ✨ New Features
 
-- **Schedule Sensors**: Auto-created sensor entities for every schedule configured on the device (boiler, water heater, mixers, thermostats, circulation pump, etc.)
+- **Schedule Sensors** — **[Schedules Guide](docs/SCHEDULES.md)**: Auto-created sensor entities for every schedule configured on the device (boiler, water heater, mixers, thermostats, circulation pump, etc.)
   - **Native value**: Today's active-hours summary (e.g. `06:00-12:00, 20:00-00:00`)
   - **Attributes**: Per-day summaries (sunday–saturday) + schedule metadata — perfect for Markdown cards
   - **Dynamic**: Only schedules present on your device are created (no extra clutter)
