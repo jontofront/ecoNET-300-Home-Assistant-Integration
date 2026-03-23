@@ -1,5 +1,16 @@
 # Changelog
 
+## [v1.2.3-beta.3] - 2026-03-16
+
+### ✨ New Features
+
+- **Schedule Sensors**: Auto-created sensor entities for every schedule configured on the device (boiler, water heater, mixers, thermostats, circulation pump, etc.)
+  - **Native value**: Today's active-hours summary (e.g. `06:00-12:00, 20:00-00:00`)
+  - **Attributes**: Per-day summaries (sunday–saturday) + schedule metadata — perfect for Markdown cards
+  - **Dynamic**: Only schedules present on your device are created (no extra clutter)
+  - **Translated**: EN, PL, FR, UK, CZ — 20 schedule types covered
+  - **Icon**: `mdi:calendar-clock` for all schedule sensors
+
 ## [v1.2.3-beta.1] - 2026-03-15
 
 ### ✨ New Features
