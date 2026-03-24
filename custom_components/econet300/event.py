@@ -65,7 +65,10 @@ class BoilerAlarmEvent(EconetEntity, EventEntity):
         if self._previous_alarm_count is not None:
             new_alarm_detected = (
                 current_count > self._previous_alarm_count
-                or current_latest_from != self._previous_latest_from_date
+                or (
+                    current_latest_from != self._previous_latest_from_date
+                    and current_count >= self._previous_alarm_count
+                )
             ) and current_latest_from is not None
 
             if new_alarm_detected:
