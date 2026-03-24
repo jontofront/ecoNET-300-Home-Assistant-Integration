@@ -257,6 +257,17 @@
       },
       "ecosrv_https": {
         "name": "Сервер ecoNET HTTPS"
+      },
+      "alarms": {
+        "name": "Тривоги"
+      },
+      "alarm_active": {
+        "name": "Тривога активна"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Тривога котла"
       }
     },
     "sensor": {
@@ -645,6 +656,12 @@
       },
       "tem_co": {
         "name": "Температура котла"
+      },
+      "last_alarm": {
+        "name": "Остання тривога"
+      },
+      "alarm_count": {
+        "name": "Кількість тривог"
       },
       "schedule_boiler": {
         "name": "Розклад опалення"

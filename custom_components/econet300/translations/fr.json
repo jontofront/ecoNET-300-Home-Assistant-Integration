@@ -257,6 +257,17 @@
       },
       "ecosrv_https": {
         "name": "Serveur ecoNET HTTPS"
+      },
+      "alarms": {
+        "name": "Alarmes"
+      },
+      "alarm_active": {
+        "name": "Alarme active"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Alarme chaudière"
       }
     },
     "sensor": {
@@ -645,6 +656,12 @@
       },
       "tem_co": {
         "name": "Température chaudière"
+      },
+      "last_alarm": {
+        "name": "Dernière alarme"
+      },
+      "alarm_count": {
+        "name": "Nombre d'alarmes"
       },
       "schedule_boiler": {
         "name": "Programme chauffage"

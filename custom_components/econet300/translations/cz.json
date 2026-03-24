@@ -266,6 +266,17 @@
       },
       "ecosrv_https": {
         "name": "Server ecoNET HTTPS"
+      },
+      "alarms": {
+        "name": "Alarmy"
+      },
+      "alarm_active": {
+        "name": "Alarm aktivní"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Alarm kotle"
       }
     },
     "sensor": {
@@ -654,6 +665,12 @@
       },
       "tem_co": {
         "name": "Teplota kotle"
+      },
+      "last_alarm": {
+        "name": "Poslední alarm"
+      },
+      "alarm_count": {
+        "name": "Počet alarmů"
       },
       "schedule_boiler": {
         "name": "Rozvrh vytápění"
