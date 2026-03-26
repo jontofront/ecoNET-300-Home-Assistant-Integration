@@ -1,17 +1,6 @@
 # Changelog
 
-## [v1.2.3-beta.3] - 2026-03-16
-
-### ✨ New Features
-
-- **Schedule Sensors** — **[Schedules Guide](docs/SCHEDULES.md)**: Auto-created sensor entities for every schedule configured on the device (boiler, water heater, mixers, thermostats, circulation pump, etc.)
-  - **Native value**: Today's active-hours summary (e.g. `06:00-12:00, 20:00-00:00`)
-  - **Attributes**: Per-day summaries (sunday–saturday) + schedule metadata — perfect for Markdown cards
-  - **Dynamic**: Only schedules present on your device are created (no extra clutter)
-  - **Translated**: EN, PL, FR, UK, CZ — 20 schedule types covered
-  - **Icon**: `mdi:calendar-clock` for all schedule sensors
-
-## [v1.2.3-beta.1] - 2026-03-15
+## [v1.2.3] - 2026-03-26
 
 ### ✨ New Features
 
@@ -20,6 +9,12 @@
   - **Alarm Count** sensor: total number of alarms with the 5 most recent in attributes
   - **Alarm Active** binary sensor: ON when any alarm is currently active (device class: `problem`)
   - **Boiler Alarm** event entity: fires `alarm_triggered` / `alarm_cleared` events for instant notification automations
+- **Schedule Sensors** — **[Schedules Guide](docs/SCHEDULES.md)**: Auto-created sensor entities for every schedule configured on the device (boiler, water heater, mixers, thermostats, circulation pump, etc.)
+  - **Native value**: Today's active-hours summary (e.g. `06:00-12:00, 20:00-00:00`)
+  - **Attributes**: Per-day summaries (sunday–saturday) + schedule metadata — perfect for Markdown cards
+  - **Dynamic**: Only schedules present on your device are created (no extra clutter)
+  - **Translated**: EN, PL, FR, UK, CZ — 20 schedule types covered
+  - **Icon**: `mdi:calendar-clock` for all schedule sensors
 - **ecoMAX360i Sensors**: Added flap valve states, heat demanded, water pump running, Axen heat pump temperatures, circuit comfort/eco setpoints
 - **Schedule Service**: New `econet300.get_schedule` service to read ecoMAX heating schedules (boiler, mixers, thermostats, water heater)
 
@@ -33,6 +28,7 @@
 ### 📖 Documentation
 
 - **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)** — entity details, automation examples (push notifications, persistent alerts, logbook logging)
+- **[Schedules Guide](docs/SCHEDULES.md)** — how to display heating schedules on your dashboard
 
 ---
 
@@ -196,7 +192,6 @@
 ### 🐛 Bug Fixes
 
 - **#187 - Sensors Not Refreshing**: Fixed critical bug where mixer and other sensors stopped updating automatically
-
   - **Problem**: If initial data was missing, entities never registered with the coordinator for updates
   - **Solution**: Moved `super().async_added_to_hass()` to run first, ensuring entities always register for updates
   - **Impact**: All sensors (especially mixers) now refresh automatically every 30 seconds
@@ -611,3 +606,4 @@
 - **v1.2.0** - Dynamic entity system, mixer support, parameter locking
 - **v1.2.1** - Fuel consumption tracking, legacy device support
 - **v1.2.2** - Custom Entity Selector, fuel sensor fixes
+- **v1.2.3** - Alarm monitoring, schedule sensors, ecoMAX360i sensors, API throttling

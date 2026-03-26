@@ -373,4 +373,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-03-16 with v1.2.3-beta.3 release._
+_This README was last updated on 2026-03-26 with v1.2.3 release._
