@@ -117,6 +117,7 @@ def test_device_type_detection():
         "ecoMAX810P-L": "ecoMAX",
         "ecoMAX360": "ecoMAX",
         "ecoMAX850R2-X": "ecoMAX",
+        "ecoMAX860D3-HB": "ecoMAX",
         "ecoMAX860P2-N": "ecoMAX",
         "ecoMAX860P3-V": "ecoMAX",
         "ecoSOL": "ecoSOL",

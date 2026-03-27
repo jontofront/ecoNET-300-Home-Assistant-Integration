@@ -21,3 +21,45 @@ calibrate_fuel_meter:
           step: 0.001
           unit_of_measurement: "kg"
           mode: box
+
+get_schedule:
+  fields:
+    schedule_type:
+      example: "boiler"
+      required: true
+      selector:
+        select:
+          options:
+            - "boiler"
+            - "boiler_clean"
+            - "boiler_work"
+            - "circulation_pump"
+            - "exchanger_clean"
+            - "mixer_1"
+            - "mixer_2"
+            - "mixer_3"
+            - "mixer_4"
+            - "mixer_5"
+            - "mixer_6"
+            - "mixer_7"
+            - "mixer_8"
+            - "mixer_9"
+            - "mixer_10"
+            - "thermostat_1"
+            - "thermostat_2"
+            - "thermostat_3"
+            - "water_heater"
+            - "water_heater_2"
+    weekday:
+      example: "monday"
+      required: false
+      selector:
+        select:
+          options:
+            - "sunday"
+            - "monday"
+            - "tuesday"
+            - "wednesday"
+            - "thursday"
+            - "friday"
+            - "saturday"

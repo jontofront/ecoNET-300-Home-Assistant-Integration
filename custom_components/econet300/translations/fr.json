@@ -13,6 +13,20 @@
           "description": "La valeur à définir pour le compteur (en kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Obtenir le programme",
+      "description": "Récupère un programme horaire décodé depuis l'appareil.",
+      "fields": {
+        "schedule_type": {
+          "name": "Type de programme",
+          "description": "Programme à récupérer (ex. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Jour de la semaine",
+          "description": "Jour de la semaine. Renvoie tous les jours si omis."
+        }
+      }
     }
   },
   "exceptions": {
@@ -243,6 +257,17 @@
       },
       "ecosrv_https": {
         "name": "Serveur ecoNET HTTPS"
+      },
+      "alarms": {
+        "name": "Alarmes"
+      },
+      "alarm_active": {
+        "name": "Alarme active"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Alarme chaudière"
       }
     },
     "sensor": {
@@ -631,6 +656,72 @@
       },
       "tem_co": {
         "name": "Température chaudière"
+      },
+      "last_alarm": {
+        "name": "Dernière alarme"
+      },
+      "alarm_count": {
+        "name": "Nombre d'alarmes"
+      },
+      "schedule_boiler": {
+        "name": "Programme chauffage"
+      },
+      "schedule_boiler_clean": {
+        "name": "Programme nettoyage"
+      },
+      "schedule_boiler_work": {
+        "name": "Programme fonctionnement"
+      },
+      "schedule_circulation_pump": {
+        "name": "Programme pompe de circulation"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Programme nettoyage échangeur"
+      },
+      "schedule_mixer_1": {
+        "name": "Programme mélangeur 1"
+      },
+      "schedule_mixer_2": {
+        "name": "Programme mélangeur 2"
+      },
+      "schedule_mixer_3": {
+        "name": "Programme mélangeur 3"
+      },
+      "schedule_mixer_4": {
+        "name": "Programme mélangeur 4"
+      },
+      "schedule_mixer_5": {
+        "name": "Programme mélangeur 5"
+      },
+      "schedule_mixer_6": {
+        "name": "Programme mélangeur 6"
+      },
+      "schedule_mixer_7": {
+        "name": "Programme mélangeur 7"
+      },
+      "schedule_mixer_8": {
+        "name": "Programme mélangeur 8"
+      },
+      "schedule_mixer_9": {
+        "name": "Programme mélangeur 9"
+      },
+      "schedule_mixer_10": {
+        "name": "Programme mélangeur 10"
+      },
+      "schedule_thermostat_1": {
+        "name": "Programme thermostat 1"
+      },
+      "schedule_thermostat_2": {
+        "name": "Programme thermostat 2"
+      },
+      "schedule_thermostat_3": {
+        "name": "Programme thermostat 3"
+      },
+      "schedule_water_heater": {
+        "name": "Programme chauffe-eau"
+      },
+      "schedule_water_heater_2": {
+        "name": "Programme chauffe-eau 2"
       }
     }
   }

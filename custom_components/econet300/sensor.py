@@ -27,6 +27,7 @@ from homeassistant.core import (
     callback,
 )
 from homeassistant.helpers import entity_registry as er
+import homeassistant.util.dt as dt_util
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import (
@@ -37,7 +38,15 @@ from homeassistant.helpers.event import (
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
-from .common_functions import camel_to_snake, get_entity_component
+from .common_functions import (
+    camel_to_snake,
+    decode_ecomax_schedule_day,
+    decode_ecomax_schedule_metadata,
+    get_entity_component,
+    get_latest_alarm,
+    parse_alarm_entry,
+    summarize_schedule_slots,
+)
 from .const import (
     API_REG_PARAMS_URI,
     CDP_ID_TO_REGPARAMS,
@@ -53,6 +62,8 @@ from .const import (
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
     NUMBER_OF_AVAILABLE_ECOSTERS,
+    SCHEDULE_TYPE_REVERSE_MAP,
+    SCHEDULE_WEEKDAYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_FUEL_STREAM,
     SENSOR_MAP_KEY,
@@ -1182,6 +1193,258 @@ def create_custom_sensors(
     return entities
 
 
+# =============================================================================
+# Alarm sensors (sysParams.alarms + rmAlarmsNames)
+# =============================================================================
+
+
+class LastAlarmSensor(EconetEntity, SensorEntity):
+    """Sensor showing the most recent alarm from sysParams.alarms."""
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the last alarm sensor."""
+        self.entity_description = SensorEntityDescription(
+            key="last_alarm",
+            translation_key="last_alarm",
+        )
+        self.api = api
+        self._alarm_attrs: dict[str, Any] = {}
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated alarm data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        alarms: list[dict[str, Any]] = sys_params.get("alarms", [])
+        alarm_names: dict[str, str] = (self.coordinator.data.get("rmData") or {}).get(
+            "alarmsNames"
+        ) or {}
+
+        latest = get_latest_alarm(alarms, alarm_names)
+        if latest is None:
+            self._attr_native_value = "No alarms"
+            self._alarm_attrs = {}
+        else:
+            self._attr_native_value = latest["description"]
+            self._alarm_attrs = latest
+
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return alarm details as extra state attributes."""
+        attrs = dict(self._alarm_attrs)
+        # Add total alarm count
+        if self.coordinator.data:
+            sys_params = self.coordinator.data.get("sysParams") or {}
+            attrs["alarm_count"] = len(sys_params.get("alarms", []))
+        return attrs
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+class AlarmCountSensor(EconetEntity, SensorEntity):
+    """Sensor showing total number of alarms in sysParams history."""
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+    ) -> None:
+        """Initialize the alarm count sensor."""
+        self.entity_description = SensorEntityDescription(
+            key="alarm_count",
+            translation_key="alarm_count",
+        )
+        self.api = api
+        self._recent_alarms: list[dict[str, Any]] = []
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated alarm data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        alarms: list[dict[str, Any]] = sys_params.get("alarms", [])
+        alarm_names: dict[str, str] = (self.coordinator.data.get("rmData") or {}).get(
+            "alarmsNames"
+        ) or {}
+
+        self._attr_native_value = len(alarms)
+        self._recent_alarms = [parse_alarm_entry(a, alarm_names) for a in alarms[:5]]
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return recent alarms as extra state attributes."""
+        return {"recent_alarms": self._recent_alarms}
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+def create_alarm_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SensorEntity]:
+    """Create alarm sensor entities from sysParams.alarms data.
+
+    Only creates entities if alarm data is present in the coordinator.
+    """
+    entities: list[SensorEntity] = []
+
+    if coordinator.data is None:
+        return entities
+
+    sys_params = coordinator.data.get("sysParams") or {}
+    if "alarms" not in sys_params:
+        _LOGGER.debug("No alarms key in sysParams, skipping alarm sensors")
+        return entities
+
+    entities.append(LastAlarmSensor(coordinator, api))
+    entities.append(AlarmCountSensor(coordinator, api))
+    _LOGGER.info("Created %d alarm sensors", len(entities))
+    return entities
+
+
+# =============================================================================
+# Schedule sensors (sysParams.schedules.ecomaxSchedules)
+# =============================================================================
+
+
+class ScheduleSensor(EconetEntity, SensorEntity):
+    """Sensor showing the decoded weekly schedule for a schedule type.
+
+    Native value is today's active-hours summary. Each weekday summary and
+    optional metadata are exposed as extra state attributes so a Markdown
+    card can render the full week at a glance.
+    """
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        schedule_type: str,
+        api_key: str,
+    ) -> None:
+        """Initialize the schedule sensor."""
+        self.entity_description = SensorEntityDescription(
+            key=f"schedule_{schedule_type}",
+            translation_key=f"schedule_{schedule_type}",
+        )
+        self.api = api
+        self._api_key = api_key
+        self._day_summaries: dict[str, str] = {}
+        self._metadata: dict[str, Any] = {}
+        super().__init__(coordinator, api)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated schedule data from the coordinator."""
+        if self.coordinator.data is None:
+            return
+
+        sys_params = self.coordinator.data.get("sysParams") or {}
+        raw_schedules = sys_params.get("schedules") or {}
+        schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
+
+        schedule_data: list | None = schedules.get(self._api_key)
+        if not schedule_data:
+            self._attr_native_value = None
+            self._day_summaries = {}
+            self._metadata = {}
+            self.async_write_ha_state()
+            return
+
+        metadata_raw = schedule_data[-1] if len(schedule_data) > 7 else []
+        self._metadata = decode_ecomax_schedule_metadata(metadata_raw)
+
+        num_days = min(len(schedule_data), 7)
+        summaries: dict[str, str] = {}
+        for idx, day_name in enumerate(SCHEDULE_WEEKDAYS):
+            if idx >= num_days:
+                break
+            slots = decode_ecomax_schedule_day(schedule_data[idx])
+            summaries[day_name] = summarize_schedule_slots(slots)
+
+        self._day_summaries = summaries
+
+        # on_off_mode 0 = schedule disabled by the device toggle
+        schedule_enabled = self._metadata.get("on_off_mode", 1) != 0
+
+        # Python weekday (Mon=0 .. Sun=6) → SCHEDULE_WEEKDAYS index (Sun=0 .. Sat=6)
+        today_idx = (dt_util.now().weekday() + 1) % 7
+        today_name = SCHEDULE_WEEKDAYS[today_idx]
+        today_summary = summaries.get(today_name, "unknown")
+        self._attr_native_value = today_summary if schedule_enabled else f"OFF ({today_summary})"
+        self.async_write_ha_state()
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return per-day summaries and schedule metadata."""
+        attrs: dict[str, Any] = dict(self._day_summaries)
+        attrs["schedule_enabled"] = self._metadata.get("on_off_mode", 1) != 0
+        if self._metadata:
+            attrs["metadata"] = self._metadata
+        return attrs
+
+    async def async_added_to_hass(self) -> None:
+        """Sync initial state when entity is added."""
+        await super().async_added_to_hass()
+        self._handle_coordinator_update()
+
+
+def create_schedule_sensors(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[ScheduleSensor]:
+    """Create schedule sensor entities from sysParams.schedules data.
+
+    One sensor is created per schedule type present on the device.
+    """
+    entities: list[ScheduleSensor] = []
+
+    if coordinator.data is None:
+        return entities
+
+    sys_params = coordinator.data.get("sysParams") or {}
+    raw_schedules = sys_params.get("schedules") or {}
+    schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
+
+    if not schedules:
+        _LOGGER.debug("No schedule data in sysParams, skipping schedule sensors")
+        return entities
+
+    for api_key in schedules:
+        key = str(api_key)
+        friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(key, key)
+        entities.append(ScheduleSensor(coordinator, api, friendly_name, key))
+
+    _LOGGER.info("Created %d schedule sensors", len(entities))
+    return entities
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -1215,6 +1478,16 @@ async def async_setup_entry(
         ecoster_sensors = create_ecoster_sensors(coordinator, api)
         _LOGGER.info("Collected %d ecoSTER sensors", len(ecoster_sensors))
         entities.extend(ecoster_sensors)
+
+        # Gather alarm sensors from sysParams.alarms
+        alarm_sensors = create_alarm_sensors(coordinator, api)
+        _LOGGER.info("Collected %d alarm sensors", len(alarm_sensors))
+        entities.extend(alarm_sensors)
+
+        # Gather schedule sensors from sysParams.schedules
+        schedule_sensors = create_schedule_sensors(coordinator, api)
+        _LOGGER.info("Collected %d schedule sensors", len(schedule_sensors))
+        entities.extend(schedule_sensors)
 
         # Gather user-defined custom sensors from Options Flow
         custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})

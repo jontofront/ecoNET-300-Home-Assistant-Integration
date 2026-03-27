@@ -33,6 +33,7 @@ DOMAIN = "econet300"
 SERVICE_API = "api"
 SERVICE_COORDINATOR = "coordinator"
 SERVICE_FUEL_SENSOR = "fuel_sensor"
+SERVICE_GET_SCHEDULE = "get_schedule"
 
 # regParams key for the fuel flow rate sensor (kg/h).
 SENSOR_FUEL_STREAM = "fuelStream"
@@ -52,6 +53,17 @@ CONSECUTIVE_FAILURES_THRESHOLD = 5
 
 # Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
 RM_PROBE_TIMEOUT_SEC = 2
+
+# Max concurrent HTTP requests to the ecoNET module.
+# The module runs on a TP-Link MR3020 with very limited resources;
+# too many parallel connections cause timeouts (see GitHub issue #210).
+MAX_CONCURRENT_API_REQUESTS = 3
+
+# Coordinator update timeouts (seconds)
+# First update: static metadata cache is cold -> 6+ parallel RM API calls needed
+UPDATE_TIMEOUT_FIRST_SEC = 120
+# Subsequent updates: only dynamic data fetched (cached metadata reused)
+UPDATE_TIMEOUT_SEC = 30
 
 # RM endpoint dataset keys for data coordinator (order matches tasks list)
 RM_CORE_DATASET_KEYS = [
@@ -199,6 +211,12 @@ RM_STRUCTURE_TYPE_DATA_REF = 3  # Data reference (read-only, has data_id)
 RM_STRUCTURE_TYPE_MENU_GROUP = 7  # Menu group/header (resets pass_index)
 
 # =============================================================================
+# ALARM CODE CONSTANTS
+# =============================================================================
+ALARM_CODE_POWER_OUTAGE = 0
+ALARM_CODE_CONTINUES = 255
+
+# =============================================================================
 # OPERATION MODES AND STATUS MAPPINGS
 # =============================================================================
 OPERATION_MODE_NAMES = {
@@ -264,6 +282,31 @@ ECOMAX360I_SENSORS = {
     "heatingUpperTemp",
     "Circuit1thermostat",
     "heating_work_state_pump4",
+    # 3-way valve and demand sensors
+    "flapValveStates",
+    "HeatDemanded",
+    "WaterPumpRunning",
+    # Heat pump (Axen) sensors
+    "AxenOutdoorTemp",
+    "AxenOutgoingTemp",
+    "AxenReturnTemp",
+    "AxenCompressorFreq",
+    # Circuit comfort/eco temperature setpoints (read-only from regParams)
+    "Circuit1ComfortTemp",
+    "Circuit1EcoTemp",
+    "BufferTargetTemp",
+    "Circuit2ComfortTemp",
+    "Circuit2EcoTemp",
+    "Circuit3ComfortTemp",
+    "Circuit3EcoTemp",
+    "Circuit4ComfortTemp",
+    "Circuit4EcoTemp",
+    "Circuit5ComfortTemp",
+    "Circuit5EcoTemp",
+    "Circuit6ComfortTemp",
+    "Circuit6EcoTemp",
+    "Circuit7ComfortTemp",
+    "Circuit7EcoTemp",
 }
 
 # ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
@@ -763,6 +806,30 @@ ENTITY_UNIT_MAP = {
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
+    "flapValveStates": None,
+    "HeatDemanded": None,
+    "WaterPumpRunning": None,
+    # Heat pump (Axen) units
+    "AxenOutdoorTemp": UnitOfTemperature.CELSIUS,
+    "AxenOutgoingTemp": UnitOfTemperature.CELSIUS,
+    "AxenReturnTemp": UnitOfTemperature.CELSIUS,
+    "AxenCompressorFreq": "Hz",
+    # Circuit comfort/eco temperature setpoints
+    "Circuit1ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1EcoTemp": UnitOfTemperature.CELSIUS,
+    "BufferTargetTemp": UnitOfTemperature.CELSIUS,
+    "Circuit2ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit2EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit3ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit3EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6EcoTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7ComfortTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7EcoTemp": UnitOfTemperature.CELSIUS,
     # ecoSOL specific units (ecoSOL 500, ecoSOL 301, etc.)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
@@ -822,6 +889,9 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
+    "flapValveStates": None,
+    "HeatDemanded": None,
+    "WaterPumpRunning": None,
 }
 
 # =============================================================================
@@ -900,6 +970,30 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
+    "flapValveStates": SensorDeviceClass.ENUM,
+    "HeatDemanded": SensorDeviceClass.ENUM,
+    "WaterPumpRunning": SensorDeviceClass.ENUM,
+    # Heat pump (Axen) device classes
+    "AxenOutdoorTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenOutgoingTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenReturnTemp": SensorDeviceClass.TEMPERATURE,
+    "AxenCompressorFreq": SensorDeviceClass.FREQUENCY,
+    # Circuit comfort/eco temperature device classes
+    "Circuit1ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "BufferTargetTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit2ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit2EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit3ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit3EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6EcoTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7ComfortTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7EcoTemp": SensorDeviceClass.TEMPERATURE,
     # ecoSOL specific device classes (ecoSOL 500, ecoSOL 301, etc.)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
@@ -984,6 +1078,30 @@ ENTITY_PRECISION = {
     # ecoMAX360i
     "PS": None,
     "TempBuforDown": 1,
+    "flapValveStates": None,
+    "HeatDemanded": None,
+    "WaterPumpRunning": None,
+    # Heat pump (Axen) precision
+    "AxenOutdoorTemp": 1,
+    "AxenOutgoingTemp": 1,
+    "AxenReturnTemp": 1,
+    "AxenCompressorFreq": 0,
+    # Circuit comfort/eco temperature precision
+    "Circuit1ComfortTemp": 1,
+    "Circuit1EcoTemp": 1,
+    "BufferTargetTemp": 1,
+    "Circuit2ComfortTemp": 1,
+    "Circuit2EcoTemp": 1,
+    "Circuit3ComfortTemp": 1,
+    "Circuit3EcoTemp": 1,
+    "Circuit4ComfortTemp": 1,
+    "Circuit4EcoTemp": 1,
+    "Circuit5ComfortTemp": 1,
+    "Circuit5EcoTemp": 1,
+    "Circuit6ComfortTemp": 1,
+    "Circuit6EcoTemp": 1,
+    "Circuit7ComfortTemp": 1,
+    "Circuit7EcoTemp": 1,
     # ecoSTER thermostat precision
     "ecoSterTemp1": 1,
     "ecoSterTemp2": 1,
@@ -1031,6 +1149,14 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
+    # ecoMAX360i-specific processors
+    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(
+        x, STATE_UNKNOWN
+    ),
+    "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(x, STATE_UNKNOWN),
+    "WaterPumpRunning": lambda x: SENSOR_WATER_PUMP_RUNNING_MAPPING.get(
+        x, STATE_UNKNOWN
+    ),
 }
 
 # =============================================================================
@@ -1130,6 +1256,23 @@ SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
     1: "on",
 }
 
+# ecoMAX360i-specific value mappings
+SENSOR_FLAP_VALVE_STATES_MAPPING: dict[int, str] = {
+    0: "central_heating",
+    3: "domestic_hot_water",
+}
+
+SENSOR_HEAT_DEMANDED_MAPPING: dict[int, str] = {
+    0: "heat",
+    1: "off",
+}
+
+SENSOR_WATER_PUMP_RUNNING_MAPPING: dict[int, str] = {
+    0: "on",
+    1: "unknown",
+    2: "off",
+}
+
 # =============================================================================
 # ENUM SENSOR OPTIONS
 # =============================================================================
@@ -1138,4 +1281,51 @@ SENSOR_ENUM_OPTIONS: dict[str, list[str]] = {
     "mode": list(OPERATION_MODE_NAMES.values()),
     "transmission": list(OPERATION_MODE_NAMES.values()),
     "statusCO": [*SENSOR_STATUS_CO_MAPPING.values(), STATE_UNKNOWN],
+    # ecoMAX360i enum options
+    "flapValveStates": [*SENSOR_FLAP_VALVE_STATES_MAPPING.values(), STATE_UNKNOWN],
+    "HeatDemanded": [*SENSOR_HEAT_DEMANDED_MAPPING.values(), STATE_UNKNOWN],
+    "WaterPumpRunning": list(
+        dict.fromkeys([*SENSOR_WATER_PUMP_RUNNING_MAPPING.values(), STATE_UNKNOWN])
+    ),
 }
+
+# =============================================================================
+# SCHEDULE CONSTANTS (ecoMAX "em" protocol)
+# =============================================================================
+# User-friendly name -> API key mapping for ecomaxSchedules
+SCHEDULE_TYPE_MAP: dict[str, str] = {
+    "boiler": "boilerTZ",
+    "boiler_clean": "boilerCleanTZ",
+    "boiler_work": "boilerWorkTZ",
+    "circulation_pump": "circPumpTZ",
+    "exchanger_clean": "exchangerCleanTZ",
+    "mixer_1": "mixer1TZ",
+    "mixer_2": "mixer2TZ",
+    "mixer_3": "mixer3TZ",
+    "mixer_4": "mixer4TZ",
+    "mixer_5": "mixer5TZ",
+    "mixer_6": "mixer6TZ",
+    "mixer_7": "mixer7TZ",
+    "mixer_8": "mixer8TZ",
+    "mixer_9": "mixer9TZ",
+    "mixer_10": "mixer10TZ",
+    "thermostat_1": "thermostat1TZ",
+    "thermostat_2": "thermostat2TZ",
+    "thermostat_3": "thermostat3TZ",
+    "water_heater": "cwuTZ",
+    "water_heater_2": "cwu2TZ",
+}
+
+# Reverse map: API key -> user-friendly name
+SCHEDULE_TYPE_REVERSE_MAP: dict[str, str] = {v: k for k, v in SCHEDULE_TYPE_MAP.items()}
+
+# Day ordering matches the ecoNET web interface (index 0 = Sunday)
+SCHEDULE_WEEKDAYS: list[str] = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+]

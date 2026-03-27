@@ -4,13 +4,14 @@ Complete reference for all entities provided by the ecoNET300 Home Assistant Int
 
 ## Overview
 
-| Type           | Count | Description                      |
-| -------------- | ----- | -------------------------------- |
-| Sensors        | 50+   | Temperature, status, system info |
-| Binary Sensors | 25+   | Pumps, fans, connections         |
-| Switches       | 1     | Boiler ON/OFF control            |
-| Select         | 1     | Heater mode (Winter/Summer/Auto) |
-| Number         | 15+   | Temperature setpoints            |
+| Type           | Count | Description                       |
+| -------------- | ----- | --------------------------------- |
+| Sensors        | 50+   | Temperature, status, system info  |
+| Binary Sensors | 25+   | Pumps, fans, connections, alarms  |
+| Events         | 1     | Boiler alarm triggered / cleared  |
+| Switches       | 1     | Boiler ON/OFF control             |
+| Select         | 1     | Heater mode (Winter/Summer/Auto)  |
+| Number         | 15+   | Temperature setpoints             |
 
 ---
 
@@ -276,6 +277,20 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `ecosterSetTemp6` | Room thermostat 6 setpoint | `../econet/regParams` |
 | `ecosterSetTemp7` | Room thermostat 7 setpoint | `../econet/regParams` |
 | `ecosterSetTemp8` | Room thermostat 8 setpoint | `../econet/regParams` |
+
+---
+
+## Alarm and Event Entities (v1.2.3+)
+
+| Entity Key     | Platform      | Description                                  | Category   |
+| -------------- | ------------- | -------------------------------------------- | ---------- |
+| `last_alarm`   | Sensor        | Most recent alarm description                | Diagnostic |
+| `alarm_count`  | Sensor        | Total number of alarms (recent 5 in attrs)   | Diagnostic |
+| `alarm_active` | Binary Sensor | ON when any alarm is currently active        | Diagnostic |
+| `boiler_alarm` | Event         | Fires `alarm_triggered` / `alarm_cleared`    | Diagnostic |
+
+**Full documentation, attributes, and automation examples:**
+**[Alarms & Events Guide](ALARMS_AND_EVENTS.md)**
 
 ---
 

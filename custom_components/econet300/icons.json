@@ -308,6 +308,18 @@
           "on": "mdi:pump",
           "off": "mdi:pump"
         }
+      },
+      "alarm_active": {
+        "default": "mdi:alert-circle",
+        "state": {
+          "on": "mdi:alert-circle",
+          "off": "mdi:alert-circle-check-outline"
+        }
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "default": "mdi:alert-circle-outline"
       }
     },
     "sensor": {
@@ -1133,6 +1145,66 @@
       },
       "water_heater_status": {
         "default": "mdi:water-boiler"
+      },
+      "schedule_boiler": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_boiler_clean": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_boiler_work": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_circulation_pump": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_exchanger_clean": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_1": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_2": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_3": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_4": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_5": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_6": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_7": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_8": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_9": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_mixer_10": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_thermostat_1": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_thermostat_2": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_thermostat_3": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_water_heater": {
+        "default": "mdi:calendar-clock"
+      },
+      "schedule_water_heater_2": {
+        "default": "mdi:calendar-clock"
       }
     },
     "diagnostic": {
@@ -1165,6 +1237,12 @@
       },
       "transmission": {
         "default": "mdi:antenna"
+      },
+      "last_alarm": {
+        "default": "mdi:alert-circle"
+      },
+      "alarm_count": {
+        "default": "mdi:counter"
       }
     }
   }

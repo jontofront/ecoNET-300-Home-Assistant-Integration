@@ -13,6 +13,20 @@
           "description": "Hodnota pro nastavení měřiče (v kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Získat rozvrh",
+      "description": "Načte dekódovaný rozvrh kotle ze zařízení.",
+      "fields": {
+        "schedule_type": {
+          "name": "Typ rozvrhu",
+          "description": "Rozvrh k načtení (např. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Den v týdnu",
+          "description": "Den v týdnu. Vrátí všechny dny, pokud není zadáno."
+        }
+      }
     }
   },
   "exceptions": {
@@ -252,6 +266,17 @@
       },
       "ecosrv_https": {
         "name": "Server ecoNET HTTPS"
+      },
+      "alarms": {
+        "name": "Alarmy"
+      },
+      "alarm_active": {
+        "name": "Alarm aktivní"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Alarm kotle"
       }
     },
     "sensor": {
@@ -640,6 +665,72 @@
       },
       "tem_co": {
         "name": "Teplota kotle"
+      },
+      "last_alarm": {
+        "name": "Poslední alarm"
+      },
+      "alarm_count": {
+        "name": "Počet alarmů"
+      },
+      "schedule_boiler": {
+        "name": "Rozvrh vytápění"
+      },
+      "schedule_boiler_clean": {
+        "name": "Rozvrh čištění"
+      },
+      "schedule_boiler_work": {
+        "name": "Rozvrh provozu"
+      },
+      "schedule_circulation_pump": {
+        "name": "Rozvrh cirkulačního čerpadla"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Rozvrh čištění výměníku"
+      },
+      "schedule_mixer_1": {
+        "name": "Rozvrh směšovače 1"
+      },
+      "schedule_mixer_2": {
+        "name": "Rozvrh směšovače 2"
+      },
+      "schedule_mixer_3": {
+        "name": "Rozvrh směšovače 3"
+      },
+      "schedule_mixer_4": {
+        "name": "Rozvrh směšovače 4"
+      },
+      "schedule_mixer_5": {
+        "name": "Rozvrh směšovače 5"
+      },
+      "schedule_mixer_6": {
+        "name": "Rozvrh směšovače 6"
+      },
+      "schedule_mixer_7": {
+        "name": "Rozvrh směšovače 7"
+      },
+      "schedule_mixer_8": {
+        "name": "Rozvrh směšovače 8"
+      },
+      "schedule_mixer_9": {
+        "name": "Rozvrh směšovače 9"
+      },
+      "schedule_mixer_10": {
+        "name": "Rozvrh směšovače 10"
+      },
+      "schedule_thermostat_1": {
+        "name": "Rozvrh termostatu 1"
+      },
+      "schedule_thermostat_2": {
+        "name": "Rozvrh termostatu 2"
+      },
+      "schedule_thermostat_3": {
+        "name": "Rozvrh termostatu 3"
+      },
+      "schedule_water_heater": {
+        "name": "Rozvrh ohřívače vody"
+      },
+      "schedule_water_heater_2": {
+        "name": "Rozvrh ohřívače vody 2"
       }
     }
   }

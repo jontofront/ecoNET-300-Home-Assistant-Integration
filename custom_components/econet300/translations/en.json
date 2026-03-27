@@ -13,6 +13,20 @@
           "description": "The value to set the meter to (in kg)."
         }
       }
+    },
+    "get_schedule": {
+      "name": "Get schedule",
+      "description": "Retrieves a decoded boiler schedule from the device.",
+      "fields": {
+        "schedule_type": {
+          "name": "Schedule type",
+          "description": "Schedule to retrieve (e.g. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Weekday",
+          "description": "Day of the week. Returns all days if omitted."
+        }
+      }
     }
   },
   "exceptions": {
@@ -190,6 +204,14 @@
       },
       "alarms": {
         "name": "Alarms"
+      },
+      "alarm_active": {
+        "name": "Alarm Active"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Boiler Alarm"
       }
     },
     "number": {
@@ -673,6 +695,87 @@
       "heating_work_state_pump4": {
         "name": "Heating work state pump 4"
       },
+      "flap_valve_states": {
+        "name": "3-way valve state",
+        "state": {
+          "central_heating": "Central heating",
+          "domestic_hot_water": "Domestic hot water",
+          "unknown": "Unknown"
+        }
+      },
+      "heat_demanded": {
+        "name": "Heat demanded",
+        "state": {
+          "heat": "Heat",
+          "off": "Off",
+          "unknown": "Unknown"
+        }
+      },
+      "water_pump_running": {
+        "name": "Water pump",
+        "state": {
+          "on": "On",
+          "unknown": "Unknown",
+          "off": "Off"
+        }
+      },
+      "axen_outdoor_temp": {
+        "name": "Heat pump outdoor temperature"
+      },
+      "axen_outgoing_temp": {
+        "name": "Heat pump supply temperature"
+      },
+      "axen_return_temp": {
+        "name": "Heat pump return temperature"
+      },
+      "axen_compressor_freq": {
+        "name": "Heat pump compressor frequency"
+      },
+      "circuit1_comfort_temp": {
+        "name": "Circuit 1 day temperature"
+      },
+      "circuit1_eco_temp": {
+        "name": "Circuit 1 night temperature"
+      },
+      "buffer_target_temp": {
+        "name": "Buffer target temperature"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Circuit 2 day temperature"
+      },
+      "circuit2_eco_temp": {
+        "name": "Circuit 2 night temperature"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Circuit 3 day temperature"
+      },
+      "circuit3_eco_temp": {
+        "name": "Circuit 3 night temperature"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Circuit 4 day temperature"
+      },
+      "circuit4_eco_temp": {
+        "name": "Circuit 4 night temperature"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Circuit 5 day temperature"
+      },
+      "circuit5_eco_temp": {
+        "name": "Circuit 5 night temperature"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Circuit 6 day temperature"
+      },
+      "circuit6_eco_temp": {
+        "name": "Circuit 6 night temperature"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Circuit 7 day temperature"
+      },
+      "circuit7_eco_temp": {
+        "name": "Circuit 7 night temperature"
+      },
       "fuel_consum": {
         "name": "Fuel consumption"
       },
@@ -821,6 +924,72 @@
       },
       "tem_co": {
         "name": "Boiler Temperature"
+      },
+      "last_alarm": {
+        "name": "Last Alarm"
+      },
+      "alarm_count": {
+        "name": "Alarm Count"
+      },
+      "schedule_boiler": {
+        "name": "Heating schedule"
+      },
+      "schedule_boiler_clean": {
+        "name": "Cleaning schedule"
+      },
+      "schedule_boiler_work": {
+        "name": "Work schedule"
+      },
+      "schedule_circulation_pump": {
+        "name": "Circulation pump schedule"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Exchanger cleaning schedule"
+      },
+      "schedule_mixer_1": {
+        "name": "Mixer 1 schedule"
+      },
+      "schedule_mixer_2": {
+        "name": "Mixer 2 schedule"
+      },
+      "schedule_mixer_3": {
+        "name": "Mixer 3 schedule"
+      },
+      "schedule_mixer_4": {
+        "name": "Mixer 4 schedule"
+      },
+      "schedule_mixer_5": {
+        "name": "Mixer 5 schedule"
+      },
+      "schedule_mixer_6": {
+        "name": "Mixer 6 schedule"
+      },
+      "schedule_mixer_7": {
+        "name": "Mixer 7 schedule"
+      },
+      "schedule_mixer_8": {
+        "name": "Mixer 8 schedule"
+      },
+      "schedule_mixer_9": {
+        "name": "Mixer 9 schedule"
+      },
+      "schedule_mixer_10": {
+        "name": "Mixer 10 schedule"
+      },
+      "schedule_thermostat_1": {
+        "name": "Thermostat 1 schedule"
+      },
+      "schedule_thermostat_2": {
+        "name": "Thermostat 2 schedule"
+      },
+      "schedule_thermostat_3": {
+        "name": "Thermostat 3 schedule"
+      },
+      "schedule_water_heater": {
+        "name": "Water heater schedule"
+      },
+      "schedule_water_heater_2": {
+        "name": "Water heater 2 schedule"
       }
     }
   },

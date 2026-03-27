@@ -1220,47 +1220,28 @@ async def _create_dynamic_entities_from_merged_data(
 async def _create_legacy_entities(
     api: Econet300Api, coordinator: EconetDataCoordinator
 ) -> list[NumberEntity]:
-    """Create legacy entities from NUMBER_MAP (fallback).
+    """Create legacy entities when mergedData is unavailable (fallback).
+
+    Only creates mixer number entities here. Basic NUMBER_MAP entities
+    are already created by _create_basic_entities() which always runs.
 
     Args:
         api: API instance
         coordinator: Data coordinator
 
     Returns:
-        List of legacy entities
+        List of legacy entities (mixer only)
 
     """
     entities: list[NumberEntity] = []
-    _LOGGER.info("Falling back to legacy number entity creation from NUMBER_MAP")
+    _LOGGER.info(
+        "No mergedData available - creating mixer number entities only "
+        "(basic NUMBER_MAP entities already created)"
+    )
 
-    # Create mixer number entities dynamically
-    _LOGGER.debug("Creating mixer number entities...")
     mixer_entities = await create_mixer_number_entities(coordinator, api)
     _LOGGER.debug("Created %d mixer number entities", len(mixer_entities))
     entities.extend(mixer_entities)
-
-    # Create other number entities from NUMBER_MAP (excluding mixer entities)
-    for key in NUMBER_MAP:
-        # Skip mixer entities as they are created dynamically above
-        map_value = NUMBER_MAP.get(key)
-        if map_value and map_value.startswith("mixerSetTemp"):
-            continue
-        number_limits = await api.get_param_limits(key)
-        if number_limits is None:
-            _LOGGER.info(
-                "Cannot add number entity: %s, numeric limits for this entity is None",
-                key,
-            )
-            continue
-
-        if can_add(key, coordinator):
-            entity_description = create_number_entity_description(key, number_limits)
-            entities.append(EconetNumber(entity_description, coordinator, api))
-        else:
-            _LOGGER.info(
-                "Cannot add number entity - availability key: %s does not exist",
-                key,
-            )
 
     return entities
 
