@@ -211,7 +211,15 @@
     },
     "event": {
       "boiler_alarm": {
-        "name": "Alarm kotła"
+        "name": "Alarm",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "alarm_triggered": "Alarm wyzwolony",
+              "alarm_cleared": "Alarm usunięty"
+            }
+          }
+        }
       }
     },
     "number": {

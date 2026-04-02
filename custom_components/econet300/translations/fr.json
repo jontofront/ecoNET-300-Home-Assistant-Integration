@@ -267,7 +267,15 @@
     },
     "event": {
       "boiler_alarm": {
-        "name": "Alarme chaudière"
+        "name": "Alarme",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "alarm_triggered": "Alarme déclenchée",
+              "alarm_cleared": "Alarme effacée"
+            }
+          }
+        }
       }
     },
     "sensor": {

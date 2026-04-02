@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.2.4] - 2026-03-24
+
+### 🔧 Improvements
+
+- **Alarm Event Translations**: Unified alarm event entity name to "Alarm" across all languages and added translated `state_attributes` for `alarm_triggered` / `alarm_cleared` event types (EN, PL, CZ, FR, UK)
+- **Missing Alarm Translations**: Added `last_alarm`, `alarm_count`, `alarm_active`, and `boiler_alarm` translations for Czech, French, and Ukrainian — previously only English and Polish were covered
+
+---
+
 ## [v1.2.3] - 2026-03-26
 
 ### ✨ New Features
