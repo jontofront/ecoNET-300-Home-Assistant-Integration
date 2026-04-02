@@ -211,7 +211,15 @@
     },
     "event": {
       "boiler_alarm": {
-        "name": "Boiler Alarm"
+        "name": "Alarm",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "alarm_triggered": "Alarm triggered",
+              "alarm_cleared": "Alarm cleared"
+            }
+          }
+        }
       }
     },
     "number": {

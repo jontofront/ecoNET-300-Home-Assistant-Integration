@@ -267,7 +267,15 @@
     },
     "event": {
       "boiler_alarm": {
-        "name": "Тривога котла"
+        "name": "Тривога",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "alarm_triggered": "Тривога спрацювала",
+              "alarm_cleared": "Тривогу знято"
+            }
+          }
+        }
       }
     },
     "sensor": {
