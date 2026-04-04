@@ -37,6 +37,33 @@ import json
 from pathlib import Path
 import re
 import sys
+from typing import Any
+
+# api_endpoint_data.extended_endpoints keys → tests/fixtures/<device>/ filenames
+EXTENDED_ENDPOINT_FIXTURE_MAP: dict[str, str] = {
+    "edit_params": "editParams.json",
+    "rm_params_names": "rmParamsNames.json",
+    "rm_params_data": "rmParamsData.json",
+    "rm_params_descs": "rmParamsDescs.json",
+    "rm_params_enums": "rmParamsEnums.json",
+    "rm_params_units_names": "rmParamsUnitsNames.json",
+    "rm_structure": "rmStructure.json",
+    "rm_current_data_params": "rmCurrentDataParams.json",
+    "rm_langs": "rmLangs.json",
+    "rm_existing_langs": "rmExistingLangs.json",
+    "rm_locks_names": "rmLocksNames.json",
+    "rm_alarms_names": "rmAlarmsNames.json",
+}
+
+
+def _extended_fixture_payload_usable(payload: Any) -> bool:
+    """Skip HA diagnostics placeholders (failed or unsupported endpoint)."""
+    if isinstance(payload, dict) and (
+        "_ha_diagnostics_unavailable" in payload
+        or "_ha_diagnostics_fetch_failed" in payload
+    ):
+        return False
+    return True
 
 
 def sanitize_folder_name(name: str) -> str:
@@ -262,6 +289,31 @@ def extract_and_save_files(
         else:
             print(f"  [SKIP] {filename}: Data not found in diagnostic file")
             results[filename] = False
+
+    unwrapped = unwrap_data(data)
+    api_ep = unwrapped.get("api_endpoint_data")
+    if isinstance(api_ep, dict) and not api_ep.get("error"):
+        extended = api_ep.get("extended_endpoints")
+        if isinstance(extended, dict):
+            for ep_key, fname in EXTENDED_ENDPOINT_FIXTURE_MAP.items():
+                payload = extended.get(ep_key)
+                if payload is None or not _extended_fixture_payload_usable(payload):
+                    continue
+                file_path = output_dir / fname
+                if dry_run:
+                    print(f"  [DRY-RUN] Would create (extended): {file_path}")
+                    results[fname] = True
+                else:
+                    try:
+                        file_path.write_text(
+                            json.dumps(payload, indent=2, ensure_ascii=False),
+                            encoding="utf-8",
+                        )
+                        print(f"  [OK] Created (extended): {file_path}")
+                        results[fname] = True
+                    except OSError as e:
+                        print(f"  [ERROR] Failed to write {file_path}: {e}")
+                        results[fname] = False
 
     return results
 

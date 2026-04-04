@@ -4,12 +4,15 @@ Tests data redaction, diagnostic functions availability, and edge cases.
 """
 
 from typing import Any
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from custom_components.econet300.diagnostics import (
     TO_REDACT,
     _redact_data,
+    _snapshot_extended_fetch_result,
+    async_collect_extended_endpoint_snapshots,
     async_get_config_entry_diagnostics,
     async_get_device_diagnostics,
 )
@@ -112,6 +115,47 @@ class TestToRedactList:
     def test_expected_keys_in_to_redact(self, expected_key):
         """Test expected sensitive keys are in TO_REDACT."""
         assert expected_key in TO_REDACT
+
+
+class TestExtendedEndpointSnapshots:
+    """Extended API endpoint snapshots for diagnostics / fixtures."""
+
+    def test_snapshot_extended_fetch_result_ok(self):
+        """Successful fetch returns payload unchanged."""
+        assert _snapshot_extended_fetch_result({"k": 1}, None) == {"k": 1}
+
+    def test_snapshot_extended_fetch_result_error(self):
+        """Exceptions become a structured error dict."""
+        out = _snapshot_extended_fetch_result(None, ValueError("x"))
+        assert out["_ha_diagnostics_fetch_failed"]
+
+    def test_snapshot_extended_fetch_result_unavailable(self):
+        """None result becomes unavailable placeholder."""
+        out = _snapshot_extended_fetch_result(None, None)
+        assert out["_ha_diagnostics_unavailable"] is True
+
+    @pytest.mark.asyncio
+    async def test_collect_extended_isolates_per_endpoint(self):
+        """One failing coroutine must not break other keys."""
+        api = MagicMock()
+        api.fetch_edit_params = AsyncMock(return_value={"edit": True})
+        api.fetch_rm_params_names = AsyncMock(side_effect=RuntimeError("rm fail"))
+        api.fetch_rm_params_data = AsyncMock(return_value=None)
+        api.fetch_rm_params_descs = AsyncMock(return_value=None)
+        api.fetch_rm_params_enums = AsyncMock(return_value=None)
+        api.fetch_rm_params_units_names = AsyncMock(return_value=None)
+        api.fetch_rm_structure = AsyncMock(return_value=None)
+        api.fetch_rm_current_data_params = AsyncMock(return_value=None)
+        api.fetch_rm_langs = AsyncMock(return_value=None)
+        api.fetch_rm_existing_langs = AsyncMock(return_value=None)
+        api.fetch_rm_locks_names = AsyncMock(return_value=None)
+        api.fetch_rm_alarms_names = AsyncMock(return_value=None)
+
+        out = await async_collect_extended_endpoint_snapshots(api)
+
+        assert out["edit_params"] == {"edit": True}
+        assert "_ha_diagnostics_fetch_failed" in out["rm_params_names"]
+        assert out["rm_params_data"]["_ha_diagnostics_unavailable"] is True
 
 
 class TestDiagnosticFunctions:
