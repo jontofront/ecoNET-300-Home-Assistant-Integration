@@ -165,6 +165,9 @@ API_NEW_PARAM_URI = "newParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
+# Optional LAN endpoint for editable-parameter metadata (module-dependent; may 404)
+API_EDIT_PARAMS_URI = "editParams"
+
 # =============================================================================
 # RM... ENDPOINT CONSTANTS (Remote Menu API)
 # =============================================================================

@@ -15,6 +15,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .common_functions import generate_translation_key
 from .const import (
+    API_EDIT_PARAMS_URI,
     API_EDITABLE_PARAMS_LIMITS_DATA,
     API_EDITABLE_PARAMS_LIMITS_URI,
     API_NEW_PARAM_URI,
@@ -640,6 +641,20 @@ class Econet300Api:
             len(sysParams) if isinstance(sysParams, dict) else 0,
         )
         return sysParams
+
+    async def fetch_edit_params(self) -> dict[str, Any] | list[Any] | None:
+        """Fetch raw JSON from ``/econet/editParams`` (optional; not used by coordinator).
+
+        Some modules expose this endpoint; others return 404 or an error payload.
+        """
+        try:
+            url = f"{self.host}/econet/{API_EDIT_PARAMS_URI}"
+            return await self._client.get(url)
+        except AuthError:
+            return None
+        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError, TypeError) as e:
+            _LOGGER.debug("editParams request failed: %s", e)
+            return None
 
     async def _fetch_api_data_by_key(self, endpoint: str, data_key: str | None = None):
         """Fetch a key from the json-encoded data returned by the API for a given registry If key is None, then return whole data."""
