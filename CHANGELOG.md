@@ -1,10 +1,21 @@
 # Changelog
 
-## Unreleased
+## [v1.2.5a] - 2026-04-04
 
 ### Fixed
 
-- **ecoSOL 301 / ecoSOL 500 sensors** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Sensor platform now uses `ECOSOL_SENSORS` (`T1`, `P1`, `TzCWU`, etc.) when `controllerID` is an ecoSOL model, instead of boiler-only `DEFAULT_SENSORS` (which left critical entities missing or unavailable)
+- **ecoSOL 301 / ecoSOL 500 sensors** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Sensor platform now uses `ECOSOL_SENSORS` (`T1`, `P1`, `TzCWU`, etc.) when `controllerID` is an ecoSOL model, instead of boiler-only `DEFAULT_SENSORS` (which left critical sensors unavailable after v1.1.16)
+
+### Added
+
+- **Diagnostics**: `api_endpoint_data.extended_endpoints` — per-endpoint snapshots for RM API data (`rmParamsNames`, `rmParamsData`, `rmStructure`, `rmCurrentDataParams`, languages, locks, alarms, etc.) and optional **`editParams`**; failures are isolated so one timeout does not empty the rest
+- **`fetch_edit_params`** / `API_EDIT_PARAMS_URI` for `GET /econet/editParams` (module-dependent; missing endpoints appear as `_ha_diagnostics_unavailable` in diagnostics)
+- **`scripts/create_fixture_from_diagnostics.py`**: can emit `editParams.json`, `rmParamsNames.json`, and other RM fixture files from `extended_endpoints` when present
+- **Tests**: `ecoSOL301` fixture folder and sensor mapping regression tests ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219))
+
+### Documentation
+
+- **[MIGRATION.md](docs/MIGRATION.md)**: Troubleshooting for ecoSOL 301/500 sensors after upgrading from v1.1.16
 
 ---
 

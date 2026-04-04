@@ -33,7 +33,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Multiple Entity Types**: Sensors, Binary Sensors, Events, Switches, Select, and Number entities
 - **Parameter Locking**: Device-side locks reflected in Home Assistant UI
 - **Repair Issues**: Automatic connection failure detection with one-click fix
-- **Diagnostics Support**: Download comprehensive diagnostics for troubleshooting
+- **Diagnostics Support**: Download diagnostics with core API data plus optional RM/`editParams` snapshots (v1.2.5a+)
 
 ### 🌐 Language Support
 
@@ -54,8 +54,8 @@ The integration supports **6 languages** with comprehensive translations:
 - **ecoMAX360** boiler controller
 - **ecoMAX860P2-N** boiler controller
 - **ecoMAX860P3-V** boiler controller
-- **ecoSOL500** solar collector system controller
-- **ecosol301**
+- **ecoSOL 500** solar collector system controller
+- **ecoSOL 301** solar controller (flat `regParams` / `T1`, `P1`, …)
 - **ecoSOL** solar thermal controller
 - **SControl MK1** control module
 - Other ecoNET300 compatible devices
@@ -229,7 +229,7 @@ The `fuel_stream` sensor provides current fuel consumption rate in **kg/h**. To 
 
 ## 🔧 Diagnostics
 
-The integration includes comprehensive diagnostics support to help troubleshoot issues. Download detailed system information including entity states, API data, and configuration details.
+The integration includes comprehensive diagnostics support to help troubleshoot issues. Downloads include coordinator data, core endpoint snapshots (`sysParams`, `regParams`, `regParamsData`, editable limits), and **extended snapshots** (v1.2.5a+): RM endpoints (`rmParamsNames`, `rmParamsData`, `rmStructure`, `rmCurrentDataParams`, languages, locks, alarms, …) plus optional **`editParams`** when the module exposes it. Unsupported endpoints are marked clearly in JSON so support can see what failed.
 
 **📖 [Complete Diagnostics Documentation](docs/DIAGNOSTICS.md)**
 
@@ -243,9 +243,11 @@ The integration includes comprehensive diagnostics support to help troubleshoot 
 **Features:**
 
 - ✅ Automatic sensitive data redaction
-- ✅ Complete API endpoint data
+- ✅ Core and extended API endpoint data (`extended_endpoints` in v1.2.5a+)
 - ✅ Entity states and attributes
 - ✅ System configuration details
+
+**Developers:** `scripts/create_fixture_from_diagnostics.py` can build test fixtures from a diagnostic ZIP/JSON, including RM and `editParams` files when `extended_endpoints` is populated.
 
 ---
 
@@ -285,6 +287,12 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
+### What's New in v1.2.5a (pre-release)
+
+- **ecoSOL 301 / 500 sensor fix** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Main controller sensors use solar register keys (`T1`, `P1`, `TzCWU`, …) instead of boiler-only keys
+- **Richer diagnostics**: Optional RM API and `editParams` snapshots under `api_endpoint_data.extended_endpoints`; easier fixture generation from downloads
+- **Migration**: See [MIGRATION.md](docs/MIGRATION.md) if ecoSOL sensors went unavailable after upgrading from v1.1.16
+
 ### What's New in v1.2.3
 
 - **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes — **[Schedules Guide](docs/SCHEDULES.md)**
@@ -323,9 +331,9 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Schedule Sensors**: View configured heating schedules directly in Home Assistant
 - **[Alarm Monitoring](docs/ALARMS_AND_EVENTS.md)**: Real-time alarm sensors and event entity for push notifications
 - **ecoSTER Integration**: Support for 8 room thermostats
-- **ecoSOL 500 Support**: Solar collector system integration
+- **ecoSOL support**: ecoSOL 500 / ecoSOL 301 solar controllers and ecoSOL thermal line
 - **Multi-language**: 6 language support (English, Polish, Czech, French, Ukrainian)
-- **Diagnostics Support**: Comprehensive diagnostics for troubleshooting
+- **Diagnostics Support**: Core + extended RM/`editParams` snapshots (v1.2.5a+)
 
 ---
 
@@ -373,4 +381,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-03-26 with v1.2.3 release._
+_This README was last updated on 2026-04-04 for v1.2.5a._
