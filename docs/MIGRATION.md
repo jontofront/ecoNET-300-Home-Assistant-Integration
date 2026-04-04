@@ -228,6 +228,14 @@ Entity IDs should remain stable between versions. If you notice changes:
 2. Use **Settings → Devices → ecoNET300 → Entity** to find new IDs
 3. Update automations/scripts with new entity IDs
 
+### ecoSOL 301 / ecoSOL 500: critical sensors unavailable
+
+If **temperatures and pump values** became **unavailable** after upgrading from v1.1.16 to v1.2.x ([issue #219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)):
+
+1. **Update** the integration to a release that includes the ecoSOL sensor mapping fix (uses register keys `T1`, `P1`, etc., from `regParams`).
+2. **Restart** Home Assistant.
+3. **Optional**: In **Settings → Devices → ecoNET300 → Entities**, delete orphaned or duplicate `sensor` entities that still reference boiler-only keys if the UI shows duplicates after the fix.
+
 ### Connection Issues After Upgrade
 
 1. **Verify device IP**: Ensure your ecoNET300 device IP hasn't changed
@@ -294,4 +302,4 @@ Use this checklist when upgrading:
 
 ---
 
-<!-- Last updated: 2025-01-26 for v1.2.0a5 -->
+<!-- Last updated: 2026-04-04 (ecoSOL #219) -->

@@ -1,11 +1,20 @@
 """Basic tests for ecoNET300 sensors."""
 
+import json
+from pathlib import Path
 from unittest.mock import Mock
 
-from custom_components.econet300.const import DEFAULT_SENSORS, SENSOR_MAP_KEY
+from custom_components.econet300.const import (
+    DEFAULT_SENSORS,
+    ECOSOL_CONTROLLER_IDS,
+    ECOSOL_SENSORS,
+    SENSOR_MAP_KEY,
+)
 from custom_components.econet300.sensor import (
     EconetSensorEntityDescription,
+    _controller_sensor_key_candidates,
     can_add_mixer,
+    create_controller_sensors,
     create_sensor_entity_description,
 )
 
@@ -88,53 +97,51 @@ class TestSensorMappingLogic:
     """Test sensor mapping logic for different controllerIDs."""
 
     # ruff: noqa: PLR6301
-    def test_all_controllers_use_default_sensors(self):
-        """Test that all controllers use DEFAULT_SENSORS mapping."""
-        # Test known controllers
-        known_controllers = [
-            "ecoMAX360i",
-            "ecoSter",
-            "lambda",
-            "ecoSOL 500",
-            "ecoSOL 301",
-        ]
+    def test_ecosol_controller_ids_use_ecosol_sensors(self):
+        """EcoSOL 301/500 use ECOSOL_SENSORS (issue #219)."""
+        for cid in ECOSOL_CONTROLLER_IDS:
+            keys = _controller_sensor_key_candidates(cid)
+            ecoSTER_stripped = keys - SENSOR_MAP_KEY.get("ecoSter", set())
+            assert keys == ECOSOL_SENSORS
+            assert ecoSTER_stripped == ECOSOL_SENSORS
+            assert cid in SENSOR_MAP_KEY
+            assert SENSOR_MAP_KEY[cid] == ECOSOL_SENSORS
 
-        for controller_id in known_controllers:
-            # Simulate the logic from sensor.py
-            if controller_id and controller_id in SENSOR_MAP_KEY:
-                sensor_keys = SENSOR_MAP_KEY["_default"].copy()
-                # Verify we're using default sensors, not specific mapping
-                assert sensor_keys == DEFAULT_SENSORS
-                # Verify the specific mapping exists but we don't use it
-                assert controller_id in SENSOR_MAP_KEY
-                assert (
-                    SENSOR_MAP_KEY[controller_id] != DEFAULT_SENSORS
-                )  # Different from default
+    # ruff: noqa: PLR6301
+    def test_non_ecosol_controllers_use_default_sensors(self):
+        """Boiler and other controllers use DEFAULT_SENSORS."""
+        for controller_id in (
+            "ecoMAX860P3-V",
+            "ecoMAX360i",
+            "SControl MK1",
+            None,
+        ):
+            keys = _controller_sensor_key_candidates(controller_id)
+            assert keys == DEFAULT_SENSORS
+
+    # ruff: noqa: PLR6301
+    def test_reference_mappings_exist_for_documentation(self):
+        """SENSOR_MAP_KEY holds per-device sets; ecoSOL entries match runtime."""
+        assert SENSOR_MAP_KEY["ecoSOL 301"] == ECOSOL_SENSORS
+        assert SENSOR_MAP_KEY["ecoSOL 500"] == ECOSOL_SENSORS
+        for cid in ("ecoMAX360i", "ecoSter", "lambda"):
+            assert cid in SENSOR_MAP_KEY
+            assert SENSOR_MAP_KEY[cid] != DEFAULT_SENSORS
 
     # ruff: noqa: PLR6301
     def test_unknown_controllers_use_default_sensors(self):
-        """Test that unknown controllers use DEFAULT_SENSORS mapping."""
+        """Unknown controllerID values use DEFAULT_SENSORS."""
         unknown_controllers = [
             "ecoMAX860D3-HB",
             "ecoMAX860P4-O MINI MATIC",
             "ecoMAX850R2-X",
             "ecoMAX810P-L TOUCH",
             "ecoMAX860P2-N TOUCH",
-            "ecoMAX860P3-V",
-            "SControl MK1",
             "UnknownController",
-            None,  # No controllerID
         ]
 
         for controller_id in unknown_controllers:
-            # Simulate the logic from sensor.py
-            if controller_id and controller_id in SENSOR_MAP_KEY:
-                sensor_keys = SENSOR_MAP_KEY["_default"].copy()
-            else:
-                sensor_keys = SENSOR_MAP_KEY["_default"].copy()
-
-            # All should use default sensors
-            assert sensor_keys == DEFAULT_SENSORS
+            assert _controller_sensor_key_candidates(controller_id) == DEFAULT_SENSORS
 
     # ruff: noqa: PLR6301
     def test_default_sensors_comprehensive(self):
@@ -153,3 +160,24 @@ class TestSensorMappingLogic:
             assert sensor in DEFAULT_SENSORS, (
                 f"Expected sensor {sensor} not in DEFAULT_SENSORS"
             )
+
+    # ruff: noqa: PLR6301
+    def test_create_controller_sensors_ecosol301_fixture(self):
+        """EcoSOL 301 regParams produce T1/P1 sensors, not boiler tempCO (issue #219)."""
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoSOL301"
+        reg_params = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert "T1" in keys
+        assert "P1" in keys
+        assert "tempCO" not in keys

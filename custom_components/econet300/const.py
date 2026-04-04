@@ -415,14 +415,16 @@ DEFAULT_SENSORS = {
 }
 
 # Main sensor mapping by controller type
-# All controllers use DEFAULT_SENSORS (specific mappings are for reference only)
+# Sensor platform: ecoSOL 301/500 use ECOSOL_SENSORS when controllerID is in
+# ECOSOL_CONTROLLER_IDS; all others use DEFAULT_SENSORS (see sensor.py).
+# ecoMAX360i / ecoSter / lambda entries remain reference-only for now.
 SENSOR_MAP_KEY = {
     "ecoMAX360i": ECOMAX360I_SENSORS,  # Reference only - not used
     "ecoSter": ECOSTER_SENSORS,  # Reference only - not used
     COMPONENT_LAMBDA: LAMBDA_SENSORS,  # Reference only - not used
-    "ecoSOL 500": ECOSOL_SENSORS,  # Reference only - not used
-    "ecoSOL 301": ECOSOL_SENSORS,  # Reference only - not used
-    "_default": DEFAULT_SENSORS,  # Always used for all controllers
+    "ecoSOL 500": ECOSOL_SENSORS,  # Used via ECOSOL_CONTROLLER_IDS
+    "ecoSOL 301": ECOSOL_SENSORS,  # Used via ECOSOL_CONTROLLER_IDS
+    "_default": DEFAULT_SENSORS,  # Default for non-ecoSOL controllers
 }
 
 # =============================================================================
@@ -1150,9 +1152,7 @@ ENTITY_VALUE_PROCESSOR = {
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
     # ecoMAX360i-specific processors
-    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(
-        x, STATE_UNKNOWN
-    ),
+    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(x, STATE_UNKNOWN),
     "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(x, STATE_UNKNOWN),
     "WaterPumpRunning": lambda x: SENSOR_WATER_PUMP_RUNNING_MAPPING.get(
         x, STATE_UNKNOWN

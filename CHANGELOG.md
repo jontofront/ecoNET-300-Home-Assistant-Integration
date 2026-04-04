@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **ecoSOL 301 / ecoSOL 500 sensors** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Sensor platform now uses `ECOSOL_SENSORS` (`T1`, `P1`, `TzCWU`, etc.) when `controllerID` is an ecoSOL model, instead of boiler-only `DEFAULT_SENSORS` (which left critical entities missing or unavailable)
+
+---
+
 ## [v1.2.4] - 2026-03-24
 
 ### 🔧 Improvements

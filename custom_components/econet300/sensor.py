@@ -27,7 +27,6 @@ from homeassistant.core import (
     callback,
 )
 from homeassistant.helpers import entity_registry as er
-import homeassistant.util.dt as dt_util
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import (
@@ -35,6 +34,7 @@ from homeassistant.helpers.event import (
     async_track_state_change_event,
     async_track_state_report_event,
 )
+import homeassistant.util.dt as dt_util
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
@@ -55,6 +55,8 @@ from .const import (
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
+    ECOSOL_CONTROLLER_IDS,
+    ECOSOL_SENSORS,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
@@ -710,6 +712,17 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     return entity_description
 
 
+def _controller_sensor_key_candidates(controller_id: str | None) -> set[str]:
+    """Return sensor map keys for the main controller before ecoSTER filtering.
+
+    ecoSOL controllers use ECOSOL_SENSORS (e.g. T1, P1 from regParams).
+    All other controllers use DEFAULT_SENSORS.
+    """
+    if controller_id and controller_id in ECOSOL_CONTROLLER_IDS:
+        return ECOSOL_SENSORS.copy()
+    return SENSOR_MAP_KEY["_default"].copy()
+
+
 def create_controller_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[EconetSensor]:
@@ -732,16 +745,12 @@ def create_controller_sensors(
     # Extract the controllerID from sysParams
     controller_id = data_sysParams.get("controllerID")
 
-    # Always use default sensor mapping for all controllers
-    sensor_keys = SENSOR_MAP_KEY["_default"].copy()
-    if controller_id and controller_id in SENSOR_MAP_KEY:
-        _LOGGER.info(
-            "ControllerID '%s' found in mapping, but using default sensor mapping",
-            controller_id,
-        )
+    sensor_keys = _controller_sensor_key_candidates(controller_id)
+    if controller_id and controller_id in ECOSOL_CONTROLLER_IDS:
+        _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
     else:
         _LOGGER.info(
-            "ControllerID '%s' not found in mapping, using default sensor mapping",
+            "Using default sensor mapping for controllerID: %s",
             controller_id if controller_id else "None",
         )
 
@@ -1398,7 +1407,9 @@ class ScheduleSensor(EconetEntity, SensorEntity):
         today_idx = (dt_util.now().weekday() + 1) % 7
         today_name = SCHEDULE_WEEKDAYS[today_idx]
         today_summary = summaries.get(today_name, "unknown")
-        self._attr_native_value = today_summary if schedule_enabled else f"OFF ({today_summary})"
+        self._attr_native_value = (
+            today_summary if schedule_enabled else f"OFF ({today_summary})"
+        )
         self.async_write_ha_state()
 
     @property

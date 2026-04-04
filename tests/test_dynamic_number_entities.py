@@ -27,6 +27,7 @@ ALL_FIXTURES = [
     "ecoMAX360",
     "ecoMAX360-cf8",
     "ecoSOL",
+    "ecoSOL301",
     "SControl MK1",
     "ecoMAX850R2-X",
     "ecoMAX860D3-HB",
@@ -437,6 +438,7 @@ class TestMultipleFixtures:
             ("ecoMAX860D3-HB", ["controllerID", "uid", "softVer"]),
             ("ecoMAX360", ["controllerID", "uid"]),
             ("ecoSOL", ["controllerID", "uid"]),
+            ("ecoSOL301", ["controllerID", "uid"]),
             ("SControl MK1", ["controllerID", "uid"]),
         ],
     )
@@ -472,6 +474,7 @@ class TestMultipleFixtures:
             ("ecoMAX860P3-O", "ecoMAX"),
             ("ecoMAX860P3-V", "ecoMAX"),
             ("ecoSOL", "ecoSOL"),
+            ("ecoSOL301", "ecoSOL"),
             ("ecoSOL500", "ecoSOL"),
             ("SControl MK1", "SControl"),
         ],

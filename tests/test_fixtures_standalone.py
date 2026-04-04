@@ -14,6 +14,7 @@ ALL_FIXTURES = [
     "ecoMAX360",
     "ecoMAX360-cf8",
     "ecoSOL",
+    "ecoSOL301",
     "SControl MK1",
     "ecoMAX850R2-X",
     "ecoMAX860D3-HB",
@@ -121,6 +122,7 @@ def test_device_type_detection():
         "ecoMAX860P2-N": "ecoMAX",
         "ecoMAX860P3-V": "ecoMAX",
         "ecoSOL": "ecoSOL",
+        "ecoSOL301": "ecoSOL",
         "ecoSOL500": "ecoSOL",
         "SControl MK1": "SControl",
     }
