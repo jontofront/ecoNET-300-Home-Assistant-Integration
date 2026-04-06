@@ -26,6 +26,8 @@ from .const import (
     DEVICE_INFO_MODEL,
     DEVICE_INFO_SOLAR_NAME,
     DOMAIN,
+    EDIT_PARAMS_DATA_SENSOR_MAP,
+    INFORMATION_PARAMS_SENSOR_MAP,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -151,7 +153,7 @@ class EconetEntity(CoordinatorEntity):
         param_data = self._get_param_data()
         return param_data.get("description") if param_data else None
 
-    def _get_data_sources(self) -> tuple[dict, dict, dict, dict]:
+    def _get_data_sources(self) -> tuple[dict, dict, dict, dict, dict, dict]:
         """Get all data sources with safe defaults."""
         data = self.coordinator.data or {}
         return (
@@ -159,19 +161,29 @@ class EconetEntity(CoordinatorEntity):
             data.get("regParams") or {},
             data.get("paramsEdits") or {},
             data.get("mergedData") or {},
+            data.get("editParams") or {},
+            data.get("informationParams") or {},
         )
 
     def _lookup_value(self) -> Any:
         """Look up value from appropriate data source.
 
         For dynamic entities (with param_id), looks up in mergedData.
-        For legacy entities, looks up in sysParams, regParams, or paramsEdits.
+        For legacy entities, looks up in sysParams, regParams, paramsEdits,
+        then editParams.data and informationParams (ecoMAX360i).
 
         Returns:
             The value if found, None otherwise.
 
         """
-        sys_params, reg_params, params_edits, merged_data = self._get_data_sources()
+        (
+            sys_params,
+            reg_params,
+            params_edits,
+            merged_data,
+            edit_params,
+            information_params,
+        ) = self._get_data_sources()
         param_id = getattr(self.entity_description, "param_id", None)
 
         if param_id:
@@ -188,6 +200,22 @@ class EconetEntity(CoordinatorEntity):
             return reg_params[key]
         if key in params_edits:
             return params_edits[key]
+
+        # editParams.data lookup (ecoMAX360i sensors by parameter ID)
+        edit_param_id = EDIT_PARAMS_DATA_SENSOR_MAP.get(key)
+        if edit_param_id and edit_param_id in edit_params:
+            entry = edit_params[edit_param_id]
+            return entry.get("value") if isinstance(entry, dict) else entry
+
+        # informationParams lookup (ecoMAX360i read-only status sensors)
+        info_param_id = INFORMATION_PARAMS_SENSOR_MAP.get(key)
+        if info_param_id and info_param_id in information_params:
+            info_data = information_params[info_param_id]
+            if isinstance(info_data, list) and len(info_data) > 1:
+                inner = info_data[1]
+                if isinstance(inner, list) and len(inner) > 0:
+                    return inner[0][0]
+
         return None
 
     @callback

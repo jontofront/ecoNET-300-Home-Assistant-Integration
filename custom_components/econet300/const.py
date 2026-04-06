@@ -318,6 +318,22 @@ ECOMAX360I_SENSORS = {
     "Circuit6EcoTemp",
     "Circuit7ComfortTemp",
     "Circuit7EcoTemp",
+    # informationParams sensors (from editParams endpoint)
+    "TargetFlowTemp",
+    "ActualFlowTemp",
+    "ActualReturnTemp",
+    "FanSpeed",
+    "HeatPumpAmbient",
+    "ActualDHWTemp",
+    "Circuit1DesiredLWT",
+    "ElectricalPower",
+    "ThermalPower",
+    "COP",
+    "SCOP",
+    "FlowRate",
+    # editParams.data sensors
+    "AXENREGISTER64",
+    "AXENREGISTER65",
     # sysParams diagnostics (same as DEFAULT_SENSORS subset)
     "controllerID",
     "moduleASoftVer",
@@ -331,6 +347,31 @@ ECOMAX360I_SENSORS = {
     "routerType",
     "signal",
     "softVer",
+}
+
+# informationParams: sensor key -> parameter ID in editParams.informationParams
+# These are read-only heat pump / status sensors for ecoMAX360i.
+INFORMATION_PARAMS_SENSOR_MAP: dict[str, str] = {
+    "TargetFlowTemp": "12",
+    "ActualFlowTemp": "14",
+    "ActualReturnTemp": "15",
+    "FanSpeed": "22",
+    "HeatPumpAmbient": "23",
+    "HeatDemanded": "26",
+    "ActualDHWTemp": "61",
+    "Circuit1DesiredLWT": "93",
+    "ElectricalPower": "211",
+    "ThermalPower": "212",
+    "COP": "221",
+    "SCOP": "222",
+    "FlowRate": "231",
+}
+
+# editParams.data: sensor key -> parameter ID in editParams["data"]
+# These are read-only Axen register sensors for ecoMAX360i.
+EDIT_PARAMS_DATA_SENSOR_MAP: dict[str, str] = {
+    "AXENREGISTER64": "1211",
+    "AXENREGISTER65": "1212",
 }
 
 # ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
@@ -859,6 +900,21 @@ ENTITY_UNIT_MAP = {
     "Circuit6EcoTemp": UnitOfTemperature.CELSIUS,
     "Circuit7ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit7EcoTemp": UnitOfTemperature.CELSIUS,
+    # ecoMAX360i informationParams / editParams sensors
+    "TargetFlowTemp": UnitOfTemperature.CELSIUS,
+    "ActualFlowTemp": UnitOfTemperature.CELSIUS,
+    "ActualReturnTemp": UnitOfTemperature.CELSIUS,
+    "FanSpeed": "rpm",
+    "HeatPumpAmbient": UnitOfTemperature.CELSIUS,
+    "ActualDHWTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1DesiredLWT": UnitOfTemperature.CELSIUS,
+    "ElectricalPower": UnitOfPower.KILO_WATT,
+    "ThermalPower": UnitOfPower.KILO_WATT,
+    "COP": None,
+    "SCOP": None,
+    "FlowRate": "L/min",
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
     # ecoSOL specific units (ecoSOL [n] models)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
@@ -921,6 +977,13 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "flapValveStates": None,
     "HeatDemanded": None,
     "WaterPumpRunning": None,
+    # ecoMAX360i informationParams / editParams sensors
+    "FanSpeed": None,
+    "COP": None,
+    "SCOP": SensorStateClass.TOTAL,
+    "FlowRate": None,
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
 }
 
 # =============================================================================
@@ -1032,6 +1095,21 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "Circuit6EcoTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7EcoTemp": SensorDeviceClass.TEMPERATURE,
+    # ecoMAX360i informationParams / editParams device classes
+    "TargetFlowTemp": SensorDeviceClass.TEMPERATURE,
+    "ActualFlowTemp": SensorDeviceClass.TEMPERATURE,
+    "ActualReturnTemp": SensorDeviceClass.TEMPERATURE,
+    "FanSpeed": None,
+    "HeatPumpAmbient": SensorDeviceClass.TEMPERATURE,
+    "ActualDHWTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1DesiredLWT": SensorDeviceClass.TEMPERATURE,
+    "ElectricalPower": SensorDeviceClass.POWER,
+    "ThermalPower": SensorDeviceClass.POWER,
+    "COP": SensorDeviceClass.POWER_FACTOR,
+    "SCOP": SensorDeviceClass.POWER_FACTOR,
+    "FlowRate": None,
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
     # ecoSOL specific device classes (ecoSOL [n] models)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
@@ -1156,6 +1234,21 @@ ENTITY_PRECISION = {
     "Circuit6EcoTemp": 1,
     "Circuit7ComfortTemp": 1,
     "Circuit7EcoTemp": 1,
+    # ecoMAX360i informationParams / editParams precision
+    "TargetFlowTemp": 1,
+    "ActualFlowTemp": 1,
+    "ActualReturnTemp": 1,
+    "FanSpeed": 0,
+    "HeatPumpAmbient": 1,
+    "ActualDHWTemp": 1,
+    "Circuit1DesiredLWT": 1,
+    "ElectricalPower": 2,
+    "ThermalPower": 2,
+    "COP": 2,
+    "SCOP": 2,
+    "FlowRate": 1,
+    "AXENREGISTER64": 1,
+    "AXENREGISTER65": 0,
     # ecoSTER thermostat precision
     "ecoSterTemp1": 1,
     "ecoSterTemp2": 1,

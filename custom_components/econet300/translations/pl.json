@@ -882,6 +882,48 @@
       "circuit7_eco_temp": {
         "name": "Obwód 7 temp. nocna"
       },
+      "target_flow_temp": {
+        "name": "Temperatura zadana zasilania"
+      },
+      "actual_flow_temp": {
+        "name": "Temperatura rzeczywista zasilania"
+      },
+      "actual_return_temp": {
+        "name": "Temperatura rzeczywista powrotu"
+      },
+      "fan_speed": {
+        "name": "Prędkość wentylatora"
+      },
+      "heat_pump_ambient": {
+        "name": "Temperatura otoczenia pompy ciepła"
+      },
+      "actual_dhw_temp": {
+        "name": "Rzeczywista temp. CWU"
+      },
+      "circuit1_desired_lwt": {
+        "name": "Obwód 1 zadana temp. zasilania"
+      },
+      "electrical_power": {
+        "name": "Moc elektryczna"
+      },
+      "thermal_power": {
+        "name": "Moc cieplna"
+      },
+      "cop": {
+        "name": "COP"
+      },
+      "scop": {
+        "name": "SCOP"
+      },
+      "flow_rate": {
+        "name": "Przepływ"
+      },
+      "axenregister64": {
+        "name": "Rejestr AXEN 64"
+      },
+      "axenregister65": {
+        "name": "Rejestr AXEN 65"
+      },
       "t1": {
         "name": "Temperatura kolektora"
       },

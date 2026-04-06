@@ -808,6 +808,48 @@
       "circuit7_eco_temp": {
         "name": "Circuit 7 night temperature"
       },
+      "target_flow_temp": {
+        "name": "Target flow temp."
+      },
+      "actual_flow_temp": {
+        "name": "Actual flow temp."
+      },
+      "actual_return_temp": {
+        "name": "Actual return temp."
+      },
+      "fan_speed": {
+        "name": "Fan speed"
+      },
+      "heat_pump_ambient": {
+        "name": "Heat pump ambient temp."
+      },
+      "actual_dhw_temp": {
+        "name": "Actual DHW temp."
+      },
+      "circuit1_desired_lwt": {
+        "name": "Circuit 1 desired LWT"
+      },
+      "electrical_power": {
+        "name": "Electrical power"
+      },
+      "thermal_power": {
+        "name": "Thermal power"
+      },
+      "cop": {
+        "name": "COP"
+      },
+      "scop": {
+        "name": "SCOP"
+      },
+      "flow_rate": {
+        "name": "Flow rate"
+      },
+      "axenregister64": {
+        "name": "AXEN register 64"
+      },
+      "axenregister65": {
+        "name": "AXEN register 65"
+      },
       "fuel_consum": {
         "name": "Fuel consumption"
       },

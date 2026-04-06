@@ -88,9 +88,7 @@ class BoilerAlarmEvent(EconetEntity, EventEntity):
                     parsed["description"],
                 )
 
-            alarm_cleared = (
-                self._previous_had_active is True and not current_has_active
-            )
+            alarm_cleared = self._previous_had_active is True and not current_has_active
             if alarm_cleared and not new_alarm_detected:
                 self._trigger_event(EVENT_ALARM_CLEARED)
                 _LOGGER.info("Active alarm cleared")
