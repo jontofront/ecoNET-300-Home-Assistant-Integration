@@ -33,7 +33,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Multiple Entity Types**: Sensors, Binary Sensors, Events, Switches, Select, and Number entities
 - **Parameter Locking**: Device-side locks reflected in Home Assistant UI
 - **Repair Issues**: Automatic connection failure detection with one-click fix
-- **Diagnostics Support**: Download diagnostics with core API data plus optional RM/`editParams` snapshots (v1.2.5a+)
+- **Diagnostics Support**: Download diagnostics with core API data plus optional RM/`editParams` snapshots (v1.2.5-beta.1+)
 
 ### 🌐 Language Support
 
@@ -229,7 +229,7 @@ The `fuel_stream` sensor provides current fuel consumption rate in **kg/h**. To 
 
 ## 🔧 Diagnostics
 
-The integration includes comprehensive diagnostics support to help troubleshoot issues. Downloads include coordinator data, core endpoint snapshots (`sysParams`, `regParams`, `regParamsData`, editable limits), and **extended snapshots** (v1.2.5a+): RM endpoints (`rmParamsNames`, `rmParamsData`, `rmStructure`, `rmCurrentDataParams`, languages, locks, alarms, …) plus optional **`editParams`** when the module exposes it. Unsupported endpoints are marked clearly in JSON so support can see what failed.
+The integration includes comprehensive diagnostics support to help troubleshoot issues. Downloads include coordinator data, core endpoint snapshots (`sysParams`, `regParams`, `regParamsData`, editable limits), and **extended snapshots** (v1.2.5-beta.1+): RM endpoints (`rmParamsNames`, `rmParamsData`, `rmStructure`, `rmCurrentDataParams`, languages, locks, alarms, …) plus optional **`editParams`** when the module exposes it. Unsupported endpoints are marked clearly in JSON so support can see what failed.
 
 **📖 [Complete Diagnostics Documentation](docs/DIAGNOSTICS.md)**
 
@@ -243,7 +243,7 @@ The integration includes comprehensive diagnostics support to help troubleshoot 
 **Features:**
 
 - ✅ Automatic sensitive data redaction
-- ✅ Core and extended API endpoint data (`extended_endpoints` in v1.2.5a+)
+- ✅ Core and extended API endpoint data (`extended_endpoints` in v1.2.5-beta.1+)
 - ✅ Entity states and attributes
 - ✅ System configuration details
 
@@ -287,7 +287,7 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
-### What's New in v1.2.5a (pre-release)
+### What's New in v1.2.5 (beta)
 
 - **ecoSOL 301 / 500 sensor fix** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Main controller sensors use solar register keys (`T1`, `P1`, `TzCWU`, …) instead of boiler-only keys
 - **Richer diagnostics**: Optional RM API and `editParams` snapshots under `api_endpoint_data.extended_endpoints`; easier fixture generation from downloads
@@ -333,7 +333,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL support**: ecoSOL 500 / ecoSOL 301 solar controllers and ecoSOL thermal line
 - **Multi-language**: 6 language support (English, Polish, Czech, French, Ukrainian)
-- **Diagnostics Support**: Core + extended RM/`editParams` snapshots (v1.2.5a+)
+- **Diagnostics Support**: Core + extended RM/`editParams` snapshots (v1.2.5-beta.1+)
 
 ---
 
@@ -381,4 +381,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-04-04 for v1.2.5a._
+_This README was last updated on 2026-04-04 for v1.2.5-beta.1 (beta)._
