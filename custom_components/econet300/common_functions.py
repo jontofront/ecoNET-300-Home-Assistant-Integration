@@ -35,6 +35,20 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# Matches ``ecoSOL``, ``ecoSOL 301``, ``ecoSOL400``, etc. (sysParams controllerID)
+_ECOSOL_CONTROLLER_ID_RE = re.compile(r"ecoSOL(?:\s*\d+)?\Z")
+
+
+def is_ecosol_controller(controller_id: str | None) -> bool:
+    """Return True when controllerID is any ecoSOL solar-controller model.
+
+    Covers the base name and numbered variants (``ecoSOL [n]``), with or without
+    a space before the digits, as returned by different modules.
+    """
+    if not controller_id or not isinstance(controller_id, str):
+        return False
+    return bool(_ECOSOL_CONTROLLER_ID_RE.fullmatch(controller_id.strip()))
+
 
 def camel_to_snake(key: str) -> str:
     """Convert camel case return from API to snake case to match translations keys structure."""

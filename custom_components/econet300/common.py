@@ -19,10 +19,10 @@ from homeassistant.helpers.issue_registry import (
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ApiError, AuthError, Econet300Api
+from .common_functions import is_ecosol_controller
 from .const import (
     CONSECUTIVE_FAILURES_THRESHOLD,
     DOMAIN,
-    ECOSOL_CONTROLLER_IDS,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
     UPDATE_TIMEOUT_FIRST_SEC,
@@ -41,12 +41,11 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
     # Controllers that don't support rmCurrentDataParamsEdits endpoint
     unsupported_controllers = {
         "ecoMAX360i",  # Known to not support the endpoint
-        *ECOSOL_CONTROLLER_IDS,  # All ecoSOL controllers don't support this endpoint
         "ecoSter",  # ecoSter controllers
         "SControl MK1",  # SControl controllers
     }
 
-    if controller_id in unsupported_controllers:
+    if is_ecosol_controller(controller_id) or controller_id in unsupported_controllers:
         _LOGGER.info(
             "Skipping paramsEdits due to controllerID: %s (endpoint not supported)",
             controller_id,

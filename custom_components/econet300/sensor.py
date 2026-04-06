@@ -44,6 +44,7 @@ from .common_functions import (
     decode_ecomax_schedule_metadata,
     get_entity_component,
     get_latest_alarm,
+    is_ecosol_controller,
     parse_alarm_entry,
     summarize_schedule_slots,
 )
@@ -55,7 +56,6 @@ from .const import (
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
-    ECOSOL_CONTROLLER_IDS,
     ECOSOL_SENSORS,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
@@ -718,7 +718,7 @@ def _controller_sensor_key_candidates(controller_id: str | None) -> set[str]:
     ecoSOL controllers use ECOSOL_SENSORS (e.g. T1, P1 from regParams).
     All other controllers use DEFAULT_SENSORS.
     """
-    if controller_id and controller_id in ECOSOL_CONTROLLER_IDS:
+    if is_ecosol_controller(controller_id):
         return ECOSOL_SENSORS.copy()
     return SENSOR_MAP_KEY["_default"].copy()
 
@@ -746,7 +746,7 @@ def create_controller_sensors(
     controller_id = data_sysParams.get("controllerID")
 
     sensor_keys = _controller_sensor_key_candidates(controller_id)
-    if controller_id and controller_id in ECOSOL_CONTROLLER_IDS:
+    if is_ecosol_controller(controller_id):
         _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
     else:
         _LOGGER.info(

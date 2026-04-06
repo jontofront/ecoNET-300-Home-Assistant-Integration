@@ -350,7 +350,7 @@ LAMBDA_SENSORS = {
     "lambdaLevel",
 }
 
-# ecoSOL solar collector sensors (ecoSOL 500, ecoSOL 301, etc.)
+# ecoSOL solar collector sensors (all ecoSOL [n] models with matching regParams)
 ECOSOL_SENSORS = {
     # Temperature sensors
     "T1",  # Collector temperature
@@ -377,6 +377,9 @@ ECOSOL_SENSORS = {
     "controllerID",
     "ecosrvSoftVer",
 }
+
+# Reference-only dict key for SENSOR_MAP_KEY / BINARY_SENSOR_MAP_KEY (not a live controllerID)
+ECOSOL_CONTROLLER_MAP_REFERENCE_KEY = "ecoSOL [n]"
 
 # Default sensors for most controllers
 DEFAULT_SENSORS = {
@@ -418,15 +421,14 @@ DEFAULT_SENSORS = {
 }
 
 # Main sensor mapping by controller type
-# Sensor platform: ecoSOL 301/500 use ECOSOL_SENSORS when controllerID is in
-# ECOSOL_CONTROLLER_IDS; all others use DEFAULT_SENSORS (see sensor.py).
+# Sensor platform: any controllerID matched by is_ecosol_controller() uses
+# ECOSOL_SENSORS; all others use DEFAULT_SENSORS (see sensor.py).
 # ecoMAX360i / ecoSter / lambda entries remain reference-only for now.
 SENSOR_MAP_KEY = {
     "ecoMAX360i": ECOMAX360I_SENSORS,  # Reference only - not used
+    ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_SENSORS,  # Reference only - not used
     COMPONENT_LAMBDA: LAMBDA_SENSORS,  # Reference only - not used
-    "ecoSOL 500": ECOSOL_SENSORS,  # Used via ECOSOL_CONTROLLER_IDS
-    "ecoSOL 301": ECOSOL_SENSORS,  # Used via ECOSOL_CONTROLLER_IDS
     "_default": DEFAULT_SENSORS,  # Default for non-ecoSOL controllers
 }
 
@@ -475,7 +477,7 @@ ECOSTER_BINARY_SENSORS = {
     "ecoSterDaySched8",
 }
 
-# ecoSOL solar collector binary sensors (ecoSOL 500, ecoSOL 301, etc.)
+# ecoSOL solar collector binary sensors (all ecoSOL [n] models)
 ECOSOL_BINARY_SENSORS = {
     "wifi",
     "lan",
@@ -488,16 +490,8 @@ ECOSOL_BINARY_SENSORS = {
 # All controllers use DEFAULT_BINARY_SENSORS (specific mappings are for reference only)
 BINARY_SENSOR_MAP_KEY = {
     "_default": DEFAULT_BINARY_SENSORS,  # Always used for all controllers
+    ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_BINARY_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_BINARY_SENSORS,  # Reference only - not used
-    "ecoSOL 500": ECOSOL_BINARY_SENSORS,  # Reference only - not used
-    "ecoSOL 301": ECOSOL_BINARY_SENSORS,  # Reference only - not used
-}
-
-# Helper: Extract ecoSOL controller IDs for easy access
-ECOSOL_CONTROLLER_IDS = {
-    controller_id
-    for controller_id, sensor_set in BINARY_SENSOR_MAP_KEY.items()
-    if sensor_set == ECOSOL_BINARY_SENSORS
 }
 
 # =============================================================================
@@ -835,7 +829,7 @@ ENTITY_UNIT_MAP = {
     "Circuit6EcoTemp": UnitOfTemperature.CELSIUS,
     "Circuit7ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit7EcoTemp": UnitOfTemperature.CELSIUS,
-    # ecoSOL specific units (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoSOL specific units (ecoSOL [n] models)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
     "T3": UnitOfTemperature.CELSIUS,
@@ -999,7 +993,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "Circuit6EcoTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7EcoTemp": SensorDeviceClass.TEMPERATURE,
-    # ecoSOL specific device classes (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoSOL specific device classes (ecoSOL [n] models)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
     "T3": SensorDeviceClass.TEMPERATURE,
@@ -1127,7 +1121,7 @@ ENTITY_PRECISION = {
     "heatingUpperTemp": 1,
     "Circuit1thermostat": 1,
     "heating_work_state_pump4": None,
-    # ecoSOL specific precision (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoSOL specific precision (ecoSOL [n] models)
     "T1": 1,
     "T2": 1,
     "T3": 1,

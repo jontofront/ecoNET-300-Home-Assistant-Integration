@@ -16,14 +16,18 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .common import Econet300Api, EconetDataCoordinator
-from .common_functions import camel_to_snake, get_active_alarm, get_entity_component
+from .common_functions import (
+    camel_to_snake,
+    get_active_alarm,
+    get_entity_component,
+    is_ecosol_controller,
+)
 from .const import (
     API_REG_PARAMS_URI,
     BINARY_SENSOR_MAP_KEY,
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
-    ECOSOL_CONTROLLER_IDS,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_CATEGORY,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
@@ -348,13 +352,13 @@ def create_ecoster_binary_sensors(
 
 
 def create_ecosol_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api):
-    """Create ecoSOL-specific binary sensor entities (ecoSOL 500, ecoSOL 301, etc.)."""
+    """Create ecoSOL-specific binary sensor entities (all ecoSOL [n] models)."""
     entities: list[EconetBinarySensor] = []
     sys_params = coordinator.data.get("sysParams", {})
 
     # Check if this is an ecoSOL controller
     controller_id = sys_params.get("controllerID", "")
-    if controller_id not in ECOSOL_CONTROLLER_IDS:
+    if not is_ecosol_controller(controller_id):
         _LOGGER.debug("Not an ecoSOL controller, skipping ecoSOL binary sensors")
         return entities
 
@@ -602,7 +606,7 @@ async def async_setup_entry(
     # Create ecoSTER binary sensors
     entities.extend(create_ecoster_binary_sensors(coordinator, api))
 
-    # Create ecoSOL-specific binary sensors (ecoSOL 500, ecoSOL 301, etc.)
+    # Create ecoSOL-specific binary sensors (ecoSOL [n] models)
     entities.extend(create_ecosol_binary_sensors(coordinator, api))
 
     # Create alarm binary sensors from sysParams.alarms
