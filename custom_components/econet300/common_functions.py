@@ -50,6 +50,13 @@ def is_ecosol_controller(controller_id: str | None) -> bool:
     return bool(_ECOSOL_CONTROLLER_ID_RE.fullmatch(controller_id.strip()))
 
 
+def is_ecomax360i_controller(controller_id: str | None) -> bool:
+    """Return True when sysParams controllerID is ecoMAX360i (schema-based regParams ``curr``)."""
+    if not controller_id or not isinstance(controller_id, str):
+        return False
+    return controller_id.strip() == "ecoMAX360i"
+
+
 def camel_to_snake(key: str) -> str:
     """Convert camel case return from API to snake case to match translations keys structure."""
     # Handle special cases first

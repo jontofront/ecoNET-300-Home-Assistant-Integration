@@ -679,14 +679,38 @@
       "circuit3thermostat_temp": {
         "name": "Circuit 3 thermostat temp."
       },
+      "circuit4thermostat_temp": {
+        "name": "Circuit 4 thermostat temp."
+      },
+      "circuit5thermostat_temp": {
+        "name": "Circuit 5 thermostat temp."
+      },
+      "circuit6thermostat_temp": {
+        "name": "Circuit 6 thermostat temp."
+      },
+      "circuit7thermostat_temp": {
+        "name": "Circuit 7 thermostat temp."
+      },
       "temp_wthr": {
         "name": "Weather temp."
+      },
+      "temp_circuit2": {
+        "name": "Circuit 2 temp."
       },
       "temp_circuit3": {
         "name": "Circuit 3 temp."
       },
-      "temp_circuit2": {
-        "name": "Circuit 2 temp."
+      "temp_circuit4": {
+        "name": "Circuit 4 temp."
+      },
+      "temp_circuit5": {
+        "name": "Circuit 5 temp."
+      },
+      "temp_circuit6": {
+        "name": "Circuit 6 temp."
+      },
+      "temp_circuit7": {
+        "name": "Circuit 7 temp."
       },
       "temp_bufor_up": {
         "name": "Upper buffer temp."

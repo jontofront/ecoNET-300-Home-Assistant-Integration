@@ -753,14 +753,38 @@
       "circuit3thermostat_temp": {
         "name": "Temperatura termostatu obwodu 3"
       },
+      "circuit4thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 4"
+      },
+      "circuit5thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 5"
+      },
+      "circuit6thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 6"
+      },
+      "circuit7thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 7"
+      },
       "temp_wthr": {
         "name": "Temperatura pogodowa"
+      },
+      "temp_circuit2": {
+        "name": "Temperatura obwodu 2"
       },
       "temp_circuit3": {
         "name": "Temperatura obwodu 3"
       },
-      "temp_circuit2": {
-        "name": "Temperatura obwodu 2"
+      "temp_circuit4": {
+        "name": "Temperatura obwodu 4"
+      },
+      "temp_circuit5": {
+        "name": "Temperatura obwodu 5"
+      },
+      "temp_circuit6": {
+        "name": "Temperatura obwodu 6"
+      },
+      "temp_circuit7": {
+        "name": "Temperatura obwodu 7"
       },
       "temp_bufor_up": {
         "name": "Temperatura bufora górna"

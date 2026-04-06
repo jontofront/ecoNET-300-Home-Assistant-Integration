@@ -270,15 +270,23 @@ MIXER_RELATED_KEYWORDS: list[str] = [
 # =============================================================================
 # DEVICE-SPECIFIC SENSOR MAPPINGS
 # =============================================================================
-# ecoMAX360i specific sensors
+# ecoMAX360i specific sensors (regParams ``curr`` + common sysParams diagnostics)
 ECOMAX360I_SENSORS = {
     "PS",
     "Circuit2thermostatTemp",
     "TempClutch",
     "Circuit3thermostatTemp",
+    "Circuit4thermostatTemp",
+    "Circuit5thermostatTemp",
+    "Circuit6thermostatTemp",
+    "Circuit7thermostatTemp",
     "TempWthr",
-    "TempCircuit3",
     "TempCircuit2",
+    "TempCircuit3",
+    "TempCircuit4",
+    "TempCircuit5",
+    "TempCircuit6",
+    "TempCircuit7",
     "TempBuforUp",
     "TempCWU",
     "TempBuforDown",
@@ -310,6 +318,19 @@ ECOMAX360I_SENSORS = {
     "Circuit6EcoTemp",
     "Circuit7ComfortTemp",
     "Circuit7EcoTemp",
+    # sysParams diagnostics (same as DEFAULT_SENSORS subset)
+    "controllerID",
+    "moduleASoftVer",
+    "moduleBSoftVer",
+    "moduleCSoftVer",
+    "moduleLambdaSoftVer",
+    "modulePanelSoftVer",
+    "moduleEcoSTERSoftVer",
+    "protocolType",
+    "quality",
+    "routerType",
+    "signal",
+    "softVer",
 }
 
 # ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
@@ -421,11 +442,11 @@ DEFAULT_SENSORS = {
 }
 
 # Main sensor mapping by controller type
-# Sensor platform: any controllerID matched by is_ecosol_controller() uses
-# ECOSOL_SENSORS; all others use DEFAULT_SENSORS (see sensor.py).
-# ecoMAX360i / ecoSter / lambda entries remain reference-only for now.
+# Sensor platform: is_ecosol_controller() → ECOSOL_SENSORS;
+# is_ecomax360i_controller() → ECOMAX360I_SENSORS (see sensor.py); else DEFAULT_SENSORS.
+# ecoSter / lambda entries remain reference-only for now.
 SENSOR_MAP_KEY = {
-    "ecoMAX360i": ECOMAX360I_SENSORS,  # Reference only - not used
+    "ecoMAX360i": ECOMAX360I_SENSORS,  # Runtime via is_ecomax360i_controller()
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_SENSORS,  # Reference only - not used
     COMPONENT_LAMBDA: LAMBDA_SENSORS,  # Reference only - not used
@@ -796,12 +817,21 @@ ENTITY_UNIT_MAP = {
     "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
-    "TempClutch": UnitOfTemperature.CELSIUS,
     "Circuit3thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7thermostatTemp": UnitOfTemperature.CELSIUS,
+    "TempClutch": UnitOfTemperature.CELSIUS,
     "TempWthr": UnitOfTemperature.CELSIUS,
-    "TempCircuit3": UnitOfTemperature.CELSIUS,
     "TempCircuit2": UnitOfTemperature.CELSIUS,
+    "TempCircuit3": UnitOfTemperature.CELSIUS,
+    "TempCircuit4": UnitOfTemperature.CELSIUS,
+    "TempCircuit5": UnitOfTemperature.CELSIUS,
+    "TempCircuit6": UnitOfTemperature.CELSIUS,
+    "TempCircuit7": UnitOfTemperature.CELSIUS,
     "TempBuforUp": UnitOfTemperature.CELSIUS,
+    "TempCWU": UnitOfTemperature.CELSIUS,
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
@@ -960,12 +990,21 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
-    "TempClutch": SensorDeviceClass.TEMPERATURE,
     "Circuit3thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "TempClutch": SensorDeviceClass.TEMPERATURE,
     "TempWthr": SensorDeviceClass.TEMPERATURE,
-    "TempCircuit3": SensorDeviceClass.TEMPERATURE,
     "TempCircuit2": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit3": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit4": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit5": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit6": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit7": SensorDeviceClass.TEMPERATURE,
     "TempBuforUp": SensorDeviceClass.TEMPERATURE,
+    "TempCWU": SensorDeviceClass.TEMPERATURE,
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
@@ -1076,6 +1115,22 @@ ENTITY_PRECISION = {
     "ecosrvSoftVer": None,
     # ecoMAX360i
     "PS": None,
+    "Circuit2thermostatTemp": 1,
+    "Circuit3thermostatTemp": 1,
+    "Circuit4thermostatTemp": 1,
+    "Circuit5thermostatTemp": 1,
+    "Circuit6thermostatTemp": 1,
+    "Circuit7thermostatTemp": 1,
+    "TempClutch": 1,
+    "TempWthr": 1,
+    "TempCircuit2": 1,
+    "TempCircuit3": 1,
+    "TempCircuit4": 1,
+    "TempCircuit5": 1,
+    "TempCircuit6": 1,
+    "TempCircuit7": 1,
+    "TempBuforUp": 1,
+    "TempCWU": 1,
     "TempBuforDown": 1,
     "flapValveStates": None,
     "HeatDemanded": None,
