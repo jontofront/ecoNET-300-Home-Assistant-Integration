@@ -6,9 +6,13 @@ from unittest.mock import Mock
 
 import pytest
 
-from custom_components.econet300.common_functions import is_ecosol_controller
+from custom_components.econet300.common_functions import (
+    is_ecomax360i_controller,
+    is_ecosol_controller,
+)
 from custom_components.econet300.const import (
     DEFAULT_SENSORS,
+    ECOMAX360I_SENSORS,
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
     SENSOR_MAP_KEY,
@@ -101,24 +105,51 @@ class TestIsEcosolController:
 
     @pytest.mark.parametrize(
         "cid",
-        (
+        [
             "ecoSOL",
             "ecoSOL 301",
             "ecoSOL 400",
             "ecoSOL 500",
             "ecoSOL500",
             "  ecoSOL 301  ",
-        ),
+        ],
     )
     def test_matches_ecosol_models(self, cid: str) -> None:
         assert is_ecosol_controller(cid)
 
     @pytest.mark.parametrize(
         "cid",
-        (None, "", "ecoMAX860P3-V", "ecoSOL not_a_model", "ecosol 301"),
+        [
+            None,
+            "",
+            "ecoMAX860P3-V",
+            "ecoSOL not_a_model",
+            "ecosol 301",
+        ],
     )
     def test_rejects_non_ecosol(self, cid: str | None) -> None:
         assert not is_ecosol_controller(cid)
+
+
+class TestIsEcomax360iController:
+    """sysParams controllerID for schema-style regParams (ecoMAX360 / 360i line)."""
+
+    def test_matches_ecoMAX360i(self) -> None:
+        assert is_ecomax360i_controller("ecoMAX360i")
+        assert is_ecomax360i_controller("  ecoMAX360i  ")
+
+    @pytest.mark.parametrize(
+        "cid",
+        [
+            None,
+            "",
+            "ecoMAX360",
+            "ecoMAX360i TOUCH",
+            "ecoMAX860P3-V",
+        ],
+    )
+    def test_rejects_other(self, cid: str | None) -> None:
+        assert not is_ecomax360i_controller(cid)
 
 
 class TestSensorMappingLogic:
@@ -127,13 +158,13 @@ class TestSensorMappingLogic:
     # ruff: noqa: PLR6301
     @pytest.mark.parametrize(
         "cid",
-        (
+        [
             "ecoSOL",
             "ecoSOL 301",
             "ecoSOL 400",
             "ecoSOL 500",
             "ecoSOL500",
-        ),
+        ],
     )
     def test_ecosol_models_use_ecosol_sensors(self, cid: str):
         """All ecoSOL [n] controllerIDs use ECOSOL_SENSORS (issues #219, #220)."""
@@ -148,20 +179,25 @@ class TestSensorMappingLogic:
         """Boiler and other controllers use DEFAULT_SENSORS."""
         for controller_id in (
             "ecoMAX860P3-V",
-            "ecoMAX360i",
             "SControl MK1",
             None,
         ):
             keys = _controller_sensor_key_candidates(controller_id)
             assert keys == DEFAULT_SENSORS
 
+    def test_ecomax360i_uses_ecomax360i_sensors(self) -> None:
+        """ecoMAX360i uses ``curr`` register keys, not boiler DEFAULT_SENSORS."""
+        keys = _controller_sensor_key_candidates("ecoMAX360i")
+        assert keys == ECOMAX360I_SENSORS
+        assert "tempCO" not in keys
+        assert "TempCircuit3" in keys
+
     # ruff: noqa: PLR6301
     def test_reference_mappings_exist_for_documentation(self):
         """SENSOR_MAP_KEY holds per-device sets; ecoSOL [n] reference matches runtime."""
-        assert (
-            SENSOR_MAP_KEY[ECOSOL_CONTROLLER_MAP_REFERENCE_KEY] == ECOSOL_SENSORS
-        )
-        for cid in ("ecoMAX360i", "ecoSter", "lambda"):
+        assert SENSOR_MAP_KEY[ECOSOL_CONTROLLER_MAP_REFERENCE_KEY] == ECOSOL_SENSORS
+        assert SENSOR_MAP_KEY["ecoMAX360i"] == ECOMAX360I_SENSORS
+        for cid in ("ecoSter", "lambda"):
             assert cid in SENSOR_MAP_KEY
             assert SENSOR_MAP_KEY[cid] != DEFAULT_SENSORS
 
@@ -217,4 +253,25 @@ class TestSensorMappingLogic:
 
         assert "T1" in keys
         assert "P1" in keys
+        assert "tempCO" not in keys
+
+    def test_create_controller_sensors_ecomax360_fixture(self) -> None:
+        """ecoMAX360i ``curr`` keys produce circuit sensors, not boiler tempCO."""
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX360"
+        reg_raw = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        reg_params = reg_raw.get("curr") or reg_raw
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert "TempCircuit3" in keys
+        assert "quality" in keys
         assert "tempCO" not in keys
