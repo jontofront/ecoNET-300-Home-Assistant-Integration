@@ -9,6 +9,8 @@ This module contains all constants organized by functionality:
 - Mixer and thermostat configurations
 """
 
+from typing import Any
+
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
@@ -1289,6 +1291,15 @@ ENTITY_PRECISION = {
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
+
+def _int_enum_lookup(mapping: dict[int, str], value: Any) -> str:
+    """Look up an integer-keyed enum mapping, coercing string values from informationParams."""
+    try:
+        return mapping.get(int(value), STATE_UNKNOWN)
+    except (TypeError, ValueError):
+        return STATE_UNKNOWN
+
+
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
@@ -1296,11 +1307,11 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    # ecoMAX360i-specific processors
-    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(x, STATE_UNKNOWN),
-    "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(x, STATE_UNKNOWN),
-    "WaterPumpRunning": lambda x: SENSOR_WATER_PUMP_RUNNING_MAPPING.get(
-        x, STATE_UNKNOWN
+    # ecoMAX360i-specific processors (informationParams yields string values)
+    "flapValveStates": lambda x: _int_enum_lookup(SENSOR_FLAP_VALVE_STATES_MAPPING, x),
+    "HeatDemanded": lambda x: _int_enum_lookup(SENSOR_HEAT_DEMANDED_MAPPING, x),
+    "WaterPumpRunning": lambda x: _int_enum_lookup(
+        SENSOR_WATER_PUMP_RUNNING_MAPPING, x
     ),
 }
 
