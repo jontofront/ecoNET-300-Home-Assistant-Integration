@@ -982,7 +982,7 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     # ecoMAX360i informationParams / editParams sensors
     "FanSpeed": None,
     "COP": None,
-    "SCOP": SensorStateClass.TOTAL,
+    "SCOP": None,
     "FlowRate": None,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
