@@ -4,9 +4,12 @@ import json
 from pathlib import Path
 from unittest.mock import Mock
 
+import pytest
+
+from custom_components.econet300.common_functions import is_ecosol_controller
 from custom_components.econet300.const import (
     DEFAULT_SENSORS,
-    ECOSOL_CONTROLLER_IDS,
+    ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
     SENSOR_MAP_KEY,
 )
@@ -93,19 +96,52 @@ class TestEconetSensorEntityDescription:
         assert description.process_val("test") == "test"
 
 
+class TestIsEcosolController:
+    """Pattern match for sysParams controllerID (ecoSOL [n] product line)."""
+
+    @pytest.mark.parametrize(
+        "cid",
+        (
+            "ecoSOL",
+            "ecoSOL 301",
+            "ecoSOL 400",
+            "ecoSOL 500",
+            "ecoSOL500",
+            "  ecoSOL 301  ",
+        ),
+    )
+    def test_matches_ecosol_models(self, cid: str) -> None:
+        assert is_ecosol_controller(cid)
+
+    @pytest.mark.parametrize(
+        "cid",
+        (None, "", "ecoMAX860P3-V", "ecoSOL not_a_model", "ecosol 301"),
+    )
+    def test_rejects_non_ecosol(self, cid: str | None) -> None:
+        assert not is_ecosol_controller(cid)
+
+
 class TestSensorMappingLogic:
     """Test sensor mapping logic for different controllerIDs."""
 
     # ruff: noqa: PLR6301
-    def test_ecosol_controller_ids_use_ecosol_sensors(self):
-        """EcoSOL 301/500 use ECOSOL_SENSORS (issue #219)."""
-        for cid in ECOSOL_CONTROLLER_IDS:
-            keys = _controller_sensor_key_candidates(cid)
-            ecoSTER_stripped = keys - SENSOR_MAP_KEY.get("ecoSter", set())
-            assert keys == ECOSOL_SENSORS
-            assert ecoSTER_stripped == ECOSOL_SENSORS
-            assert cid in SENSOR_MAP_KEY
-            assert SENSOR_MAP_KEY[cid] == ECOSOL_SENSORS
+    @pytest.mark.parametrize(
+        "cid",
+        (
+            "ecoSOL",
+            "ecoSOL 301",
+            "ecoSOL 400",
+            "ecoSOL 500",
+            "ecoSOL500",
+        ),
+    )
+    def test_ecosol_models_use_ecosol_sensors(self, cid: str):
+        """All ecoSOL [n] controllerIDs use ECOSOL_SENSORS (issues #219, #220)."""
+        keys = _controller_sensor_key_candidates(cid)
+        ecoSTER_stripped = keys - SENSOR_MAP_KEY.get("ecoSter", set())
+        assert keys == ECOSOL_SENSORS
+        assert ecoSTER_stripped == ECOSOL_SENSORS
+        assert is_ecosol_controller(cid)
 
     # ruff: noqa: PLR6301
     def test_non_ecosol_controllers_use_default_sensors(self):
@@ -121,9 +157,10 @@ class TestSensorMappingLogic:
 
     # ruff: noqa: PLR6301
     def test_reference_mappings_exist_for_documentation(self):
-        """SENSOR_MAP_KEY holds per-device sets; ecoSOL entries match runtime."""
-        assert SENSOR_MAP_KEY["ecoSOL 301"] == ECOSOL_SENSORS
-        assert SENSOR_MAP_KEY["ecoSOL 500"] == ECOSOL_SENSORS
+        """SENSOR_MAP_KEY holds per-device sets; ecoSOL [n] reference matches runtime."""
+        assert (
+            SENSOR_MAP_KEY[ECOSOL_CONTROLLER_MAP_REFERENCE_KEY] == ECOSOL_SENSORS
+        )
         for cid in ("ecoMAX360i", "ecoSter", "lambda"):
             assert cid in SENSOR_MAP_KEY
             assert SENSOR_MAP_KEY[cid] != DEFAULT_SENSORS
