@@ -278,6 +278,10 @@ class TestSensorMappingLogic:
         assert "TempCircuit3" in keys
         assert "quality" in keys
         assert "tempCO" not in keys
+        # editParams / informationParams-only keys (not in regParams/sysParams)
+        assert "TargetFlowTemp" in keys
+        assert "COP" in keys
+        assert "AXENREGISTER64" in keys
 
 
 class TestGetDataSourcesTuple:

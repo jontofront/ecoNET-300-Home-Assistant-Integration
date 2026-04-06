@@ -59,12 +59,14 @@ from .const import (
     DOMAIN,
     ECOMAX360I_SENSORS,
     ECOSOL_SENSORS,
+    EDIT_PARAMS_DATA_SENSOR_MAP,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
+    INFORMATION_PARAMS_SENSOR_MAP,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     SCHEDULE_TYPE_REVERSE_MAP,
     SCHEDULE_WEEKDAYS,
@@ -802,6 +804,18 @@ def create_controller_sensors(
             entities.append(entity)
             _LOGGER.debug(
                 "Created and appended sensor entity from sysParams: %s", entity
+            )
+        elif is_ecomax360i_controller(controller_id) and (
+            data_key in INFORMATION_PARAMS_SENSOR_MAP
+            or data_key in EDIT_PARAMS_DATA_SENSOR_MAP
+        ):
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created ecoMAX360i sensor from editParams/informationParams map: %s",
+                entity,
             )
         else:
             _LOGGER.debug(
