@@ -158,6 +158,44 @@ class TestExtendedEndpointSnapshots:
         assert out["rm_params_data"]["_ha_diagnostics_unavailable"] is True
 
 
+class TestCoordinatorDataKeysInDiagnostics:
+    """Verify coordinator data shape includes editParams/informationParams."""
+
+    def test_coordinator_data_includes_edit_params_keys(self):
+        """Coordinator data dict should contain editParams and informationParams."""
+        coordinator_data = {
+            "sysParams": {"controllerID": "ecoMAX360i"},
+            "regParams": {},
+            "regParamsData": {},
+            "paramsEdits": {},
+            "editParams": {"1211": {"value": 0}},
+            "informationParams": {"221": [True, [[0, 1, 0]]]},
+            "rmData": {},
+            "mergedData": None,
+        }
+        assert "editParams" in coordinator_data
+        assert "informationParams" in coordinator_data
+        redacted = _redact_data(coordinator_data, TO_REDACT)
+        assert "editParams" in redacted
+        assert "informationParams" in redacted
+        assert redacted["editParams"]["1211"]["value"] == 0
+
+    def test_coordinator_data_non_ecomax360i_empty(self):
+        """Non-ecoMAX360i controllers should have empty editParams/informationParams."""
+        coordinator_data = {
+            "sysParams": {"controllerID": "ecoMAX860P3-V"},
+            "regParams": {},
+            "regParamsData": {},
+            "paramsEdits": {},
+            "editParams": {},
+            "informationParams": {},
+            "rmData": {},
+            "mergedData": None,
+        }
+        assert coordinator_data["editParams"] == {}
+        assert coordinator_data["informationParams"] == {}
+
+
 class TestDiagnosticFunctions:
     """Test diagnostic functions availability."""
 

@@ -15,8 +15,11 @@ from custom_components.econet300.const import (
     ECOMAX360I_SENSORS,
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
+    EDIT_PARAMS_DATA_SENSOR_MAP,
+    INFORMATION_PARAMS_SENSOR_MAP,
     SENSOR_MAP_KEY,
 )
+from custom_components.econet300.entity import EconetEntity
 from custom_components.econet300.sensor import (
     EconetSensorEntityDescription,
     _controller_sensor_key_candidates,
@@ -275,3 +278,200 @@ class TestSensorMappingLogic:
         assert "TempCircuit3" in keys
         assert "quality" in keys
         assert "tempCO" not in keys
+
+
+class TestGetDataSourcesTuple:
+    """Test _get_data_sources returns the correct 6-tuple structure."""
+
+    @staticmethod
+    def _build_entity(coordinator_data: dict | None) -> EconetEntity:
+        """Create a minimal entity wired to coordinator data."""
+        entity = object.__new__(EconetEntity)
+        entity.coordinator = Mock()
+        entity.coordinator.data = coordinator_data
+        return entity
+
+    def test_returns_six_element_tuple(self) -> None:
+        """_get_data_sources returns a 6-tuple with all data sources."""
+        coord_data = {
+            "sysParams": {"controllerID": "ecoMAX360i"},
+            "regParams": {"tempCO": 65.5},
+            "paramsEdits": {"k": 1},
+            "mergedData": {"parameters": {}},
+            "editParams": {"1211": {"value": 0}},
+            "informationParams": {"221": [True, [[0, 1, 0]]]},
+        }
+        entity = self._build_entity(coord_data)
+        sources = entity._get_data_sources()
+        assert len(sources) == 6
+        assert sources[0] == coord_data["sysParams"]
+        assert sources[1] == coord_data["regParams"]
+        assert sources[2] == coord_data["paramsEdits"]
+        assert sources[3] == coord_data["mergedData"]
+        assert sources[4] == coord_data["editParams"]
+        assert sources[5] == coord_data["informationParams"]
+
+    def test_defaults_missing_keys_to_empty_dict(self) -> None:
+        """Missing data keys default to empty dicts (backward compatibility)."""
+        coord_data = {
+            "sysParams": {"controllerID": "ecoMAX860P3-V"},
+            "regParams": {"tempCO": 65.5},
+            "paramsEdits": {},
+        }
+        entity = self._build_entity(coord_data)
+        sources = entity._get_data_sources()
+        assert len(sources) == 6
+        assert sources[4] == {}  # editParams
+        assert sources[5] == {}  # informationParams
+
+    def test_none_coordinator_data(self) -> None:
+        """None coordinator data yields all empty dicts."""
+        entity = self._build_entity(None)
+        sources = entity._get_data_sources()
+        assert len(sources) == 6
+        assert all(s == {} for s in sources)
+
+
+class TestEditParamsSensorMaps:
+    """Validate INFORMATION_PARAMS_SENSOR_MAP and EDIT_PARAMS_DATA_SENSOR_MAP."""
+
+    def test_info_params_keys_in_ecomax360i_sensors(self) -> None:
+        """All informationParams sensor keys should be in ECOMAX360I_SENSORS."""
+        for key in INFORMATION_PARAMS_SENSOR_MAP:
+            assert key in ECOMAX360I_SENSORS, (
+                f"{key} in INFORMATION_PARAMS_SENSOR_MAP but missing from ECOMAX360I_SENSORS"
+            )
+
+    def test_edit_params_keys_in_ecomax360i_sensors(self) -> None:
+        """All editParams.data sensor keys should be in ECOMAX360I_SENSORS."""
+        for key in EDIT_PARAMS_DATA_SENSOR_MAP:
+            assert key in ECOMAX360I_SENSORS, (
+                f"{key} in EDIT_PARAMS_DATA_SENSOR_MAP but missing from ECOMAX360I_SENSORS"
+            )
+
+    def test_info_params_ids_in_cf8_fixture(self) -> None:
+        """IDs in INFORMATION_PARAMS_SENSOR_MAP must exist in ecoMAX360-cf8 fixture."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        info_params = edit_params.get("informationParams", {})
+        for key, param_id in INFORMATION_PARAMS_SENSOR_MAP.items():
+            assert param_id in info_params, (
+                f"INFORMATION_PARAMS_SENSOR_MAP['{key}'] = '{param_id}' "
+                f"not found in ecoMAX360-cf8 informationParams"
+            )
+
+    def test_edit_params_ids_in_cf8_fixture(self) -> None:
+        """IDs in EDIT_PARAMS_DATA_SENSOR_MAP must exist in ecoMAX360-cf8 fixture."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        data_section = edit_params.get("data", {})
+        for key, param_id in EDIT_PARAMS_DATA_SENSOR_MAP.items():
+            assert param_id in data_section, (
+                f"EDIT_PARAMS_DATA_SENSOR_MAP['{key}'] = '{param_id}' "
+                f"not found in ecoMAX360-cf8 editParams.data"
+            )
+
+
+class TestLookupValueEditParams:
+    """Test _lookup_value() resolves from editParams and informationParams."""
+
+    @staticmethod
+    def _build_entity(key: str, coordinator_data: dict) -> EconetEntity:
+        """Create a minimal entity wired to coordinator data."""
+        entity = object.__new__(EconetEntity)
+        entity.coordinator = Mock()
+        entity.coordinator.data = coordinator_data
+        entity.entity_description = Mock()
+        entity.entity_description.key = key
+        entity.entity_description.param_id = None
+        return entity
+
+    def test_lookup_from_information_params(self) -> None:
+        """_lookup_value() extracts value from informationParams for mapped sensors."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        coord_data = {
+            "sysParams": {},
+            "regParams": {},
+            "paramsEdits": {},
+            "mergedData": {},
+            "editParams": edit_params.get("data", {}),
+            "informationParams": edit_params.get("informationParams", {}),
+        }
+        entity = self._build_entity("ActualDHWTemp", coord_data)
+        val = entity._lookup_value()
+        assert val == "42.4"
+
+    def test_lookup_from_edit_params_data(self) -> None:
+        """_lookup_value() extracts value from editParams.data for mapped sensors."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        coord_data = {
+            "sysParams": {},
+            "regParams": {},
+            "paramsEdits": {},
+            "mergedData": {},
+            "editParams": edit_params.get("data", {}),
+            "informationParams": edit_params.get("informationParams", {}),
+        }
+        entity = self._build_entity("AXENREGISTER64", coord_data)
+        val = entity._lookup_value()
+        assert val == 0
+
+    def test_regparams_takes_precedence(self) -> None:
+        """RegParams values should be returned before editParams for shared keys."""
+        coord_data = {
+            "sysParams": {},
+            "regParams": {"TempCWU": 43.5},
+            "paramsEdits": {},
+            "mergedData": {},
+            "editParams": {},
+            "informationParams": {"61": [True, [["42.4", 1, 0]]]},
+        }
+        entity = self._build_entity("TempCWU", coord_data)
+        val = entity._lookup_value()
+        assert val == 43.5
+
+    def test_cop_from_information_params(self) -> None:
+        """COP sensor resolves from informationParams ID 221."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        coord_data = {
+            "sysParams": {},
+            "regParams": {},
+            "paramsEdits": {},
+            "mergedData": {},
+            "editParams": edit_params.get("data", {}),
+            "informationParams": edit_params.get("informationParams", {}),
+        }
+        entity = self._build_entity("COP", coord_data)
+        val = entity._lookup_value()
+        assert val == 0
+
+    def test_scop_from_information_params(self) -> None:
+        """SCOP sensor resolves from informationParams ID 222."""
+        fixture = (
+            Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+        )
+        edit_params = json.loads(fixture.read_text(encoding="utf-8"))
+        coord_data = {
+            "sysParams": {},
+            "regParams": {},
+            "paramsEdits": {},
+            "mergedData": {},
+            "editParams": edit_params.get("data", {}),
+            "informationParams": edit_params.get("informationParams", {}),
+        }
+        entity = self._build_entity("SCOP", coord_data)
+        val = entity._lookup_value()
+        assert val == 4.67

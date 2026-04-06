@@ -27,4 +27,3 @@ class TestServiceParameterDetection:
         assert isinstance(param["category"], str)
         assert len(param["categories"]) > 1
         assert param["category"] == param["categories"][0]
-

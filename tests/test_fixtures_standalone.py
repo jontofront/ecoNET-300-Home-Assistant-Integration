@@ -111,6 +111,29 @@ def test_merged_data_structure():
     print("All mergedData.json files valid!")
 
 
+def test_edit_params_structure():
+    """Test editParams.json structure for ecoMAX360-cf8 fixture."""
+    print("\n=== Testing editParams.json ===")
+    edit_params = load_fixture("ecoMAX360-cf8", "editParams.json")
+    assert edit_params is not None, "editParams.json missing for ecoMAX360-cf8"
+    assert isinstance(edit_params, dict)
+
+    assert "data" in edit_params, "editParams should have 'data' section"
+    assert "informationParams" in edit_params, (
+        "editParams should have 'informationParams' section"
+    )
+
+    data_section = edit_params["data"]
+    info_section = edit_params["informationParams"]
+    assert isinstance(data_section, dict)
+    assert isinstance(info_section, dict)
+
+    print(
+        f"  ecoMAX360-cf8: data={len(data_section)} informationParams={len(info_section)}"
+    )
+    print("editParams.json valid!")
+
+
 def test_device_type_detection():
     """Test that device type can be detected from controllerID."""
     print("\n=== Testing device type detection ===")
@@ -172,6 +195,7 @@ def run_all_tests():
         test_sys_params_for_all_fixtures()
         test_reg_params_for_all_fixtures()
         test_merged_data_structure()
+        test_edit_params_structure()
         test_device_type_detection()
         test_fixture_summary()
     except AssertionError as e:
