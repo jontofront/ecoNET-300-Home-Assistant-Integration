@@ -22,6 +22,7 @@ from homeassistant.const import (
     STATE_PROBLEM,
     STATE_UNKNOWN,
     EntityCategory,
+    UnitOfEnergy,
     UnitOfMass,
     UnitOfPower,
     UnitOfTemperature,
@@ -429,8 +430,9 @@ ECOSOL_SENSORS = {
     "P2",  # Pump 2 status
     # Output status
     "H",  # Output status
-    # Heat output
-    "Uzysk_ca_kowity",  # Total heat output
+    # Power / energy (regParams; ecoSOL 301 flat JSON uses subset)
+    "Moc_chwilowa",  # Instantaneous solar collector power (kW)
+    "Uzysk_ca_kowity",  # Cumulative solar heat yield (kWh)
     # Diagnostic sensors
     "ecosrvAddr",
     "quality",
@@ -648,6 +650,7 @@ UNIT_NAME_TO_HA_UNIT = {
     "kg": UnitOfMass.KILOGRAMS,
     "kg/h": "kg/h",  # Mass flow rate for fuel stream
     "kW": UnitOfPower.KILO_WATT,
+    "kWh": UnitOfEnergy.KILO_WATT_HOUR,
     "r/min": "r/min",  # Custom unit for revolutions per minute
 }
 
@@ -928,7 +931,8 @@ ENTITY_UNIT_MAP = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": PERCENTAGE,
+    "Moc_chwilowa": UnitOfPower.KILO_WATT,
+    "Uzysk_ca_kowity": UnitOfEnergy.KILO_WATT_HOUR,
     # ecoSOL diagnostic units
     "ecosrvAddr": None,
     "softVer": None,
@@ -973,6 +977,8 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "P1": None,
     "P2": None,
     "H": None,
+    "Moc_chwilowa": SensorStateClass.MEASUREMENT,
+    "Uzysk_ca_kowity": SensorStateClass.TOTAL_INCREASING,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
@@ -1123,7 +1129,8 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
+    "Moc_chwilowa": SensorDeviceClass.POWER,
+    "Uzysk_ca_kowity": SensorDeviceClass.ENERGY,
     # ecoSOL diagnostic device classes
     "ecosrvAddr": None,
     "softVer": None,
@@ -1282,7 +1289,8 @@ ENTITY_PRECISION = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": 1,
+    "Moc_chwilowa": 2,
+    "Uzysk_ca_kowity": 2,
     # ecoSOL diagnostic precision
     "ecosrvAddr": None,
     "routerType": None,

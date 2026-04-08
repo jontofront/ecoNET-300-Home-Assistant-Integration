@@ -981,8 +981,11 @@
       "h": {
         "name": "Output Status"
       },
+      "moc_chwilowa": {
+        "name": "Solar collector power"
+      },
       "uzysk_ca_kowity": {
-        "name": "Total Heat Output"
+        "name": "Total solar heat yield"
       },
       "ecosrv_addr": {
         "name": "ecoNET Server Address"

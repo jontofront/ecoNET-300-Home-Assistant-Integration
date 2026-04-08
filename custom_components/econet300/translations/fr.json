@@ -647,6 +647,9 @@
       "h": {
         "name": "État de fonctionnement sortie H"
       },
+      "moc_chwilowa": {
+        "name": "Puissance instantanée panneaux solaire"
+      },
       "uzysk_ca_kowity": {
         "name": "Récupération totale de chaleur"
       },

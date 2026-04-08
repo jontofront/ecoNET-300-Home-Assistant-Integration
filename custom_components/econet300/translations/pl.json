@@ -954,6 +954,9 @@
       "h": {
         "name": "Status wyjścia"
       },
+      "moc_chwilowa": {
+        "name": "Moc chwilowa kolektora słonecznego"
+      },
       "uzysk_ca_kowity": {
         "name": "Całkowity uzysk ciepła"
       },
