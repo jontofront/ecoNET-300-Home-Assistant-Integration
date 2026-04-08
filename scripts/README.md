@@ -54,12 +54,21 @@ python language_finder.py
 - `language_coverage_report.json` - Detailed coverage data
 - `language_coverage_report.md` - Markdown report with samples
 
+## 📥 Diagnostics → test fixtures
+
+1. Save a Home Assistant **Download diagnostics** JSON under `scripts/ad_diagnostic_file/` (see `ad_diagnostic_file/README.md`).
+2. Run `python scripts/create_fixture_from_diagnostics.py` (use `--dry-run` or `--keep-file` as needed).
+
+That produces `tests/fixtures/<device>/` files for regression tests.
+
 ## 📁 Scripts Organization
 
 ### **Current Scripts (Essential):**
 - `test_api_endpoints.py` - API testing and documentation
 - `check_translations.py` - Translation validation
 - `language_finder.py` - Language discovery and analysis
+- `create_fixture_from_diagnostics.py` - Build fixtures from HA diagnostics
+- `ad_diagnostic_file/README.md` - Where to drop `config_entry-econet300-*.json`
 - `README.md` - This documentation
 
 ### **Backup (Obsolete):**
