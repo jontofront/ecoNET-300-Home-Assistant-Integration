@@ -200,6 +200,7 @@ def extract_and_save_files(
             "regParamsData.json",
             [
                 ("api_endpoint_data", "reg_params_data"),
+                ("coordinator_data", "data", "regParamsData"),
             ],
         ),
         (
@@ -228,30 +229,6 @@ def extract_and_save_files(
     file_mappings.extend(
         (f"{rm_key}.json", [("coordinator_data", "data", rm_key)]) for rm_key in rm_keys
     )
-
-    # Also try to extract from regParamsData the rmCurrentDataParams if present
-    reg_params_data = None
-    for path in [
-        ("api_endpoint_data", "reg_params_data"),
-        ("coordinator_data", "data", "regParamsData"),
-    ]:
-        try:
-            current = data
-            for key in path:
-                current = current[key]
-            reg_params_data = current
-            break
-        except (KeyError, TypeError):
-            pass
-
-    # If regParamsData has a specific structure, extract rmCurrentDataParams
-    if isinstance(reg_params_data, dict) and "curr" in reg_params_data:
-        file_mappings.append(
-            (
-                "rmCurrentDataParams.json",
-                [("api_endpoint_data", "reg_params_data")],
-            )
-        )
 
     # Extract and save each file
     for filename, paths in file_mappings:
@@ -293,6 +270,40 @@ def extract_and_save_files(
     unwrapped = unwrap_data(data)
     api_ep = unwrapped.get("api_endpoint_data")
     if isinstance(api_ep, dict) and not api_ep.get("error"):
+        # ecoSOL (and some legacy modules): GET regParamsData is null but
+        # extended edit_params.funcdata exposes name-keyed metadata (curr-like).
+        if not results.get("regParamsData.json"):
+            extended_pre = api_ep.get("extended_endpoints")
+            if isinstance(extended_pre, dict):
+                edit_payload = extended_pre.get("edit_params")
+                if isinstance(edit_payload, dict) and _extended_fixture_payload_usable(
+                    edit_payload
+                ):
+                    funcdata = edit_payload.get("funcdata")
+                    if isinstance(funcdata, dict) and funcdata:
+                        synthetic = {"curr": funcdata}
+                        file_path = output_dir / "regParamsData.json"
+                        if dry_run:
+                            print(
+                                f"  [DRY-RUN] Would create: {file_path} "
+                                "(synthetic curr from edit_params.funcdata)"
+                            )
+                            results["regParamsData.json"] = True
+                        else:
+                            try:
+                                file_path.write_text(
+                                    json.dumps(synthetic, indent=2, ensure_ascii=False),
+                                    encoding="utf-8",
+                                )
+                                print(
+                                    f"  [OK] Created: {file_path} "
+                                    "(from edit_params.funcdata; reg_params_data was null)"
+                                )
+                                results["regParamsData.json"] = True
+                            except OSError as e:
+                                print(f"  [ERROR] Failed to write {file_path}: {e}")
+                                results["regParamsData.json"] = False
+
         extended = api_ep.get("extended_endpoints")
         if isinstance(extended, dict):
             for ep_key, fname in EXTENDED_ENDPOINT_FIXTURE_MAP.items():
