@@ -4,7 +4,7 @@ Sanitized snapshots for **ecoSOL 301** (GitHub issue #219).
 
 ## Source
 
-Generated from Home Assistant diagnostics (`config_entry-econet300-*.json`, integration **v1.2.5-beta.1+**) via `scripts/create_fixture_from_diagnostics.py` and a small follow-up for `regParamsData` (see below).
+Generated from Home Assistant diagnostics (`config_entry-econet300-*.json`, integration **v1.2.5+**) via `scripts/create_fixture_from_diagnostics.py` and a small follow-up for `regParamsData` (see below).
 
 ## LAN API behaviour on this hardware
 
