@@ -93,5 +93,40 @@ class TestCoordinatorLegacyOnly:
         assert result["regParamsData"] == reg_params_data
         assert result["rmData"] == {}
         assert result["mergedData"] is None
+        # editParams/informationParams skipped for non-ecoMAX360i controllers
+        assert result["editParams"] == {}
+        assert result["informationParams"] == {}
         mock_api.probe_rm_support.assert_called_once()
         mock_api.fetch_merged_rm_data.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_coordinator_fetches_edit_params_for_ecomax360i(
+        self, hass, load_fixture
+    ):
+        """When controllerID is ecoMAX360i, editParams and informationParams are populated."""
+        sys_params = load_fixture("ecoMAX360-cf8", "sysParams.json") or {}
+        reg_params = load_fixture("ecoMAX360-cf8", "regParams.json") or {}
+        edit_params_fixture = load_fixture("ecoMAX360-cf8", "editParams.json") or {}
+
+        mock_api = MagicMock(spec=Econet300Api)
+        mock_api.fetch_sys_params = AsyncMock(return_value=sys_params)
+        mock_api.fetch_param_edit_data = AsyncMock(return_value={})
+        mock_api.fetch_reg_params = AsyncMock(return_value=reg_params)
+        mock_api.fetch_reg_params_data = AsyncMock(return_value={})
+        mock_api.fetch_edit_params = AsyncMock(return_value=edit_params_fixture)
+        mock_api.probe_rm_support = AsyncMock(return_value=False)
+
+        config_entry = MagicMock()
+        config_entry.entry_id = "test-entry-id"
+        config_entry.data = {"host": "192.168.1.1"}
+
+        coordinator = EconetDataCoordinator(hass, mock_api, config_entry)
+        coordinator._rm_supported = None
+
+        result = await coordinator._async_update_data()
+
+        assert result["editParams"] == edit_params_fixture.get("data", {})
+        assert result["informationParams"] == edit_params_fixture.get(
+            "informationParams", {}
+        )
+        mock_api.fetch_edit_params.assert_called_once()

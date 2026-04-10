@@ -1070,8 +1070,11 @@
       "h": {
         "default": "mdi:gauge"
       },
+      "moc_chwilowa": {
+        "default": "mdi:solar-power"
+      },
       "uzysk_ca_kowity": {
-        "default": "mdi:gauge"
+        "default": "mdi:solar-power-variant"
       },
       "router_type": {
         "default": "mdi:router-wireless"

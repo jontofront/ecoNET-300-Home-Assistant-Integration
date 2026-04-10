@@ -753,14 +753,38 @@
       "circuit3thermostat_temp": {
         "name": "Temperatura termostatu obwodu 3"
       },
+      "circuit4thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 4"
+      },
+      "circuit5thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 5"
+      },
+      "circuit6thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 6"
+      },
+      "circuit7thermostat_temp": {
+        "name": "Temperatura termostatu obwodu 7"
+      },
       "temp_wthr": {
         "name": "Temperatura pogodowa"
+      },
+      "temp_circuit2": {
+        "name": "Temperatura obwodu 2"
       },
       "temp_circuit3": {
         "name": "Temperatura obwodu 3"
       },
-      "temp_circuit2": {
-        "name": "Temperatura obwodu 2"
+      "temp_circuit4": {
+        "name": "Temperatura obwodu 4"
+      },
+      "temp_circuit5": {
+        "name": "Temperatura obwodu 5"
+      },
+      "temp_circuit6": {
+        "name": "Temperatura obwodu 6"
+      },
+      "temp_circuit7": {
+        "name": "Temperatura obwodu 7"
       },
       "temp_bufor_up": {
         "name": "Temperatura bufora górna"
@@ -858,6 +882,48 @@
       "circuit7_eco_temp": {
         "name": "Obwód 7 temp. nocna"
       },
+      "target_flow_temp": {
+        "name": "Temperatura zadana zasilania"
+      },
+      "actual_flow_temp": {
+        "name": "Temperatura rzeczywista zasilania"
+      },
+      "actual_return_temp": {
+        "name": "Temperatura rzeczywista powrotu"
+      },
+      "fan_speed": {
+        "name": "Prędkość wentylatora"
+      },
+      "heat_pump_ambient": {
+        "name": "Temperatura otoczenia pompy ciepła"
+      },
+      "actual_dhw_temp": {
+        "name": "Rzeczywista temp. CWU"
+      },
+      "circuit1_desired_lwt": {
+        "name": "Obwód 1 zadana temp. zasilania"
+      },
+      "electrical_power": {
+        "name": "Moc elektryczna"
+      },
+      "thermal_power": {
+        "name": "Moc cieplna"
+      },
+      "cop": {
+        "name": "COP"
+      },
+      "scop": {
+        "name": "SCOP"
+      },
+      "flow_rate": {
+        "name": "Przepływ"
+      },
+      "axenregister64": {
+        "name": "Rejestr AXEN 64"
+      },
+      "axenregister65": {
+        "name": "Rejestr AXEN 65"
+      },
       "t1": {
         "name": "Temperatura kolektora"
       },
@@ -887,6 +953,9 @@
       },
       "h": {
         "name": "Status wyjścia"
+      },
+      "moc_chwilowa": {
+        "name": "Moc chwilowa kolektora słonecznego"
       },
       "uzysk_ca_kowity": {
         "name": "Całkowity uzysk ciepła"

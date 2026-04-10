@@ -679,14 +679,38 @@
       "circuit3thermostat_temp": {
         "name": "Circuit 3 thermostat temp."
       },
+      "circuit4thermostat_temp": {
+        "name": "Circuit 4 thermostat temp."
+      },
+      "circuit5thermostat_temp": {
+        "name": "Circuit 5 thermostat temp."
+      },
+      "circuit6thermostat_temp": {
+        "name": "Circuit 6 thermostat temp."
+      },
+      "circuit7thermostat_temp": {
+        "name": "Circuit 7 thermostat temp."
+      },
       "temp_wthr": {
         "name": "Weather temp."
+      },
+      "temp_circuit2": {
+        "name": "Circuit 2 temp."
       },
       "temp_circuit3": {
         "name": "Circuit 3 temp."
       },
-      "temp_circuit2": {
-        "name": "Circuit 2 temp."
+      "temp_circuit4": {
+        "name": "Circuit 4 temp."
+      },
+      "temp_circuit5": {
+        "name": "Circuit 5 temp."
+      },
+      "temp_circuit6": {
+        "name": "Circuit 6 temp."
+      },
+      "temp_circuit7": {
+        "name": "Circuit 7 temp."
       },
       "temp_bufor_up": {
         "name": "Upper buffer temp."
@@ -783,6 +807,48 @@
       },
       "circuit7_eco_temp": {
         "name": "Circuit 7 night temperature"
+      },
+      "target_flow_temp": {
+        "name": "Target flow temp."
+      },
+      "actual_flow_temp": {
+        "name": "Actual flow temp."
+      },
+      "actual_return_temp": {
+        "name": "Actual return temp."
+      },
+      "fan_speed": {
+        "name": "Fan speed"
+      },
+      "heat_pump_ambient": {
+        "name": "Heat pump ambient temp."
+      },
+      "actual_dhw_temp": {
+        "name": "Actual DHW temp."
+      },
+      "circuit1_desired_lwt": {
+        "name": "Circuit 1 desired LWT"
+      },
+      "electrical_power": {
+        "name": "Electrical power"
+      },
+      "thermal_power": {
+        "name": "Thermal power"
+      },
+      "cop": {
+        "name": "COP"
+      },
+      "scop": {
+        "name": "SCOP"
+      },
+      "flow_rate": {
+        "name": "Flow rate"
+      },
+      "axenregister64": {
+        "name": "AXEN register 64"
+      },
+      "axenregister65": {
+        "name": "AXEN register 65"
       },
       "fuel_consum": {
         "name": "Fuel consumption"
@@ -915,8 +981,11 @@
       "h": {
         "name": "Output Status"
       },
+      "moc_chwilowa": {
+        "name": "Solar collector power"
+      },
       "uzysk_ca_kowity": {
-        "name": "Total Heat Output"
+        "name": "Total solar heat yield"
       },
       "ecosrv_addr": {
         "name": "ecoNET Server Address"

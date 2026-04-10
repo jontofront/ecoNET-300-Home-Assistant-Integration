@@ -95,9 +95,7 @@ def main() -> None:
     # Load merged parameter data if available
     params_complete: dict = {}
     if merged_data_file.exists():
-        merged_data = json.loads(
-            merged_data_file.read_text(encoding="utf-8")
-        )
+        merged_data = json.loads(merged_data_file.read_text(encoding="utf-8"))
         params_complete = merged_data.get("parameters", {})
 
     # Map param index -> category names using rmStructure:

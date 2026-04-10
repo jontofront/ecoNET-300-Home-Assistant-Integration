@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Awaitable
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -10,6 +11,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.loader import async_get_integration
 
+from .api import Econet300Api
 from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
 
 # Data to redact from diagnostics
@@ -43,6 +45,53 @@ def _redact_data(data: Any, to_redact: list[str]) -> Any:
     if isinstance(data, list):
         return [_redact_data(item, to_redact) for item in data]
     return data
+
+
+def _snapshot_extended_fetch_result(value: Any, error: BaseException | None) -> Any:
+    """Normalize one extended endpoint result for JSON diagnostics."""
+    if error is not None:
+        return {"_ha_diagnostics_fetch_failed": repr(error)}
+    if value is not None:
+        return value
+    return {
+        "_ha_diagnostics_unavailable": True,
+        "_note": "null response, HTTP error, or endpoint not supported on this module",
+    }
+
+
+async def async_collect_extended_endpoint_snapshots(
+    api: Econet300Api,
+) -> dict[str, Any]:
+    """Fetch optional RM and legacy endpoints for troubleshooting (matches fixture coverage).
+
+    Each key mirrors data used under ``tests/fixtures/*/`` (rmParamsNames.json, etc.).
+    Failures are isolated per endpoint so one timeout does not hide the rest.
+    """
+    specs: list[tuple[str, Awaitable[Any]]] = [
+        ("edit_params", api.fetch_edit_params()),
+        ("rm_params_names", api.fetch_rm_params_names("en")),
+        ("rm_params_data", api.fetch_rm_params_data()),
+        ("rm_params_descs", api.fetch_rm_params_descs("en")),
+        ("rm_params_enums", api.fetch_rm_params_enums("en")),
+        ("rm_params_units_names", api.fetch_rm_params_units_names()),
+        ("rm_structure", api.fetch_rm_structure("en")),
+        ("rm_current_data_params", api.fetch_rm_current_data_params("en")),
+        ("rm_langs", api.fetch_rm_langs()),
+        ("rm_existing_langs", api.fetch_rm_existing_langs()),
+        ("rm_locks_names", api.fetch_rm_locks_names("en")),
+        ("rm_alarms_names", api.fetch_rm_alarms_names("en")),
+    ]
+
+    out: dict[str, Any] = {}
+    for key, awaitable in specs:
+        err: BaseException | None = None
+        result: Any = None
+        try:
+            result = await awaitable
+        except Exception as e:  # noqa: BLE001 — isolate failures per endpoint for diagnostics
+            err = e
+        out[key] = _snapshot_extended_fetch_result(result, err)
+    return out
 
 
 async def async_get_config_entry_diagnostics(
@@ -100,13 +149,16 @@ async def async_get_config_entry_diagnostics(
                 except (AttributeError, TypeError, ValueError) as e:
                     api_info = {"error": f"Failed to get API info: {e!s}"}
 
-                # Get raw API endpoint data for troubleshooting
+                # Raw coordinator-style endpoints + extended RM/editParams (fixture parity)
                 try:
                     api_endpoint_data = {
                         "sys_params": await api.fetch_sys_params(),
                         "reg_params": await api.fetch_reg_params(),
                         "reg_params_data": await api.fetch_reg_params_data(),
                         "param_edit_data": await api.fetch_param_edit_data(),
+                        "extended_endpoints": await async_collect_extended_endpoint_snapshots(
+                            api
+                        ),
                     }
                 except (
                     AttributeError,
@@ -291,6 +343,9 @@ async def async_get_device_diagnostics(
                             "reg_params": await api.fetch_reg_params(),
                             "reg_params_data": await api.fetch_reg_params_data(),
                             "param_edit_data": await api.fetch_param_edit_data(),
+                            "extended_endpoints": await async_collect_extended_endpoint_snapshots(
+                                api
+                            ),
                         }
                     except (
                         AttributeError,

@@ -155,6 +155,7 @@ When writing or editing Markdown files (`.md`), follow these rules:
 - Run `ruff format .` to auto-format code
 - Ensure no import sorting issues
 - Ensure no blank line whitespace issues
+- **`manifest.json` `version`**: Must be Home Assistant–valid (see `.cursor/rules/home-assistant-standards.mdc` — SemVer like `1.2.5-beta.1`, not `1.2.5a`); align with `pyproject.toml` version
 - **Validate API documentation** against test fixtures
 - **Check markdown files** pass markdownlint
 - Test your changes work as expected

@@ -9,6 +9,8 @@ This module contains all constants organized by functionality:
 - Mixer and thermostat configurations
 """
 
+from typing import Any
+
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
@@ -20,6 +22,7 @@ from homeassistant.const import (
     STATE_PROBLEM,
     STATE_UNKNOWN,
     EntityCategory,
+    UnitOfEnergy,
     UnitOfMass,
     UnitOfPower,
     UnitOfTemperature,
@@ -165,6 +168,9 @@ API_NEW_PARAM_URI = "newParam"
 API_EDITABLE_PARAMS_LIMITS_URI = "rmCurrentDataParamsEdits"
 API_EDITABLE_PARAMS_LIMITS_DATA = "data"
 
+# Optional LAN endpoint for editable-parameter metadata (module-dependent; may 404)
+API_EDIT_PARAMS_URI = "editParams"
+
 # =============================================================================
 # RM... ENDPOINT CONSTANTS (Remote Menu API)
 # =============================================================================
@@ -267,15 +273,23 @@ MIXER_RELATED_KEYWORDS: list[str] = [
 # =============================================================================
 # DEVICE-SPECIFIC SENSOR MAPPINGS
 # =============================================================================
-# ecoMAX360i specific sensors
+# ecoMAX360i specific sensors (regParams ``curr`` + common sysParams diagnostics)
 ECOMAX360I_SENSORS = {
     "PS",
     "Circuit2thermostatTemp",
     "TempClutch",
     "Circuit3thermostatTemp",
+    "Circuit4thermostatTemp",
+    "Circuit5thermostatTemp",
+    "Circuit6thermostatTemp",
+    "Circuit7thermostatTemp",
     "TempWthr",
-    "TempCircuit3",
     "TempCircuit2",
+    "TempCircuit3",
+    "TempCircuit4",
+    "TempCircuit5",
+    "TempCircuit6",
+    "TempCircuit7",
     "TempBuforUp",
     "TempCWU",
     "TempBuforDown",
@@ -307,6 +321,60 @@ ECOMAX360I_SENSORS = {
     "Circuit6EcoTemp",
     "Circuit7ComfortTemp",
     "Circuit7EcoTemp",
+    # informationParams sensors (from editParams endpoint)
+    "TargetFlowTemp",
+    "ActualFlowTemp",
+    "ActualReturnTemp",
+    "FanSpeed",
+    "HeatPumpAmbient",
+    "ActualDHWTemp",
+    "Circuit1DesiredLWT",
+    "ElectricalPower",
+    "ThermalPower",
+    "COP",
+    "SCOP",
+    "FlowRate",
+    # editParams.data sensors
+    "AXENREGISTER64",
+    "AXENREGISTER65",
+    # sysParams diagnostics (same as DEFAULT_SENSORS subset)
+    "controllerID",
+    "moduleASoftVer",
+    "moduleBSoftVer",
+    "moduleCSoftVer",
+    "moduleLambdaSoftVer",
+    "modulePanelSoftVer",
+    "moduleEcoSTERSoftVer",
+    "protocolType",
+    "quality",
+    "routerType",
+    "signal",
+    "softVer",
+}
+
+# informationParams: sensor key -> parameter ID in editParams.informationParams
+# These are read-only heat pump / status sensors for ecoMAX360i.
+INFORMATION_PARAMS_SENSOR_MAP: dict[str, str] = {
+    "TargetFlowTemp": "12",
+    "ActualFlowTemp": "14",
+    "ActualReturnTemp": "15",
+    "FanSpeed": "22",
+    "HeatPumpAmbient": "23",
+    "HeatDemanded": "26",
+    "ActualDHWTemp": "61",
+    "Circuit1DesiredLWT": "93",
+    "ElectricalPower": "211",
+    "ThermalPower": "212",
+    "COP": "221",
+    "SCOP": "222",
+    "FlowRate": "231",
+}
+
+# editParams.data: sensor key -> parameter ID in editParams["data"]
+# These are read-only Axen register sensors for ecoMAX360i.
+EDIT_PARAMS_DATA_SENSOR_MAP: dict[str, str] = {
+    "AXENREGISTER64": "1211",
+    "AXENREGISTER65": "1212",
 }
 
 # ecoSTER thermostat sensors (if moduleEcoSTERSoftVer is not None)
@@ -347,7 +415,7 @@ LAMBDA_SENSORS = {
     "lambdaLevel",
 }
 
-# ecoSOL solar collector sensors (ecoSOL 500, ecoSOL 301, etc.)
+# ecoSOL solar collector sensors (all ecoSOL [n] models with matching regParams)
 ECOSOL_SENSORS = {
     # Temperature sensors
     "T1",  # Collector temperature
@@ -362,8 +430,9 @@ ECOSOL_SENSORS = {
     "P2",  # Pump 2 status
     # Output status
     "H",  # Output status
-    # Heat output
-    "Uzysk_ca_kowity",  # Total heat output
+    # Power / energy (regParams; ecoSOL 301 flat JSON uses subset)
+    "Moc_chwilowa",  # Instantaneous solar collector power (kW)
+    "Uzysk_ca_kowity",  # Cumulative solar heat yield (kWh)
     # Diagnostic sensors
     "ecosrvAddr",
     "quality",
@@ -374,6 +443,9 @@ ECOSOL_SENSORS = {
     "controllerID",
     "ecosrvSoftVer",
 }
+
+# Reference-only dict key for SENSOR_MAP_KEY / BINARY_SENSOR_MAP_KEY (not a live controllerID)
+ECOSOL_CONTROLLER_MAP_REFERENCE_KEY = "ecoSOL [n]"
 
 # Default sensors for most controllers
 DEFAULT_SENSORS = {
@@ -415,14 +487,15 @@ DEFAULT_SENSORS = {
 }
 
 # Main sensor mapping by controller type
-# All controllers use DEFAULT_SENSORS (specific mappings are for reference only)
+# Sensor platform: is_ecosol_controller() → ECOSOL_SENSORS;
+# is_ecomax360i_controller() → ECOMAX360I_SENSORS (see sensor.py); else DEFAULT_SENSORS.
+# ecoSter / lambda entries remain reference-only for now.
 SENSOR_MAP_KEY = {
-    "ecoMAX360i": ECOMAX360I_SENSORS,  # Reference only - not used
+    "ecoMAX360i": ECOMAX360I_SENSORS,  # Runtime via is_ecomax360i_controller()
+    ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_SENSORS,  # Reference only - not used
     COMPONENT_LAMBDA: LAMBDA_SENSORS,  # Reference only - not used
-    "ecoSOL 500": ECOSOL_SENSORS,  # Reference only - not used
-    "ecoSOL 301": ECOSOL_SENSORS,  # Reference only - not used
-    "_default": DEFAULT_SENSORS,  # Always used for all controllers
+    "_default": DEFAULT_SENSORS,  # Default for non-ecoSOL controllers
 }
 
 # =============================================================================
@@ -470,7 +543,7 @@ ECOSTER_BINARY_SENSORS = {
     "ecoSterDaySched8",
 }
 
-# ecoSOL solar collector binary sensors (ecoSOL 500, ecoSOL 301, etc.)
+# ecoSOL solar collector binary sensors (all ecoSOL [n] models)
 ECOSOL_BINARY_SENSORS = {
     "wifi",
     "lan",
@@ -483,16 +556,8 @@ ECOSOL_BINARY_SENSORS = {
 # All controllers use DEFAULT_BINARY_SENSORS (specific mappings are for reference only)
 BINARY_SENSOR_MAP_KEY = {
     "_default": DEFAULT_BINARY_SENSORS,  # Always used for all controllers
+    ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_BINARY_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_BINARY_SENSORS,  # Reference only - not used
-    "ecoSOL 500": ECOSOL_BINARY_SENSORS,  # Reference only - not used
-    "ecoSOL 301": ECOSOL_BINARY_SENSORS,  # Reference only - not used
-}
-
-# Helper: Extract ecoSOL controller IDs for easy access
-ECOSOL_CONTROLLER_IDS = {
-    controller_id
-    for controller_id, sensor_set in BINARY_SENSOR_MAP_KEY.items()
-    if sensor_set == ECOSOL_BINARY_SENSORS
 }
 
 # =============================================================================
@@ -585,6 +650,7 @@ UNIT_NAME_TO_HA_UNIT = {
     "kg": UnitOfMass.KILOGRAMS,
     "kg/h": "kg/h",  # Mass flow rate for fuel stream
     "kW": UnitOfPower.KILO_WATT,
+    "kWh": UnitOfEnergy.KILO_WATT_HOUR,
     "r/min": "r/min",  # Custom unit for revolutions per minute
 }
 
@@ -797,12 +863,21 @@ ENTITY_UNIT_MAP = {
     "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": UnitOfTemperature.CELSIUS,
-    "TempClutch": UnitOfTemperature.CELSIUS,
     "Circuit3thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit4thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit5thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit6thermostatTemp": UnitOfTemperature.CELSIUS,
+    "Circuit7thermostatTemp": UnitOfTemperature.CELSIUS,
+    "TempClutch": UnitOfTemperature.CELSIUS,
     "TempWthr": UnitOfTemperature.CELSIUS,
-    "TempCircuit3": UnitOfTemperature.CELSIUS,
     "TempCircuit2": UnitOfTemperature.CELSIUS,
+    "TempCircuit3": UnitOfTemperature.CELSIUS,
+    "TempCircuit4": UnitOfTemperature.CELSIUS,
+    "TempCircuit5": UnitOfTemperature.CELSIUS,
+    "TempCircuit6": UnitOfTemperature.CELSIUS,
+    "TempCircuit7": UnitOfTemperature.CELSIUS,
     "TempBuforUp": UnitOfTemperature.CELSIUS,
+    "TempCWU": UnitOfTemperature.CELSIUS,
     "TempBuforDown": UnitOfTemperature.CELSIUS,
     "heatingUpperTemp": UnitOfTemperature.CELSIUS,
     "Circuit1thermostat": UnitOfTemperature.CELSIUS,
@@ -830,7 +905,22 @@ ENTITY_UNIT_MAP = {
     "Circuit6EcoTemp": UnitOfTemperature.CELSIUS,
     "Circuit7ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit7EcoTemp": UnitOfTemperature.CELSIUS,
-    # ecoSOL specific units (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoMAX360i informationParams / editParams sensors
+    "TargetFlowTemp": UnitOfTemperature.CELSIUS,
+    "ActualFlowTemp": UnitOfTemperature.CELSIUS,
+    "ActualReturnTemp": UnitOfTemperature.CELSIUS,
+    "FanSpeed": "rpm",
+    "HeatPumpAmbient": UnitOfTemperature.CELSIUS,
+    "ActualDHWTemp": UnitOfTemperature.CELSIUS,
+    "Circuit1DesiredLWT": UnitOfTemperature.CELSIUS,
+    "ElectricalPower": UnitOfPower.KILO_WATT,
+    "ThermalPower": UnitOfPower.KILO_WATT,
+    "COP": None,
+    "SCOP": None,
+    "FlowRate": "L/min",
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
+    # ecoSOL specific units (ecoSOL [n] models)
     "T1": UnitOfTemperature.CELSIUS,
     "T2": UnitOfTemperature.CELSIUS,
     "T3": UnitOfTemperature.CELSIUS,
@@ -841,7 +931,8 @@ ENTITY_UNIT_MAP = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": PERCENTAGE,
+    "Moc_chwilowa": UnitOfPower.KILO_WATT,
+    "Uzysk_ca_kowity": UnitOfEnergy.KILO_WATT_HOUR,
     # ecoSOL diagnostic units
     "ecosrvAddr": None,
     "softVer": None,
@@ -886,12 +977,21 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "P1": None,
     "P2": None,
     "H": None,
+    "Moc_chwilowa": SensorStateClass.MEASUREMENT,
+    "Uzysk_ca_kowity": SensorStateClass.TOTAL_INCREASING,
     # ecoMAX360i
     "PS": None,
     "heating_work_state_pump4": None,
     "flapValveStates": None,
     "HeatDemanded": None,
     "WaterPumpRunning": None,
+    # ecoMAX360i informationParams / editParams sensors
+    "FanSpeed": None,
+    "COP": None,
+    "SCOP": None,
+    "FlowRate": None,
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
 }
 
 # =============================================================================
@@ -961,12 +1061,21 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "ecoSterMode8": None,
     # ecoMAX360i
     "Circuit2thermostatTemp": SensorDeviceClass.TEMPERATURE,
-    "TempClutch": SensorDeviceClass.TEMPERATURE,
     "Circuit3thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit4thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit5thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit6thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit7thermostatTemp": SensorDeviceClass.TEMPERATURE,
+    "TempClutch": SensorDeviceClass.TEMPERATURE,
     "TempWthr": SensorDeviceClass.TEMPERATURE,
-    "TempCircuit3": SensorDeviceClass.TEMPERATURE,
     "TempCircuit2": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit3": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit4": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit5": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit6": SensorDeviceClass.TEMPERATURE,
+    "TempCircuit7": SensorDeviceClass.TEMPERATURE,
     "TempBuforUp": SensorDeviceClass.TEMPERATURE,
+    "TempCWU": SensorDeviceClass.TEMPERATURE,
     "TempBuforDown": SensorDeviceClass.TEMPERATURE,
     "heatingUpperTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1thermostat": SensorDeviceClass.TEMPERATURE,
@@ -994,7 +1103,22 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "Circuit6EcoTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit7EcoTemp": SensorDeviceClass.TEMPERATURE,
-    # ecoSOL specific device classes (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoMAX360i informationParams / editParams device classes
+    "TargetFlowTemp": SensorDeviceClass.TEMPERATURE,
+    "ActualFlowTemp": SensorDeviceClass.TEMPERATURE,
+    "ActualReturnTemp": SensorDeviceClass.TEMPERATURE,
+    "FanSpeed": None,
+    "HeatPumpAmbient": SensorDeviceClass.TEMPERATURE,
+    "ActualDHWTemp": SensorDeviceClass.TEMPERATURE,
+    "Circuit1DesiredLWT": SensorDeviceClass.TEMPERATURE,
+    "ElectricalPower": SensorDeviceClass.POWER,
+    "ThermalPower": SensorDeviceClass.POWER,
+    "COP": SensorDeviceClass.POWER_FACTOR,
+    "SCOP": SensorDeviceClass.POWER_FACTOR,
+    "FlowRate": None,
+    "AXENREGISTER64": None,
+    "AXENREGISTER65": None,
+    # ecoSOL specific device classes (ecoSOL [n] models)
     "T1": SensorDeviceClass.TEMPERATURE,
     "T2": SensorDeviceClass.TEMPERATURE,
     "T3": SensorDeviceClass.TEMPERATURE,
@@ -1005,7 +1129,8 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": SensorDeviceClass.POWER_FACTOR,
+    "Moc_chwilowa": SensorDeviceClass.POWER,
+    "Uzysk_ca_kowity": SensorDeviceClass.ENERGY,
     # ecoSOL diagnostic device classes
     "ecosrvAddr": None,
     "softVer": None,
@@ -1077,6 +1202,22 @@ ENTITY_PRECISION = {
     "ecosrvSoftVer": None,
     # ecoMAX360i
     "PS": None,
+    "Circuit2thermostatTemp": 1,
+    "Circuit3thermostatTemp": 1,
+    "Circuit4thermostatTemp": 1,
+    "Circuit5thermostatTemp": 1,
+    "Circuit6thermostatTemp": 1,
+    "Circuit7thermostatTemp": 1,
+    "TempClutch": 1,
+    "TempWthr": 1,
+    "TempCircuit2": 1,
+    "TempCircuit3": 1,
+    "TempCircuit4": 1,
+    "TempCircuit5": 1,
+    "TempCircuit6": 1,
+    "TempCircuit7": 1,
+    "TempBuforUp": 1,
+    "TempCWU": 1,
     "TempBuforDown": 1,
     "flapValveStates": None,
     "HeatDemanded": None,
@@ -1102,6 +1243,21 @@ ENTITY_PRECISION = {
     "Circuit6EcoTemp": 1,
     "Circuit7ComfortTemp": 1,
     "Circuit7EcoTemp": 1,
+    # ecoMAX360i informationParams / editParams precision
+    "TargetFlowTemp": 1,
+    "ActualFlowTemp": 1,
+    "ActualReturnTemp": 1,
+    "FanSpeed": 0,
+    "HeatPumpAmbient": 1,
+    "ActualDHWTemp": 1,
+    "Circuit1DesiredLWT": 1,
+    "ElectricalPower": 2,
+    "ThermalPower": 2,
+    "COP": 2,
+    "SCOP": 2,
+    "FlowRate": 1,
+    "AXENREGISTER64": 1,
+    "AXENREGISTER65": 0,
     # ecoSTER thermostat precision
     "ecoSterTemp1": 1,
     "ecoSterTemp2": 1,
@@ -1122,7 +1278,7 @@ ENTITY_PRECISION = {
     "heatingUpperTemp": 1,
     "Circuit1thermostat": 1,
     "heating_work_state_pump4": None,
-    # ecoSOL specific precision (ecoSOL 500, ecoSOL 301, etc.)
+    # ecoSOL specific precision (ecoSOL [n] models)
     "T1": 1,
     "T2": 1,
     "T3": 1,
@@ -1133,7 +1289,8 @@ ENTITY_PRECISION = {
     "P1": None,
     "P2": None,
     "H": None,
-    "Uzysk_ca_kowity": 1,
+    "Moc_chwilowa": 2,
+    "Uzysk_ca_kowity": 2,
     # ecoSOL diagnostic precision
     "ecosrvAddr": None,
     "routerType": None,
@@ -1142,6 +1299,15 @@ ENTITY_PRECISION = {
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
+
+def _int_enum_lookup(mapping: dict[int, str], value: Any) -> str:
+    """Look up an integer-keyed enum mapping, coercing string values from informationParams."""
+    try:
+        return mapping.get(int(value), STATE_UNKNOWN)
+    except (TypeError, ValueError):
+        return STATE_UNKNOWN
+
+
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
@@ -1149,13 +1315,11 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
-    # ecoMAX360i-specific processors
-    "flapValveStates": lambda x: SENSOR_FLAP_VALVE_STATES_MAPPING.get(
-        x, STATE_UNKNOWN
-    ),
-    "HeatDemanded": lambda x: SENSOR_HEAT_DEMANDED_MAPPING.get(x, STATE_UNKNOWN),
-    "WaterPumpRunning": lambda x: SENSOR_WATER_PUMP_RUNNING_MAPPING.get(
-        x, STATE_UNKNOWN
+    # ecoMAX360i-specific processors (informationParams yields string values)
+    "flapValveStates": lambda x: _int_enum_lookup(SENSOR_FLAP_VALVE_STATES_MAPPING, x),
+    "HeatDemanded": lambda x: _int_enum_lookup(SENSOR_HEAT_DEMANDED_MAPPING, x),
+    "WaterPumpRunning": lambda x: _int_enum_lookup(
+        SENSOR_WATER_PUMP_RUNNING_MAPPING, x
     ),
 }
 

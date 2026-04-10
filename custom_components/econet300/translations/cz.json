@@ -656,6 +656,9 @@
       "h": {
         "name": "Status výstupu"
       },
+      "moc_chwilowa": {
+        "name": "Okamžitý výkon solárního kolektoru"
+      },
       "uzysk_ca_kowity": {
         "name": "Celkový tepelný zisk"
       },

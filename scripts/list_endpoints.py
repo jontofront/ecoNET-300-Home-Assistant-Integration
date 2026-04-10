@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components"))
 
 try:
     from econet300.const import (  # type: ignore[import-untyped]
+        API_EDIT_PARAMS_URI,
         API_NEW_PARAM_URI,
         API_REG_PARAMS_DATA_URI,
         API_REG_PARAMS_URI,
@@ -45,6 +46,7 @@ def main():
         ("System Parameters", API_SYS_PARAMS_URI),
         ("Register Parameters", API_REG_PARAMS_URI),
         ("Register Parameters Data", API_REG_PARAMS_DATA_URI),
+        ("Edit Parameters (optional)", API_EDIT_PARAMS_URI),
     ]
 
     for name, endpoint in endpoints:

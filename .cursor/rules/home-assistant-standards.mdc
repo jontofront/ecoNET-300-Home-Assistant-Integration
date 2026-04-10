@@ -58,6 +58,25 @@ CONFIG_SCHEMA = vol.Schema({
 })
 ```
 
+## Integration manifest (`manifest.json`)
+
+### `version` field (custom integrations)
+
+Home Assistant **rejects** custom integration manifests whose `version` does not match an allowed strategy (CalVer, SemVer, SimpleVer, BuildVer, or PEP 440) when the loader validates with `AwesomeVersion` `ensure_strategy`.
+
+**Do:**
+
+- Use **SemVer** stable releases: `1.2.4`, `1.2.5`, `1.3.0`
+- Use **SemVer pre-release** for beta/rc: `1.2.5-beta.1`, `1.2.5-rc.1`
+- Use **PEP 440**-style if preferred: `1.2.5a1`, `1.2.5b0` (alpha/beta)
+
+**Do not:**
+
+- Use informal suffixes like `1.2.5a` or `1.2.5beta` (no separator) — strategy becomes **unknown** and loading fails
+- Omit `version` (custom integrations must include it)
+
+Keep **`custom_components/econet300/manifest.json`** `version` in sync with **`pyproject.toml`** `[tool.poetry] version` and document human-facing labels (e.g. “v1.2.5 beta”) in **README** / **CHANGELOG** while the machine-readable string stays valid.
+
 ## Performance Guidelines
 - Minimize API calls to external services
 - Use caching where appropriate

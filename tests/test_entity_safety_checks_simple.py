@@ -151,6 +151,49 @@ def test_entity_does_not_crash_with_none_reg_params():
     # If we get here, no crash occurred - test passes
 
 
+def test_entity_handles_edit_params_in_data():
+    """Test that entity handles editParams and informationParams in coordinator data."""
+    mock_coordinator = Mock()
+    mock_coordinator.data = {
+        "sysParams": {"controllerID": "ecoMAX360i"},
+        "regParams": {},
+        "paramsEdits": {},
+        "mergedData": {},
+        "editParams": {"1211": {"value": 0, "minv": -1000, "maxv": 1000}},
+        "informationParams": {"221": [True, [[0, 1, 0]]]},
+    }
+
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
+    entity.entity_description = EconetSensorEntityDescription(
+        key="tempCO", name="Boiler Temperature", process_val=lambda x: x
+    )
+    entity.api = Mock()
+
+    entity._handle_coordinator_update()
+
+
+def test_entity_handles_missing_edit_params_keys():
+    """Test that entity handles missing editParams/informationParams keys gracefully."""
+    mock_coordinator = Mock()
+    mock_coordinator.data = {
+        "sysParams": {"controllerID": "ecoMAX360"},
+        "regParams": {"tempCO": 65.5},
+        "paramsEdits": {},
+    }
+
+    mock_api = Mock()
+    entity = EconetEntity(mock_coordinator, mock_api)
+    entity.entity_description = EconetSensorEntityDescription(
+        key="tempCO", name="Boiler Temperature", process_val=lambda x: x
+    )
+    entity.api = Mock()
+
+    with patch.object(entity, "_sync_state") as mock_sync:
+        entity._handle_coordinator_update()
+        mock_sync.assert_called_with(65.5)
+
+
 def test_edge_cases():
     """Test various edge cases to ensure robustness."""
     test_cases = [
@@ -169,6 +212,17 @@ def test_edge_cases():
         {
             "name": "All None data",
             "data": {"sysParams": None, "regParams": None, "paramsEdits": None},
+        },
+        {
+            "name": "Full data with editParams and informationParams",
+            "data": {
+                "sysParams": {"controllerID": "ecoMAX360i"},
+                "regParams": {},
+                "paramsEdits": {},
+                "mergedData": {},
+                "editParams": {"1211": {"value": 0}},
+                "informationParams": {"221": [True, [[0, 1, 0]]]},
+            },
         },
     ]
 

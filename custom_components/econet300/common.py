@@ -19,10 +19,10 @@ from homeassistant.helpers.issue_registry import (
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ApiError, AuthError, Econet300Api
+from .common_functions import is_ecomax360i_controller, is_ecosol_controller
 from .const import (
     CONSECUTIVE_FAILURES_THRESHOLD,
     DOMAIN,
-    ECOSOL_CONTROLLER_IDS,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
     UPDATE_TIMEOUT_FIRST_SEC,
@@ -41,12 +41,11 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
     # Controllers that don't support rmCurrentDataParamsEdits endpoint
     unsupported_controllers = {
         "ecoMAX360i",  # Known to not support the endpoint
-        *ECOSOL_CONTROLLER_IDS,  # All ecoSOL controllers don't support this endpoint
         "ecoSter",  # ecoSter controllers
         "SControl MK1",  # SControl controllers
     }
 
-    if controller_id in unsupported_controllers:
+    if is_ecosol_controller(controller_id) or controller_id in unsupported_controllers:
         _LOGGER.info(
             "Skipping paramsEdits due to controllerID: %s (endpoint not supported)",
             controller_id,
@@ -56,6 +55,17 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
     # Log which controllers do support the endpoint
     _LOGGER.debug("Controller %s supports paramsEdits endpoint", controller_id)
     return False
+
+
+def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
+    """Determine whether editParams should be skipped based on controllerID.
+
+    Only ecoMAX360i controllers expose the ``/econet/editParams`` endpoint
+    with structured ``data`` + ``informationParams`` sections.
+    """
+    if sys_params is None:
+        return True
+    return not is_ecomax360i_controller(sys_params.get("controllerID"))
 
 
 class EconetDataCoordinator(DataUpdateCoordinator):
@@ -134,6 +144,16 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 # Fetch regParamsData from ../econet/regParamsData
                 reg_params_data = await self._api.fetch_reg_params_data()
 
+                # Fetch editParams for ecoMAX360i (data + informationParams)
+                if skip_edit_params(sys_params):
+                    edit_params_data: dict[str, Any] = {}
+                    information_params: dict[str, Any] = {}
+                else:
+                    raw = await self._api.fetch_edit_params()
+                    edit_params_full = raw if isinstance(raw, dict) else {}
+                    edit_params_data = edit_params_full.get("data") or {}
+                    information_params = edit_params_full.get("informationParams") or {}
+
                 # Probe once whether RM API is supported (legacy-only modules return 404/timeout)
                 if self._rm_supported is None:
                     self._rm_supported = await self._api.probe_rm_support()
@@ -171,6 +191,8 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "regParams": reg_params,
                     "regParamsData": reg_params_data,
                     "paramsEdits": params_edits,
+                    "editParams": edit_params_data,
+                    "informationParams": information_params,
                     "rmData": rm_data,
                     "mergedData": merged_data,
                 }

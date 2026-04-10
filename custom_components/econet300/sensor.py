@@ -27,7 +27,6 @@ from homeassistant.core import (
     callback,
 )
 from homeassistant.helpers import entity_registry as er
-import homeassistant.util.dt as dt_util
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import (
@@ -35,6 +34,7 @@ from homeassistant.helpers.event import (
     async_track_state_change_event,
     async_track_state_report_event,
 )
+import homeassistant.util.dt as dt_util
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
@@ -44,6 +44,8 @@ from .common_functions import (
     decode_ecomax_schedule_metadata,
     get_entity_component,
     get_latest_alarm,
+    is_ecomax360i_controller,
+    is_ecosol_controller,
     parse_alarm_entry,
     summarize_schedule_slots,
 )
@@ -55,12 +57,16 @@ from .const import (
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
+    ECOMAX360I_SENSORS,
+    ECOSOL_SENSORS,
+    EDIT_PARAMS_DATA_SENSOR_MAP,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
+    INFORMATION_PARAMS_SENSOR_MAP,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     SCHEDULE_TYPE_REVERSE_MAP,
     SCHEDULE_WEEKDAYS,
@@ -710,6 +716,20 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     return entity_description
 
 
+def _controller_sensor_key_candidates(controller_id: str | None) -> set[str]:
+    """Return sensor map keys for the main controller before ecoSTER filtering.
+
+    ecoSOL controllers use ECOSOL_SENSORS (e.g. T1, P1 from regParams).
+    ecoMAX360i uses ECOMAX360I_SENSORS (``curr`` register names from regParams).
+    All other controllers use DEFAULT_SENSORS.
+    """
+    if is_ecosol_controller(controller_id):
+        return ECOSOL_SENSORS.copy()
+    if is_ecomax360i_controller(controller_id):
+        return ECOMAX360I_SENSORS.copy()
+    return SENSOR_MAP_KEY["_default"].copy()
+
+
 def create_controller_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[EconetSensor]:
@@ -732,16 +752,16 @@ def create_controller_sensors(
     # Extract the controllerID from sysParams
     controller_id = data_sysParams.get("controllerID")
 
-    # Always use default sensor mapping for all controllers
-    sensor_keys = SENSOR_MAP_KEY["_default"].copy()
-    if controller_id and controller_id in SENSOR_MAP_KEY:
+    sensor_keys = _controller_sensor_key_candidates(controller_id)
+    if is_ecosol_controller(controller_id):
+        _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
+    elif is_ecomax360i_controller(controller_id):
         _LOGGER.info(
-            "ControllerID '%s' found in mapping, but using default sensor mapping",
-            controller_id,
+            "Using ecoMAX360i sensor mapping for controllerID: %s", controller_id
         )
     else:
         _LOGGER.info(
-            "ControllerID '%s' not found in mapping, using default sensor mapping",
+            "Using default sensor mapping for controllerID: %s",
             controller_id if controller_id else "None",
         )
 
@@ -784,6 +804,18 @@ def create_controller_sensors(
             entities.append(entity)
             _LOGGER.debug(
                 "Created and appended sensor entity from sysParams: %s", entity
+            )
+        elif is_ecomax360i_controller(controller_id) and (
+            data_key in INFORMATION_PARAMS_SENSOR_MAP
+            or data_key in EDIT_PARAMS_DATA_SENSOR_MAP
+        ):
+            entity = EconetSensor(
+                create_sensor_entity_description(data_key), coordinator, api
+            )
+            entities.append(entity)
+            _LOGGER.debug(
+                "Created ecoMAX360i sensor from editParams/informationParams map: %s",
+                entity,
             )
         else:
             _LOGGER.debug(
@@ -1398,7 +1430,9 @@ class ScheduleSensor(EconetEntity, SensorEntity):
         today_idx = (dt_util.now().weekday() + 1) % 7
         today_name = SCHEDULE_WEEKDAYS[today_idx]
         today_summary = summaries.get(today_name, "unknown")
-        self._attr_native_value = today_summary if schedule_enabled else f"OFF ({today_summary})"
+        self._attr_native_value = (
+            today_summary if schedule_enabled else f"OFF ({today_summary})"
+        )
         self.async_write_ha_state()
 
     @property
