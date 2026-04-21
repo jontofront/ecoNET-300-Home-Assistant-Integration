@@ -287,6 +287,11 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
+### What's New in v1.2.6
+
+- **Dynamic select entities now save correctly** ([#225](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/225), [#224](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/224)): Fixed a regression where changing dynamic select options (e.g. `Output H1`, `Output H2 and H3`, `Feeding time`) on ecoMAX810P-L / ecoMAX860P3-O / ecoMAX920P1-O appeared to succeed in the UI but was silently ignored by the controller
+- **New test fixture `ecoMAX920P1-O`** and regression tests pin the fix across three controller families
+
 ### What's New in v1.2.5
 
 - **ecoSOL 301 / 500 sensor fix** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Main controller sensors use solar register keys (`T1`, `P1`, `TzCWU`, …) instead of boiler-only keys
@@ -381,4 +386,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-04-09 for v1.2.5._
+_This README was last updated on 2026-04-21 for v1.2.6._

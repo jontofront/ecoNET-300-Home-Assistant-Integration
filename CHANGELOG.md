@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.2.6] - 2026-04-21
+
+### Fixed
+
+- **Dynamic select entities not saving changes** ([#225](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/225), [#224](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/224)): `EconetDynamicSelect.async_select_option` now calls `api.set_param_by_index` (the `rmNewParamIndex` endpoint) instead of `api.set_param`. Previously, dynamic select parameters that were not explicitly mapped in `RMNEWPARAM_PARAMS` / `NUMBER_MAP` / `CONTROL_PARAMS` (e.g. `Output H1` = 159, `Output H2 and H3` = 160, `Feeding time` = 28 on ecoMAX810P-L and equivalents on ecoMAX860P3-O / ecoMAX920P1-O) fell through to the default `newParamName=<numeric_id>` route, which the controller silently ignored — so UI changes never persisted. Static `heaterMode` (param `55`) was unaffected because it is explicitly listed in `RMNEWPARAM_PARAMS`.
+
+### Added
+
+- **Test fixture for `ecoMAX920P1-O`** under `tests/fixtures/ecoMAX920P1-O/` (18 JSON files + README) generated from real diagnostics via `scripts/create_fixture_from_diagnostics.py`; includes 20 dynamic-select candidates used to pin the fix above
+- **Regression tests** (`TestDynamicSelectEntities` in `tests/test_dynamic_number_entities.py`): parametrized across `ecoMAX810P-L`, `ecoMAX860P3-O`, and `ecoMAX920P1-O` — asserts `set_param_by_index` is called (and `set_param` is not), verifies error handling for failed writes and invalid options
+
+---
+
 ## [v1.2.5] - 2026-04-09
 
 ### Fixed
