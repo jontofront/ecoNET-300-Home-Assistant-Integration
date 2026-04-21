@@ -1,0 +1,686 @@
+{
+  "regRefresh": 5,
+  "lan": false,
+  "uid": "**REDACTED**",
+  "ecosrvSoftVer": "3.2.3678",
+  "regAllowed": true,
+  "schedules": {
+    "ecomaxSchedules": {
+      "circPumpTZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "mixer3TZ": [
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          0
+        ],
+        [
+          0,
+          10,
+          0,
+          20
+        ]
+      ],
+      "boilerTZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "thermostat1TZ": [
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          3,
+          255,
+          255,
+          255,
+          248
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "cwuTZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          0,
+          0,
+          20
+        ]
+      ],
+      "mixer2TZ": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ],
+        [
+          0,
+          5,
+          0,
+          20
+        ]
+      ]
+    }
+  },
+  "panelsNames": {
+    "2": [
+      "Pokòj"
+    ]
+  },
+  "tiles": [
+    {
+      "minValue_": 0,
+      "idx": 0,
+      "seqNo_": 1,
+      "bit_": null,
+      "type_": "tile_text",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "mode",
+      "extra_": "CAN_TURN_OFF_BOILER"
+    },
+    {
+      "minValue_": 0,
+      "idx": 1,
+      "seqNo_": 3,
+      "bit_": null,
+      "type_": "tile_power",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "boilerPower"
+    },
+    {
+      "minValue_": 0,
+      "idx": 2,
+      "seqNo_": 4,
+      "bit_": null,
+      "type_": "tile_level",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fuelLevel"
+    },
+    {
+      "minValue_": 0,
+      "idx": 3,
+      "seqNo_": 5,
+      "bit_": null,
+      "type_": "tile_stream",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fuelStream"
+    },
+    {
+      "minValue_": 0,
+      "idx": 4,
+      "seqNo_": 6,
+      "bit_": null,
+      "type_": "tile_fan",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fanPower"
+    },
+    {
+      "minValue_": 0,
+      "idx": 5,
+      "seqNo_": 7,
+      "bit_": null,
+      "type_": "tile_flame",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempOpticalSensor"
+    },
+    {
+      "minValue_": 0,
+      "idx": 6,
+      "seqNo_": 9,
+      "bit_": null,
+      "type_": "tile_text_icon",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "lambdaLevel"
+    },
+    {
+      "minValue_": 0,
+      "idx": 7,
+      "seqNo_": 10,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCOSet",
+      "maxValue_": 100,
+      "memberName_": "tempCO"
+    },
+    {
+      "minValue_": 0,
+      "idx": 8,
+      "seqNo_": 11,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempBack"
+    },
+    {
+      "minValue_": -35,
+      "idx": 9,
+      "seqNo_": 13,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 40,
+      "memberName_": "tempExternalSensor"
+    },
+    {
+      "minValue_": 0,
+      "idx": 10,
+      "seqNo_": 17,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "mixerSetTemp2",
+      "maxValue_": 100,
+      "memberName_": "mixerTemp2",
+      "extra_": null
+    },
+    {
+      "minValue_": 0,
+      "idx": 11,
+      "seqNo_": 18,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "mixerSetTemp3",
+      "maxValue_": 100,
+      "memberName_": "mixerTemp3",
+      "extra_": null
+    },
+    {
+      "minValue_": 0,
+      "idx": 12,
+      "seqNo_": 100000,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempFeeder"
+    },
+    {
+      "minValue_": 0,
+      "idx": 13,
+      "seqNo_": 100000,
+      "bit_": null,
+      "type_": "tile_temp_wave",
+      "name_": "Pokòj",
+      "setMemberName_": "ecoSterSetTemp1",
+      "maxValue_": 100,
+      "memberName_": "ecoSterTemp1",
+      "extra_": {
+        "index": "1",
+        "addParameters": "STER_MODE_1;WORK_MODE_H_1",
+        "tempSelection": "ecoSterContacts1"
+      }
+    }
+  ],
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "16.11.91",
+      5371
+    ],
+    [
+      "lbPanelModuleVerCurr",
+      "16.10.75",
+      5627
+    ],
+    [
+      "lbEcoSTERModuleVer1Curr",
+      "2.14.4",
+      59
+    ],
+    [
+      "lbModuleBVerCurr",
+      "1.31.12",
+      18
+    ],
+    [
+      "lbLambdaModuleVerCurr",
+      "0.8801.11",
+      30
+    ]
+  ],
+  "etNewConfTrans": false,
+  "etConfDesc": null,
+  "schema": {},
+  "key": "**REDACTED**",
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "password": "**REDACTED**",
+  "quality": 100,
+  "eth0": "**REDACTED**",
+  "fuelConsumptionCalc": true,
+  "tilesET": null,
+  "etPasswords": {},
+  "ssid": "**REDACTED**",
+  "logFl": 0,
+  "encryption": "psk2",
+  "signal": "-29",
+  "wifi": true,
+  "econetConfVer": null,
+  "wlan0": "**REDACTED**",
+  "alarms": [
+    {
+      "code": "0",
+      "fromDate": "2026-04-15 15:25:43",
+      "toDate": "2026-04-15 15:26:20"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-04-06 16:36:04",
+      "toDate": "2026-04-06 16:36:18"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-04-06 16:35:26",
+      "toDate": "2026-04-06 16:35:40"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-04-06 16:34:03",
+      "toDate": "2026-04-06 16:34:27"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-03-30 11:51:41",
+      "toDate": "2026-03-30 11:53:24"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-03-30 07:57:50",
+      "toDate": "2026-03-30 08:01:38"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-03-17 11:57:34",
+      "toDate": "2026-03-17 13:32:18"
+    },
+    {
+      "code": "0",
+      "fromDate": "2026-03-17 06:05:51",
+      "toDate": "2026-03-17 06:06:15"
+    },
+    {
+      "code": "0",
+      "fromDate": "2025-12-23 16:41:13",
+      "toDate": "2025-12-23 19:35:36"
+    },
+    {
+      "code": "0",
+      "fromDate": "2025-12-23 16:39:34",
+      "toDate": "2025-12-23 16:41:03"
+    },
+    {
+      "code": "0",
+      "fromDate": "2025-12-15 17:53:49",
+      "toDate": "2025-12-15 17:57:16"
+    },
+    {
+      "code": "0",
+      "fromDate": "2025-12-15 17:53:02",
+      "toDate": "2025-12-15 17:53:24"
+    }
+  ],
+  "remoteMenu": true,
+  "login": "admin",
+  "ecosrvAddr": "econet24.com",
+  "servicePassword": "**REDACTED**",
+  "etConfVer": null,
+  "ecosrvHttps": true,
+  "history": [],
+  "settingsVer": 277,
+  "softVer": "3.2.3678",
+  "routerType": "mr3020-v3",
+  "protocolType": "em",
+  "controllerID": "ecoMAX920P1-O",
+  "prodLogo": 51,
+  "regImgID": 2,
+  "regType": 0,
+  "regProd": 51,
+  "moduleASoftVer": "16.11.91.P1",
+  "moduleBSoftVer": "1.31.12",
+  "moduleCSoftVer": null,
+  "moduleLambdaSoftVer": "0.97.11",
+  "moduleEcoSTERSoftVer": "2.14.4",
+  "modulePanelSoftVer": "16.10.75",
+  "schemaID": 4,
+  "panelVer": null
+}

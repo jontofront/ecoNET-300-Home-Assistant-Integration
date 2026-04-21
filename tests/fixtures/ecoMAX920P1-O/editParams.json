@@ -1,0 +1,126 @@
+{
+  "editableParamsVer": 3,
+  "remoteMenu": true,
+  "data": {
+    "STER_CORRECTION_1": {
+      "value": -1.6,
+      "maxv": 4.0,
+      "minv": -4.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 8
+    },
+    "STER_HYSTEREZE_1": {
+      "value": 2.0,
+      "maxv": 5.0,
+      "minv": 0.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 7
+    },
+    "STER_MODE_1": {
+      "value": 2,
+      "maxv": 7,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 24,
+      "sec": 36,
+      "pos": 1
+    },
+    "STER_TEMP_ANTIFREEZ_1": {
+      "value": 8.0,
+      "maxv": 30.0,
+      "minv": 5.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 4
+    },
+    "STER_TEMP_DAY_1": {
+      "value": 21.5,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 2
+    },
+    "STER_TEMP_HEAT_1": {
+      "value": 30.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 5
+    },
+    "STER_TEMP_NIGHT_1": {
+      "value": 21.5,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 3
+    },
+    "STER_TEMP_SET_SUMMER_1": {
+      "value": 15.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 6
+    },
+    "STER_TIMER_HEAT_1": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 0,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 11
+    },
+    "STER_TIMER_HOLIDAY_1": {
+      "value": 10,
+      "maxv": 60,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 12
+    },
+    "STER_TIMER_OFF_1": {
+      "value": 7,
+      "maxv": 60,
+      "minv": 0,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 9
+    },
+    "STER_TIMER_VENT_1": {
+      "value": 15,
+      "maxv": 60,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 10
+    }
+  }
+}

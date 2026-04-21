@@ -1,0 +1,16 @@
+{
+  "11": "Alarm 11\\nUszkodzenie wentylatora lub czujnika obrotów.",
+  "13": "Alarm 8\\nBłąd wygaszania.",
+  "55": "Alarm 9\\nPełny popielnik.",
+  "18": "Alarm 6\\nObwód bezpieczeństwa.",
+  "56": "Alarm 12\\nZablokowany siłownik liniowy.",
+  "52": "Alarm 7\\nUszkodzony system sterowania podajnikiem.",
+  "1": "Alarm 3\\nUszkodzenie czujnika temperatury kotła.",
+  "0": "Alarm 0\\nBrak zasilania.",
+  "3": "Alarm 4\\nUszkodzenie czujnika temperatury palnika.",
+  "2": "Alarm 1\\nPrzekroczono maksymalną temperaturę kotła.",
+  "4": "Alarm 2\\nPrzegrzanie palnika. Wyłączenie kotła.",
+  "7": "Alarm 5\\nNieudana próba rozpalenia kotła.",
+  "54": "Alarm 10\\nBrak paliwa.",
+  "255": "Alarm trwa!"
+}
