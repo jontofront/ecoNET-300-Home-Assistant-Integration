@@ -1,10 +1,12 @@
-"""Test dynamic number entity creation."""
+"""Test dynamic number and select entity creation."""
 
 import json
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 
 from homeassistant.components.number import NumberEntity as HANumberEntity
+from homeassistant.components.select import SelectEntityDescription
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import pytest
 
@@ -17,9 +19,13 @@ from custom_components.econet300.number import (
     create_dynamic_number_entity_description,
     should_be_number_entity,
 )
+from custom_components.econet300.select import (
+    EconetDynamicSelect,
+    should_be_select_entity,
+)
 
 # List of fixtures to test - only those with mergedData.json
-FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O"]
+FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O", "ecoMAX920P1-O"]
 
 # All available fixtures for basic tests
 ALL_FIXTURES = [
@@ -34,6 +40,7 @@ ALL_FIXTURES = [
     "ecoMAX860P2-N",
     "ecoMAX860P3-O",
     "ecoMAX860P3-V",
+    "ecoMAX920P1-O",
     "ecoSOL500",
 ]
 
@@ -436,6 +443,7 @@ class TestMultipleFixtures:
         [
             ("ecoMAX810P-L", ["controllerID", "uid", "softVer"]),
             ("ecoMAX860D3-HB", ["controllerID", "uid", "softVer"]),
+            ("ecoMAX920P1-O", ["controllerID", "uid", "softVer"]),
             ("ecoMAX360", ["controllerID", "uid"]),
             ("ecoSOL", ["controllerID", "uid"]),
             ("ecoSOL301", ["controllerID", "uid"]),
@@ -473,6 +481,7 @@ class TestMultipleFixtures:
             ("ecoMAX860P2-N", "ecoMAX"),
             ("ecoMAX860P3-O", "ecoMAX"),
             ("ecoMAX860P3-V", "ecoMAX"),
+            ("ecoMAX920P1-O", "ecoMAX"),
             ("ecoSOL", "ecoSOL"),
             ("ecoSOL301", "ecoSOL"),
             ("ecoSOL500", "ecoSOL"),
@@ -492,3 +501,133 @@ class TestMultipleFixtures:
         assert (
             device_type in controller_id or device_type.lower() in controller_id.lower()
         ), f"Device type {device_type} not found in controllerID {controller_id}"
+
+
+def _first_select_candidate(merged_data: dict) -> tuple[str, dict]:
+    """Return the first dynamic-select-worthy parameter from mergedData."""
+    for pid, param in merged_data.get("parameters", {}).items():
+        if should_be_select_entity(param) and param.get("enum", {}).get("values"):
+            return pid, param
+    raise AssertionError("Fixture has no dynamic select candidates")
+
+
+class TestDynamicSelectEntities:
+    """Regression tests for :class:`EconetDynamicSelect`.
+
+    These tests pin the fix for issue #225 (dynamic select "Save" failure)
+    and form the seed for future select-focused tests. Adding the
+    ``ecoMAX920P1-O`` fixture also makes it possible to exercise the
+    select builder against a device that ships with 20+ enum parameters.
+    """
+
+    @pytest.fixture(
+        params=["ecoMAX810P-L", "ecoMAX860P3-O", "ecoMAX920P1-O"],
+    )
+    def merged_data(self, request):
+        """Load mergedData.json for each fixture known to contain selects."""
+        data = load_fixture(request.param, "mergedData.json")
+        if data is None:
+            pytest.skip(f"mergedData.json missing for {request.param}")
+        return data
+
+    @pytest.fixture
+    def mock_coordinator(self, merged_data):
+        """Create a mock coordinator exposing mergedData."""
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": "ecoMAX920P1-O"},
+            "regParams": {},
+            "paramsEdits": {},
+            "mergedData": merged_data,
+        }
+        coordinator.last_update_success = True
+        return coordinator
+
+    @pytest.fixture
+    def mock_api(self):
+        """Create a mock API that simulates a successful parameter write."""
+        api = MagicMock(spec=Econet300Api)
+        api.set_param = AsyncMock(return_value=True)
+        api.set_param_by_index = AsyncMock(return_value=True)
+        api.uid = "test-uid"
+        return api
+
+    def _build_entity(
+        self, mock_coordinator, mock_api, merged_data
+    ) -> tuple[EconetDynamicSelect, str, dict]:
+        param_id, param = _first_select_candidate(merged_data)
+        description = SelectEntityDescription(
+            key=param.get("key") or f"param_{param_id}",
+            name=param.get("name", "select"),
+            translation_key=param.get("key") or f"param_{param_id}",
+        )
+        entity = EconetDynamicSelect(
+            description, mock_coordinator, mock_api, param_id, param
+        )
+        entity.async_write_ha_state = MagicMock()
+        return entity, param_id, param
+
+    def test_fixture_has_select_candidates(self, merged_data):
+        """Every merged-data fixture should expose at least one select."""
+        candidates = [
+            pid
+            for pid, param in merged_data.get("parameters", {}).items()
+            if should_be_select_entity(param)
+        ]
+        assert candidates, "fixture should contain dynamic select candidates"
+
+    @pytest.mark.asyncio
+    async def test_async_select_option_uses_param_index_endpoint(
+        self, mock_coordinator, mock_api, merged_data
+    ):
+        """Regression for issue #225: saving must hit rmNewParam, not newParam.
+
+        The controller silently ignores ``newParamName=<numeric id>`` writes,
+        so dynamic selects have to use ``set_param_by_index`` (rmNewParam) the
+        same way :class:`EconetDynamicSwitch` does.
+        """
+        entity, _, param = self._build_entity(mock_coordinator, mock_api, merged_data)
+        chosen_option = next(v for v in entity.options if v)
+
+        await entity.async_select_option(chosen_option)
+
+        mock_api.set_param.assert_not_called()
+        mock_api.set_param_by_index.assert_awaited_once()
+
+        called_index, called_value = mock_api.set_param_by_index.await_args.args
+        expected_index = param.get("number", entity._param_id)  # noqa: SLF001
+        expected_value = (
+            entity._enum_values.index(chosen_option)  # noqa: SLF001
+            + entity._first_index  # noqa: SLF001
+        )
+        assert called_index == expected_index
+        assert called_value == expected_value
+        assert entity.current_option == chosen_option
+
+    @pytest.mark.asyncio
+    async def test_async_select_option_failure_raises(
+        self, mock_coordinator, mock_api, merged_data
+    ):
+        """A failed write must surface as HomeAssistantError and not mutate state."""
+        entity, _, _ = self._build_entity(mock_coordinator, mock_api, merged_data)
+        mock_api.set_param_by_index = AsyncMock(return_value=False)
+        previous_option = entity.current_option
+        chosen_option = next(v for v in entity.options if v and v != previous_option)
+
+        with pytest.raises(HomeAssistantError):
+            await entity.async_select_option(chosen_option)
+
+        assert entity.current_option == previous_option
+
+    @pytest.mark.asyncio
+    async def test_async_select_option_invalid_raises(
+        self, mock_coordinator, mock_api, merged_data
+    ):
+        """An option not in the enum list must raise without calling the API."""
+        entity, _, _ = self._build_entity(mock_coordinator, mock_api, merged_data)
+
+        with pytest.raises(HomeAssistantError):
+            await entity.async_select_option("__not_a_real_option__")
+
+        mock_api.set_param.assert_not_called()
+        mock_api.set_param_by_index.assert_not_called()

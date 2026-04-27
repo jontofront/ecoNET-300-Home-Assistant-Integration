@@ -1,0 +1,320 @@
+[
+  {
+    "values": [],
+    "first": 0
+  },
+  {
+    "values": [
+      "OFF",
+      "ON"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "STOP",
+      "START",
+      "",
+      "Kalibracja"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "",
+      "Kalibracja"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "STOP",
+      "OFF",
+      "ON"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Rozłączony",
+      "Połączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "",
+      "OPEN",
+      "WEP",
+      "WPA",
+      "WPA2"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "WYŁĄCZONY",
+      "ROZPALANIE",
+      "TEST PŁOMIENIA",
+      "ROZŻARZANIE",
+      "PRACA",
+      "NADZÓR",
+      "WYGASZANIE",
+      "CZYSZCZENIE",
+      "POSTÓJ",
+      "RĘCZNE",
+      "ALARM",
+      "URUCHAMIANIE",
+      "BRAK TRANSMISJI",
+      "KOMINIARZ",
+      "SCHŁADZANIE",
+      "OTWARTE DRZWI",
+      "TRYB AWARYJNY"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "OFF",
+      "Zablokowany",
+      "",
+      "Wysuwanie",
+      "Cofanie"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Standardowy",
+      "FuzzyLogic",
+      "Moc maksymalna",
+      "Moc pośrednia",
+      "Moc minimalna"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Priorytet",
+      "Bez priorytetu"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Włączona"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Zima",
+      "Lato",
+      "Auto",
+      "Zima",
+      "Lato"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Pompa kotłowa",
+      "Pompa przewałowa",
+      "Wymiennik ciepła"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączone",
+      "Włączone"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Włączona CO",
+      "Włącz.podłog.",
+      "Tylko pompa"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Nie",
+      "Tak"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T1",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T1",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T1",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T1",
+      "ecoSTER T3",
+      "Uniwersalny",
+      "Uniwersalny",
+      "Uniwersalny",
+      "Wyłączony",
+      "Wyłączony",
+      "Wyłączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Poziom paliwa 100%",
+      "Poziom paliwa 0%",
+      ""
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłącz",
+      "Włącz"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłącz",
+      "Włącz"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Palnik - Pellet",
+      "Kocioł rezerwowy",
+      "Ruszt - Drewno"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączone",
+      "Kocioł rezerwowy",
+      "Alarmy",
+      "Pompa cyrkulacyjna",
+      "Podajnik zewnętrzny",
+      "Wentylator dodatkowy"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Eco groszek",
+      "Węgiel brunatny",
+      "Pellet",
+      "Miał",
+      "Owies",
+      "Kukurydza",
+      "Inne"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Włączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Włączona"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Nie",
+      "Tak"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "CIĄGŁY",
+      "AUTOMATYCZNY"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Kocioł",
+      "Bufor"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Włączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Przymknięcie zaworów",
+      "Włączona 4D",
+      "Wyłączona",
+      "Przymknięcie zaworów",
+      "Włączona 3D"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Harmonogram",
+      "Nocny",
+      "Dzienny",
+      "Wyłącz ogrzewanie",
+      "Wietrzenie",
+      "Grzej teraz",
+      "Wakacje",
+      "Antyzamrożenie",
+      "Ładowanie CWU"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Krytyczny",
+      "Niski",
+      "Dobry",
+      "Wysoki"
+    ],
+    "first": 0
+  }
+]

@@ -450,14 +450,21 @@ class EconetDynamicSelect(EconetEntity, SelectEntity):
             else:
                 self._raise_select_error(f"Invalid option: {option}")
 
-            success = await self.api.set_param(self._param_id, value)
+            # Dynamic selects must use the parameter index (rmNewParam endpoint),
+            # matching the EconetDynamicSwitch pattern. Falling back to set_param
+            # routes through newParamName=<id>, which the controller silently
+            # ignores, so the UI change never persists (issue #225).
+            param_number = self._param.get("number", self._param_id)
+            success = await self.api.set_param_by_index(param_number, value)
             if success:
                 self._attr_current_option = option
                 self.async_write_ha_state()
                 _LOGGER.info(
-                    "Select %s changed to %s",
+                    "Select %s changed to %s (param_index=%s, value=%s)",
                     self.entity_description.key,
                     option,
+                    param_number,
+                    value,
                 )
             else:
                 self._raise_select_error(

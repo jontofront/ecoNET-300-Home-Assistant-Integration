@@ -21,10 +21,11 @@ ALL_FIXTURES = [
     "ecoMAX860P2-N",
     "ecoMAX860P3-O",
     "ecoMAX860P3-V",
+    "ecoMAX920P1-O",
     "ecoSOL500",
 ]
 
-FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O"]
+FIXTURES_WITH_MERGED_DATA = ["ecoMAX810P-L", "ecoMAX860P3-O", "ecoMAX920P1-O"]
 
 
 def load_fixture(fixture_name: str, filename: str) -> dict | None:
@@ -144,6 +145,7 @@ def test_device_type_detection():
         "ecoMAX860D3-HB": "ecoMAX",
         "ecoMAX860P2-N": "ecoMAX",
         "ecoMAX860P3-V": "ecoMAX",
+        "ecoMAX920P1-O": "ecoMAX",
         "ecoSOL": "ecoSOL",
         "ecoSOL301": "ecoSOL",
         "ecoSOL500": "ecoSOL",

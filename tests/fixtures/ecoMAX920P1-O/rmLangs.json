@@ -1,0 +1,53 @@
+[
+  {
+    "default": true,
+    "code": "pl",
+    "name": "Polski",
+    "version": "F6D0E34D"
+  },
+  {
+    "code": "en",
+    "name": "English",
+    "version": "42CFE87A"
+  },
+  {
+    "code": "de",
+    "name": "Deutsch",
+    "version": "B4241D67"
+  },
+  {
+    "code": "lt",
+    "name": "Lietuvių",
+    "version": "846F47E7"
+  },
+  {
+    "code": "es",
+    "name": "Español",
+    "version": "305BC64A"
+  },
+  {
+    "code": "ru",
+    "name": "Русский",
+    "version": "45E014AE"
+  },
+  {
+    "code": "fr",
+    "name": "Français",
+    "version": "82738042"
+  },
+  {
+    "code": "cs",
+    "name": "Čeština",
+    "version": "B2BF9B83"
+  },
+  {
+    "code": "lv",
+    "name": "Latviešu",
+    "version": "2DC1CD37"
+  },
+  {
+    "code": "HU",
+    "name": "Magyar",
+    "version": "959E72F9"
+  }
+]
