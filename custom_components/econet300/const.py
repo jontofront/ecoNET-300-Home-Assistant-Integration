@@ -9,7 +9,7 @@ This module contains all constants organized by functionality:
 - Mixer and thermostat configurations
 """
 
-from typing import Any
+from typing import Any, Final
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass
@@ -1299,6 +1299,23 @@ ENTITY_PRECISION = {
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
+ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS: Final[tuple[str, ...]] = (
+    "ActualDHWTemp",
+    "ActualFlowTemp",
+    "ActualReturnTemp",
+    "AXENREGISTER64",
+    "AXENREGISTER65",
+    "Circuit1DesiredLWT",
+    "COP",
+    "ElectricalPower",
+    "FanSpeed",
+    "FlowRate",
+    "HeatPumpAmbient",
+    "SCOP",
+    "TargetFlowTemp",
+    "ThermalPower",
+)
+
 
 def _int_enum_lookup(mapping: dict[int, str], value: Any) -> str:
     """Look up an integer-keyed enum mapping, coercing string values from informationParams."""
@@ -1308,7 +1325,18 @@ def _int_enum_lookup(mapping: dict[int, str], value: Any) -> str:
         return STATE_UNKNOWN
 
 
+def _numeric_or_none(value: Any) -> float | None:
+    """Return a numeric sensor value, or None when the controller reports a state."""
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 ENTITY_VALUE_PROCESSOR = {
+    **dict.fromkeys(ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS, _numeric_or_none),
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, STATE_UNKNOWN),
     "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, STATE_UNKNOWN),

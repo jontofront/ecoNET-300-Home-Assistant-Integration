@@ -43,6 +43,21 @@ class TestEconetSensorBasic:
         assert description.process_val is not None
 
     # ruff: noqa: PLR6301
+    @pytest.mark.parametrize(
+        "key",
+        ["ActualFlowTemp", "ActualReturnTemp", "Circuit1DesiredLWT"],
+    )
+    def test_ecomax360i_temperature_sensors_ignore_off_state(
+        self, key: str
+    ) -> None:
+        """ecoMAX360i temperature sensors should not publish off as numeric state."""
+        description = create_sensor_entity_description(key)
+
+        assert description.process_val("off") is None
+        assert description.process_val("") is None
+        assert description.process_val("34.5") == 34.5
+
+    # ruff: noqa: PLR6301
     def test_can_add_mixer_with_valid_data(self):
         """Test can_add_mixer with valid data."""
         # Create a mock coordinator with valid data
