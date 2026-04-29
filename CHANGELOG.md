@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.2.7a1] - 2026-04-29
+
+### Fixed
+
+- **ecoMAX360i temperature sensors crash on `"off"` ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227))**: `ActualFlowTemp`, `ActualReturnTemp`, `Circuit1DesiredLWT`, and other ecoMAX360i numeric sensors no longer raise `ValueError` when the heat-pump controller reports the literal string `"off"` from `informationParams` / `editParams`. A scoped `_numeric_or_none` value processor now coerces non-numeric API responses to `None`, so HA renders the entity as `unavailable` until a real numeric value arrives, instead of failing entity setup.
+
+### Added
+
+- **Regression test**: `TestEconetSensorBasic.test_ecomax360i_temperature_sensors_ignore_off_state` parametrized across `ActualFlowTemp`, `ActualReturnTemp`, and `Circuit1DesiredLWT` — verifies `process_val("off") is None` and numeric strings still convert to floats.
+
+### Notes
+
+- This is a **pre-release** (PEP 440 `a1`). HACS will not auto-prompt users on the stable channel. Install manually to test.
+
+---
+
 ## [v1.2.6] - 2026-04-21
 
 ### Fixed
