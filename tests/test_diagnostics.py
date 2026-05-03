@@ -9,10 +9,12 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from custom_components.econet300.diagnostics import (
+    RAW_PROBE_ENDPOINTS,
     TO_REDACT,
     _redact_data,
     _snapshot_extended_fetch_result,
     async_collect_extended_endpoint_snapshots,
+    async_collect_raw_endpoint_probes,
     async_get_config_entry_diagnostics,
     async_get_device_diagnostics,
 )
@@ -150,12 +152,103 @@ class TestExtendedEndpointSnapshots:
         api.fetch_rm_existing_langs = AsyncMock(return_value=None)
         api.fetch_rm_locks_names = AsyncMock(return_value=None)
         api.fetch_rm_alarms_names = AsyncMock(return_value=None)
+        api.fetch_raw_endpoint = AsyncMock(
+            return_value={"status": 200, "body": {}, "error": None}
+        )
 
         out = await async_collect_extended_endpoint_snapshots(api)
 
         assert out["edit_params"] == {"edit": True}
         assert "_ha_diagnostics_fetch_failed" in out["rm_params_names"]
         assert out["rm_params_data"]["_ha_diagnostics_unavailable"] is True
+        assert "raw_probes" in out
+        assert isinstance(out["raw_probes"], dict)
+
+
+class TestRawEndpointProbes:
+    """Raw probes that capture HTTP status + body for diagnostic-only endpoints."""
+
+    def test_probe_list_covers_known_diagnostic_endpoints(self):
+        """The probe list must include the endpoints reported in issue #231."""
+        keys = {key for key, _, _ in RAW_PROBE_ENDPOINTS}
+        # See issue #231: device-side errors on these endpoints distinguish
+        # heat-pump (gm3_pomp) variants from boiler controllers.
+        assert "rm_device_list" in keys
+        assert "rm_current_data_object" in keys
+        assert "legacy_sys" in keys
+        assert "rm_params_data_no_uid" in keys
+
+    def test_probe_list_uses_correct_endpoint_paths(self):
+        """Endpoint paths must match the live API names (no leading slash)."""
+        spec = {
+            key: (endpoint, with_uid) for key, endpoint, with_uid in RAW_PROBE_ENDPOINTS
+        }
+        assert spec["rm_device_list"] == ("rmDeviceList", False)
+        assert spec["rm_current_data_object"] == ("rmCurrentDataObject", False)
+        assert spec["legacy_sys"] == ("sys", False)
+
+    @pytest.mark.asyncio
+    async def test_probes_capture_status_and_body(self):
+        """A successful probe should preserve status + body verbatim."""
+        api = MagicMock()
+        api.fetch_raw_endpoint = AsyncMock(
+            return_value={"status": 200, "body": {"k": "v"}, "error": None}
+        )
+        out = await async_collect_raw_endpoint_probes(api, timeout_sec=1.0)
+
+        assert set(out.keys()) == {key for key, _, _ in RAW_PROBE_ENDPOINTS}
+        for probe in out.values():
+            assert probe["status"] == 200
+            assert probe["body"] == {"k": "v"}
+            assert probe["error"] is None
+
+    @pytest.mark.asyncio
+    async def test_probes_capture_device_error_payloads(self):
+        """A 200 response containing the device's error string must be preserved."""
+        # Heat-pump gm3_pomp returns 200 + JSON error body for unsupported endpoints.
+        api = MagicMock()
+        api.fetch_raw_endpoint = AsyncMock(
+            return_value={
+                "status": 200,
+                "body": {
+                    "error": "'Controller' object has no attribute 'onrmDeviceList'"
+                },
+                "error": None,
+            }
+        )
+        out = await async_collect_raw_endpoint_probes(api)
+        assert (
+            out["rm_device_list"]["body"]["error"]
+            == "'Controller' object has no attribute 'onrmDeviceList'"
+        )
+
+    @pytest.mark.asyncio
+    async def test_probes_isolate_per_endpoint_failures(self):
+        """A raised exception on one probe must not break the others."""
+        api = MagicMock()
+        results_iter = iter(
+            [
+                {"status": 200, "body": {}, "error": None},
+                Exception("boom"),
+                {"status": 404, "body": None, "error": None},
+                {"status": None, "body": None, "error": "TimeoutError()"},
+            ]
+        )
+
+        async def fake_fetch(*_args, **_kwargs):
+            value = next(results_iter)
+            if isinstance(value, Exception):
+                raise value
+            return value
+
+        api.fetch_raw_endpoint = AsyncMock(side_effect=fake_fetch)
+        out = await async_collect_raw_endpoint_probes(api)
+
+        # All probes are present even though one raised
+        assert len(out) == len(RAW_PROBE_ENDPOINTS)
+        # The raising probe is captured as an error dict
+        any_with_error = [p for p in out.values() if p.get("error")]
+        assert any_with_error, "expected at least one probe to surface an error"
 
 
 class TestCoordinatorDataKeysInDiagnostics:
@@ -194,6 +287,125 @@ class TestCoordinatorDataKeysInDiagnostics:
         }
         assert coordinator_data["editParams"] == {}
         assert coordinator_data["informationParams"] == {}
+
+
+class TestDiagnosticsReportSummary:
+    """Pure-function summary used by the options-flow diagnostics step."""
+
+    def _summarize(self, **overrides):
+        from custom_components.econet300.config_flow import EconetOptionsFlowHandler
+
+        defaults = {
+            "sys_params": {
+                "controllerID": "ecoMAX360i",
+                "protocolType": "gm3_pomp",
+                "uid": "ABCDEF",
+            },
+            "reg_params": {"TempCWU": 47.5, "TempBuforDown": 37.6},
+            "extended": {
+                "raw_probes": {
+                    "rm_device_list": {"status": 200, "body": {}, "error": None},
+                    "legacy_sys": {"status": None, "body": None, "error": "Timeout()"},
+                }
+            },
+            "errors": [],
+        }
+        defaults.update(overrides)
+        return EconetOptionsFlowHandler._summarize_report(  # noqa: SLF001
+            defaults["sys_params"],
+            defaults["reg_params"],
+            defaults["extended"],
+            defaults["errors"],
+        )
+
+    def test_summary_includes_controller_and_protocol(self):
+        """Summary should surface controllerID and protocolType for triage."""
+        summary = self._summarize()
+        assert "ecoMAX360i" in summary
+        assert "gm3_pomp" in summary
+
+    def test_summary_reports_uid_presence(self):
+        """UID presence is the most common config-flow failure cause; surface it."""
+        with_uid = self._summarize()
+        assert "uid in sysParams: True" in with_uid
+
+        without_uid = self._summarize(
+            sys_params={"controllerID": "ecoMAX360i", "protocolType": "gm3_pomp"}
+        )
+        assert "uid in sysParams: False" in without_uid
+
+    def test_summary_includes_reg_params_count(self):
+        """A non-zero reg_params count tells us the device is responsive."""
+        summary = self._summarize()
+        assert "regParams keys: 2" in summary
+
+    def test_summary_includes_raw_probe_status_lines(self):
+        """Each raw probe should contribute one status line."""
+        summary = self._summarize()
+        assert "rm_device_list: status=200" in summary
+        # Probes with errors include the error repr
+        assert "legacy_sys" in summary
+        assert "Timeout()" in summary
+
+    def test_summary_handles_collection_errors(self):
+        """Collection errors are surfaced as their own block."""
+        summary = self._summarize(errors=["sysParams: TimeoutError()"])
+        assert "Collection errors:" in summary
+        assert "sysParams: TimeoutError()" in summary
+
+    def test_summary_handles_non_dict_sys_params(self):
+        """Defensive: sys_params can be None when fetch fails."""
+        summary = self._summarize(sys_params=None, reg_params=None)
+        assert "controllerID:" in summary
+        assert "regParams keys: 0" in summary
+
+    def test_summary_mentions_log_marker(self):
+        """User must know which log marker to grep for."""
+        summary = self._summarize()
+        assert "ECONET300_DIAGNOSTICS_REPORT" in summary
+
+
+class TestApiRawEndpointHelper:
+    """Econet300Api.fetch_raw_endpoint() URL construction + delegation."""
+
+    @pytest.mark.asyncio
+    async def test_fetch_raw_endpoint_without_uid(self):
+        """URL is built without a uid query string when with_uid=False."""
+        from custom_components.econet300.api import Econet300Api
+        from custom_components.econet300.mem_cache import MemCache
+
+        client = MagicMock()
+        client.host = "http://192.168.1.100"
+        client.probe_raw = AsyncMock(
+            return_value={"status": 200, "body": {}, "error": None}
+        )
+
+        api = Econet300Api(client, MemCache())
+        await api.fetch_raw_endpoint("rmDeviceList", timeout_sec=2.5)
+
+        client.probe_raw.assert_awaited_once_with(
+            "http://192.168.1.100/econet/rmDeviceList", timeout_sec=2.5
+        )
+
+    @pytest.mark.asyncio
+    async def test_fetch_raw_endpoint_with_uid_appends_query(self):
+        """URL appends ?uid=<uid> when with_uid=True."""
+        from custom_components.econet300.api import Econet300Api
+        from custom_components.econet300.mem_cache import MemCache
+
+        client = MagicMock()
+        client.host = "http://192.168.1.100"
+        client.probe_raw = AsyncMock(
+            return_value={"status": 200, "body": {}, "error": None}
+        )
+
+        api = Econet300Api(client, MemCache())
+        api._uid = "TEST_UID"  # noqa: SLF001 — direct attr access OK in tests
+        await api.fetch_raw_endpoint("rmParamsData", with_uid=True, timeout_sec=1.0)
+
+        client.probe_raw.assert_awaited_once_with(
+            "http://192.168.1.100/econet/rmParamsData?uid=TEST_UID", timeout_sec=1.0
+        )
 
 
 class TestDiagnosticFunctions:

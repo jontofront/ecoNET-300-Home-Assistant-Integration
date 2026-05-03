@@ -110,7 +110,8 @@
       "init": {
         "menu_options": {
           "connection_settings": "Ustawienia połączenia",
-          "custom_entities": "Własne encje"
+          "custom_entities": "Własne encje",
+          "diagnostics": "Wygeneruj raport diagnostyczny"
         }
       },
       "connection_settings": {
@@ -121,6 +122,10 @@
           "username": "Nazwa użytkownika",
           "password": "Hasło"
         }
+      },
+      "diagnostics": {
+        "title": "Wygeneruj raport diagnostyczny",
+        "description": "Sprawdza urządzenie, zapisuje zredagowany raport JSON do homeassistant.log (znacznik: ECONET300_DIAGNOSTICS_REPORT) oraz tworzy trwałe powiadomienie z krótkim podsumowaniem. Użyj tego, aby dołączyć kompletny raport do zgłoszenia na GitHub."
       },
       "custom_entities": {
         "title": "Własne encje",
