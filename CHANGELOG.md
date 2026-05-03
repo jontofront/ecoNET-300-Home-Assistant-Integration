@@ -1,5 +1,39 @@
 # Changelog
 
+## [v1.2.7a2] - 2026-05-03
+
+### Fixed
+
+- **`rmData` `NoneType` crash in `_lookup_cdp_value`**: Sensor entities no longer raise `AttributeError: 'NoneType' object has no attribute 'get'` when the `rmCurrentDataParams` endpoint returns `None` for a single coordinator update (transient device hiccup, malformed response, etc.). Root cause was fixed in `common.py` — the RM result loops now normalize both exceptions and `None` results to `{}`, so every key in `rm_data` is guaranteed to be a dict for downstream consumers. Sensor `_lookup_cdp_value` was also updated to use the defense-in-depth `or {}` pattern already used elsewhere in the file.
+
+### Added
+
+- **Diagnostics: raw probes** for endpoints the integration does not consume but whose response shape (or device-side error string) helps identify protocol/controller variants — `rmDeviceList`, `rmCurrentDataObject`, legacy `/sys`, `rmParamsData` without `uid`. Captured under `extended_endpoints.raw_probes` in every standard "Download diagnostics" file with HTTP status, body, and error preserved.
+- **Diagnostics: "Generate diagnostics report" options-flow action** ([#231](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/231)): a new menu entry under Settings → Devices & Services → ecoNET300 → Configure that runs the full collection, writes a redacted JSON report to `homeassistant.log` with a unique marker (`ECONET300_DIAGNOSTICS_REPORT`), and raises a persistent notification with a triage-friendly summary (controllerID, protocolType, uid presence, regParams count, per-probe status). Lets users attach a complete report to a GitHub issue without searching for log files.
+- **`Econet300Api.fetch_raw_endpoint()`** + **`EconetClient.probe_raw()`**: low-level diagnostic helpers that capture HTTP status + body for any `/econet/<endpoint>`, never collapsing a non-200 response or parse error to `None`. This is what surfaces the device-side error strings (e.g. `'Controller' object has no attribute 'onrmDeviceList'`) used by the new raw probes.
+
+### Tests
+
+- **+14 tests** in `tests/test_diagnostics.py` across three new classes:
+  - `TestRawEndpointProbes` — verifies probe list covers issue #231 endpoints, uses correct paths, captures status + body, preserves device error payloads, isolates per-probe failures.
+  - `TestApiRawEndpointHelper` — verifies URL construction with/without `uid`.
+  - `TestDiagnosticsReportSummary` — verifies the persistent-notification summary surfaces controllerID/protocolType, reports `uid` presence, includes regParams count, reflects raw-probe statuses including errors, handles `None` sysParams defensively, includes the log marker.
+- All 463 tests pass (was 449); 4 pre-existing skips unchanged.
+
+### Translations
+
+- **EN + PL** translations added for the new `diagnostics` options-flow step and menu label (`strings.json`, `translations/en.json`, `translations/pl.json`).
+
+### Documentation
+
+- **README**: extended `## 🔧 Diagnostics` with a "Generating a triage report" subsection covering the new action and the `raw_probes` block.
+
+### Notes
+
+- This is a **pre-release** (PEP 440 `a2`). HACS will not auto-prompt users on the stable channel. Install manually to test.
+
+---
+
 ## [v1.2.7a1] - 2026-04-29
 
 ### Fixed
