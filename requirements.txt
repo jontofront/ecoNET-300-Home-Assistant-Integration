@@ -2,7 +2,7 @@ homeassistant>=2025.6.0
 ruff==0.14.10
 codespell==2.3.0
 autotyping>=24.3.0
-aiohttp>=3.8.0
+aiohttp>=3.13.3
 aiodns>=3.0.0
 pycares>=4.3.0
 requests>=2.25.0
