@@ -1390,6 +1390,7 @@ ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS: Final[tuple[str, ...]] = (
     "beforeCompressorTemp",
     "exhaustGasTemp",
     "outdoorTemp",
+    "ssaCorr",
     "ssaPrevTemp",
 )
 
