@@ -305,6 +305,22 @@ ECOMAX360I_SENSORS = {
     "AxenOutgoingTemp",
     "AxenReturnTemp",
     "AxenCompressorFreq",
+    "AxenUpperPump",
+    "AxenWorkState",
+    "HeatSourceCalcPresetTemp",
+    # Heat pump compressor temperatures
+    "afterCompressorTemp",
+    "beforeCompressorTemp",
+    "exhaustGasTemp",
+    "outdoorTemp",
+    # Heat pump status sensors
+    "HPStatusWorkMode",
+    "HPStatusPresetTemp",
+    "HPStatusControl",
+    # SSA (weather compensation) sensors
+    "ssaState",
+    "ssaCorr",
+    "ssaPrevTemp",
     # Circuit comfort/eco temperature setpoints (read-only from regParams)
     "Circuit1ComfortTemp",
     "Circuit1EcoTemp",
@@ -889,6 +905,22 @@ ENTITY_UNIT_MAP = {
     "AxenOutgoingTemp": UnitOfTemperature.CELSIUS,
     "AxenReturnTemp": UnitOfTemperature.CELSIUS,
     "AxenCompressorFreq": "Hz",
+    "AxenUpperPump": None,
+    "AxenWorkState": None,
+    "HeatSourceCalcPresetTemp": UnitOfTemperature.CELSIUS,
+    # Heat pump compressor temperature units
+    "afterCompressorTemp": UnitOfTemperature.CELSIUS,
+    "beforeCompressorTemp": UnitOfTemperature.CELSIUS,
+    "exhaustGasTemp": UnitOfTemperature.CELSIUS,
+    "outdoorTemp": UnitOfTemperature.CELSIUS,
+    # Heat pump status units
+    "HPStatusWorkMode": None,
+    "HPStatusPresetTemp": UnitOfTemperature.CELSIUS,
+    "HPStatusControl": None,
+    # SSA (weather compensation) units
+    "ssaState": None,
+    "ssaCorr": UnitOfTemperature.CELSIUS,
+    "ssaPrevTemp": UnitOfTemperature.CELSIUS,
     # Circuit comfort/eco temperature setpoints
     "Circuit1ComfortTemp": UnitOfTemperature.CELSIUS,
     "Circuit1EcoTemp": UnitOfTemperature.CELSIUS,
@@ -992,6 +1024,12 @@ STATE_CLASS_MAP: dict[str, SensorStateClass | None] = {
     "FlowRate": None,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
+    # ecoMAX360i heat pump status sensors (not measurements)
+    "HPStatusWorkMode": None,
+    "HPStatusControl": None,
+    "AxenUpperPump": None,
+    "AxenWorkState": None,
+    "ssaState": None,
 }
 
 # =============================================================================
@@ -1087,6 +1125,22 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, SensorDeviceClass | None] = {
     "AxenOutgoingTemp": SensorDeviceClass.TEMPERATURE,
     "AxenReturnTemp": SensorDeviceClass.TEMPERATURE,
     "AxenCompressorFreq": SensorDeviceClass.FREQUENCY,
+    "AxenUpperPump": None,
+    "AxenWorkState": None,
+    "HeatSourceCalcPresetTemp": SensorDeviceClass.TEMPERATURE,
+    # Heat pump compressor temperature device classes
+    "afterCompressorTemp": SensorDeviceClass.TEMPERATURE,
+    "beforeCompressorTemp": SensorDeviceClass.TEMPERATURE,
+    "exhaustGasTemp": SensorDeviceClass.TEMPERATURE,
+    "outdoorTemp": SensorDeviceClass.TEMPERATURE,
+    # Heat pump status device classes
+    "HPStatusWorkMode": None,
+    "HPStatusPresetTemp": SensorDeviceClass.TEMPERATURE,
+    "HPStatusControl": None,
+    # SSA (weather compensation) device classes
+    "ssaState": None,
+    "ssaCorr": SensorDeviceClass.TEMPERATURE,
+    "ssaPrevTemp": SensorDeviceClass.TEMPERATURE,
     # Circuit comfort/eco temperature device classes
     "Circuit1ComfortTemp": SensorDeviceClass.TEMPERATURE,
     "Circuit1EcoTemp": SensorDeviceClass.TEMPERATURE,
@@ -1258,6 +1312,22 @@ ENTITY_PRECISION = {
     "FlowRate": 1,
     "AXENREGISTER64": 1,
     "AXENREGISTER65": 0,
+    # Heat pump compressor temperature precision
+    "afterCompressorTemp": 1,
+    "beforeCompressorTemp": 1,
+    "exhaustGasTemp": 1,
+    "outdoorTemp": 1,
+    # Heat pump status precision
+    "HPStatusWorkMode": None,
+    "HPStatusPresetTemp": 0,
+    "HPStatusControl": None,
+    "AxenUpperPump": None,
+    "AxenWorkState": None,
+    "HeatSourceCalcPresetTemp": 0,
+    # SSA (weather compensation) precision
+    "ssaState": None,
+    "ssaCorr": 0,
+    "ssaPrevTemp": 1,
     # ecoSTER thermostat precision
     "ecoSterTemp1": 1,
     "ecoSterTemp2": 1,
@@ -1311,9 +1381,16 @@ ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS: Final[tuple[str, ...]] = (
     "FanSpeed",
     "FlowRate",
     "HeatPumpAmbient",
+    "HeatSourceCalcPresetTemp",
+    "HPStatusPresetTemp",
     "SCOP",
     "TargetFlowTemp",
     "ThermalPower",
+    "afterCompressorTemp",
+    "beforeCompressorTemp",
+    "exhaustGasTemp",
+    "outdoorTemp",
+    "ssaPrevTemp",
 )
 
 

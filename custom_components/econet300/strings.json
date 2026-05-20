@@ -768,6 +768,45 @@
       "axen_compressor_freq": {
         "name": "Heat pump compressor frequency"
       },
+      "axen_upper_pump": {
+        "name": "Heat pump upper pump"
+      },
+      "axen_work_state": {
+        "name": "Heat pump work state"
+      },
+      "heat_source_calc_preset_temp": {
+        "name": "Heat source calculated preset temp."
+      },
+      "after_compressor_temp": {
+        "name": "After compressor temp."
+      },
+      "before_compressor_temp": {
+        "name": "Before compressor temp."
+      },
+      "exhaust_gas_temp": {
+        "name": "Exhaust gas temp."
+      },
+      "outdoor_temp": {
+        "name": "Outdoor temperature"
+      },
+      "hp_status_work_mode": {
+        "name": "HP work mode"
+      },
+      "hp_status_preset_temp": {
+        "name": "HP preset temperature"
+      },
+      "hp_status_control": {
+        "name": "HP control state"
+      },
+      "ssa_state": {
+        "name": "Weather compensation state"
+      },
+      "ssa_corr": {
+        "name": "Weather compensation correction"
+      },
+      "ssa_prev_temp": {
+        "name": "Weather curve target temp."
+      },
       "circuit1_comfort_temp": {
         "name": "Circuit 1 day temperature"
       },
