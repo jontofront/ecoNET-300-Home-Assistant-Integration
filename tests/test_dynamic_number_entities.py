@@ -32,6 +32,7 @@ ALL_FIXTURES = [
     "ecoMAX810P-L",
     "ecoMAX360",
     "ecoMAX360-cf8",
+    "ecoMAX360i",
     "ecoSOL",
     "ecoSOL301",
     "SControl MK1",
@@ -445,6 +446,7 @@ class TestMultipleFixtures:
             ("ecoMAX860D3-HB", ["controllerID", "uid", "softVer"]),
             ("ecoMAX920P1-O", ["controllerID", "uid", "softVer"]),
             ("ecoMAX360", ["controllerID", "uid"]),
+            ("ecoMAX360i", ["controllerID", "uid", "softVer"]),
             ("ecoSOL", ["controllerID", "uid"]),
             ("ecoSOL301", ["controllerID", "uid"]),
             ("SControl MK1", ["controllerID", "uid"]),
@@ -476,6 +478,7 @@ class TestMultipleFixtures:
             ("ecoMAX810P-L", "ecoMAX"),
             ("ecoMAX360", "ecoMAX"),
             ("ecoMAX360-cf8", "ecoMAX"),
+            ("ecoMAX360i", "ecoMAX"),
             ("ecoMAX850R2-X", "ecoMAX"),
             ("ecoMAX860D3-HB", "ecoMAX"),
             ("ecoMAX860P2-N", "ecoMAX"),
@@ -564,7 +567,7 @@ class TestDynamicSelectEntities:
         entity = EconetDynamicSelect(
             description, mock_coordinator, mock_api, param_id, param
         )
-        entity.async_write_ha_state = MagicMock()
+        entity.async_write_ha_state = MagicMock()  # type: ignore[method-assign]
         return entity, param_id, param
 
     def test_fixture_has_select_candidates(self, merged_data):
