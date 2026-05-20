@@ -297,3 +297,35 @@ def test_comprehensive_safety_checks():
 
     # If we get here, all tests passed
     assert True
+
+
+def test_select_entity_handles_none_reg_params_data():
+    """Regression test: select extra_state_attributes must not crash when regParamsData is None.
+
+    Issue #227 - ecoMAX360i controllers have reg_params_data=null which causes
+    AttributeError: 'NoneType' object has no attribute 'get' in select.py.
+    """
+    from custom_components.econet300.select import EconetSelect
+
+    mock_coordinator = Mock()
+    mock_coordinator.data = {
+        "sysParams": {"controllerID": "ecoMAX360i"},
+        "regParams": {},
+        "paramsEdits": {},
+        "regParamsData": None,
+    }
+
+    mock_api = Mock()
+    mock_api.uid = "test-uid"
+
+    from homeassistant.components.select import SelectEntityDescription
+
+    description = SelectEntityDescription(
+        key="heater_mode",
+        name="Heater Mode",
+        translation_key="heater_mode",
+    )
+
+    entity = EconetSelect(description, mock_coordinator, mock_api, "heaterMode")
+    attrs = entity.extra_state_attributes
+    assert attrs["current_state_value"] is None
