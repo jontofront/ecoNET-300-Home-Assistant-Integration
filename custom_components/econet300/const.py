@@ -1548,8 +1548,8 @@ SENSOR_WATER_PUMP_RUNNING_MAPPING: dict[int, str] = {
 # =============================================================================
 # Options for SensorDeviceClass.ENUM sensors - displayed in HA Developer Tools
 SENSOR_ENUM_OPTIONS: dict[str, list[str]] = {
-    "mode": list(OPERATION_MODE_NAMES.values()),
-    "transmission": list(OPERATION_MODE_NAMES.values()),
+    "mode": [*OPERATION_MODE_NAMES.values(), STATE_UNKNOWN],
+    "transmission": [*OPERATION_MODE_NAMES.values(), STATE_UNKNOWN],
     "statusCO": [*SENSOR_STATUS_CO_MAPPING.values(), STATE_UNKNOWN],
     # ecoMAX360i enum options
     "flapValveStates": [*SENSOR_FLAP_VALVE_STATES_MAPPING.values(), STATE_UNKNOWN],
