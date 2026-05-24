@@ -304,6 +304,12 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
+### What's New in v1.2.7
+
+- **ecoMAX360i heat pump fixes** ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227)): Temperature sensors no longer crash on `"off"` values; new heat pump sensors (`afterCompressorTemp`, `outdoorTemp`, `HPStatusWorkMode`, etc.) and SSA weather compensation sensors
+- **Mode sensor crash fix** ([#223](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/223)): `mode` and `transmission` enum sensors no longer crash when the controller returns unknown values
+- **Diagnostics report action** ([#231](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/231)): One-click diagnostics report via Configure menu with raw endpoint probes for heat pump / controller variant triage
+
 ### What's New in v1.2.6
 
 - **Dynamic select entities now save correctly** ([#225](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/225), [#224](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/224)): Fixed a regression where changing dynamic select options (e.g. `Output H1`, `Output H2 and H3`, `Feeding time`) on ecoMAX810P-L / ecoMAX860P3-O / ecoMAX920P1-O appeared to succeed in the UI but was silently ignored by the controller
