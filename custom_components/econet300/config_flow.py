@@ -23,6 +23,12 @@ from .const import (
     CONF_CUSTOM_ENTITIES,
     CONF_ENTRY_DESCRIPTION,
     CONF_ENTRY_TITLE,
+    CONF_POLL_EDIT_PARAMS,
+    CONF_POLL_REG_PARAMS,
+    CONF_POLL_SYS_PARAMS,
+    DEFAULT_POLL_EDIT_PARAMS,
+    DEFAULT_POLL_REG_PARAMS,
+    DEFAULT_POLL_SYS_PARAMS,
     CUSTOM_ENTITY_COMPONENTS,
     CUSTOM_ENTITY_TYPE_BINARY_SENSOR,
     CUSTOM_ENTITY_TYPE_SENSOR,
@@ -299,8 +305,42 @@ class EconetOptionsFlowHandler(OptionsFlow):
         """Show the options menu."""
         return self.async_show_menu(
             step_id="init",
-            menu_options=["connection_settings", "custom_entities", "diagnostics"],
+            menu_options=["connection_settings", "polling_settings", "custom_entities", "diagnostics"],
         )
+
+
+    # ------------------------------------------------------------------
+    # Polling settings
+    # ------------------------------------------------------------------
+    async def async_step_polling_settings(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Manage Local polling intervals."""
+        if user_input is not None:
+            new_options = {**self.config_entry.options, **user_input}
+            self.hass.async_create_task(
+                self.hass.config_entries.async_reload(self.config_entry.entry_id)
+            )
+            return self.async_create_entry(title="", data=new_options)
+
+        options = dict(self.config_entry.options)
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_POLL_REG_PARAMS,
+                    default=options.get(CONF_POLL_REG_PARAMS, DEFAULT_POLL_REG_PARAMS),
+                ): vol.All(vol.Coerce(int), vol.Range(min=2, max=300)),
+                vol.Required(
+                    CONF_POLL_SYS_PARAMS,
+                    default=options.get(CONF_POLL_SYS_PARAMS, DEFAULT_POLL_SYS_PARAMS),
+                ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
+                vol.Required(
+                    CONF_POLL_EDIT_PARAMS,
+                    default=options.get(CONF_POLL_EDIT_PARAMS, DEFAULT_POLL_EDIT_PARAMS),
+                ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            }
+        )
+        return self.async_show_form(step_id="polling_settings", data_schema=schema)
 
     # ------------------------------------------------------------------
     # Connection settings

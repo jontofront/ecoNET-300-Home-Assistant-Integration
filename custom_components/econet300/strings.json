@@ -111,7 +111,8 @@
         "menu_options": {
           "connection_settings": "Connection Settings",
           "custom_entities": "Custom Entities",
-          "diagnostics": "Generate diagnostics report"
+          "diagnostics": "Generate diagnostics report",
+          "polling_settings": "Polling settings"
         }
       },
       "connection_settings": {
@@ -158,6 +159,13 @@
           "native_unit": "Unit of measurement",
           "device_class": "Device class",
           "precision": "Display precision"
+        }
+      },
+      "polling_settings": {
+        "data": {
+          "poll_reg_params": "regParams polling interval (seconds) — live sensor values",
+          "poll_sys_params": "sysParams polling interval (seconds) — controller metadata",
+          "poll_edit_params": "editParams polling interval (seconds, 0 to disable) — editable parameters catalog/values"
         }
       }
     },

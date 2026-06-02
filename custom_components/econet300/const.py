@@ -94,7 +94,7 @@ CACHE_STATIC_METADATA_TTL = 86400  # 24 hours
 # =============================================================================
 DEVICE_INFO_MANUFACTURER = "PLUM"
 DEVICE_INFO_MODEL = "ecoNET300"
-DEVICE_INFO_CONTROLLER_NAME = "Boiler"
+DEVICE_INFO_CONTROLLER_NAME = "PLUM ecoNET300"
 DEVICE_INFO_MIXER_NAME = "Mixer device"
 DEVICE_INFO_LAMBDA_NAME = "Module Lambda"
 DEVICE_INFO_ECOSTER_NAME = "ecoSTER"
@@ -106,6 +106,22 @@ DEVICE_INFO_ADVANCED_PARAMETERS_NAME = "Advanced Parameters"
 
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
+
+# =============================================================================
+# HARDENING / POLLING
+# =============================================================================
+CONF_POLL_REG_PARAMS = "poll_reg_params"
+CONF_POLL_SYS_PARAMS = "poll_sys_params"
+CONF_POLL_EDIT_PARAMS = "poll_edit_params"
+
+# Conservative defaults for the small ecoNET300 web server.
+DEFAULT_POLL_REG_PARAMS = 15
+DEFAULT_POLL_SYS_PARAMS = 300
+DEFAULT_POLL_EDIT_PARAMS = 300
+
+# Keep last values during short glitches, but do not allow silent flat-lines forever.
+STALE_AFTER_SECONDS = 600
+
 
 # =============================================================================
 # DEVICE COMPONENT IDENTIFIERS
@@ -1403,6 +1419,13 @@ def _int_enum_lookup(mapping: dict[int, str], value: Any) -> str:
         return STATE_UNKNOWN
 
 
+# scale-phnxreg2045-2046
+def _numeric_div10_or_none(value: Any) -> float | None:
+    """Return numeric value divided by 10, or None when unavailable."""
+    numeric = _numeric_or_none(value)
+    return None if numeric is None else numeric / 10
+
+
 def _numeric_or_none(value: Any) -> float | None:
     """Return a numeric sensor value, or None when the controller reports a state."""
     if isinstance(value, bool) or value is None:
@@ -1421,6 +1444,8 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, STATE_UNKNOWN),
     "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
+    "PHNXreg2045": _numeric_div10_or_none,
+    "PHNXreg2046": _numeric_div10_or_none,
     # ecoMAX360i-specific processors (informationParams yields string values)
     "flapValveStates": lambda x: _int_enum_lookup(SENSOR_FLAP_VALVE_STATES_MAPPING, x),
     "HeatDemanded": lambda x: _int_enum_lookup(SENSOR_HEAT_DEMANDED_MAPPING, x),
