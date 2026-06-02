@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
+import json
 import logging
 from typing import Any
 
 from homeassistant import config_entries
+from homeassistant.components import persistent_notification
 from homeassistant.config_entries import ConfigEntry, ConfigFlowResult, OptionsFlow
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
@@ -27,15 +30,23 @@ from .const import (
     CUSTOM_SENSOR_PRECISION_OPTIONS,
     CUSTOM_SENSOR_UNIT_OPTIONS,
     DOMAIN,
+    SERVICE_API,
     SERVICE_COORDINATOR,
     STATIC_CDP_IDS,
     STATIC_REGPARAMS_DATA_IDS,
     STATIC_REGPARAMS_KEYS,
     UNIT_INDEX_TO_NAME,
 )
+from .diagnostics import (
+    TO_REDACT,
+    _redact_data,
+    async_collect_extended_endpoint_snapshots,
+)
 from .mem_cache import MemCache
 
 _LOGGER = logging.getLogger(__name__)
+
+DIAGNOSTICS_LOG_MARKER = "ECONET300_DIAGNOSTICS_REPORT"
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -288,7 +299,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
         """Show the options menu."""
         return self.async_show_menu(
             step_id="init",
-            menu_options=["connection_settings", "custom_entities"],
+            menu_options=["connection_settings", "custom_entities", "diagnostics"],
         )
 
     # ------------------------------------------------------------------
@@ -545,6 +556,156 @@ class EconetOptionsFlowHandler(OptionsFlow):
             step_id="configure_sensor",
             data_schema=schema,
             description_placeholders={"name": entity_name},
+        )
+
+    # ------------------------------------------------------------------
+    # Diagnostics report
+    # ------------------------------------------------------------------
+    async def async_step_diagnostics(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Generate a triage-friendly diagnostics report.
+
+        Runs the same data collection used by HA's "Download Diagnostics" but
+        also raises a persistent notification with a short summary, and writes
+        the full redacted JSON to ``homeassistant.log`` (look for the marker
+        ``ECONET300_DIAGNOSTICS_REPORT``). Useful when the user is asked to
+        attach a diagnostics file to a GitHub issue but is not comfortable
+        finding the auto-generated download.
+        """
+        if user_input is None:
+            return self.async_show_form(
+                step_id="diagnostics",
+                data_schema=vol.Schema({}),
+            )
+
+        report, summary = await self._build_diagnostics_report()
+
+        # Full redacted JSON to logs (with stable marker for grep).
+        try:
+            report_json = json.dumps(report, indent=2, default=str)
+        except (TypeError, ValueError) as err:
+            report_json = f"<could not serialize report: {err}>"
+        _LOGGER.info("%s\n%s", DIAGNOSTICS_LOG_MARKER, report_json)
+
+        await self._create_diagnostics_notification(summary)
+
+        return self.async_create_entry(title="", data=dict(self.config_entry.options))
+
+    async def _build_diagnostics_report(self) -> tuple[dict[str, Any], str]:
+        """Collect a redacted diagnostics report + a human-readable summary."""
+        api = self.hass.data[DOMAIN][self.config_entry.entry_id].get(SERVICE_API)
+        if api is None:
+            return (
+                {"error": "API not initialized for this entry"},
+                "API is not initialized — try reloading the integration first.",
+            )
+
+        sys_params: Any = None
+        reg_params: Any = None
+        extended: dict[str, Any] = {}
+        errors: list[str] = []
+
+        try:
+            sys_params = await api.fetch_sys_params()
+        except Exception as err:  # noqa: BLE001 — diagnostics must not raise
+            errors.append(f"sysParams: {err!r}")
+        try:
+            reg_params = await api.fetch_reg_params()
+        except Exception as err:  # noqa: BLE001
+            errors.append(f"regParams: {err!r}")
+        try:
+            extended = await async_collect_extended_endpoint_snapshots(api)
+        except Exception as err:  # noqa: BLE001
+            errors.append(f"extended_endpoints: {err!r}")
+
+        report: dict[str, Any] = _redact_data(
+            {
+                "marker": DIAGNOSTICS_LOG_MARKER,
+                "timestamp": datetime.now(UTC).isoformat(),
+                "host": getattr(api, "host", None),
+                "uid": getattr(api, "uid", None),
+                "model_id": getattr(api, "model_id", None),
+                "sw_rev": getattr(api, "sw_rev", None),
+                "hw_ver": getattr(api, "hw_ver", None),
+                "sys_params": sys_params,
+                "reg_params": reg_params,
+                "extended_endpoints": extended,
+                "collection_errors": errors,
+            },
+            TO_REDACT,
+        )
+
+        summary = self._summarize_report(sys_params, reg_params, extended, errors)
+        return report, summary
+
+    @staticmethod
+    def _summarize_report(
+        sys_params: Any,
+        reg_params: Any,
+        extended: dict[str, Any],
+        errors: list[str],
+    ) -> str:
+        """Produce a short human-readable summary for the persistent notification."""
+        controller_id = (
+            sys_params.get("controllerID") if isinstance(sys_params, dict) else None
+        )
+        protocol_type = (
+            sys_params.get("protocolType") if isinstance(sys_params, dict) else None
+        )
+        uid_present = isinstance(sys_params, dict) and "uid" in sys_params
+        reg_count = len(reg_params) if isinstance(reg_params, dict) else 0
+
+        raw_probes = (
+            extended.get("raw_probes", {}) if isinstance(extended, dict) else {}
+        )
+        probe_summary_lines: list[str] = []
+        for key, probe in raw_probes.items():
+            if not isinstance(probe, dict):
+                continue
+            status = probe.get("status")
+            err = probe.get("error")
+            probe_summary_lines.append(
+                f"  - {key}: status={status} error={err}"
+                if err
+                else f"  - {key}: status={status}"
+            )
+
+        lines = [
+            "ecoNET300 diagnostics report generated.",
+            "",
+            f"controllerID:  {controller_id}",
+            f"protocolType:  {protocol_type}",
+            f"uid in sysParams: {uid_present}",
+            f"regParams keys: {reg_count}",
+        ]
+        if probe_summary_lines:
+            lines.append("")
+            lines.append("Raw probes (diagnostic-only endpoints):")
+            lines.extend(probe_summary_lines)
+        if errors:
+            lines.append("")
+            lines.append("Collection errors:")
+            lines.extend(f"  - {e}" for e in errors)
+        lines.extend(
+            [
+                "",
+                f"Full redacted JSON written to homeassistant.log — search for "
+                f"'{DIAGNOSTICS_LOG_MARKER}'.",
+                "Attach the matching log block (or use Settings → Devices "
+                "& Services → ecoNET300 → Download diagnostics) to your GitHub issue.",
+            ]
+        )
+        return "\n".join(lines)
+
+    async def _create_diagnostics_notification(self, summary: str) -> None:
+        """Raise a persistent notification with the diagnostics summary."""
+        notification_id = f"econet300_diagnostics_{self.config_entry.entry_id}"
+        persistent_notification.async_create(
+            self.hass,
+            summary,
+            title="ecoNET300 diagnostics",
+            notification_id=notification_id,
         )
 
     async def _advance_or_save(self) -> ConfigFlowResult:

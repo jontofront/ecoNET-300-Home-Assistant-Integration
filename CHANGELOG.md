@@ -1,5 +1,32 @@
 # Changelog
 
+## [v1.2.7] - 2026-05-24
+
+### Fixed
+
+- **ecoMAX360i temperature sensors crash on `"off"` ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227))**: `ActualFlowTemp`, `ActualReturnTemp`, `Circuit1DesiredLWT`, and other ecoMAX360i numeric sensors no longer raise `ValueError` when the heat-pump controller reports the literal string `"off"` from `informationParams` / `editParams`. A scoped `_numeric_or_none` value processor now coerces non-numeric API responses to `None`, so HA renders the entity as `unavailable` until a real numeric value arrives, instead of failing entity setup.
+- **`rmData` `NoneType` crash in `_lookup_cdp_value`**: Sensor entities no longer raise `AttributeError: 'NoneType' object has no attribute 'get'` when the `rmCurrentDataParams` endpoint returns `None` for a single coordinator update (transient device hiccup, malformed response, etc.). Root cause was fixed in `common.py` — the RM result loops now normalize both exceptions and `None` results to `{}`, so every key in `rm_data` is guaranteed to be a dict for downstream consumers.
+- **`mode` / `transmission` enum sensors crash on unknown values ([#223](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/223))**: `SENSOR_ENUM_OPTIONS` for `mode` and `transmission` now include `STATE_UNKNOWN` as a valid option. Previously, when the controller sent an unrecognized mode value (or data was stale after a transient 503/500 error), the value processor returned `"unknown"` which was not in the declared options list, causing HA to reject every coordinator update with `ValueError`.
+- **`select.py` NoneType crash on `regParamsData`**: `extra_state_attributes` and `_handle_coordinator_update` now use `or {}` pattern to handle `None` regParamsData gracefully.
+
+### Added
+
+- **New ecoMAX360i heat pump sensors**: `afterCompressorTemp`, `beforeCompressorTemp`, `exhaustGasTemp`, `outdoorTemp`, `HPStatusWorkMode`, `HPStatusPresetTemp`, `HPStatusControl`, `HeatSourceCalcPresetTemp`, `AxenUpperPump`, `AxenWorkState`
+- **SSA (weather compensation) sensors**: `ssaState`, `ssaCorr`, `ssaPrevTemp`
+- **Diagnostics: raw probes** for endpoints the integration does not consume but whose response shape helps identify protocol/controller variants — `rmDeviceList`, `rmCurrentDataObject`, legacy `/sys`, `rmParamsData` without `uid`. Captured under `extended_endpoints.raw_probes`.
+- **Diagnostics: "Generate diagnostics report" options-flow action** ([#231](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/231)): a new menu entry under Settings → Devices & Services → ecoNET300 → Configure that runs the full collection, writes a redacted JSON report to `homeassistant.log` with a unique marker (`ECONET300_DIAGNOSTICS_REPORT`), and raises a persistent notification with a triage-friendly summary.
+- **Brand icons**: `icon.png`, `icon@2x.png`, `logo.png`, `logo@2x.png`
+
+### Tests
+
+- 472 tests pass (was 449); 4 pre-existing skips unchanged.
+
+### Translations
+
+- **EN + PL** translations for new heat pump sensors, SSA sensors, and the diagnostics options-flow step.
+
+---
+
 ## [v1.2.6] - 2026-04-21
 
 ### Fixed

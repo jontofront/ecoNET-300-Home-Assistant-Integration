@@ -1,0 +1,801 @@
+{
+  "regProd": 208,
+  "regAllowed": null,
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "modulePanelSoftVer": "S005.11_1.02",
+  "ecosrvSoftVer": "3.2.3881",
+  "moduleASoftVer": "S005.28",
+  "eth0": "**REDACTED**",
+  "tilesET": [
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "HDWTSetPoint",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit1EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit2BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit2ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit2EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit2MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit3BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit3ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit3EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit3MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit4BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit4ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit4EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit4MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit5BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit5ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit5EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit5MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit6BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit6MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit6ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit6EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit7BaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit7MixerCoolBaseTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit7ComfortTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "Circuit7EcoTemp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_text"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    }
+  ],
+  "etPasswords": {
+    "1": "200ec608217b461168065ccce0c501e7b35a4490c965f0c908fa48f0d2599f2482b31ff69879ce6fbde30d1c8c722c8179762a45add9ef758bcc6e23e8f7ef8d",
+    "2": "c6001d5b2ac3df314204a8f9d7a00e1503c9aba0fd4538645de4bf4cc7e2555cfe9ff9d0236bf327ed3e907849a98df4d330c4bea551017d465b4c1d9b80bcb0",
+    "3": "65c5c6dd34bf2c6ef2991bca4da7f80bb95480b30edcc547221850ef80d167d63aa2960dd610037d1867e1203e797b3991bc1ea18b575de0152f2a3c5c3d62a1",
+    "4": "ab7fa92b25c483c9452c328d5f4ce1004d28931042ba97f778025f249e7a1b23c8e8d705d19593275864ba565c8898b9b6d50b8a9ce06ccbbe95212917d14a50"
+  },
+  "encryption": "psk2",
+  "schemaID": 1,
+  "wlan0": "**REDACTED**",
+  "remoteMenu": false,
+  "regType": 0,
+  "schema": {},
+  "regRefresh": 5,
+  "tiles": null,
+  "protocolType": "gm3_pomp",
+  "controllerID": "ecoMAX360i",
+  "moduleEcoSTERSoftVer": null,
+  "schedules": {},
+  "econetConfVer": "1.00",
+  "password": "**REDACTED**",
+  "prodLogo": 208,
+  "fuelConsumptionCalc": false,
+  "regImgID": 0,
+  "settingsVer": 83833,
+  "signal": "-54",
+  "logFl": 0,
+  "etConfDesc": {
+    "lang": "",
+    "client": "208",
+    "regname": "ecoMAX360i"
+  },
+  "history": [
+    "EPowerWorldRegisters32798",
+    "TempWthr",
+    "EPowerWorldRegisters32790",
+    "HPStatusFlowHeatStat",
+    "TempCWU",
+    "ssaPrevTemp",
+    "HPStatusCircPStat6",
+    "HPStatusCircPStat5",
+    "HPStatusCircPStat4",
+    "HPStatusCircPStat3",
+    "HPStatusCircPStat2",
+    "HPStatusCircPStat1",
+    "HPStatusCircPStat0",
+    "flapValveStates",
+    "ssaCorr",
+    "Circuit3thermostatTemp",
+    "beforeCompressorTemp",
+    "Circuit5thermostatTemp",
+    "TempBuforUp",
+    "HPStatusPresetTemp",
+    "ssaTState",
+    "TempBuforDown",
+    "Circuit4thermostatTemp",
+    "exhaustGasTemp",
+    "outdoorTemp",
+    "Circuit7thermostatTemp",
+    "afterCompressorTemp",
+    "HPStatusUhsStat",
+    "MTHScounterToRunSupp",
+    "HPStatusControl",
+    "Circuit6thermostatTemp",
+    "ssaState",
+    "Circuit1thermostat",
+    "HPStatusWorkMode",
+    "Circuit2thermostatTemp",
+    "TempClutch",
+    "TempCircuit5",
+    "TempCircuit4",
+    "TempCircuit7",
+    "TempCircuit6",
+    "TempCircuit3",
+    "TempCircuit2"
+  ],
+  "uid": "**REDACTED**",
+  "routerType": "mr3020-v3",
+  "etNewConfTrans": true,
+  "ecosrvAddr": "econet24.com",
+  "softVer": "3.2.3881",
+  "quality": 74,
+  "moduleCSoftVer": null,
+  "lan": false,
+  "moduleLambdaSoftVer": null,
+  "panelsNames": [],
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "S005.28",
+      1
+    ],
+    [
+      "lbPanelVer_100Curr",
+      "S005.11",
+      100
+    ]
+  ],
+  "key": "**REDACTED**",
+  "servicePassword": "**REDACTED**",
+  "ssid": "**REDACTED**",
+  "wifi": true,
+  "panelVer": "S005.11_1.02",
+  "alarms": [
+    {
+      "toDate": "2023-11-19 23:35:29",
+      "code": 98,
+      "fromDate": "2023-11-19 23:34:53",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-19 23:35:25",
+      "code": 103,
+      "fromDate": "2023-11-19 23:34:49",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-19 22:50:09",
+      "code": 98,
+      "fromDate": "2023-11-19 22:49:29",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-19 22:50:05",
+      "code": 103,
+      "fromDate": "2023-11-19 22:49:25",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-19 21:16:13",
+      "code": 98,
+      "fromDate": "2023-11-19 21:15:21",
+      "service": false
+    },
+    {
+      "toDate": "2023-11-19 21:16:09",
+      "code": 103,
+      "fromDate": "2023-11-19 21:15:17",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-26 13:59:43",
+      "code": 98,
+      "fromDate": "2023-05-25 17:46:39",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-26 13:59:43",
+      "code": 124,
+      "fromDate": "2023-05-25 17:46:35",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-25 17:44:47",
+      "code": 98,
+      "fromDate": "2023-05-21 16:32:31",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-25 17:44:47",
+      "code": 124,
+      "fromDate": "2023-05-21 16:32:27",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-21 16:30:43",
+      "code": 98,
+      "fromDate": "2023-05-21 16:28:08",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-21 16:30:43",
+      "code": 124,
+      "fromDate": "2023-05-21 16:28:04",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-21 16:26:20",
+      "code": 98,
+      "fromDate": "2023-05-20 11:15:39",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-21 16:26:20",
+      "code": 124,
+      "fromDate": "2023-05-20 11:15:35",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-09 21:37:56",
+      "code": 6,
+      "fromDate": "2023-05-09 21:36:04",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 22:30:49",
+      "code": 98,
+      "fromDate": "2023-05-08 22:27:45",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 22:30:45",
+      "code": 108,
+      "fromDate": "2023-05-08 22:27:41",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 08:55:37",
+      "code": 98,
+      "fromDate": "2023-05-08 08:53:53",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 08:55:33",
+      "code": 108,
+      "fromDate": "2023-05-08 08:53:49",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 08:16:41",
+      "code": 98,
+      "fromDate": "2023-05-08 08:12:33",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 08:16:37",
+      "code": 108,
+      "fromDate": "2023-05-08 08:12:29",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 06:58:33",
+      "code": 98,
+      "fromDate": "2023-05-08 06:57:01",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 06:58:29",
+      "code": 108,
+      "fromDate": "2023-05-08 06:56:57",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 06:19:37",
+      "code": 98,
+      "fromDate": "2023-05-08 06:15:13",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 06:19:33",
+      "code": 108,
+      "fromDate": "2023-05-08 06:15:09",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 05:40:41",
+      "code": 98,
+      "fromDate": "2023-05-08 05:38:57",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 05:40:37",
+      "code": 108,
+      "fromDate": "2023-05-08 05:38:53",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 05:01:45",
+      "code": 98,
+      "fromDate": "2023-05-08 04:59:09",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 05:01:41",
+      "code": 108,
+      "fromDate": "2023-05-08 04:59:05",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 04:22:37",
+      "code": 98,
+      "fromDate": "2023-05-08 04:20:49",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 04:22:33",
+      "code": 108,
+      "fromDate": "2023-05-08 04:20:45",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 04:20:33",
+      "code": 98,
+      "fromDate": "2023-05-08 04:20:21",
+      "service": false
+    },
+    {
+      "toDate": "2023-05-08 04:20:29",
+      "code": 108,
+      "fromDate": "2023-05-08 04:20:17",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 16:09:06",
+      "code": 98,
+      "fromDate": "2023-04-20 16:07:46",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 16:09:02",
+      "code": 126,
+      "fromDate": "2023-04-20 16:07:42",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 16:04:14",
+      "code": 98,
+      "fromDate": "2023-04-20 16:02:50",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 16:04:10",
+      "code": 126,
+      "fromDate": "2023-04-20 16:02:46",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:42:58",
+      "code": 98,
+      "fromDate": "2023-04-20 15:37:39",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:42:58",
+      "code": 126,
+      "fromDate": "2023-04-20 15:37:35",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:36:59",
+      "code": 20,
+      "fromDate": "2023-04-20 15:36:11",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:29:35",
+      "code": 98,
+      "fromDate": "2023-04-20 15:28:11",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:29:31",
+      "code": 126,
+      "fromDate": "2023-04-20 15:28:07",
+      "service": false
+    },
+    {
+      "toDate": "2023-04-20 15:23:15",
+      "code": 6,
+      "fromDate": "2022-07-01 12:39:29",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:36:11",
+      "code": 98,
+      "fromDate": "2022-07-01 12:34:43",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:36:07",
+      "code": 126,
+      "fromDate": "2022-07-01 12:34:39",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:17:50",
+      "code": 6,
+      "fromDate": "2022-07-01 12:15:14",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:21:22",
+      "code": 20,
+      "fromDate": "2022-07-01 12:15:14",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:15:14",
+      "code": 20,
+      "fromDate": "2022-07-01 12:10:45",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:15:14",
+      "code": 6,
+      "fromDate": "2022-07-01 12:10:25",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:15:14",
+      "code": 10,
+      "fromDate": "2022-07-01 12:10:25",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:10:21",
+      "code": 6,
+      "fromDate": "2022-07-01 12:01:25",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:10:21",
+      "code": 10,
+      "fromDate": "2022-07-01 12:01:25",
+      "service": false
+    },
+    {
+      "toDate": "2022-07-01 12:10:17",
+      "code": 20,
+      "fromDate": "2022-07-01 12:01:25",
+      "service": false
+    }
+  ],
+  "login": "admin",
+  "moduleBSoftVer": null,
+  "etConfVer": "S005.11_1.02"
+}

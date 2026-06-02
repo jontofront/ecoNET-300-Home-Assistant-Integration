@@ -1208,6 +1208,52 @@
       },
       "schedule_water_heater_2": {
         "default": "mdi:calendar-clock"
+      },
+      "after_compressor_temp": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "before_compressor_temp": {
+        "default": "mdi:thermometer-chevron-down"
+      },
+      "exhaust_gas_temp": {
+        "default": "mdi:thermometer-alert"
+      },
+      "outdoor_temp": {
+        "default": "mdi:thermometer",
+        "range": {
+          "0": "mdi:thermometer-low",
+          "1": "mdi:thermometer",
+          "25": "mdi:thermometer",
+          "26": "mdi:thermometer-high",
+          "50": "mdi:thermometer-high"
+        }
+      },
+      "hp_status_work_mode": {
+        "default": "mdi:heat-pump"
+      },
+      "hp_status_preset_temp": {
+        "default": "mdi:thermometer-check"
+      },
+      "hp_status_control": {
+        "default": "mdi:heat-pump-outline"
+      },
+      "ssa_state": {
+        "default": "mdi:weather-partly-cloudy"
+      },
+      "ssa_corr": {
+        "default": "mdi:thermometer-plus"
+      },
+      "ssa_prev_temp": {
+        "default": "mdi:thermometer"
+      },
+      "axen_upper_pump": {
+        "default": "mdi:pump"
+      },
+      "axen_work_state": {
+        "default": "mdi:heat-pump"
+      },
+      "heat_source_calc_preset_temp": {
+        "default": "mdi:thermometer-check"
       }
     },
     "diagnostic": {

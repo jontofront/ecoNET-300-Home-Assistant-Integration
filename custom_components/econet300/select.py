@@ -118,7 +118,7 @@ class EconetSelect(EconetEntity, SelectEntity):
         # Get current state from regParamsData if available
         current_state_value = None
         if self.coordinator.data is not None:
-            reg_params_data = self.coordinator.data.get("regParamsData", {})
+            reg_params_data = self.coordinator.data.get("regParamsData") or {}
             current_state_value = reg_params_data.get(
                 SELECT_KEY_GET_INDEX[self.select_key]
             )
@@ -201,7 +201,7 @@ class EconetSelect(EconetEntity, SelectEntity):
         # For heater mode, get current state from regParamsData parameter 2049
         if self.entity_description.key == "heater_mode":
             _LOGGER.debug("🔥 Processing heater_mode in _handle_coordinator_update")
-            reg_params_data = self.coordinator.data.get("regParamsData", {})
+            reg_params_data = self.coordinator.data.get("regParamsData") or {}
 
             heater_mode_value = reg_params_data.get(
                 SELECT_KEY_GET_INDEX.get(self.select_key, "unknown")

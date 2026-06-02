@@ -104,9 +104,9 @@ class TestCoordinatorLegacyOnly:
         self, hass, load_fixture
     ):
         """When controllerID is ecoMAX360i, editParams and informationParams are populated."""
-        sys_params = load_fixture("ecoMAX360-cf8", "sysParams.json") or {}
-        reg_params = load_fixture("ecoMAX360-cf8", "regParams.json") or {}
-        edit_params_fixture = load_fixture("ecoMAX360-cf8", "editParams.json") or {}
+        sys_params = load_fixture("ecoMAX360i", "sysParams.json") or {}
+        reg_params = load_fixture("ecoMAX360i", "regParams.json") or {}
+        edit_params_fixture = load_fixture("ecoMAX360i", "editParams.json") or {}
 
         mock_api = MagicMock(spec=Econet300Api)
         mock_api.fetch_sys_params = AsyncMock(return_value=sys_params)

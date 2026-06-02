@@ -91,7 +91,59 @@ async def async_collect_extended_endpoint_snapshots(
         except Exception as e:  # noqa: BLE001 — isolate failures per endpoint for diagnostics
             err = e
         out[key] = _snapshot_extended_fetch_result(result, err)
+
+    # Raw probes — capture status + body (including error payloads) for endpoints
+    # the integration does NOT consume but that help identify protocol/controller
+    # variants (e.g. heat-pump gm3_pomp vs pellet boiler). See issue #231.
+    out["raw_probes"] = await async_collect_raw_endpoint_probes(api)
+
     return out
+
+
+# Endpoints the integration does not use, but whose response shape (or error
+# payload) is useful for triage. Keep this list short and readable.
+RAW_PROBE_ENDPOINTS: tuple[tuple[str, str, bool], ...] = (
+    # (probe_key, endpoint_path, with_uid)
+    ("rm_device_list", "rmDeviceList", False),
+    ("rm_current_data_object", "rmCurrentDataObject", False),
+    ("legacy_sys", "sys", False),
+    ("rm_params_data_no_uid", "rmParamsData", False),
+)
+
+
+async def _probe_one_raw_endpoint(
+    api: Econet300Api,
+    endpoint: str,
+    *,
+    timeout_sec: float,
+    with_uid: bool,
+) -> dict[str, Any]:
+    """Run a single raw probe and never raise — return the error in the result dict."""
+    try:
+        return await api.fetch_raw_endpoint(
+            endpoint, timeout_sec=timeout_sec, with_uid=with_uid
+        )
+    except Exception as e:  # noqa: BLE001 — diagnostics must isolate failures
+        return {"status": None, "body": None, "error": repr(e)}
+
+
+async def async_collect_raw_endpoint_probes(
+    api: Econet300Api,
+    *,
+    timeout_sec: float = 5.0,
+) -> dict[str, Any]:
+    """Probe diagnostic-only endpoints, preserving status + body for each result.
+
+    Unlike :func:`async_collect_extended_endpoint_snapshots`, this never collapses
+    a non-200 response to ``None`` — the device's error string is exactly what we
+    need to identify protocol/controller variants in user reports.
+    """
+    return {
+        key: await _probe_one_raw_endpoint(
+            api, endpoint, timeout_sec=timeout_sec, with_uid=with_uid
+        )
+        for key, endpoint, with_uid in RAW_PROBE_ENDPOINTS
+    }
 
 
 async def async_get_config_entry_diagnostics(

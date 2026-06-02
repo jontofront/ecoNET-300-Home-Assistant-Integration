@@ -110,7 +110,8 @@
       "init": {
         "menu_options": {
           "connection_settings": "Ustawienia połączenia",
-          "custom_entities": "Własne encje"
+          "custom_entities": "Własne encje",
+          "diagnostics": "Wygeneruj raport diagnostyczny"
         }
       },
       "connection_settings": {
@@ -121,6 +122,10 @@
           "username": "Nazwa użytkownika",
           "password": "Hasło"
         }
+      },
+      "diagnostics": {
+        "title": "Wygeneruj raport diagnostyczny",
+        "description": "Sprawdza urządzenie, zapisuje zredagowany raport JSON do homeassistant.log (znacznik: ECONET300_DIAGNOSTICS_REPORT) oraz tworzy trwałe powiadomienie z krótkim podsumowaniem. Użyj tego, aby dołączyć kompletny raport do zgłoszenia na GitHub."
       },
       "custom_entities": {
         "title": "Własne encje",
@@ -836,6 +841,45 @@
       },
       "axen_compressor_freq": {
         "name": "Pompa ciepła częstotliwość sprężarki"
+      },
+      "axen_upper_pump": {
+        "name": "Pompa górna pompy ciepła"
+      },
+      "axen_work_state": {
+        "name": "Stan pracy pompy ciepła"
+      },
+      "heat_source_calc_preset_temp": {
+        "name": "Oblicz. temp. zadana źródła ciepła"
+      },
+      "after_compressor_temp": {
+        "name": "Temp. za sprężarką"
+      },
+      "before_compressor_temp": {
+        "name": "Temp. przed sprężarką"
+      },
+      "exhaust_gas_temp": {
+        "name": "Temp. spalin"
+      },
+      "outdoor_temp": {
+        "name": "Temperatura zewnętrzna"
+      },
+      "hp_status_work_mode": {
+        "name": "Tryb pracy pompy ciepła"
+      },
+      "hp_status_preset_temp": {
+        "name": "Temperatura zadana PC"
+      },
+      "hp_status_control": {
+        "name": "Stan sterowania PC"
+      },
+      "ssa_state": {
+        "name": "Stan kompensacji pogodowej"
+      },
+      "ssa_corr": {
+        "name": "Korekta kompensacji pogodowej"
+      },
+      "ssa_prev_temp": {
+        "name": "Temperatura z krzywej pogodowej"
       },
       "circuit1_comfort_temp": {
         "name": "Obwód 1 temp. dzienna"

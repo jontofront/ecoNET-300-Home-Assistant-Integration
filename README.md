@@ -244,8 +244,25 @@ The integration includes comprehensive diagnostics support to help troubleshoot 
 
 - ✅ Automatic sensitive data redaction
 - ✅ Core and extended API endpoint data (`extended_endpoints` in v1.2.5+)
+- ✅ Raw probes for non-consumed endpoints — `rmDeviceList`, `rmCurrentDataObject`, legacy `/sys`, `rmParamsData` without `uid` — captured under `extended_endpoints.raw_probes` to identify protocol/controller variants (e.g. heat-pump `gm3_pomp` vs pellet boiler)
 - ✅ Entity states and attributes
 - ✅ System configuration details
+
+### Generating a triage report (heat pumps, controller variants, setup-failures)
+
+When the standard "Download diagnostics" button is not enough — or when you want a one-click way to attach a complete report to a GitHub issue — use the new **Generate diagnostics report** action:
+
+1. Go to **Settings > Devices & Services > ecoNET300 > Configure**
+2. Pick **Generate diagnostics report**
+3. Submit the (empty) confirmation form
+
+This will:
+
+- Run the same data collection used by Download Diagnostics, including `raw_probes`
+- Write the full **redacted** JSON to `homeassistant.log` with the marker `ECONET300_DIAGNOSTICS_REPORT`
+- Raise a persistent notification ("ecoNET300 diagnostics") with a short summary: `controllerID`, `protocolType`, `uid` presence, `regParams` count, and the status of every raw probe
+
+Attach either the matching log block (search for `ECONET300_DIAGNOSTICS_REPORT`) or the file from Download Diagnostics to your issue.
 
 **Developers:** `scripts/create_fixture_from_diagnostics.py` can build test fixtures from a diagnostic ZIP/JSON, including RM and `editParams` files when `extended_endpoints` is populated.
 
@@ -286,6 +303,12 @@ ecoNET-300-Home-Assistant-Integration/
 ## 📋 Versions
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
+
+### What's New in v1.2.7
+
+- **ecoMAX360i heat pump fixes** ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227)): Temperature sensors no longer crash on `"off"` values; new heat pump sensors (`afterCompressorTemp`, `outdoorTemp`, `HPStatusWorkMode`, etc.) and SSA weather compensation sensors
+- **Mode sensor crash fix** ([#223](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/223)): `mode` and `transmission` enum sensors no longer crash when the controller returns unknown values
+- **Diagnostics report action** ([#231](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/231)): One-click diagnostics report via Configure menu with raw endpoint probes for heat pump / controller variant triage
 
 ### What's New in v1.2.6
 

@@ -280,7 +280,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             # Process core results using mapping
             for index, key in enumerate(RM_CORE_DATASET_KEYS):
                 result = core_results[index]
-                rm_data[key] = {} if isinstance(result, Exception) else result
+                rm_data[key] = (
+                    {} if isinstance(result, Exception) or result is None else result
+                )
                 if isinstance(result, Exception):
                     _LOGGER.warning("Failed to fetch %s: %s", key, result)
 
@@ -298,7 +300,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 # Process additional results using mapping
                 for index, key in enumerate(RM_ADDITIONAL_DATASET_KEYS):
                     result = additional_results[index]
-                    rm_data[key] = {} if isinstance(result, Exception) else result
+                    rm_data[key] = (
+                        {}
+                        if isinstance(result, Exception) or result is None
+                        else result
+                    )
                     if isinstance(result, Exception):
                         _LOGGER.warning("Failed to fetch %s: %s", key, result)
 

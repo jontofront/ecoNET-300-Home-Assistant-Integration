@@ -208,6 +208,48 @@ class EconetClient:
         except (aiohttp.ClientError, asyncio.TimeoutError, ValueError):
             return None
 
+    async def probe_raw(self, url: str, timeout_sec: float = 5.0) -> dict[str, Any]:
+        """Diagnostics-only probe that preserves status + body for every outcome.
+
+        Unlike :meth:`get` and :meth:`get_with_short_timeout`, this never collapses
+        a non-200 response or a parse error into ``None`` — it returns a dict that
+        captures the HTTP status and the raw body (parsed if JSON, else text). This
+        is the only way to surface the device-side error strings (e.g. ``'Controller'
+        object has no attribute 'onrmDeviceList'``) which let us identify protocol /
+        controller variants in user-submitted diagnostics.
+
+        Returns:
+            ``{"status": int | None, "body": Any, "error": str | None}`` where:
+              - ``status`` is the HTTP status code (or ``None`` on transport failure),
+              - ``body`` is the parsed JSON payload, or the raw text if not JSON, or
+                ``None`` if the body was empty / unreadable,
+              - ``error`` is a short repr of any exception raised, else ``None``.
+
+        """
+        try:
+            async with (
+                self._semaphore,
+                await self._session.get(
+                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                ) as resp,
+            ):
+                status = resp.status
+                body: Any = None
+                try:
+                    body = await resp.json(content_type=None)
+                except (
+                    aiohttp.ContentTypeError,
+                    aiohttp.ClientError,
+                    ValueError,
+                ):
+                    try:
+                        body = await resp.text()
+                    except (aiohttp.ClientError, UnicodeDecodeError):
+                        body = None
+                return {"status": status, "body": body, "error": None}
+        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+            return {"status": None, "body": None, "error": repr(e)}
+
     async def get_with_fix_quotes(self, url):
         r"""Fetch data with preprocessing to fix malformed JSON quote escaping.
 
@@ -866,6 +908,36 @@ class Econet300Api:
         if not isinstance(data, dict) or API_RM_DATA_KEY not in data:
             return False
         return True
+
+    async def fetch_raw_endpoint(
+        self,
+        endpoint: str,
+        *,
+        timeout_sec: float = 5.0,
+        with_uid: bool = False,
+    ) -> dict[str, Any]:
+        """Diagnostics-only: probe an arbitrary ``/econet/<endpoint>`` with status + body.
+
+        Wraps :meth:`EconetClient.probe_raw` and constructs the full URL with optional
+        ``?uid=`` parameter. Used by diagnostics to capture the raw device response
+        (including error payloads from unsupported endpoints) so users can attach a
+        single file to GitHub issues for triage.
+
+        Args:
+            endpoint: Path under ``/econet/`` — e.g. ``"rmDeviceList"``, ``"sys"``.
+            timeout_sec: Per-probe timeout. Short by design so a hung endpoint does
+                not slow the full diagnostics dump.
+            with_uid: When True, appends ``?uid=<self.uid>``.
+
+        Returns:
+            Dict shaped ``{"status": int | None, "body": Any, "error": str | None}``.
+
+        """
+        url = f"{self.host}/econet/{endpoint}"
+        if with_uid:
+            sep = "&" if "?" in endpoint else "?"
+            url = f"{url}{sep}uid={self.uid}"
+        return await self._client.probe_raw(url, timeout_sec=timeout_sec)
 
     async def fetch_rm_params_descs(self, lang: str = "en") -> dict[str, Any] | None:
         """Fetch parameter descriptions from rmParamsDescs endpoint.

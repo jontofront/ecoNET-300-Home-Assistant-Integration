@@ -13,6 +13,7 @@ ALL_FIXTURES = [
     "ecoMAX810P-L",
     "ecoMAX360",
     "ecoMAX360-cf8",
+    "ecoMAX360i",
     "ecoSOL",
     "ecoSOL301",
     "SControl MK1",
@@ -113,25 +114,32 @@ def test_merged_data_structure():
 
 
 def test_edit_params_structure():
-    """Test editParams.json structure for ecoMAX360-cf8 fixture."""
+    """Test editParams.json structure for fixtures that have it."""
     print("\n=== Testing editParams.json ===")
-    edit_params = load_fixture("ecoMAX360-cf8", "editParams.json")
-    assert edit_params is not None, "editParams.json missing for ecoMAX360-cf8"
-    assert isinstance(edit_params, dict)
+    fixtures_with_edit_params = ["ecoMAX360-cf8", "ecoMAX360i"]
+    for fixture_name in fixtures_with_edit_params:
+        edit_params = load_fixture(fixture_name, "editParams.json")
+        assert edit_params is not None, (
+            f"editParams.json missing for {fixture_name}"
+        )
+        assert isinstance(edit_params, dict)
 
-    assert "data" in edit_params, "editParams should have 'data' section"
-    assert "informationParams" in edit_params, (
-        "editParams should have 'informationParams' section"
-    )
+        assert "data" in edit_params, (
+            f"editParams should have 'data' section for {fixture_name}"
+        )
+        assert "informationParams" in edit_params, (
+            f"editParams should have 'informationParams' section for {fixture_name}"
+        )
 
-    data_section = edit_params["data"]
-    info_section = edit_params["informationParams"]
-    assert isinstance(data_section, dict)
-    assert isinstance(info_section, dict)
+        data_section = edit_params["data"]
+        info_section = edit_params["informationParams"]
+        assert isinstance(data_section, dict)
+        assert isinstance(info_section, dict)
 
-    print(
-        f"  ecoMAX360-cf8: data={len(data_section)} informationParams={len(info_section)}"
-    )
+        print(
+            f"  {fixture_name}: data={len(data_section)}"
+            f" informationParams={len(info_section)}"
+        )
     print("editParams.json valid!")
 
 
@@ -141,6 +149,7 @@ def test_device_type_detection():
     device_types = {
         "ecoMAX810P-L": "ecoMAX",
         "ecoMAX360": "ecoMAX",
+        "ecoMAX360i": "ecoMAX",
         "ecoMAX850R2-X": "ecoMAX",
         "ecoMAX860D3-HB": "ecoMAX",
         "ecoMAX860P2-N": "ecoMAX",

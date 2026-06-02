@@ -1099,10 +1099,8 @@ class CustomSensor(EconetEntity, SensorEntity):
 
         # 2. Try name-based heuristic: convert CDP name to camelCase regParams key
         cdp_meta = (
-            self.coordinator.data.get("rmData", {})
-            .get("currentDataParams", {})
-            .get(self._param_key)
-        )
+            (self.coordinator.data.get("rmData") or {}).get("currentDataParams") or {}
+        ).get(self._param_key)
         cdp_name = cdp_meta.get("name", "") if isinstance(cdp_meta, dict) else ""
         if cdp_name:
             guessed_key = self._cdp_name_to_camel(cdp_name)

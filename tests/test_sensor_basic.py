@@ -16,8 +16,11 @@ from custom_components.econet300.const import (
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
     EDIT_PARAMS_DATA_SENSOR_MAP,
+    ENTITY_VALUE_PROCESSOR,
     INFORMATION_PARAMS_SENSOR_MAP,
+    SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
+    STATE_UNKNOWN,
 )
 from custom_components.econet300.entity import EconetEntity
 from custom_components.econet300.sensor import (
@@ -41,6 +44,34 @@ class TestEconetSensorBasic:
         assert description.key == "tempCO"
         assert description.translation_key == "temp_co"
         assert description.process_val is not None
+
+    # ruff: noqa: PLR6301
+    @pytest.mark.parametrize(
+        "key",
+        ["ActualFlowTemp", "ActualReturnTemp", "Circuit1DesiredLWT"],
+    )
+    def test_ecomax360i_temperature_sensors_ignore_off_state(
+        self, key: str
+    ) -> None:
+        """ecoMAX360i temperature sensors should not publish off as numeric state."""
+        description = create_sensor_entity_description(key)
+
+        assert description.process_val("off") is None
+        assert description.process_val("") is None
+        assert description.process_val("34.5") == 34.5
+
+    @pytest.mark.parametrize("key", ["mode", "transmission"])
+    def test_enum_sensor_unknown_fallback_is_in_options(self, key: str) -> None:
+        """Enum sensors must include STATE_UNKNOWN in options when processor can return it."""
+        options = SENSOR_ENUM_OPTIONS.get(key)
+        assert options is not None, f"Missing SENSOR_ENUM_OPTIONS for {key}"
+        assert STATE_UNKNOWN in options, (
+            f"STATE_UNKNOWN not in options for {key} — HA rejects the state"
+        )
+
+        processor = ENTITY_VALUE_PROCESSOR.get(key)
+        assert processor is not None
+        assert processor(9999) == STATE_UNKNOWN
 
     # ruff: noqa: PLR6301
     def test_can_add_mixer_with_valid_data(self):
