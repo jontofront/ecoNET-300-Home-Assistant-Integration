@@ -1391,7 +1391,7 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         except (TypeError, ValueError):
             self._attr_native_max_value = 1000000.0
         self._attr_native_step = info.get("step") or 1.0
-        self._attr_mode = "box"
+        self._attr_mode = NumberMode.BOX
 
     @property
     def unique_id(self) -> str | None:
