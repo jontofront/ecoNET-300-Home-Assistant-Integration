@@ -21,11 +21,11 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
-    is_ecomax360i_controller,
     ecoster_exists,
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
+    is_ecomax360i_controller,
     is_ecoster_related,
     mixer_exists,
 )
@@ -782,6 +782,7 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
     _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str) -> None:
+        """Initialize the editable select entity for the given parameter id."""
         super().__init__(coordinator)
         self._api = api
         self._pid = str(pid)
@@ -797,10 +798,12 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
 
     @property
     def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
         return f"{self._api.uid}-edit_{self._pid}"
 
     @property
     def current_option(self) -> str | None:
+        """Return the current parameter value as a string option."""
         info = (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
         val = info.get("value")
         if val is None:
@@ -813,11 +816,13 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
 
     @property
     def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
         data = self.coordinator.data or {}
         health = data.get("_health") or {}
         return (not bool(health.get("stale"))) and self._pid in data.get("editParamCatalog", {})
 
     async def async_select_option(self, option: str) -> None:
+        """Write the selected option back to the controller."""
         try:
             value = int(option)
         except ValueError as e:
@@ -832,6 +837,7 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
         return self._attr_device_info
 
 
