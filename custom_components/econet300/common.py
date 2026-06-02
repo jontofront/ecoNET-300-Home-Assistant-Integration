@@ -141,10 +141,8 @@ def build_edit_param_catalog(edit_params: dict[str, Any]) -> dict[str, dict[str,
             if native_min is not None and native_max is not None:
                 try:
                     fval = float(value)
-                    if fval < native_min:
-                        native_min = fval
-                    if fval > native_max:
-                        native_max = fval
+                    native_min = min(native_min, fval)
+                    native_max = max(native_max, fval)
                 except (TypeError, ValueError):
                     pass
 
@@ -281,7 +279,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 ):
                     sys_params = await self._api.fetch_sys_params()
                     if not isinstance(sys_params, dict) or not sys_params:
-                        raise ApiError("sysParams endpoint returned no usable data")
+                        raise ApiError("sysParams endpoint returned no usable data")  # noqa: TRY301 — reuse the ApiError keep-last-data path
                     self._sys_params_last_fetch = now
 
                 if sys_params is None or skip_params_edits(sys_params):
@@ -293,7 +291,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
 
                 reg_params = await self._api.fetch_reg_params()
                 if not isinstance(reg_params, dict) or not reg_params:
-                    raise ApiError("regParams endpoint returned no usable data")
+                    raise ApiError("regParams endpoint returned no usable data")  # noqa: TRY301 — reuse the ApiError keep-last-data path
 
                 reg_params_data = await self._api.fetch_reg_params_data()
                 if not isinstance(reg_params_data, dict):
@@ -312,7 +310,8 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                         self._edit_params_force_refresh
                         or not edit_params_full
                         or self._poll_edit_params <= 0
-                        or (now - self._edit_params_last_fetch) >= self._poll_edit_params
+                        or (now - self._edit_params_last_fetch)
+                        >= self._poll_edit_params
                     )
                     if should_fetch_edit:
                         try:
@@ -344,9 +343,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 if self._rm_supported is None:
                     self._rm_supported = await self._api.probe_rm_support()
                     if not self._rm_supported:
-                        _LOGGER.info(
-                            "RM endpoint not available, skipping merged data"
-                        )
+                        _LOGGER.info("RM endpoint not available, skipping merged data")
 
                 if self._rm_supported:
                     rm_data = await self._fetch_rm_endpoint_data()
@@ -503,7 +500,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 for index, key in enumerate(RM_ADDITIONAL_DATASET_KEYS):
                     result = additional_results[index]
                     rm_data[key] = (
-                        {} if isinstance(result, Exception) or result is None else result
+                        {}
+                        if isinstance(result, Exception) or result is None
+                        else result
                     )
                     if isinstance(result, Exception):
                         _LOGGER.warning("Failed to fetch %s: %s", key, result)

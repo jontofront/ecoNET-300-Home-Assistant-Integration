@@ -26,15 +26,15 @@ from .const import (
     CONF_POLL_EDIT_PARAMS,
     CONF_POLL_REG_PARAMS,
     CONF_POLL_SYS_PARAMS,
-    DEFAULT_POLL_EDIT_PARAMS,
-    DEFAULT_POLL_REG_PARAMS,
-    DEFAULT_POLL_SYS_PARAMS,
     CUSTOM_ENTITY_COMPONENTS,
     CUSTOM_ENTITY_TYPE_BINARY_SENSOR,
     CUSTOM_ENTITY_TYPE_SENSOR,
     CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS,
     CUSTOM_SENSOR_PRECISION_OPTIONS,
     CUSTOM_SENSOR_UNIT_OPTIONS,
+    DEFAULT_POLL_EDIT_PARAMS,
+    DEFAULT_POLL_REG_PARAMS,
+    DEFAULT_POLL_SYS_PARAMS,
     DOMAIN,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -305,9 +305,13 @@ class EconetOptionsFlowHandler(OptionsFlow):
         """Show the options menu."""
         return self.async_show_menu(
             step_id="init",
-            menu_options=["connection_settings", "polling_settings", "custom_entities", "diagnostics"],
+            menu_options=[
+                "connection_settings",
+                "polling_settings",
+                "custom_entities",
+                "diagnostics",
+            ],
         )
-
 
     # ------------------------------------------------------------------
     # Polling settings
@@ -336,7 +340,9 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
                 vol.Required(
                     CONF_POLL_EDIT_PARAMS,
-                    default=options.get(CONF_POLL_EDIT_PARAMS, DEFAULT_POLL_EDIT_PARAMS),
+                    default=options.get(
+                        CONF_POLL_EDIT_PARAMS, DEFAULT_POLL_EDIT_PARAMS
+                    ),
                 ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
             }
         )

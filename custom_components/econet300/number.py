@@ -1286,7 +1286,9 @@ async def async_setup_entry(
     if sys_params is None:
         sys_params = {}
     if skip_params_edits(sys_params):
-        _LOGGER.info("Skipping upstream merged number setup for this controllerID; using Local editParams entities")
+        _LOGGER.info(
+            "Skipping upstream merged number setup for this controllerID; using Local editParams entities"
+        )
         entities.extend(_create_edit_param_numbers(coordinator, api))
         return async_add_entities(entities)
 
@@ -1354,7 +1356,9 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str) -> None:
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
         """Initialize the editable number entity for the given parameter id."""
         super().__init__(coordinator)
         self._api = api
@@ -1362,7 +1366,9 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
         info = (coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
         pname = info.get("name", f"Param {self._pid}")
-        self._use_number_suffix = bool(info.get("expose_number") and info.get("kind") != "number")
+        self._use_number_suffix = bool(
+            info.get("expose_number") and info.get("kind") != "number"
+        )
         self._attr_name = f"{pname} ({self._pid})"
         if self._use_number_suffix:
             self._attr_name = f"{self._attr_name} value"
@@ -1373,11 +1379,15 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         min_value = info.get("min")
         max_value = info.get("max")
         try:
-            self._attr_native_min_value = float(min_value) if min_value is not None else -1000000.0
+            self._attr_native_min_value = (
+                float(min_value) if min_value is not None else -1000000.0
+            )
         except (TypeError, ValueError):
             self._attr_native_min_value = -1000000.0
         try:
-            self._attr_native_max_value = float(max_value) if max_value is not None else 1000000.0
+            self._attr_native_max_value = (
+                float(max_value) if max_value is not None else 1000000.0
+            )
         except (TypeError, ValueError):
             self._attr_native_max_value = 1000000.0
         self._attr_native_step = info.get("step") or 1.0
@@ -1393,7 +1403,9 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the current numeric value of the parameter."""
-        info = (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
         val = info.get("value")
         try:
             return None if val is None else float(val)
@@ -1405,7 +1417,9 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         """Return True when data is fresh and the parameter is in the catalog."""
         data = self.coordinator.data or {}
         health = data.get("_health") or {}
-        return (not bool(health.get("stale"))) and self._pid in data.get("editParamCatalog", {})
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
 
     async def async_set_native_value(self, value: float) -> None:
         """Write the new numeric value back to the controller."""
@@ -1436,8 +1450,12 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         return self._attr_device_info
 
 
-def _create_edit_param_numbers(coordinator: EconetDataCoordinator, api: Econet300Api) -> list[NumberEntity]:
-    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get("editParamCatalog", {}) or {}
+def _create_edit_param_numbers(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[NumberEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
     entities: list[NumberEntity] = []
     for pid, info in catalog.items():
         if info.get("kind") != "number" and not info.get("expose_number"):

@@ -19,10 +19,10 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
-    is_ecomax360i_controller,
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
+    is_ecomax360i_controller,
     mixer_exists,
 )
 from .const import (
@@ -554,7 +554,10 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
 
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str) -> None:
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
+        """Initialize the editable switch entity for the given parameter id."""
         super().__init__(coordinator)
         self._api = api
         self._pid = str(pid)
@@ -567,11 +570,15 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
 
     @property
     def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
         return f"{self._api.uid}-edit_{self._pid}"
 
     @property
     def is_on(self) -> bool | None:
-        info = (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        """Return True/False from the parameter value, or None if unavailable."""
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
         val = info.get("value")
         try:
             return None if val is None else bool(int(val))
@@ -580,11 +587,15 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
 
     @property
     def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
         data = self.coordinator.data or {}
         health = data.get("_health") or {}
-        return (not bool(health.get("stale"))) and self._pid in data.get("editParamCatalog", {})
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
 
     async def async_turn_on(self, **kwargs: Any) -> None:
+        """Set the parameter to 1 on the controller."""
         ok = await self._api.set_param(self._pid, 1)
         if not ok:
             raise HomeAssistantError(f"Failed to set param {self._pid} to 1")
@@ -592,6 +603,7 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
+        """Set the parameter to 0 on the controller."""
         ok = await self._api.set_param(self._pid, 0)
         if not ok:
             raise HomeAssistantError(f"Failed to set param {self._pid} to 0")
@@ -600,11 +612,16 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
         return self._attr_device_info
 
 
-def _create_edit_param_switches(coordinator: EconetDataCoordinator, api: Econet300Api) -> list[SwitchEntity]:
-    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get("editParamCatalog", {}) or {}
+def _create_edit_param_switches(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SwitchEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
     entities: list[SwitchEntity] = []
     for pid, info in catalog.items():
         if info.get("kind") != "switch":

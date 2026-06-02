@@ -54,7 +54,6 @@ class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     component: str | None = None  # Component for device grouping (huw, mixer_1, etc.)
 
 
-
 class EconetOnlineBinarySensor(BinarySensorEntity):
     """Diagnostic connectivity binary sensor for ecoNET300 live polling."""
 
@@ -64,25 +63,30 @@ class EconetOnlineBinarySensor(BinarySensorEntity):
     _attr_name = "ecoNET300 live polling"
 
     def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api) -> None:
+        """Initialize the live-polling connectivity diagnostic sensor."""
         self.coordinator = coordinator
         self.api = api
         self._attr_unique_id = f"{api.uid}-health-online"
 
     @property
     def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
         return EconetEntity(self.coordinator, self.api).device_info
 
     @property
     def available(self) -> bool:
+        """Return True once the coordinator has data to report."""
         return self.coordinator.data is not None
 
     @property
     def is_on(self) -> bool | None:
+        """Return True when the coordinator reports the device as online."""
         health = (self.coordinator.data or {}).get("_health", {})
         return bool(health.get("online"))
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
+        """Return health diagnostics (staleness, failures, poll intervals)."""
         health = (self.coordinator.data or {}).get("_health", {})
         return {
             "stale": health.get("stale"),
@@ -96,8 +100,12 @@ class EconetOnlineBinarySensor(BinarySensorEntity):
         }
 
     async def async_added_to_hass(self) -> None:
+        """Subscribe to coordinator updates when added to Home Assistant."""
         await super().async_added_to_hass()
-        self.async_on_remove(self.coordinator.async_add_listener(self.async_write_ha_state))
+        self.async_on_remove(
+            self.coordinator.async_add_listener(self.async_write_ha_state)
+        )
+
 
 class EconetBinarySensor(EconetEntity, BinarySensorEntity):
     """Econet Binary Sensor."""

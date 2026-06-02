@@ -18,7 +18,12 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import STATE_UNAVAILABLE, EntityCategory, UnitOfMass, UnitOfTime
+from homeassistant.const import (
+    STATE_UNAVAILABLE,
+    EntityCategory,
+    UnitOfMass,
+    UnitOfTime,
+)
 from homeassistant.core import (
     CALLBACK_TYPE,
     Event,
@@ -44,7 +49,6 @@ from .common_functions import (
     camel_to_snake,
     decode_ecomax_schedule_day,
     decode_ecomax_schedule_metadata,
-    get_entity_component,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -97,13 +101,15 @@ _LOGGER = logging.getLogger(__name__)
 def _load_translated_entity_keys(entity_domain: str) -> set[str]:
     """Load translation keys declared in strings.json for a given entity domain."""
     try:
-        with resources.files(__package__).joinpath("strings.json").open(
-            "r", encoding="utf-8"
-        ) as f:
+        with (
+            resources.files(__package__)
+            .joinpath("strings.json")
+            .open("r", encoding="utf-8") as f
+        ):
             payload = json.load(f) or {}
         entities = (payload.get("entity") or {}).get(entity_domain) or {}
         return set(entities.keys())
-    except Exception:  # pragma: no cover
+    except Exception:  # noqa: BLE001 — diagnostics helper must never break setup  # pragma: no cover
         return set()
 
 
@@ -134,6 +140,7 @@ def _safe_native_value(value: Any) -> Any:
     text = str(value)
     return text if len(text) <= 255 else text[:252] + "..."
 
+
 # Unit time divisor: convert seconds to hours for kg/h integration
 _UNIT_TIME_HOURS: Final = Decimal(3600)
 
@@ -144,7 +151,6 @@ class EconetSensorEntityDescription(SensorEntityDescription):
 
     process_val: Callable[[Any], Any] = lambda x: x  # noqa: E731
     component: str | None = None  # Component for device grouping (huw, mixer_1, etc.)
-
 
 
 class EconetHealthSensor(SensorEntity):
@@ -163,6 +169,7 @@ class EconetHealthSensor(SensorEntity):
         device_class: SensorDeviceClass | None = None,
         state_class: SensorStateClass | None = None,
     ) -> None:
+        """Initialize a coordinator-health diagnostic sensor."""
         self.coordinator = coordinator
         self.api = api
         self._health_key = key
@@ -175,14 +182,17 @@ class EconetHealthSensor(SensorEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
         return EconetEntity(self.coordinator, self.api).device_info
 
     @property
     def available(self) -> bool:
+        """Return True once the coordinator has data to report."""
         return self.coordinator.data is not None
 
     @property
     def native_value(self):
+        """Return the value for this health key from coordinator data."""
         health = (self.coordinator.data or {}).get("_health", {})
         value = health.get(self._health_key)
         if self._health_key.endswith("_ts") and isinstance(value, (int, float)):
@@ -190,8 +200,12 @@ class EconetHealthSensor(SensorEntity):
         return value
 
     async def async_added_to_hass(self) -> None:
+        """Subscribe to coordinator updates when added to Home Assistant."""
         await super().async_added_to_hass()
-        self.async_on_remove(self.coordinator.async_add_listener(self.async_write_ha_state))
+        self.async_on_remove(
+            self.coordinator.async_add_listener(self.async_write_ha_state)
+        )
+
 
 class EconetSensor(EconetEntity, SensorEntity):
     """Represents an ecoNET sensor entity."""
@@ -271,7 +285,9 @@ class MixerSensor(MixerEntity, SensorEntity):
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
-        self._attr_native_value = _safe_native_value(self.entity_description.process_val(value))
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -292,7 +308,9 @@ class LambdaSensors(LambdaEntity, SensorEntity):
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
-        self._attr_native_value = _safe_native_value(self.entity_description.process_val(value))
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -317,7 +335,9 @@ class EcoSterSensor(EcoSterEntity, SensorEntity):
     def _sync_state(self, value) -> None:
         """Sync state."""
         _LOGGER.debug("EcoSter sensor sync state: %s", value)
-        self._attr_native_value = _safe_native_value(self.entity_description.process_val(value))
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -795,502 +815,503 @@ class FuelConsumptionTotalSensor(RestoreSensor):
 
 EXTRA_SENSORS: dict[str, dict[str, Any]] = {
     "BuforCalcSetTemp": {
-        "name": 'Buffer calculated Set temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Buffer calculated Set temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit1CalcTemp": {
-        "name": 'Circuit 1calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 1calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit1thermostat": {
-        "name": 'Circuit 1thermostat',
-        "type": 'status/enum',
+        "name": "Circuit 1thermostat",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "Circuit2CalcTemp": {
-        "name": 'Circuit 2calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 2calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit2thermostatTemp": {
-        "name": 'Circuit 2thermostat temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 2thermostat temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit3thermostatTemp": {
-        "name": 'Circuit 3thermostat temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 3thermostat temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit4CalcTemp": {
-        "name": 'Circuit 4calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 4calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit5CalcTemp": {
-        "name": 'Circuit 5calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 5calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit6CalcTemp": {
-        "name": 'Circuit 6calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 6calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "Circuit7CalcTemp": {
-        "name": 'Circuit 7calculated temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Circuit 7calculated temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "CoolingPower": {
-        "name": 'Cooling Power',
-        "type": 'power',
-        "unit": 'kW',
+        "name": "Cooling Power",
+        "type": "power",
+        "unit": "kW",
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 2,
     },
     "ElectricPower": {
-        "name": 'Electrical power',
-        "type": 'power',
-        "unit": 'kW',
+        "name": "Electrical power",
+        "type": "power",
+        "unit": "kW",
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 2,
     },
     "HDWsetpointcalculate": {
-        "name": 'DHW setpoint upper limit',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "DHW setpoint upper limit",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 0,
     },
     "HPStatusBuffHeatStat": {
-        "name": 'Heat pump Status Buff Heat Stat',
-        "type": 'status/enum',
+        "name": "Heat pump Status Buff Heat Stat",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat0": {
-        "name": 'Heat pump Status Circ PStat 0',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 0",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat1": {
-        "name": 'Heat pump Status Circ PStat 1',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 1",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat2": {
-        "name": 'Heat pump Status Circ PStat 2',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 2",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat3": {
-        "name": 'Heat pump Status Circ PStat 3',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 3",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat4": {
-        "name": 'Heat pump Status Circ PStat 4',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 4",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat5": {
-        "name": 'Heat pump Status Circ PStat 5',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 5",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusCircPStat6": {
-        "name": 'Heat pump Status Circ PStat 6',
-        "type": 'status/enum',
+        "name": "Heat pump Status Circ PStat 6",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusControl": {
-        "name": 'Heat pump Status Control',
-        "type": 'status/enum',
+        "name": "Heat pump Status Control",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusFlowHeatStat": {
-        "name": 'Heat pump Status Flow Heat Stat',
-        "type": 'status/enum',
+        "name": "Heat pump Status Flow Heat Stat",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusHdwHeatStat": {
-        "name": 'Heat pump Status Hdw Heat Stat',
-        "type": 'status/enum',
+        "name": "Heat pump Status Hdw Heat Stat",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusPresetTemp": {
-        "name": 'Heat pump Status Preset temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Heat pump Status Preset temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "HPStatusUhsStat": {
-        "name": 'Heat pump Status Uhs Stat',
-        "type": 'status/enum',
+        "name": "Heat pump Status Uhs Stat",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HPStatusWorkMode": {
-        "name": 'Heat pump Status Work Mode',
-        "type": 'status/enum',
+        "name": "Heat pump Status Work Mode",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HP_work_state_set_pump2": {
-        "name": 'Heat pump _work_state_set_pump 2',
-        "type": 'status/enum',
+        "name": "Heat pump _work_state_set_pump 2",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HP_work_state_set_pump3": {
-        "name": 'Heat pump _work_state_set_pump 3',
-        "type": 'status/enum',
+        "name": "Heat pump _work_state_set_pump 3",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HP_work_state_set_pump4": {
-        "name": 'Heat pump _work_state_set_pump 4',
-        "type": 'status/enum',
+        "name": "Heat pump _work_state_set_pump 4",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HP_work_state_set_pump5": {
-        "name": 'Heat pump _work_state_set_pump 5',
-        "type": 'status/enum',
+        "name": "Heat pump _work_state_set_pump 5",
+        "type": "status/enum",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": 0,
     },
     "HeatingPower": {
-        "name": 'Heating Power',
-        "type": 'power',
-        "unit": 'kW',
+        "name": "Heating Power",
+        "type": "power",
+        "unit": "kW",
         "device_class": SensorDeviceClass.POWER,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 2,
     },
     "PHNXcoil_temp": {
-        "name": 'Evaporator coil temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Evaporator coil temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXdischarge_temp": {
-        "name": 'Compressor discharge temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Compressor discharge temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXinletTemp": {
-        "name": 'Heat pump water inlet temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Heat pump water inlet temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXinletTemp_pump": {
-        "name": 'Phoenixinlet Temp_pump',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixinlet Temp_pump",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXinletTemp_pump2": {
-        "name": 'Phoenixinlet Temp_pump 2',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixinlet Temp_pump 2",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXinletTemp_pump3": {
-        "name": 'Phoenixinlet Temp_pump 3',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixinlet Temp_pump 3",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXinletTemp_pump5": {
-        "name": 'Phoenixinlet Temp_pump 5',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixinlet Temp_pump 5",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXoutletTemp": {
-        "name": 'Heat pump water outlet temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Heat pump water outlet temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXoutletTemp_pump2": {
-        "name": 'Phoenixoutlet Temp_pump 2',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixoutlet Temp_pump 2",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXoutletTemp_pump3": {
-        "name": 'Phoenixoutlet Temp_pump 3',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixoutlet Temp_pump 3",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXoutletTemp_pump4": {
-        "name": 'Phoenixoutlet Temp_pump 4',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixoutlet Temp_pump 4",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXoutletTemp_pump5": {
-        "name": 'Phoenixoutlet Temp_pump 5',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenixoutlet Temp_pump 5",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXreg2045": {
-        "name": 'Phoenix internal inlet temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenix internal inlet temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXreg2046": {
-        "name": 'Phoenix internal outlet temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Phoenix internal outlet temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXreg2071": {
-        "name": 'Compressor frequency (Phoenix raw)',
-        "type": 'frequency',
-        "unit": 'Hz',
+        "name": "Compressor frequency (Phoenix raw)",
+        "type": "frequency",
+        "unit": "Hz",
         "device_class": SensorDeviceClass.FREQUENCY,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PHNXreg2074": {
-        "name": 'Fan speed (Phoenix raw)',
-        "type": 'speed',
-        "unit": 'rpm',
+        "name": "Fan speed (Phoenix raw)",
+        "type": "speed",
+        "unit": "rpm",
         "device_class": None,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 0,
     },
     "PHNXsuctionTemp": {
-        "name": 'Compressor suction temperature',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Compressor suction temperature",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "PS": {
-        "name": 'ecoTouch software version',
-        "type": 'text/diagnostic',
+        "name": "ecoTouch software version",
+        "type": "text/diagnostic",
         "unit": None,
         "device_class": None,
         "state_class": None,
         "precision": None,
     },
     "TempBuforDown": {
-        "name": 'Temperature Buffer Down',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Buffer Down",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempBuforUp": {
-        "name": 'Temperature Buffer Up',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Buffer Up",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCWU": {
-        "name": 'Temperature DHW',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature DHW",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit2": {
-        "name": 'Temperature Circuit 2',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 2",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit3": {
-        "name": 'Temperature Circuit 3',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 3",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit4": {
-        "name": 'Temperature Circuit 4',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 4",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit5": {
-        "name": 'Temperature Circuit 5',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 5",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit6": {
-        "name": 'Temperature Circuit 6',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 6",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempCircuit7": {
-        "name": 'Temperature Circuit 7',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Circuit 7",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempClutch": {
-        "name": 'Temperature Clutch',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature Clutch",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "TempWthr": {
-        "name": 'Temperature weather',
-        "type": 'temperature',
-        "unit": '°C',
+        "name": "Temperature weather",
+        "type": "temperature",
+        "unit": "°C",
         "device_class": SensorDeviceClass.TEMPERATURE,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 1,
     },
     "currentFlow": {
-        "name": 'Current Flow',
-        "type": 'flow',
-        "unit": 'm³/h',
+        "name": "Current Flow",
+        "type": "flow",
+        "unit": "m³/h",
         "device_class": None,
         "state_class": SensorStateClass.MEASUREMENT,
         "precision": 2,
     },
 }
+
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     """Create ecoNET300 sensor entity based on supplied key.
@@ -1304,7 +1325,9 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
 
     extra = EXTRA_SENSORS.get(key, {})
 
-    device_class = extra.get("device_class", ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None))
+    device_class = extra.get(
+        "device_class", ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None)
+    )
     entity_category = extra.get("entity_category", ENTITY_CATEGORY.get(key, None))
     native_unit_of_measurement = extra.get("unit", ENTITY_UNIT_MAP.get(key, None))
     state_class = extra.get("state_class", STATE_CLASS_MAP.get(key))
@@ -1328,7 +1351,9 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         suggested_display_precision=suggested_display_precision,
         process_val=ENTITY_VALUE_PROCESSOR.get(
             key,
-            lambda x: x if isinstance(x, (int, float, str, bool)) or x is None else str(x),
+            lambda x: x
+            if isinstance(x, (int, float, str, bool)) or x is None
+            else str(x),
         ),
         component=component,
     )
@@ -1338,6 +1363,7 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         component,
     )
     return entity_description
+
 
 def _controller_sensor_key_candidates(controller_id: str | None) -> set[str]:
     """Return sensor map keys for the main controller before ecoSTER filtering.
@@ -2120,19 +2146,31 @@ async def async_setup_entry(
         _LOGGER.info("Starting entity collection for sensors...")
 
         # Diagnostic health sensors: always present.
-        entities.extend([
-            EconetHealthSensor(
-                coordinator,
-                api,
-                "stale_seconds",
-                "ecoNET300 data age",
-                UnitOfTime.SECONDS,
-                SensorDeviceClass.DURATION,
-                SensorStateClass.MEASUREMENT,
-            ),
-            EconetHealthSensor(coordinator, api, "consecutive_failures", "ecoNET300 consecutive failures"),
-            EconetHealthSensor(coordinator, api, "last_success_ts", "ecoNET300 last success timestamp"),
-        ])
+        entities.extend(
+            [
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "stale_seconds",
+                    "ecoNET300 data age",
+                    UnitOfTime.SECONDS,
+                    SensorDeviceClass.DURATION,
+                    SensorStateClass.MEASUREMENT,
+                ),
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "consecutive_failures",
+                    "ecoNET300 consecutive failures",
+                ),
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "last_success_ts",
+                    "ecoNET300 last success timestamp",
+                ),
+            ]
+        )
 
         # Gather sensors dynamically based on the controller
         controller_sensors = create_controller_sensors(coordinator, api)

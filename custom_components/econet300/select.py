@@ -744,7 +744,9 @@ async def async_setup_entry(
         # On this ecoMAX360i, the generic upstream heaterMode write returns API failure.
         # Do not expose it; Mode DHW/other editParams remain available.
         if select_key == "heaterMode" and is_ecomax360i_controller(controller_id):
-            _LOGGER.info("Skipping unsupported static heaterMode control for ecoMAX360i")
+            _LOGGER.info(
+                "Skipping unsupported static heaterMode control for ecoMAX360i"
+            )
             continue
         _LOGGER.debug("Creating select entity: %s", select_key)
         # Convert camelCase to snake_case for entity key
@@ -781,7 +783,9 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
 
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str) -> None:
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
         """Initialize the editable select entity for the given parameter id."""
         super().__init__(coordinator)
         self._api = api
@@ -804,7 +808,9 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
     @property
     def current_option(self) -> str | None:
         """Return the current parameter value as a string option."""
-        info = (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
         val = info.get("value")
         if val is None:
             return None
@@ -819,14 +825,18 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
         """Return True when data is fresh and the parameter is in the catalog."""
         data = self.coordinator.data or {}
         health = data.get("_health") or {}
-        return (not bool(health.get("stale"))) and self._pid in data.get("editParamCatalog", {})
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
 
     async def async_select_option(self, option: str) -> None:
         """Write the selected option back to the controller."""
         try:
             value = int(option)
         except ValueError as e:
-            raise HomeAssistantError(f"Invalid option '{option}' for param {self._pid}") from e
+            raise HomeAssistantError(
+                f"Invalid option '{option}' for param {self._pid}"
+            ) from e
 
         ok = await self._api.set_param(self._pid, value)
         if not ok:
@@ -841,8 +851,12 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
         return self._attr_device_info
 
 
-def _create_edit_param_selects(coordinator: EconetDataCoordinator, api: Econet300Api) -> list[SelectEntity]:
-    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get("editParamCatalog", {}) or {}
+def _create_edit_param_selects(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SelectEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
     entities: list[SelectEntity] = []
     for pid, info in catalog.items():
         if info.get("kind") != "select":
