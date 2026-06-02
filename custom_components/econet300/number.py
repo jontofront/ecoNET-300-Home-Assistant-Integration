@@ -1355,6 +1355,7 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
     _attr_entity_category = EntityCategory.CONFIG
 
     def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str) -> None:
+        """Initialize the editable number entity for the given parameter id."""
         super().__init__(coordinator)
         self._api = api
         self._pid = str(pid)
@@ -1384,12 +1385,14 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     @property
     def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
         if self._use_number_suffix:
             return f"{self._api.uid}-edit_{self._pid}_value"
         return f"{self._api.uid}-edit_{self._pid}"
 
     @property
     def native_value(self) -> float | None:
+        """Return the current numeric value of the parameter."""
         info = (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
         val = info.get("value")
         try:
@@ -1399,11 +1402,13 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     @property
     def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
         data = self.coordinator.data or {}
         health = data.get("_health") or {}
         return (not bool(health.get("stale"))) and self._pid in data.get("editParamCatalog", {})
 
     async def async_set_native_value(self, value: float) -> None:
+        """Write the new numeric value back to the controller."""
         # Round to the nearest step to avoid noisy writes
         step = self.native_step or 1.0
         if step and step > 0:
@@ -1427,6 +1432,7 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
         return self._attr_device_info
 
 
