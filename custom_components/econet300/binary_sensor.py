@@ -60,7 +60,7 @@ class EconetOnlineBinarySensor(BinarySensorEntity):
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
-    _attr_name = "ecoNET300 live polling"
+    _attr_translation_key = "health_online"
 
     def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api) -> None:
         """Initialize the live-polling connectivity diagnostic sensor."""
@@ -644,11 +644,16 @@ async def async_setup_entry(
 
     entities: list[
         EconetBinarySensor
+        | EconetOnlineBinarySensor
         | MixerBinarySensor
         | EcoSterBinarySensor
         | CustomBinarySensor
         | AlarmActiveBinarySensor
     ] = []
+
+    # Diagnostic connectivity sensor: always present so live-polling status is
+    # observable even when the device is offline/stale.
+    entities.append(EconetOnlineBinarySensor(coordinator, api))
 
     # Create standard binary sensors (including controller-specific ones)
     entities.extend(create_binary_sensors(coordinator, api))
