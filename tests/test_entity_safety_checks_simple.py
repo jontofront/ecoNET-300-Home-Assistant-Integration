@@ -2,8 +2,14 @@
 
 from unittest.mock import Mock, patch
 
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
+from homeassistant.const import UnitOfTemperature
+
 from custom_components.econet300.entity import EconetEntity
-from custom_components.econet300.sensor import EconetSensorEntityDescription
+from custom_components.econet300.sensor import (
+    EconetSensor,
+    EconetSensorEntityDescription,
+)
 
 
 def test_handle_coordinator_update_with_none_data():
@@ -297,6 +303,51 @@ def test_comprehensive_safety_checks():
 
     # If we get here, all tests passed
     assert True
+
+
+def test_sync_state_restores_state_class_after_non_numeric_value():
+    """Regression: a transient non-numeric value must not permanently disable stats.
+
+    HA resolves ``_attr_*`` before ``entity_description.*``. A non-numeric update
+    (e.g. ``None`` from a transient "off" string) nulls ``_attr_state_class``; a
+    later numeric value must restore it so long-term statistics keep working.
+    """
+    description = EconetSensorEntityDescription(
+        key="tempCO",
+        name="Boiler Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        process_val=lambda x: x,
+    )
+
+    sensor = object.__new__(EconetSensor)
+    sensor.entity_description = description
+    sensor._raw_value = None
+    sensor.async_write_ha_state = Mock()
+
+    # 1) Valid numeric value: metadata reflects the description.
+    sensor._sync_state(65.5)
+    assert sensor._attr_native_value == 65.5
+    assert sensor._attr_state_class == SensorStateClass.MEASUREMENT
+    assert sensor._attr_device_class == SensorDeviceClass.TEMPERATURE
+    assert sensor._attr_native_unit_of_measurement == UnitOfTemperature.CELSIUS
+    assert sensor._attr_suggested_display_precision == 1
+
+    # 2) Transient non-numeric value: stats metadata cleared for safety.
+    sensor._sync_state(None)
+    assert sensor._attr_native_value is None
+    assert sensor._attr_state_class is None
+    assert sensor._attr_suggested_display_precision is None
+
+    # 3) Numeric value returns: metadata must be restored, not stuck at None.
+    sensor._sync_state(70.0)
+    assert sensor._attr_native_value == 70.0
+    assert sensor._attr_state_class == SensorStateClass.MEASUREMENT
+    assert sensor._attr_device_class == SensorDeviceClass.TEMPERATURE
+    assert sensor._attr_native_unit_of_measurement == UnitOfTemperature.CELSIUS
+    assert sensor._attr_suggested_display_precision == 1
 
 
 def test_select_entity_handles_none_reg_params_data():

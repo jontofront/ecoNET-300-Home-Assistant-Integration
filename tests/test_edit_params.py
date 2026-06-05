@@ -220,3 +220,30 @@ class TestCreateEditParamEntities:
         assert number.native_value == 55
         assert number.native_min_value == 40
         assert number.native_max_value == 80
+
+    def test_select_current_option_for_value_in_options(self):
+        catalog = _catalog()
+        select = _create_edit_param_selects(_coordinator(catalog), _make_api())[0]
+        select = cast("EditParamSelect", select)
+
+        assert select.options == ["0", "1", "2", "3", "4", "5"]
+        assert select.current_option == "2"
+
+    def test_select_current_option_none_when_value_not_in_options(self):
+        """HA contract: current_option must be one of options or None."""
+        catalog = _catalog()
+        # Device reports a value outside the declared options list.
+        catalog["sel1"]["value"] = 9
+        select = _create_edit_param_selects(_coordinator(catalog), _make_api())[0]
+        select = cast("EditParamSelect", select)
+
+        assert "9" not in select.options
+        assert select.current_option is None
+
+    def test_select_current_option_none_when_value_missing(self):
+        catalog = _catalog()
+        catalog["sel1"]["value"] = None
+        select = _create_edit_param_selects(_coordinator(catalog), _make_api())[0]
+        select = cast("EditParamSelect", select)
+
+        assert select.current_option is None

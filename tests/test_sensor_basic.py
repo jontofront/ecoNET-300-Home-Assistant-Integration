@@ -18,6 +18,7 @@ from custom_components.econet300.const import (
     EDIT_PARAMS_DATA_SENSOR_MAP,
     ENTITY_VALUE_PROCESSOR,
     INFORMATION_PARAMS_SENSOR_MAP,
+    SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
     STATE_UNKNOWN,
@@ -313,6 +314,29 @@ class TestSensorMappingLogic:
         assert "TargetFlowTemp" in keys
         assert "COP" in keys
         assert "AXENREGISTER64" in keys
+
+    def test_sensitive_sysparams_keys_are_not_exposed(self) -> None:
+        """Credentials/network keys in sysParams must never become sensors."""
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX810P-L"
+        reg_params = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        # Guard: the fixture must actually contain the sensitive keys we filter,
+        # otherwise this test would pass vacuously.
+        present_sensitive = SENSITIVE_PARAM_KEYS & set(sys_params)
+        assert present_sensitive, "fixture lacks sensitive keys to validate filtering"
+
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert keys.isdisjoint(SENSITIVE_PARAM_KEYS)
 
 
 class TestGetDataSourcesTuple:
