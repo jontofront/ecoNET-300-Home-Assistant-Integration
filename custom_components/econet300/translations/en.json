@@ -111,7 +111,15 @@
         "menu_options": {
           "connection_settings": "Connection Settings",
           "custom_entities": "Custom Entities",
-          "diagnostics": "Generate diagnostics report"
+          "diagnostics": "Generate diagnostics report",
+          "polling_settings": "Polling settings"
+        }
+      },
+      "polling_settings": {
+        "data": {
+          "poll_reg_params": "regParams polling interval (seconds) — live sensor values",
+          "poll_sys_params": "sysParams polling interval (seconds) — controller metadata",
+          "poll_edit_params": "editParams polling interval (seconds, 0 to disable) — editable parameters catalog/values"
         }
       },
       "connection_settings": {
@@ -305,6 +313,9 @@
       }
     },
     "binary_sensor": {
+      "health_online": {
+        "name": "Live polling"
+      },
       "lighter_works": {
         "name": "Lighter"
       },
@@ -427,6 +438,15 @@
       }
     },
     "sensor": {
+      "health_data_age": {
+        "name": "Data age"
+      },
+      "health_consecutive_failures": {
+        "name": "Consecutive failures"
+      },
+      "health_last_success": {
+        "name": "Last successful update"
+      },
       "boiler_power": {
         "name": "Boiler output"
       },
@@ -797,6 +817,138 @@
       },
       "hp_status_control": {
         "name": "HP control state"
+      },
+      "hp_status_buff_heat_stat": {
+        "name": "HP buffer heating status"
+      },
+      "hp_status_flow_heat_stat": {
+        "name": "HP flow heating status"
+      },
+      "hp_status_hdw_heat_stat": {
+        "name": "HP DHW heating status"
+      },
+      "hp_status_uhs_stat": {
+        "name": "HP UHS status"
+      },
+      "hp_status_circ_p_stat0": {
+        "name": "HP circulation pump status 0"
+      },
+      "hp_status_circ_p_stat1": {
+        "name": "HP circulation pump status 1"
+      },
+      "hp_status_circ_p_stat2": {
+        "name": "HP circulation pump status 2"
+      },
+      "hp_status_circ_p_stat3": {
+        "name": "HP circulation pump status 3"
+      },
+      "hp_status_circ_p_stat4": {
+        "name": "HP circulation pump status 4"
+      },
+      "hp_status_circ_p_stat5": {
+        "name": "HP circulation pump status 5"
+      },
+      "hp_status_circ_p_stat6": {
+        "name": "HP circulation pump status 6"
+      },
+      "hp_work_state_set_pump2": {
+        "name": "HP work state set pump 2"
+      },
+      "hp_work_state_set_pump3": {
+        "name": "HP work state set pump 3"
+      },
+      "hp_work_state_set_pump4": {
+        "name": "HP work state set pump 4"
+      },
+      "hp_work_state_set_pump5": {
+        "name": "HP work state set pump 5"
+      },
+      "cooling_power": {
+        "name": "Cooling power"
+      },
+      "heating_power": {
+        "name": "Heating power"
+      },
+      "electric_power": {
+        "name": "Electrical power"
+      },
+      "current_flow": {
+        "name": "Current flow"
+      },
+      "hd_wsetpointcalculate": {
+        "name": "DHW setpoint upper limit"
+      },
+      "bufor_calc_set_temp": {
+        "name": "Buffer calculated set temperature"
+      },
+      "circuit1_calc_temp": {
+        "name": "Circuit 1 calculated temperature"
+      },
+      "circuit2_calc_temp": {
+        "name": "Circuit 2 calculated temperature"
+      },
+      "circuit4_calc_temp": {
+        "name": "Circuit 4 calculated temperature"
+      },
+      "circuit5_calc_temp": {
+        "name": "Circuit 5 calculated temperature"
+      },
+      "circuit6_calc_temp": {
+        "name": "Circuit 6 calculated temperature"
+      },
+      "circuit7_calc_temp": {
+        "name": "Circuit 7 calculated temperature"
+      },
+      "phn_xcoil_temp": {
+        "name": "Evaporator coil temperature"
+      },
+      "phn_xdischarge_temp": {
+        "name": "Compressor discharge temperature"
+      },
+      "phn_xsuction_temp": {
+        "name": "Compressor suction temperature"
+      },
+      "phn_xinlet_temp": {
+        "name": "Heat pump water inlet temperature"
+      },
+      "phn_xoutlet_temp": {
+        "name": "Heat pump water outlet temperature"
+      },
+      "phn_xinlet_temp_pump": {
+        "name": "Heat pump inlet temperature (pump)"
+      },
+      "phn_xinlet_temp_pump2": {
+        "name": "Heat pump inlet temperature (pump 2)"
+      },
+      "phn_xinlet_temp_pump3": {
+        "name": "Heat pump inlet temperature (pump 3)"
+      },
+      "phn_xinlet_temp_pump5": {
+        "name": "Heat pump inlet temperature (pump 5)"
+      },
+      "phn_xoutlet_temp_pump2": {
+        "name": "Heat pump outlet temperature (pump 2)"
+      },
+      "phn_xoutlet_temp_pump3": {
+        "name": "Heat pump outlet temperature (pump 3)"
+      },
+      "phn_xoutlet_temp_pump4": {
+        "name": "Heat pump outlet temperature (pump 4)"
+      },
+      "phn_xoutlet_temp_pump5": {
+        "name": "Heat pump outlet temperature (pump 5)"
+      },
+      "phn_xreg2045": {
+        "name": "Phoenix internal inlet temperature"
+      },
+      "phn_xreg2046": {
+        "name": "Phoenix internal outlet temperature"
+      },
+      "phn_xreg2071": {
+        "name": "Compressor frequency"
+      },
+      "phn_xreg2074": {
+        "name": "Fan speed (Phoenix)"
       },
       "ssa_state": {
         "name": "Weather compensation state"
