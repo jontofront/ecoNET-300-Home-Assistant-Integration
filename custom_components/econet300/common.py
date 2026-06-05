@@ -70,7 +70,9 @@ def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
     return not is_ecomax360i_controller(sys_params.get("controllerID"))
 
 
-def build_edit_param_catalog(edit_params: dict[str, Any]) -> dict[str, dict[str, Any]]:
+def build_edit_param_catalog(
+    edit_params: dict[str, Any] | None,
+) -> dict[str, dict[str, Any]]:
     """Build a normalized writable-parameter catalog from /econet/editParams."""
     data = (edit_params or {}).get("data", {}) or {}
     editable_params = (edit_params or {}).get("editableParams", {}) or {}
