@@ -818,7 +818,7 @@ class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
             sval = str(int(val))
         except (TypeError, ValueError):
             return None
-        return sval if sval in (self.options or []) else sval
+        return sval if sval in (self.options or []) else None
 
     @property
     def available(self) -> bool:

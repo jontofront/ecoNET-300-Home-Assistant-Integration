@@ -37,6 +37,10 @@ from homeassistant.const import (  # noqa: F401
 
 from .controllers import *  # noqa: F401,F403
 from .core import *  # noqa: F401,F403
+
+# Explicit re-export so static analyzers resolve this shared constant reliably
+# (wildcard re-exports of newly added names are not always picked up).
+from .core import SENSITIVE_PARAM_KEYS  # noqa: F401
 from .custom_entities import *  # noqa: F401,F403
 from .entity_maps import *  # noqa: F401,F403
 from .params import *  # noqa: F401,F403

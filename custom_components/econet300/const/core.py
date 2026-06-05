@@ -25,6 +25,27 @@ DEVICE_CLASS_FUEL_METER = "econet300__fuel_meter"
 # If fuelStream does not change within this period, integration is still triggered.
 FUEL_MAX_SUB_INTERVAL_SECONDS = 300
 
+# Sensitive sysParams/regParams keys that must never be exposed as entity states
+# or surfaced in diagnostics. The all-sensors path iterates every device key, so
+# these are filtered out before entity creation and reused as the diagnostics
+# redaction list to keep a single source of truth.
+SENSITIVE_PARAM_KEYS = frozenset(
+    {
+        "device_uid",  # Device UID in coordinator data
+        "eth0",  # Ethernet interface IP address
+        "host",  # May contain internal network info
+        "identifiers",  # Device identifiers containing UIDs
+        "key",  # API keys and secrets
+        "login",  # Account login name
+        "password",  # Account password hash
+        "servicePassword",  # Service password hash
+        "ssid",  # WiFi network name
+        "uid",  # Device UID - unique device identifier
+        "username",  # May contain sensitive info
+        "wlan0",  # WiFi interface IP address
+    }
+)
+
 # =============================================================================
 # COORDINATOR CONFIGURATION CONSTANTS
 # =============================================================================

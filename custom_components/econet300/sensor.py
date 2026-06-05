@@ -76,6 +76,7 @@ from .const import (
     NUMBER_OF_AVAILABLE_ECOSTERS,
     SCHEDULE_TYPE_REVERSE_MAP,
     SCHEDULE_WEEKDAYS,
+    SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_FUEL_STREAM,
     SENSOR_MAP_KEY,
@@ -274,15 +275,32 @@ class EconetSensor(EconetEntity, SensorEntity):
         native_value = _safe_native_value(self.entity_description.process_val(value))
         self._attr_native_value = native_value
 
-        # Last-resort HA safety: never expose a non-numeric value as a measurement
-        # sensor. This prevents listener crashes for dynamic sysParams strings,
-        # dicts/lists converted to strings, passwords, IPs, SSIDs, etc.
-        if not isinstance(native_value, (int, float)) or isinstance(native_value, bool):
+        description = self.entity_description
+        if isinstance(native_value, (int, float)) and not isinstance(
+            native_value, bool
+        ):
+            # Numeric value: restore the entity-description metadata in case a
+            # previous non-numeric update cleared it. HA resolves ``_attr_*``
+            # before ``entity_description.*``, so leaving these nulled would
+            # permanently break statistics/long-term graphs for the entity.
+            self._attr_state_class = description.state_class
+            self._attr_suggested_display_precision = (
+                description.suggested_display_precision
+            )
+            self._attr_native_unit_of_measurement = (
+                description.native_unit_of_measurement
+            )
+            self._attr_device_class = description.device_class
+        else:
+            # Last-resort HA safety: never expose a non-numeric value as a
+            # measurement sensor. This prevents listener crashes for dynamic
+            # sysParams strings, dicts/lists converted to strings, passwords,
+            # IPs, SSIDs, etc.
             self._attr_state_class = None
             self._attr_suggested_display_precision = None
-            if self.entity_description.key not in ENTITY_UNIT_MAP:
+            if description.key not in ENTITY_UNIT_MAP:
                 self._attr_native_unit_of_measurement = None
-            if self.entity_description.key not in ENTITY_SENSOR_DEVICE_CLASS_MAP:
+            if description.key not in ENTITY_SENSOR_DEVICE_CLASS_MAP:
                 self._attr_device_class = None
 
         self.async_write_ha_state()
@@ -921,6 +939,8 @@ def create_controller_sensors(
         sensor_keys |= set(data_regParams.keys())
     if data_sysParams:
         sensor_keys |= set(data_sysParams.keys())
+    # Never expose sensitive credentials/network identifiers as sensor states.
+    sensor_keys -= SENSITIVE_PARAM_KEYS
     if is_ecosol_controller(controller_id):
         _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
     elif is_ecomax360i_controller(controller_id):
