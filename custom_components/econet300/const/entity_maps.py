@@ -225,7 +225,12 @@ ENTITY_UNIT_MAP = {
 # =============================================================================
 # ENTITY STATE CLASS MAPPINGS
 # =============================================================================
-# By default all sensors state_class are MEASUREMENT
+# Default state class for sensors not listed in STATE_CLASS_MAP. Numeric sensors
+# inherit this so Home Assistant keeps long-term statistics; STATE_CLASS_MAP
+# lists the keys to suppress to None.
+DEFAULT_SENSOR_STATE_CLASS = _SensorStateClass.MEASUREMENT
+
+# By default all sensors state_class are MEASUREMENT (see DEFAULT_SENSOR_STATE_CLASS)
 STATE_CLASS_MAP: dict[str, _SensorStateClass | None] = {
     "lambdaStatus": None,
     "mode": None,
