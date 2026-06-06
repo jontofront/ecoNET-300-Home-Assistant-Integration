@@ -7,6 +7,7 @@ from decimal import Decimal, InvalidOperation
 from importlib import resources
 import json
 import logging
+import re
 from typing import Any, Final, Self
 
 from homeassistant.components.sensor import (
@@ -52,12 +53,14 @@ from .common_functions import (
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
+    mixer_exists,
     parse_alarm_entry,
     summarize_schedule_slots,
 )
 from .const import (
     API_REG_PARAMS_URI,
     CDP_ID_TO_REGPARAMS,
+    COMPONENT_HUW,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
     DEFAULT_SENSOR_STATE_CLASS,
@@ -75,6 +78,7 @@ from .const import (
     FUEL_MAX_SUB_INTERVAL_SECONDS,
     INFORMATION_PARAMS_SENSOR_MAP,
     NUMBER_OF_AVAILABLE_ECOSTERS,
+    NUMBER_OF_AVAILABLE_MIXERS,
     SCHEDULE_TYPE_REVERSE_MAP,
     SCHEDULE_WEEKDAYS,
     SENSITIVE_PARAM_KEYS,
@@ -949,6 +953,25 @@ def create_controller_sensors(
         sensor_keys |= set(data_sysParams.keys())
     # Never expose sensitive credentials/network identifiers as sensor states.
     sensor_keys -= SENSITIVE_PARAM_KEYS
+
+    # Mixer and lambda sensors are owned by their dedicated creators
+    # (create_mixer_sensors / create_lambda_sensors), which validate presence
+    # and group the sensors on the correct child device. Remove their keys from
+    # the all-sensors sweep so they are not duplicated on the main device with a
+    # colliding unique_id (which would otherwise shadow the device-grouped one).
+    sensor_keys -= set().union(*SENSOR_MIXER_KEY.values())
+    sensor_keys -= SENSOR_MAP_KEY.get(COMPONENT_LAMBDA, set())
+
+    # Drop any remaining mixer-specific keys (e.g. mixerPumpWorks{N}) for mixers
+    # that are not physically connected (mixerTemp{N} is null).
+    for mixer_num in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
+        if not mixer_exists(coordinator.data, mixer_num):
+            sensor_keys -= {
+                key
+                for key in sensor_keys
+                if re.fullmatch(rf"mixer[A-Za-z]*{mixer_num}", key)
+            }
+
     if is_ecosol_controller(controller_id):
         _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
     elif is_ecomax360i_controller(controller_id):
@@ -1578,6 +1601,7 @@ class ScheduleSensor(EconetEntity, SensorEntity):
         api: Econet300Api,
         schedule_type: str,
         api_key: str,
+        component: str | None = None,
     ) -> None:
         """Initialize the schedule sensor."""
         self.entity_description = SensorEntityDescription(
@@ -1586,9 +1610,21 @@ class ScheduleSensor(EconetEntity, SensorEntity):
         )
         self.api = api
         self._api_key = api_key
+        self._component = component
         self._day_summaries: dict[str, str] = {}
         self._metadata: dict[str, Any] = {}
         super().__init__(coordinator, api)
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return device info, grouping mixer/HUW schedules with their device."""
+        if self._component:
+            return get_device_info_for_component(
+                self._component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
+        return super().device_info
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -1671,10 +1707,38 @@ def create_schedule_sensors(
     for api_key in schedules:
         key = str(api_key)
         friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(key, key)
-        entities.append(ScheduleSensor(coordinator, api, friendly_name, key))
+        component = _schedule_component(friendly_name)
+
+        # Skip mixer schedules for mixers that are not physically connected.
+        if component and component.startswith("mixer_"):
+            mixer_num = int(component.split("_")[1])
+            if not mixer_exists(coordinator.data, mixer_num):
+                _LOGGER.debug(
+                    "Skipping schedule sensor %s - Mixer %d not connected",
+                    friendly_name,
+                    mixer_num,
+                )
+                continue
+
+        entities.append(
+            ScheduleSensor(coordinator, api, friendly_name, key, component)
+        )
 
     _LOGGER.info("Created %d schedule sensors", len(entities))
     return entities
+
+
+def _schedule_component(friendly_name: str) -> str | None:
+    """Map a schedule friendly name to its device-grouping component.
+
+    Mixer and water-heater schedules are grouped with their respective
+    devices; all other schedule types stay on the main controller device.
+    """
+    if friendly_name.startswith("mixer_"):
+        return friendly_name
+    if friendly_name in ("water_heater", "water_heater_2"):
+        return COMPONENT_HUW
+    return None
 
 
 async def async_setup_entry(
