@@ -120,6 +120,16 @@ DEFAULT_POLL_EDIT_PARAMS = 300
 # Keep last values during short glitches, but do not allow silent flat-lines forever.
 STALE_AFTER_SECONDS = 600
 
+# =============================================================================
+# DEVICE GROUPING
+# =============================================================================
+# Controls whether entities are exposed under separate per-component devices
+# (split) or merged under a single PLUM ecoNET300 device (single).
+CONF_DEVICE_GROUPING = "device_grouping"
+DEVICE_GROUPING_SPLIT = "split"
+DEVICE_GROUPING_SINGLE = "single"
+DEFAULT_DEVICE_GROUPING = DEVICE_GROUPING_SPLIT
+
 
 # =============================================================================
 # DEVICE COMPONENT IDENTIFIERS
@@ -283,4 +293,3 @@ MIXER_RELATED_KEYWORDS: list[str] = [
     "actuator",
     "circuit",
 ]
-

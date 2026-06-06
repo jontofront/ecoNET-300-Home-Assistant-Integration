@@ -23,13 +23,16 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import ApiError, AuthError, Econet300Api
 from .common_functions import is_ecomax360i_controller, is_ecosol_controller
 from .const import (
+    CONF_DEVICE_GROUPING,
     CONF_POLL_EDIT_PARAMS,
     CONF_POLL_REG_PARAMS,
     CONF_POLL_SYS_PARAMS,
     CONSECUTIVE_FAILURES_THRESHOLD,
+    DEFAULT_DEVICE_GROUPING,
     DEFAULT_POLL_EDIT_PARAMS,
     DEFAULT_POLL_REG_PARAMS,
     DEFAULT_POLL_SYS_PARAMS,
+    DEVICE_GROUPING_SINGLE,
     DOMAIN,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
@@ -220,6 +223,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         self._poll_edit_params = int(
             options.get(CONF_POLL_EDIT_PARAMS, DEFAULT_POLL_EDIT_PARAMS)
         )
+        self._device_grouping = options.get(
+            CONF_DEVICE_GROUPING, DEFAULT_DEVICE_GROUPING
+        )
 
         super().__init__(
             hass,
@@ -257,6 +263,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         if self.data is None:
             return False
         return key in (self.data.get("paramsEdits") or {})
+
+    @property
+    def single_device_tree(self) -> bool:
+        """Return True when all entities should share one device."""
+        return self._device_grouping == DEVICE_GROUPING_SINGLE
 
     def force_edit_params_refresh(self) -> None:
         """Force editParams refresh on the next coordinator update."""

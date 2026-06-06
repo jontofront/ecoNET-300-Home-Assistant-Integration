@@ -111,6 +111,7 @@
         "menu_options": {
           "connection_settings": "Connection Settings",
           "custom_entities": "Custom Entities",
+          "device_settings": "Device settings",
           "diagnostics": "Generate diagnostics report",
           "polling_settings": "Polling settings"
         }
@@ -166,6 +167,16 @@
           "poll_reg_params": "regParams polling interval (seconds) — live sensor values",
           "poll_sys_params": "sysParams polling interval (seconds) — controller metadata",
           "poll_edit_params": "editParams polling interval (seconds, 0 to disable) — editable parameters catalog/values"
+        }
+      },
+      "device_settings": {
+        "title": "Device settings",
+        "description": "Choose how entities are grouped into devices. Split keeps separate devices per component (boiler, mixers, lambda, ecoSTER, etc.). Single merges everything into one device.",
+        "data": {
+          "device_grouping": "Device grouping"
+        },
+        "data_description": {
+          "device_grouping": "Split (separate devices) or Single (one merged device). Entity IDs are unchanged either way."
         }
       }
     },

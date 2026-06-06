@@ -38,9 +38,15 @@ from homeassistant.const import (  # noqa: F401
 from .controllers import *  # noqa: F401,F403
 from .core import *  # noqa: F401,F403
 
-# Explicit re-export (PEP 484 redundant-alias form) so static analyzers treat
-# this shared constant as an intentional public re-export of the package.
-from .core import SENSITIVE_PARAM_KEYS as SENSITIVE_PARAM_KEYS  # noqa: F401,PLC0414
+# Explicit re-exports (PEP 484 redundant-alias form) so static analyzers treat
+# these shared constants as intentional public re-exports of the package.
+from .core import (
+    CONF_DEVICE_GROUPING as CONF_DEVICE_GROUPING,  # noqa: F401,PLC0414
+    DEFAULT_DEVICE_GROUPING as DEFAULT_DEVICE_GROUPING,  # noqa: F401,PLC0414
+    DEVICE_GROUPING_SINGLE as DEVICE_GROUPING_SINGLE,  # noqa: F401,PLC0414
+    DEVICE_GROUPING_SPLIT as DEVICE_GROUPING_SPLIT,  # noqa: F401,PLC0414
+    SENSITIVE_PARAM_KEYS as SENSITIVE_PARAM_KEYS,  # noqa: F401,PLC0414
+)
 from .custom_entities import *  # noqa: F401,F403
 from .entity_maps import *  # noqa: F401,F403
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.3.0-beta.2] - 2026-06-06
+
+### Changed
+
+- **Device grouping is now configurable (default: split)**: a new **Device settings** options-flow step lets you choose how entities are grouped into devices. **Split** (default) restores the pre-1.3.0 layout with separate devices per component (boiler, mixers, lambda, ecoSTER, HUW, buffer, solar). **Single** keeps the merged `PLUM ecoNET300` device introduced in beta.1. Entity IDs are unchanged in both modes. This reverts the beta.1 single-device tree from a forced breaking change to an opt-in.
+
+### Migration
+
+- After upgrading, the default split mode restores the separate devices. A leftover empty merged `PLUM ecoNET300` device may remain after switching back to split — it can be removed via **Settings → Devices & Services → Devices**.
+
+### Tests
+
+- Added `tests/test_device_grouping.py` covering split vs single `device_info` for the controller, mixer, lambda, ecoSTER, and component devices.
+
+---
+
 ## [v1.3.0-beta.1] - 2026-06-05
 
 ### Added
@@ -11,7 +27,7 @@
 
 ### Changed
 
-- **Single device tree (breaking)**: all entities are now grouped under one `PLUM ecoNET300` device instead of separate child devices for mixers, lambda, and ecoSTER. Entity IDs are unchanged.
+- **Single device tree**: all entities are grouped under one `PLUM ecoNET300` device instead of separate child devices for mixers, lambda, and ecoSTER. Entity IDs are unchanged. *(Superseded in v1.3.0-beta.2: this is now an opt-in **Device settings** option, with split devices restored as the default.)*
 - **Stale-data availability**: entities report `unavailable` when the coordinator marks the latest data as stale.
 - **Refactor — `EXTRA_SENSORS` extracted from `sensor.py`**: the inline `EXTRA_SENSORS` metadata dictionary was decomposed into the shared `const.py` maps (`ENTITY_UNIT_MAP`, `ENTITY_SENSOR_DEVICE_CLASS_MAP`, `STATE_CLASS_MAP`, `ENTITY_PRECISION`) and `ECOMAX360I_SENSORS`. No user-visible entity behavior change.
 

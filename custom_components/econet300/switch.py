@@ -240,7 +240,11 @@ class EconetDynamicSwitch(EconetEntity, SwitchEntity):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device info based on entity component."""
-        return get_device_info_for_component(self._component, self.api)
+        return get_device_info_for_component(
+            self._component,
+            self.api,
+            single_device=self.coordinator.single_device_tree,
+        )
 
     @property
     def available(self) -> bool:

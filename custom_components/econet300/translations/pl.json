@@ -111,8 +111,19 @@
         "menu_options": {
           "connection_settings": "Ustawienia połączenia",
           "custom_entities": "Własne encje",
+          "device_settings": "Ustawienia urządzeń",
           "diagnostics": "Wygeneruj raport diagnostyczny",
           "polling_settings": "Ustawienia odpytywania"
+        }
+      },
+      "device_settings": {
+        "title": "Ustawienia urządzeń",
+        "description": "Wybierz sposób grupowania encji w urządzenia. Podział tworzy osobne urządzenia dla każdego komponentu (kocioł, mieszacze, lambda, ecoSTER itd.). Pojedyncze łączy wszystko w jedno urządzenie.",
+        "data": {
+          "device_grouping": "Grupowanie urządzeń"
+        },
+        "data_description": {
+          "device_grouping": "Podział (osobne urządzenia) lub Pojedyncze (jedno połączone urządzenie). Identyfikatory encji pozostają bez zmian."
         }
       },
       "polling_settings": {

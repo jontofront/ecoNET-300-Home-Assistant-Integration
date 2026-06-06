@@ -134,7 +134,11 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         """Return device info based on entity component."""
         component = getattr(self.entity_description, "component", None)
         if component:
-            return get_device_info_for_component(component, self.api)
+            return get_device_info_for_component(
+                component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
         # Fall back to parent class device_info (main boiler device)
         return super().device_info
 
@@ -481,7 +485,11 @@ class CustomBinarySensor(EconetEntity, BinarySensorEntity):
         """Return device info based on entity component."""
         component = getattr(self.entity_description, "component", None)
         if component:
-            return get_device_info_for_component(component, self.api)
+            return get_device_info_for_component(
+                component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
         return super().device_info
 
     def _lookup_value(self):
