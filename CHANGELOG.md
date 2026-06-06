@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.3.0-beta.3] - 2026-06-06
+
+### Fixed
+
+- **Mixer entities for unconnected mixers no longer created**: the controller all-sensors sweep created `Mixer N target temperature` sensors from phantom `mixerSetTemp{N}` values even when the mixer was not connected (`mixerTemp{N}` is null). Mixer temperature/setpoint sensors are now owned exclusively by `create_mixer_sensors` (which validates mixer presence and groups them on the Mixer device), and phantom mixer keys (e.g. `mixerPumpWorks{N}`) for unconnected mixers are dropped.
+- **Duplicate `unique_id` collisions for mixer/lambda sensors fixed**: the all-sensors sweep emitted the same keys as the dedicated mixer/lambda creators and, running first, shadowed the device-grouped sensors onto the main device (logged as `... does not generate unique IDs. ID ...-mixerTemp1 already exists`). Mixer and lambda keys are now excluded from the sweep so the correctly-grouped Mixer/Lambda-device sensors win.
+- **Mixer/HUW schedule sensors grouped on the correct device**: schedule sensors (e.g. `Mixer 1 schedule`) ignored device grouping and always landed on the main controller device. They now route to their Mixer/HUW device under **split** mode, and mixer schedules for unconnected mixers are skipped.
+
+### Tests
+
+- Added coverage for schedule-sensor device routing (`tests/test_device_grouping.py`) and for absent-mixer suppression in the all-sensors sweep (`tests/test_sensor_basic.py`).
+
+---
+
 ## [v1.3.0-beta.2] - 2026-06-06
 
 ### Changed
