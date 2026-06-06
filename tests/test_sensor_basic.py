@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
+from homeassistant.components.sensor import SensorStateClass
 
 from custom_components.econet300.common_functions import (
     is_ecomax360i_controller,
@@ -45,6 +46,35 @@ class TestEconetSensorBasic:
         assert description.key == "tempCO"
         assert description.translation_key == "temp_co"
         assert description.process_val is not None
+
+    # ruff: noqa: PLR6301
+    @pytest.mark.parametrize(
+        "key",
+        [
+            "tempCO",
+            "boilerPower",
+            "boilerPowerKW",
+            "fuelLevel",
+            "tempCWU",
+            "tempFeeder",
+            "fanPower",
+            "tempFlueGas",
+            "tempBack",
+            "quality",
+            "signal",
+        ],
+    )
+    def test_core_numeric_sensors_default_to_measurement(self, key: str) -> None:
+        """Core numeric sensors must keep MEASUREMENT for long-term statistics."""
+        description = create_sensor_entity_description(key)
+        assert description.state_class == SensorStateClass.MEASUREMENT
+
+    # ruff: noqa: PLR6301
+    @pytest.mark.parametrize("key", ["mode", "statusCO", "controllerID"])
+    def test_suppressed_keys_have_no_state_class(self, key: str) -> None:
+        """Enum/status/string keys stay suppressed to None (no bogus statistics)."""
+        description = create_sensor_entity_description(key)
+        assert description.state_class is None
 
     # ruff: noqa: PLR6301
     @pytest.mark.parametrize(

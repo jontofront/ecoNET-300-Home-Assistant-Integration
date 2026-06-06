@@ -38,11 +38,17 @@ from homeassistant.const import (  # noqa: F401
 from .controllers import *  # noqa: F401,F403
 from .core import *  # noqa: F401,F403
 
-# Explicit re-export so static analyzers resolve this shared constant reliably
-# (wildcard re-exports of newly added names are not always picked up).
-from .core import SENSITIVE_PARAM_KEYS  # noqa: F401
+# Explicit re-export (PEP 484 redundant-alias form) so static analyzers treat
+# this shared constant as an intentional public re-export of the package.
+from .core import SENSITIVE_PARAM_KEYS as SENSITIVE_PARAM_KEYS  # noqa: F401,PLC0414
 from .custom_entities import *  # noqa: F401,F403
 from .entity_maps import *  # noqa: F401,F403
+
+# Explicit re-export (PEP 484 redundant-alias form) so static analyzers treat
+# this shared constant as an intentional public re-export of the package.
+from .entity_maps import (
+    DEFAULT_SENSOR_STATE_CLASS as DEFAULT_SENSOR_STATE_CLASS,  # noqa: F401,PLC0414
+)
 from .params import *  # noqa: F401,F403
 from .processors import *  # noqa: F401,F403
 

@@ -60,6 +60,7 @@ from .const import (
     CDP_ID_TO_REGPARAMS,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
+    DEFAULT_SENSOR_STATE_CLASS,
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
@@ -856,7 +857,10 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     """Create ecoNET300 sensor entity based on supplied key.
 
     Entity preservation rule:
-    - do not default unknown/all-sensors keys to measurement statistics;
+    - default to MEASUREMENT state class so core numeric sensors keep long-term
+      statistics; ``STATE_CLASS_MAP`` lists the keys to suppress to ``None``, and
+      ``_sync_state`` nulls the state class at runtime for non-numeric values, so
+      all-sensors string/enum keys never produce bogus statistics;
     - give unknown keys a real fallback name instead of a nameless "Boiler" entity;
     - keep old unique_id unchanged because key is unchanged.
     """
@@ -865,7 +869,7 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
     device_class = ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None)
     entity_category = ENTITY_CATEGORY.get(key, None)
     native_unit_of_measurement = ENTITY_UNIT_MAP.get(key, None)
-    state_class = STATE_CLASS_MAP.get(key)
+    state_class = STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS)
     suggested_display_precision = ENTITY_PRECISION.get(key)
 
     # Keep component grouping disabled for controller/all-sensors entities to avoid
@@ -1038,7 +1042,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         key=key,
         translation_key=camel_to_snake(key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        state_class=STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
@@ -1142,7 +1146,7 @@ def create_ecoster_sensor_entity_description(key: str) -> EconetSensorEntityDesc
         key=key,
         translation_key=camel_to_snake(key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        state_class=STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
