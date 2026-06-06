@@ -15,6 +15,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
@@ -24,6 +25,7 @@ from .common_functions import (
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
+    is_ecomax360i_controller,
     is_ecoster_related,
     mixer_exists,
 )
@@ -39,6 +41,19 @@ from .const import (
 from .entity import EconetEntity, get_device_info_for_component
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _device_info(api: Econet300Api) -> DeviceInfo:
+    """Return main ecoNET300 device info for editParams entities."""
+    return DeviceInfo(
+        identifiers={(DOMAIN, api.uid)},
+        name="PLUM ecoNET300",
+        manufacturer="PLUM",
+        model="ecoNET300",
+        configuration_url=api.host,
+        sw_version=api.sw_rev,
+        hw_version=api.hw_ver,
+    )
 
 
 class HeaterModeSelectError(HomeAssistantError):
@@ -722,7 +737,17 @@ async def async_setup_entry(
     entities: list[SelectEntity] = []
 
     # Create static select entities (heaterMode, etc.)
+    sys_params = (coordinator.data or {}).get("sysParams") or {}
+    controller_id = sys_params.get("controllerID")
     for select_key in SELECT_KEY_POST_INDEX:
+        # disable-unsupported-heater-mode
+        # On this ecoMAX360i, the generic upstream heaterMode write returns API failure.
+        # Do not expose it; Mode DHW/other editParams remain available.
+        if select_key == "heaterMode" and is_ecomax360i_controller(controller_id):
+            _LOGGER.info(
+                "Skipping unsupported static heaterMode control for ecoMAX360i"
+            )
+            continue
         _LOGGER.debug("Creating select entity: %s", select_key)
         # Convert camelCase to snake_case for entity key
         entity_key = camel_to_snake(select_key)
@@ -744,5 +769,98 @@ async def async_setup_entry(
     entities.extend(dynamic_selects)
     _LOGGER.info("Created %d dynamic select entities", len(dynamic_selects))
 
+    entities.extend(_create_edit_param_selects(coordinator, api))
+
     _LOGGER.info("Adding %d total select entities", len(entities))
     async_add_entities(entities)
+
+
+# =============================================================================
+# Local editParams select entities (preserve uid-edit_<pid>)
+# =============================================================================
+class EditParamSelect(CoordinatorEntity[EconetDataCoordinator], SelectEntity):
+    """Editable discrete parameter from editParams."""
+
+    _attr_entity_category = EntityCategory.CONFIG
+
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
+        """Initialize the editable select entity for the given parameter id."""
+        super().__init__(coordinator)
+        self._api = api
+        self._pid = str(pid)
+
+        info = (coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        pname = info.get("name", f"Param {self._pid}")
+        self._attr_name = f"{pname} ({self._pid})"
+
+        self._attr_device_info = _device_info(api)
+
+        options = info.get("options") or []
+        self._attr_options = [str(o) for o in options]
+
+    @property
+    def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
+        return f"{self._api.uid}-edit_{self._pid}"
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the current parameter value as a string option."""
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
+        val = info.get("value")
+        if val is None:
+            return None
+        try:
+            sval = str(int(val))
+        except (TypeError, ValueError):
+            return None
+        return sval if sval in (self.options or []) else None
+
+    @property
+    def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
+
+    async def async_select_option(self, option: str) -> None:
+        """Write the selected option back to the controller."""
+        try:
+            value = int(option)
+        except ValueError as e:
+            raise HomeAssistantError(
+                f"Invalid option '{option}' for param {self._pid}"
+            ) from e
+
+        ok = await self._api.set_param(self._pid, value)
+        if not ok:
+            raise HomeAssistantError(f"Failed to set param {self._pid} to {value}")
+
+        self.coordinator.force_edit_params_refresh()
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
+        return self._attr_device_info
+
+
+def _create_edit_param_selects(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SelectEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
+    entities: list[SelectEntity] = []
+    for pid, info in catalog.items():
+        if info.get("kind") != "select":
+            continue
+        entities.append(EditParamSelect(coordinator, api, pid))
+    _LOGGER.info("Adding %d editable Select entities from editParams", len(entities))
+    return entities

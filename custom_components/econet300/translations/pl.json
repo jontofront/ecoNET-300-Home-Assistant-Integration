@@ -111,7 +111,15 @@
         "menu_options": {
           "connection_settings": "Ustawienia połączenia",
           "custom_entities": "Własne encje",
-          "diagnostics": "Wygeneruj raport diagnostyczny"
+          "diagnostics": "Wygeneruj raport diagnostyczny",
+          "polling_settings": "Ustawienia odpytywania"
+        }
+      },
+      "polling_settings": {
+        "data": {
+          "poll_reg_params": "Interwał odpytywania regParams (sekundy) — bieżące wartości czujników",
+          "poll_sys_params": "Interwał odpytywania sysParams (sekundy) — metadane sterownika",
+          "poll_edit_params": "Interwał odpytywania editParams (sekundy, 0 aby wyłączyć) — katalog/wartości parametrów edytowalnych"
         }
       },
       "connection_settings": {
@@ -305,6 +313,9 @@
       }
     },
     "binary_sensor": {
+      "health_online": {
+        "name": "Odpytywanie na żywo"
+      },
       "pump_co_works": {
         "name": "Pompa CO"
       },
@@ -427,6 +438,15 @@
       }
     },
     "sensor": {
+      "health_data_age": {
+        "name": "Wiek danych"
+      },
+      "health_consecutive_failures": {
+        "name": "Kolejne błędy"
+      },
+      "health_last_success": {
+        "name": "Ostatnia udana aktualizacja"
+      },
       "boiler_power": {
         "name": "Moc kotła"
       },
@@ -871,6 +891,138 @@
       },
       "hp_status_control": {
         "name": "Stan sterowania PC"
+      },
+      "hp_status_buff_heat_stat": {
+        "name": "Status grzania bufora PC"
+      },
+      "hp_status_flow_heat_stat": {
+        "name": "Status grzania obiegu PC"
+      },
+      "hp_status_hdw_heat_stat": {
+        "name": "Status grzania CWU PC"
+      },
+      "hp_status_uhs_stat": {
+        "name": "Status UHS PC"
+      },
+      "hp_status_circ_p_stat0": {
+        "name": "Status pompy obiegowej PC 0"
+      },
+      "hp_status_circ_p_stat1": {
+        "name": "Status pompy obiegowej PC 1"
+      },
+      "hp_status_circ_p_stat2": {
+        "name": "Status pompy obiegowej PC 2"
+      },
+      "hp_status_circ_p_stat3": {
+        "name": "Status pompy obiegowej PC 3"
+      },
+      "hp_status_circ_p_stat4": {
+        "name": "Status pompy obiegowej PC 4"
+      },
+      "hp_status_circ_p_stat5": {
+        "name": "Status pompy obiegowej PC 5"
+      },
+      "hp_status_circ_p_stat6": {
+        "name": "Status pompy obiegowej PC 6"
+      },
+      "hp_work_state_set_pump2": {
+        "name": "Stan pracy PC – pompa 2"
+      },
+      "hp_work_state_set_pump3": {
+        "name": "Stan pracy PC – pompa 3"
+      },
+      "hp_work_state_set_pump4": {
+        "name": "Stan pracy PC – pompa 4"
+      },
+      "hp_work_state_set_pump5": {
+        "name": "Stan pracy PC – pompa 5"
+      },
+      "cooling_power": {
+        "name": "Moc chłodzenia"
+      },
+      "heating_power": {
+        "name": "Moc grzewcza"
+      },
+      "electric_power": {
+        "name": "Moc elektryczna"
+      },
+      "current_flow": {
+        "name": "Bieżący przepływ"
+      },
+      "hd_wsetpointcalculate": {
+        "name": "Górny limit zadanej CWU"
+      },
+      "bufor_calc_set_temp": {
+        "name": "Obliczona temperatura zadana bufora"
+      },
+      "circuit1_calc_temp": {
+        "name": "Obliczona temperatura obwodu 1"
+      },
+      "circuit2_calc_temp": {
+        "name": "Obliczona temperatura obwodu 2"
+      },
+      "circuit4_calc_temp": {
+        "name": "Obliczona temperatura obwodu 4"
+      },
+      "circuit5_calc_temp": {
+        "name": "Obliczona temperatura obwodu 5"
+      },
+      "circuit6_calc_temp": {
+        "name": "Obliczona temperatura obwodu 6"
+      },
+      "circuit7_calc_temp": {
+        "name": "Obliczona temperatura obwodu 7"
+      },
+      "phn_xcoil_temp": {
+        "name": "Temperatura parownika"
+      },
+      "phn_xdischarge_temp": {
+        "name": "Temperatura tłoczenia sprężarki"
+      },
+      "phn_xsuction_temp": {
+        "name": "Temperatura ssania sprężarki"
+      },
+      "phn_xinlet_temp": {
+        "name": "Temperatura wlotu wody PC"
+      },
+      "phn_xoutlet_temp": {
+        "name": "Temperatura wylotu wody PC"
+      },
+      "phn_xinlet_temp_pump": {
+        "name": "Temperatura wlotu PC (pompa)"
+      },
+      "phn_xinlet_temp_pump2": {
+        "name": "Temperatura wlotu PC (pompa 2)"
+      },
+      "phn_xinlet_temp_pump3": {
+        "name": "Temperatura wlotu PC (pompa 3)"
+      },
+      "phn_xinlet_temp_pump5": {
+        "name": "Temperatura wlotu PC (pompa 5)"
+      },
+      "phn_xoutlet_temp_pump2": {
+        "name": "Temperatura wylotu PC (pompa 2)"
+      },
+      "phn_xoutlet_temp_pump3": {
+        "name": "Temperatura wylotu PC (pompa 3)"
+      },
+      "phn_xoutlet_temp_pump4": {
+        "name": "Temperatura wylotu PC (pompa 4)"
+      },
+      "phn_xoutlet_temp_pump5": {
+        "name": "Temperatura wylotu PC (pompa 5)"
+      },
+      "phn_xreg2045": {
+        "name": "Wewnętrzna temperatura wlotu Phoenix"
+      },
+      "phn_xreg2046": {
+        "name": "Wewnętrzna temperatura wylotu Phoenix"
+      },
+      "phn_xreg2071": {
+        "name": "Częstotliwość sprężarki"
+      },
+      "phn_xreg2074": {
+        "name": "Prędkość wentylatora (Phoenix)"
       },
       "ssa_state": {
         "name": "Stan kompensacji pogodowej"

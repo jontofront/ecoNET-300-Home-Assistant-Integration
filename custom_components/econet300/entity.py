@@ -18,7 +18,6 @@ from .const import (
     COMPONENT_SOLAR,
     DEVICE_INFO_BUFFER_NAME,
     DEVICE_INFO_CONTROLLER_NAME,
-    DEVICE_INFO_ECOSTER_NAME,
     DEVICE_INFO_HUW_NAME,
     DEVICE_INFO_LAMBDA_NAME,
     DEVICE_INFO_MANUFACTURER,
@@ -74,6 +73,18 @@ def _create_base_device_info(
     return info
 
 
+# force-single-main-device
+def _main_device_info(api: Econet300Api) -> DeviceInfo:
+    """Return the single main PLUM ecoNET300 device for all entities."""
+    return _create_base_device_info(
+        api=api,
+        identifier=api.uid,
+        name="PLUM ecoNET300",
+        include_model_id=True,
+        include_hw_version=True,
+    )
+
+
 class EconetEntity(CoordinatorEntity):
     """Represents EconetEntity."""
 
@@ -94,14 +105,15 @@ class EconetEntity(CoordinatorEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
-        return _create_base_device_info(
-            api=self.api,
-            identifier=self.api.uid,
-            name=DEVICE_INFO_CONTROLLER_NAME,
-            include_model_id=True,
-            include_hw_version=True,
-        )
+        """Return main device info for all controller entities."""
+        return _main_device_info(self.api)
+
+    @property
+    def available(self) -> bool:
+        """Return entity availability; stale cached data is not available."""
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        return not bool(health.get("stale"))
 
     def _get_param_data(self) -> dict | None:
         """Get parameter data from mergedData for this entity.
@@ -278,14 +290,8 @@ class MixerEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
-        return _create_base_device_info(
-            api=self.api,
-            identifier=f"{self.api.uid}-mixer-{self._idx}",
-            name=f"{DEVICE_INFO_MIXER_NAME}{self._idx}",
-            parent_device_id=self.api.uid,
-            include_model_id=True,
-        )
+        """Return the main PLUM ecoNET300 device for this entity."""
+        return _main_device_info(self.api)
 
 
 class LambdaEntity(EconetEntity):
@@ -304,13 +310,8 @@ class LambdaEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
-        return _create_base_device_info(
-            api=self.api,
-            identifier=f"{self.api.uid}-lambda",
-            name=DEVICE_INFO_LAMBDA_NAME,
-            parent_device_id=self.api.uid,
-        )
+        """Return the main PLUM ecoNET300 device for this entity."""
+        return _main_device_info(self.api)
 
 
 class EcoSterEntity(EconetEntity):
@@ -331,14 +332,8 @@ class EcoSterEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
-        return _create_base_device_info(
-            api=self.api,
-            identifier=f"{self.api.uid}-ecoster-{self._idx}",
-            name=f"{DEVICE_INFO_ECOSTER_NAME} {self._idx}",
-            parent_device_id=self.api.uid,
-            include_model_id=True,
-        )
+        """Return the main PLUM ecoNET300 device for this entity."""
+        return _main_device_info(self.api)
 
 
 # Component configuration for device info creation
@@ -382,6 +377,10 @@ def get_device_info_for_component(
         DeviceInfo for the specified component
 
     """
+    # force-single-main-device: avoid HUW/mixer/other child devices and
+    # keep all entities under the existing PLUM ecoNET300 device.
+    return _main_device_info(api)
+
     # Handle mixer special case
     if component.startswith("mixer_"):
         idx = mixer_idx or int(component.split("_")[1])

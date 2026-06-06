@@ -4,6 +4,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from importlib import resources
+import json
 import logging
 from typing import Any, Final, Self
 
@@ -16,7 +18,12 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import STATE_UNAVAILABLE, EntityCategory, UnitOfMass
+from homeassistant.const import (
+    STATE_UNAVAILABLE,
+    EntityCategory,
+    UnitOfMass,
+    UnitOfTime,
+)
 from homeassistant.core import (
     CALLBACK_TYPE,
     Event,
@@ -42,7 +49,6 @@ from .common_functions import (
     camel_to_snake,
     decode_ecomax_schedule_day,
     decode_ecomax_schedule_metadata,
-    get_entity_component,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -54,6 +60,7 @@ from .const import (
     CDP_ID_TO_REGPARAMS,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
+    DEFAULT_SENSOR_STATE_CLASS,
     DEVICE_CLASS_FUEL_METER,
     DEVICE_INFO_CONTROLLER_NAME,
     DOMAIN,
@@ -70,6 +77,7 @@ from .const import (
     NUMBER_OF_AVAILABLE_ECOSTERS,
     SCHEDULE_TYPE_REVERSE_MAP,
     SCHEDULE_WEEKDAYS,
+    SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_FUEL_STREAM,
     SENSOR_MAP_KEY,
@@ -91,6 +99,50 @@ from .entity import (
 
 _LOGGER = logging.getLogger(__name__)
 
+
+def _load_translated_entity_keys(entity_domain: str) -> set[str]:
+    """Load translation keys declared in strings.json for a given entity domain."""
+    try:
+        with (
+            resources.files(__package__)
+            .joinpath("strings.json")
+            .open("r", encoding="utf-8") as f
+        ):
+            payload = json.load(f) or {}
+        entities = (payload.get("entity") or {}).get(entity_domain) or {}
+        return set(entities.keys())
+    except Exception:  # noqa: BLE001 — diagnostics helper must never break setup  # pragma: no cover
+        return set()
+
+
+_TRANSLATED_SENSOR_TRANSLATION_KEYS: set[str] = _load_translated_entity_keys("sensor")
+
+
+def _resolve_sensor_name(key: str, explicit_name: str | None) -> str | None:
+    """Resolve a non-empty display name for all-sensors dynamic keys."""
+    if explicit_name:
+        return explicit_name
+    tkey = camel_to_snake(str(key))
+    if tkey in _TRANSLATED_SENSOR_TRANSLATION_KEYS:
+        return None
+    return str(key)
+
+
+def _safe_native_value(value: Any) -> Any:
+    """Ensure Home Assistant-compatible sensor state."""
+    if value is None:
+        return None
+    if isinstance(value, (int, float, bool)):
+        return value
+    if isinstance(value, str):
+        stripped = value.strip()
+        if stripped == "":
+            return None
+        return value if len(value) <= 255 else value[:252] + "..."
+    text = str(value)
+    return text if len(text) <= 255 else text[:252] + "..."
+
+
 # Unit time divisor: convert seconds to hours for kg/h integration
 _UNIT_TIME_HOURS: Final = Decimal(3600)
 
@@ -101,6 +153,81 @@ class EconetSensorEntityDescription(SensorEntityDescription):
 
     process_val: Callable[[Any], Any] = lambda x: x  # noqa: E731
     component: str | None = None  # Component for device grouping (huw, mixer_1, etc.)
+
+
+class EconetHealthSensor(SensorEntity):
+    """Diagnostic sensor exposing ecoNET300 coordinator health.
+
+    These sensors are intentionally created unconditionally - independent of the
+    controller model or which parameters the device exposes - so integration
+    health stays observable even while the physical device is offline or
+    returning stale data. They read from the coordinator ``_health`` block:
+
+    - ``stale_seconds``: age of the most recent successful poll, in seconds
+      (DURATION). Keeps growing while the device is unreachable.
+    - ``consecutive_failures``: count of consecutive failed update cycles; 0
+      after a successful poll.
+    - ``last_success_ts``: wall-clock time of the last successful update,
+      exposed as a TIMESTAMP (timezone-aware ``datetime``).
+
+    All three are DIAGNOSTIC entities and become available as soon as the
+    coordinator has produced any data.
+    """
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(
+        self,
+        coordinator: EconetDataCoordinator,
+        api: Econet300Api,
+        key: str,
+        translation_key: str,
+        unit: str | None = None,
+        device_class: SensorDeviceClass | None = None,
+        state_class: SensorStateClass | None = None,
+    ) -> None:
+        """Initialize a coordinator-health diagnostic sensor."""
+        self.coordinator = coordinator
+        self.api = api
+        self._health_key = key
+        self._attr_translation_key = translation_key
+        self._attr_unique_id = f"{api.uid}-health-{key}"
+        self._attr_native_unit_of_measurement = unit
+        self._attr_device_class = device_class
+        self._attr_state_class = state_class
+        # Timestamps render their own value; numeric health values show no decimals.
+        self._attr_suggested_display_precision = (
+            None if device_class == SensorDeviceClass.TIMESTAMP else 0
+        )
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
+        return EconetEntity(self.coordinator, self.api).device_info
+
+    @property
+    def available(self) -> bool:
+        """Return True once the coordinator has data to report."""
+        return self.coordinator.data is not None
+
+    @property
+    def native_value(self):
+        """Return the value for this health key from coordinator data."""
+        health = (self.coordinator.data or {}).get("_health", {})
+        value = health.get(self._health_key)
+        if self._attr_device_class == SensorDeviceClass.TIMESTAMP:
+            if isinstance(value, (int, float)) and value:
+                return datetime.fromtimestamp(value, tz=UTC)
+            return None
+        return value
+
+    async def async_added_to_hass(self) -> None:
+        """Subscribe to coordinator updates when added to Home Assistant."""
+        await super().async_added_to_hass()
+        self.async_on_remove(
+            self.coordinator.async_add_listener(self.async_write_ha_state)
+        )
 
 
 class EconetSensor(EconetEntity, SensorEntity):
@@ -146,7 +273,37 @@ class EconetSensor(EconetEntity, SensorEntity):
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
         self._raw_value = value
-        self._attr_native_value = self.entity_description.process_val(value)
+        native_value = _safe_native_value(self.entity_description.process_val(value))
+        self._attr_native_value = native_value
+
+        description = self.entity_description
+        if isinstance(native_value, (int, float)) and not isinstance(
+            native_value, bool
+        ):
+            # Numeric value: restore the entity-description metadata in case a
+            # previous non-numeric update cleared it. HA resolves ``_attr_*``
+            # before ``entity_description.*``, so leaving these nulled would
+            # permanently break statistics/long-term graphs for the entity.
+            self._attr_state_class = description.state_class
+            self._attr_suggested_display_precision = (
+                description.suggested_display_precision
+            )
+            self._attr_native_unit_of_measurement = (
+                description.native_unit_of_measurement
+            )
+            self._attr_device_class = description.device_class
+        else:
+            # Last-resort HA safety: never expose a non-numeric value as a
+            # measurement sensor. This prevents listener crashes for dynamic
+            # sysParams strings, dicts/lists converted to strings, passwords,
+            # IPs, SSIDs, etc.
+            self._attr_state_class = None
+            self._attr_suggested_display_precision = None
+            if description.key not in ENTITY_UNIT_MAP:
+                self._attr_native_unit_of_measurement = None
+            if description.key not in ENTITY_SENSOR_DEVICE_CLASS_MAP:
+                self._attr_device_class = None
+
         self.async_write_ha_state()
 
 
@@ -168,7 +325,9 @@ class MixerSensor(MixerEntity, SensorEntity):
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
-        self._attr_native_value = self.entity_description.process_val(value)
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -189,7 +348,9 @@ class LambdaSensors(LambdaEntity, SensorEntity):
 
     def _sync_state(self, value) -> None:
         """Synchronize the state of the sensor entity."""
-        self._attr_native_value = self.entity_description.process_val(value)
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -214,7 +375,9 @@ class EcoSterSensor(EcoSterEntity, SensorEntity):
     def _sync_state(self, value) -> None:
         """Sync state."""
         _LOGGER.debug("EcoSter sensor sync state: %s", value)
-        self._attr_native_value = self.entity_description.process_val(value)
+        self._attr_native_value = _safe_native_value(
+            self.entity_description.process_val(value)
+        )
         self.async_write_ha_state()
 
 
@@ -691,21 +854,43 @@ class FuelConsumptionTotalSensor(RestoreSensor):
 
 
 def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
-    """Create ecoNET300 sensor entity based on supplied key."""
+    """Create ecoNET300 sensor entity based on supplied key.
+
+    Entity preservation rule:
+    - default to MEASUREMENT state class so core numeric sensors keep long-term
+      statistics; ``STATE_CLASS_MAP`` lists the keys to suppress to ``None``, and
+      ``_sync_state`` nulls the state class at runtime for non-numeric values, so
+      all-sensors string/enum keys never produce bogus statistics;
+    - give unknown keys a real fallback name instead of a nameless "Boiler" entity;
+    - keep old unique_id unchanged because key is unchanged.
+    """
     _LOGGER.debug("Creating sensor entity description for key: %s", key)
 
-    # Determine component for device grouping based on key patterns
-    component = get_entity_component(key, key)
+    device_class = ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None)
+    entity_category = ENTITY_CATEGORY.get(key, None)
+    native_unit_of_measurement = ENTITY_UNIT_MAP.get(key, None)
+    state_class = STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS)
+    suggested_display_precision = ENTITY_PRECISION.get(key)
+
+    # Keep component grouping disabled for controller/all-sensors entities to avoid
+    # renaming existing entity display names to the device name ("Boiler").
+    component = None
 
     entity_description = EconetSensorEntityDescription(
         key=key,
-        device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
-        entity_category=ENTITY_CATEGORY.get(key, None),
+        name=_resolve_sensor_name(key, None),
+        device_class=device_class,
+        entity_category=entity_category,
         translation_key=camel_to_snake(key),
-        native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
-        suggested_display_precision=ENTITY_PRECISION.get(key, 0),
-        process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
+        native_unit_of_measurement=native_unit_of_measurement,
+        state_class=state_class,
+        suggested_display_precision=suggested_display_precision,
+        process_val=ENTITY_VALUE_PROCESSOR.get(
+            key,
+            lambda x: x
+            if isinstance(x, (int, float, str, bool)) or x is None
+            else str(x),
+        ),
         component=component,
     )
     _LOGGER.debug(
@@ -753,6 +938,13 @@ def create_controller_sensors(
     controller_id = data_sysParams.get("controllerID")
 
     sensor_keys = _controller_sensor_key_candidates(controller_id)
+    # All-sensors: expose every readable value actually present on the device.
+    if data_regParams:
+        sensor_keys |= set(data_regParams.keys())
+    if data_sysParams:
+        sensor_keys |= set(data_sysParams.keys())
+    # Never expose sensitive credentials/network identifiers as sensor states.
+    sensor_keys -= SENSITIVE_PARAM_KEYS
     if is_ecosol_controller(controller_id):
         _LOGGER.info("Using ecoSOL sensor mapping for controllerID: %s", controller_id)
     elif is_ecomax360i_controller(controller_id):
@@ -850,7 +1042,7 @@ def create_mixer_sensor_entity_description(key: str) -> EconetSensorEntityDescri
         key=key,
         translation_key=camel_to_snake(key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        state_class=STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
@@ -954,7 +1146,7 @@ def create_ecoster_sensor_entity_description(key: str) -> EconetSensorEntityDesc
         key=key,
         translation_key=camel_to_snake(key),
         native_unit_of_measurement=ENTITY_UNIT_MAP.get(key, None),
-        state_class=STATE_CLASS_MAP.get(key, SensorStateClass.MEASUREMENT),
+        state_class=STATE_CLASS_MAP.get(key, DEFAULT_SENSOR_STATE_CLASS),
         device_class=ENTITY_SENSOR_DEVICE_CLASS_MAP.get(key, None),
         suggested_display_precision=ENTITY_PRECISION.get(key, 0),
         process_val=ENTITY_VALUE_PROCESSOR.get(key, lambda x: x),  # noqa: E731
@@ -1490,6 +1682,36 @@ async def async_setup_entry(
         """Collect all sensor entities."""
         entities: list[SensorEntity] = []
         _LOGGER.info("Starting entity collection for sensors...")
+
+        # Diagnostic health sensors: created unconditionally so integration
+        # health is observable even when the device is offline/stale. See
+        # EconetHealthSensor for the meaning of each health key.
+        entities.extend(
+            [
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "stale_seconds",
+                    "health_data_age",
+                    UnitOfTime.SECONDS,
+                    SensorDeviceClass.DURATION,
+                    SensorStateClass.MEASUREMENT,
+                ),
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "consecutive_failures",
+                    "health_consecutive_failures",
+                ),
+                EconetHealthSensor(
+                    coordinator,
+                    api,
+                    "last_success_ts",
+                    "health_last_success",
+                    device_class=SensorDeviceClass.TIMESTAMP,
+                ),
+            ]
+        )
 
         # Gather sensors dynamically based on the controller
         controller_sensors = create_controller_sensors(coordinator, api)

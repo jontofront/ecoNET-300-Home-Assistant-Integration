@@ -1,5 +1,26 @@
 # Changelog
 
+## [v1.3.0-beta.1] - 2026-06-05
+
+### Added
+
+- **Configurable polling intervals** ([#234](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/234)): a new **Polling settings** options-flow step lets you tune the `regParams`, `sysParams`, and `editParams` polling intervals independently (set `editParams` to `0` to disable it).
+- **Coordinator health diagnostics**: always-present diagnostic entities — `Data age` (DURATION), `Consecutive failures`, `Last successful update` (TIMESTAMP), and a `Live polling` connectivity binary sensor — so integration health stays observable even while the device is offline or returning stale data.
+- **`editParams` catalog**: editable parameters from the `editParams` endpoint are now exposed as number/select/switch entities (and read-only sensors where appropriate).
+- **Phoenix / extended heat-pump sensors**: evaporator/compressor temperatures, compressor frequency, fan speed, cooling/heating/electrical power, buffer/circuit calculated temperatures, extended `HPStatus*` states, and more.
+
+### Changed
+
+- **Single device tree (breaking)**: all entities are now grouped under one `PLUM ecoNET300` device instead of separate child devices for mixers, lambda, and ecoSTER. Entity IDs are unchanged.
+- **Stale-data availability**: entities report `unavailable` when the coordinator marks the latest data as stale.
+- **Refactor — `EXTRA_SENSORS` extracted from `sensor.py`**: the inline `EXTRA_SENSORS` metadata dictionary was decomposed into the shared `const.py` maps (`ENTITY_UNIT_MAP`, `ENTITY_SENSOR_DEVICE_CLASS_MAP`, `STATE_CLASS_MAP`, `ENTITY_PRECISION`) and `ECOMAX360I_SENSORS`. No user-visible entity behavior change.
+
+### Translations
+
+- **EN + PL** for the new heat-pump/Phoenix sensors, health diagnostics, and the polling-settings options step.
+
+---
+
 ## [v1.2.7] - 2026-05-24
 
 ### Fixed

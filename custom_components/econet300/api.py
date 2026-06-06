@@ -1391,7 +1391,7 @@ class Econet300Api:
                 "version": "1.0-names",                    # Merged data version
                 "timestamp": "2024-01-15T10:30:00Z",       # Generation timestamp
                 "device": {                                # Device information
-                    "uid": "ecoMAX810P-L-device",         # Device unique identifier
+                    "uid": "example-device-uid",         # Device unique identifier
                     "controllerId": "ecoMAX810P-L",        # Controller type
                     "language": "en"                       # Language used
                 },
@@ -1627,7 +1627,7 @@ class Econet300Api:
                 "version": "1.0-names-descs-structure-units-indexed-enums-cleaned",  # Cleaned merged data version
                 "timestamp": "2024-01-15T10:30:00Z",           # Generation timestamp
                 "device": {                                    # Device information
-                    "uid": "ecoMAX810P-L-device",             # Device unique identifier
+                    "uid": "example-device-uid",             # Device unique identifier
                     "controllerId": "ecoMAX810P-L",            # Controller type
                     "language": "en"                           # Language used
                 },
