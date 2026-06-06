@@ -485,6 +485,32 @@ def validate_parameter_data(param: dict) -> tuple[bool, str]:
     return True, ""
 
 
+def find_merged_param_by_key(merged_data: dict | None, key: str) -> dict | None:
+    """Find a mergedData parameter dict by its ``key`` field.
+
+    mergedData parameters are indexed by their numeric id, but each entry also
+    carries a stable ``key`` (e.g. ``preset_mixer1_temperature``). Static,
+    regParams-based entities that lack a ``param_id`` use this helper to resolve
+    their mergedData counterpart so shared metadata (lock flags, lock reason,
+    description) can be reused.
+
+    Args:
+        merged_data: The ``mergedData`` payload from the coordinator.
+        key: The parameter ``key`` to match.
+
+    Returns:
+        The matching parameter dict, or None if not found.
+
+    """
+    if not merged_data:
+        return None
+    parameters = merged_data.get("parameters") or {}
+    for param in parameters.values():
+        if isinstance(param, dict) and param.get("key") == key:
+            return param
+    return None
+
+
 def is_parameter_locked(param: dict) -> bool:
     """Check if parameter is locked using existing mergedData field.
 

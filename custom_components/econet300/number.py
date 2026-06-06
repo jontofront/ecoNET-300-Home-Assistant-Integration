@@ -27,6 +27,7 @@ from .common import Econet300Api, EconetDataCoordinator, skip_params_edits
 from .common_functions import (
     camel_to_snake,
     ecoster_exists,
+    find_merged_param_by_key,
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
@@ -478,6 +479,26 @@ class MixerNumber(MixerEntity, NumberEntity):
         _LOGGER.debug("Apply mixer number limits: %s", self)
         self.async_write_ha_state()
 
+    def _get_param_data(self) -> dict | None:
+        """Resolve the mergedData parameter backing this mixer setpoint.
+
+        Static mixer setpoints (``mixerSetTemp{N}``) come from ``regParams`` and
+        have no ``param_id``, so the base lookup misses the lock flags that live
+        on the mergedData ``preset_mixer{N}_temperature`` parameter. Fall back to
+        matching that parameter by key so lock detection (``locked`` /
+        ``lock_reason``) works for these entities too.
+        """
+        param_data = super()._get_param_data()
+        if param_data is not None:
+            return param_data
+
+        if self.coordinator.data is None:
+            return None
+        return find_merged_param_by_key(
+            self.coordinator.data.get("mergedData"),
+            f"preset_mixer{self._idx}_temperature",
+        )
+
     @property
     def icon(self) -> str | None:
         """Return icon for entity."""
@@ -538,8 +559,19 @@ class MixerNumber(MixerEntity, NumberEntity):
             return
 
         if not await self.api.set_param(self.entity_description.key, int(value)):
-            _LOGGER.warning("Setting mixer value failed")
-            return
+            _LOGGER.warning(
+                "Setting mixer value failed: %s=%s (device rejected the write, "
+                "parameter may be locked)",
+                self.entity_description.key,
+                int(value),
+            )
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="number_set_failed",
+                translation_placeholders={
+                    "error": f"{self.entity_description.key}={int(value)}"
+                },
+            )
 
         self._attr_native_value = value
         self._last_write_time = time.monotonic()  # Record write time for cooldown
