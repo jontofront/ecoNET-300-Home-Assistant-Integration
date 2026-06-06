@@ -27,6 +27,7 @@ from custom_components.econet300.entity import (
     MixerEntity,
     get_device_info_for_component,
 )
+from custom_components.econet300.sensor import ScheduleSensor, _schedule_component
 
 
 def _make_api() -> MagicMock:
@@ -177,3 +178,39 @@ def test_ecoster_entity_split_vs_single() -> None:
     single._idx = 2
     single.coordinator = _coordinator(single=True)
     assert _identifier(_entity_device_info(EcoSterEntity, single)) == api.uid
+
+
+# ---------------------------------------------------------------------------
+# Schedule sensor device routing
+# ---------------------------------------------------------------------------
+def test_schedule_component_mapping() -> None:
+    """Mixer/water-heater schedules map to their device component."""
+    assert _schedule_component("mixer_1") == "mixer_1"
+    assert _schedule_component("mixer_4") == "mixer_4"
+    assert _schedule_component("water_heater") == COMPONENT_HUW
+    assert _schedule_component("water_heater_2") == COMPONENT_HUW
+    # Boiler-level schedules stay on the main controller device.
+    assert _schedule_component("boiler") is None
+    assert _schedule_component("circulation_pump") is None
+
+
+def test_schedule_sensor_routes_to_mixer_device() -> None:
+    """A mixer schedule sensor is grouped under its mixer device when split."""
+    api = _make_api()
+    entity = object.__new__(ScheduleSensor)
+    entity.api = api
+    entity._component = "mixer_1"
+    entity.coordinator = _coordinator(single=False)
+    assert (
+        _identifier(_entity_device_info(ScheduleSensor, entity)) == f"{api.uid}-mixer-1"
+    )
+
+
+def test_schedule_sensor_without_component_uses_main_device() -> None:
+    """A boiler-level schedule sensor stays on the controller device."""
+    api = _make_api()
+    entity = object.__new__(ScheduleSensor)
+    entity.api = api
+    entity._component = None
+    entity.coordinator = _coordinator(single=False)
+    assert _identifier(_entity_device_info(ScheduleSensor, entity)) == api.uid

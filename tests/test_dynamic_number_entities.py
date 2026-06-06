@@ -15,8 +15,10 @@ from custom_components.econet300.common import EconetDataCoordinator
 
 # Category functions removed - category support eliminated
 from custom_components.econet300.number import (
+    MixerNumber,
     async_setup_entry,
     create_dynamic_number_entity_description,
+    create_number_entity_description,
     should_be_number_entity,
 )
 from custom_components.econet300.select import (
@@ -634,3 +636,74 @@ class TestDynamicSelectEntities:
 
         mock_api.set_param.assert_not_called()
         mock_api.set_param_by_index.assert_not_called()
+
+
+class TestMixerNumberLock:
+    """Lock detection for static (regParams-based) mixer setpoints.
+
+    ``mixerSetTemp{N}`` entities have no ``param_id`` and must resolve their
+    lock state from the mergedData ``preset_mixer{N}_temperature`` parameter.
+    """
+
+    @pytest.fixture
+    def merged_data(self):
+        """Load ecoMAX810P-L mergedData (preset_mixer1_temperature is locked)."""
+        return load_fixture("ecoMAX810P-L", "mergedData.json")
+
+    def _build_mixer_number(
+        self, merged_data, idx: int
+    ) -> tuple[MixerNumber, MagicMock]:
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": "ecoMAX810P-L"},
+            "regParams": {f"mixerSetTemp{idx}": 41, f"mixerTemp{idx}": 40},
+            "paramsEdits": {},
+            "mergedData": merged_data,
+        }
+        coordinator.single_device_tree = False
+        coordinator.last_update_success = True
+
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test-uid"
+        api.set_param = AsyncMock(return_value=False)
+        api.get_param_limits = AsyncMock(return_value=None)
+
+        description = create_number_entity_description(f"mixerSetTemp{idx}", None)
+        entity = MixerNumber(description, coordinator, api, idx)
+        entity.hass = MagicMock()
+        return entity, api
+
+    def test_locked_mixer_setpoint_detected(self, merged_data):
+        """Mixer 1 setpoint resolves the lock from preset_mixer1_temperature."""
+        entity, _ = self._build_mixer_number(merged_data, 1)
+
+        assert entity._is_parameter_locked() is True  # noqa: SLF001
+        assert entity._get_lock_reason() == "Weather control enabled."  # noqa: SLF001
+        assert entity.icon == "mdi:lock"
+        attrs = entity.extra_state_attributes
+        assert attrs.get("locked") is True
+        assert attrs.get("lock_reason") == "Weather control enabled."
+
+    @pytest.mark.asyncio
+    async def test_locked_mixer_setpoint_write_raises(self, merged_data):
+        """Writing a locked mixer setpoint surfaces a HomeAssistantError popup."""
+        entity, api = self._build_mixer_number(merged_data, 1)
+
+        with pytest.raises(HomeAssistantError):
+            await entity.async_set_native_value(50)
+
+        # Locked check happens before the API call, so no write is attempted.
+        api.set_param.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_device_rejected_write_raises(self, merged_data):
+        """A device-rejected write (set_param False) surfaces a popup error."""
+        # Mixer 2 setpoint is not locked in this fixture, so the lock gate passes
+        # and the API is actually called (returning False to simulate rejection).
+        entity, api = self._build_mixer_number(merged_data, 2)
+        assert entity._is_parameter_locked() is False  # noqa: SLF001
+
+        with pytest.raises(HomeAssistantError):
+            await entity.async_set_native_value(50)
+
+        api.set_param.assert_awaited_once()

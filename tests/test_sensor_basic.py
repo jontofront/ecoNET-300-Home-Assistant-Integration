@@ -12,6 +12,7 @@ from custom_components.econet300.common_functions import (
     is_ecosol_controller,
 )
 from custom_components.econet300.const import (
+    COMPONENT_LAMBDA,
     DEFAULT_SENSORS,
     ECOMAX360I_SENSORS,
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
@@ -367,6 +368,71 @@ class TestSensorMappingLogic:
         keys = {e.entity_description.key for e in entities}
 
         assert keys.isdisjoint(SENSITIVE_PARAM_KEYS)
+
+    def test_absent_mixer_setpoints_not_exposed_by_all_sensors(self) -> None:
+        """All-sensors sweep must not create setpoints for unconnected mixers.
+
+        On ecoMAX810P-L only Mixer 1 is connected (mixerTemp1 has a value);
+        mixerTemp2/3/4 are null while mixerSetTemp2/3/4 still report values.
+        The controller all-sensors sweep must not turn those phantom setpoints
+        into "Mixer N target temperature" sensors (issue: device split logic).
+        """
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX810P-L"
+        reg_raw = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        reg_params = reg_raw.get("curr") or reg_raw
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        # Guard: the fixture must contain phantom setpoints to validate filtering.
+        assert reg_params.get("mixerTemp2") is None
+        assert reg_params.get("mixerSetTemp2") is not None
+
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        # Mixer temp/setpoint keys are owned by create_mixer_sensors(); the
+        # all-sensors sweep must not emit any of them (connected or not).
+        for mixer_num in (1, 2, 3, 4):
+            assert f"mixerSetTemp{mixer_num}" not in keys
+            assert f"mixerTemp{mixer_num}" not in keys
+        # Phantom mixer pump sensors for unconnected mixers are dropped too.
+        for mixer_num in (2, 3, 4):
+            assert f"mixerPumpWorks{mixer_num}" not in keys
+
+    def test_lambda_keys_not_duplicated_by_all_sensors(self) -> None:
+        """Lambda sensors are owned by create_lambda_sensors, not the sweep.
+
+        The all-sensors sweep must not emit lambda keys; otherwise their
+        unique_ids collide with the device-grouped Lambda sensors and Home
+        Assistant ignores one of them (observed: ``...-lambdaStatus`` already
+        exists).
+        """
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX810P-L"
+        reg_raw = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        reg_params = reg_raw.get("curr") or reg_raw
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        lambda_keys = SENSOR_MAP_KEY[COMPONENT_LAMBDA]
+        # Guard: the fixture must actually expose lambda values to validate.
+        assert lambda_keys & set(reg_params), "fixture lacks lambda keys to validate"
+
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert keys.isdisjoint(lambda_keys)
 
 
 class TestGetDataSourcesTuple:

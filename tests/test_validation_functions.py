@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from custom_components.econet300.common_functions import (
+    find_merged_param_by_key,
     get_active_alarm,
     get_duplicate_display_name,
     get_duplicate_entity_key,
@@ -179,6 +180,41 @@ class TestIsParameterLocked:
             "lock_reason": "Weather control enabled.",
         }
         assert is_parameter_locked(param) is True
+
+
+class TestFindMergedParamByKey:
+    """Tests for find_merged_param_by_key function."""
+
+    def _merged(self) -> dict:
+        return {
+            "parameters": {
+                "63": {"key": "preset_mixer1_temperature", "locked": True},
+                "64": {"key": "preset_mixer2_temperature", "locked": False},
+                "99": "not-a-dict",
+            }
+        }
+
+    def test_found_by_key(self):
+        """Test returns the matching parameter dict by key."""
+        param = find_merged_param_by_key(self._merged(), "preset_mixer1_temperature")
+        assert param is not None
+        assert param["locked"] is True
+
+    def test_not_found_returns_none(self):
+        """Test returns None when no parameter matches the key."""
+        assert (
+            find_merged_param_by_key(self._merged(), "preset_mixer9_temperature")
+            is None
+        )
+
+    def test_none_merged_data(self):
+        """Test returns None when merged_data is None or empty."""
+        assert find_merged_param_by_key(None, "preset_mixer1_temperature") is None
+        assert find_merged_param_by_key({}, "preset_mixer1_temperature") is None
+
+    def test_ignores_non_dict_entries(self):
+        """Test non-dict parameter entries are skipped safely."""
+        assert find_merged_param_by_key(self._merged(), "not-a-dict") is None
 
 
 class TestGetLockReason:
