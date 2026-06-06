@@ -26,7 +26,6 @@ from custom_components.econet300.const import (
     DEFAULT_POLL_EDIT_PARAMS,
     DEFAULT_POLL_REG_PARAMS,
     DEFAULT_POLL_SYS_PARAMS,
-    DOMAIN,
     STALE_AFTER_SECONDS,
 )
 from custom_components.econet300.sensor import EconetHealthSensor
