@@ -1,0 +1,497 @@
+{
+  "216": {
+    "special": 0,
+    "name": "Czas przegrzania kotła",
+    "unit": 4
+  },
+  "217": {
+    "special": 0,
+    "name": "Ilość uzupełnień paliwa",
+    "unit": 0
+  },
+  "214": {
+    "special": 0,
+    "name": "Czas pracy",
+    "unit": 4
+  },
+  "215": {
+    "special": 0,
+    "name": "Czas postoju",
+    "unit": 4
+  },
+  "210": {
+    "special": 0,
+    "name": "Bieżąca moc kotła",
+    "unit": 5
+  },
+  "218": {
+    "special": 0,
+    "name": "Ilość rozpaleń",
+    "unit": 0
+  },
+  "133": {
+    "special": 1,
+    "name": "UWAGA!\\nBrak paliwa.",
+    "unit": 31
+  },
+  "132": {
+    "special": 1,
+    "name": "UWAGA!\\nNieudana próba ładowania zasobnika.",
+    "unit": 31
+  },
+  "131": {
+    "special": 1,
+    "name": "UWAGA!\\nNiski poziom paliwa.",
+    "unit": 31
+  },
+  "130": {
+    "special": 1,
+    "name": "Strumień paliwa",
+    "unit": 9
+  },
+  "137": {
+    "special": 1,
+    "name": "UWAGA!\\nOtwarte drzwiczki kotła.",
+    "unit": 31
+  },
+  "136": {
+    "special": 1,
+    "name": "UWAGA!\\nUszkodzony system podajnika.",
+    "unit": 31
+  },
+  "135": {
+    "special": 1,
+    "name": "Błąd sondy ecoLAMBDA.",
+    "unit": 31
+  },
+  "134": {
+    "special": 1,
+    "name": "Trwa kalibracja sondy ecoLAMBDA.",
+    "unit": 31
+  },
+  "139": {
+    "special": 1,
+    "name": "Maksymalna temperatura spalin.",
+    "unit": 31
+  },
+  "138": {
+    "special": 1,
+    "name": "UWAGA!\\nWyczyść wymiennik.",
+    "unit": 31
+  },
+  "1547": {
+    "special": 1,
+    "name": "Pompa mieszacza 2",
+    "unit": 31
+  },
+  "1544": {
+    "special": 1,
+    "name": "Pompa mieszacza 1",
+    "unit": 31
+  },
+  "1542": {
+    "special": 1,
+    "name": "Pompa CWU",
+    "unit": 31
+  },
+  "1543": {
+    "special": 1,
+    "name": "Pompa cyrkulacyjna",
+    "unit": 31
+  },
+  "1540": {
+    "special": 1,
+    "name": "Podajnik zewnętrzny",
+    "unit": 31
+  },
+  "1541": {
+    "special": 1,
+    "name": "Pompa kotła",
+    "unit": 31
+  },
+  "4": {
+    "special": 1,
+    "name": "Kocioł rezerwowy",
+    "unit": 31
+  },
+  "1793": {
+    "special": 1,
+    "name": "Moc kotła",
+    "unit": 7
+  },
+  "1792": {
+    "special": 7,
+    "name": "",
+    "unit": 31
+  },
+  "1795": {
+    "special": 0,
+    "name": "Moc nadmuchu",
+    "unit": 5
+  },
+  "1026": {
+    "special": 1,
+    "name": "Temperatura palnika",
+    "unit": 1
+  },
+  "126": {
+    "special": 0,
+    "name": "Moc wyciągu",
+    "unit": 5
+  },
+  "2": {
+    "special": 1,
+    "name": "Rotacyjne oczyszczanie",
+    "unit": 31
+  },
+  "1550": {
+    "special": 1,
+    "name": "Pompa mieszacza 3",
+    "unit": 31
+  },
+  "1553": {
+    "special": 1,
+    "name": "Pompa mieszacza 4",
+    "unit": 31
+  },
+  "50": {
+    "special": 1,
+    "name": "Temperatura bufora środkowa",
+    "unit": 1
+  },
+  "195": {
+    "special": 1,
+    "name": "SAV",
+    "unit": 5
+  },
+  "194": {
+    "special": 1,
+    "name": "Tlen",
+    "unit": 5
+  },
+  "191": {
+    "special": 2,
+    "name": "Tlen",
+    "unit": 31
+  },
+  "190": {
+    "special": 3,
+    "name": "Zawór mieszacza 4",
+    "unit": 31
+  },
+  "142": {
+    "special": 1,
+    "name": "Przegrzanie kotła.",
+    "unit": 31
+  },
+  "143": {
+    "special": 1,
+    "name": "Moc wentylatora 100% - Podgląd",
+    "unit": 31
+  },
+  "141": {
+    "special": 1,
+    "name": "Podtrzymanie gorącego żaru od systemu detekcji paliwa.",
+    "unit": 31
+  },
+  "3": {
+    "special": 1,
+    "name": "Wyjście alarmowe",
+    "unit": 31
+  },
+  "245": {
+    "special": 0,
+    "name": "Brama:",
+    "unit": 0
+  },
+  "244": {
+    "special": 0,
+    "name": "Maska:",
+    "unit": 0
+  },
+  "247": {
+    "special": 6,
+    "name": "Zabezpieczenie:",
+    "unit": 31
+  },
+  "246": {
+    "special": 5,
+    "name": "Serwer:",
+    "unit": 31
+  },
+  "241": {
+    "special": 0,
+    "name": "Brama:",
+    "unit": 0
+  },
+  "240": {
+    "special": 0,
+    "name": "Maska:",
+    "unit": 0
+  },
+  "243": {
+    "special": 0,
+    "name": "IP:",
+    "unit": 0
+  },
+  "242": {
+    "special": 5,
+    "name": "Serwer:",
+    "unit": 31
+  },
+  "249": {
+    "special": 5,
+    "name": "Status WiFi:",
+    "unit": 31
+  },
+  "248": {
+    "special": 0,
+    "name": "Siła sygnału:",
+    "unit": 5
+  },
+  "38": {
+    "special": 1,
+    "name": "Płomień",
+    "unit": 5
+  },
+  "1537": {
+    "special": 1,
+    "name": "Wyciąg",
+    "unit": 31
+  },
+  "1536": {
+    "special": 1,
+    "name": "Nadmuch",
+    "unit": 31
+  },
+  "1539": {
+    "special": 1,
+    "name": "Podajnik 2",
+    "unit": 31
+  },
+  "1538": {
+    "special": 1,
+    "name": "Podajnik",
+    "unit": 31
+  },
+  "179": {
+    "special": 0,
+    "name": "Zawór mieszacza 1",
+    "unit": 5
+  },
+  "252": {
+    "special": 0,
+    "name": "Poziom naładowania bufora",
+    "unit": 5
+  },
+  "251": {
+    "special": 0,
+    "name": "SSID:",
+    "unit": 0
+  },
+  "182": {
+    "special": 0,
+    "name": "Zawór mieszacza 4",
+    "unit": 5
+  },
+  "183": {
+    "special": 4,
+    "name": "Siłownik mieszacza 1",
+    "unit": 31
+  },
+  "180": {
+    "special": 0,
+    "name": "Zawór mieszacza 2",
+    "unit": 5
+  },
+  "181": {
+    "special": 0,
+    "name": "Zawór mieszacza 3",
+    "unit": 5
+  },
+  "186": {
+    "special": 4,
+    "name": "Siłownik mieszacza 4",
+    "unit": 31
+  },
+  "187": {
+    "special": 3,
+    "name": "Zawór mieszacza 1",
+    "unit": 31
+  },
+  "184": {
+    "special": 4,
+    "name": "Siłownik mieszacza 2",
+    "unit": 31
+  },
+  "185": {
+    "special": 4,
+    "name": "Siłownik mieszacza 3",
+    "unit": 31
+  },
+  "1032": {
+    "special": 1,
+    "name": "Temp. mieszacza 2",
+    "unit": 1
+  },
+  "1033": {
+    "special": 1,
+    "name": "Temp. mieszacza 3",
+    "unit": 1
+  },
+  "1030": {
+    "special": 1,
+    "name": "Temperatura spalin",
+    "unit": 1
+  },
+  "189": {
+    "special": 3,
+    "name": "Zawór mieszacza 3",
+    "unit": 31
+  },
+  "1034": {
+    "special": 1,
+    "name": "Temp. mieszacza 4",
+    "unit": 1
+  },
+  "160": {
+    "special": 1,
+    "name": "Term. pok. mieszacza 3",
+    "unit": 31
+  },
+  "161": {
+    "special": 1,
+    "name": "Term. pok. mieszacza 4",
+    "unit": 31
+  },
+  "1025": {
+    "special": 1,
+    "name": "Temperatura CWU",
+    "unit": 1
+  },
+  "1024": {
+    "special": 1,
+    "name": "Temperatura kotła",
+    "unit": 1
+  },
+  "1027": {
+    "special": 1,
+    "name": "Temperatura pogodowa",
+    "unit": 1
+  },
+  "1031": {
+    "special": 1,
+    "name": "Temp. mieszacza 1",
+    "unit": 1
+  },
+  "188": {
+    "special": 3,
+    "name": "Zawór mieszacza 2",
+    "unit": 31
+  },
+  "1029": {
+    "special": 1,
+    "name": "Temperatura bufora dolna",
+    "unit": 1
+  },
+  "1028": {
+    "special": 1,
+    "name": "Temperatura bufora górna",
+    "unit": 1
+  },
+  "154": {
+    "special": 1,
+    "name": "Poziom paliwa",
+    "unit": 31
+  },
+  "157": {
+    "special": 1,
+    "name": "Termostat kotła",
+    "unit": 31
+  },
+  "159": {
+    "special": 1,
+    "name": "Term. pok. mieszacza 2",
+    "unit": 31
+  },
+  "158": {
+    "special": 1,
+    "name": "Term. pok. mieszacza 1",
+    "unit": 31
+  },
+  "239": {
+    "special": 0,
+    "name": "IP:",
+    "unit": 0
+  },
+  "1": {
+    "special": 1,
+    "name": "Zapalarka",
+    "unit": 31
+  },
+  "1290": {
+    "special": 0,
+    "name": "Temp. zadana mieszacza 4",
+    "unit": 1
+  },
+  "203": {
+    "special": 0,
+    "name": "Czas pracy na mocy 100%",
+    "unit": 4
+  },
+  "205": {
+    "special": 0,
+    "name": "Czas pracy na mocy 30%",
+    "unit": 4
+  },
+  "204": {
+    "special": 0,
+    "name": "Czas pracy na mocy 50%",
+    "unit": 4
+  },
+  "140": {
+    "special": 1,
+    "name": "Brak paliwa od temperatury spalin.",
+    "unit": 31
+  },
+  "206": {
+    "special": 0,
+    "name": "Czas pracy podajnika",
+    "unit": 4
+  },
+  "209": {
+    "special": 0,
+    "name": "Ilość resetów",
+    "unit": 0
+  },
+  "208": {
+    "special": 0,
+    "name": "Ilość rozpaleń",
+    "unit": 0
+  },
+  "1287": {
+    "special": 0,
+    "name": "Temp. zadana mieszacza 1",
+    "unit": 1
+  },
+  "1281": {
+    "special": 0,
+    "name": "Temperatura zadana CWU",
+    "unit": 1
+  },
+  "1280": {
+    "special": 0,
+    "name": "Temperatura zadana kotła",
+    "unit": 1
+  },
+  "1289": {
+    "special": 0,
+    "name": "Temp. zadana mieszacza 3",
+    "unit": 1
+  },
+  "1288": {
+    "special": 0,
+    "name": "Temp. zadana mieszacza 2",
+    "unit": 1
+  }
+}

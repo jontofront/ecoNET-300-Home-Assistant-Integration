@@ -1,1 +1,3014 @@
-{}
+{
+  "currentDataParams": {
+    "216": {
+      "special": 0,
+      "name": "Czas przegrzania kotła",
+      "unit": 4
+    },
+    "217": {
+      "special": 0,
+      "name": "Ilość uzupełnień paliwa",
+      "unit": 0
+    },
+    "214": {
+      "special": 0,
+      "name": "Czas pracy",
+      "unit": 4
+    },
+    "215": {
+      "special": 0,
+      "name": "Czas postoju",
+      "unit": 4
+    },
+    "210": {
+      "special": 0,
+      "name": "Bieżąca moc kotła",
+      "unit": 5
+    },
+    "218": {
+      "special": 0,
+      "name": "Ilość rozpaleń",
+      "unit": 0
+    },
+    "133": {
+      "special": 1,
+      "name": "UWAGA!\\nBrak paliwa.",
+      "unit": 31
+    },
+    "132": {
+      "special": 1,
+      "name": "UWAGA!\\nNieudana próba ładowania zasobnika.",
+      "unit": 31
+    },
+    "131": {
+      "special": 1,
+      "name": "UWAGA!\\nNiski poziom paliwa.",
+      "unit": 31
+    },
+    "130": {
+      "special": 1,
+      "name": "Strumień paliwa",
+      "unit": 9
+    },
+    "137": {
+      "special": 1,
+      "name": "UWAGA!\\nOtwarte drzwiczki kotła.",
+      "unit": 31
+    },
+    "136": {
+      "special": 1,
+      "name": "UWAGA!\\nUszkodzony system podajnika.",
+      "unit": 31
+    },
+    "135": {
+      "special": 1,
+      "name": "Błąd sondy ecoLAMBDA.",
+      "unit": 31
+    },
+    "134": {
+      "special": 1,
+      "name": "Trwa kalibracja sondy ecoLAMBDA.",
+      "unit": 31
+    },
+    "139": {
+      "special": 1,
+      "name": "Maksymalna temperatura spalin.",
+      "unit": 31
+    },
+    "138": {
+      "special": 1,
+      "name": "UWAGA!\\nWyczyść wymiennik.",
+      "unit": 31
+    },
+    "1547": {
+      "special": 1,
+      "name": "Pompa mieszacza 2",
+      "unit": 31
+    },
+    "1544": {
+      "special": 1,
+      "name": "Pompa mieszacza 1",
+      "unit": 31
+    },
+    "1542": {
+      "special": 1,
+      "name": "Pompa CWU",
+      "unit": 31
+    },
+    "1543": {
+      "special": 1,
+      "name": "Pompa cyrkulacyjna",
+      "unit": 31
+    },
+    "1540": {
+      "special": 1,
+      "name": "Podajnik zewnętrzny",
+      "unit": 31
+    },
+    "1541": {
+      "special": 1,
+      "name": "Pompa kotła",
+      "unit": 31
+    },
+    "4": {
+      "special": 1,
+      "name": "Kocioł rezerwowy",
+      "unit": 31
+    },
+    "1793": {
+      "special": 1,
+      "name": "Moc kotła",
+      "unit": 7
+    },
+    "1792": {
+      "special": 7,
+      "name": "",
+      "unit": 31
+    },
+    "1795": {
+      "special": 0,
+      "name": "Moc nadmuchu",
+      "unit": 5
+    },
+    "1026": {
+      "special": 1,
+      "name": "Temperatura palnika",
+      "unit": 1
+    },
+    "126": {
+      "special": 0,
+      "name": "Moc wyciągu",
+      "unit": 5
+    },
+    "2": {
+      "special": 1,
+      "name": "Rotacyjne oczyszczanie",
+      "unit": 31
+    },
+    "1550": {
+      "special": 1,
+      "name": "Pompa mieszacza 3",
+      "unit": 31
+    },
+    "1553": {
+      "special": 1,
+      "name": "Pompa mieszacza 4",
+      "unit": 31
+    },
+    "50": {
+      "special": 1,
+      "name": "Temperatura bufora środkowa",
+      "unit": 1
+    },
+    "195": {
+      "special": 1,
+      "name": "SAV",
+      "unit": 5
+    },
+    "194": {
+      "special": 1,
+      "name": "Tlen",
+      "unit": 5
+    },
+    "191": {
+      "special": 2,
+      "name": "Tlen",
+      "unit": 31
+    },
+    "190": {
+      "special": 3,
+      "name": "Zawór mieszacza 4",
+      "unit": 31
+    },
+    "142": {
+      "special": 1,
+      "name": "Przegrzanie kotła.",
+      "unit": 31
+    },
+    "143": {
+      "special": 1,
+      "name": "Moc wentylatora 100% - Podgląd",
+      "unit": 31
+    },
+    "141": {
+      "special": 1,
+      "name": "Podtrzymanie gorącego żaru od systemu detekcji paliwa.",
+      "unit": 31
+    },
+    "3": {
+      "special": 1,
+      "name": "Wyjście alarmowe",
+      "unit": 31
+    },
+    "245": {
+      "special": 0,
+      "name": "Brama:",
+      "unit": 0
+    },
+    "244": {
+      "special": 0,
+      "name": "Maska:",
+      "unit": 0
+    },
+    "247": {
+      "special": 6,
+      "name": "Zabezpieczenie:",
+      "unit": 31
+    },
+    "246": {
+      "special": 5,
+      "name": "Serwer:",
+      "unit": 31
+    },
+    "241": {
+      "special": 0,
+      "name": "Brama:",
+      "unit": 0
+    },
+    "240": {
+      "special": 0,
+      "name": "Maska:",
+      "unit": 0
+    },
+    "243": {
+      "special": 0,
+      "name": "IP:",
+      "unit": 0
+    },
+    "242": {
+      "special": 5,
+      "name": "Serwer:",
+      "unit": 31
+    },
+    "249": {
+      "special": 5,
+      "name": "Status WiFi:",
+      "unit": 31
+    },
+    "248": {
+      "special": 0,
+      "name": "Siła sygnału:",
+      "unit": 5
+    },
+    "38": {
+      "special": 1,
+      "name": "Płomień",
+      "unit": 5
+    },
+    "1537": {
+      "special": 1,
+      "name": "Wyciąg",
+      "unit": 31
+    },
+    "1536": {
+      "special": 1,
+      "name": "Nadmuch",
+      "unit": 31
+    },
+    "1539": {
+      "special": 1,
+      "name": "Podajnik 2",
+      "unit": 31
+    },
+    "1538": {
+      "special": 1,
+      "name": "Podajnik",
+      "unit": 31
+    },
+    "179": {
+      "special": 0,
+      "name": "Zawór mieszacza 1",
+      "unit": 5
+    },
+    "252": {
+      "special": 0,
+      "name": "Poziom naładowania bufora",
+      "unit": 5
+    },
+    "251": {
+      "special": 0,
+      "name": "SSID:",
+      "unit": 0
+    },
+    "182": {
+      "special": 0,
+      "name": "Zawór mieszacza 4",
+      "unit": 5
+    },
+    "183": {
+      "special": 4,
+      "name": "Siłownik mieszacza 1",
+      "unit": 31
+    },
+    "180": {
+      "special": 0,
+      "name": "Zawór mieszacza 2",
+      "unit": 5
+    },
+    "181": {
+      "special": 0,
+      "name": "Zawór mieszacza 3",
+      "unit": 5
+    },
+    "186": {
+      "special": 4,
+      "name": "Siłownik mieszacza 4",
+      "unit": 31
+    },
+    "187": {
+      "special": 3,
+      "name": "Zawór mieszacza 1",
+      "unit": 31
+    },
+    "184": {
+      "special": 4,
+      "name": "Siłownik mieszacza 2",
+      "unit": 31
+    },
+    "185": {
+      "special": 4,
+      "name": "Siłownik mieszacza 3",
+      "unit": 31
+    },
+    "1032": {
+      "special": 1,
+      "name": "Temp. mieszacza 2",
+      "unit": 1
+    },
+    "1033": {
+      "special": 1,
+      "name": "Temp. mieszacza 3",
+      "unit": 1
+    },
+    "1030": {
+      "special": 1,
+      "name": "Temperatura spalin",
+      "unit": 1
+    },
+    "189": {
+      "special": 3,
+      "name": "Zawór mieszacza 3",
+      "unit": 31
+    },
+    "1034": {
+      "special": 1,
+      "name": "Temp. mieszacza 4",
+      "unit": 1
+    },
+    "160": {
+      "special": 1,
+      "name": "Term. pok. mieszacza 3",
+      "unit": 31
+    },
+    "161": {
+      "special": 1,
+      "name": "Term. pok. mieszacza 4",
+      "unit": 31
+    },
+    "1025": {
+      "special": 1,
+      "name": "Temperatura CWU",
+      "unit": 1
+    },
+    "1024": {
+      "special": 1,
+      "name": "Temperatura kotła",
+      "unit": 1
+    },
+    "1027": {
+      "special": 1,
+      "name": "Temperatura pogodowa",
+      "unit": 1
+    },
+    "1031": {
+      "special": 1,
+      "name": "Temp. mieszacza 1",
+      "unit": 1
+    },
+    "188": {
+      "special": 3,
+      "name": "Zawór mieszacza 2",
+      "unit": 31
+    },
+    "1029": {
+      "special": 1,
+      "name": "Temperatura bufora dolna",
+      "unit": 1
+    },
+    "1028": {
+      "special": 1,
+      "name": "Temperatura bufora górna",
+      "unit": 1
+    },
+    "154": {
+      "special": 1,
+      "name": "Poziom paliwa",
+      "unit": 31
+    },
+    "157": {
+      "special": 1,
+      "name": "Termostat kotła",
+      "unit": 31
+    },
+    "159": {
+      "special": 1,
+      "name": "Term. pok. mieszacza 2",
+      "unit": 31
+    },
+    "158": {
+      "special": 1,
+      "name": "Term. pok. mieszacza 1",
+      "unit": 31
+    },
+    "239": {
+      "special": 0,
+      "name": "IP:",
+      "unit": 0
+    },
+    "1": {
+      "special": 1,
+      "name": "Zapalarka",
+      "unit": 31
+    },
+    "1290": {
+      "special": 0,
+      "name": "Temp. zadana mieszacza 4",
+      "unit": 1
+    },
+    "203": {
+      "special": 0,
+      "name": "Czas pracy na mocy 100%",
+      "unit": 4
+    },
+    "205": {
+      "special": 0,
+      "name": "Czas pracy na mocy 30%",
+      "unit": 4
+    },
+    "204": {
+      "special": 0,
+      "name": "Czas pracy na mocy 50%",
+      "unit": 4
+    },
+    "140": {
+      "special": 1,
+      "name": "Brak paliwa od temperatury spalin.",
+      "unit": 31
+    },
+    "206": {
+      "special": 0,
+      "name": "Czas pracy podajnika",
+      "unit": 4
+    },
+    "209": {
+      "special": 0,
+      "name": "Ilość resetów",
+      "unit": 0
+    },
+    "208": {
+      "special": 0,
+      "name": "Ilość rozpaleń",
+      "unit": 0
+    },
+    "1287": {
+      "special": 0,
+      "name": "Temp. zadana mieszacza 1",
+      "unit": 1
+    },
+    "1281": {
+      "special": 0,
+      "name": "Temperatura zadana CWU",
+      "unit": 1
+    },
+    "1280": {
+      "special": 0,
+      "name": "Temperatura zadana kotła",
+      "unit": 1
+    },
+    "1289": {
+      "special": 0,
+      "name": "Temp. zadana mieszacza 3",
+      "unit": 1
+    },
+    "1288": {
+      "special": 0,
+      "name": "Temp. zadana mieszacza 2",
+      "unit": 1
+    }
+  },
+  "paramsNames": [
+    "Maksymalna moc kotła",
+    "Pośrednia moc kotła",
+    "Minimalna moc kotła",
+    "Moc maksymalna - nadmuch",
+    "Moc pośrednia - nadmuch",
+    "Moc minimalna - nadmuch",
+    "Moc maksymalna - wyciąg",
+    "Moc pośrednia - wyciąg",
+    "Moc minimalna - wyciąg",
+    "Histereza kotła",
+    "Czas cyklu w trybie PRACA",
+    "Minimalna moc kotła FL",
+    "Maksymalna moc kotła FL",
+    "Parametr A FuzzyLogic",
+    "Parametr B FuzzyLogic",
+    "Parametr C FuzzyLogic",
+    "Nadmuch rozpalania 1",
+    "Wyciąg rozpalania 1",
+    "Czas testu zapłonu",
+    "Czas rozpalania",
+    "Dawka paliwa",
+    "Czas rozgrzewania",
+    "Detekcja płomienia",
+    "Czas pracy z mocą minimalną",
+    "Czas rozżarzania",
+    "Nadmuch po rozpaleniu",
+    "Wyciąg po rozpaleniu",
+    "Pulsacja wentylatora",
+    "Czas nadzoru",
+    "Moc kotła w trybie Nadzór",
+    "Czas cyklu",
+    "Moc nadmuchu",
+    "Moc wyciągu",
+    "Minimalna moc nadmuchu",
+    "Maksymalny czas wygaszania",
+    "Minimalny czas wygaszania",
+    "Parametr A Lambda",
+    "Parametr B Lambda",
+    "Parametr C Lambda",
+    "Zakres korekcji nadmuchu",
+    "Moc maksymalna - tlen",
+    "Moc pośrednia - tlen",
+    "Moc minimalna - tlen",
+    "Wydajność podajnika",
+    "Kaloryczność paliwa",
+    "Pojemność zbiornika",
+    "Cykl rotacyjnego oczyszczania",
+    "Intensywność czyszczenia",
+    "Temperatura zadana kotła",
+    "Min. temperatura zadana kotła",
+    "Maks. temperatura zadana kotła",
+    "Temperatura zadana CWU",
+    "Min. temperatura zadana CWU",
+    "Maks. temperatura zadana CWU",
+    "Tryb pracy pompy CWU",
+    "Histereza zasobnika CWU",
+    "Dezynfekcja CWU",
+    "ŹRÓDŁO CWU",
+    "Tryb LATO/ZIMA",
+    "Temperatura włączenia trybu LATO",
+    "Temperatura wyłączenia trybu LATO",
+    "Temperatura załączenia pompy CO",
+    "Podwyższenie temp. kotła od CWU i miesz.",
+    "Wydłużenie pracy CWU",
+    "Pompa CO",
+    "Temperatura przeciwzamrożeniowa",
+    "Start pompy kotła (temp. spalin)",
+    "Temperatura zadana mieszacza 1",
+    "Temperatura zadana mieszacza 2",
+    "Temperatura zadana mieszacza 3",
+    "Temperatura zadana mieszacza 4",
+    "Minimalna temperatura mieszacza 1",
+    "Minimalna temperatura mieszacza 2",
+    "Minimalna temperatura mieszacza 3",
+    "Minimalna temperatura mieszacza 4",
+    "Maksymalna temperatura mieszacza 1",
+    "Maksymalna temperatura mieszacza 2",
+    "Maksymalna temperatura mieszacza 3",
+    "Maksymalna temperatura mieszacza 4",
+    "Termostat pokojowy mieszacza 1",
+    "Termostat pokojowy mieszacza 2",
+    "Termostat pokojowy mieszacza 3",
+    "Termostat pokojowy mieszacza 4",
+    "Sterowanie pogodowe mieszacza 1",
+    "Sterowanie pogodowe mieszacza 2",
+    "Sterowanie pogodowe mieszacza 3",
+    "Sterowanie pogodowe mieszacza 4",
+    "Krzywa grzewcza mieszacza 1",
+    "Krzywa grzewcza mieszacza 2",
+    "Krzywa grzewcza mieszacza 3",
+    "Krzywa grzewcza mieszacza 4",
+    "Obsługa mieszacza 1",
+    "Obsługa mieszacza 2",
+    "Obsługa mieszacza 3",
+    "Obsługa mieszacza 4",
+    "Zakres proporcjonalności",
+    "Zakres proporcjonalności",
+    "Zakres proporcjonalności",
+    "Zakres proporcjonalności",
+    "Stała czasu całkowania",
+    "Stała czasu całkowania",
+    "Stała czasu całkowania",
+    "Stała czasu całkowania",
+    "Wyłączenie pompy od termostatu",
+    "Wyłączenie pompy od termostatu",
+    "Wyłączenie pompy od termostatu",
+    "Wyłączenie pompy od termostatu",
+    "Czas otwarcia zaworu",
+    "Czas otwarcia zaworu",
+    "Czas otwarcia zaworu",
+    "Czas otwarcia zaworu",
+    "Temperatura schładzania kotła",
+    "Wybór termostatu",
+    "Wybór termostatu",
+    "Wybór termostatu",
+    "Wybór termostatu",
+    "Czas postoju pompy cyrkulacyjnej",
+    "Czas pracy pompy cyrkulacyjnej",
+    "Temperatura startu pompy cyrkulacyjnej",
+    "Przesunięcie równoległe krzywej",
+    "Przesunięcie równoległe krzywej",
+    "Przesunięcie równoległe krzywej",
+    "Przesunięcie równoległe krzywej",
+    "Współczynnik temperatury pokojowej",
+    "Współczynnik temperatury pokojowej",
+    "Współczynnik temperatury pokojowej",
+    "Współczynnik temperatury pokojowej",
+    "Współczynnik temperatury pokojowej",
+    "Nadmuch czyszczenia",
+    "Wyciąg czyszczenia",
+    "Czyszczenie palnika",
+    "Moc przedmuchu",
+    "Moc wyciągu w wygaszaniu",
+    "Temperatura rozpoczęcia ładowania",
+    "Temperatura zakończenia ładowania",
+    "Poziom alarmowy",
+    "Czas detekcji braku paliwa",
+    "Czas pracy podajnika zew.",
+    "Kocioł rezerwowy",
+    "Wybór paliwa",
+    "Maksymalna temperatura palnika",
+    "Wydłużenie pracy podajnika 2",
+    "Czas czyszczenia Rozpalanie",
+    "Czas czyszczenia wygaszanie",
+    "Czas przedmuchu",
+    "Przerwa przedmuchu",
+    "Start przedmuchu",
+    "Stop przedmuchu",
+    "Praca z sondą Lambda",
+    "Korekta czujnika",
+    "Producent",
+    "Przerwa czyszczenia wymiennika",
+    "Czas czyszczenia wymiennika",
+    "Palnik pelletowy",
+    "Tryb pracy",
+    "Tryb pracy zgazowywania drewna",
+    "Ustawienia mocy kotła",
+    "Automatyczne podtrzymanie żaru",
+    "Rozszerzenie operacji",
+    "Aktywacja czujnika drzwi",
+    "Moc wentylatora wyc. przy rozpalaniu",
+    "Moc went. wyc. przy podtrzymaniu żaru",
+    "Temperatura spalin końca rozpalania",
+    "Czas podtrzymania",
+    "Maksymalny czas uzupełniania paliwa",
+    "Czas rozpalania",
+    "Praca awaryjna",
+    "Moc wentylatora w pracy awaryjnej",
+    "Minimalna zadana temperatura kotła",
+    "Histereza przegrzania kotła",
+    "Warstwa gorącego żaru",
+    "Minimalny czas pracy",
+    "Temperatura spalin dla braku paliwa",
+    "Czas interwału podtrzymania żaru",
+    "Czas przedmuchu podczas podtrzymania",
+    "Czas podglądu",
+    "Maksymalny wzrost temp. spalin",
+    "Maksymalny spadek temp. spalin",
+    "Styk AHS normalnie otwarty",
+    "Aktywacja rozproszenia ciepła bufora",
+    "Temperatura rozproszenia ciepła ",
+    "Histereza startu odzysku ciepła",
+    "Histereza stopu odzysku ciepła",
+    "Temperatura startu sys. hydraulicznego",
+    "Histereza systemu hydraulicznego",
+    "Spaliny - Maks. moc kotła",
+    "Spaliny - Min. moc kotła",
+    "Minimalna moc wentylatora wyciągowego",
+    "Maksymalna moc wentylatora wyciągowego",
+    "Automatyczna aktywacja palnika",
+    "Automatyczna aktywacja palnika",
+    "Opóźnienie startu palnika pelletowego",
+    "Wyjście H",
+    "Wybierz paliwo",
+    "PODKŁAD otwarcie przepustnicy",
+    "Tlen - Suche twarde drewno",
+    "Tlen - Wilgotne twarde drewno",
+    "Tlen - Suche miękkie drewno",
+    "Tlen - Wilgotne miękkie drewno",
+    "Korekcja temp. kotła"
+  ],
+  "paramsData": [
+    {
+      "value": 26,
+      "maxv": 26,
+      "minv": 15,
+      "edit": true,
+      "unit": 7,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 14,
+      "maxv": 25,
+      "minv": 7,
+      "edit": true,
+      "unit": 7,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 6,
+      "maxv": 13,
+      "minv": 4,
+      "edit": true,
+      "unit": 7,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 40,
+      "maxv": 100,
+      "minv": 36,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 35,
+      "maxv": 39,
+      "minv": 31,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 34,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 24,
+      "maxv": 40,
+      "minv": 24,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 23,
+      "maxv": 23,
+      "minv": 23,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 22,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 30,
+      "minv": 1,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 15,
+      "maxv": 250,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 100,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100,
+      "maxv": 100,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 8,
+      "minv": 2,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 40,
+      "maxv": 120,
+      "minv": 20,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 15,
+      "maxv": 75,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 25,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 30,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 240,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 6,
+      "maxv": 20,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 120.0,
+      "maxv": 2550.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 11,
+      "mult": 10.0,
+      "offset": 0
+    },
+    {
+      "value": 36.0,
+      "maxv": 500.0,
+      "minv": 2.0,
+      "edit": true,
+      "unit": 2,
+      "mult": 2.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 100,
+      "minv": 1,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 100,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 50,
+      "maxv": 200,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 28,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 30,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 21
+    },
+    {
+      "value": 0,
+      "maxv": 60,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 3.0,
+      "maxv": 51.0,
+      "minv": 0.2,
+      "edit": true,
+      "unit": 7,
+      "mult": 0.2,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 250,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 25,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 30,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 100,
+      "minv": 10,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 80,
+      "minv": 1,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100,
+      "maxv": 200,
+      "minv": 10,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 75,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 5,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 6.2,
+      "maxv": 25.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 7.0,
+      "maxv": 25.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 9.0,
+      "maxv": 25.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 33.4,
+      "maxv": 50.0,
+      "minv": 0.2,
+      "edit": true,
+      "unit": 9,
+      "mult": 0.2,
+      "offset": 0
+    },
+    {
+      "value": 5.0,
+      "maxv": 25.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 10,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 200.0,
+      "maxv": 300.0,
+      "minv": 100.0,
+      "edit": true,
+      "unit": 6,
+      "mult": 2.0,
+      "offset": 0
+    },
+    {
+      "value": 140,
+      "maxv": 255,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 100,
+      "minv": 3,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 90,
+      "maxv": 95,
+      "minv": 70,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 70,
+      "maxv": 80,
+      "minv": 60,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 95,
+      "maxv": 95,
+      "minv": 70,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 50,
+      "maxv": 60,
+      "minv": 30,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 55,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 60,
+      "maxv": 80,
+      "minv": 25,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 2,
+      "maxv": 2,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 8
+    },
+    {
+      "value": 1,
+      "maxv": 20,
+      "minv": 1,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 9
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 20
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 10
+    },
+    {
+      "value": 16,
+      "maxv": 30,
+      "minv": 5,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 15,
+      "minv": 1,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 75,
+      "maxv": 90,
+      "minv": 60,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 15,
+      "minv": 3,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 99,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 0,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 11
+    },
+    {
+      "value": 5,
+      "maxv": 25,
+      "minv": 3,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 90,
+      "maxv": 130,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 28,
+      "maxv": 55,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 24,
+      "maxv": 55,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 40,
+      "maxv": 55,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 40,
+      "maxv": 55,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 20,
+      "maxv": 90,
+      "minv": 15,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 20,
+      "maxv": 90,
+      "minv": 15,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 20,
+      "maxv": 90,
+      "minv": 15,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 20,
+      "maxv": 90,
+      "minv": 15,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 61,
+      "maxv": 90,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 62,
+      "maxv": 90,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 85,
+      "maxv": 90,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 85,
+      "maxv": 90,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 30,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 30,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 30,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 30,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 1.0,
+      "maxv": 4.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 0,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 1.0,
+      "maxv": 4.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 0,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 1.0,
+      "maxv": 4.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 0,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 1.0,
+      "maxv": 4.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 0,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 2,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 12
+    },
+    {
+      "value": 2,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 12
+    },
+    {
+      "value": 2,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 12
+    },
+    {
+      "value": 2,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 12
+    },
+    {
+      "value": 3,
+      "maxv": 10,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 3,
+      "maxv": 10,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 3,
+      "maxv": 10,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 3,
+      "maxv": 10,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 160,
+      "maxv": 255,
+      "minv": 30,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 160,
+      "maxv": 255,
+      "minv": 30,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 160,
+      "maxv": 255,
+      "minv": 30,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 160,
+      "maxv": 255,
+      "minv": 30,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 13
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 13
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 13
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 13
+    },
+    {
+      "value": 140,
+      "maxv": 255,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 140,
+      "maxv": 255,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 140,
+      "maxv": 255,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 140,
+      "maxv": 255,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 96,
+      "maxv": 100,
+      "minv": 80,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 2,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 14
+    },
+    {
+      "value": 3,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 14
+    },
+    {
+      "value": 0,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 14
+    },
+    {
+      "value": 0,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 14
+    },
+    {
+      "value": 30,
+      "maxv": 255,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 70,
+      "maxv": 255,
+      "minv": 0,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 65,
+      "minv": 3,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0.0,
+      "maxv": 20.0,
+      "minv": -20.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 20
+    },
+    {
+      "value": 0.0,
+      "maxv": 20.0,
+      "minv": -20.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 20
+    },
+    {
+      "value": 0.0,
+      "maxv": 20.0,
+      "minv": -20.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 20
+    },
+    {
+      "value": 0.0,
+      "maxv": 20.0,
+      "minv": -20.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 20
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 0,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 24,
+      "maxv": 250,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 80,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 80,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 55,
+      "maxv": 85,
+      "minv": 30,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 80,
+      "maxv": 85,
+      "minv": 40,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 50,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 5,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 100,
+      "minv": 0,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 25,
+      "maxv": 60,
+      "minv": 20,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 6,
+      "maxv": 6,
+      "minv": 6,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 18
+    },
+    {
+      "value": 60,
+      "maxv": 90,
+      "minv": 40,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 9,
+      "maxv": 250,
+      "minv": 0,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 20,
+      "maxv": 250,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 3,
+      "maxv": 30,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 40,
+      "maxv": 100,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 15,
+      "maxv": 250,
+      "minv": 10,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 15,
+      "maxv": 100,
+      "minv": 1,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 100,
+      "minv": 1,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 17
+    },
+    {
+      "value": 0.0,
+      "maxv": 5.0,
+      "minv": -5.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "offset": 50
+    },
+    {
+      "value": 4,
+      "maxv": 4,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 19
+    },
+    {
+      "value": 100.0,
+      "maxv": 2000.0,
+      "minv": 100.0,
+      "edit": true,
+      "unit": 6,
+      "mult": 10.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 240,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 23
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 22
+    },
+    {
+      "value": 50,
+      "maxv": 100,
+      "minv": 50,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 80,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 100,
+      "minv": 20,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100,
+      "maxv": 150,
+      "minv": 70,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 20,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 2,
+      "maxv": 5,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 60,
+      "maxv": 255,
+      "minv": 10,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 20,
+      "maxv": 70,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 20,
+      "minv": 2,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 5,
+      "maxv": 10,
+      "minv": 1,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 100.0,
+      "maxv": 100.0,
+      "minv": 0.0,
+      "edit": true,
+      "unit": 5,
+      "mult": 10.0,
+      "offset": 0
+    },
+    {
+      "value": 30.0,
+      "maxv": 600.0,
+      "minv": 0.0,
+      "edit": true,
+      "unit": 3,
+      "mult": 10.0,
+      "offset": 0
+    },
+    {
+      "value": 90,
+      "maxv": 200,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 255,
+      "minv": 5,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 30,
+      "maxv": 255,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 31,
+      "maxv": 90,
+      "minv": 5,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 15,
+      "maxv": 200,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10,
+      "maxv": 200,
+      "minv": 1,
+      "edit": true,
+      "unit": 2,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 92,
+      "maxv": 100,
+      "minv": 50,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 10,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": -40.0,
+      "maxv": 2.0,
+      "minv": -50.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 50
+    },
+    {
+      "value": 30,
+      "maxv": 90,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 4,
+      "maxv": 20,
+      "minv": 0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 150,
+      "maxv": 250,
+      "minv": 120,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 120,
+      "maxv": 150,
+      "minv": 50,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 22,
+      "maxv": 70,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 70,
+      "maxv": 100,
+      "minv": 22,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 1,
+      "maxv": 1,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 1
+    },
+    {
+      "value": 1,
+      "maxv": 24,
+      "minv": 0,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 0,
+      "maxv": 2,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 24
+    },
+    {
+      "value": 0,
+      "maxv": 3,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 0,
+      "offset": 25
+    },
+    {
+      "value": 0,
+      "maxv": 100,
+      "minv": 0,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "offset": 0
+    },
+    {
+      "value": 10.0,
+      "maxv": 20.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 10.0,
+      "maxv": 20.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 10.0,
+      "maxv": 20.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 10.0,
+      "maxv": 20.0,
+      "minv": 0.1,
+      "edit": true,
+      "unit": 5,
+      "mult": 0.1,
+      "offset": 0
+    },
+    {
+      "value": 0.0,
+      "maxv": 10.0,
+      "minv": -10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 1.0,
+      "offset": 10
+    }
+  ],
+  "langs": [
+    {
+      "code": "cs",
+      "name": "Čeština",
+      "version": "FED4D8A"
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "version": "83891541"
+    },
+    {
+      "default": true,
+      "code": "pl",
+      "name": "Polski",
+      "version": "D9C3374A"
+    },
+    {
+      "code": "de",
+      "name": "Deutsch",
+      "version": "B9524F16"
+    },
+    {
+      "code": "es",
+      "name": "Español",
+      "version": "DC8B2BC9"
+    },
+    {
+      "code": "IT",
+      "name": "Italiano",
+      "version": "51219671"
+    },
+    {
+      "code": "FR",
+      "name": "Français",
+      "version": "7DB68DB2"
+    },
+    {
+      "code": "sl",
+      "name": "Slovenščina",
+      "version": "7C1A5E34"
+    }
+  ],
+  "paramsDescs": [
+    "Maksymalna moc kotła.",
+    "Pośrednia moc kotła.",
+    "Minimalna moc kotła.",
+    "Moc nadmuchu przy pracy palnika z mocą maksymalną.",
+    "Moc nadmuchu przy pracy palnika z mocą pośrednią.",
+    "Moc nadmuchu przy pracy palnika z mocą minimalną.",
+    "Moc wyciągu przy pracy palnika z mocą maksymalną.",
+    "Moc wyciągu przy pracy palnika z mocą pośrednią.",
+    "Moc wyciągu przy pracy palnika z mocą minimalną.",
+    "Jeśli temperatura kotła spadnie poniżej temperatury zadanej kotła o wartość histerezy kotła to następuje automatyczne rozpalenie palnika.",
+    "Czas całego cyklu podawania paliwa w PRACY. CZAS CYKLU W TYBIE PRACA = CZAS PODAWANIA PRACA + CZAS POSTOJU PODAJNIKA.",
+    "Minimalna moc z jaką może pracować palnik przy pracy w trybie Fuzzy Logic.",
+    "Maksymalna moc z jaką może pracować palnik przy pracy w trybie Fuzzy Logic.",
+    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Zwiększenie wartości zwiększa szybkość przyrostu mocy kotła. Zbyt duża wartość może spowodować niestabilność utrzymywania temperatury zadanej kotła.",
+    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Zwiększenie wartości zmniejsza szybkość przyrostu mocy kotła. Zbyt mała wartość może spowodować niestabilność utrzymywania temperatury zadanej kotła.",
+    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Nie zaleca się zmian wartości tego parametru.",
+    "Moc wstępnego nadmuchu podczas rozpalania. Zbyt duża wartość wydłuża proces rozpalania lub powoduje nieudaną próbę rozpalenia.",
+    "Moc wstępnego wyciągu podczas rozpalania. Zbyt duża wartość wydłuża proces rozpalania lub powoduje nieudaną próbę rozpalenia.",
+    "Czas sprawdzania czy palenisko jest już rozpalone. Pracuje tylko wentylator. Jeśli płomień ma wystarczającą jasność to następuje przejście do trybu PRACA z pominięciem trybu ROZPALANIA.",
+    "Czas pojedyńczej próby rozpalania. Po tym czasie regulator przechodzi do kolejnej próby rozpalenia. Po nieudanych wszystkich próbach rozpalania zgłaszany jest alarm: \"Nieudana próba rozpalenia\".",
+    "Masa dawki paliwa przy rozpalaniu. Dotyczy pierwszej próby rozpalenia. W kolejnych próbach dawka paliwa jest mniejsza.",
+    "Czas rozgrzewania zapalarki przed załączeniem wentylatora. Nie powinien być zbyt długi aby nie uszkodzić grzałki. Po tym czasie grzałka pracuje nadal, aż do chwili zdetektowania płomienia.",
+    "Próg detekcji płomienia w % światła, przy którym regulator uznaje, że palenisko jest już rozpalone. Wykorzystywany jest również do detekcji braku paliwa.",
+    "Czas pracy z mocą minimalną.",
+    "Czas rozżarzania po rozpaleniu.",
+    "Nadmuch po rozpaleniu.",
+    "Wyciąg po rozpaleniu.",
+    "Pulsacja wentylatora w rozpalaniu",
+    "Jest to czas maksymalnego przebywania regulatora w trybie NADZÓR. Po tym czasie od chwili przejścia regulatora do trybu NADZÓR następuje automatyczne wygaszenie palnika.CZAS NADZORU= 0 tryb jest całkowicie wyłączany.CZAS NADZORU= 255 tryb nie jest wyłączany.",
+    "Moc kotła w trybie Nadzór.",
+    "Czas cyklu pracy w nadzorze",
+    "Moc nadmuchu w trybie nadzoru.",
+    "Moc wyciągu w trybie nadzoru.",
+    "Minimalna moc nadmuchu jaką może ustawić użytkownik. Wykorzystana jest jedynie do ograniczenia dostępnego zakresu mocy wentylatora. Powinna być możliwie mała lecz taka, aby wentylator obracał się wolno i swobodnie.",
+    "Po tym czasie nastąpi przejście do trybu POSTÓJ pomimo, że czujnik płomienia wskazuje na obecność płomienia.",
+    "Wygaszanie będzie trwało co najmniej przez ten czas pomimo, że czujnik płomienia wskazuje już brak płomienia.",
+    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
+    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
+    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
+    "Określa dopuszczalny zakres zmienności mocy nadmuchu przy pracy z wykorzystaniem sondy Lambda.",
+    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą maksymalną.",
+    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą pośrednią.",
+    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą minimalną.",
+    "Prędkość podawania paliwa przez podajnik główny w kg/h.",
+    "Kaloryczność paliwa w kWh/kg. Dla pelletu około 4,9 kWh/kg. Dla węgla około 6,5kWh/kg",
+    "Pojemność zbiornika paliwa do wyliczania poziomu paliwa. Wprowadzenie właściwej wartości zwalnia użytkownika z konieczności przeprowadzenia kalibracji poziomu paliwa. Po przeprowadzonej kalibracji poziomu paliwa regulator nie korzysta z wartości POJEMNOŚĆ ZBIORNIKA.",
+    "Czas cyklu rotacyjnego oczyszczania.",
+    "Intensywność czyszczenia.",
+    "Temperatura zadana kotła przy wyłączonym sterowaniu pogodowym. Może być automatycznie zmieniona przez regulator na przykład gdy temperatura zadana kotła jest niższa od temperatury zadanej CWU.",
+    "Minimalna temperatura zadana kotła jaką może ustawić użytkownik w menu użytkownika oraz minimalna jaką może automatycznie zadać regulator, np. z obniżeń nocnych, sterowania pogodowego itp.",
+    "Maksymalna temperatura zadana kotła jaką może ustawić użytkownik w menu użytkownika oraz maksymalna jaką może automatycznie zadać regulator, np. ze sterowania pogodowego itp.",
+    "Temperatura do jakiej zostanie nagrzany zasobnik ciepłej wody użytkowej. Uwaga: zbyt duża temperatura może spowodwoać oparzenie użytkownika gorącą wodą!",
+    "Jest to parametr za pomocą którego można ograniczyć użytkownikowi ustawienie zbyt niskiej temperatury zadanej CWU.",
+    "Parametr określa do jakiej maksymalnej temperatury zostanie nagrzany zasobnik CWU podczas zrzucania nadmiaru ciepła z kotła w stanach alarmowych. Ustawienie zbyt dużęj wartości może doprowadzić do ryzyka poparzenia użytkowników ciepłą wodą użytkową. ",
+    "Umożliwia wybór trybu pracy ciepłej wody użytkowej. BEZ PRIORYTETU - równoległa praca pompy CWU oraz pomp centralnego ogrzewania, PRIORYTET - pracuje tylko pompa CWU, LATO - przygotowanie tylko ciepłej wody użytkowej CWU (ogrzewanie budynku jest wyłączone).",
+    "Parametr określa po jakim spadku temperatury zmierzonej przez czujnik CWU w stosunku do temperatury zadanej CWU nastąpi załączenie pompy CWU (CWU = ciepła woda użytkowa).",
+    "Po włączeniu tego parametru raz w tygodniu w poniedziałek o godzinie 2:00 ciepła woda użytkowa zostanie nagrzana do 70˚C w celu dezynfekcji zasobnika CWU. Uwaga: ryzyko poparzenia gorącą wodą!",
+    "Określa źródło energii dla CWU",
+    "Tryb LATO oznacza wyłączenie centalnego ogrzewania przy pozostawieniu grzania CWU. Automatycznie aktywowanie trybu realizowane jest na podstawie wskazań czujnika temperatury pogodowej.",
+    "Temperatura zewnętrzna powyżej której nastąpi włączenie trybu pracy LATO jeśli automatyczna detekcja trybu LATO jest włączona. ",
+    "Temperatura zewnętrzna poniżej której nastąpi wyłaczenie trybu pracy LATO jeśli automatyczna detekcja trybu LATO jest włączona.",
+    "Parametr decyduje o temperaturze przy której załączy się pompa kotła CO. Zabezpiecza to kocioł przed roszeniem na skutek wychładzania go zimną wodą powracającą z instalacji. ",
+    "Parametr określa o ile stopni musi być wyższa temperatura zadana kotła, aby załadować zasobnik CWU, bufor oraz obieg mieszacza. Podwyższenie temperatury zadanej kotła realizowane jest jedynie wówczas, gdy temperatura zadana kotła jest niższa od pozostałych temperatur zadanych.",
+    "Umożliwia odbiór ciepła z kotła przez zasobnik CWU bezpośrenio po załadowaniu zasobnika CWU. W celu schłodzenia kotła pracę pompy CWU można wydłużyć o czas wydłużenia pracy pompy CWU.",
+    "Pompa CO",
+    "Temperatura przeciwzamrożeniowa",
+    "Parametr określa temperaturę spalin dla której zostanie włączona pompa kotła. Temperatura kotła muzi zostać również osiągnięta.",
+    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
+    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
+    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
+    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
+    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
+    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
+    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
+    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
+    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
+    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
+    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
+    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
+    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
+    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
+    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
+    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
+    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
+    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
+    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
+    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
+    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
+    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
+    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
+    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
+    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
+    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
+    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
+    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
+    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
+    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
+    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
+    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
+    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
+    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
+    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
+    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
+    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
+    "Powyżej tej temperatury regulator włącza pompę CWU i otwiera obiegi mieszaczy w celu schłodzenia kotła. Regulator wyłączy pompę CWU jeśli temperatura tej wody przekroczy wartość maksymalną. Regulator nie otworzy obiegu mieszacza gdy OBSŁUGA MIESZACZA = włączony podłoga.",
+    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
+    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
+    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
+    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
+    "Określa czas przerwy pomiędzy załączeniami pompy cyrkulacyjnej. Parametr dostępny po podłączeniu dodatkowego modułu C. ",
+    "Określa czas pracy po czasie postoju pompy cyrkulacyjnej. Parametr dostępny po podłączeniu dodatkowego modułu C. ",
+    "Temperatura startu pompy cyrkulacyjnej",
+    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
+    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
+    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
+    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
+    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
+    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
+    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
+    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
+    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
+    "Nadmuch czyszczenia",
+    "Wyciąg czyszczenia",
+    "Jest to czas ciągłej pracy palnika po którym nastąpi automatyczne wygaszenie, wyczyszczenie i ponowne rozpalenie palnika.",
+    "Moc nadmuchu podczas wygaszania.",
+    "Moc wyciągu podczas wygaszania.",
+    "Parametr definiuje temperaturę górną bufora poniżej której rozpoczyna się proces ładowania bufora. Proces ładowania bufora zostaje zakończony z chwilą w której temperatura dolna bufora osiągnie wartość zdefiniowaną w parametrze TEMPERATURA ZAKOŃCZENIA ŁADOWANIA BUFORA.",
+    "Parametr definiuje temperaturę dolną bufora powyżej której zakończy się proces ładowania bufora. Proces ładowania bufora rozpocznie się ponownie z chwilą w której temperatura górna bufora spadnie poniżej temperatury TEMPERATURA ROZPOCZĘCIA ŁADOWANIA BUFORA.",
+    "Próg poziomu paliwa przy którym zostanie wyświetlony monit: NISKI POZIOM PALIWA!",
+    "Czas odliczany jest po spadku jasności płomienia poniżej wartości parametru \"Detekcja płomienia\". Po odliczeniu tego czasu regulator przechodzi do próby rozpalania palnika a po nieudanych 3 próbach wystawia alarm \"Nieudana próba rozpalenia”.",
+    "Czas pracy podajnika dodatkowego (zewnętrznego).",
+    "Określa temperaturę kotła pelletowego poniżej której zostanie włączony kocioł rezerwowy (na przykład gazowy). Nastawa na wartość \"0\" powoduje wyłączenie sterowania kotłem rezerwowym i przełączenie styku 39-40 na obsługę alarmów.",
+    "Parametr umożliwia zmianę paliwa. Dla danego paliwa zostaną wczytane nowe nastawy w menu: MODULACJA MOCY.",
+    "Określa maksymalną temperaturę palnika przy której zostanie wystawiony alarm przekroczenia maksymalnej temperatury palnika.",
+    "Wydłużenie pracy podajnika 2.",
+    "Czas czyszczenia Rozpalanie.",
+    "Czas czyszczenia wygaszanie.",
+    "Czas trwania przedmuchów przy dopalaniu paliwa w WYGASZANIU.",
+    "Przerwa między przedmuchami przy dopalaniu paliwa w WYGASZANIU.",
+    "Jasność płomienia przy której następuje start przedmuchów przy dopalaniu paliwa w WYGASZANIU.",
+    "Jasność płomienia przy której przedmuchy zostają zakończone przy dopalaniu paliwa w WYGASZANIU. ",
+    "Włącza lub wyłącza obsługę sondy Lambda.",
+    "Korekta czujnika pogodowego.",
+    "Producent",
+    "Przerwa czyszczenia wymiennika",
+    "Czas czyszczenia wymiennika",
+    "Sterowanie palnikiem pelletowym",
+    "Wybierz tryb pracy",
+    "Wybierz tryb pracy zgazowywania drewna",
+    "Ustawienie mocy kotła. Może być ustawione pomiędzy 50%  a 150%. Sterownik zawsze utrzymuje ustawioną moc kotła jako pierwszy warunek. Gdy ustawiona moc kotła jest za wysoka i kocioł jest bliski swojej maksymalnej temperatury, sterownik automatycznie obniży moc kotła.",
+    "Włączenie lub wyłączenie mechanizmu detekcji paliwa. Jeśli funkcjonalność jest aktywna, w kotle pozostanie warstwa gorącego żaru.",
+    "Rozszerzenie operacji gdy system detekcji paliwa jest aktywny i jest niski poziom paliwa w kotle",
+    "Aktywacja czujnika otwarcia drzwi kotła. Gdy jest włączona, wentylator wyciągowy załącza się automatycznie po otwarciu drzwiczek. ",
+    "Moc wentylatora wyciągowego w trakcie rozpalania",
+    "Moc wentylatora wyciągowego podczas podtrzymania żaru",
+    "Temperatura spalin na podstawie której zostaje stwierdzone rozpalenie kotła i koniec trybu rozpalania",
+    "Przez ten czas sterownik będzie uruchamiał wentylator wyciągowy aby podtrzymać warstwę żaru w palenisku. Funkcjonalność pracuje zgodnie z parametrami: Moc went. wyc. przy podtrzymaniu żaru, Czas przedmuchu podczas podtrzymania.",
+    "Maksymalny czas uzupełniania paliwa gdy czujnik otwarcia drzwiczek nie jest aktywny",
+    "Czas po którym sterownik przełączy tryb z rozpalania na pracę w przypadku gdy zadana temperatura spalin dla zakończenia rozpalania nie jest osiągnięta",
+    "Tryb pracy awaryjnej",
+    "Tryb pracy awaryjnej jest wykorzystywany gdy uszkodzony jest czujnik temperatury spalin. Należy przebywać przy kotle podczas działania trybu awaryjnego i monitorować temperature wody kotła.",
+    "Minimalna zadana temperatura kotła",
+    "Histereza przegrzania kotła",
+    "Gdy jest ustawione 100%  dla warstwy gorącego żaru wentylator wyciągowy wyłączy się natychmiast po zgłoszeniu braku paliwa przez mechanizm. Dla mniejszych wartości będzie utrzymywał mniejszą warstwę żaru. Rozszerzenie operacji zawsze musi byc włączone.",
+    "Przez ten czas mechanizm detekcji paliwa jest nieaktywny",
+    "Gdy temperatura spalin spadnie poniżej tej wartości pojawi się komunikat o braku paliwa i wentylator wyciagowy zostanie wyłączony.",
+    "Czas interwału podtrzymania żaru-  to czas co jaki jest załączany wentylator w trzybie podtrzymania żaru",
+    "Czas pracy wentylatora w trakcie przedmuchu w trybie konserwacji",
+    "Czas podglądu komory kotła. Gdy drzwi kotła zostaną zamkniete przed zakońćzeniem trybu podglądu, kocioł powróci do trybu pracy i będzie go kontynuował. ",
+    "Maksymalny wzrost temp. spalin",
+    "Maksymalny spadek temp. spalin",
+    "Gdy On - styk normalnie otwarty\\nGdy Off - styk normalnie zamknięty",
+    "Aktywacja rozproszenia ciepła bufora",
+    "Po osiągnieciu tej temperatury uruchamiają się pompy mieszaczy i CWU aż do wychłodzenia bufora",
+    "Parametr określa różnicę temperatur pomiędzy buforem a kotłem, przy jakiej uruchomi się pompa kotła. Gdy wartość parametru wynosi OFF, funkcja ochrony przed wychłodzeniem bufora jest wyłączona.",
+    "Parametr określa różnicę temperatur pomiędzy buforem a kotłem, przy jakiej wyłączy się pompa kotła. Gdy wartość parametru wynosi OFF, funkcja ochrony przed wychłodzeniem bufora jest wyłączona.",
+    "Temperatura startu sys. hydraulicznego",
+    "Histereza systemu hydraulicznego",
+    "Temperatura spalin - Maks. moc kotła",
+    "Temperatura spalin - Min. moc kotła",
+    "Minimalna moc wentylatora wyciągowego w zgazowywaniu drewna.",
+    "Maksymalna moc wentylatora wyciągowego w zgazowywaniu drewna.",
+    "Automatyczna aktywacja palnika pelletowego po zakończeniu spalania drewna. Po zakońćzeniu spalania drewna sterownik odlicza czas po którym załączy palnik pelletowy ",
+    "Automatyczna aktywacja palnika pelletowego po zakończeniu spalania drewna po czasie opóźnienia.",
+    "Ustawienie czasu po jakim wystartuje palnik pelletowy. Dobrze jest ustawić opóźnienie takie, aby utrzymywał się żar w komorze kotła.",
+    "Wybierz tryb pracy wyjścia H",
+    "Wybierz rodzaj paliwa jaki jest obecnie używany",
+    "Otwarcie przepustnicy podczas uzupełniania paliwa",
+    "Tlen - Suche twarde drewno",
+    "Tlen - Wilgotne twarde drewno",
+    "Tlen - Suche miękkie drewno",
+    "Tlen - Wilgotne miękkie drewno",
+    "Korekcja temp. kotła"
+  ],
+  "paramsEnums": [
+    {
+      "values": [],
+      "first": 0
+    },
+    {
+      "values": [
+        "OFF",
+        "ON"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "STOP",
+        "START",
+        "",
+        "Kalibracja"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "",
+        "Kalibracja"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "STOP",
+        "OFF",
+        "ON"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Rozłączony",
+        "Połączony"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "",
+        "OPEN",
+        "WEP",
+        "WPA",
+        "WPA2"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "WYŁĄCZONY",
+        "ROZPALANIE",
+        "PRACA",
+        "NADZÓR",
+        "WYGASZANIE",
+        "POSTÓJ",
+        "RĘCZNE",
+        "ALARM",
+        "CZYSZCZENIE",
+        "URUCHAMIANIE",
+        "BRAK TRANSMISJI",
+        "PODGLĄD",
+        "UZUPEŁNIENIE PALIWA",
+        "PRACA AWARYJNA"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłączony",
+        "Priorytet",
+        "Bez priorytetu"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłączona",
+        "Włączona"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Zima",
+        "Lato",
+        "Auto",
+        "Zima",
+        "Lato"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "OFF",
+        "ON",
+        "Wymiennik"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłączona",
+        "Włączona CO",
+        "Włącz.podłog.",
+        "Tylko pompa"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Nie",
+        "Tak"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłączony",
+        "Uniwersalny",
+        "ecoSTER T1",
+        "ecoSTER T2",
+        "ecoSTER T3",
+        "Wyłączony",
+        "Uniwersalny",
+        "ecoSTER T2",
+        "ecoSTER T3",
+        "Wyłączony",
+        "Uniwersalny",
+        "ecoSTER T3",
+        "Wyłączony",
+        "Uniwersalny",
+        "ecoSTER T1",
+        "ecoSTER T3",
+        "Wyłączony",
+        "ecoSTER T1",
+        "ecoSTER T2",
+        "ecoSTER T3",
+        "Wyłączony",
+        "ecoSTER T2",
+        "ecoSTER T3",
+        "Wyłączony",
+        "ecoSTER T3",
+        "Wyłączony",
+        "ecoSTER T1",
+        "ecoSTER T3",
+        "Uniwersalny",
+        "Uniwersalny",
+        "Uniwersalny",
+        "Wyłączony",
+        "Wyłączony",
+        "Wyłączony"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Poziom paliwa 100%",
+        "Poziom paliwa 0%",
+        ""
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłącz",
+        "Włącz"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Wyłącz",
+        "Włącz"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "HB12",
+        "HB18",
+        "HB25",
+        "HB33",
+        "BCC15",
+        "BCC20",
+        "BCC25",
+        "BCC30",
+        "-",
+        "-"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "BLAZE HARMONY",
+        "PERGE",
+        "CTM",
+        "LAMINOX",
+        "BLAZE GREEN"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Kocioł",
+        "Bufor"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "OFF",
+        "ON"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "STOP",
+        "PRACA",
+        "UZUPEŁNIENIE PALIWA"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "ZGAZOWYWANIE DREWNA",
+        "PELLET"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Off",
+        "Kocioł",
+        "Alarm"
+      ],
+      "first": 0
+    },
+    {
+      "values": [
+        "Suche twarde drewno",
+        "Wilgotne twarde drewno",
+        "Suche miękkie drewno",
+        "Wilgotne miękkie drewno"
+      ],
+      "first": 0
+    }
+  ],
+  "alarmsNames": {
+    "18": "Przegrzanie kotła, rozwarty styk STB.",
+    "44": "Moduł Pelletowy jest odłączony.",
+    "52": "Uszkodzony system sterowania podajnikiem.",
+    "1": "Uszkodzenie czujnika temperatury kotła.",
+    "0": "Brak zasilania.",
+    "3": "Uszkodzenie czujnika temperatury palnika.",
+    "2": "Przekroczono maksymalną temperaturę kotła.",
+    "4": "Przegrzanie palnika.",
+    "7": "Nieudana próba rozpalenia kotła.",
+    "255": "Alarm trwa!"
+  }
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "values": [],
+    "first": 0
+  },
+  {
+    "values": [
+      "OFF",
+      "ON"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "STOP",
+      "START",
+      "",
+      "Kalibracja"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "",
+      "Kalibracja"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "STOP",
+      "OFF",
+      "ON"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Rozłączony",
+      "Połączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "",
+      "OPEN",
+      "WEP",
+      "WPA",
+      "WPA2"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "WYŁĄCZONY",
+      "ROZPALANIE",
+      "PRACA",
+      "NADZÓR",
+      "WYGASZANIE",
+      "POSTÓJ",
+      "RĘCZNE",
+      "ALARM",
+      "CZYSZCZENIE",
+      "URUCHAMIANIE",
+      "BRAK TRANSMISJI",
+      "PODGLĄD",
+      "UZUPEŁNIENIE PALIWA",
+      "PRACA AWARYJNA"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Priorytet",
+      "Bez priorytetu"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Włączona"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Zima",
+      "Lato",
+      "Auto",
+      "Zima",
+      "Lato"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "OFF",
+      "ON",
+      "Wymiennik"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączona",
+      "Włączona CO",
+      "Włącz.podłog.",
+      "Tylko pompa"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Nie",
+      "Tak"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T1",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T3",
+      "Wyłączony",
+      "Uniwersalny",
+      "ecoSTER T1",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T1",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T2",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T3",
+      "Wyłączony",
+      "ecoSTER T1",
+      "ecoSTER T3",
+      "Uniwersalny",
+      "Uniwersalny",
+      "Uniwersalny",
+      "Wyłączony",
+      "Wyłączony",
+      "Wyłączony"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Poziom paliwa 100%",
+      "Poziom paliwa 0%",
+      ""
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłącz",
+      "Włącz"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Wyłącz",
+      "Włącz"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "HB12",
+      "HB18",
+      "HB25",
+      "HB33",
+      "BCC15",
+      "BCC20",
+      "BCC25",
+      "BCC30",
+      "-",
+      "-"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "BLAZE HARMONY",
+      "PERGE",
+      "CTM",
+      "LAMINOX",
+      "BLAZE GREEN"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Kocioł",
+      "Bufor"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "OFF",
+      "ON"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "STOP",
+      "PRACA",
+      "UZUPEŁNIENIE PALIWA"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "ZGAZOWYWANIE DREWNA",
+      "PELLET"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Off",
+      "Kocioł",
+      "Alarm"
+    ],
+    "first": 0
+  },
+  {
+    "values": [
+      "Suche twarde drewno",
+      "Wilgotne twarde drewno",
+      "Suche miękkie drewno",
+      "Wilgotne miękkie drewno"
+    ],
+    "first": 0
+  }
+]

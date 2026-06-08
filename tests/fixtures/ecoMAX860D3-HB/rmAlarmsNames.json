@@ -1,0 +1,12 @@
+{
+  "18": "Przegrzanie kotła, rozwarty styk STB.",
+  "44": "Moduł Pelletowy jest odłączony.",
+  "52": "Uszkodzony system sterowania podajnikiem.",
+  "1": "Uszkodzenie czujnika temperatury kotła.",
+  "0": "Brak zasilania.",
+  "3": "Uszkodzenie czujnika temperatury palnika.",
+  "2": "Przekroczono maksymalną temperaturę kotła.",
+  "4": "Przegrzanie palnika.",
+  "7": "Nieudana próba rozpalenia kotła.",
+  "255": "Alarm trwa!"
+}
