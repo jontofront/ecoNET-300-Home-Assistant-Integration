@@ -391,8 +391,19 @@ class EconetDynamicSelect(EconetEntity, SelectEntity):
 
     @property
     def available(self) -> bool:
-        """Return if entity is available."""
-        return self.coordinator.last_update_success
+        """Return True when data is fresh and the parameter is still present.
+
+        The coordinator keeps the last payload on transient failures, so
+        ``last_update_success`` stays True even while the device is
+        unreachable. Availability is therefore driven by the staleness flag
+        in the coordinator ``_health`` block, matching every other entity.
+        """
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        if bool(health.get("stale")):
+            return False
+        parameters = (data.get("mergedData") or {}).get("parameters", {})
+        return self._param_id in parameters
 
     @property
     def icon(self) -> str | None:
