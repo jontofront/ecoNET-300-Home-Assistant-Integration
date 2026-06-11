@@ -511,6 +511,136 @@ def find_merged_param_by_key(merged_data: dict | None, key: str) -> dict | None:
     return None
 
 
+# Tokens used to recognise the heater-mode (summer/winter) parameter and its
+# enum options across controllers that report native-language values.
+_HEATER_MODE_WINTER_TOKENS = {"winter", "zima"}
+_HEATER_MODE_SUMMER_TOKENS = {"summer", "lato"}
+_HEATER_MODE_AUTO_TOKENS = {"auto"}
+
+
+def find_heater_mode_param(merged_data: dict | None) -> dict | None:
+    """Find the heater-mode (summer/winter) parameter in mergedData.
+
+    The heater-mode write ID differs between controllers (e.g. ``55`` on
+    ecoMAX810P-L but ``58`` on ecoMAX860D3-HB), so the static
+    ``select.heater_mode`` entity resolves it from mergedData instead of a
+    hardcoded constant. Detection order:
+
+    1. Parameter whose ``key`` is ``summer_mode``.
+    2. Else first editable ``unit == 31`` parameter whose enum values contain
+       both a winter token (winter/zima) and a summer token (summer/lato).
+    3. Else first parameter whose ``name`` mentions ``lato`` or ``summer mode``.
+    4. Else None (legacy RM-less modules use the hardcoded fallback).
+
+    Args:
+        merged_data: The ``mergedData`` payload from the coordinator.
+
+    Returns:
+        The matching parameter dict, or None when not found.
+
+    """
+    if not merged_data:
+        return None
+
+    by_key = find_merged_param_by_key(merged_data, "summer_mode")
+    if by_key is not None:
+        return by_key
+
+    parameters = merged_data.get("parameters") or {}
+
+    for param in parameters.values():
+        if not isinstance(param, dict) or not param.get("edit", False):
+            continue
+        if param.get("unit") != 31:
+            continue
+        values = [
+            str(v).lower() for v in (param.get("enum") or {}).get("values", []) if v
+        ]
+        has_winter = any(v in _HEATER_MODE_WINTER_TOKENS for v in values)
+        has_summer = any(v in _HEATER_MODE_SUMMER_TOKENS for v in values)
+        if has_winter and has_summer:
+            return param
+
+    for param in parameters.values():
+        if not isinstance(param, dict):
+            continue
+        name = str(param.get("name", "")).lower()
+        if "lato" in name or "summer mode" in name:
+            return param
+
+    return None
+
+
+def get_heater_mode_options(param: dict) -> list[str]:
+    """Return the heater-mode options limited by the parameter's value range.
+
+    The enum array can repeat values (e.g. ``[Zima, Lato, Auto, Zima, Lato]``)
+    and may expose more entries than the controller actually allows, so the
+    options are derived from the ``minv..maxv`` range and de-duplicated while
+    preserving order. On ecoMAX860D3-HB (``maxv == 1``) this trims ``Auto``.
+
+    Args:
+        param: The heater-mode parameter dict from mergedData.
+
+    Returns:
+        Ordered list of unique native-language option strings.
+
+    """
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+
+    minv = param.get("minv")
+    maxv = param.get("maxv")
+    if isinstance(minv, (int, float)) and isinstance(maxv, (int, float)):
+        lo, hi = int(minv), int(maxv)
+    else:
+        lo, hi = first, first + len(values) - 1
+
+    options: list[str] = []
+    for value in range(lo, hi + 1):
+        idx = value - first
+        if 0 <= idx < len(values):
+            option = values[idx]
+            if option and option not in options:
+                options.append(option)
+    return options
+
+
+def heater_mode_value_to_option(param: dict, value: int) -> str | None:
+    """Map a numeric heater-mode value to its native-language option string."""
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+    idx = int(value) - first
+    return values[idx] if 0 <= idx < len(values) else None
+
+
+def heater_mode_option_to_value(param: dict, option: str) -> int | None:
+    """Map a native-language heater-mode option string back to its value."""
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+    for idx, value in enumerate(values):
+        if value == option:
+            return idx + first
+    return None
+
+
+def heater_mode_icon(option: str | None) -> str:
+    """Return an mdi icon for a heater-mode option, language-independent."""
+    if not option:
+        return "mdi:thermostat"
+    token = option.lower()
+    if token in _HEATER_MODE_WINTER_TOKENS:
+        return "mdi:snowflake"
+    if token in _HEATER_MODE_SUMMER_TOKENS:
+        return "mdi:weather-sunny"
+    if token in _HEATER_MODE_AUTO_TOKENS:
+        return "mdi:thermostat-auto"
+    return "mdi:thermostat"
+
+
 def is_parameter_locked(param: dict) -> bool:
     """Check if parameter is locked using existing mergedData field.
 
