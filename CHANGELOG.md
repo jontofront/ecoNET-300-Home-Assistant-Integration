@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.3.0-beta.4] - 2026-06-11
+
+### Fixed
+
+- **`select.heater_mode` write ID resolved from `mergedData`** ([#235](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/235)): the static heater-mode select always wrote to a hardcoded parameter (`55`), which is wrong on controllers that use a different index (e.g. ecoMAX860D3-HB uses `58`), so mode changes silently reverted. The entity now resolves its write ID, name, and options from `mergedData` (writing via `set_param_by_index`, like dynamic selects) while keeping the stable `select.heater_mode` entity ID. Options and state use the controller's native language (e.g. *Zima*/*Lato*), the value range is limited by `minv`/`maxv` (so *Auto* is dropped where unavailable), device-side locks are honored, and the hardcoded `55`/`2049`/English fallback remains for legacy RM-less modules.
+- **No duplicate heater-mode select**: the heater-mode parameter is now skipped in dynamic select creation so it does not shadow the canonical `select.heater_mode` entity.
+
+### Tests
+
+- Added heater-mode helper coverage (`find_heater_mode_param`, `get_heater_mode_options`, value/option round-trips, icon mapping) in `tests/test_validation_functions.py`, plus write-path (ecoMAX810P-L vs ecoMAX860D3-HB), fallback, lock, and de-duplication tests in `tests/test_dynamic_number_entities.py`.
+
+---
+
 ## [v1.3.0-beta.3] - 2026-06-06
 
 ### Fixed
