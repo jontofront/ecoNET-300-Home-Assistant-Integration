@@ -319,12 +319,18 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     edit_params_data = {}
                     information_params = {}
                 else:
+                    # poll_edit_params <= 0 disables interval polling: only fetch
+                    # on an explicit force-refresh or once to populate an empty
+                    # catalog (never unconditionally on every cycle).
+                    interval_due = (
+                        self._poll_edit_params > 0
+                        and (now - self._edit_params_last_fetch)
+                        >= self._poll_edit_params
+                    )
                     should_fetch_edit = (
                         self._edit_params_force_refresh
                         or not edit_params_full
-                        or self._poll_edit_params <= 0
-                        or (now - self._edit_params_last_fetch)
-                        >= self._poll_edit_params
+                        or interval_due
                     )
                     if should_fetch_edit:
                         try:
