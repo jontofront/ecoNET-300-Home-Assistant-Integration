@@ -21,8 +21,12 @@ from custom_components.econet300.number import (
     create_number_entity_description,
     should_be_number_entity,
 )
+from custom_components.econet300.common_functions import find_heater_mode_param
 from custom_components.econet300.select import (
     EconetDynamicSelect,
+    EconetSelect,
+    HeaterModeSelectError,
+    create_dynamic_selects,
     should_be_select_entity,
 )
 
@@ -707,3 +711,166 @@ class TestMixerNumberLock:
             await entity.async_set_native_value(50)
 
         api.set_param.assert_awaited_once()
+
+
+class TestHeaterModeSelectWrite:
+    """Static select.heater_mode resolves write ID from mergedData (issue #235)."""
+
+    def _build_entity(
+        self, fixture_name: str, controller_id: str
+    ) -> tuple[EconetSelect, MagicMock]:
+        merged_data = load_fixture(fixture_name, "mergedData.json")
+        heater_param = find_heater_mode_param(merged_data)
+
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": controller_id},
+            "regParams": {},
+            "paramsEdits": {},
+            "regParamsData": {"2049": 0},
+            "mergedData": merged_data,
+        }
+        coordinator.single_device_tree = False
+        coordinator.last_update_success = True
+
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test-uid"
+        api.set_param = AsyncMock(return_value=True)
+        api.set_param_by_index = AsyncMock(return_value=True)
+
+        description = SelectEntityDescription(
+            key="heater_mode",
+            name="Heater Mode",
+            translation_key="heater_mode",
+        )
+        entity = EconetSelect(description, coordinator, api, "heaterMode", heater_param)
+        entity.async_write_ha_state = MagicMock()  # type: ignore[method-assign]
+        return entity, api
+
+    @pytest.mark.asyncio
+    async def test_write_uses_param_index_810p_l(self):
+        """ecoMAX810P-L writes heater mode through set_param_by_index(55, ...)."""
+        entity, api = self._build_entity("ecoMAX810P-L", "ecoMAX810P-L")
+
+        assert entity.options == ["Winter", "Summer", "Auto"]
+        await entity.async_select_option("Summer")
+
+        api.set_param.assert_not_called()
+        api.set_param_by_index.assert_awaited_once_with(55, 1)
+        assert entity.current_option == "Summer"
+
+    @pytest.mark.asyncio
+    async def test_write_uses_param_index_860d3_hb(self):
+        """ecoMAX860D3-HB writes heater mode through set_param_by_index(58, ...)."""
+        entity, api = self._build_entity("ecoMAX860D3-HB", "ecoMAX860D3-HB")
+
+        assert entity.options == ["Zima", "Lato"]
+        await entity.async_select_option("Lato")
+
+        api.set_param.assert_not_called()
+        api.set_param_by_index.assert_awaited_once_with(58, 1)
+        assert entity.current_option == "Lato"
+        assert entity.icon == "mdi:weather-sunny"
+
+    @pytest.mark.asyncio
+    async def test_write_falls_back_to_set_param_without_merged_data(self):
+        """No mergedData -> legacy set_param('55', value) path is used."""
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": "legacy"},
+            "regParams": {},
+            "paramsEdits": {},
+            "regParamsData": {"2049": 0},
+        }
+        coordinator.single_device_tree = False
+        coordinator.last_update_success = True
+
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test-uid"
+        api.set_param = AsyncMock(return_value=True)
+        api.set_param_by_index = AsyncMock(return_value=True)
+
+        description = SelectEntityDescription(
+            key="heater_mode",
+            name="Heater Mode",
+            translation_key="heater_mode",
+        )
+        entity = EconetSelect(description, coordinator, api, "heaterMode", None)
+        entity.async_write_ha_state = MagicMock()  # type: ignore[method-assign]
+
+        assert entity.options == ["Winter", "Summer", "Auto"]
+        assert entity.icon is None
+        await entity.async_select_option("Summer")
+
+        api.set_param_by_index.assert_not_called()
+        api.set_param.assert_awaited_once_with("55", 1)
+
+    @pytest.mark.asyncio
+    async def test_locked_heater_mode_write_raises(self):
+        """A locked merged param blocks the write and raises before any API call."""
+        merged_data = load_fixture("ecoMAX810P-L", "mergedData.json")
+        heater_param = find_heater_mode_param(merged_data)
+        assert heater_param is not None
+        heater_param["locked"] = True
+        heater_param["lock_reason"] = "Weather control enabled."
+
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": "ecoMAX810P-L"},
+            "regParamsData": {"2049": 0},
+            "mergedData": merged_data,
+        }
+        coordinator.single_device_tree = False
+        coordinator.last_update_success = True
+
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test-uid"
+        api.set_param = AsyncMock(return_value=True)
+        api.set_param_by_index = AsyncMock(return_value=True)
+
+        description = SelectEntityDescription(
+            key="heater_mode",
+            name="Heater Mode",
+            translation_key="heater_mode",
+        )
+        entity = EconetSelect(description, coordinator, api, "heaterMode", heater_param)
+        entity.async_write_ha_state = MagicMock()  # type: ignore[method-assign]
+
+        assert entity.icon == "mdi:lock"
+        with pytest.raises(HeaterModeSelectError):
+            await entity.async_select_option("Summer")
+
+        api.set_param.assert_not_called()
+        api.set_param_by_index.assert_not_called()
+
+
+class TestHeaterModeDedup:
+    """create_dynamic_selects must not duplicate the static heater_mode entity."""
+
+    def test_no_duplicate_heater_mode_dynamic_select(self):
+        """The heater-mode param is skipped in dynamic select creation."""
+        merged_data = load_fixture("ecoMAX810P-L", "mergedData.json")
+        heater_param = find_heater_mode_param(merged_data)
+        assert heater_param is not None
+        heater_number = heater_param.get("number", heater_param.get("index"))
+
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {
+            "sysParams": {"controllerID": "ecoMAX810P-L"},
+            "regParams": {},
+            "mergedData": merged_data,
+        }
+        coordinator.single_device_tree = False
+        coordinator.last_update_success = True
+
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test-uid"
+
+        selects = create_dynamic_selects(coordinator, api)
+        dynamic_numbers = {
+            getattr(s, "_param", {}).get(
+                "number", getattr(s, "_param", {}).get("index")
+            )
+            for s in selects
+        }
+        assert heater_number not in dynamic_numbers
