@@ -10,8 +10,8 @@ Covers PR #234 hardening features:
 
 from datetime import UTC, datetime
 import time
-from typing import NamedTuple
-from unittest.mock import MagicMock, PropertyMock, patch
+from typing import Any, NamedTuple, cast
+from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
 
 import pytest
 
@@ -139,6 +139,123 @@ class TestWithHealth:
         coord._with_health(payload, online=True)
 
         assert "_health" not in payload
+
+
+# ============================================================================
+# editParams polling gate (poll_edit_params == 0 means "disable")
+# ============================================================================
+
+
+def _update_ready_coordinator(
+    *,
+    poll_edit_params: int,
+    last_data: dict | None = None,
+    force_refresh: bool = False,
+    edit_last_fetch: float = 0.0,
+) -> tuple[EconetDataCoordinator, MagicMock]:
+    """Build a coordinator wired for ``_async_update_data`` on an ecoMAX360i.
+
+    ecoMAX360i is the only controller that reaches the ``editParams`` fetch
+    branch (``skip_edit_params`` returns False), so the gating logic is
+    exercised here. RM support is forced off to keep the success path minimal.
+    """
+    coord = object.__new__(EconetDataCoordinator)
+    api = MagicMock()
+    api.fetch_sys_params = AsyncMock(return_value={"controllerID": "ecoMAX360i"})
+    api.fetch_reg_params = AsyncMock(return_value={"tempCO": 50})
+    api.fetch_reg_params_data = AsyncMock(return_value={})
+    api.fetch_param_edit_data = AsyncMock(return_value={})
+    api.fetch_edit_params = AsyncMock(
+        return_value={"data": {}, "informationParams": {}}
+    )
+    api.probe_rm_support = AsyncMock(return_value=False)
+
+    coord._api = api
+    # _async_update_data reads ``self.data`` (``None`` on the very first run).
+    coord.data = cast("dict[str, Any]", last_data)
+    coord._rm_supported = False
+    coord._sys_params_last_fetch = 0.0
+    coord._poll_sys_params = 300
+    coord._poll_reg_params = 15
+    coord._poll_edit_params = poll_edit_params
+    coord._edit_params_last_fetch = edit_last_fetch
+    coord._edit_params_force_refresh = force_refresh
+    coord._edit_params_failures = 0
+    coord._consecutive_failures = 0
+    coord._last_success_ts = 0.0
+    coord._last_failure_ts = 0.0
+    coord._last_error = ""
+    return coord, api
+
+
+class TestEditParamsPollingGate:
+    """Test that poll_edit_params == 0 disables editParams interval polling."""
+
+    @pytest.mark.asyncio
+    async def test_zero_interval_does_not_refetch_when_catalog_present(self):
+        # Regression for the OR-branch bug: 0 must mean "disable", not "fetch
+        # every cycle". With a populated catalog and no force-refresh, no fetch.
+        coord, api = _update_ready_coordinator(
+            poll_edit_params=0,
+            last_data={"editParamsFull": {"data": {}}},
+            force_refresh=False,
+            edit_last_fetch=time.time(),
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_zero_interval_still_fetches_to_populate_empty_catalog(self):
+        coord, api = _update_ready_coordinator(
+            poll_edit_params=0,
+            last_data=None,
+            force_refresh=False,
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_zero_interval_still_fetches_on_force_refresh(self):
+        coord, api = _update_ready_coordinator(
+            poll_edit_params=0,
+            last_data={"editParamsFull": {"data": {}}},
+            force_refresh=True,
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+        assert coord._edit_params_force_refresh is False
+
+    @pytest.mark.asyncio
+    async def test_positive_interval_refetches_when_due(self):
+        coord, api = _update_ready_coordinator(
+            poll_edit_params=10,
+            last_data={"editParamsFull": {"data": {}}},
+            force_refresh=False,
+            edit_last_fetch=time.time() - 30,
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_positive_interval_skips_when_not_due(self):
+        coord, api = _update_ready_coordinator(
+            poll_edit_params=300,
+            last_data={"editParamsFull": {"data": {}}},
+            force_refresh=False,
+            edit_last_fetch=time.time(),
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
 
 
 # ============================================================================
@@ -275,7 +392,10 @@ class TestEconetHealthSensor:
     def test_consecutive_failures_value(self):
         coordinator = self._coordinator({"consecutive_failures": 3})
         sensor = EconetHealthSensor(
-            coordinator, _make_api(), "consecutive_failures", "health_consecutive_failures"
+            coordinator,
+            _make_api(),
+            "consecutive_failures",
+            "health_consecutive_failures",
         )
         assert sensor.native_value == 3
 
@@ -353,8 +473,7 @@ class TestPollingSettingsOptionsFlow:
         assert kwargs["step_id"] == "polling_settings"
 
         defaults = {
-            marker.schema: marker.default()
-            for marker in kwargs["data_schema"].schema
+            marker.schema: marker.default() for marker in kwargs["data_schema"].schema
         }
         assert defaults[CONF_POLL_REG_PARAMS] == DEFAULT_POLL_REG_PARAMS
         assert defaults[CONF_POLL_SYS_PARAMS] == DEFAULT_POLL_SYS_PARAMS
@@ -371,8 +490,7 @@ class TestPollingSettingsOptionsFlow:
 
         kwargs = mocks.show_form.call_args.kwargs
         defaults = {
-            marker.schema: marker.default()
-            for marker in kwargs["data_schema"].schema
+            marker.schema: marker.default() for marker in kwargs["data_schema"].schema
         }
         assert defaults[CONF_POLL_REG_PARAMS] == 30
 
