@@ -1714,8 +1714,8 @@ def create_schedule_sensors(
             mixer_num = int(component.split("_")[1])
             if not mixer_exists(coordinator.data, mixer_num):
                 _LOGGER.debug(
-                    "Skipping schedule sensor %s - Mixer %d not connected",
-                    friendly_name,
+                    "Skipping schedule sensor for component %s - Mixer %d not connected",
+                    component,
                     mixer_num,
                 )
                 continue
