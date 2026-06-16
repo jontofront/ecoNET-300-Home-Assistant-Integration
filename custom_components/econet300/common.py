@@ -397,7 +397,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     "mergedData": merged_data,
                 }
 
-                return self._with_health(result, online=True)
+                # result is freshly allocated (each value already deep-copied
+                # above), so _with_health can mutate it in place without copying.
+                return self._with_health(result, online=True, copy_payload=False)
         except AuthError as err:
             _LOGGER.error("Authentication error: %s", err)
             raise ConfigEntryAuthFailed from err
@@ -424,9 +426,16 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 return self._with_health(last_data, online=False)
             raise UpdateFailed(f"Connection failed: {err}") from err
 
-    def _with_health(self, payload: dict[str, Any], *, online: bool) -> dict[str, Any]:
-        """Add health metadata used by watchdog entities."""
-        data = copy.deepcopy(payload)
+    def _with_health(
+        self, payload: dict[str, Any], *, online: bool, copy_payload: bool = True
+    ) -> dict[str, Any]:
+        """Add health metadata used by watchdog entities.
+
+        ``copy_payload`` deep-copies the payload to avoid mutating live data
+        (needed on the failure path, where ``payload`` is the live ``self.data``).
+        The success path passes an already-fresh dict and can skip the copy.
+        """
+        data = copy.deepcopy(payload) if copy_payload else payload
         now = time.time()
         last_success_ts = self._last_success_ts or float(
             (data.get("_health") or {}).get("last_success_ts") or 0
