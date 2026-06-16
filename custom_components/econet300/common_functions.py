@@ -571,6 +571,23 @@ def find_heater_mode_param(merged_data: dict | None) -> dict | None:
     return None
 
 
+def _heater_mode_value_range(param: dict) -> tuple[int, int]:
+    """Return the inclusive (lo, hi) value range for a heater-mode parameter.
+
+    Uses ``minv``/``maxv`` when available, otherwise spans the full enum array.
+    Shared by option/value conversion so they all honor the same constraint.
+    """
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+
+    minv = param.get("minv")
+    maxv = param.get("maxv")
+    if isinstance(minv, (int, float)) and isinstance(maxv, (int, float)):
+        return int(minv), int(maxv)
+    return first, first + len(values) - 1
+
+
 def get_heater_mode_options(param: dict) -> list[str]:
     """Return the heater-mode options limited by the parameter's value range.
 
@@ -589,13 +606,7 @@ def get_heater_mode_options(param: dict) -> list[str]:
     enum_data = param.get("enum") or {}
     values = enum_data.get("values") or []
     first = enum_data.get("first", 0)
-
-    minv = param.get("minv")
-    maxv = param.get("maxv")
-    if isinstance(minv, (int, float)) and isinstance(maxv, (int, float)):
-        lo, hi = int(minv), int(maxv)
-    else:
-        lo, hi = first, first + len(values) - 1
+    lo, hi = _heater_mode_value_range(param)
 
     options: list[str] = []
     for value in range(lo, hi + 1):
@@ -617,13 +628,21 @@ def heater_mode_value_to_option(param: dict, value: int) -> str | None:
 
 
 def heater_mode_option_to_value(param: dict, option: str) -> int | None:
-    """Map a native-language heater-mode option string back to its value."""
+    """Map a native-language option back to its value within the minv..maxv range.
+
+    The enum array can repeat values, so the search is limited to the valid
+    ``minv..maxv`` range (matching ``get_heater_mode_options``) to avoid
+    returning an earlier out-of-range index for a duplicated option.
+    """
     enum_data = param.get("enum") or {}
     values = enum_data.get("values") or []
     first = enum_data.get("first", 0)
-    for idx, value in enumerate(values):
-        if value == option:
-            return idx + first
+    lo, hi = _heater_mode_value_range(param)
+
+    for value in range(lo, hi + 1):
+        idx = value - first
+        if 0 <= idx < len(values) and values[idx] == option:
+            return value
     return None
 
 

@@ -102,6 +102,25 @@ class TestHeaterModeHelpers:
         assert heater_mode_icon(None) == "mdi:thermostat"
         assert heater_mode_icon("Unknown") == "mdi:thermostat"
 
+    def test_option_to_value_respects_range_with_duplicates(self):
+        """Duplicated enum values must map back inside the minv..maxv range.
+
+        Regression: a repeated option (e.g. Zima at index 0 and 3) must not
+        return the earlier out-of-range index when the valid range starts later.
+        """
+        param = {
+            "enum": {"values": ["Zima", "Lato", "Auto", "Zima", "Lato"], "first": 0},
+            "minv": 3,
+            "maxv": 4,
+        }
+        # Options come from the constrained range (indices 3..4).
+        assert get_heater_mode_options(param) == ["Zima", "Lato"]
+        # Reverse mapping returns in-range values, not the earlier duplicates.
+        assert heater_mode_option_to_value(param, "Zima") == 3
+        assert heater_mode_option_to_value(param, "Lato") == 4
+        # An option outside the valid range resolves to None.
+        assert heater_mode_option_to_value(param, "Auto") is None
+
 
 class TestValidateParameterData:
     """Tests for validate_parameter_data function."""
