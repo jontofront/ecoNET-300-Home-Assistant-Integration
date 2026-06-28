@@ -179,7 +179,7 @@ class EconetSelect(EconetEntity, SelectEntity):
 
     def _sync_state(self, value: str | None) -> None:
         """Synchronize the state of the select entity."""
-        _LOGGER.debug("🔄 _sync_state called with value: %s", value)
+        _LOGGER.debug("_sync_state called with value: %s", value)
         self._attr_current_option = value
         self.async_write_ha_state()
 
@@ -196,7 +196,7 @@ class EconetSelect(EconetEntity, SelectEntity):
         reg_params_data = (data or {}).get("regParamsData") or {}
         raw_value = reg_params_data.get(self._state_index)
         _LOGGER.debug(
-            "🎯 Heater mode current state (%s): %s", self._state_index, raw_value
+            "Heater mode current state (%s): %s", self._state_index, raw_value
         )
 
         if raw_value is None:
@@ -210,7 +210,7 @@ class EconetSelect(EconetEntity, SelectEntity):
             self._sync_state(option)
         else:
             _LOGGER.warning(
-                "❌ Unknown heater mode value: %s (options: %s)",
+                "Unknown heater mode value: %s (options: %s)",
                 raw_value,
                 self.options,
             )
@@ -247,33 +247,51 @@ class EconetSelect(EconetEntity, SelectEntity):
     async def async_added_to_hass(self):
         """Handle added to hass - read heater_mode state from regParamsData."""
         _LOGGER.debug(
-            "🏠 async_added_to_hass called for: %s", self.entity_description.key
+            "async_added_to_hass called for: %s", self.entity_description.key
         )
-        # Register for coordinator updates first.
         await super().async_added_to_hass()
 
         if self.entity_description.key == "heater_mode":
+            self._refresh_merged_param()
             self._refresh_from_reg_params()
+
+    def _refresh_merged_param(self) -> None:
+        """Re-resolve the merged heater-mode param from live coordinator data.
+
+        The initial ``_merged_param`` is a one-time snapshot captured at entity
+        creation. Because ``fetch_merged_rm_data`` builds a fresh dict each
+        poll cycle, the snapshot detaches from live data after the first
+        coordinator refresh. Re-resolving here keeps lock status, options,
+        and write index in sync with the device.
+        """
+        if self._merged_param is None:
+            return
+        merged_data = (self.coordinator.data or {}).get("mergedData")
+        if merged_data is not None:
+            fresh = find_heater_mode_param(merged_data)
+            if fresh is not None:
+                self._merged_param = fresh
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         _LOGGER.debug(
-            "🔄 _handle_coordinator_update called for: %s", self.entity_description.key
+            "_handle_coordinator_update called for: %s", self.entity_description.key
         )
 
         if self.coordinator.data is None:
-            _LOGGER.debug("❌ Coordinator data is None")
+            _LOGGER.debug("Coordinator data is None")
             return
 
         if self.entity_description.key == "heater_mode":
+            self._refresh_merged_param()
             self._refresh_from_reg_params()
         else:
             super()._handle_coordinator_update()
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        _LOGGER.debug("🎯 async_select_option called with option: %s", option)
+        _LOGGER.debug("async_select_option called with option: %s", option)
 
         if self._is_locked():
             lock_reason = self._lock_reason() or "Parameter is locked"
@@ -282,10 +300,10 @@ class EconetSelect(EconetEntity, SelectEntity):
 
         try:
             value = self._option_to_value(option)
-            _LOGGER.debug("🔢 Converted option '%s' to value: %s", option, value)
+            _LOGGER.debug("Converted option '%s' to value: %s", option, value)
 
             if value is None:
-                _LOGGER.error("❌ Invalid option: %s", option)
+                _LOGGER.error("Invalid option: %s", option)
                 self._raise_heater_mode_error(f"Invalid option: {option}")
 
             param_index = self._write_index()
@@ -293,19 +311,19 @@ class EconetSelect(EconetEntity, SelectEntity):
                 if param_index is None:
                     self._raise_heater_mode_error(f"No write index for {option}")
                 _LOGGER.debug(
-                    "📡 Setting heater mode via index %s to value %s",
+                    "Setting heater mode via index %s to value %s",
                     param_index,
                     value,
                 )
                 success = await self.api.set_param_by_index(param_index, value)
             else:
                 _LOGGER.debug(
-                    "📡 Setting heater mode via param %s to value %s",
+                    "Setting heater mode via param %s to value %s",
                     param_index,
                     value,
                 )
                 success = await self.api.set_param(param_index, value)
-            _LOGGER.debug("📡 API call result: %s", success)
+            _LOGGER.debug("API call result: %s", success)
 
             if success:
                 old_option = self._attr_current_option
