@@ -368,7 +368,7 @@ class EconetOptionsFlowHandler(OptionsFlow):
                 vol.Required(
                     CONF_POLL_REG_PARAMS,
                     default=options.get(CONF_POLL_REG_PARAMS, DEFAULT_POLL_REG_PARAMS),
-                ): vol.All(vol.Coerce(int), vol.Range(min=2, max=300)),
+                ): vol.All(vol.Coerce(int), vol.Range(min=5, max=300)),
                 vol.Required(
                     CONF_POLL_SYS_PARAMS,
                     default=options.get(CONF_POLL_SYS_PARAMS, DEFAULT_POLL_SYS_PARAMS),

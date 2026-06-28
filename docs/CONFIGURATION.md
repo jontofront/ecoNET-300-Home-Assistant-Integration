@@ -20,13 +20,13 @@ Use **Polling settings** when you want to change how often Home Assistant reads 
 
 | Option | Default | Range | Description |
 | ------ | ------- | ----- | ----------- |
-| `regParams` polling interval | 15 seconds | 2-300 seconds | Live sensor values, such as temperatures, pumps, fans, and statuses. |
+| `regParams` polling interval | 15 seconds | 5-300 seconds | Live sensor values, such as temperatures, pumps, fans, and statuses. |
 | `sysParams` polling interval | 300 seconds | 10-3600 seconds | Controller metadata and system information. |
 | `editParams` polling interval | 300 seconds | 0-3600 seconds | Editable parameter catalog and values. Use `0` to disable periodic polling. |
 
 For better graph granularity, reduce the **regParams polling interval**. This controls the live sensor values shown in Home Assistant history graphs.
 
-The effective minimum for live polling is **5 seconds**, even if a lower value is entered.
+The minimum for live polling is **5 seconds**.
 
 ## Connection Settings
 
