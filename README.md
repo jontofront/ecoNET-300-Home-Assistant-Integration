@@ -164,6 +164,24 @@ Apart from using 'My button' (in case it doesn't work) you can also perform the 
 
 </details>
 
+### Configuration Options
+
+After setup, you can change integration options from Home Assistant:
+
+**Settings > Devices & Services > ecoNET300 > Configure**
+
+Available options:
+
+- **Connection Settings** - update the local ecoNET300 host, username, or password.
+- **Polling settings** - adjust how often the integration refreshes data from the controller.
+- **Device settings** - choose how entities are grouped into Home Assistant devices.
+- **Custom Entities** - expose additional parameters discovered from your controller.
+- **Generate diagnostics report** - create a redacted diagnostics report for troubleshooting or GitHub issues.
+
+For better graph granularity, open **Polling settings** and reduce the **regParams polling interval**. This controls live sensor values. The default is 15 seconds, and the effective minimum is 5 seconds.
+
+**📖 [Complete Configuration Guide](docs/CONFIGURATION.md)**
+
 ### Custom Entities
 
 After initial setup, you can add extra sensors from the integration's configuration options. This allows you to expose additional parameters that are not included by default.
@@ -289,6 +307,7 @@ ecoNET-300-Home-Assistant-Integration/
 ### 📚 **Essential Documentation** (in `docs/`)
 
 - **[ENTITIES.md](docs/ENTITIES.md)** - Complete entity reference (sensors, switches, numbers)
+- **[CONFIGURATION.md](docs/CONFIGURATION.md)** - Configure menu, polling settings, device grouping, and custom entities
 - **[SCHEDULES.md](docs/SCHEDULES.md)** - How to display heating schedules on your dashboard
 - **[ALARMS_AND_EVENTS.md](docs/ALARMS_AND_EVENTS.md)** - Alarm monitoring, event entity, and automation examples
 - **[FUEL_CONSUMPTION.md](docs/FUEL_CONSUMPTION.md)** - Track total fuel consumption with Riemann Sum helper
