@@ -183,6 +183,13 @@ class EconetSelect(EconetEntity, SelectEntity):
         self._attr_current_option = value
         self.async_write_ha_state()
 
+    @property
+    def available(self) -> bool:
+        """Return availability combining stale-data check and value presence."""
+        if not super().available:
+            return False
+        return self._attr_available
+
     def _refresh_from_reg_params(self) -> None:
         """Resolve the current heater-mode option from regParamsData[2049]."""
         data = self.coordinator.data
