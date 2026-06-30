@@ -121,7 +121,7 @@ Home Assistant enforces strict **PEP 8** (Python style) and **PEP 257** (Docstri
 
 ## Core Standards
 
-- Use Python 3.13 features and syntax (Home Assistant 2024.12+)
+- Use Python 3.13 features and syntax — Home Assistant Core 2025.2+ requires Python `>=3.13.2` (2025.6 confirmed). Source of truth is HA core `requires-python`, not the local `pyproject.toml` (which currently lags at `~3.12.0` and should be bumped to 3.13)
 - Follow PEP 8 style guidelines
 - Use type hints for all function parameters and return values
 - Prefer f-strings over `%` or `str.format()` for string formatting

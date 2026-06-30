@@ -16,6 +16,7 @@ alwaysApply: true
 - `.cursor/rules/translation-requirements.mdc` - Translation requirements
 - `.cursor/rules/code-style-ruff.mdc` - **Code formatting with Ruff** 🚨
 - `.cursor/rules/api-endpoint-validation.mdc` - **API response validation** 🚨
+- `.cursor/rules/documentation-maintenance.mdc` - **Keep docs/README/CHANGELOG in sync** 🚨
 - `docs/DYNAMIC_ENTITY_VALIDATION.md` - **Dynamic entity validation layer** 🆕
 - `docs/MIGRATION.md` - **Version migration guide for users** 🆕
 

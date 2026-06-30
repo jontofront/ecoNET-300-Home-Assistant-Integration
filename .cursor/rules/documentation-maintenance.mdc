@@ -1,0 +1,54 @@
+---
+description: Keep documentation in sync after every code or feature change
+alwaysApply: true
+---
+
+# 📚 Documentation Maintenance
+
+## 🚨 After EVERY change, update the docs
+
+Before finishing any task that changes behavior, entities, config, or API usage,
+update the matching documentation. Code and docs must never drift apart.
+
+### What to update (by change type)
+
+| Change | Update |
+| ------ | ------ |
+| New/changed entity, sensor, switch, select, number | `docs/ENTITIES.md` + translations (`strings.json`, `en.json`, `pl.json`) |
+| Alarms / events behavior | `docs/ALARMS_AND_EVENTS.md` |
+| Schedules / calendar behavior | `docs/SCHEDULES.md` |
+| Config flow / options / polling / device grouping | `docs/CONFIGURATION.md` |
+| API endpoint usage | `docs/API_V1_DOCUMENTATION.md` |
+| Dynamic entity logic | `docs/DYNAMIC_ENTITY_VALIDATION.md` |
+| Breaking change / new major feature | `docs/MIGRATION.md` |
+| Any user-facing change | `CHANGELOG.md` (newest entry on top) |
+
+### README is a hub, not a manual
+
+- Keep `README.md` short: summaries + links to `docs/`. Put full details in `docs/`.
+- When adding a new doc under `docs/`, add it to the **Documentation** table in `README.md`.
+- Verify every internal link points to a file that exists.
+
+### Docs must match the real code
+
+- Never document removed features. Example: schedules became **Calendar** entities
+  (`calendar.py`) — text schedule sensors no longer exist, so docs must use the
+  Calendar card, not `state_attr('sensor.*_schedule_*', 'monday')`.
+- Expose **structured data**; let the dashboard render it (Jinja/Markdown card).
+  Do not generate presentation strings (Markdown tables) inside the integration.
+
+### Markdown anchors (TOC links)
+
+- GitHub does NOT strip emoji variation selectors (U+FE0F), so headings like
+  `## ⚙️ Configuration` break `#configuration` links. Prefer single-codepoint
+  emoji (e.g. `🧰`) and link to the generated form (`#-configuration`), or omit
+  emoji from headings used in the TOC.
+
+### Before finishing
+
+- [ ] Relevant `docs/*.md` updated
+- [ ] `CHANGELOG.md` entry added for user-facing changes
+- [ ] `README.md` links/table updated if docs were added
+- [ ] Internal links resolve
+- [ ] Markdown passes **pymarkdown** (config in `pyproject.toml` `[tool.pymarkdown]`:
+      `MD013` line length 120, `MD033`/`MD024` disabled). Run `python -m pymarkdown scan <file>`.

@@ -110,3 +110,47 @@ The project uses a simplified pre-commit configuration with:
 - **Ruff** for code formatting and linting
 - **Codespell** for spelling checks
 - **MyPy** for type checking
+
+## HA Development Checklist
+
+Reference: <https://developers.home-assistant.io/docs/development_checklist/>
+
+### Applies to this custom integration
+
+- ✅ **Format with Ruff** before committing (`ruff format`, `ruff check`).
+- ✅ **Full type hints**; keep `.strict-typing` updated if a module is fully typed.
+- ✅ **Update documentation** (`docs/`, `README.md`, `CHANGELOG.md`) — see `documentation-maintenance.mdc`.
+- ✅ **Keep `manifest.json` valid**: SemVer `version`, correct `requirements`, `codeowners`, `iot_class`, `quality_scale`.
+- ⚠️ **External communication should live in a library**: HA core requires device/service I/O to be wrapped in a pypi-hosted library with issue tracker. This integration currently embeds its API client (`api.py`); acceptable for a custom integration, but note this deviation if upstreaming to core.
+
+### Core-only (not required here, custom integration)
+
+- `requirements_all.txt` via `python3 -m script.gen_requirements_all`
+- `CODEOWNERS` via `python3 -m script.hassfest`
+- Documentation PRs to `home-assistant.io`
+
+## HA Developer Documentation Index
+
+When unsure about HA patterns, consult the official docs (source of truth, not memory):
+
+| Topic | Link |
+| ----- | ---- |
+| Development index (start here) | <https://developers.home-assistant.io/docs/development_index> |
+| Architecture | <https://developers.home-assistant.io/docs/architecture_index> |
+| Style guidelines | <https://developers.home-assistant.io/docs/development_guidelines> |
+| Development checklist (pre-commit) | <https://developers.home-assistant.io/docs/development_checklist> |
+| Component code review checklist | <https://developers.home-assistant.io/docs/creating_component_code_review> |
+| Platform code review checklist | <https://developers.home-assistant.io/docs/creating_platform_code_review> |
+| Integration manifest | <https://developers.home-assistant.io/docs/creating_integration_manifest> |
+| Entity lifecycle & hooks | <https://developers.home-assistant.io/docs/core/entity> |
+| Config validation (voluptuous) | <https://developers.home-assistant.io/docs/development_validation> |
+
+### Key checklist items to enforce here
+
+- **Use existing constants** from `homeassistant.const` before defining local ones.
+- **Entity rules**: no I/O in property getters (cache in `update()`/coordinator), don't call
+  `update()` in `__init__`, group `add_entities`, use `update_before_add=True` when needed.
+- **Time as UTC**: store UTC timestamps in state/attributes, never relative time.
+- **Event names prefixed with the domain** (e.g. `econet300_*`), per the component checklist.
+- **Pinned requirements** in `manifest.json` (no GitHub-hosted deps; PyPI only).
+- **Keep PRs small**: one concern per PR; don't mix clean-ups with new features.
