@@ -149,6 +149,24 @@ def _raw_boolean_keys_with_binary_counterparts(
     }
 
 
+def _raw_payload_sensor_keys(
+    sensor_keys: set[str],
+    data_reg_params: dict[str, Any],
+    data_sys_params: dict[str, Any],
+) -> set[str]:
+    """Return keys whose raw payload cannot be a useful HA sensor state."""
+    return {
+        key
+        for key in sensor_keys
+        if isinstance(
+            data_reg_params[key]
+            if key in data_reg_params
+            else data_sys_params.get(key),
+            (dict, list),
+        )
+    }
+
+
 def _resolve_sensor_name(key: str, explicit_name: str | None) -> str | None:
     """Resolve a non-empty display name for all-sensors dynamic keys."""
     if explicit_name:
@@ -980,6 +998,7 @@ def create_controller_sensors(
         sensor_keys |= set(data_sysParams.keys())
     # Never expose sensitive credentials/network identifiers as sensor states.
     sensor_keys -= SENSITIVE_PARAM_KEYS
+    sensor_keys -= _raw_payload_sensor_keys(sensor_keys, data_regParams, data_sysParams)
 
     # Keys with a dedicated binary_sensor entity should not also be exposed as
     # raw sensors from the all-sensors sweep.
@@ -1583,7 +1602,9 @@ class AlarmCountSensor(EconetEntity, SensorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return recent alarms as extra state attributes."""
-        return {"recent_alarms": self._recent_alarms}
+        return {
+            "recent_alarms": self._recent_alarms,
+        }
 
     async def async_added_to_hass(self) -> None:
         """Sync initial state when entity is added."""

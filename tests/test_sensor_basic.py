@@ -27,6 +27,7 @@ from custom_components.econet300.const import (
 )
 from custom_components.econet300.entity import EconetEntity
 from custom_components.econet300.sensor import (
+    AlarmCountSensor,
     EconetSensorEntityDescription,
     _controller_sensor_key_candidates,
     can_add_mixer,
@@ -367,6 +368,28 @@ class TestSensorMappingLogic:
 
         assert keys.isdisjoint(SENSITIVE_PARAM_KEYS)
 
+    def test_raw_payload_sysparams_are_not_exposed_as_sensors(self) -> None:
+        """List/dict payloads should stay attributes or diagnostics, not states."""
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX920P1-T"
+        reg_params = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        sys_params["debugPayload"] = {"nested": True}
+        sys_params["debugList"] = [{"value": 1}]
+        assert isinstance(sys_params.get("alarms"), list)
+
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert keys.isdisjoint({"alarms", "debugList", "debugPayload"})
+
     def test_binary_values_are_not_duplicated_as_sensors(self) -> None:
         """Binary sensor values should not also appear as raw sensors."""
         fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX920P1-T"
@@ -457,6 +480,47 @@ class TestSensorMappingLogic:
         keys = {e.entity_description.key for e in entities}
 
         assert keys.isdisjoint(lambda_keys)
+
+
+class TestAlarmCountSensor:
+    """Test alarm history presentation attributes."""
+
+    def test_alarm_count_exposes_structured_history(self) -> None:
+        """Recent alarm attributes expose structured data for the frontend."""
+        entity = object.__new__(AlarmCountSensor)
+        entity.coordinator = Mock()
+        entity.coordinator.data = {
+            "sysParams": {
+                "alarms": [
+                    {
+                        "code": 7,
+                        "fromDate": "2026-04-24 21:36:06",
+                        "service": False,
+                        "toDate": "2026-04-24 21:40:00",
+                    },
+                    {
+                        "code": 0,
+                        "fromDate": "2026-06-01 22:51:31",
+                        "service": False,
+                        "toDate": None,
+                    },
+                ]
+            },
+            "rmData": {"alarmsNames": {"0": "Alarm continues!", "7": "Sensor error"}},
+        }
+        entity.async_write_ha_state = Mock()
+
+        AlarmCountSensor._handle_coordinator_update(entity)
+        attrs = entity.extra_state_attributes
+
+        assert entity._attr_native_value == 2
+        # Presentation belongs to the frontend, so only structured data is exposed.
+        assert set(attrs) == {"recent_alarms"}
+        first, second = attrs["recent_alarms"]
+        assert first["description"] == "Sensor error"
+        assert first["is_active"] is False
+        assert second["description"] == "Alarm continues!"
+        assert second["is_active"] is True
 
 
 class TestGetDataSourcesTuple:
