@@ -48,6 +48,48 @@ Shows the total number of alarms stored on the device.
 | --------------- | ---- | ---------------------------------------------------- |
 | `recent_alarms` | list | Up to 5 most recent alarms with code, description, dates |
 
+Each item in `recent_alarms` is a dictionary:
+
+| Field         | Type    | Description                                         |
+| ------------- | ------- | --------------------------------------------------- |
+| `alarm_code`  | int     | Numeric alarm code from the device                  |
+| `description` | string  | Human-readable alarm description                    |
+| `from_date`   | string  | Timestamp when the alarm started                    |
+| `to_date`     | string  | Timestamp when the alarm ended (`null` if active)   |
+| `is_active`   | boolean | `true` when the alarm is currently ongoing          |
+| `service`     | boolean | `true` when the alarm requires service intervention |
+
+The sensor intentionally exposes only **structured data**. Following Home
+Assistant guidelines, presentation (tables, formatting) is left to the
+dashboard. See the Markdown card below to render a history list.
+
+---
+
+## Dashboard: Alarm History List
+
+The recommended way to show a list/table of recent alarms is a
+[Markdown card](https://www.home-assistant.io/dashboards/markdown/) that
+renders the `recent_alarms` attribute with a Jinja template. This keeps the
+integration clean while giving you full control over the layout.
+
+```yaml
+type: markdown
+title: ecoNET alarms
+content: >
+  {% set alarms = state_attr('sensor.econet300_alarm_count', 'recent_alarms') %}
+  {% if alarms %}
+  | Time | Code | Alarm | Status |
+  | --- | --- | --- | --- |
+  {% for a in alarms -%}
+  | {{ a.from_date }} | {{ a.alarm_code }} | {{ a.description }} | {{ 'Active' if a.is_active else 'Cleared' }} |
+  {% endfor %}
+  {% else %}
+  No alarms
+  {% endif %}
+```
+
+> Adjust `sensor.econet300_alarm_count` to match your entity ID.
+
 ---
 
 ## Binary Sensor: Alarm Active

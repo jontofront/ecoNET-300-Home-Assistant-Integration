@@ -30,7 +30,7 @@ The **ecoNET300 Home Assistant Integration** allows local control and monitoring
 - **Boiler Control**: Turn your boiler ON/OFF directly from Home Assistant
 - **Real-time Monitoring**: Monitor temperatures, fuel levels, and system status
 - **Comprehensive API Access**: Access to 80+ API endpoints
-- **Multiple Entity Types**: Sensors, Binary Sensors, Events, Switches, Select, and Number entities
+- **Multiple Entity Types**: Sensors, Binary Sensors, Calendars, Events, Switches, Select, and Number entities
 - **Parameter Locking**: Device-side locks reflected in Home Assistant UI
 - **Repair Issues**: Automatic connection failure detection with one-click fix
 - **Diagnostics Support**: Download diagnostics with core API data plus optional RM/`editParams` snapshots (v1.2.5+)
@@ -64,13 +64,15 @@ The integration supports **6 languages** with comprehensive translations:
 
 ## 📋 Table of Contents
 
-1. [Installation](#installation)
-2. [Upgrading](#upgrading)
-3. [Configuration](#configuration)
-4. [Custom Entities](#custom-entities)
-5. [Entities](#entities)
-6. [Contributing](#contributing)
-7. [Acknowledgments](#acknowledgments)
+1. [Installation](#-installation)
+2. [Upgrading](#-upgrading)
+3. [Configuration](#-configuration)
+4. [Entities](#-entities)
+5. [Diagnostics](#-diagnostics)
+6. [Documentation](#-documentation)
+7. [Versions](#-versions)
+8. [Contributing](#-contributing)
+9. [Support](#-support)
 
 ---
 
@@ -92,120 +94,37 @@ https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration
 
 1. Download or clone this repository.
 2. Copy `custom_components/econet300` into your `<config_directory>/custom_components/`.
-
-```text
-<config directory>/
-|-- custom_components/
-|   |-- econet300/
-|       |-- [...]
-```
-
 3. Restart Home Assistant.
 
 ---
 
 ## 🔄 Upgrading
 
-### From v1.1.x to v1.2.x
+**v1.2.0+ introduces significant new features** including 165+ dynamic entities, parameter locking, and the repair issues system. **No manual migration is required** — your existing configuration keeps working.
 
-**v1.2.0 introduces significant new features** including 165+ dynamic entities, parameter locking, and repair issues system.
-
-**Good news:** No manual migration required! Your existing configuration will continue to work.
-
-**After upgrading:**
+After upgrading:
 
 1. Restart Home Assistant
-2. Check **Settings → Devices → ecoNET300** for new entities
-3. New CONFIG category entities are disabled by default - enable as needed
-
-| What Changes      | Details                                     |
-| ----------------- | ------------------------------------------- |
-| Existing entities | Continue working unchanged                  |
-| Entity IDs        | Stable, no changes                          |
-| New entities      | Auto-discovered, CONFIG disabled by default |
-| Configuration     | Preserved, no reconfiguration needed        |
+2. Check **Settings → Devices & Services → ecoNET300** for new entities
+3. New CONFIG category entities are disabled by default — enable as needed
 
 **📖 [Complete Migration Guide](docs/MIGRATION.md)**
 
 ---
 
-## ⚙️ Configuration
+## 🧰 Configuration
 
 Integrate ecoNET300 via the user interface:
 
 [![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start?domain=econet300)
 
-<details>
-<summary><b>Manual Configuration Steps</b></summary>
+Enter your local device **Host** (IP/domain) and **local** credentials — not your econet24.com cloud login.
 
-Apart from using 'My button' (in case it doesn't work) you can also perform the following steps manually:
+After setup, open **Settings → Devices & Services → ecoNET300 → Configure** to adjust connection settings, polling intervals, device grouping, custom entities, and to generate diagnostics reports.
 
-1. Go to **Settings > Devices & Services** in Home Assistant.
-2. Click **Add Integration**.
-3. Search and select **"ecoNET300"**.
-4. In the bottom right, click on the Add Integration button.
-5. From the list, search and select **"ecoNET300"**.
+> Tip: For better graph granularity, lower the **regParams polling interval** in **Polling settings** (default 15s, minimum 5s).
 
-![Search dialog](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/search.png)
-
-6. Enter your local device IP/domain and local credentials (not econet24.com credentials). **"Submit"**.
-
-**Host**: Local IP/domain of your device.
-
-**Username**: Local username (NOT the username that you use to login to econet24.com!).
-
-**Password**: Local password (NOT the password that you use to login to econet24.com!).
-
-![Configuration dialog](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/configure.png)
-
-7. Your device should now be available in your Home Assistant installation.
-
-![Success](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/success.png)
-
-</details>
-
-### Configuration Options
-
-After setup, you can change integration options from Home Assistant:
-
-**Settings > Devices & Services > ecoNET300 > Configure**
-
-Available options:
-
-- **Connection Settings** - update the local ecoNET300 host, username, or password.
-- **Polling settings** - adjust how often the integration refreshes data from the controller.
-- **Device settings** - choose how entities are grouped into Home Assistant devices.
-- **Custom Entities** - expose additional parameters discovered from your controller.
-- **Generate diagnostics report** - create a redacted diagnostics report for troubleshooting or GitHub issues.
-
-For better graph granularity, open **Polling settings** and reduce the **regParams polling interval**. This controls live sensor values. The default is 15 seconds, and the effective minimum is 5 seconds.
-
-**📖 [Complete Configuration Guide](docs/CONFIGURATION.md)**
-
-### Custom Entities
-
-After initial setup, you can add extra sensors from the integration's configuration options. This allows you to expose additional parameters that are not included by default.
-
-**Step 1.** Go to **Settings > Devices & Services**, find your **ecoNET300** integration and click **Configure**. Select **Custom Entities**.
-
-![Custom Entities menu](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_menu.png)
-
-**Step 2.** Choose the API endpoint to browse:
-
-- **regParams** — named parameters (e.g. temperatures, statuses)
-- **regParamsData** — numeric IDs with names from the device
-
-![Choose endpoint](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_endpoint.png)
-
-**Step 3.** Select the parameters you want to add. The list shows all available parameters discovered from your device that are not already mapped.
-
-![Select parameters](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_select.png)
-
-**Step 4.** Configure each entity — set the name, device group, entity type (sensor / binary sensor), and category. For sensors you can also set unit, device class, and display precision.
-
-![Configure entity](https://raw.githubusercontent.com/jontofront/ecoNET-300-Home-Assistant-Integration/master/images/custom_entities_configure_entity.png)
-
-The selected parameters will be created as entities and available immediately in Home Assistant.
+**📖 [Complete Configuration Guide](docs/CONFIGURATION.md)** — manual setup steps, polling, device grouping, and custom entities.
 
 ---
 
@@ -223,171 +142,83 @@ The integration provides multiple entity types:
 | Select         | 1+    | Heater mode, dynamic parameters        |
 | Number         | 15+   | Temperature setpoints                  |
 
-### Dynamic Entities (v1.2.0+)
+Starting with v1.2.0, the integration automatically discovers **165+ additional entities** from your boiler's remote menu via the `mergedData` API endpoint, with automatic type detection, category grouping, parameter locking, and mixer/ecoSTER support.
 
-Starting with v1.2.0, the integration automatically discovers **165+ additional entities** from your boiler's remote menu via the `mergedData` API endpoint:
+**📖 [Complete Entity Reference](docs/ENTITIES.md)** — full list of all entities with descriptions.
 
-- **Automatic Type Detection**: Parameters become Number, Switch, Select, or Sensor entities
-- **Category Grouping**: CONFIG entities disabled by default, enable as needed
-- **Parameter Locking**: Locked parameters show lock icon and become unavailable
-- **Mixer Support**: Entities correctly assigned to Mixer 1-4 devices
-- **ecoSTER Detection**: Entities only created when ecoSTER panel is connected
+Related usage guides:
 
-**📖 [Complete Entity Reference](docs/ENTITIES.md)** - Full list of all entities with descriptions
-
-### Fuel Consumption Tracking
-
-The `fuel_stream` sensor provides current fuel consumption rate in **kg/h**. To track total consumption:
-
-1. Use Home Assistant's **Riemann Sum Integration Helper** to convert rate → total
-2. Add a **Utility Meter** for daily/weekly/monthly tracking
-
-**📖 [Fuel Consumption Guide](docs/FUEL_CONSUMPTION.md)** - Step-by-step setup instructions
+- **[Heating Schedules](docs/SCHEDULES.md)** — display weekly schedules as calendar entities
+- **[Alarms & Events](docs/ALARMS_AND_EVENTS.md)** — alarm monitoring and push notifications
+- **[Fuel Consumption](docs/FUEL_CONSUMPTION.md)** — track total fuel usage with the Riemann Sum helper
 
 ---
 
 ## 🔧 Diagnostics
 
-The integration includes comprehensive diagnostics support to help troubleshoot issues. Downloads include coordinator data, core endpoint snapshots (`sysParams`, `regParams`, `regParamsData`, editable limits), and **extended snapshots** (v1.2.5+): RM endpoints (`rmParamsNames`, `rmParamsData`, `rmStructure`, `rmCurrentDataParams`, languages, locks, alarms, …) plus optional **`editParams`** when the module exposes it. Unsupported endpoints are marked clearly in JSON so support can see what failed.
+The integration includes comprehensive diagnostics support to help troubleshoot issues. Downloads include coordinator data, core endpoint snapshots, and **extended snapshots** (v1.2.5+): RM endpoints plus optional `editParams`, with automatic sensitive-data redaction.
+
+To download: **Settings → Devices & Services → ecoNET300 → Download diagnostics**. For a one-click triage report (useful for GitHub issues, heat pumps, and controller variants), use **Configure → Generate diagnostics report**.
 
 **📖 [Complete Diagnostics Documentation](docs/DIAGNOSTICS.md)**
 
-### Quick Start
-
-1. Go to **Settings > Devices & Services** in Home Assistant
-2. Find your **ecoNET300** integration
-3. Click the **Download diagnostics** button
-4. Share the redacted diagnostics file for support
-
-**Features:**
-
-- ✅ Automatic sensitive data redaction
-- ✅ Core and extended API endpoint data (`extended_endpoints` in v1.2.5+)
-- ✅ Raw probes for non-consumed endpoints — `rmDeviceList`, `rmCurrentDataObject`, legacy `/sys`, `rmParamsData` without `uid` — captured under `extended_endpoints.raw_probes` to identify protocol/controller variants (e.g. heat-pump `gm3_pomp` vs pellet boiler)
-- ✅ Entity states and attributes
-- ✅ System configuration details
-
-### Generating a triage report (heat pumps, controller variants, setup-failures)
-
-When the standard "Download diagnostics" button is not enough — or when you want a one-click way to attach a complete report to a GitHub issue — use the new **Generate diagnostics report** action:
-
-1. Go to **Settings > Devices & Services > ecoNET300 > Configure**
-2. Pick **Generate diagnostics report**
-3. Submit the (empty) confirmation form
-
-This will:
-
-- Run the same data collection used by Download Diagnostics, including `raw_probes`
-- Write the full **redacted** JSON to `homeassistant.log` with the marker `ECONET300_DIAGNOSTICS_REPORT`
-- Raise a persistent notification ("ecoNET300 diagnostics") with a short summary: `controllerID`, `protocolType`, `uid` presence, `regParams` count, and the status of every raw probe
-
-Attach either the matching log block (search for `ECONET300_DIAGNOSTICS_REPORT`) or the file from Download Diagnostics to your issue.
-
-**Developers:** `scripts/create_fixture_from_diagnostics.py` can build test fixtures from a diagnostic ZIP/JSON, including RM and `editParams` files when `extended_endpoints` is populated.
-
 ---
 
-## 📁 Project Structure
+## 📚 Documentation
 
-```text
-ecoNET-300-Home-Assistant-Integration/
-├── custom_components/econet300/     # Home Assistant integration
-├── docs/                            # Complete documentation
-├── scripts/                         # Development and utility scripts
-├── tests/                           # Integration tests
-└── [standard project files]
-```
+All documentation lives in the [`docs/`](docs/) folder. Start here:
 
-### 🔧 **Essential Scripts** (in `scripts/`)
+### Setup & Usage
 
-- **test_api_endpoints.py** - Test all API endpoints and validate responses
-- **check_translations.py** - Validate translation files for consistency
-- **language_finder.py** - Find and analyze language-specific content
-- **README.md** - Scripts documentation and usage instructions
+| Guide | Description |
+| ----- | ----------- |
+| [Configuration](docs/CONFIGURATION.md) | Configure menu, polling, device grouping, custom entities |
+| [Migration](docs/MIGRATION.md) | Upgrading between versions |
+| [Entities](docs/ENTITIES.md) | Complete entity reference |
+| [Heating Schedules](docs/SCHEDULES.md) | Display schedules as calendar entities |
+| [Alarms & Events](docs/ALARMS_AND_EVENTS.md) | Alarm monitoring and automations |
+| [Fuel Consumption](docs/FUEL_CONSUMPTION.md) | Track total fuel usage |
+| [Boiler Control](docs/BOILER_CONTROL_README.md) | Boiler ON/OFF switch behavior |
+| [Diagnostics](docs/DIAGNOSTICS.md) | Diagnostics and troubleshooting |
 
-### 📚 **Essential Documentation** (in `docs/`)
+### Reference & API
 
-- **[ENTITIES.md](docs/ENTITIES.md)** - Complete entity reference (sensors, switches, numbers)
-- **[CONFIGURATION.md](docs/CONFIGURATION.md)** - Configure menu, polling settings, device grouping, and custom entities
-- **[SCHEDULES.md](docs/SCHEDULES.md)** - How to display heating schedules on your dashboard
-- **[ALARMS_AND_EVENTS.md](docs/ALARMS_AND_EVENTS.md)** - Alarm monitoring, event entity, and automation examples
-- **[FUEL_CONSUMPTION.md](docs/FUEL_CONSUMPTION.md)** - Track total fuel consumption with Riemann Sum helper
-- **[MIGRATION.md](docs/MIGRATION.md)** - Migration guide for upgrading between versions
-- **[DIAGNOSTICS.md](docs/DIAGNOSTICS.md)** - Diagnostics documentation and troubleshooting
-- **[DYNAMIC_ENTITY_VALIDATION.md](docs/DYNAMIC_ENTITY_VALIDATION.md)** - Dynamic entity system (v1.2.0+)
-- **[API_V1_DOCUMENTATION.md](docs/API_V1_DOCUMENTATION.md)** - Complete API documentation (80+ endpoints)
-- **[devices/](docs/devices/)** - Device-specific documentation (ecoMAX, ecoSOL)
+| Guide | Description |
+| ----- | ----------- |
+| [API v1 Documentation](docs/API_V1_DOCUMENTATION.md) | Complete API documentation (80+ endpoints) |
+| [API Construction Guide](docs/API_CONSTRUCTION_GUIDE.md) | How API requests are built |
+| [Dynamic Entity Validation](docs/DYNAMIC_ENTITY_VALIDATION.md) | Dynamic entity system (v1.2.0+) |
+| [New API Endpoints](docs/NEW_API_ENDPOINTS_DISCOVERED.md) | Newly discovered endpoints |
+
+### Device-Specific
+
+| Device | Description |
+| ------ | ----------- |
+| [ecoMAX810P-L](docs/devices/ecoMAX810P-L/README.md) | Most feature-rich pellet controller |
+| [ecoMAX360](docs/devices/ecoMAX360/README.md) | Boiler / heat pump controller |
+| [ecoSOL 500](docs/devices/ecoSOL500/README.md) | Solar collector controller |
+| [ecoMAX850R2-X](docs/ecoMAX850R2-X_DOCUMENTATION.md) | Pellet boiler controller |
+| [ecoSOL Discovery](docs/ecoSOL_DISCOVERY_SUMMARY.md) | ecoSOL line discovery summary |
+
+### Developer
+
+| Guide | Description |
+| ----- | ----------- |
+| [Architecture](docs/ARCHITECTURE.md) | High-level integration architecture |
+| [Developer Tools](docs/DEVELOPER_TOOLS_GUIDE.md) | Scripts and tooling |
+| [Cloud Translations](docs/CLOUD_TRANSLATIONS.md) | Translation references and workflow |
 
 ---
 
 ## 📋 Versions
 
-For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
-
 ### What's New in v1.3.0-beta.6
 
-- **Schedule Calendar Entities**: Heating schedules are now displayed as native Home Assistant **Calendar** entities instead of text-based sensors. Each schedule type (boiler, water heater, mixers, thermostats, circulation pump, etc.) gets its own calendar entity with weekly recurring events visible in the HA calendar card and dashboard. Supported controllers: ecoMAX810P-L, ecoMAX860 series, ecoMAX920 series, SControl MK1/EM892.
-- **DRY refactoring**: Schedule decoding helpers (`merge_active_slot_ranges`, `schedule_component`, `iter_device_schedules`) extracted into reusable functions for future schedule editing support.
-- **Multi-model test coverage**: Schedule tests now automatically run against all 9 fixture models with schedule data.
+- **Schedule Calendar Entities**: Heating schedules are now native Home Assistant **Calendar** entities instead of text-based sensors. Each schedule type gets its own calendar entity with weekly recurring events. Supported controllers: ecoMAX810P-L, ecoMAX860 series, ecoMAX920 series, SControl MK1/EM892.
+- **DRY refactoring**: Schedule decoding helpers extracted into reusable functions for future schedule editing support.
+- **Multi-model test coverage**: Schedule tests run against all 9 fixture models with schedule data.
 
-### What's New in v1.2.7
-
-- **ecoMAX360i heat pump fixes** ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227)): Temperature sensors no longer crash on `"off"` values; new heat pump sensors (`afterCompressorTemp`, `outdoorTemp`, `HPStatusWorkMode`, etc.) and SSA weather compensation sensors
-- **Mode sensor crash fix** ([#223](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/223)): `mode` and `transmission` enum sensors no longer crash when the controller returns unknown values
-- **Diagnostics report action** ([#231](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/231)): One-click diagnostics report via Configure menu with raw endpoint probes for heat pump / controller variant triage
-
-### What's New in v1.2.6
-
-- **Dynamic select entities now save correctly** ([#225](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/225), [#224](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/224)): Fixed a regression where changing dynamic select options (e.g. `Output H1`, `Output H2 and H3`, `Feeding time`) on ecoMAX810P-L / ecoMAX860P3-O / ecoMAX920P1-O appeared to succeed in the UI but was silently ignored by the controller
-- **New test fixture `ecoMAX920P1-O`** and regression tests pin the fix across three controller families
-
-### What's New in v1.2.5
-
-- **ecoSOL 301 / 500 sensor fix** ([#219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)): Main controller sensors use solar register keys (`T1`, `P1`, `TzCWU`, …) instead of boiler-only keys
-- **Richer diagnostics**: Optional RM API and `editParams` snapshots under `api_endpoint_data.extended_endpoints`; easier fixture generation from downloads
-- **Migration**: See [MIGRATION.md](docs/MIGRATION.md) if ecoSOL sensors went unavailable after upgrading from v1.1.16
-
-### What's New in v1.2.3
-
-- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes (replaced by Calendar entities in v1.3.0) — **[Schedules Guide](docs/SCHEDULES.md)**
-- **Alarm Monitoring** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Alarm sensors, binary sensor, and event entity — **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)**
-- **ecoMAX360i Sensors**: Flap valve, heat demand, Axen heat pump temps, circuit comfort/eco setpoints
-- **Schedule Service**: Read ecoMAX schedules via `econet300.get_schedule`
-- **API Throttling**: Concurrency limit prevents module overload ([#210](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/210))
-
-### What's New in v1.2.2
-
-- **Custom Entity Selector**: Create sensors/binary sensors from any device parameter via the UI
-- **Fuel Consumption Fix**: Race condition and unique ID mismatch resolved
-- **Duplicate Entity Fix**: Dynamic entities no longer collide with static number entities
-
-### What's New in v1.2.1
-
-- **Fuel Consumption Tracking**: New sensor that tracks total fuel usage (kg) with reset/calibrate services
-- **Boiler Switch Fix**: Fixed bug where ON/OFF switch stopped updating after initial load
-- **Legacy Device Support**: Older devices without RM API now handled gracefully
-- **New Devices**: Added support for ecoMAX860D3-HB, ecoMAX860P3-O, SControl EM892
-
-### What's New in v1.2.0
-
-- **Dynamic Entity System**: 165+ entities auto-discovered from `mergedData` API endpoint
-- **80+ API Endpoints**: Comprehensive access to all boiler parameters
-- **Parameter Locking**: Device-side locks reflected with lock icons in Home Assistant
-- **Complete Boiler Status Codes**: All 27 operation status codes supported
-- **Repair Issues System**: Automatic connection failure detection with one-click fix
-- **Reconfiguration Flow**: Update connection settings after initial setup
-
-### Core Features
-
-- **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
-- **Temperature Setpoints**: Full control over heating and hot water temperatures
-- **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
-- **Schedule Calendars**: View heating schedules as native HA calendar entities with weekly events
-- **[Alarm Monitoring](docs/ALARMS_AND_EVENTS.md)**: Real-time alarm sensors and event entity for push notifications
-- **ecoSTER Integration**: Support for 8 room thermostats
-- **ecoSOL support**: ecoSOL 500 / ecoSOL 301 solar controllers and ecoSOL thermal line
-- **Multi-language**: 6 language support (English, Polish, Czech, French, Ukrainian)
-- **Diagnostics Support**: Core + extended RM/`editParams` snapshots (v1.2.5+)
+**📖 [Full Changelog](CHANGELOG.md)** — complete version history and release notes.
 
 ---
 
@@ -395,17 +226,12 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 
 We welcome contributions! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-### Development Setup
-
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+3. Make your changes and test thoroughly
+4. Submit a pull request
 
-### Testing
-
-Use the provided scripts in the `scripts/` directory to test API endpoints and validate translations.
+See the [Architecture](docs/ARCHITECTURE.md) and [Developer Tools](docs/DEVELOPER_TOOLS_GUIDE.md) guides to get started.
 
 ---
 
@@ -429,10 +255,10 @@ This integration is not officially affiliated with or endorsed by Plum Sp. z o.o
 
 If you encounter any issues or have questions:
 
-1. Check the [API Documentation](docs/API_V1_DOCUMENTATION.md)
+1. Check the [Documentation](#-documentation)
 2. Search existing [Issues](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues)
-3. Create a new issue with detailed information about your problem
+3. Create a new issue with detailed information about your problem (attach a diagnostics report when possible)
 
 ---
 
-_This README was last updated on 2026-04-21 for v1.2.6._
+_This README was last updated on 2026-06-30 for v1.3.0-beta.6._
