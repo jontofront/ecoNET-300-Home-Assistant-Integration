@@ -213,14 +213,15 @@ The selected parameters will be created as entities and available immediately in
 
 The integration provides multiple entity types:
 
-| Type           | Count | Description                       |
-| -------------- | ----- | --------------------------------- |
-| Sensors        | 50+   | Temperature, status, alarms, schedules |
-| Binary Sensors | 25+   | Pumps, fans, connections, alarms  |
-| Events         | 1     | Boiler alarm triggered / cleared  |
-| Switches       | 1     | Boiler ON/OFF control             |
-| Select         | 1+    | Heater mode, dynamic parameters   |
-| Number         | 15+   | Temperature setpoints             |
+| Type           | Count | Description                            |
+| -------------- | ----- | -------------------------------------- |
+| Sensors        | 50+   | Temperature, status, alarms            |
+| Binary Sensors | 25+   | Pumps, fans, connections, alarms       |
+| Calendars      | 1-20  | Weekly heating schedules per component |
+| Events         | 1     | Boiler alarm triggered / cleared       |
+| Switches       | 1     | Boiler ON/OFF control                  |
+| Select         | 1+    | Heater mode, dynamic parameters        |
+| Number         | 15+   | Temperature setpoints                  |
 
 ### Dynamic Entities (v1.2.0+)
 
@@ -323,6 +324,12 @@ ecoNET-300-Home-Assistant-Integration/
 
 For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md).
 
+### What's New in v1.3.0-beta.6
+
+- **Schedule Calendar Entities**: Heating schedules are now displayed as native Home Assistant **Calendar** entities instead of text-based sensors. Each schedule type (boiler, water heater, mixers, thermostats, circulation pump, etc.) gets its own calendar entity with weekly recurring events visible in the HA calendar card and dashboard. Supported controllers: ecoMAX810P-L, ecoMAX860 series, ecoMAX920 series, SControl MK1/EM892.
+- **DRY refactoring**: Schedule decoding helpers (`merge_active_slot_ranges`, `schedule_component`, `iter_device_schedules`) extracted into reusable functions for future schedule editing support.
+- **Multi-model test coverage**: Schedule tests now automatically run against all 9 fixture models with schedule data.
+
 ### What's New in v1.2.7
 
 - **ecoMAX360i heat pump fixes** ([#227](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/227)): Temperature sensors no longer crash on `"off"` values; new heat pump sensors (`afterCompressorTemp`, `outdoorTemp`, `HPStatusWorkMode`, etc.) and SSA weather compensation sensors
@@ -342,7 +349,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 
 ### What's New in v1.2.3
 
-- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes — **[Schedules Guide](docs/SCHEDULES.md)**
+- **Schedule Sensors**: Auto-created entities showing today's schedule + full week in attributes (replaced by Calendar entities in v1.3.0) — **[Schedules Guide](docs/SCHEDULES.md)**
 - **Alarm Monitoring** ([#71](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/71)): Alarm sensors, binary sensor, and event entity — **[Alarms & Events Guide](docs/ALARMS_AND_EVENTS.md)**
 - **ecoMAX360i Sensors**: Flap valve, heat demand, Axen heat pump temps, circuit comfort/eco setpoints
 - **Schedule Service**: Read ecoMAX schedules via `econet300.get_schedule`
@@ -375,7 +382,7 @@ For detailed version information and changelog, see [CHANGELOG.md](CHANGELOG.md)
 - **Boiler Control**: Turn boiler ON/OFF directly from Home Assistant
 - **Temperature Setpoints**: Full control over heating and hot water temperatures
 - **Mixer Support**: Smart entity creation for up to 6 mixer temperature setpoints
-- **Schedule Sensors**: View configured heating schedules directly in Home Assistant
+- **Schedule Calendars**: View heating schedules as native HA calendar entities with weekly events
 - **[Alarm Monitoring](docs/ALARMS_AND_EVENTS.md)**: Real-time alarm sensors and event entity for push notifications
 - **ecoSTER Integration**: Support for 8 room thermostats
 - **ecoSOL support**: ecoSOL 500 / ecoSOL 301 solar controllers and ecoSOL thermal line
