@@ -15,23 +15,26 @@ from custom_components.econet300.calendar import (
 )
 
 
-@pytest.fixture
-def sys_params() -> dict:
-    """Load the ecoMAX810P-L sysParams fixture."""
-    fixture_path = (
-        Path(__file__).parent / "fixtures" / "ecoMAX810P-L" / "sysParams.json"
-    )
-    with fixture_path.open() as f:
+def _discover_schedule_fixtures() -> list[str]:
+    """Find all fixture directories containing ecomaxSchedules in sysParams."""
+    fixtures_dir = Path(__file__).parent / "fixtures"
+    models: list[str] = []
+    for sys_file in sorted(fixtures_dir.glob("*/sysParams.json")):
+        data = json.loads(sys_file.read_text())
+        schedules = data.get("schedules", {})
+        if "ecomaxSchedules" in schedules:
+            models.append(sys_file.parent.name)
+    return models
+
+
+SCHEDULE_FIXTURE_MODELS = _discover_schedule_fixtures()
+
+
+def _load_sys_params(model: str) -> dict:
+    """Load sysParams fixture for a given model."""
+    path = Path(__file__).parent / "fixtures" / model / "sysParams.json"
+    with path.open() as f:
         return json.load(f)
-
-
-@pytest.fixture
-def coordinator(sys_params) -> MagicMock:
-    """Create a mock coordinator with schedule data."""
-    mock = MagicMock()
-    mock.data = {"sysParams": sys_params}
-    mock.single_device_tree = False
-    return mock
 
 
 @pytest.fixture
@@ -43,14 +46,66 @@ def api() -> MagicMock:
     return mock
 
 
-class TestCreateScheduleCalendars:
-    """Test create_schedule_calendars factory function."""
+def _make_coordinator(sys_params: dict) -> MagicMock:
+    """Create a mock coordinator with schedule data."""
+    mock = MagicMock()
+    mock.data = {"sysParams": sys_params}
+    mock.single_device_tree = False
+    return mock
 
-    def test_creates_calendars_from_fixture(self, coordinator, api):
-        """Factory creates one calendar per schedule type."""
+
+class TestCreateScheduleCalendarsAllModels:
+    """Test create_schedule_calendars across all fixture models with schedules."""
+
+    @pytest.fixture(params=SCHEDULE_FIXTURE_MODELS)
+    def model_coordinator(self, request) -> tuple[str, MagicMock]:
+        """Create coordinator for each model with schedule data."""
+        model = request.param
+        sys_params = _load_sys_params(model)
+        return model, _make_coordinator(sys_params)
+
+    def test_creates_calendars(self, model_coordinator, api):
+        """Factory creates at least one calendar for each model."""
+        model, coordinator = model_coordinator
         entities = create_schedule_calendars(coordinator, api)
-        assert len(entities) > 0
+        assert len(entities) > 0, f"{model} should produce calendar entities"
         assert all(isinstance(e, EconetScheduleCalendar) for e in entities)
+
+    def test_unique_ids(self, model_coordinator, api):
+        """Each calendar entity has a unique ID within the same model."""
+        model, coordinator = model_coordinator
+        entities = create_schedule_calendars(coordinator, api)
+        ids = [e._attr_unique_id for e in entities]
+        assert len(ids) == len(set(ids)), f"{model} has duplicate calendar IDs"
+
+    def test_async_get_events_all_models(self, model_coordinator, api):
+        """async_get_events returns a list for every calendar entity."""
+        model, coordinator = model_coordinator
+        entities = create_schedule_calendars(coordinator, api)
+        tz = datetime.timezone.utc
+        start = datetime.datetime(2026, 6, 29, 0, 0, tzinfo=tz)
+        end = datetime.datetime(2026, 7, 6, 0, 0, tzinfo=tz)
+        hass = MagicMock()
+
+        import asyncio
+
+        loop = asyncio.new_event_loop()
+        try:
+            for entity in entities:
+                with patch("custom_components.econet300.calendar.dt_util") as mock_dt:
+                    mock_dt.get_default_time_zone.return_value = tz
+                    events = loop.run_until_complete(
+                        entity.async_get_events(hass, start, end)
+                    )
+                    assert isinstance(events, list), (
+                        f"{model}/{entity._schedule_type} should return a list"
+                    )
+        finally:
+            loop.close()
+
+
+class TestCreateScheduleCalendars:
+    """Test create_schedule_calendars edge cases."""
 
     def test_no_data_returns_empty(self, api):
         """No coordinator data returns empty list."""
@@ -59,15 +114,20 @@ class TestCreateScheduleCalendars:
         entities = create_schedule_calendars(coordinator, api)
         assert entities == []
 
-    def test_unique_ids(self, coordinator, api):
-        """Each calendar has a unique ID."""
+    def test_empty_schedules_returns_empty(self, api):
+        """Empty schedules dict returns empty list."""
+        coordinator = _make_coordinator({"schedules": {}})
         entities = create_schedule_calendars(coordinator, api)
-        ids = [e._attr_unique_id for e in entities]
-        assert len(ids) == len(set(ids))
+        assert entities == []
 
 
 class TestEconetScheduleCalendar:
     """Test EconetScheduleCalendar entity behavior."""
+
+    @pytest.fixture
+    def coordinator(self) -> MagicMock:
+        """Default coordinator with ecoMAX810P-L data."""
+        return _make_coordinator(_load_sys_params("ecoMAX810P-L"))
 
     def _make_calendar(
         self, coordinator, api, schedule_type="boiler", api_key="boilerTZ"

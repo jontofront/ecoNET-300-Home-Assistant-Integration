@@ -196,47 +196,71 @@ class TestSummarizeScheduleSlots:
         assert "18:30-00:00" in summary
 
 
-class TestScheduleWithFixture:
-    """Integration-style test using the real ecoMAX810P-L sysParams fixture."""
+def _discover_schedule_fixtures() -> list[str]:
+    """Find all fixture directories containing ecomaxSchedules in sysParams."""
+    fixtures_dir = Path(__file__).parent / "fixtures"
+    models: list[str] = []
+    for sys_file in sorted(fixtures_dir.glob("*/sysParams.json")):
+        data = json.loads(sys_file.read_text())
+        schedules = data.get("schedules", {})
+        if "ecomaxSchedules" in schedules:
+            models.append(sys_file.parent.name)
+    return models
 
-    @pytest.fixture
-    def sys_params(self) -> dict:
-        """Load the ecoMAX810P-L sysParams fixture."""
+
+SCHEDULE_FIXTURE_MODELS = _discover_schedule_fixtures()
+
+
+class TestScheduleWithFixture:
+    """Integration-style tests using all fixtures that have ecomaxSchedules."""
+
+    @pytest.fixture(params=SCHEDULE_FIXTURE_MODELS)
+    def model_sys_params(self, request) -> tuple[str, dict]:
+        """Load sysParams fixture for each model with schedule data."""
+        model = request.param
         fixture_path = (
-            Path(__file__).parent / "fixtures" / "ecoMAX810P-L" / "sysParams.json"
+            Path(__file__).parent / "fixtures" / model / "sysParams.json"
         )
         with fixture_path.open() as f:
-            return json.load(f)
+            return model, json.load(f)
 
-    def test_fixture_has_ecomax_schedules(self, sys_params):
-        """Fixture contains ecomaxSchedules with expected keys."""
+    def test_fixture_has_ecomax_schedules(self, model_sys_params):
+        """Fixture contains ecomaxSchedules with at least one schedule."""
+        model, sys_params = model_sys_params
         schedules = sys_params["schedules"]["ecomaxSchedules"]
-        assert "cwuTZ" in schedules
-        assert "boilerWorkTZ" in schedules
-        assert "boilerTZ" in schedules
-        assert "mixer1TZ" in schedules
+        assert len(schedules) > 0, f"{model} should have at least one schedule"
 
-    def test_fixture_schedule_structure(self, sys_params):
-        """Each schedule has 8 entries: 7 days + 1 metadata."""
+    def test_fixture_schedule_structure(self, model_sys_params):
+        """Each schedule has 7 day arrays (6 bytes each) + optional metadata."""
+        model, sys_params = model_sys_params
         for key, data in sys_params["schedules"]["ecomaxSchedules"].items():
-            assert len(data) == 8, f"{key} should have 8 entries (7 days + metadata)"
+            assert len(data) >= 7, (
+                f"{model}/{key} should have at least 7 entries (7 days)"
+            )
             for day_idx in range(7):
                 assert len(data[day_idx]) == 6, (
-                    f"{key} day {day_idx} should have 6 bytes"
+                    f"{model}/{key} day {day_idx} should have 6 bytes"
                 )
-            assert len(data[7]) == 4, f"{key} metadata should have 4 values"
+            if len(data) > 7:
+                assert len(data[7]) == 4, (
+                    f"{model}/{key} metadata should have 4 values"
+                )
 
-    def test_decode_all_fixture_schedules(self, sys_params):
+    def test_decode_all_fixture_schedules(self, model_sys_params):
         """Decode every schedule in the fixture without errors."""
+        model, sys_params = model_sys_params
         for key, data in sys_params["schedules"]["ecomaxSchedules"].items():
             for day_idx in range(7):
                 slots = decode_ecomax_schedule_day(data[day_idx])
-                assert len(slots) == 48, f"{key} day {day_idx} should yield 48 slots"
+                assert len(slots) == 48, (
+                    f"{model}/{key} day {day_idx} should yield 48 slots"
+                )
                 summary = summarize_schedule_slots(slots)
                 assert isinstance(summary, str)
 
-            meta = decode_ecomax_schedule_metadata(data[7])
-            assert "on_off_mode" in meta
+            if len(data) > 7:
+                meta = decode_ecomax_schedule_metadata(data[7])
+                assert "on_off_mode" in meta
 
 
 class TestMergeActiveSlotRanges:
