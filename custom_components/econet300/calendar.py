@@ -6,7 +6,11 @@ import datetime
 import logging
 from typing import Any
 
-from homeassistant.components.calendar import CalendarEntity, CalendarEvent
+from homeassistant.components.calendar import (
+    CalendarEntity,
+    CalendarEntityDescription,
+    CalendarEvent,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -60,13 +64,15 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
         component: str | None = None,
     ) -> None:
         """Initialize the schedule calendar entity."""
-        self._attr_unique_id = f"{api.uid}-schedule-{schedule_type}"
+        self.entity_description = CalendarEntityDescription(
+            key=f"schedule_{schedule_type}",
+            translation_key=f"schedule_{schedule_type}",
+        )
         self.api = api
         self._api_key = api_key
         self._component = component
         self._schedule_type = schedule_type
         self._event_summary = _event_summary(schedule_type)
-        self._attr_translation_key = f"schedule_{schedule_type}"
         self._cached_event: CalendarEvent | None = None
         self._metadata: dict[str, Any] = {}
         super().__init__(coordinator, api)

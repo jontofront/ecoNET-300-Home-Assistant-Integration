@@ -75,7 +75,7 @@ class TestCreateScheduleCalendarsAllModels:
         """Each calendar entity has a unique ID within the same model."""
         model, coordinator = model_coordinator
         entities = create_schedule_calendars(coordinator, api)
-        ids = [e._attr_unique_id for e in entities]
+        ids = [e.entity_description.key for e in entities]
         assert len(ids) == len(set(ids)), f"{model} has duplicate calendar IDs"
 
     def test_async_get_events_all_models(self, model_coordinator, api):
@@ -140,12 +140,12 @@ class TestEconetScheduleCalendar:
     def test_unique_id_format(self, coordinator, api):
         """Unique ID includes UID and schedule type."""
         cal = self._make_calendar(coordinator, api)
-        assert cal._attr_unique_id == "test-uid-123-schedule-boiler"
+        assert cal.entity_description.key == "schedule_boiler"
 
     def test_translation_key(self, coordinator, api):
         """Translation key follows expected pattern."""
         cal = self._make_calendar(coordinator, api)
-        assert cal._attr_translation_key == "schedule_boiler"
+        assert cal.entity_description.translation_key == "schedule_boiler"
 
     @patch("custom_components.econet300.calendar.dt_util")
     def test_async_get_events(self, mock_dt_util, coordinator, api):
