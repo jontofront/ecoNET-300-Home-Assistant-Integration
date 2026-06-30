@@ -1,16 +1,24 @@
 """Tests for parameter validation functions in common_functions.py."""
 
+import json
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from custom_components.econet300.common_functions import (
+    find_heater_mode_param,
+    find_merged_param_by_key,
     get_active_alarm,
     get_duplicate_display_name,
     get_duplicate_entity_key,
+    get_heater_mode_options,
     get_latest_alarm,
     get_lock_reason,
     has_active_alarm,
+    heater_mode_icon,
+    heater_mode_option_to_value,
+    heater_mode_value_to_option,
     is_binary_enum,
     is_parameter_locked,
     parse_alarm_entry,
@@ -19,6 +27,99 @@ from custom_components.econet300.common_functions import (
     validate_parameter_data,
 )
 from custom_components.econet300.event import BoilerAlarmEvent
+
+
+def _load_merged_data(fixture_name: str) -> dict:
+    """Load a mergedData.json fixture for the given controller."""
+    fixture_path = Path(__file__).parent / "fixtures" / fixture_name / "mergedData.json"
+    with fixture_path.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+class TestHeaterModeHelpers:
+    """Tests for heater-mode mergedData helpers (issue #235)."""
+
+    def test_find_heater_mode_param_by_key_810p_l(self):
+        """ecoMAX810P-L resolves heater mode via key summer_mode (number 55)."""
+        merged = _load_merged_data("ecoMAX810P-L")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        assert param["number"] == 55
+        assert param["key"] == "summer_mode"
+
+    def test_find_heater_mode_param_by_enum_860d3_hb(self):
+        """ecoMAX860D3-HB resolves heater mode via enum heuristic (number 58)."""
+        merged = _load_merged_data("ecoMAX860D3-HB")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        assert param["number"] == 58
+        assert param["name"] == "Tryb LATO/ZIMA"
+
+    def test_find_heater_mode_param_none_when_missing(self):
+        """Return None when no mergedData is provided."""
+        assert find_heater_mode_param(None) is None
+        assert find_heater_mode_param({"parameters": {}}) is None
+
+    def test_get_heater_mode_options_810p_l(self):
+        """810P-L exposes Winter/Summer/Auto (maxv=2), de-duplicated."""
+        merged = _load_merged_data("ecoMAX810P-L")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        assert get_heater_mode_options(param) == ["Winter", "Summer", "Auto"]
+
+    def test_get_heater_mode_options_860d3_hb_trims_auto(self):
+        """860D3-HB has maxv=1, so Auto is trimmed leaving Zima/Lato."""
+        merged = _load_merged_data("ecoMAX860D3-HB")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        assert get_heater_mode_options(param) == ["Zima", "Lato"]
+
+    def test_value_option_round_trip_810p_l(self):
+        """Numeric value <-> option round-trips for 810P-L."""
+        merged = _load_merged_data("ecoMAX810P-L")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        for value, option in ((0, "Winter"), (1, "Summer"), (2, "Auto")):
+            assert heater_mode_value_to_option(param, value) == option
+            assert heater_mode_option_to_value(param, option) == value
+
+    def test_value_option_round_trip_860d3_hb(self):
+        """Numeric value <-> option round-trips for 860D3-HB."""
+        merged = _load_merged_data("ecoMAX860D3-HB")
+        param = find_heater_mode_param(merged)
+        assert param is not None
+        for value, option in ((0, "Zima"), (1, "Lato")):
+            assert heater_mode_value_to_option(param, value) == option
+            assert heater_mode_option_to_value(param, option) == value
+
+    def test_heater_mode_icon_is_language_independent(self):
+        """Icons map for both English and Polish option spellings."""
+        assert heater_mode_icon("Winter") == "mdi:snowflake"
+        assert heater_mode_icon("Zima") == "mdi:snowflake"
+        assert heater_mode_icon("Summer") == "mdi:weather-sunny"
+        assert heater_mode_icon("Lato") == "mdi:weather-sunny"
+        assert heater_mode_icon("Auto") == "mdi:thermostat-auto"
+        assert heater_mode_icon(None) == "mdi:thermostat"
+        assert heater_mode_icon("Unknown") == "mdi:thermostat"
+
+    def test_option_to_value_respects_range_with_duplicates(self):
+        """Duplicated enum values must map back inside the minv..maxv range.
+
+        Regression: a repeated option (e.g. Zima at index 0 and 3) must not
+        return the earlier out-of-range index when the valid range starts later.
+        """
+        param = {
+            "enum": {"values": ["Zima", "Lato", "Auto", "Zima", "Lato"], "first": 0},
+            "minv": 3,
+            "maxv": 4,
+        }
+        # Options come from the constrained range (indices 3..4).
+        assert get_heater_mode_options(param) == ["Zima", "Lato"]
+        # Reverse mapping returns in-range values, not the earlier duplicates.
+        assert heater_mode_option_to_value(param, "Zima") == 3
+        assert heater_mode_option_to_value(param, "Lato") == 4
+        # An option outside the valid range resolves to None.
+        assert heater_mode_option_to_value(param, "Auto") is None
 
 
 class TestValidateParameterData:
@@ -179,6 +280,41 @@ class TestIsParameterLocked:
             "lock_reason": "Weather control enabled.",
         }
         assert is_parameter_locked(param) is True
+
+
+class TestFindMergedParamByKey:
+    """Tests for find_merged_param_by_key function."""
+
+    def _merged(self) -> dict:
+        return {
+            "parameters": {
+                "63": {"key": "preset_mixer1_temperature", "locked": True},
+                "64": {"key": "preset_mixer2_temperature", "locked": False},
+                "99": "not-a-dict",
+            }
+        }
+
+    def test_found_by_key(self):
+        """Test returns the matching parameter dict by key."""
+        param = find_merged_param_by_key(self._merged(), "preset_mixer1_temperature")
+        assert param is not None
+        assert param["locked"] is True
+
+    def test_not_found_returns_none(self):
+        """Test returns None when no parameter matches the key."""
+        assert (
+            find_merged_param_by_key(self._merged(), "preset_mixer9_temperature")
+            is None
+        )
+
+    def test_none_merged_data(self):
+        """Test returns None when merged_data is None or empty."""
+        assert find_merged_param_by_key(None, "preset_mixer1_temperature") is None
+        assert find_merged_param_by_key({}, "preset_mixer1_temperature") is None
+
+    def test_ignores_non_dict_entries(self):
+        """Test non-dict parameter entries are skipped safely."""
+        assert find_merged_param_by_key(self._merged(), "not-a-dict") is None
 
 
 class TestGetLockReason:

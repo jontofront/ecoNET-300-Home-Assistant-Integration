@@ -20,12 +20,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .api import Limits
 from .common import Econet300Api, EconetDataCoordinator, skip_params_edits
 from .common_functions import (
     camel_to_snake,
     ecoster_exists,
+    find_merged_param_by_key,
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
@@ -56,6 +58,19 @@ from .const import (
 from .entity import EconetEntity, MixerEntity, get_device_info_for_component
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _device_info(api: Econet300Api) -> DeviceInfo:
+    """Return main ecoNET300 device info for editParams entities."""
+    return DeviceInfo(
+        identifiers={(DOMAIN, api.uid)},
+        name="PLUM ecoNET300",
+        manufacturer="PLUM",
+        model="ecoNET300",
+        configuration_url=api.host,
+        sw_version=api.sw_rev,
+        hw_version=api.hw_ver,
+    )
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -211,7 +226,11 @@ class EconetNumber(EconetEntity, NumberEntity):
         """Return device info based on entity component."""
         component = getattr(self.entity_description, "component", None)
         if component:
-            return get_device_info_for_component(component, self.api)
+            return get_device_info_for_component(
+                component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
         # Fall back to parent class device_info (main boiler device)
         return super().device_info
 
@@ -460,6 +479,26 @@ class MixerNumber(MixerEntity, NumberEntity):
         _LOGGER.debug("Apply mixer number limits: %s", self)
         self.async_write_ha_state()
 
+    def _get_param_data(self) -> dict | None:
+        """Resolve the mergedData parameter backing this mixer setpoint.
+
+        Static mixer setpoints (``mixerSetTemp{N}``) come from ``regParams`` and
+        have no ``param_id``, so the base lookup misses the lock flags that live
+        on the mergedData ``preset_mixer{N}_temperature`` parameter. Fall back to
+        matching that parameter by key so lock detection (``locked`` /
+        ``lock_reason``) works for these entities too.
+        """
+        param_data = super()._get_param_data()
+        if param_data is not None:
+            return param_data
+
+        if self.coordinator.data is None:
+            return None
+        return find_merged_param_by_key(
+            self.coordinator.data.get("mergedData"),
+            f"preset_mixer{self._idx}_temperature",
+        )
+
     @property
     def icon(self) -> str | None:
         """Return icon for entity."""
@@ -520,8 +559,19 @@ class MixerNumber(MixerEntity, NumberEntity):
             return
 
         if not await self.api.set_param(self.entity_description.key, int(value)):
-            _LOGGER.warning("Setting mixer value failed")
-            return
+            _LOGGER.warning(
+                "Setting mixer value failed: %s=%s (device rejected the write, "
+                "parameter may be locked)",
+                self.entity_description.key,
+                int(value),
+            )
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="number_set_failed",
+                translation_placeholders={
+                    "error": f"{self.entity_description.key}={int(value)}"
+                },
+            )
 
         self._attr_native_value = value
         self._last_write_time = time.monotonic()  # Record write time for cooldown
@@ -1272,7 +1322,10 @@ async def async_setup_entry(
     if sys_params is None:
         sys_params = {}
     if skip_params_edits(sys_params):
-        _LOGGER.info("Skipping number entity setup for controllerID: ecoMAX360i")
+        _LOGGER.info(
+            "Skipping upstream merged number setup for this controllerID; using Local editParams entities"
+        )
+        entities.extend(_create_edit_param_numbers(coordinator, api))
         return async_add_entities(entities)
 
     # Always create basic NUMBER_MAP entities first
@@ -1319,6 +1372,8 @@ async def async_setup_entry(
         dynamic_count,
         mixer_count,
     )
+    entities.extend(_create_edit_param_numbers(coordinator, api))
+
     if not entities:
         _LOGGER.warning(
             "No number entities could be created. This may indicate that your device "
@@ -1327,3 +1382,120 @@ async def async_setup_entry(
         )
 
     return async_add_entities(entities)
+
+
+# =============================================================================
+# Local editParams number entities (preserve uid-edit_<pid>)
+# =============================================================================
+class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
+    """Editable numeric parameter from editParams."""
+
+    _attr_entity_category = EntityCategory.CONFIG
+
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
+        """Initialize the editable number entity for the given parameter id."""
+        super().__init__(coordinator)
+        self._api = api
+        self._pid = str(pid)
+
+        info = (coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        pname = info.get("name", f"Param {self._pid}")
+        self._use_number_suffix = bool(
+            info.get("expose_number") and info.get("kind") != "number"
+        )
+        self._attr_name = f"{pname} ({self._pid})"
+        if self._use_number_suffix:
+            self._attr_name = f"{self._attr_name} value"
+
+        self._attr_device_info = _device_info(api)
+        self._attr_native_unit_of_measurement = info.get("unit")
+        # number-minmax-fallback
+        min_value = info.get("min")
+        max_value = info.get("max")
+        try:
+            self._attr_native_min_value = (
+                float(min_value) if min_value is not None else -1000000.0
+            )
+        except (TypeError, ValueError):
+            self._attr_native_min_value = -1000000.0
+        try:
+            self._attr_native_max_value = (
+                float(max_value) if max_value is not None else 1000000.0
+            )
+        except (TypeError, ValueError):
+            self._attr_native_max_value = 1000000.0
+        self._attr_native_step = info.get("step") or 1.0
+        self._attr_mode = NumberMode.BOX
+
+    @property
+    def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
+        if self._use_number_suffix:
+            return f"{self._api.uid}-edit_{self._pid}_value"
+        return f"{self._api.uid}-edit_{self._pid}"
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the current numeric value of the parameter."""
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
+        val = info.get("value")
+        try:
+            return None if val is None else float(val)
+        except (TypeError, ValueError):
+            return None
+
+    @property
+    def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Write the new numeric value back to the controller."""
+        # Round to the nearest step to avoid noisy writes
+        step = self.native_step or 1.0
+        if step and step > 0:
+            value = round(value / step) * step
+
+        send_value: Any = value
+        # Many firmwares expect integer strings even for temperature setpoints.
+        try:
+            fv = float(value)
+            if fv.is_integer():
+                send_value = int(fv)
+        except (TypeError, ValueError):
+            pass
+        ok = await self._api.set_param(self._pid, send_value)
+        if not ok:
+            raise HomeAssistantError(f"Failed to set param {self._pid} to {value}")
+
+        # Force a fresh editParams refresh on next update so values reflect quickly
+        self.coordinator.force_edit_params_refresh()
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
+        return self._attr_device_info
+
+
+def _create_edit_param_numbers(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[NumberEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
+    entities: list[NumberEntity] = []
+    for pid, info in catalog.items():
+        if info.get("kind") != "number" and not info.get("expose_number"):
+            continue
+        entities.append(EditParamNumber(coordinator, api, pid))
+    _LOGGER.info("Adding %d editable Number entities from editParams", len(entities))
+    return entities

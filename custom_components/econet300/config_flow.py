@@ -21,14 +21,24 @@ from .const import (
     API_REG_PARAMS_DATA_URI,
     API_REG_PARAMS_URI,
     CONF_CUSTOM_ENTITIES,
+    CONF_DEVICE_GROUPING,
     CONF_ENTRY_DESCRIPTION,
     CONF_ENTRY_TITLE,
+    CONF_POLL_EDIT_PARAMS,
+    CONF_POLL_REG_PARAMS,
+    CONF_POLL_SYS_PARAMS,
     CUSTOM_ENTITY_COMPONENTS,
     CUSTOM_ENTITY_TYPE_BINARY_SENSOR,
     CUSTOM_ENTITY_TYPE_SENSOR,
     CUSTOM_SENSOR_DEVICE_CLASS_OPTIONS,
     CUSTOM_SENSOR_PRECISION_OPTIONS,
     CUSTOM_SENSOR_UNIT_OPTIONS,
+    DEFAULT_DEVICE_GROUPING,
+    DEFAULT_POLL_EDIT_PARAMS,
+    DEFAULT_POLL_REG_PARAMS,
+    DEFAULT_POLL_SYS_PARAMS,
+    DEVICE_GROUPING_SINGLE,
+    DEVICE_GROUPING_SPLIT,
     DOMAIN,
     SERVICE_API,
     SERVICE_COORDINATOR,
@@ -299,8 +309,79 @@ class EconetOptionsFlowHandler(OptionsFlow):
         """Show the options menu."""
         return self.async_show_menu(
             step_id="init",
-            menu_options=["connection_settings", "custom_entities", "diagnostics"],
+            menu_options=[
+                "connection_settings",
+                "polling_settings",
+                "device_settings",
+                "custom_entities",
+                "diagnostics",
+            ],
         )
+
+    # ------------------------------------------------------------------
+    # Device settings (device grouping)
+    # ------------------------------------------------------------------
+    async def async_step_device_settings(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Manage how entities are grouped into devices."""
+        if user_input is not None:
+            new_options = {**self.config_entry.options, **user_input}
+            self.hass.async_create_task(
+                self.hass.config_entries.async_reload(self.config_entry.entry_id)
+            )
+            return self.async_create_entry(title="", data=new_options)
+
+        options = dict(self.config_entry.options)
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_DEVICE_GROUPING,
+                    default=options.get(CONF_DEVICE_GROUPING, DEFAULT_DEVICE_GROUPING),
+                ): vol.In(
+                    {
+                        DEVICE_GROUPING_SPLIT: "Split (separate devices)",
+                        DEVICE_GROUPING_SINGLE: "Single (one merged device)",
+                    }
+                ),
+            }
+        )
+        return self.async_show_form(step_id="device_settings", data_schema=schema)
+
+    # ------------------------------------------------------------------
+    # Polling settings
+    # ------------------------------------------------------------------
+    async def async_step_polling_settings(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Manage Local polling intervals."""
+        if user_input is not None:
+            new_options = {**self.config_entry.options, **user_input}
+            self.hass.async_create_task(
+                self.hass.config_entries.async_reload(self.config_entry.entry_id)
+            )
+            return self.async_create_entry(title="", data=new_options)
+
+        options = dict(self.config_entry.options)
+        schema = vol.Schema(
+            {
+                vol.Required(
+                    CONF_POLL_REG_PARAMS,
+                    default=options.get(CONF_POLL_REG_PARAMS, DEFAULT_POLL_REG_PARAMS),
+                ): vol.All(vol.Coerce(int), vol.Range(min=5, max=300)),
+                vol.Required(
+                    CONF_POLL_SYS_PARAMS,
+                    default=options.get(CONF_POLL_SYS_PARAMS, DEFAULT_POLL_SYS_PARAMS),
+                ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),
+                vol.Required(
+                    CONF_POLL_EDIT_PARAMS,
+                    default=options.get(
+                        CONF_POLL_EDIT_PARAMS, DEFAULT_POLL_EDIT_PARAMS
+                    ),
+                ): vol.All(vol.Coerce(int), vol.Range(min=0, max=3600)),
+            }
+        )
+        return self.async_show_form(step_id="polling_settings", data_schema=schema)
 
     # ------------------------------------------------------------------
     # Connection settings

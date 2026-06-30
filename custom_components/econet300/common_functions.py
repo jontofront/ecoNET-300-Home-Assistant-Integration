@@ -12,6 +12,8 @@ see: docs/DYNAMIC_ENTITY_VALIDATION.md
 
 from __future__ import annotations
 
+from collections.abc import Generator
+import datetime
 import logging
 import re
 from typing import Any
@@ -30,6 +32,7 @@ from .const import (
     COMPONENT_SOLAR,
     DEFAULT_COMPONENT_STATUS,
     NUMBER_OF_AVAILABLE_MIXERS,
+    SCHEDULE_TYPE_REVERSE_MAP,
     STATIC_REGPARAMS_DATA_IDS,
 )
 
@@ -485,6 +488,181 @@ def validate_parameter_data(param: dict) -> tuple[bool, str]:
     return True, ""
 
 
+def find_merged_param_by_key(merged_data: dict | None, key: str) -> dict | None:
+    """Find a mergedData parameter dict by its ``key`` field.
+
+    mergedData parameters are indexed by their numeric id, but each entry also
+    carries a stable ``key`` (e.g. ``preset_mixer1_temperature``). Static,
+    regParams-based entities that lack a ``param_id`` use this helper to resolve
+    their mergedData counterpart so shared metadata (lock flags, lock reason,
+    description) can be reused.
+
+    Args:
+        merged_data: The ``mergedData`` payload from the coordinator.
+        key: The parameter ``key`` to match.
+
+    Returns:
+        The matching parameter dict, or None if not found.
+
+    """
+    if not merged_data:
+        return None
+    parameters = merged_data.get("parameters") or {}
+    for param in parameters.values():
+        if isinstance(param, dict) and param.get("key") == key:
+            return param
+    return None
+
+
+# Tokens used to recognise the heater-mode (summer/winter) parameter and its
+# enum options across controllers that report native-language values.
+_HEATER_MODE_WINTER_TOKENS = {"winter", "zima"}
+_HEATER_MODE_SUMMER_TOKENS = {"summer", "lato"}
+_HEATER_MODE_AUTO_TOKENS = {"auto"}
+
+
+def find_heater_mode_param(merged_data: dict | None) -> dict | None:
+    """Find the heater-mode (summer/winter) parameter in mergedData.
+
+    The heater-mode write ID differs between controllers (e.g. ``55`` on
+    ecoMAX810P-L but ``58`` on ecoMAX860D3-HB), so the static
+    ``select.heater_mode`` entity resolves it from mergedData instead of a
+    hardcoded constant. Detection order:
+
+    1. Parameter whose ``key`` is ``summer_mode``.
+    2. Else first editable ``unit == 31`` parameter whose enum values contain
+       both a winter token (winter/zima) and a summer token (summer/lato).
+    3. Else first parameter whose ``name`` mentions ``lato`` or ``summer mode``.
+    4. Else None (legacy RM-less modules use the hardcoded fallback).
+
+    Args:
+        merged_data: The ``mergedData`` payload from the coordinator.
+
+    Returns:
+        The matching parameter dict, or None when not found.
+
+    """
+    if not merged_data:
+        return None
+
+    by_key = find_merged_param_by_key(merged_data, "summer_mode")
+    if by_key is not None:
+        return by_key
+
+    parameters = merged_data.get("parameters") or {}
+
+    for param in parameters.values():
+        if not isinstance(param, dict) or not param.get("edit", False):
+            continue
+        if param.get("unit") != 31:
+            continue
+        values = [
+            str(v).lower() for v in (param.get("enum") or {}).get("values", []) if v
+        ]
+        has_winter = any(v in _HEATER_MODE_WINTER_TOKENS for v in values)
+        has_summer = any(v in _HEATER_MODE_SUMMER_TOKENS for v in values)
+        if has_winter and has_summer:
+            return param
+
+    for param in parameters.values():
+        if not isinstance(param, dict):
+            continue
+        name = str(param.get("name", "")).lower()
+        if "lato" in name or "summer mode" in name:
+            return param
+
+    return None
+
+
+def _heater_mode_value_range(param: dict) -> tuple[int, int]:
+    """Return the inclusive (lo, hi) value range for a heater-mode parameter.
+
+    Uses ``minv``/``maxv`` when available, otherwise spans the full enum array.
+    Shared by option/value conversion so they all honor the same constraint.
+    """
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+
+    minv = param.get("minv")
+    maxv = param.get("maxv")
+    if isinstance(minv, (int, float)) and isinstance(maxv, (int, float)):
+        return int(minv), int(maxv)
+    return first, first + len(values) - 1
+
+
+def get_heater_mode_options(param: dict) -> list[str]:
+    """Return the heater-mode options limited by the parameter's value range.
+
+    The enum array can repeat values (e.g. ``[Zima, Lato, Auto, Zima, Lato]``)
+    and may expose more entries than the controller actually allows, so the
+    options are derived from the ``minv..maxv`` range and de-duplicated while
+    preserving order. On ecoMAX860D3-HB (``maxv == 1``) this trims ``Auto``.
+
+    Args:
+        param: The heater-mode parameter dict from mergedData.
+
+    Returns:
+        Ordered list of unique native-language option strings.
+
+    """
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+    lo, hi = _heater_mode_value_range(param)
+
+    options: list[str] = []
+    for value in range(lo, hi + 1):
+        idx = value - first
+        if 0 <= idx < len(values):
+            option = values[idx]
+            if option and option not in options:
+                options.append(option)
+    return options
+
+
+def heater_mode_value_to_option(param: dict, value: int) -> str | None:
+    """Map a numeric heater-mode value to its native-language option string."""
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+    idx = int(value) - first
+    return values[idx] if 0 <= idx < len(values) else None
+
+
+def heater_mode_option_to_value(param: dict, option: str) -> int | None:
+    """Map a native-language option back to its value within the minv..maxv range.
+
+    The enum array can repeat values, so the search is limited to the valid
+    ``minv..maxv`` range (matching ``get_heater_mode_options``) to avoid
+    returning an earlier out-of-range index for a duplicated option.
+    """
+    enum_data = param.get("enum") or {}
+    values = enum_data.get("values") or []
+    first = enum_data.get("first", 0)
+    lo, hi = _heater_mode_value_range(param)
+
+    for value in range(lo, hi + 1):
+        idx = value - first
+        if 0 <= idx < len(values) and values[idx] == option:
+            return value
+    return None
+
+
+def heater_mode_icon(option: str | None) -> str:
+    """Return an mdi icon for a heater-mode option, language-independent."""
+    if not option:
+        return "mdi:thermostat"
+    token = option.lower()
+    if token in _HEATER_MODE_WINTER_TOKENS:
+        return "mdi:snowflake"
+    if token in _HEATER_MODE_SUMMER_TOKENS:
+        return "mdi:weather-sunny"
+    if token in _HEATER_MODE_AUTO_TOKENS:
+        return "mdi:thermostat-auto"
+    return "mdi:thermostat"
+
+
 def is_parameter_locked(param: dict) -> bool:
     """Check if parameter is locked using existing mergedData field.
 
@@ -853,6 +1031,44 @@ def decode_ecomax_schedule_metadata(metadata: list[int] | None) -> dict:
     }
 
 
+def merge_active_slot_ranges(
+    slots: list[dict],
+) -> list[tuple[datetime.time, datetime.time]]:
+    """Merge consecutive active slots into (start, end) time-range tuples.
+
+    Args:
+        slots: List of slot dicts from decode_ecomax_schedule_day.
+
+    Returns:
+        List of (start_time, end_time) tuples for each active range.
+        An end_time of 00:00 represents midnight (end of day).
+
+    """
+    if not slots:
+        return []
+
+    ranges: list[tuple[datetime.time, datetime.time]] = []
+    range_start: str | None = None
+
+    for slot in slots:
+        if slot["active"] and range_start is None:
+            range_start = slot["start"]
+        elif not slot["active"] and range_start is not None:
+            ranges.append((_parse_time(range_start), _parse_time(slot["start"])))
+            range_start = None
+
+    if range_start is not None:
+        ranges.append((_parse_time(range_start), datetime.time(0, 0)))
+
+    return ranges
+
+
+def _parse_time(time_str: str) -> datetime.time:
+    """Parse "HH:MM" string to datetime.time."""
+    h, m = time_str.split(":")
+    return datetime.time(int(h), int(m))
+
+
 def summarize_schedule_slots(slots: list[dict]) -> str:
     """Generate a human-readable summary of active time ranges.
 
@@ -874,21 +1090,71 @@ def summarize_schedule_slots(slots: list[dict]) -> str:
     if active_count == len(slots):
         return "all_on"
 
-    ranges: list[str] = []
-    range_start: str | None = None
+    ranges = merge_active_slot_ranges(slots)
+    return ", ".join(
+        f"{r[0].strftime('%H:%M')}-{r[1].strftime('%H:%M')}" for r in ranges
+    )
 
-    for slot in slots:
-        if slot["active"] and range_start is None:
-            range_start = slot["start"]
-        elif not slot["active"] and range_start is not None:
-            ranges.append(f"{range_start}-{slot['start']}")
-            range_start = None
 
-    # Close final range if it extends to midnight
-    if range_start is not None:
-        ranges.append(f"{range_start}-00:00")
+# =============================================================================
+# Schedule iteration helpers
+# =============================================================================
 
-    return ", ".join(ranges)
+
+def schedule_component(friendly_name: str) -> str | None:
+    """Map a schedule friendly name to its device-grouping component.
+
+    Mixer and water-heater schedules are grouped with their respective
+    devices; all other schedule types stay on the main controller device.
+    """
+    if friendly_name.startswith("mixer_"):
+        return friendly_name
+    if friendly_name in ("water_heater", "water_heater_2"):
+        return COMPONENT_HUW
+    return None
+
+
+def iter_device_schedules(
+    coordinator_data: dict[str, Any] | None,
+) -> Generator[tuple[str, str, str | None], None, None]:
+    """Yield (friendly_name, api_key, component) for each valid device schedule.
+
+    Iterates over ecomaxSchedules from sysParams, resolves friendly names,
+    determines device component grouping, and skips disconnected mixers.
+
+    Args:
+        coordinator_data: Full coordinator data dict.
+
+    Yields:
+        Tuples of (friendly_name, api_key, component) for each valid schedule.
+
+    """
+    if not coordinator_data:
+        return
+
+    sys_params = coordinator_data.get("sysParams") or {}
+    raw_schedules = sys_params.get("schedules") or {}
+    schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
+
+    if not schedules:
+        return
+
+    for api_key in schedules:
+        key = str(api_key)
+        friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(key, key)
+        component = schedule_component(friendly_name)
+
+        if component and component.startswith("mixer_"):
+            mixer_num = int(component.split("_")[1])
+            if not mixer_exists(coordinator_data, mixer_num):
+                _LOGGER.debug(
+                    "Skipping schedule for component %s - Mixer %d not connected",
+                    component,
+                    mixer_num,
+                )
+                continue
+
+        yield friendly_name, key, component
 
 
 # =============================================================================

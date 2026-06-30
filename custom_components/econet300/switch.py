@@ -14,6 +14,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import (
@@ -21,6 +22,7 @@ from .common_functions import (
     get_duplicate_display_name,
     get_duplicate_entity_key,
     get_validated_entity_component,
+    is_ecomax360i_controller,
     mixer_exists,
 )
 from .const import (
@@ -34,6 +36,19 @@ from .const import (
 from .entity import EconetEntity, get_device_info_for_component
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _device_info(api: Econet300Api) -> DeviceInfo:
+    """Return main ecoNET300 device info for editParams entities."""
+    return DeviceInfo(
+        identifiers={(DOMAIN, api.uid)},
+        name="PLUM ecoNET300",
+        manufacturer="PLUM",
+        model="ecoNET300",
+        configuration_url=api.host,
+        sw_version=api.sw_rev,
+        hw_version=api.hw_ver,
+    )
 
 
 class BoilerControlError(HomeAssistantError):
@@ -225,12 +240,27 @@ class EconetDynamicSwitch(EconetEntity, SwitchEntity):
     @property
     def device_info(self) -> DeviceInfo:
         """Return device info based on entity component."""
-        return get_device_info_for_component(self._component, self.api)
+        return get_device_info_for_component(
+            self._component,
+            self.api,
+            single_device=self.coordinator.single_device_tree,
+        )
 
     @property
     def available(self) -> bool:
-        """Return if entity is available."""
-        return self.coordinator.last_update_success
+        """Return True when data is fresh and the parameter is still present.
+
+        The coordinator keeps the last payload on transient failures, so
+        ``last_update_success`` stays True even while the device is
+        unreachable. Availability is therefore driven by the staleness flag
+        in the coordinator ``_health`` block, matching every other entity.
+        """
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        if bool(health.get("stale")):
+            return False
+        parameters = (data.get("mergedData") or {}).get("parameters", {})
+        return self._param_id in parameters
 
     @property
     def icon(self) -> str | None:
@@ -508,16 +538,109 @@ async def async_setup_entry(
 
     entities: list[SwitchEntity] = []
 
-    # Create boiler control switch (static)
-    # Initial state is synced automatically via _handle_coordinator_update()
-    # once the entity is added to Home Assistant.
-    entities.append(create_boiler_switch(coordinator, api))
-    _LOGGER.info("Created 1 static switch entity (boiler control)")
+    # Create boiler control switch (static) unless known unsupported.
+    # disable-unsupported-boiler-control
+    sys_params = (coordinator.data or {}).get("sysParams") or {}
+    controller_id = sys_params.get("controllerID")
+    if is_ecomax360i_controller(controller_id):
+        _LOGGER.info("Skipping unsupported static boiler control for ecoMAX360i")
+    else:
+        # Initial state is synced automatically via _handle_coordinator_update()
+        # once the entity is added to Home Assistant.
+        entities.append(create_boiler_switch(coordinator, api))
+        _LOGGER.info("Created 1 static switch entity (boiler control)")
 
     # Create dynamic switch entities from mergedData
     dynamic_switches = create_dynamic_switches(coordinator, api)
     entities.extend(dynamic_switches)
     _LOGGER.info("Created %d dynamic switch entities", len(dynamic_switches))
 
+    entities.extend(_create_edit_param_switches(coordinator, api))
+
     _LOGGER.info("Adding %d total switch entities", len(entities))
     async_add_entities(entities)
+
+
+# =============================================================================
+# Local editParams switch entities (preserve uid-edit_<pid>)
+# =============================================================================
+class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
+    """Editable boolean parameter from editParams."""
+
+    _attr_entity_category = EntityCategory.CONFIG
+
+    def __init__(
+        self, coordinator: EconetDataCoordinator, api: Econet300Api, pid: str
+    ) -> None:
+        """Initialize the editable switch entity for the given parameter id."""
+        super().__init__(coordinator)
+        self._api = api
+        self._pid = str(pid)
+
+        info = (coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        pname = info.get("name", f"Param {self._pid}")
+        self._attr_name = f"{pname} ({self._pid})"
+
+        self._attr_device_info = _device_info(api)
+
+    @property
+    def unique_id(self) -> str | None:
+        """Return the stable unique id preserving the legacy uid-edit_ scheme."""
+        return f"{self._api.uid}-edit_{self._pid}"
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True/False from the parameter value, or None if unavailable."""
+        info = (
+            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
+        )
+        val = info.get("value")
+        try:
+            return None if val is None else bool(int(val))
+        except (TypeError, ValueError):
+            return None
+
+    @property
+    def available(self) -> bool:
+        """Return True when data is fresh and the parameter is in the catalog."""
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        return (not bool(health.get("stale"))) and self._pid in data.get(
+            "editParamCatalog", {}
+        )
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        """Set the parameter to 1 on the controller."""
+        ok = await self._api.set_param(self._pid, 1)
+        if not ok:
+            raise HomeAssistantError(f"Failed to set param {self._pid} to 1")
+        self.coordinator.force_edit_params_refresh()
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Set the parameter to 0 on the controller."""
+        ok = await self._api.set_param(self._pid, 0)
+        if not ok:
+            raise HomeAssistantError(f"Failed to set param {self._pid} to 0")
+        self.coordinator.force_edit_params_refresh()
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
+        return self._attr_device_info
+
+
+def _create_edit_param_switches(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[SwitchEntity]:
+    catalog: dict[str, dict[str, Any]] = (coordinator.data or {}).get(
+        "editParamCatalog", {}
+    ) or {}
+    entities: list[SwitchEntity] = []
+    for pid, info in catalog.items():
+        if info.get("kind") != "switch":
+            continue
+        entities.append(EditParamSwitch(coordinator, api, pid))
+    _LOGGER.info("Adding %d editable Switch entities from editParams", len(entities))
+    return entities

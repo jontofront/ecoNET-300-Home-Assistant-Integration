@@ -74,10 +74,23 @@ def _create_base_device_info(
     return info
 
 
-class EconetEntity(CoordinatorEntity):
+# force-single-main-device
+def _main_device_info(api: Econet300Api) -> DeviceInfo:
+    """Return the single main PLUM ecoNET300 device for all entities."""
+    return _create_base_device_info(
+        api=api,
+        identifier=api.uid,
+        name="PLUM ecoNET300",
+        include_model_id=True,
+        include_hw_version=True,
+    )
+
+
+class EconetEntity(CoordinatorEntity[EconetDataCoordinator]):
     """Represents EconetEntity."""
 
     api: Econet300Api
+    coordinator: EconetDataCoordinator
     _attr_has_entity_name = True  # Required for icon translations from icons.json
     # Note: entity_description type is defined by child classes (NumberEntity, SensorEntity, etc.)
     # to avoid MRO conflicts when multiple inheritance is used
@@ -94,7 +107,9 @@ class EconetEntity(CoordinatorEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
+        """Return device info for controller entities (split or single)."""
+        if self.coordinator.single_device_tree:
+            return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
             identifier=self.api.uid,
@@ -102,6 +117,13 @@ class EconetEntity(CoordinatorEntity):
             include_model_id=True,
             include_hw_version=True,
         )
+
+    @property
+    def available(self) -> bool:
+        """Return entity availability; stale cached data is not available."""
+        data = self.coordinator.data or {}
+        health = data.get("_health") or {}
+        return not bool(health.get("stale"))
 
     def _get_param_data(self) -> dict | None:
         """Get parameter data from mergedData for this entity.
@@ -278,7 +300,9 @@ class MixerEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
+        """Return device info for this mixer (split or single)."""
+        if self.coordinator.single_device_tree:
+            return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
             identifier=f"{self.api.uid}-mixer-{self._idx}",
@@ -304,7 +328,9 @@ class LambdaEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
+        """Return device info for the lambda module (split or single)."""
+        if self.coordinator.single_device_tree:
+            return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
             identifier=f"{self.api.uid}-lambda",
@@ -331,7 +357,9 @@ class EcoSterEntity(EconetEntity):
 
     @property
     def device_info(self) -> DeviceInfo | None:
-        """Return device info of the entity."""
+        """Return device info for this ecoSTER (split or single)."""
+        if self.coordinator.single_device_tree:
+            return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
             identifier=f"{self.api.uid}-ecoster-{self._idx}",
@@ -369,7 +397,10 @@ _COMPONENT_CONFIG: dict[str, dict[str, Any]] = {
 
 
 def get_device_info_for_component(
-    component: str, api: Econet300Api, mixer_idx: int | None = None
+    component: str,
+    api: Econet300Api,
+    mixer_idx: int | None = None,
+    single_device: bool = False,
 ) -> DeviceInfo:
     """Return DeviceInfo for a specific component.
 
@@ -377,11 +408,15 @@ def get_device_info_for_component(
         component: Component identifier (COMPONENT_BOILER, COMPONENT_HUW, etc.)
         api: Econet300Api instance for device information
         mixer_idx: Optional mixer index (1-4) for mixer components
+        single_device: When True, merge all entities under one main device.
 
     Returns:
         DeviceInfo for the specified component
 
     """
+    if single_device:
+        return _main_device_info(api)
+
     # Handle mixer special case
     if component.startswith("mixer_"):
         idx = mixer_idx or int(component.split("_")[1])

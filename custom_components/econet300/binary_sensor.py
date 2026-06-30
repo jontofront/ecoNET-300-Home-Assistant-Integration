@@ -54,6 +54,59 @@ class EconetBinarySensorEntityDescription(BinarySensorEntityDescription):
     component: str | None = None  # Component for device grouping (huw, mixer_1, etc.)
 
 
+class EconetOnlineBinarySensor(BinarySensorEntity):
+    """Diagnostic connectivity binary sensor for ecoNET300 live polling."""
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+    _attr_translation_key = "health_online"
+
+    def __init__(self, coordinator: EconetDataCoordinator, api: Econet300Api) -> None:
+        """Initialize the live-polling connectivity diagnostic sensor."""
+        self.coordinator = coordinator
+        self.api = api
+        self._attr_unique_id = f"{api.uid}-health-online"
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        """Return the main ecoNET300 device info for this entity."""
+        return EconetEntity(self.coordinator, self.api).device_info
+
+    @property
+    def available(self) -> bool:
+        """Return True once the coordinator has data to report."""
+        return self.coordinator.data is not None
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True when the coordinator reports the device as online."""
+        health = (self.coordinator.data or {}).get("_health", {})
+        return bool(health.get("online"))
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return health diagnostics (staleness, failures, poll intervals)."""
+        health = (self.coordinator.data or {}).get("_health", {})
+        return {
+            "stale": health.get("stale"),
+            "stale_seconds": health.get("stale_seconds"),
+            "stale_after_seconds": health.get("stale_after_seconds"),
+            "consecutive_failures": health.get("consecutive_failures"),
+            "last_error": health.get("last_error"),
+            "poll_reg_params": health.get("poll_reg_params"),
+            "poll_sys_params": health.get("poll_sys_params"),
+            "poll_edit_params": health.get("poll_edit_params"),
+        }
+
+    async def async_added_to_hass(self) -> None:
+        """Subscribe to coordinator updates when added to Home Assistant."""
+        await super().async_added_to_hass()
+        self.async_on_remove(
+            self.coordinator.async_add_listener(self.async_write_ha_state)
+        )
+
+
 class EconetBinarySensor(EconetEntity, BinarySensorEntity):
     """Econet Binary Sensor."""
 
@@ -81,7 +134,11 @@ class EconetBinarySensor(EconetEntity, BinarySensorEntity):
         """Return device info based on entity component."""
         component = getattr(self.entity_description, "component", None)
         if component:
-            return get_device_info_for_component(component, self.api)
+            return get_device_info_for_component(
+                component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
         # Fall back to parent class device_info (main boiler device)
         return super().device_info
 
@@ -428,7 +485,11 @@ class CustomBinarySensor(EconetEntity, BinarySensorEntity):
         """Return device info based on entity component."""
         component = getattr(self.entity_description, "component", None)
         if component:
-            return get_device_info_for_component(component, self.api)
+            return get_device_info_for_component(
+                component,
+                self.api,
+                single_device=self.coordinator.single_device_tree,
+            )
         return super().device_info
 
     def _lookup_value(self):
@@ -591,11 +652,16 @@ async def async_setup_entry(
 
     entities: list[
         EconetBinarySensor
+        | EconetOnlineBinarySensor
         | MixerBinarySensor
         | EcoSterBinarySensor
         | CustomBinarySensor
         | AlarmActiveBinarySensor
     ] = []
+
+    # Diagnostic connectivity sensor: always present so live-polling status is
+    # observable even when the device is offline/stale.
+    entities.append(EconetOnlineBinarySensor(coordinator, api))
 
     # Create standard binary sensors (including controller-specific ones)
     entities.extend(create_binary_sensors(coordinator, api))

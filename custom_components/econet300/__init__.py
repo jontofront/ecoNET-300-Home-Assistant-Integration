@@ -50,6 +50,7 @@ _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
+    Platform.CALENDAR,
     Platform.EVENT,
     Platform.NUMBER,
     Platform.SELECT,
@@ -90,7 +91,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         data: dict[str, str] = dict(entry.data)
         api = await make_api(hass, cache, data)
 
-        coordinator = EconetDataCoordinator(hass, api, entry)
+        coordinator = EconetDataCoordinator(
+            hass, api, entry, options=dict(entry.options)
+        )
         await coordinator.async_config_entry_first_refresh()
 
         hass.data[DOMAIN][entry.entry_id] = {

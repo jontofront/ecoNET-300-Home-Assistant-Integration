@@ -12,22 +12,11 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.loader import async_get_integration
 
 from .api import Econet300Api
-from .const import DOMAIN, SERVICE_API, SERVICE_COORDINATOR
+from .const import DOMAIN, SENSITIVE_PARAM_KEYS, SERVICE_API, SERVICE_COORDINATOR
 
-# Data to redact from diagnostics
-TO_REDACT = [
-    "password",
-    "servicePassword",  # Service password hash - sensitive
-    "username",  # May contain sensitive info
-    "host",  # May contain internal network info
-    "uid",  # Device UID - unique device identifier
-    "device_uid",  # Device UID in coordinator data
-    "identifiers",  # Device identifiers containing UIDs
-    "key",  # API keys and secrets
-    "ssid",  # WiFi network name
-    "wlan0",  # WiFi interface IP address
-    "eth0",  # Ethernet interface IP address
-]
+# Data to redact from diagnostics. Shares a single source of truth with the
+# sensor-creation filter so sensitive keys can never leak via either path.
+TO_REDACT = sorted(SENSITIVE_PARAM_KEYS)
 
 
 def _redact_data(data: Any, to_redact: list[str]) -> Any:

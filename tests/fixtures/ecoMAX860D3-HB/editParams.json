@@ -1,0 +1,246 @@
+{
+  "editableParamsVer": 114,
+  "remoteMenu": true,
+  "data": {
+    "STER_CORRECTION_1": {
+      "value": 0.0,
+      "maxv": 4.0,
+      "minv": -4.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 8
+    },
+    "STER_CORRECTION_2": {
+      "value": 0.0,
+      "maxv": 4.0,
+      "minv": -4.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 8
+    },
+    "STER_HYSTEREZE_1": {
+      "value": 0.4,
+      "maxv": 5.0,
+      "minv": 0.2,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 7
+    },
+    "STER_HYSTEREZE_2": {
+      "value": 0.4,
+      "maxv": 5.0,
+      "minv": 0.2,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 7
+    },
+    "STER_MODE_1": {
+      "value": 2,
+      "maxv": 7,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 19,
+      "sec": 36,
+      "pos": 1
+    },
+    "STER_MODE_2": {
+      "value": 2,
+      "maxv": 7,
+      "minv": 0,
+      "edit": true,
+      "unit": 31,
+      "mult": 19,
+      "sec": 37,
+      "pos": 1
+    },
+    "STER_TEMP_ANTIFREEZ_1": {
+      "value": 9.0,
+      "maxv": 30.0,
+      "minv": 5.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 4
+    },
+    "STER_TEMP_ANTIFREEZ_2": {
+      "value": 9.0,
+      "maxv": 30.0,
+      "minv": 5.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 4
+    },
+    "STER_TEMP_DAY_1": {
+      "value": 23.1,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 2
+    },
+    "STER_TEMP_DAY_2": {
+      "value": 22.2,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 2
+    },
+    "STER_TEMP_NIGHT_1": {
+      "value": 18.1,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 3
+    },
+    "STER_TEMP_NIGHT_2": {
+      "value": 18.2,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 3
+    },
+    "STER_TEMP_SET_PARTY_1": {
+      "value": 22.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 5
+    },
+    "STER_TEMP_SET_PARTY_2": {
+      "value": 22.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 5
+    },
+    "STER_TEMP_SET_SUMMER_1": {
+      "value": 15.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 36,
+      "pos": 6
+    },
+    "STER_TEMP_SET_SUMMER_2": {
+      "value": 15.0,
+      "maxv": 35.0,
+      "minv": 10.0,
+      "edit": true,
+      "unit": 1,
+      "mult": 0.1,
+      "sec": 37,
+      "pos": 6
+    },
+    "STER_TIMER_EXIT_1": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 9
+    },
+    "STER_TIMER_EXIT_2": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 37,
+      "pos": 9
+    },
+    "STER_TIMER_HOLIDAY_1": {
+      "value": 10,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 12
+    },
+    "STER_TIMER_HOLIDAY_2": {
+      "value": 10,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 5,
+      "mult": 1.0,
+      "sec": 37,
+      "pos": 12
+    },
+    "STER_TIMER_PARTY_1": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 11
+    },
+    "STER_TIMER_PARTY_2": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 4,
+      "mult": 1.0,
+      "sec": 37,
+      "pos": 11
+    },
+    "STER_TIMER_VENT_1": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "sec": 36,
+      "pos": 10
+    },
+    "STER_TIMER_VENT_2": {
+      "value": 1,
+      "maxv": 60,
+      "minv": 1,
+      "edit": true,
+      "unit": 3,
+      "mult": 1.0,
+      "sec": 37,
+      "pos": 10
+    }
+  }
+}

@@ -8,10 +8,23 @@ This directory contains test fixtures for the **ecoMAX860D3-HB** ecoNET device.
 
 ### Data Files
 
+- `editParams.json` - Extracted from diagnostic file
+- `mergedData.json` - Extracted from diagnostic file
 - `regParams.json` - Extracted from diagnostic file
 - `regParamsData.json` - Extracted from diagnostic file
+- `rmAlarmsNames.json` - Extracted from diagnostic file
+- `rmCurrentDataParams.json` - Extracted from diagnostic file
 - `rmCurrentDataParamsEdits.json` - Extracted from diagnostic file
 - `rmData.json` - Extracted from diagnostic file
+- `rmExistingLangs.json` - Extracted from diagnostic file
+- `rmLangs.json` - Extracted from diagnostic file
+- `rmLocksNames.json` - Extracted from diagnostic file
+- `rmParamsData.json` - Extracted from diagnostic file
+- `rmParamsDescs.json` - Extracted from diagnostic file
+- `rmParamsEnums.json` - Extracted from diagnostic file
+- `rmParamsNames.json` - Extracted from diagnostic file
+- `rmParamsUnitsNames.json` - Extracted from diagnostic file
+- `rmStructure.json` - Extracted from diagnostic file
 - `sysParams.json` - Extracted from diagnostic file
 
 ## Source
