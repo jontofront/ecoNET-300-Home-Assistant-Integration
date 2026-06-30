@@ -448,6 +448,68 @@
         "name": "ecoNET server HTTPS"
       }
     },
+    "calendar": {
+      "schedule_boiler": {
+        "name": "Boiler Schedule"
+      },
+      "schedule_boiler_clean": {
+        "name": "Boiler Clean Schedule"
+      },
+      "schedule_boiler_work": {
+        "name": "Boiler Work Schedule"
+      },
+      "schedule_circulation_pump": {
+        "name": "Circulation Pump Schedule"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Exchanger Clean Schedule"
+      },
+      "schedule_mixer_1": {
+        "name": "Mixer 1 Schedule"
+      },
+      "schedule_mixer_2": {
+        "name": "Mixer 2 Schedule"
+      },
+      "schedule_mixer_3": {
+        "name": "Mixer 3 Schedule"
+      },
+      "schedule_mixer_4": {
+        "name": "Mixer 4 Schedule"
+      },
+      "schedule_mixer_5": {
+        "name": "Mixer 5 Schedule"
+      },
+      "schedule_mixer_6": {
+        "name": "Mixer 6 Schedule"
+      },
+      "schedule_mixer_7": {
+        "name": "Mixer 7 Schedule"
+      },
+      "schedule_mixer_8": {
+        "name": "Mixer 8 Schedule"
+      },
+      "schedule_mixer_9": {
+        "name": "Mixer 9 Schedule"
+      },
+      "schedule_mixer_10": {
+        "name": "Mixer 10 Schedule"
+      },
+      "schedule_thermostat_1": {
+        "name": "Thermostat 1 Schedule"
+      },
+      "schedule_thermostat_2": {
+        "name": "Thermostat 2 Schedule"
+      },
+      "schedule_thermostat_3": {
+        "name": "Thermostat 3 Schedule"
+      },
+      "schedule_water_heater": {
+        "name": "Water Heater Schedule"
+      },
+      "schedule_water_heater_2": {
+        "name": "Water Heater 2 Schedule"
+      }
+    },
     "sensor": {
       "health_data_age": {
         "name": "Data age"

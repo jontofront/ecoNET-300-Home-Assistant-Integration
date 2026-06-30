@@ -12,6 +12,8 @@ see: docs/DYNAMIC_ENTITY_VALIDATION.md
 
 from __future__ import annotations
 
+from collections.abc import Generator
+import datetime
 import logging
 import re
 from typing import Any
@@ -30,6 +32,7 @@ from .const import (
     COMPONENT_SOLAR,
     DEFAULT_COMPONENT_STATUS,
     NUMBER_OF_AVAILABLE_MIXERS,
+    SCHEDULE_TYPE_REVERSE_MAP,
     STATIC_REGPARAMS_DATA_IDS,
 )
 
@@ -1028,6 +1031,44 @@ def decode_ecomax_schedule_metadata(metadata: list[int] | None) -> dict:
     }
 
 
+def merge_active_slot_ranges(
+    slots: list[dict],
+) -> list[tuple[datetime.time, datetime.time]]:
+    """Merge consecutive active slots into (start, end) time-range tuples.
+
+    Args:
+        slots: List of slot dicts from decode_ecomax_schedule_day.
+
+    Returns:
+        List of (start_time, end_time) tuples for each active range.
+        An end_time of 00:00 represents midnight (end of day).
+
+    """
+    if not slots:
+        return []
+
+    ranges: list[tuple[datetime.time, datetime.time]] = []
+    range_start: str | None = None
+
+    for slot in slots:
+        if slot["active"] and range_start is None:
+            range_start = slot["start"]
+        elif not slot["active"] and range_start is not None:
+            ranges.append((_parse_time(range_start), _parse_time(slot["start"])))
+            range_start = None
+
+    if range_start is not None:
+        ranges.append((_parse_time(range_start), datetime.time(0, 0)))
+
+    return ranges
+
+
+def _parse_time(time_str: str) -> datetime.time:
+    """Parse "HH:MM" string to datetime.time."""
+    h, m = time_str.split(":")
+    return datetime.time(int(h), int(m))
+
+
 def summarize_schedule_slots(slots: list[dict]) -> str:
     """Generate a human-readable summary of active time ranges.
 
@@ -1049,21 +1090,71 @@ def summarize_schedule_slots(slots: list[dict]) -> str:
     if active_count == len(slots):
         return "all_on"
 
-    ranges: list[str] = []
-    range_start: str | None = None
+    ranges = merge_active_slot_ranges(slots)
+    return ", ".join(
+        f"{r[0].strftime('%H:%M')}-{r[1].strftime('%H:%M')}" for r in ranges
+    )
 
-    for slot in slots:
-        if slot["active"] and range_start is None:
-            range_start = slot["start"]
-        elif not slot["active"] and range_start is not None:
-            ranges.append(f"{range_start}-{slot['start']}")
-            range_start = None
 
-    # Close final range if it extends to midnight
-    if range_start is not None:
-        ranges.append(f"{range_start}-00:00")
+# =============================================================================
+# Schedule iteration helpers
+# =============================================================================
 
-    return ", ".join(ranges)
+
+def schedule_component(friendly_name: str) -> str | None:
+    """Map a schedule friendly name to its device-grouping component.
+
+    Mixer and water-heater schedules are grouped with their respective
+    devices; all other schedule types stay on the main controller device.
+    """
+    if friendly_name.startswith("mixer_"):
+        return friendly_name
+    if friendly_name in ("water_heater", "water_heater_2"):
+        return COMPONENT_HUW
+    return None
+
+
+def iter_device_schedules(
+    coordinator_data: dict[str, Any] | None,
+) -> Generator[tuple[str, str, str | None], None, None]:
+    """Yield (friendly_name, api_key, component) for each valid device schedule.
+
+    Iterates over ecomaxSchedules from sysParams, resolves friendly names,
+    determines device component grouping, and skips disconnected mixers.
+
+    Args:
+        coordinator_data: Full coordinator data dict.
+
+    Yields:
+        Tuples of (friendly_name, api_key, component) for each valid schedule.
+
+    """
+    if not coordinator_data:
+        return
+
+    sys_params = coordinator_data.get("sysParams") or {}
+    raw_schedules = sys_params.get("schedules") or {}
+    schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
+
+    if not schedules:
+        return
+
+    for api_key in schedules:
+        key = str(api_key)
+        friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(key, key)
+        component = schedule_component(friendly_name)
+
+        if component and component.startswith("mixer_"):
+            mixer_num = int(component.split("_")[1])
+            if not mixer_exists(coordinator_data, mixer_num):
+                _LOGGER.debug(
+                    "Skipping schedule for component %s - Mixer %d not connected",
+                    component,
+                    mixer_num,
+                )
+                continue
+
+        yield friendly_name, key, component
 
 
 # =============================================================================

@@ -10,6 +10,9 @@ import pytest
 from custom_components.econet300.common_functions import (
     decode_ecomax_schedule_day,
     decode_ecomax_schedule_metadata,
+    iter_device_schedules,
+    merge_active_slot_ranges,
+    schedule_component,
     summarize_schedule_slots,
 )
 
@@ -234,3 +237,114 @@ class TestScheduleWithFixture:
 
             meta = decode_ecomax_schedule_metadata(data[7])
             assert "on_off_mode" in meta
+
+
+class TestMergeActiveSlotRanges:
+    """Test merge_active_slot_ranges time-range merging."""
+
+    def test_all_on_single_range(self):
+        """All-active slots produce a single midnight-to-midnight range."""
+        import datetime
+
+        slots = decode_ecomax_schedule_day([255, 255, 255, 255, 255, 255])
+        ranges = merge_active_slot_ranges(slots)
+        assert len(ranges) == 1
+        assert ranges[0] == (datetime.time(0, 0), datetime.time(0, 0))
+
+    def test_all_off_empty(self):
+        """No active slots produce an empty list."""
+        slots = decode_ecomax_schedule_day([0, 0, 0, 0, 0, 0])
+        ranges = merge_active_slot_ranges(slots)
+        assert ranges == []
+
+    def test_empty_input(self):
+        """Empty input produces empty list."""
+        assert merge_active_slot_ranges([]) == []
+
+    def test_real_cwu_sunday(self):
+        """Real cwuTZ Sunday [192, 15, 255, 0, 1, 255] produces expected ranges."""
+        import datetime
+
+        slots = decode_ecomax_schedule_day([192, 15, 255, 0, 1, 255])
+        ranges = merge_active_slot_ranges(slots)
+        assert len(ranges) == 3
+        assert ranges[0] == (datetime.time(0, 0), datetime.time(1, 0))
+        assert ranges[1] == (datetime.time(6, 0), datetime.time(12, 0))
+        assert ranges[2] == (datetime.time(19, 30), datetime.time(0, 0))
+
+    def test_summarize_uses_merge(self):
+        """Verify summarize_schedule_slots produces same result via merge."""
+        slots = decode_ecomax_schedule_day([192, 15, 255, 0, 1, 255])
+        summary = summarize_schedule_slots(slots)
+        ranges = merge_active_slot_ranges(slots)
+        manual = ", ".join(
+            f"{r[0].strftime('%H:%M')}-{r[1].strftime('%H:%M')}" for r in ranges
+        )
+        assert summary == manual
+
+
+class TestScheduleComponent:
+    """Test schedule_component device grouping."""
+
+    def test_mixer_schedules(self):
+        """Mixer schedules return mixer component."""
+        assert schedule_component("mixer_1") == "mixer_1"
+        assert schedule_component("mixer_10") == "mixer_10"
+
+    def test_water_heater_schedules(self):
+        """Water heater schedules return HUW component."""
+        assert schedule_component("water_heater") == "huw"
+        assert schedule_component("water_heater_2") == "huw"
+
+    def test_other_schedules(self):
+        """Non-mixer, non-water-heater schedules return None."""
+        assert schedule_component("boiler") is None
+        assert schedule_component("boiler_work") is None
+        assert schedule_component("circulation_pump") is None
+
+
+class TestIterDeviceSchedules:
+    """Test iter_device_schedules iteration logic."""
+
+    def test_none_data(self):
+        """None data yields nothing."""
+        assert list(iter_device_schedules(None)) == []
+
+    def test_empty_data(self):
+        """Empty sysParams yields nothing."""
+        assert list(iter_device_schedules({"sysParams": {}})) == []
+
+    def test_basic_schedules(self):
+        """Yields correct tuples for basic schedule types."""
+        data = {
+            "sysParams": {
+                "schedules": {
+                    "ecomaxSchedules": {
+                        "boilerTZ": [[0] * 6] * 7 + [[0, 0, 0, 0]],
+                        "cwuTZ": [[0] * 6] * 7 + [[0, 0, 0, 0]],
+                    }
+                }
+            }
+        }
+        results = list(iter_device_schedules(data))
+        names = [r[0] for r in results]
+        assert "boiler" in names
+        assert "water_heater" in names
+
+    def test_skips_disconnected_mixer(self):
+        """Skips mixer schedules when mixer is not connected."""
+        data = {
+            "sysParams": {
+                "schedules": {
+                    "ecomaxSchedules": {
+                        "mixer1TZ": [[0] * 6] * 7 + [[0, 0, 0, 0]],
+                        "boilerTZ": [[0] * 6] * 7 + [[0, 0, 0, 0]],
+                    }
+                }
+            },
+            "regParams": {},
+        }
+        results = list(iter_device_schedules(data))
+        names = [r[0] for r in results]
+        assert "mixer_1" not in names
+        assert "boiler" in names

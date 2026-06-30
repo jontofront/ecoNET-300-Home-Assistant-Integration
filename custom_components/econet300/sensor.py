@@ -42,25 +42,20 @@ from homeassistant.helpers.event import (
     async_track_state_change_event,
     async_track_state_report_event,
 )
-import homeassistant.util.dt as dt_util
 
 from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
-    decode_ecomax_schedule_day,
-    decode_ecomax_schedule_metadata,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
     mixer_exists,
     parse_alarm_entry,
-    summarize_schedule_slots,
 )
 from .const import (
     API_REG_PARAMS_URI,
     CDP_ID_TO_REGPARAMS,
-    COMPONENT_HUW,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
     DEFAULT_SENSOR_STATE_CLASS,
@@ -79,8 +74,6 @@ from .const import (
     INFORMATION_PARAMS_SENSOR_MAP,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
-    SCHEDULE_TYPE_REVERSE_MAP,
-    SCHEDULE_WEEKDAYS,
     SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_FUEL_STREAM,
@@ -1580,167 +1573,6 @@ def create_alarm_sensors(
     return entities
 
 
-# =============================================================================
-# Schedule sensors (sysParams.schedules.ecomaxSchedules)
-# =============================================================================
-
-
-class ScheduleSensor(EconetEntity, SensorEntity):
-    """Sensor showing the decoded weekly schedule for a schedule type.
-
-    Native value is today's active-hours summary. Each weekday summary and
-    optional metadata are exposed as extra state attributes so a Markdown
-    card can render the full week at a glance.
-    """
-
-    _attr_has_entity_name = True
-
-    def __init__(
-        self,
-        coordinator: EconetDataCoordinator,
-        api: Econet300Api,
-        schedule_type: str,
-        api_key: str,
-        component: str | None = None,
-    ) -> None:
-        """Initialize the schedule sensor."""
-        self.entity_description = SensorEntityDescription(
-            key=f"schedule_{schedule_type}",
-            translation_key=f"schedule_{schedule_type}",
-        )
-        self.api = api
-        self._api_key = api_key
-        self._component = component
-        self._day_summaries: dict[str, str] = {}
-        self._metadata: dict[str, Any] = {}
-        super().__init__(coordinator, api)
-
-    @property
-    def device_info(self) -> DeviceInfo | None:
-        """Return device info, grouping mixer/HUW schedules with their device."""
-        if self._component:
-            return get_device_info_for_component(
-                self._component,
-                self.api,
-                single_device=self.coordinator.single_device_tree,
-            )
-        return super().device_info
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        """Handle updated schedule data from the coordinator."""
-        if self.coordinator.data is None:
-            return
-
-        sys_params = self.coordinator.data.get("sysParams") or {}
-        raw_schedules = sys_params.get("schedules") or {}
-        schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
-
-        schedule_data: list | None = schedules.get(self._api_key)
-        if not schedule_data:
-            self._attr_native_value = None
-            self._day_summaries = {}
-            self._metadata = {}
-            self.async_write_ha_state()
-            return
-
-        metadata_raw = schedule_data[-1] if len(schedule_data) > 7 else []
-        self._metadata = decode_ecomax_schedule_metadata(metadata_raw)
-
-        num_days = min(len(schedule_data), 7)
-        summaries: dict[str, str] = {}
-        for idx, day_name in enumerate(SCHEDULE_WEEKDAYS):
-            if idx >= num_days:
-                break
-            slots = decode_ecomax_schedule_day(schedule_data[idx])
-            summaries[day_name] = summarize_schedule_slots(slots)
-
-        self._day_summaries = summaries
-
-        # on_off_mode 0 = schedule disabled by the device toggle
-        schedule_enabled = self._metadata.get("on_off_mode", 1) != 0
-
-        # Python weekday (Mon=0 .. Sun=6) → SCHEDULE_WEEKDAYS index (Sun=0 .. Sat=6)
-        today_idx = (dt_util.now().weekday() + 1) % 7
-        today_name = SCHEDULE_WEEKDAYS[today_idx]
-        today_summary = summaries.get(today_name, "unknown")
-        self._attr_native_value = (
-            today_summary if schedule_enabled else f"OFF ({today_summary})"
-        )
-        self.async_write_ha_state()
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Return per-day summaries and schedule metadata."""
-        attrs: dict[str, Any] = dict(self._day_summaries)
-        attrs["schedule_enabled"] = self._metadata.get("on_off_mode", 1) != 0
-        if self._metadata:
-            attrs["metadata"] = self._metadata
-        return attrs
-
-    async def async_added_to_hass(self) -> None:
-        """Sync initial state when entity is added."""
-        await super().async_added_to_hass()
-        self._handle_coordinator_update()
-
-
-def create_schedule_sensors(
-    coordinator: EconetDataCoordinator, api: Econet300Api
-) -> list[ScheduleSensor]:
-    """Create schedule sensor entities from sysParams.schedules data.
-
-    One sensor is created per schedule type present on the device.
-    """
-    entities: list[ScheduleSensor] = []
-
-    if coordinator.data is None:
-        return entities
-
-    sys_params = coordinator.data.get("sysParams") or {}
-    raw_schedules = sys_params.get("schedules") or {}
-    schedules = raw_schedules.get("ecomaxSchedules", raw_schedules)
-
-    if not schedules:
-        _LOGGER.debug("No schedule data in sysParams, skipping schedule sensors")
-        return entities
-
-    for api_key in schedules:
-        key = str(api_key)
-        friendly_name = SCHEDULE_TYPE_REVERSE_MAP.get(key, key)
-        component = _schedule_component(friendly_name)
-
-        # Skip mixer schedules for mixers that are not physically connected.
-        if component and component.startswith("mixer_"):
-            mixer_num = int(component.split("_")[1])
-            if not mixer_exists(coordinator.data, mixer_num):
-                _LOGGER.debug(
-                    "Skipping schedule sensor for component %s - Mixer %d not connected",
-                    component,
-                    mixer_num,
-                )
-                continue
-
-        entities.append(
-            ScheduleSensor(coordinator, api, friendly_name, key, component)
-        )
-
-    _LOGGER.info("Created %d schedule sensors", len(entities))
-    return entities
-
-
-def _schedule_component(friendly_name: str) -> str | None:
-    """Map a schedule friendly name to its device-grouping component.
-
-    Mixer and water-heater schedules are grouped with their respective
-    devices; all other schedule types stay on the main controller device.
-    """
-    if friendly_name.startswith("mixer_"):
-        return friendly_name
-    if friendly_name in ("water_heater", "water_heater_2"):
-        return COMPONENT_HUW
-    return None
-
-
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -1809,11 +1641,6 @@ async def async_setup_entry(
         alarm_sensors = create_alarm_sensors(coordinator, api)
         _LOGGER.info("Collected %d alarm sensors", len(alarm_sensors))
         entities.extend(alarm_sensors)
-
-        # Gather schedule sensors from sysParams.schedules
-        schedule_sensors = create_schedule_sensors(coordinator, api)
-        _LOGGER.info("Collected %d schedule sensors", len(schedule_sensors))
-        entities.extend(schedule_sensors)
 
         # Gather user-defined custom sensors from Options Flow
         custom_cfg = entry.options.get(CONF_CUSTOM_ENTITIES, {})
