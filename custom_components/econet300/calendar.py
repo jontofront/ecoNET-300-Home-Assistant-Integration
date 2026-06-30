@@ -123,15 +123,20 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
         self._cached_event = self._find_current_or_next_event(schedule_data, now)
         self.async_write_ha_state()
 
+    @property
+    def _effective_summary(self) -> str:
+        """Return event summary, prefixed with [OFF] when schedule is disabled."""
+        if self._is_schedule_enabled():
+            return self._event_summary
+        return f"[OFF] {self._event_summary}"
+
     def _find_current_or_next_event(
         self, schedule_data: list, now: datetime.datetime
     ) -> CalendarEvent | None:
         """Find the event that is active now, or the next upcoming one."""
-        if not self._is_schedule_enabled():
-            return None
-
         current_time = now.time()
         today = now.date()
+        summary = self._effective_summary
 
         for day_offset in range(8):
             check_date = today + datetime.timedelta(days=day_offset)
@@ -161,7 +166,7 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
 
                 if start_dt <= now < end_dt or start_dt > now:
                     return CalendarEvent(
-                        summary=self._event_summary,
+                        summary=summary,
                         start=start_dt,
                         end=end_dt,
                     )
@@ -176,10 +181,11 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
     ) -> list[CalendarEvent]:
         """Return calendar events within a datetime range."""
         schedule_data = self._get_schedule_data()
-        if not schedule_data or not self._is_schedule_enabled():
+        if not schedule_data:
             return []
 
         events: list[CalendarEvent] = []
+        summary = self._effective_summary
         tz = start_date.tzinfo or dt_util.get_default_time_zone()
         current_date = start_date.date()
         end = end_date.date()
@@ -208,7 +214,7 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
                     if event_end > start_date and event_start < end_date:
                         events.append(
                             CalendarEvent(
-                                summary=self._event_summary,
+                                summary=summary,
                                 start=event_start,
                                 end=event_end,
                             )
