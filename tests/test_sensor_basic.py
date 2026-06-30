@@ -82,9 +82,7 @@ class TestEconetSensorBasic:
         "key",
         ["ActualFlowTemp", "ActualReturnTemp", "Circuit1DesiredLWT"],
     )
-    def test_ecomax360i_temperature_sensors_ignore_off_state(
-        self, key: str
-    ) -> None:
+    def test_ecomax360i_temperature_sensors_ignore_off_state(self, key: str) -> None:
         """ecoMAX360i temperature sensors should not publish off as numeric state."""
         description = create_sensor_entity_description(key)
 
@@ -368,6 +366,32 @@ class TestSensorMappingLogic:
         keys = {e.entity_description.key for e in entities}
 
         assert keys.isdisjoint(SENSITIVE_PARAM_KEYS)
+
+    def test_binary_values_are_not_duplicated_as_sensors(self) -> None:
+        """Binary sensor values should not also appear as raw sensors."""
+        fixture_dir = Path(__file__).parent / "fixtures" / "ecoMAX920P1-T"
+        reg_params = json.loads(
+            (fixture_dir / "regParams.json").read_text(encoding="utf-8")
+        )
+        sys_params = json.loads(
+            (fixture_dir / "sysParams.json").read_text(encoding="utf-8")
+        )
+        # Guards for the duplicated values visible in Home Assistant.
+        assert "lan" in sys_params
+        assert "fan" in reg_params
+        assert "fanWorks" in reg_params
+        assert "lighter" in reg_params
+        assert "lighterWorks" in reg_params
+
+        mock_coordinator = Mock()
+        mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
+        mock_api = Mock()
+
+        entities = create_controller_sensors(mock_coordinator, mock_api)
+        keys = {e.entity_description.key for e in entities}
+
+        assert "tempCO" in keys
+        assert keys.isdisjoint({"fan", "fanWorks", "lan", "lighter", "lighterWorks"})
 
     def test_absent_mixer_setpoints_not_exposed_by_all_sensors(self) -> None:
         """All-sensors sweep must not create setpoints for unconnected mixers.

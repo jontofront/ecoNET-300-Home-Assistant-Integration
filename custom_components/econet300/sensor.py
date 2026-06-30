@@ -55,6 +55,7 @@ from .common_functions import (
 )
 from .const import (
     API_REG_PARAMS_URI,
+    BINARY_SENSOR_MAP_KEY,
     CDP_ID_TO_REGPARAMS,
     COMPONENT_LAMBDA,
     CONF_CUSTOM_ENTITIES,
@@ -72,6 +73,7 @@ from .const import (
     ENTITY_VALUE_PROCESSOR,
     FUEL_MAX_SUB_INTERVAL_SECONDS,
     INFORMATION_PARAMS_SENSOR_MAP,
+    MIXER_PUMP_BINARY_SENSOR_KEYS,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
     SENSITIVE_PARAM_KEYS,
@@ -113,6 +115,38 @@ def _load_translated_entity_keys(entity_domain: str) -> set[str]:
 
 
 _TRANSLATED_SENSOR_TRANSLATION_KEYS: set[str] = _load_translated_entity_keys("sensor")
+
+
+def _binary_sensor_owned_keys() -> set[str]:
+    """Return keys owned by the binary sensor platform."""
+    return set().union(*BINARY_SENSOR_MAP_KEY.values()) | MIXER_PUMP_BINARY_SENSOR_KEYS
+
+
+def _raw_boolean_keys_with_binary_counterparts(
+    sensor_keys: set[str],
+    data_reg_params: dict[str, Any],
+    data_sys_params: dict[str, Any],
+) -> set[str]:
+    """Return raw boolean keys that duplicate a ``*Works`` binary entity."""
+    binary_keys = _binary_sensor_owned_keys()
+    works_counterparts = {
+        key.removesuffix("Works"): key for key in binary_keys if key.endswith("Works")
+    }
+    available_keys = set(data_reg_params) | set(data_sys_params)
+    return {
+        key
+        for key in sensor_keys
+        if (
+            isinstance(
+                data_reg_params[key]
+                if key in data_reg_params
+                else data_sys_params.get(key),
+                bool,
+            )
+            and (counterpart := works_counterparts.get(key)) is not None
+            and counterpart in available_keys
+        )
+    }
 
 
 def _resolve_sensor_name(key: str, explicit_name: str | None) -> str | None:
@@ -946,6 +980,13 @@ def create_controller_sensors(
         sensor_keys |= set(data_sysParams.keys())
     # Never expose sensitive credentials/network identifiers as sensor states.
     sensor_keys -= SENSITIVE_PARAM_KEYS
+
+    # Keys with a dedicated binary_sensor entity should not also be exposed as
+    # raw sensors from the all-sensors sweep.
+    sensor_keys -= _binary_sensor_owned_keys()
+    sensor_keys -= _raw_boolean_keys_with_binary_counterparts(
+        sensor_keys, data_regParams, data_sysParams
+    )
 
     # Mixer and lambda sensors are owned by their dedicated creators
     # (create_mixer_sensors / create_lambda_sensors), which validate presence

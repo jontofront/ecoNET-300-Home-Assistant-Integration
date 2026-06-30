@@ -32,6 +32,7 @@ FUEL_MAX_SUB_INTERVAL_SECONDS = 300
 SENSITIVE_PARAM_KEYS = frozenset(
     {
         "device_uid",  # Device UID in coordinator data
+        "etPasswords",  # ecoNET thermostat password hashes
         "eth0",  # Ethernet interface IP address
         "host",  # May contain internal network info
         "identifiers",  # Device identifiers containing UIDs
