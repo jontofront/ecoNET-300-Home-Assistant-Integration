@@ -4,41 +4,49 @@ alwaysApply: true
 
 # 🚨 MANDATORY: Code Style with Ruff
 
-## **🎯 PREFERRED: Concise Code Patterns**
+## **🎯 TOP PRIORITY: Write Human-Readable Code**
 
-- **ALWAYS prefer concise, readable one-liners** over verbose multi-line code
-- **USE ternary operators** for simple conditional assignments
-- **AVOID unnecessary intermediate variables** when the logic is clear
-- **PRIORITIZE readability** while maintaining functionality
+**Readability for the next programmer always wins.** Write for the human reading
+the code, not to save lines. Do not cram lots of logic into one dense expression.
 
-### **✅ Preferred Concise Patterns:**
+- **Readability beats brevity**: when a one-liner becomes hard to follow, break it
+  into named steps. A short block with a good variable name > a clever one-liner.
+- **One idea per line/statement**: avoid stacking multiple conditions, calls, and
+  fallbacks into a single expression.
+- **Use ternaries only for simple** conditional assignments; nested or long
+  ternaries must become an `if/else` or a helper.
+- **Introduce an intermediate variable** when it names/clarifies intent — clarity
+  is worth the extra line.
+- **Keep functions small and single-purpose** (Ruff `mccabe` complexity < 25, but
+  aim far lower); extract helpers instead of growing one function.
+- **Prefer clear names over comments** that explain confusing code.
+
+### **✅ Readable (do this):**
 
 ```python
-# GOOD: Concise ternary with None check
-self._attr_native_value = float(value.get("value")) if value.get("value") is not None else None
+# Simple ternary — clear at a glance
+raw = value.get("value")
+self._attr_native_value = float(raw) if raw is not None else None
 
-# GOOD: Direct assignment with fallback
+# Name the fallback so intent is obvious
+controller_key = controller_id or "_default"
+keys = BINARY_SENSOR_MAP_KEY.get(controller_key, BINARY_SENSOR_MAP_KEY["_default"])
+binary_sensor_keys = keys.copy()
+```
+
+### **❌ Too dense (avoid this):**
+
+```python
+# AVOID: several operations, fallbacks, and a call chained into one line
 binary_sensor_keys = BINARY_SENSOR_MAP_KEY.get(controller_id or "_default", BINARY_SENSOR_MAP_KEY["_default"]).copy()
 
-# GOOD: Simple conditional
+# AVOID: long ternary packing multiple checks + conversions
 min_value = float(limits.min) if limits and limits.min is not None else float(ENTITY_MIN_VALUE.get(map_key, 0))
 ```
 
-### **❌ Avoid Verbose Patterns:**
-
-```python
-# AVOID: Unnecessary intermediate variables
-native_value = value.get("value")
-self._attr_native_value = (
-    float(native_value) if native_value is not None else None
-)
-
-# AVOID: Overly complex if/else when ternary is clearer
-if controller_id and controller_id in BINARY_SENSOR_MAP_KEY:
-    binary_sensor_keys = BINARY_SENSOR_MAP_KEY[controller_id].copy()
-else:
-    binary_sensor_keys = BINARY_SENSOR_MAP_KEY["_default"].copy()
-```
+> Still avoid *pointless* verbosity (dead variables, redundant if/else that a
+> simple ternary expresses more clearly). The goal is **clarity**, not maximum
+> or minimum line count.
 
 ## **Code Formatting: Ruff (replaces `black`, `isort`, `flake8`)**
 
