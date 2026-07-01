@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [v1.3.0-beta.7] - 2026-07-01
 
 ### Fixed
 
@@ -9,6 +9,10 @@
 ### Added
 
 - New binary sensors: `alarmOutputWorks`, `blowFan1Active`, `blowFan2Active`, `fan2ExhaustWorks`, `feeder2AdditionalWorks`, `feederOuterWorks`, `outerBoilerWorks` (device class `RUNNING`), with English/Polish translations and icons.
+
+### Changed
+
+- Internal refactor of `sensor.py` (DRY/KISS): extracted `_param_value` (regParams-preferred value lookup), `_running_state_base_keys` (base→`*Works`/`*Active` map), and `_append_controller_sensor` (removes triplicated entity creation in the all-sensors sweep).
 
 ### Tests
 
