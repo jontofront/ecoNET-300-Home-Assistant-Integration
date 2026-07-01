@@ -393,6 +393,27 @@
       "feeder_works": {
         "name": "Podajnik"
       },
+      "alarm_output_works": {
+        "name": "Wyjście alarmowe"
+      },
+      "blow_fan1_active": {
+        "name": "Wentylator nadmuchowy 1"
+      },
+      "blow_fan2_active": {
+        "name": "Wentylator nadmuchowy 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Wentylator wyciągowy"
+      },
+      "feeder2_additional_works": {
+        "name": "Podajnik dodatkowy"
+      },
+      "feeder_outer_works": {
+        "name": "Podajnik zewnętrzny"
+      },
+      "outer_boiler_works": {
+        "name": "Kocioł zewnętrzny"
+      },
       "ecoster_contacts1": {
         "name": "Styki termostatu pokojowego 1"
       },
@@ -1267,6 +1288,27 @@
       },
       "protocol_type": {
         "name": "Typ protokołu"
+      },
+      "prod_logo": {
+        "name": "ID logotypu produktu"
+      },
+      "reg_allowed": {
+        "name": "Rejestracja dozwolona"
+      },
+      "reg_img_id": {
+        "name": "ID obrazu schematu"
+      },
+      "reg_prod": {
+        "name": "Kod produktu"
+      },
+      "reg_refresh": {
+        "name": "Interwał odświeżania"
+      },
+      "reg_type": {
+        "name": "Typ rejestru"
+      },
+      "remote_menu": {
+        "name": "Zdalne menu"
       },
       "tem_co": {
         "name": "Temperatura kotła"

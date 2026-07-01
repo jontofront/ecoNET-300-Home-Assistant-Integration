@@ -6,11 +6,35 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 ## Version Compatibility Matrix
 
-| From Version | To Version | Migration Required | Notes                                |
-| ------------ | ---------- | ------------------ | ------------------------------------ |
-| v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities       |
-| v1.1.x       | v1.1.15    | No                 | Direct upgrade                       |
-| v0.3.3       | v1.x       | Recommended        | Re-add integration for full features |
+| From Version | To Version | Migration Required | Notes                                     |
+| ------------ | ---------- | ------------------ | ----------------------------------------- |
+| v1.2.x       | v1.3.0     | No (cleanup only)  | Delete leftover *Unavailable* entities    |
+| v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
+| v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
+| v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.2.x to v1.3.0
+
+No configuration migration is required — your setup keeps working. v1.3.0 does change **how a few entities are provided**, so some old entities are left behind as **Unavailable** and should be deleted manually.
+
+### What changed
+
+- **Heating schedules are now Calendar entities.** The old text sensors — *Heating schedule*, *Mixer N schedule*, *Water heater schedule* (`sensor.*_schedule`) — are replaced by native Home Assistant **Calendar** entities.
+- **A few duplicate boiler-output sensors were removed** in favor of running-state binary sensors (e.g. *Alarm output*, *Blower fan 1/2*, *Outer boiler*).
+- **Registration/config values** (*Product code*, *Register type*, *Remote menu*, etc.) moved into the **Diagnostic** category.
+
+### Cleanup steps (recommended)
+
+Home Assistant never auto-deletes entities on upgrade, so the replaced ones remain as *Unavailable*:
+
+1. Update the integration (HACS) and **restart Home Assistant**.
+2. Go to **Settings → Devices & Services → ecoNET300 → Entities**.
+3. Filter by **Unavailable**.
+4. Delete the old `sensor.*_schedule` entities and any leftover *Unavailable* boiler-output sensors. They will **not** come back — the new Calendar and binary-sensor entities take their place.
+
+> Deleting is safe: it only removes the orphaned registry entry. Update any automations/dashboards that referenced the old schedule sensors to use the new Calendar entities.
 
 ---
 

@@ -117,9 +117,37 @@ def _load_translated_entity_keys(entity_domain: str) -> set[str]:
 _TRANSLATED_SENSOR_TRANSLATION_KEYS: set[str] = _load_translated_entity_keys("sensor")
 
 
+# Suffixes used by the ecoNET protocol for the real-time "running now" state of a
+# component whose base key means "connected/present" (e.g. pumpCO/pumpCOWorks,
+# blowFan1/blowFan1Active).
+_RUNNING_STATE_SUFFIXES = ("Works", "Active")
+
+
+def _param_value(
+    key: str,
+    data_reg_params: dict[str, Any],
+    data_sys_params: dict[str, Any],
+) -> Any:
+    """Return a parameter value, preferring regParams over sysParams."""
+    if key in data_reg_params:
+        return data_reg_params[key]
+    return data_sys_params.get(key)
+
+
 def _binary_sensor_owned_keys() -> set[str]:
     """Return keys owned by the binary sensor platform."""
     return set().union(*BINARY_SENSOR_MAP_KEY.values()) | MIXER_PUMP_BINARY_SENSOR_KEYS
+
+
+def _running_state_base_keys() -> dict[str, str]:
+    """Map each base key to its ``*Works``/``*Active`` binary counterpart."""
+    counterparts: dict[str, str] = {}
+    for key in _binary_sensor_owned_keys():
+        for suffix in _RUNNING_STATE_SUFFIXES:
+            if key.endswith(suffix):
+                counterparts[key.removesuffix(suffix)] = key
+                break
+    return counterparts
 
 
 def _raw_boolean_keys_with_binary_counterparts(
@@ -127,25 +155,22 @@ def _raw_boolean_keys_with_binary_counterparts(
     data_reg_params: dict[str, Any],
     data_sys_params: dict[str, Any],
 ) -> set[str]:
-    """Return raw boolean keys that duplicate a ``*Works`` binary entity."""
-    binary_keys = _binary_sensor_owned_keys()
-    works_counterparts = {
-        key.removesuffix("Works"): key for key in binary_keys if key.endswith("Works")
-    }
+    """Return raw boolean keys that duplicate a ``*Works``/``*Active`` binary entity.
+
+    In the ecoNET protocol the base key (e.g. ``pumpCO``, ``blowFan1``) means the
+    component is connected/present, while the ``*Works``/``*Active`` counterpart
+    (e.g. ``pumpCOWorks``, ``blowFan1Active``) is the real-time "running now"
+    state exposed as a binary sensor. Only the running-state binary sensor is
+    kept; the base boolean is dropped from the plain sensor sweep.
+    """
+    counterparts = _running_state_base_keys()
     available_keys = set(data_reg_params) | set(data_sys_params)
     return {
         key
         for key in sensor_keys
-        if (
-            isinstance(
-                data_reg_params[key]
-                if key in data_reg_params
-                else data_sys_params.get(key),
-                bool,
-            )
-            and (counterpart := works_counterparts.get(key)) is not None
-            and counterpart in available_keys
-        )
+        if isinstance(_param_value(key, data_reg_params, data_sys_params), bool)
+        and (counterpart := counterparts.get(key)) is not None
+        and counterpart in available_keys
     }
 
 
@@ -158,12 +183,7 @@ def _raw_payload_sensor_keys(
     return {
         key
         for key in sensor_keys
-        if isinstance(
-            data_reg_params[key]
-            if key in data_reg_params
-            else data_sys_params.get(key),
-            (dict, list),
-        )
+        if isinstance(_param_value(key, data_reg_params, data_sys_params), (dict, list))
     }
 
 
@@ -968,6 +988,20 @@ def _controller_sensor_key_candidates(controller_id: str | None) -> set[str]:
     return SENSOR_MAP_KEY["_default"].copy()
 
 
+def _append_controller_sensor(
+    entities: list[EconetSensor],
+    data_key: str,
+    coordinator: EconetDataCoordinator,
+    api: Econet300Api,
+    source: str,
+) -> None:
+    """Create an all-sweep controller sensor for ``data_key`` and append it."""
+    entities.append(
+        EconetSensor(create_sensor_entity_description(data_key), coordinator, api)
+    )
+    _LOGGER.debug("Created sensor entity from %s: %s", source, data_key)
+
+
 def create_controller_sensors(
     coordinator: EconetDataCoordinator, api: Econet300Api
 ) -> list[EconetSensor]:
@@ -1056,13 +1090,7 @@ def create_controller_sensors(
                     "%s in regParams is null, sensor will not be created.", data_key
                 )
                 continue
-            entity = EconetSensor(
-                create_sensor_entity_description(data_key), coordinator, api
-            )
-            entities.append(entity)
-            _LOGGER.debug(
-                "Created and appended sensor entity from regParams: %s", entity
-            )
+            _append_controller_sensor(entities, data_key, coordinator, api, "regParams")
         elif data_key in data_sysParams:
             if data_sysParams.get(data_key) is None:
                 _LOGGER.info(
@@ -1070,24 +1098,13 @@ def create_controller_sensors(
                     data_key,
                 )
                 continue
-            entity = EconetSensor(
-                create_sensor_entity_description(data_key), coordinator, api
-            )
-            entities.append(entity)
-            _LOGGER.debug(
-                "Created and appended sensor entity from sysParams: %s", entity
-            )
+            _append_controller_sensor(entities, data_key, coordinator, api, "sysParams")
         elif is_ecomax360i_controller(controller_id) and (
             data_key in INFORMATION_PARAMS_SENSOR_MAP
             or data_key in EDIT_PARAMS_DATA_SENSOR_MAP
         ):
-            entity = EconetSensor(
-                create_sensor_entity_description(data_key), coordinator, api
-            )
-            entities.append(entity)
-            _LOGGER.debug(
-                "Created ecoMAX360i sensor from editParams/informationParams map: %s",
-                entity,
+            _append_controller_sensor(
+                entities, data_key, coordinator, api, "editParams/informationParams"
             )
         else:
             _LOGGER.debug(

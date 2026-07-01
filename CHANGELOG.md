@@ -1,68 +1,50 @@
 # Changelog
 
-## [v1.3.0-beta.4] - 2026-06-11
+## [v1.3.0] - 2026-07-01
 
-### Fixed
-
-- **`select.heater_mode` write ID resolved from `mergedData`** ([#235](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/235)): the static heater-mode select always wrote to a hardcoded parameter (`55`), which is wrong on controllers that use a different index (e.g. ecoMAX860D3-HB uses `58`), so mode changes silently reverted. The entity now resolves its write ID, name, and options from `mergedData` (writing via `set_param_by_index`, like dynamic selects) while keeping the stable `select.heater_mode` entity ID. Options and state use the controller's native language (e.g. *Zima*/*Lato*), the value range is limited by `minv`/`maxv` (so *Auto* is dropped where unavailable), device-side locks are honored, and the hardcoded `55`/`2049`/English fallback remains for legacy RM-less modules.
-- **No duplicate heater-mode select**: the heater-mode parameter is now skipped in dynamic select creation so it does not shadow the canonical `select.heater_mode` entity.
-
-### Tests
-
-- Added heater-mode helper coverage (`find_heater_mode_param`, `get_heater_mode_options`, value/option round-trips, icon mapping) in `tests/test_validation_functions.py`, plus write-path (ecoMAX810P-L vs ecoMAX860D3-HB), fallback, lock, and de-duplication tests in `tests/test_dynamic_number_entities.py`.
-
----
-
-## [v1.3.0-beta.3] - 2026-06-06
-
-### Fixed
-
-- **Mixer entities for unconnected mixers no longer created**: the controller all-sensors sweep created `Mixer N target temperature` sensors from phantom `mixerSetTemp{N}` values even when the mixer was not connected (`mixerTemp{N}` is null). Mixer temperature/setpoint sensors are now owned exclusively by `create_mixer_sensors` (which validates mixer presence and groups them on the Mixer device), and phantom mixer keys (e.g. `mixerPumpWorks{N}`) for unconnected mixers are dropped.
-- **Duplicate `unique_id` collisions for mixer/lambda sensors fixed**: the all-sensors sweep emitted the same keys as the dedicated mixer/lambda creators and, running first, shadowed the device-grouped sensors onto the main device (logged as `... does not generate unique IDs. ID ...-mixerTemp1 already exists`). Mixer and lambda keys are now excluded from the sweep so the correctly-grouped Mixer/Lambda-device sensors win.
-- **Mixer/HUW schedule sensors grouped on the correct device**: schedule sensors (e.g. `Mixer 1 schedule`) ignored device grouping and always landed on the main controller device. They now route to their Mixer/HUW device under **split** mode, and mixer schedules for unconnected mixers are skipped.
-- **Locked mixer setpoints are now detected and surfaced**: `Mixer N target temperature` number entities (`mixerSetTemp{N}`) lacked a `param_id`, so device-side parameter locks (e.g. *"Preset temp. mixer 1: the ability to edit this parameter has been locked"*) were invisible. They now resolve their `mergedData` counterpart by key (`preset_mixer{N}_temperature`), show the lock icon and lock reason, and raise a user-facing error when a write is attempted on a locked parameter.
-- **Clear error on rejected number writes**: when the device rejects a setpoint write, the entity now raises a `HomeAssistantError` (shown as a UI notification) instead of silently logging a warning.
-
-### Tests
-
-- Added coverage for schedule-sensor device routing (`tests/test_device_grouping.py`), absent-mixer suppression in the all-sensors sweep (`tests/test_sensor_basic.py`), mixer setpoint lock detection (`tests/test_dynamic_number_entities.py`), and the new `find_merged_param_by_key` helper (`tests/test_validation_functions.py`).
-
----
-
-## [v1.3.0-beta.2] - 2026-06-06
-
-### Changed
-
-- **Device grouping is now configurable (default: split)**: a new **Device settings** options-flow step lets you choose how entities are grouped into devices. **Split** (default) restores the pre-1.3.0 layout with separate devices per component (boiler, mixers, lambda, ecoSTER, HUW, buffer, solar). **Single** keeps the merged `PLUM ecoNET300` device introduced in beta.1. Entity IDs are unchanged in both modes. This reverts the beta.1 single-device tree from a forced breaking change to an opt-in.
-
-### Migration
-
-- After upgrading, the default split mode restores the separate devices. A leftover empty merged `PLUM ecoNET300` device may remain after switching back to split — it can be removed via **Settings → Devices & Services → Devices**.
-
-### Tests
-
-- Added `tests/test_device_grouping.py` covering split vs single `device_info` for the controller, mixer, lambda, ecoSTER, and component devices.
-
----
-
-## [v1.3.0-beta.1] - 2026-06-05
+Stable release consolidating the `1.3.0-beta.1` … `1.3.0-beta.7` pre-releases.
 
 ### Added
 
-- **Configurable polling intervals** ([#234](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/234)): a new **Polling settings** options-flow step lets you tune the `regParams`, `sysParams`, and `editParams` polling intervals independently (set `editParams` to `0` to disable it).
-- **Coordinator health diagnostics**: always-present diagnostic entities — `Data age` (DURATION), `Consecutive failures`, `Last successful update` (TIMESTAMP), and a `Live polling` connectivity binary sensor — so integration health stays observable even while the device is offline or returning stale data.
-- **`editParams` catalog**: editable parameters from the `editParams` endpoint are now exposed as number/select/switch entities (and read-only sensors where appropriate).
+- **Heating schedules as Calendar entities**: boiler, mixer, and hot-water schedules are now exposed as native Home Assistant **Calendar** entities (replacing the old text-based `*_schedule` sensors).
+- **Configurable polling intervals** ([#234](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/234)): a **Polling settings** options-flow step to tune `regParams`, `sysParams`, and `editParams` intervals independently (set `editParams` to `0` to disable it).
+- **Configurable device grouping**: a **Device settings** options-flow step to choose **split** (separate devices per component) or **single** (one merged `PLUM ecoNET300` device). Entity IDs are unchanged in both modes.
+- **Coordinator health diagnostics**: always-present diagnostic entities — `Data age`, `Consecutive failures`, `Last successful update`, and a `Live polling` connectivity binary sensor — so integration health stays observable even when the device is offline or stale.
+- **`editParams` catalog**: editable parameters from the `editParams` endpoint exposed as number/select/switch entities (and read-only sensors where appropriate).
 - **Phoenix / extended heat-pump sensors**: evaporator/compressor temperatures, compressor frequency, fan speed, cooling/heating/electrical power, buffer/circuit calculated temperatures, extended `HPStatus*` states, and more.
+- **Operational (running-now) binary sensors**: `alarmOutputWorks`, `blowFan1Active`, `blowFan2Active`, `fan2ExhaustWorks`, `feeder2AdditionalWorks`, `feederOuterWorks`, `outerBoilerWorks` (device class `RUNNING`).
 
 ### Changed
 
-- **Single device tree**: all entities are grouped under one `PLUM ecoNET300` device instead of separate child devices for mixers, lambda, and ecoSTER. Entity IDs are unchanged. *(Superseded in v1.3.0-beta.2: this is now an opt-in **Device settings** option, with split devices restored as the default.)*
+- **Default device grouping is split** (restores the pre-1.3.0 layout); the single merged device is now opt-in.
+- **Registration/config values grouped as Diagnostics**: `prodLogo`, `regAllowed`, `regImgID`, `regProd`, `regRefresh`, `regType`, `remoteMenu` moved to the **Diagnostic** category with proper names and icons.
+- **Duplicate boiler-output sensors removed**: the ecoNET protocol exposes a base boolean meaning *connected/present* (e.g. `alarmOutput`, `blowFan1`) alongside a `*Works`/`*Active` counterpart meaning *running now*. Only the running-state `RUNNING` binary sensor is kept; the base "connected" boolean is filtered out of the sensor sweep.
 - **Stale-data availability**: entities report `unavailable` when the coordinator marks the latest data as stale.
-- **Refactor — `EXTRA_SENSORS` extracted from `sensor.py`**: the inline `EXTRA_SENSORS` metadata dictionary was decomposed into the shared `const.py` maps (`ENTITY_UNIT_MAP`, `ENTITY_SENSOR_DEVICE_CLASS_MAP`, `STATE_CLASS_MAP`, `ENTITY_PRECISION`) and `ECOMAX360I_SENSORS`. No user-visible entity behavior change.
+- **Internal refactors**: `EXTRA_SENSORS` decomposed into shared `const.py` maps; `sensor.py` DRY/KISS helpers (`_param_value`, `_running_state_base_keys`, `_append_controller_sensor`). No user-visible entity behavior change.
+
+### Fixed
+
+- **`select.heater_mode` write ID resolved from `mergedData`** ([#235](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/235)): previously wrote to a hardcoded parameter (`55`), wrong on controllers using a different index (e.g. ecoMAX860D3-HB uses `58`), so mode changes silently reverted. Now resolves write ID/name/options from `mergedData`, honors device locks and `minv`/`maxv`, and keeps a legacy fallback.
+- **No duplicate heater-mode select**: the heater-mode parameter is skipped in dynamic select creation so it does not shadow `select.heater_mode`.
+- **Mixer entities for unconnected mixers no longer created**: mixer temperature/setpoint sensors are owned exclusively by `create_mixer_sensors` (validates presence, groups on the Mixer device); phantom mixer keys are dropped.
+- **Duplicate `unique_id` collisions for mixer/lambda sensors fixed**: mixer/lambda keys are excluded from the all-sensors sweep so the correctly device-grouped sensors win.
+- **Mixer/HUW schedule sensors grouped on the correct device** under split mode; schedules for unconnected mixers are skipped.
+- **Locked mixer setpoints detected and surfaced**: `Mixer N target temperature` numbers now resolve their `mergedData` counterpart, show the lock icon/reason, and raise a user-facing error on writes to locked parameters.
+- **Clear error on rejected number writes**: the entity raises a `HomeAssistantError` (UI notification) instead of silently logging.
 
 ### Translations
 
-- **EN + PL** for the new heat-pump/Phoenix sensors, health diagnostics, and the polling-settings options step.
+- **EN, PL, CZ, FR, UK** updated for the new heat-pump/Phoenix sensors, health diagnostics, polling/device settings steps, operational binary sensors, and diagnostic config values.
+
+### Migration
+
+- **Heating schedules moved to Calendar entities.** Old `*_schedule` sensors (e.g. *Heating schedule*, *Mixer 1 schedule*, *Water heater schedule*) become **Unavailable**. Delete them manually in **Settings → Devices & Services → ecoNET300 → Entities** (filter *Unavailable*).
+- **Some duplicate boiler-output sensors removed** in favor of `RUNNING` binary sensors — delete any leftover **Unavailable** `sensor.*` entries the same way.
+- Default **split** grouping restores separate devices; a leftover empty merged `PLUM ecoNET300` device may remain and can be removed via **Settings → Devices & Services → Devices**.
+
+### Tests
+
+- Added/extended coverage: device grouping (split vs single), schedule-sensor routing, absent-mixer suppression, heater-mode helpers, dynamic number/lock detection, and binary-sensor de-duplication.
 
 ---
 

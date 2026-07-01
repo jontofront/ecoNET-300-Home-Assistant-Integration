@@ -175,6 +175,14 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 ## Binary Sensors
 
+> **Connected vs. running convention.** In the ecoNET protocol many components
+> expose a pair of boolean keys: a base key (e.g. `pumpCO`, `fan`, `blowFan1`)
+> meaning the component is *connected/present*, and a `*Works`/`*Active`
+> counterpart (e.g. `pumpCOWorks`, `fanWorks`, `blowFan1Active`) meaning it is
+> *running right now*. The integration only exposes the running-state key as a
+> `RUNNING` binary sensor; the base "connected" boolean is filtered out of the
+> sensor sweep to avoid duplicated entities.
+
 ### Pump Status
 
 | Entity Key             | Description                  | Endpoint              |
@@ -187,9 +195,21 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 
 ### Fan Status
 
-| Entity Key | Description | Endpoint              |
-| ---------- | ----------- | --------------------- |
-| `fanWorks` | Fan working | `../econet/regParams` |
+| Entity Key         | Description  | Endpoint              |
+| ------------------ | ------------ | --------------------- |
+| `fanWorks`         | Fan working  | `../econet/regParams` |
+| `fan2ExhaustWorks` | Exhaust fan  | `../econet/regParams` |
+| `blowFan1Active`   | Blower fan 1 | `../econet/regParams` |
+| `blowFan2Active`   | Blower fan 2 | `../econet/regParams` |
+
+### Feeders and Outputs
+
+| Entity Key               | Description       | Endpoint              |
+| ------------------------ | ----------------- | --------------------- |
+| `feederOuterWorks`       | Outer feeder      | `../econet/regParams` |
+| `feeder2AdditionalWorks` | Additional feeder | `../econet/regParams` |
+| `outerBoilerWorks`       | Outer boiler      | `../econet/regParams` |
+| `alarmOutputWorks`       | Alarm output      | `../econet/regParams` |
 
 ### System Components
 

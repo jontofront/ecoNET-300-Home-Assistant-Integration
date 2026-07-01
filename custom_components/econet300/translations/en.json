@@ -393,6 +393,27 @@
       "pump_solar_works": {
         "name": "Solar pump working"
       },
+      "alarm_output_works": {
+        "name": "Alarm output"
+      },
+      "blow_fan1_active": {
+        "name": "Blower fan 1"
+      },
+      "blow_fan2_active": {
+        "name": "Blower fan 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Exhaust fan"
+      },
+      "feeder2_additional_works": {
+        "name": "Additional feeder"
+      },
+      "feeder_outer_works": {
+        "name": "Outer feeder"
+      },
+      "outer_boiler_works": {
+        "name": "Outer boiler"
+      },
       "ecoster_contacts1": {
         "name": "Room thermostat 1 contacts"
       },
@@ -1267,6 +1288,27 @@
       },
       "protocol_type": {
         "name": "Protocol Type"
+      },
+      "prod_logo": {
+        "name": "Product logo ID"
+      },
+      "reg_allowed": {
+        "name": "Registration allowed"
+      },
+      "reg_img_id": {
+        "name": "Scheme image ID"
+      },
+      "reg_prod": {
+        "name": "Product code"
+      },
+      "reg_refresh": {
+        "name": "Refresh interval"
+      },
+      "reg_type": {
+        "name": "Register type"
+      },
+      "remote_menu": {
+        "name": "Remote menu"
       },
       "tem_co": {
         "name": "Boiler Temperature"

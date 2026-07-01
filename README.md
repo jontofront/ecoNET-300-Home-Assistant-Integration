@@ -212,11 +212,15 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
-### What's New in v1.3.0-beta.6
+### What's New in v1.3.0
 
-- **Schedule Calendar Entities**: Heating schedules are now native Home Assistant **Calendar** entities instead of text-based sensors. Each schedule type gets its own calendar entity with weekly recurring events. Supported controllers: ecoMAX810P-L, ecoMAX860 series, ecoMAX920 series, SControl MK1/EM892.
-- **DRY refactoring**: Schedule decoding helpers extracted into reusable functions for future schedule editing support.
-- **Multi-model test coverage**: Schedule tests run against all 9 fixture models with schedule data.
+- **Schedule Calendar entities**: heating, mixer, and hot-water schedules are now native Home Assistant **Calendar** entities instead of text-based sensors.
+- **Configurable polling and device grouping**: tune polling intervals per endpoint, and choose split (default) or single device grouping — via the options flow.
+- **Health diagnostics**: `Data age`, `Consecutive failures`, `Last successful update`, and a `Live polling` connectivity sensor.
+- **More heat-pump / Phoenix sensors** and an `editParams` catalog of editable parameters.
+- **Cleaner entity list**: duplicate boiler-output sensors removed (running-state binary sensors kept), and registration/config values moved to **Diagnostics**.
+
+> **Upgrading?** Old `*_schedule` text sensors and a few removed duplicate sensors may show as **Unavailable** — delete them manually. See the [Migration guide](docs/MIGRATION.md).
 
 **📖 [Full Changelog](CHANGELOG.md)** — complete version history and release notes.
 
@@ -261,4 +265,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-06-30 for v1.3.0-beta.6._
+_This README was last updated on 2026-07-01 for v1.3.0._

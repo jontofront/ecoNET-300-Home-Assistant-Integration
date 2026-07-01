@@ -119,6 +119,55 @@
           "off": "mdi:sun-thermometer-outline"
         }
       },
+      "alarm_output_works": {
+        "default": "mdi:alarm-light",
+        "state": {
+          "on": "mdi:alarm-light",
+          "off": "mdi:alarm-light-off"
+        }
+      },
+      "blow_fan1_active": {
+        "default": "mdi:fan",
+        "state": {
+          "on": "mdi:fan",
+          "off": "mdi:fan-off"
+        }
+      },
+      "blow_fan2_active": {
+        "default": "mdi:fan",
+        "state": {
+          "on": "mdi:fan",
+          "off": "mdi:fan-off"
+        }
+      },
+      "fan2_exhaust_works": {
+        "default": "mdi:fan",
+        "state": {
+          "on": "mdi:fan",
+          "off": "mdi:fan-off"
+        }
+      },
+      "feeder2_additional_works": {
+        "default": "mdi:gauge",
+        "state": {
+          "on": "mdi:gauge",
+          "off": "mdi:gauge-empty"
+        }
+      },
+      "feeder_outer_works": {
+        "default": "mdi:gauge",
+        "state": {
+          "on": "mdi:gauge",
+          "off": "mdi:gauge-empty"
+        }
+      },
+      "outer_boiler_works": {
+        "default": "mdi:water-boiler",
+        "state": {
+          "on": "mdi:water-boiler",
+          "off": "mdi:water-boiler-off"
+        }
+      },
       "mixer_pump_works1": {
         "default": "mdi:pump",
         "state": {
@@ -1081,6 +1130,27 @@
       },
       "protocol_type": {
         "default": "mdi:connection"
+      },
+      "prod_logo": {
+        "default": "mdi:image-outline"
+      },
+      "reg_allowed": {
+        "default": "mdi:check-circle-outline"
+      },
+      "reg_img_id": {
+        "default": "mdi:floor-plan"
+      },
+      "reg_prod": {
+        "default": "mdi:identifier"
+      },
+      "reg_refresh": {
+        "default": "mdi:refresh"
+      },
+      "reg_type": {
+        "default": "mdi:cog-outline"
+      },
+      "remote_menu": {
+        "default": "mdi:remote"
       },
       "unseal": {
         "default": "mdi:lock"

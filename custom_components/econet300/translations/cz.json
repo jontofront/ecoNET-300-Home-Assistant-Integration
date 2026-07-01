@@ -210,6 +210,27 @@
       "pump_solar_works": {
         "name": "Solární čerpadlo pracuje"
       },
+      "alarm_output_works": {
+        "name": "Alarmový výstup"
+      },
+      "blow_fan1_active": {
+        "name": "Dmychadlo 1"
+      },
+      "blow_fan2_active": {
+        "name": "Dmychadlo 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Odtahový ventilátor"
+      },
+      "feeder2_additional_works": {
+        "name": "Přídavný podavač"
+      },
+      "feeder_outer_works": {
+        "name": "Vnější podavač"
+      },
+      "outer_boiler_works": {
+        "name": "Vnější kotel"
+      },
       "pump_fireplace_works": {
         "name": "Krbové čerpadlo pracuje"
       },
@@ -673,6 +694,27 @@
       },
       "protocol_type": {
         "name": "Typ protokolu"
+      },
+      "prod_logo": {
+        "name": "ID loga produktu"
+      },
+      "reg_allowed": {
+        "name": "Registrace povolena"
+      },
+      "reg_img_id": {
+        "name": "ID obrázku schématu"
+      },
+      "reg_prod": {
+        "name": "Kód produktu"
+      },
+      "reg_refresh": {
+        "name": "Interval obnovení"
+      },
+      "reg_type": {
+        "name": "Typ registru"
+      },
+      "remote_menu": {
+        "name": "Vzdálené menu"
       },
       "tem_co": {
         "name": "Teplota kotle"
