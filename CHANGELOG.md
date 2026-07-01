@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- **Duplicate boiler-output sensors removed** ("connected" + "running" pairs): the ecoNET protocol exposes many components as a base boolean meaning *connected/present* (e.g. `alarmOutput`, `blowFan1`, `fan2Exhaust`, `feeder2Additional`, `feederOuter`, `outerBoiler`) alongside a `*Works`/`*Active` counterpart meaning *running now* (confirmed against the device web UI, where `setPumpColor(pumpConnected, pumpWorks)` colors a component only when both are true). These previously appeared as duplicate raw sensors. The run-state keys are now exposed as `RUNNING` binary sensors and the base "connected" boolean is filtered out of the sensor sweep.
+
+### Added
+
+- New binary sensors: `alarmOutputWorks`, `blowFan1Active`, `blowFan2Active`, `fan2ExhaustWorks`, `feeder2AdditionalWorks`, `feederOuterWorks`, `outerBoilerWorks` (device class `RUNNING`), with English/Polish translations and icons.
+
+### Tests
+
+- Extended `tests/test_sensor_basic.py` to assert the new base "connected" keys and their `*Active`/`*Works` counterparts are not duplicated as plain sensors.
+
+---
+
 ## [v1.3.0-beta.4] - 2026-06-11
 
 ### Fixed

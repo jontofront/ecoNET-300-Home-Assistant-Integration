@@ -214,4 +214,12 @@ ENTITY_BINARY_DEVICE_CLASS_MAP = {
     "contactGZCActive": _BinarySensorDeviceClass.CONNECTIVITY,
     # Alarm sensors
     "alarmActive": _BinarySensorDeviceClass.PROBLEM,
+    # Operational (running-now) outputs — base keys mean "connected/present".
+    "alarmOutputWorks": _BinarySensorDeviceClass.RUNNING,
+    "blowFan1Active": _BinarySensorDeviceClass.RUNNING,
+    "blowFan2Active": _BinarySensorDeviceClass.RUNNING,
+    "fan2ExhaustWorks": _BinarySensorDeviceClass.RUNNING,
+    "feeder2AdditionalWorks": _BinarySensorDeviceClass.RUNNING,
+    "feederOuterWorks": _BinarySensorDeviceClass.RUNNING,
+    "outerBoilerWorks": _BinarySensorDeviceClass.RUNNING,
 }

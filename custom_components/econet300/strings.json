@@ -393,6 +393,27 @@
       "pump_fireplace_works": {
         "name": "Fireplace pump working"
       },
+      "alarm_output_works": {
+        "name": "Alarm output"
+      },
+      "blow_fan1_active": {
+        "name": "Blower fan 1"
+      },
+      "blow_fan2_active": {
+        "name": "Blower fan 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Exhaust fan"
+      },
+      "feeder2_additional_works": {
+        "name": "Additional feeder"
+      },
+      "feeder_outer_works": {
+        "name": "Outer feeder"
+      },
+      "outer_boiler_works": {
+        "name": "Outer boiler"
+      },
       "ecoster_contacts1": {
         "name": "Room thermostat 1 contacts"
       },

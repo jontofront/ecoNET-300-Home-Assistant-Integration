@@ -405,6 +405,12 @@ class TestSensorMappingLogic:
         assert "fanWorks" in reg_params
         assert "lighter" in reg_params
         assert "lighterWorks" in reg_params
+        # Base ("connected") keys whose *Active/*Works run-state counterpart is a
+        # binary sensor must be dropped from the plain sensor sweep too.
+        assert "blowFan1" in reg_params
+        assert "blowFan1Active" in reg_params
+        assert "alarmOutput" in reg_params
+        assert "alarmOutputWorks" in reg_params
 
         mock_coordinator = Mock()
         mock_coordinator.data = {"regParams": reg_params, "sysParams": sys_params}
@@ -414,7 +420,21 @@ class TestSensorMappingLogic:
         keys = {e.entity_description.key for e in entities}
 
         assert "tempCO" in keys
-        assert keys.isdisjoint({"fan", "fanWorks", "lan", "lighter", "lighterWorks"})
+        assert keys.isdisjoint(
+            {
+                "fan",
+                "fanWorks",
+                "lan",
+                "lighter",
+                "lighterWorks",
+                "alarmOutput",
+                "alarmOutputWorks",
+                "blowFan1",
+                "blowFan1Active",
+                "blowFan2",
+                "blowFan2Active",
+            }
+        )
 
     def test_absent_mixer_setpoints_not_exposed_by_all_sensors(self) -> None:
         """All-sensors sweep must not create setpoints for unconnected mixers.

@@ -312,6 +312,16 @@ DEFAULT_BINARY_SENSORS = {
     "contactGZCActive",
     "pumpCirculationWorks",
     "pumpSolarWorks",
+    # Operational (running-now) outputs. The matching base keys (alarmOutput,
+    # blowFan1, ...) mean "connected/present" and are filtered out of the plain
+    # sensor sweep so they are not duplicated. See docs/ENTITIES.md.
+    "alarmOutputWorks",
+    "blowFan1Active",
+    "blowFan2Active",
+    "fan2ExhaustWorks",
+    "feeder2AdditionalWorks",
+    "feederOuterWorks",
+    "outerBoilerWorks",
 }
 
 # ecoSTER thermostat binary sensors
@@ -352,4 +362,3 @@ BINARY_SENSOR_MAP_KEY = {
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY: ECOSOL_BINARY_SENSORS,  # Reference — runtime uses is_ecosol_controller()
     "ecoSter": ECOSTER_BINARY_SENSORS,  # Reference only - not used
 }
-
