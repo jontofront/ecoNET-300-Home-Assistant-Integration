@@ -201,6 +201,27 @@
       "pump_solar_works": {
         "name": "Pompe solaire en fonctionnement"
       },
+      "alarm_output_works": {
+        "name": "Sortie d'alarme"
+      },
+      "blow_fan1_active": {
+        "name": "Ventilateur soufflant 1"
+      },
+      "blow_fan2_active": {
+        "name": "Ventilateur soufflant 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Ventilateur d'extraction"
+      },
+      "feeder2_additional_works": {
+        "name": "Alimentateur supplémentaire"
+      },
+      "feeder_outer_works": {
+        "name": "Alimentateur externe"
+      },
+      "outer_boiler_works": {
+        "name": "Chaudière externe"
+      },
       "pump_fireplace_works": {
         "name": "Pompe cheminée en fonctionnement"
       },
@@ -664,6 +685,27 @@
       },
       "protocol_type": {
         "name": "Type protocole"
+      },
+      "prod_logo": {
+        "name": "ID du logo produit"
+      },
+      "reg_allowed": {
+        "name": "Enregistrement autorisé"
+      },
+      "reg_img_id": {
+        "name": "ID de l'image du schéma"
+      },
+      "reg_prod": {
+        "name": "Code produit"
+      },
+      "reg_refresh": {
+        "name": "Intervalle d'actualisation"
+      },
+      "reg_type": {
+        "name": "Type de registre"
+      },
+      "remote_menu": {
+        "name": "Menu à distance"
       },
       "tem_co": {
         "name": "Température chaudière"

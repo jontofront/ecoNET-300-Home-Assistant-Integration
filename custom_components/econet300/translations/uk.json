@@ -201,6 +201,27 @@
       "pump_solar_works": {
         "name": "Сонячний насос працює"
       },
+      "alarm_output_works": {
+        "name": "Аварійний вихід"
+      },
+      "blow_fan1_active": {
+        "name": "Нагнітальний вентилятор 1"
+      },
+      "blow_fan2_active": {
+        "name": "Нагнітальний вентилятор 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Витяжний вентилятор"
+      },
+      "feeder2_additional_works": {
+        "name": "Додатковий живильник"
+      },
+      "feeder_outer_works": {
+        "name": "Зовнішній живильник"
+      },
+      "outer_boiler_works": {
+        "name": "Зовнішній котел"
+      },
       "pump_fireplace_works": {
         "name": "Камінний насос працює"
       },
@@ -664,6 +685,27 @@
       },
       "protocol_type": {
         "name": "Тип протоколу"
+      },
+      "prod_logo": {
+        "name": "ID логотипу продукту"
+      },
+      "reg_allowed": {
+        "name": "Реєстрація дозволена"
+      },
+      "reg_img_id": {
+        "name": "ID зображення схеми"
+      },
+      "reg_prod": {
+        "name": "Код продукту"
+      },
+      "reg_refresh": {
+        "name": "Інтервал оновлення"
+      },
+      "reg_type": {
+        "name": "Тип регістра"
+      },
+      "remote_menu": {
+        "name": "Віддалене меню"
       },
       "tem_co": {
         "name": "Температура котла"
