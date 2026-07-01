@@ -1289,6 +1289,27 @@
       "protocol_type": {
         "name": "Typ protokołu"
       },
+      "prod_logo": {
+        "name": "ID logotypu produktu"
+      },
+      "reg_allowed": {
+        "name": "Rejestracja dozwolona"
+      },
+      "reg_img_id": {
+        "name": "ID obrazu schematu"
+      },
+      "reg_prod": {
+        "name": "Kod produktu"
+      },
+      "reg_refresh": {
+        "name": "Interwał odświeżania"
+      },
+      "reg_type": {
+        "name": "Typ rejestru"
+      },
+      "remote_menu": {
+        "name": "Zdalne menu"
+      },
       "tem_co": {
         "name": "Temperatura kotła"
       },

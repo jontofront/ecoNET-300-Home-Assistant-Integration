@@ -1289,6 +1289,27 @@
       "protocol_type": {
         "name": "Protocol Type"
       },
+      "prod_logo": {
+        "name": "Product logo ID"
+      },
+      "reg_allowed": {
+        "name": "Registration allowed"
+      },
+      "reg_img_id": {
+        "name": "Scheme image ID"
+      },
+      "reg_prod": {
+        "name": "Product code"
+      },
+      "reg_refresh": {
+        "name": "Refresh interval"
+      },
+      "reg_type": {
+        "name": "Register type"
+      },
+      "remote_menu": {
+        "name": "Remote menu"
+      },
       "tem_co": {
         "name": "Boiler Temperature"
       },

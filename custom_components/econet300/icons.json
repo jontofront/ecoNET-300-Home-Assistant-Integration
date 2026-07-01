@@ -1131,6 +1131,27 @@
       "protocol_type": {
         "default": "mdi:connection"
       },
+      "prod_logo": {
+        "default": "mdi:image-outline"
+      },
+      "reg_allowed": {
+        "default": "mdi:check-circle-outline"
+      },
+      "reg_img_id": {
+        "default": "mdi:floor-plan"
+      },
+      "reg_prod": {
+        "default": "mdi:identifier"
+      },
+      "reg_refresh": {
+        "default": "mdi:refresh"
+      },
+      "reg_type": {
+        "default": "mdi:cog-outline"
+      },
+      "remote_menu": {
+        "default": "mdi:remote"
+      },
       "unseal": {
         "default": "mdi:lock"
       },
