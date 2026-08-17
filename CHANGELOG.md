@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **MIT license**: added a root `LICENSE` file so GitHub and HACS can detect the repository license (fixes HACS `check-license`).
+
 ## [v1.3.0] - 2026-07-01
 
 Stable release consolidating the `1.3.0-beta.1` … `1.3.0-beta.7` pre-releases.
