@@ -255,6 +255,12 @@ This integration is not officially affiliated with or endorsed by Plum Sp. z o.o
 
 ---
 
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
 ## 📞 Support
 
 If you encounter any issues or have questions:
