@@ -257,7 +257,7 @@ OPERATION_MODE_NAMES = {
     3: "work",
     4: "supervision",
     5: _STATE_PAUSED,  # "halted",
-    6: "stop",
+    6: "cleaning",
     7: "burning_off",
     8: "manual",
     9: _STATE_PROBLEM,  # "alarm",

@@ -6,6 +6,16 @@
 
 - **MIT license**: added a root `LICENSE` file so GitHub and HACS can detect the repository license (fixes HACS `check-license`).
 
+## [v1.3.1] - 2026-08-25
+
+### Fixed
+
+- **`mode` sensor reports "Stopped" instead of "Cleaning" for mode 6 ([#208](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/208))**: `OPERATION_MODE_NAMES[6]` was incorrectly mapped to `"stop"` instead of `"cleaning"`. Devices entering the cleaning phase (e.g. S.Control EM892, ecoMAX860) now correctly display "Cleaning" / "Czyszczenie" / "Nettoyage" / "Čištění" / "Очищення".
+
+### Translations
+
+- **All 6 languages** (EN, PL, FR, CZ, UK, strings.json) updated with the `cleaning` state for `mode` and `transmission` sensors.
+
 ## [v1.3.0] - 2026-07-01
 
 Stable release consolidating the `1.3.0-beta.1` … `1.3.0-beta.7` pre-releases.

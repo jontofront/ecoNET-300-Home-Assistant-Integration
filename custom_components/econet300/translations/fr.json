@@ -396,6 +396,7 @@
           "supervision": "Surveillance",
           "paused": "En pause",
           "stop": "Arrêté",
+          "cleaning": "Nettoyage",
           "burning_off": "Extinction",
           "manual": "Manuel",
           "problem": "Alarme",

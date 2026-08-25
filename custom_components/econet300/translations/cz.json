@@ -405,6 +405,7 @@
           "supervision": "Dohled",
           "paused": "Pozastaveno",
           "stop": "Zastaveno",
+          "cleaning": "Čištění",
           "burning_off": "Dohasínání",
           "manual": "Manuální",
           "problem": "Alarm",

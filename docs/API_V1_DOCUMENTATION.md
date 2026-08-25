@@ -554,7 +554,7 @@ The boiler operation mode is reported via the `mode` and `transmission` paramete
 |   3   | `work`            | `work`               | Work            | Praca           | `modeWork`            |
 |   4   | `supervision`     | `supervision`        | Supervision     | Nadzór          | `modeSupervision`     |
 |   5   | `paused`          | `STATE_PAUSED`       | Halted          | Postój          | `modeHalt`            |
-|   6   | `stop`            | `stop`               | Stopped         | Zatrzymany      | `modeStop`            |
+|   6   | `cleaning`        | `cleaning`           | Cleaning        | Czyszczenie     | `modeCleaning`        |
 |   7   | `burning_off`     | `burning_off`        | Burning OFF     | Wygaszanie      | `modeExtinction`      |
 |   8   | `manual`          | `manual`             | Manual          | Ręczny          | `modeManual`          |
 |   9   | `problem`         | `STATE_PROBLEM`      | Alarm           | Alarm           | `modeAlarm`           |
@@ -575,7 +575,6 @@ These additional mode states exist in the cloud translations but are not current
 
 | Cloud Translation Key  | Display (EN)       | Display (PL)          |
 | :--------------------- | :----------------- | :-------------------- |
-| `modeCleaning`         | Cleaning           | Czyszczenie           |
 | `modePurge`            | Purge              | Przedmuch             |
 | `modeOther`            | Other              | Inny                  |
 | `modeWorkGrate`        | Work grate         | Praca - ruszt         |
@@ -600,7 +599,7 @@ OPERATION_MODE_NAMES = {
     3: "work",
     4: "supervision",
     5: STATE_PAUSED,        # "paused" - from homeassistant.const
-    6: "stop",
+    6: "cleaning",
     7: "burning_off",
     8: "manual",
     9: STATE_PROBLEM,       # "problem" - from homeassistant.const

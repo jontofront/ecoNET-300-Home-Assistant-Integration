@@ -396,6 +396,7 @@
           "supervision": "Нагляд",
           "paused": "Призупинено",
           "stop": "Зупинено",
+          "cleaning": "Очищення",
           "burning_off": "Затухання",
           "manual": "Ручний",
           "problem": "Тривога",

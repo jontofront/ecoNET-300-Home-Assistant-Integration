@@ -382,6 +382,7 @@
           "supervision": "mdi:eye",
           "paused": "mdi:pause",
           "stop": "mdi:stop",
+          "cleaning": "mdi:broom",
           "burning_off": "mdi:fire-off",
           "manual": "mdi:hand-back-right",
           "problem": "mdi:alert",
