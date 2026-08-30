@@ -1210,6 +1210,9 @@
       "flow_rate": {
         "name": "Przepływ"
       },
+      "periodic_energy_consumption": {
+        "name": "Okresowe zużycie energii"
+      },
       "axenregister64": {
         "name": "Rejestr AXEN 64"
       },

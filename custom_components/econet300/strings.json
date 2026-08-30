@@ -1135,6 +1135,9 @@
       "flow_rate": {
         "name": "Flow rate"
       },
+      "periodic_energy_consumption": {
+        "name": "Periodic energy consumption"
+      },
       "axenregister64": {
         "name": "AXEN register 64"
       },

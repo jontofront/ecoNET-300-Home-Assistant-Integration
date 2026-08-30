@@ -155,6 +155,7 @@ ENTITY_UNIT_MAP = {
     "COP": None,
     "SCOP": None,
     "FlowRate": "L/min",
+    "PeriodicEnergyConsumption": _UnitOfEnergy.WATT_HOUR,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
     # Phoenix / extended heat-pump units (decomposed from EXTRA_SENSORS)

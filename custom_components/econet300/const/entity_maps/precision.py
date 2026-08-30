@@ -90,6 +90,7 @@ ENTITY_PRECISION = {
     "COP": 2,
     "SCOP": 2,
     "FlowRate": 1,
+    "PeriodicEnergyConsumption": 1,
     "AXENREGISTER64": 1,
     "AXENREGISTER65": 0,
     # Heat pump compressor temperature precision

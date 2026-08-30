@@ -141,6 +141,7 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, _SensorDeviceClass | None] = {
     "COP": _SensorDeviceClass.POWER_FACTOR,
     "SCOP": _SensorDeviceClass.POWER_FACTOR,
     "FlowRate": None,
+    "PeriodicEnergyConsumption": _SensorDeviceClass.ENERGY,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
     # Phoenix / extended heat-pump device classes (decomposed from EXTRA_SENSORS)

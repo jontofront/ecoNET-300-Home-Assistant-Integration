@@ -51,6 +51,7 @@ STATE_CLASS_MAP: dict[str, _SensorStateClass | None] = {
     "COP": None,
     "SCOP": None,
     "FlowRate": None,
+    "PeriodicEnergyConsumption": _SensorStateClass.TOTAL_INCREASING,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
     # ecoMAX360i heat pump status sensors (not measurements)
