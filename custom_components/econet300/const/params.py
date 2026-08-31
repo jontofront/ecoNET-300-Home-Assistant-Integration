@@ -112,6 +112,8 @@ UNIT_NAME_TO_HA_UNIT = {
     "kg/h": "kg/h",  # Mass flow rate for fuel stream
     "kW": _UnitOfPower.KILO_WATT,
     "kWh": _UnitOfEnergy.KILO_WATT_HOUR,
+    "Wh": _UnitOfEnergy.WATT_HOUR,
+    "L/min": "L/min",  # Volume flow rate
     "r/min": "r/min",  # Custom unit for revolutions per minute
 }
 
@@ -129,6 +131,8 @@ UNIT_INDEX_TO_NAME: dict[int, str] = {
     6: "kg",
     7: "kW",
     8: "r/min",
+    11: "Wh",  # ecoMAX360i energy counters (informationParams 203/204)
+    30: "L/min",  # ecoMAX360i flow rate (informationParams 231)
     31: "",  # Boolean/state indicator (no unit)
 }
 

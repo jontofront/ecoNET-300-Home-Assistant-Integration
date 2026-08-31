@@ -5,7 +5,8 @@ from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
-from homeassistant.components.sensor import SensorStateClass
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
+from homeassistant.const import UnitOfEnergy
 
 from custom_components.econet300.common_functions import (
     is_ecomax360i_controller,
@@ -18,11 +19,14 @@ from custom_components.econet300.const import (
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
     EDIT_PARAMS_DATA_SENSOR_MAP,
+    ENTITY_SENSOR_DEVICE_CLASS_MAP,
+    ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     INFORMATION_PARAMS_SENSOR_MAP,
     SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
+    STATE_CLASS_MAP,
     STATE_UNKNOWN,
 )
 from custom_components.econet300.entity import EconetEntity
@@ -604,6 +608,24 @@ class TestEditParamsSensorMaps:
             assert key in ECOMAX360I_SENSORS, (
                 f"{key} in INFORMATION_PARAMS_SENSOR_MAP but missing from ECOMAX360I_SENSORS"
             )
+
+    def test_periodic_energy_consumption_is_energy_total(self) -> None:
+        """Energy counter 204 is reported in Wh and must be a resettable total.
+
+        The controller reports this in watt-hours (unit index 11), not kWh, and
+        it can be zeroed via the EreaseEnergy parameter - so TOTAL_INCREASING,
+        which tolerates resets, rather than TOTAL.
+        """
+        key = "PeriodicEnergyConsumption"
+        assert INFORMATION_PARAMS_SENSOR_MAP[key] == "204"
+        assert ENTITY_UNIT_MAP[key] == UnitOfEnergy.WATT_HOUR
+        assert ENTITY_SENSOR_DEVICE_CLASS_MAP[key] == SensorDeviceClass.ENERGY
+        assert STATE_CLASS_MAP[key] == SensorStateClass.TOTAL_INCREASING
+        # informationParams yields strings; without _numeric_or_none the sensor
+        # would keep a string native_value and _sync_state would drop state_class.
+        processor = ENTITY_VALUE_PROCESSOR[key]
+        assert processor("12119.5") == 12119.5
+        assert processor("off") is None
 
     def test_edit_params_keys_in_ecomax360i_sensors(self) -> None:
         """All editParams.data sensor keys should be in ECOMAX360I_SENSORS."""

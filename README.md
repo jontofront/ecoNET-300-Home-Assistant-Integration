@@ -212,6 +212,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.2
+
+- **ecoMAX360i periodic energy consumption**: native `ENERGY` sensor from `informationParams` 204 (Wh, `total_increasing`), so Energy dashboard no longer needs a Riemann sum over electrical power.
+
 ### What's New in v1.3.0
 
 - **Schedule Calendar entities**: heating, mixer, and hot-water schedules are now native Home Assistant **Calendar** entities instead of text-based sensors.
@@ -271,4 +275,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-07-01 for v1.3.0._
+_This README was last updated on 2026-08-31 for v1.3.2._

@@ -110,6 +110,14 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `fuelConsum` | Fuel consumption | `../econet/regParams` |
 | `fuelStream` | Fuel stream      | `../econet/regParams` |
 
+### ecoMAX360i heat pump
+
+Read-only values from `editParams.informationParams` (not `regParams`).
+
+| Entity Key                    | Description                                         | Endpoint                       | Unit | State class        |
+| ----------------------------- | --------------------------------------------------- | ------------------------------ | ---- | ------------------ |
+| `PeriodicEnergyConsumption`   | Periodic electrical energy (resettable on the unit) | `informationParams` 204        | Wh   | `total_increasing` |
+
 ### ecoSTER Room Thermostats
 
 | Entity Key     | Description            | Endpoint              |

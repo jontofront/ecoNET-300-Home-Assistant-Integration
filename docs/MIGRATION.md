@@ -8,6 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version | Migration Required | Notes                                     |
 | ------------ | ---------- | ------------------ | ----------------------------------------- |
+| v1.3.1       | v1.3.2     | No                 | New energy sensor after HA restart        |
 | v1.2.x       | v1.3.0     | No (cleanup only)  | Delete leftover *Unavailable* entities    |
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |

@@ -127,6 +127,7 @@ ECOMAX360I_SENSORS = {
     "COP",
     "SCOP",
     "FlowRate",
+    "PeriodicEnergyConsumption",
     # editParams.data sensors
     "AXENREGISTER64",
     "AXENREGISTER65",
@@ -161,6 +162,10 @@ INFORMATION_PARAMS_SENSOR_MAP: dict[str, str] = {
     "COP": "221",
     "SCOP": "222",
     "FlowRate": "231",
+    # Cumulative electrical energy, reported in Wh (unit index 11).
+    # Resettable on the controller via the EreaseEnergy parameter, hence
+    # TOTAL_INCREASING rather than TOTAL.
+    "PeriodicEnergyConsumption": "204",
 }
 
 # editParams.data: sensor key -> parameter ID in editParams["data"]

@@ -32,6 +32,7 @@ ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS: Final[tuple[str, ...]] = (
     "HeatPumpAmbient",
     "HeatSourceCalcPresetTemp",
     "HPStatusPresetTemp",
+    "PeriodicEnergyConsumption",
     "SCOP",
     "TargetFlowTemp",
     "ThermalPower",
@@ -86,4 +87,3 @@ ENTITY_VALUE_PROCESSOR = {
         SENSOR_WATER_PUMP_RUNNING_MAPPING, x
     ),
 }
-
