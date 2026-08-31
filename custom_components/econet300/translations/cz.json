@@ -321,6 +321,9 @@
       "fuel_consumption_total": {
         "name": "Celková spotřeba paliva"
       },
+      "periodic_energy_consumption": {
+        "name": "Periodická spotřeba energie"
+      },
       "fan_power": {
         "name": "Výkon ventilátoru"
       },

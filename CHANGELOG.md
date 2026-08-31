@@ -4,6 +4,7 @@
 
 ### Added
 
+- **ecoMAX360i periodic energy consumption** ([#246](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/246)): expose `informationParams` 204 as an `ENERGY` sensor in Wh with `state_class` `total_increasing` (resettable via `EreaseEnergy`). Also maps unit indexes 11 (Wh) and 30 (L/min) for the custom-entity flow.
 - **MIT license**: added a root `LICENSE` file so GitHub and HACS can detect the repository license (fixes HACS `check-license`).
 
 ## [v1.3.1] - 2026-08-25

@@ -621,6 +621,11 @@ class TestEditParamsSensorMaps:
         assert ENTITY_UNIT_MAP[key] == UnitOfEnergy.WATT_HOUR
         assert ENTITY_SENSOR_DEVICE_CLASS_MAP[key] == SensorDeviceClass.ENERGY
         assert STATE_CLASS_MAP[key] == SensorStateClass.TOTAL_INCREASING
+        # informationParams yields strings; without _numeric_or_none the sensor
+        # would keep a string native_value and _sync_state would drop state_class.
+        processor = ENTITY_VALUE_PROCESSOR[key]
+        assert processor("12119.5") == 12119.5
+        assert processor("off") is None
 
     def test_edit_params_keys_in_ecomax360i_sensors(self) -> None:
         """All editParams.data sensor keys should be in ECOMAX360I_SENSORS."""

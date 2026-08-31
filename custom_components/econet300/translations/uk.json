@@ -312,6 +312,9 @@
       "fuel_consumption_total": {
         "name": "Загальне споживання палива"
       },
+      "periodic_energy_consumption": {
+        "name": "Періодичне споживання енергії"
+      },
       "fan_power": {
         "name": "Потужність вентилятора"
       },

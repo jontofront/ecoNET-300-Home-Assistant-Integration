@@ -312,6 +312,9 @@
       "fuel_consumption_total": {
         "name": "Consommation totale de combustible"
       },
+      "periodic_energy_consumption": {
+        "name": "Consommation d'énergie périodique"
+      },
       "fan_power": {
         "name": "Puissance du ventilateur"
       },
