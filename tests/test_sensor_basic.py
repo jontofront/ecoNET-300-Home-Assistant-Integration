@@ -26,6 +26,8 @@ from custom_components.econet300.const import (
     SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
+    SENSOR_MODE_MAPPING,
+    SENSOR_STATUS_CO_MAPPING,
     STATE_CLASS_MAP,
     STATE_UNKNOWN,
 )
@@ -107,6 +109,22 @@ class TestEconetSensorBasic:
         processor = ENTITY_VALUE_PROCESSOR.get(key)
         assert processor is not None
         assert processor(9999) == STATE_UNKNOWN
+
+    # ruff: noqa: PLR6301
+    def test_mode_reuses_official_status_co_mapping(self) -> None:
+        """Mode and transmission reuse SENSOR_STATUS_CO_MAPPING (ecoNET Mode{} / #247)."""
+        mode_proc = ENTITY_VALUE_PROCESSOR["mode"]
+        status_proc = ENTITY_VALUE_PROCESSOR["statusCO"]
+        transmission_proc = ENTITY_VALUE_PROCESSOR["transmission"]
+
+        assert SENSOR_MODE_MAPPING is SENSOR_STATUS_CO_MAPPING
+        assert mode_proc(1) == "stop"
+        assert mode_proc(2) == "fire_up"
+        assert mode_proc(6) == "cleaning"
+        assert mode_proc(1) == status_proc(1)
+        assert mode_proc(6) == status_proc(6)
+        assert transmission_proc(1) == "stop"
+        assert transmission_proc(6) == "cleaning"
 
     # ruff: noqa: PLR6301
     def test_can_add_mixer_with_valid_data(self):
@@ -276,6 +294,7 @@ class TestSensorMappingLogic:
         unknown_controllers = [
             "ecoMAX860D3-HB",
             "ecoMAX860P4-O MINI MATIC",
+            "ecoMAX850P-R",
             "ecoMAX850R2-X",
             "ecoMAX810P-L TOUCH",
             "ecoMAX860P2-N TOUCH",

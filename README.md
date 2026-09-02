@@ -212,6 +212,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.3-beta.1
+
+- **Boiler mode mapping (#247)**: `mode: 1` is **Stop**, not Fire up. `mode` / `transmission` now use the official ecoNET `Mode{}` table (same as `statusCO`). Mode `6` stays **Cleaning**. Update automations that compared the old shifted state names — see [Migration](docs/MIGRATION.md).
+
 ### What's New in v1.3.2
 
 - **ecoMAX360i periodic energy consumption**: native `ENERGY` sensor from `informationParams` 204 (Wh, `total_increasing`), so Energy dashboard no longer needs a Riemann sum over electrical power.
@@ -275,4 +279,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-08-31 for v1.3.2._
+_This README was last updated on 2026-09-02 for v1.3.3-beta.1._

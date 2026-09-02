@@ -3,7 +3,7 @@
 Organized into thematic submodules and re-exported here so existing
 ``from .const import X`` imports keep working unchanged:
 
-- ``core``            – core/coordinator/device/API/RM/mode/mixer constants
+- ``core``            – core/coordinator/device/API/RM/mixer constants
 - ``controllers``     – controller-specific sensor & binary-sensor key sets
 - ``params``          – number/select param maps, unit lookups, dedup sets
 - ``custom_entities`` – options-flow custom-entity selector constants

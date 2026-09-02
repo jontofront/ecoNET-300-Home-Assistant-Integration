@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [v1.3.3-beta.1] - 2026-09-02
+
+### Fixed
+
+- **Boiler `mode` / `transmission` states match the ecoNET Mode table ([#247](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/247))**: `mode: 1` is **Stop**, not Fire up. `mode` and `transmission` now reuse `SENSOR_STATUS_CO_MAPPING` (official cloud `Mode{}`). Mode `6` stays **Cleaning** ([#208](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/208)). Automations that keyed off the old shifted names (`1` = fire_up, `2` = operation, …) need updating.
+
+### Tests
+
+- **ecoMAX850P-R fixtures** from the [#247](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/247) diagnostic dump (separate from ecoMAX850R2-X).
+
 ## [v1.3.2] - 2026-08-31
 
 ### Added

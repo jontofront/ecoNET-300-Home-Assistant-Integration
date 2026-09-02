@@ -6,13 +6,32 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 ## Version Compatibility Matrix
 
-| From Version | To Version | Migration Required | Notes                                     |
-| ------------ | ---------- | ------------------ | ----------------------------------------- |
-| v1.3.1       | v1.3.2     | No                 | New energy sensor after HA restart        |
+| From Version | To Version    | Migration Required | Notes                                      |
+| ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.2       | v1.3.3-beta.1 | Automations only   | `mode` / `transmission` state names (#247) |
+| v1.3.1       | v1.3.2        | No                 | New energy sensor after HA restart         |
 | v1.2.x       | v1.3.0     | No (cleanup only)  | Delete leftover *Unavailable* entities    |
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
 | v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.3.2 — mode / transmission state names
+
+No config migration is required. The `mode` and `transmission` sensors now share
+the official ecoNET `Mode{}` table with `statusCO` ([#247](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/247)).
+
+| Raw `mode` | Old HA state      | New HA state   |
+| ---------- | ----------------- | -------------- |
+| 1          | `fire_up`         | `stop`         |
+| 2          | `operation`       | `fire_up`      |
+| 3          | `work`            | `operation`    |
+| 6          | `cleaning`        | `cleaning`     |
+| 8          | `manual`          | `alarm`        |
+| 9          | `problem`         | `manual`       |
+
+Mode `6` stays **cleaning** ([#208](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/208)). Update automations that compare those state strings.
 
 ---
 

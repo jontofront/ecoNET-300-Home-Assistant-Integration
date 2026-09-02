@@ -157,47 +157,43 @@ Complete mapping of boiler operation mode values to Home Assistant states and cl
 
 ### Operation Mode Mapping Table
 
-| Value | HA State          | Cloud Key           | English         | Polish          | French         |
-| :---: | :---------------- | :------------------ | :-------------- | :-------------- | :------------- |
-|   0   | `off`             | `modeTurnOff`       | Turned off      | Wyłączony       | Désactivé      |
-|   1   | `fire_up`         | `modeKindle`        | Fire up         | Rozpalanie      | Allumage       |
-|   2   | `operation`       | `modeWork`\*        | Operation       | Praca           | Fonctionnement |
-|   3   | `work`            | `modeWork`          | Work            | Praca           | Fonctionnement |
-|   4   | `supervision`     | `modeSupervision`   | Supervision     | Nadzór          | Surveillance   |
-|   5   | `paused`          | `modeHalt`          | Halted          | Postój          | Arrêt          |
-|   6   | `stop`            | `modeStop`          | Stopped         | Zatrzymany      | Arrêté         |
-|   7   | `burning_off`     | `modeExtinction`    | Burning OFF     | Wygaszanie      | Extinction     |
-|   8   | `manual`          | `modeManual`        | Manual          | Ręczny          | Manuel         |
-|   9   | `problem`         | `modeAlarm`         | Alarm           | Alarm           | Allarme        |
-|  10   | `unsealing`       | `modeUnsealing`     | Unsealing       | Rozszczelnienie | Descellement   |
-|  11   | `chimney`         | `modeChimneySweep`  | Chimney-sweep   | Kominiarz       | Ramoneur       |
-|  12   | `stabilization`   | `modeStabilization` | Stabilization   | Stabilizacja    | Stabilisation  |
-|  13   | `no_transmission` | _—_                 | No transmission | Brak transmisji | -              |
+Official ecoNET cloud `Mode{}` table. `mode`, `transmission`, and `statusCO` share
+`SENSOR_STATUS_CO_MAPPING`.
+
+| Value | HA State            | Cloud Key              | English            | Polish                | French                  |
+| :---: | :------------------ | :--------------------- | :----------------- | :-------------------- | :---------------------- |
+|   0   | `off`               | `modeTurnOff`          | Off                | Wyłączony             | Désactivé               |
+|   1   | `stop`              | `modeStop`             | Stopped            | Zatrzymany            | Arrêté                  |
+|   2   | `fire_up`           | `modeKindle`           | Fire up            | Rozpalanie            | Allumage                |
+|   3   | `operation`         | `modeWork`             | Operation          | Praca                 | Fonctionnement          |
+|   4   | `supervision`       | `modeSupervision`      | Supervision        | Nadzór                | Surveillance            |
+|   5   | `paused`            | `modeHalt`             | Paused             | Postój                | Arrêt                   |
+|   6   | `cleaning`          | `modeCleaning`         | Cleaning           | Czyszczenie           | Nettoyage               |
+|   7   | `burning_off`       | `modeExtinction`       | Burning off        | Wygaszanie            | Extinction              |
+|   8   | `alarm`             | `modeAlarm`            | Alarm              | Alarm                 | Alarme                  |
+|   9   | `manual`            | `modeManual`           | Manual             | Ręczny                | Manuel                  |
+|  10   | `unsealing`         | `modeUnsealing`        | Unsealing          | Rozszczelnienie       | Descellement            |
+|  11   | `other`             | `modeOther`            | Other              | Inny                  | Autre                   |
+|  12   | `stabilization`     | `modeStabilization`    | Stabilization      | Stabilizacja          | Stabilisation           |
+|  13   | `purge`             | `modePurge`            | Purge              | Przedmuch             | Purge                   |
+|  14   | `check_flame`       | `modeCheckFlame`       | Check flame        | Sprawdzanie płomienia | Vérifier la flamme      |
+|  15   | `flame_losing`      | `modeFlameLosing`      | Flame extinguished | Płomień zgaszony      | Flamme éteinte          |
+|  16   | `prevention`        | `modePrevention`       | Prevention         | Zapobieganie          | Prévention              |
+|  17   | `work_grate`        | `modeWorkGrate`        | Work grate         | Praca - ruszt         | Fonctionnement - grille |
+|  18   | `supervision_grate` | `modeSupervisionGrate` | Supervision grate  | Nadzór - ruszt        | Surveillance - grille   |
+|  19   | `calibration`       | `modeCalibration`      | Calibration        | Kalibracja            | Calibrage               |
+|  20   | `maintain`          | `modeMaintain`         | Maintain           | Podtrzymanie          | Maintenir               |
+|  21   | `afterburning`      | `modeAfterburning`     | Afterburning       | Dopalanie             | Post-combustion         |
+|  22   | `chimney_sweep`     | `modeChimneySwep`      | Chimney-sweep      | Kominiarz             | Ramoneur                |
+|  23   | `heating`           | `modeHeats`            | Heating            | Podgrzewanie          | Chauffage               |
+|  24   | `open_door`         | `modeOpenDoor`         | Open door          | Otwarte drzwi         | Porte ouverte           |
+|  25   | `cooling`           | `modeCooling`          | Cooling            | Chłodzenie            | Refroidissement         |
+|  26   | `safe`              | `modeSafe`             | Safe               | Bezpieczny            | Sûr                     |
 
 **Notes:**
 
-- HA States `off`, `paused`, `problem` are from `homeassistant.const` (STATE_OFF, STATE_PAUSED, STATE_PROBLEM)
-- Value 2 (`operation`) may be device-specific
-
-### Additional Mode Keys (Extended)
-
-| Cloud Key              | English            | Polish                | French                  |
-| :--------------------- | :----------------- | :-------------------- | :---------------------- |
-| `modeCleaning`         | Cleaning           | Czyszczenie           | Nettoyage               |
-| `modePurge`            | Purge              | Przedmuch             | Purge                   |
-| `modeOther`            | Other              | Inny                  | Autre                   |
-| `modeWorkGrate`        | Work grate         | Praca - ruszt         | Fonctionnement - grille |
-| `modeSupervisionGrate` | Supervision grate  | Nadzór - ruszt        | Surveillance - grille   |
-| `modeCalibration`      | Calibration        | Kalibracja            | Calibrage               |
-| `modeMaintain`         | Maintain           | Podtrzymanie          | Maintenir               |
-| `modeAfterburning`     | Afterburning       | Dopalanie             | Post-combustion         |
-| `modeSafe`             | Safe               | Bezpieczny            | Sûr                     |
-| `modeCheckFlame`       | Check flame        | Sprawdzanie płomienia | Vérifier la flamme      |
-| `modeFlameLosing`      | Flame extinguished | Płomień zgaszony      | Flamme éteinte          |
-| `modePrevention`       | Prevention         | Zapobieganie          | Prévention              |
-| `modeOpenDoor`         | Open door          | Otwarte drzwi         | Porte ouverte           |
-| `modeHeats`            | Kindling           | Podgrzewanie          | Chauffage               |
-| `modeCooling`          | Cooling            | Chłodzenie            | Refroidissement         |
+- HA state `off` matches `homeassistant.const.STATE_OFF`
+- HA state `paused` matches `homeassistant.const.STATE_PAUSED`
 
 ## 💨 Fans & Ventilation
 

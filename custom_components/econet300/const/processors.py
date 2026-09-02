@@ -4,7 +4,6 @@ from typing import Any, Final
 
 from homeassistant.const import STATE_UNKNOWN as _STATE_UNKNOWN
 
-from .core import OPERATION_MODE_NAMES
 from .value_maps import (
     SENSOR_FLAP_VALVE_STATES_MAPPING,
     SENSOR_HEAT_DEMANDED_MAPPING,
@@ -77,7 +76,7 @@ ENTITY_VALUE_PROCESSOR = {
     "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, _STATE_UNKNOWN),
     "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, _STATE_UNKNOWN),
     "thermostat": lambda x: SENSOR_THERMOSTAT_MAPPING.get(x, _STATE_UNKNOWN),
-    "transmission": lambda x: OPERATION_MODE_NAMES.get(x, _STATE_UNKNOWN),
+    "transmission": lambda x: SENSOR_MODE_MAPPING.get(x, _STATE_UNKNOWN),
     "PHNXreg2045": _numeric_div10_or_none,
     "PHNXreg2046": _numeric_div10_or_none,
     # ecoMAX360i-specific processors (informationParams yields string values)

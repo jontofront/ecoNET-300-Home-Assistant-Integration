@@ -102,6 +102,8 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `fanPower`   | Fan power   | `../econet/regParams` |
 | `thermostat` | Thermostat  | `../econet/regParams` |
 
+`mode` uses the official ecoNET `Mode{}` table (`SENSOR_STATUS_CO_MAPPING`), shared with `statusCO` and `transmission`.
+
 ### Fuel and Consumption
 
 | Entity Key   | Description      | Endpoint              |
