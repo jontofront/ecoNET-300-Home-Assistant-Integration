@@ -1,0 +1,824 @@
+{
+  "regProd": 16,
+  "regAllowed": true,
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "modulePanelSoftVer": "2.30.11",
+  "ecosrvSoftVer": "3.2.3886",
+  "moduleASoftVer": "2.10.14.V1",
+  "eth0": "**REDACTED**",
+  "tilesET": null,
+  "etPasswords": "**REDACTED**",
+  "encryption": "psk2",
+  "schemaID": 17,
+  "wlan0": "**REDACTED**",
+  "remoteMenu": false,
+  "regType": 0,
+  "schema": {},
+  "regRefresh": 5,
+  "tiles": [
+    {
+      "minValue_": 0,
+      "idx": 0,
+      "seqNo_": 1,
+      "bit_": null,
+      "type_": "tile_text",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "mode",
+      "extra_": "CAN_TURN_OFF_BOILER"
+    },
+    {
+      "minValue_": 0,
+      "idx": 1,
+      "seqNo_": 3,
+      "bit_": null,
+      "type_": "tile_power",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "boilerPower"
+    },
+    {
+      "minValue_": 0,
+      "idx": 2,
+      "seqNo_": 4,
+      "bit_": null,
+      "type_": "tile_level",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fuelLevel"
+    },
+    {
+      "minValue_": 0,
+      "idx": 3,
+      "seqNo_": 5,
+      "bit_": null,
+      "type_": "tile_stream",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fuelStream"
+    },
+    {
+      "minValue_": 0,
+      "idx": 4,
+      "seqNo_": 6,
+      "bit_": null,
+      "type_": "tile_fan",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "fanPower"
+    },
+    {
+      "minValue_": 0,
+      "idx": 5,
+      "seqNo_": 7,
+      "bit_": null,
+      "type_": "tile_flame",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempOpticalSensor"
+    },
+    {
+      "minValue_": 0,
+      "idx": 6,
+      "seqNo_": 8,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 450,
+      "memberName_": "tempFlueGas"
+    },
+    {
+      "minValue_": 0,
+      "idx": 7,
+      "seqNo_": 10,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCOSet",
+      "maxValue_": 100,
+      "memberName_": "tempCO"
+    },
+    {
+      "minValue_": 0,
+      "idx": 8,
+      "seqNo_": 12,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "tempCWUSet",
+      "maxValue_": 100,
+      "memberName_": "tempCWU",
+      "extra_": null
+    },
+    {
+      "minValue_": -35,
+      "idx": 9,
+      "seqNo_": 13,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 40,
+      "memberName_": "tempExternalSensor"
+    },
+    {
+      "minValue_": 0,
+      "idx": 10,
+      "seqNo_": 14,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempUpperBuffer"
+    },
+    {
+      "minValue_": 0,
+      "idx": 11,
+      "seqNo_": 15,
+      "bit_": null,
+      "type_": "tile_temp_ro",
+      "name_": null,
+      "maxValue_": 100,
+      "memberName_": "tempLowerBuffer"
+    },
+    {
+      "minValue_": 0,
+      "idx": 12,
+      "seqNo_": 16,
+      "bit_": null,
+      "type_": "tile_temp",
+      "name_": null,
+      "setMemberName_": "mixerSetTemp1",
+      "maxValue_": 100,
+      "memberName_": "mixerTemp1",
+      "extra_": null
+    },
+    {
+      "minValue_": 0,
+      "idx": 13,
+      "seqNo_": 100000,
+      "bit_": null,
+      "type_": "tile_temp_wave",
+      "name_": null,
+      "setMemberName_": "ecoSterSetTemp1",
+      "maxValue_": 100,
+      "memberName_": "ecoSterTemp1",
+      "extra_": {
+        "index": "1",
+        "addParameters": "STER_MODE_1;WORK_MODE_H_1",
+        "tempSelection": "ecoSterContacts1"
+      }
+    }
+  ],
+  "protocolType": "em",
+  "controllerID": "ecoMAX850P-R",
+  "moduleEcoSTERSoftVer": "10.11.8",
+  "schedules": {},
+  "econetConfVer": null,
+  "password": "**REDACTED**",
+  "prodLogo": 0,
+  "fuelConsumptionCalc": false,
+  "regImgID": 0,
+  "settingsVer": 74221,
+  "signal": "-77",
+  "logFl": 0,
+  "etConfDesc": null,
+  "history": [],
+  "uid": "**REDACTED**",
+  "routerType": "mr3020-v3",
+  "etNewConfTrans": false,
+  "ecosrvAddr": "econet24.com",
+  "softVer": "3.2.3886",
+  "quality": 1,
+  "moduleCSoftVer": null,
+  "lan": true,
+  "moduleLambdaSoftVer": null,
+  "panelsNames": [],
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "2.10.14",
+      84
+    ],
+    [
+      "lbPanelModuleVerCurr",
+      "2.30.11",
+      85
+    ],
+    [
+      "lbEcoSTERModuleVer1Curr",
+      "10.11.8",
+      4
+    ]
+  ],
+  "key": "**REDACTED**",
+  "servicePassword": "**REDACTED**",
+  "ssid": "**REDACTED**",
+  "wifi": true,
+  "panelVer": null,
+  "alarms": [
+    {
+      "toDate": "2026-08-30 12:11:30",
+      "code": 0,
+      "fromDate": "2026-08-30 12:04:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:41:59",
+      "code": 0,
+      "fromDate": "2026-08-30 11:40:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:39:40",
+      "code": 0,
+      "fromDate": "2026-08-30 11:38:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:38:19",
+      "code": 0,
+      "fromDate": "2026-08-30 11:20:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:20:24",
+      "code": 0,
+      "fromDate": "2026-08-30 11:19:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:18:45",
+      "code": 0,
+      "fromDate": "2026-08-30 11:16:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 11:15:47",
+      "code": 0,
+      "fromDate": "2026-08-30 10:33:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 10:03:35",
+      "code": 0,
+      "fromDate": "2026-08-30 09:43:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 09:35:52",
+      "code": 0,
+      "fromDate": "2026-08-30 09:35:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 09:27:29",
+      "code": 0,
+      "fromDate": "2026-08-30 09:27:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 09:27:20",
+      "code": 0,
+      "fromDate": "2026-08-30 09:27:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 09:23:21",
+      "code": 0,
+      "fromDate": "2026-08-30 09:23:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-30 09:23:05",
+      "code": 0,
+      "fromDate": "2026-08-30 09:23:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-23 08:58:16",
+      "code": 0,
+      "fromDate": "2026-08-23 03:07:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-22 23:25:41",
+      "code": 0,
+      "fromDate": "2026-08-22 23:25:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-02 10:55:30",
+      "code": 0,
+      "fromDate": "2026-08-02 10:52:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-23 18:43:17",
+      "code": 0,
+      "fromDate": "2026-07-23 18:43:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-20 19:41:31",
+      "code": 0,
+      "fromDate": "2026-07-20 19:41:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-13 14:25:15",
+      "code": 0,
+      "fromDate": "2026-07-13 14:25:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-12 12:47:34",
+      "code": 0,
+      "fromDate": "2026-07-12 12:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-12 12:19:01",
+      "code": 0,
+      "fromDate": "2026-07-12 12:18:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-07 15:26:18",
+      "code": 0,
+      "fromDate": "2026-07-07 15:12:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-04 06:54:48",
+      "code": 0,
+      "fromDate": "2026-07-04 06:54:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-06-27 14:28:27",
+      "code": 0,
+      "fromDate": "2026-06-27 14:00:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-06-06 18:42:25",
+      "code": 0,
+      "fromDate": "2026-06-06 18:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-05-31 13:52:01",
+      "code": 0,
+      "fromDate": "2026-05-31 13:51:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-05-16 12:58:55",
+      "code": 0,
+      "fromDate": "2026-05-16 12:58:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-12 15:57:49",
+      "code": 0,
+      "fromDate": "2026-04-12 15:57:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-12 15:51:59",
+      "code": 0,
+      "fromDate": "2026-04-12 15:36:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-08 17:22:26",
+      "code": 0,
+      "fromDate": "2026-04-08 17:22:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-07 13:53:33",
+      "code": 0,
+      "fromDate": "2026-04-07 13:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-07 13:43:25",
+      "code": 0,
+      "fromDate": "2026-04-07 13:41:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-04 13:21:07",
+      "code": 0,
+      "fromDate": "2026-04-04 13:20:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-04 12:28:36",
+      "code": 0,
+      "fromDate": "2026-04-04 12:19:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-04 12:08:21",
+      "code": 0,
+      "fromDate": "2026-04-04 12:02:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-04 11:45:11",
+      "code": 0,
+      "fromDate": "2026-04-04 11:40:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-04 11:26:32",
+      "code": 0,
+      "fromDate": "2026-04-04 10:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-04-03 18:35:08",
+      "code": 0,
+      "fromDate": "2026-04-03 18:34:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-03-31 13:31:09",
+      "code": 0,
+      "fromDate": "2026-03-31 13:30:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-03-16 15:51:15",
+      "code": 0,
+      "fromDate": "2026-03-16 15:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-01-19 22:05:15",
+      "code": 0,
+      "fromDate": "2026-01-19 22:00:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-19 14:16:51",
+      "code": 0,
+      "fromDate": "2025-12-19 14:12:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-19 14:11:51",
+      "code": 0,
+      "fromDate": "2025-12-19 14:10:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-15 16:46:25",
+      "code": 0,
+      "fromDate": "2025-12-15 16:46:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-15 16:42:11",
+      "code": 0,
+      "fromDate": "2025-12-15 16:41:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-15 16:35:19",
+      "code": 0,
+      "fromDate": "2025-12-15 16:33:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-15 16:32:50",
+      "code": 0,
+      "fromDate": "2025-12-15 16:32:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-14 15:18:36",
+      "code": 0,
+      "fromDate": "2025-12-14 15:17:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-14 14:42:30",
+      "code": 0,
+      "fromDate": "2025-12-14 14:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-12-03 11:44:35",
+      "code": 0,
+      "fromDate": "2025-12-03 11:41:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-17 18:19:25",
+      "code": 0,
+      "fromDate": "2025-11-17 18:19:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-15 17:13:29",
+      "code": 0,
+      "fromDate": "2025-11-15 17:13:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-14 14:55:19",
+      "code": 0,
+      "fromDate": "2025-11-14 14:53:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-10 11:39:41",
+      "code": 0,
+      "fromDate": "2025-11-10 05:14:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-08 00:11:43",
+      "code": 0,
+      "fromDate": "2025-11-08 00:11:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-11-05 11:41:20",
+      "code": 0,
+      "fromDate": "2025-11-05 11:38:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-07 19:47:30",
+      "code": 0,
+      "fromDate": "2025-10-07 19:47:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-07 19:45:43",
+      "code": 0,
+      "fromDate": "2025-10-07 19:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-10-03 06:38:40",
+      "code": 0,
+      "fromDate": "2025-10-03 06:38:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 18:50:42",
+      "code": 0,
+      "fromDate": "2025-09-13 18:45:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 18:43:36",
+      "code": 0,
+      "fromDate": "2025-09-13 17:37:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 15:16:16",
+      "code": 0,
+      "fromDate": "2025-09-13 15:16:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 15:05:35",
+      "code": 0,
+      "fromDate": "2025-09-13 15:05:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 15:04:20",
+      "code": 0,
+      "fromDate": "2025-09-13 15:03:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-13 11:35:48",
+      "code": 0,
+      "fromDate": "2025-09-13 11:31:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-09-01 04:20:11",
+      "code": 0,
+      "fromDate": "2025-09-01 04:20:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-08-02 17:12:01",
+      "code": 0,
+      "fromDate": "2025-08-02 17:11:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-27 16:07:13",
+      "code": 0,
+      "fromDate": "2025-07-27 16:07:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-20 15:11:17",
+      "code": 0,
+      "fromDate": "2025-07-20 15:02:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-20 14:58:02",
+      "code": 0,
+      "fromDate": "2025-07-20 14:57:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-20 14:40:50",
+      "code": 0,
+      "fromDate": "2025-07-20 14:32:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-14 16:56:49",
+      "code": 0,
+      "fromDate": "2025-07-14 16:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-08 04:43:46",
+      "code": 0,
+      "fromDate": "2025-07-08 04:24:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-05 13:55:48",
+      "code": 0,
+      "fromDate": "2025-07-05 13:55:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-05 13:52:39",
+      "code": 0,
+      "fromDate": "2025-07-05 13:52:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-01 14:35:54",
+      "code": 0,
+      "fromDate": "2025-07-01 14:35:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-01 14:35:02",
+      "code": 0,
+      "fromDate": "2025-07-01 14:34:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-07-01 08:51:13",
+      "code": 0,
+      "fromDate": "2025-07-01 08:46:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-30 21:29:17",
+      "code": 0,
+      "fromDate": "2025-06-30 21:29:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-30 17:12:33",
+      "code": 0,
+      "fromDate": "2025-06-30 12:34:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-07 14:27:24",
+      "code": 0,
+      "fromDate": "2025-06-07 14:27:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-07 14:26:23",
+      "code": 0,
+      "fromDate": "2025-06-07 14:26:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-07 14:24:47",
+      "code": 0,
+      "fromDate": "2025-06-07 14:24:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-06-07 14:21:51",
+      "code": 0,
+      "fromDate": "2025-06-07 14:21:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-31 15:14:35",
+      "code": 0,
+      "fromDate": "2025-05-31 15:14:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-31 15:13:06",
+      "code": 0,
+      "fromDate": "2025-05-31 12:08:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:55:49",
+      "code": 0,
+      "fromDate": "2025-05-24 08:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:50:26",
+      "code": 0,
+      "fromDate": "2025-05-24 08:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:50:17",
+      "code": 0,
+      "fromDate": "2025-05-24 08:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:50:06",
+      "code": 0,
+      "fromDate": "2025-05-24 08:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:50:01",
+      "code": 0,
+      "fromDate": "2025-05-24 08:50:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:55",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:45",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:34",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:22",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:13",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:49:05",
+      "code": 0,
+      "fromDate": "2025-05-24 08:49:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:48:57",
+      "code": 0,
+      "fromDate": "2025-05-24 08:48:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:48:49",
+      "code": 0,
+      "fromDate": "2025-05-24 08:48:00",
+      "service": false
+    },
+    {
+      "toDate": "2025-05-24 08:48:41",
+      "code": 0,
+      "fromDate": "2025-05-24 08:48:00",
+      "service": false
+    }
+  ],
+  "login": "**REDACTED**",
+  "moduleBSoftVer": "1.31.14",
+  "etConfVer": null
+}

@@ -1,10 +1,4 @@
-"""Core constants, coordinator/cache config, device info, polling, components, API + RM endpoints, structure types, alarm codes, operation modes and mixer configuration."""
-
-from homeassistant.const import (
-    STATE_OFF as _STATE_OFF,
-    STATE_PAUSED as _STATE_PAUSED,
-    STATE_PROBLEM as _STATE_PROBLEM,
-)
+"""Core constants, coordinator/cache config, device info, polling, components, API + RM endpoints, structure types, alarm codes and mixer configuration."""
 
 # =============================================================================
 # CORE INTEGRATION CONSTANTS
@@ -246,26 +240,6 @@ RM_STRUCTURE_TYPE_MENU_GROUP = 7  # Menu group/header (resets pass_index)
 # =============================================================================
 ALARM_CODE_POWER_OUTAGE = 0
 ALARM_CODE_CONTINUES = 255
-
-# =============================================================================
-# OPERATION MODES AND STATUS MAPPINGS
-# =============================================================================
-OPERATION_MODE_NAMES = {
-    0: _STATE_OFF,
-    1: "fire_up",
-    2: "operation",
-    3: "work",
-    4: "supervision",
-    5: _STATE_PAUSED,  # "halted",
-    6: "cleaning",
-    7: "burning_off",
-    8: "manual",
-    9: _STATE_PROBLEM,  # "alarm",
-    10: "unsealing",
-    11: "chimney",
-    12: "stabilization",
-    13: "no_transmission",
-}
 
 # =============================================================================
 # MIXER CONFIGURATION CONSTANTS

@@ -389,7 +389,23 @@
           "unsealing": "mdi:lock-open",
           "chimney": "mdi:smoke",
           "stabilization": "mdi:sync",
-          "no_transmission": "mdi:wifi-off"
+          "no_transmission": "mdi:wifi-off",
+          "alarm": "mdi:alert",
+          "other": "mdi:help-circle",
+          "purge": "mdi:weather-windy",
+          "check_flame": "mdi:fire",
+          "flame_losing": "mdi:fire-off",
+          "prevention": "mdi:shield-alert",
+          "work_grate": "mdi:grill",
+          "supervision_grate": "mdi:eye",
+          "calibration": "mdi:tune",
+          "maintain": "mdi:cog",
+          "afterburning": "mdi:fire",
+          "chimney_sweep": "mdi:smoke",
+          "heating": "mdi:radiator",
+          "open_door": "mdi:door-open",
+          "cooling": "mdi:snowflake",
+          "safe": "mdi:shield-check"
         }
       },
       "fan_power": {

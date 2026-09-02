@@ -2,13 +2,6 @@
 
 from homeassistant.const import STATE_UNKNOWN as _STATE_UNKNOWN
 
-from .core import OPERATION_MODE_NAMES
-
-# Sensor value mappings for both display and icon support
-# Note: mode and transmission use the same OPERATION_MODE_NAMES mapping
-# to ensure consistent state display across both sensors
-SENSOR_MODE_MAPPING: dict[int, str] = OPERATION_MODE_NAMES
-
 SENSOR_LAMBDA_STATUS_MAPPING: dict[int, str] = {
     0: "stop",
     1: "start",
@@ -53,6 +46,10 @@ SENSOR_STATUS_CO_MAPPING: dict[int, str] = {
     26: "safe",  # modeSafe - SAFE MODE
 }
 
+# Official ecoNET Mode{} table (cloud JS). mode, transmission, and statusCO share it.
+SENSOR_MODE_MAPPING: dict[int, str] = SENSOR_STATUS_CO_MAPPING
+OPERATION_MODE_NAMES: dict[int, str] = SENSOR_STATUS_CO_MAPPING
+
 SENSOR_THERMOSTAT_MAPPING: dict[int, str] = {
     0: "off",
     1: "on",
@@ -80,8 +77,8 @@ SENSOR_WATER_PUMP_RUNNING_MAPPING: dict[int, str] = {
 # =============================================================================
 # Options for SensorDeviceClass.ENUM sensors - displayed in HA Developer Tools
 SENSOR_ENUM_OPTIONS: dict[str, list[str]] = {
-    "mode": [*OPERATION_MODE_NAMES.values(), _STATE_UNKNOWN],
-    "transmission": [*OPERATION_MODE_NAMES.values(), _STATE_UNKNOWN],
+    "mode": [*SENSOR_STATUS_CO_MAPPING.values(), _STATE_UNKNOWN],
+    "transmission": [*SENSOR_STATUS_CO_MAPPING.values(), _STATE_UNKNOWN],
     "statusCO": [*SENSOR_STATUS_CO_MAPPING.values(), _STATE_UNKNOWN],
     # ecoMAX360i enum options
     "flapValveStates": [*SENSOR_FLAP_VALVE_STATES_MAPPING.values(), _STATE_UNKNOWN],
@@ -90,4 +87,3 @@ SENSOR_ENUM_OPTIONS: dict[str, list[str]] = {
         dict.fromkeys([*SENSOR_WATER_PUMP_RUNNING_MAPPING.values(), _STATE_UNKNOWN])
     ),
 }
-

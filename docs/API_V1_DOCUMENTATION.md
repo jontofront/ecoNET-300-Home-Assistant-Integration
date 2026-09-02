@@ -546,80 +546,50 @@ The boiler operation mode is reported via the `mode` and `transmission` paramete
 
 #### Complete Operation Mode Mapping Table
 
-| Value | HA Core State     | State Key (const.py) | Display (EN)    | Display (PL)    | Cloud Translation Key |
-| :---: | :---------------- | :------------------- | :-------------- | :-------------- | :-------------------- |
-|   0   | `off`             | `STATE_OFF`          | Turned off      | Wyłączony       | `modeTurnOff`         |
-|   1   | `fire_up`         | `fire_up`            | Fire up         | Rozpalanie      | `modeKindle`          |
-|   2   | `operation`       | `operation`          | Operation       | Praca           | `modeWork`\*          |
-|   3   | `work`            | `work`               | Work            | Praca           | `modeWork`            |
-|   4   | `supervision`     | `supervision`        | Supervision     | Nadzór          | `modeSupervision`     |
-|   5   | `paused`          | `STATE_PAUSED`       | Halted          | Postój          | `modeHalt`            |
-|   6   | `cleaning`        | `cleaning`           | Cleaning        | Czyszczenie     | `modeCleaning`        |
-|   7   | `burning_off`     | `burning_off`        | Burning OFF     | Wygaszanie      | `modeExtinction`      |
-|   8   | `manual`          | `manual`             | Manual          | Ręczny          | `modeManual`          |
-|   9   | `problem`         | `STATE_PROBLEM`      | Alarm           | Alarm           | `modeAlarm`           |
-|  10   | `unsealing`       | `unsealing`          | Unsealing       | Rozszczelnienie | `modeUnsealing`       |
-|  11   | `chimney`         | `chimney`            | Chimney-sweep   | Kominiarz       | `modeChimneySweep`    |
-|  12   | `stabilization`   | `stabilization`      | Stabilization   | Stabilizacja    | `modeStabilization`   |
-|  13   | `no_transmission` | `no_transmission`    | No transmission | Brak transmisji | _—_                   |
+`mode`, `transmission`, and `statusCO` share `SENSOR_STATUS_CO_MAPPING` in
+`custom_components/econet300/const/value_maps.py` (official ecoNET cloud `Mode{}`).
 
-**Notes:**
-
-- `STATE_OFF`, `STATE_PAUSED`, `STATE_PROBLEM` are imported from `homeassistant.const`
-- Value 2 (`operation`) may be device-specific; verify with actual device data
-- Value 13 indicates no communication with the controller
-
-#### Additional Cloud Mode Keys (Not Currently Mapped)
-
-These additional mode states exist in the cloud translations but are not currently mapped in the integration:
-
-| Cloud Translation Key  | Display (EN)       | Display (PL)          |
-| :--------------------- | :----------------- | :-------------------- |
-| `modePurge`            | Purge              | Przedmuch             |
-| `modeOther`            | Other              | Inny                  |
-| `modeWorkGrate`        | Work grate         | Praca - ruszt         |
-| `modeSupervisionGrate` | Supervision grate  | Nadzór - ruszt        |
-| `modeCalibration`      | Calibration        | Kalibracja            |
-| `modeMaintain`         | Maintain           | Podtrzymanie          |
-| `modeAfterburning`     | Afterburning       | Dopalanie             |
-| `modeSafe`             | Safe               | Bezpieczny            |
-| `modeCheckFlame`       | Check flame        | Sprawdzanie płomienia |
-| `modeFlameLosing`      | Flame extinguished | Płomień zgaszony      |
-| `modePrevention`       | Prevention         | Zapobieganie          |
-
-#### Implementation Reference
-
-The mode mapping is defined in `custom_components/econet300/const.py`:
-
-```python
-OPERATION_MODE_NAMES = {
-    0: STATE_OFF,           # "off" - from homeassistant.const
-    1: "fire_up",
-    2: "operation",
-    3: "work",
-    4: "supervision",
-    5: STATE_PAUSED,        # "paused" - from homeassistant.const
-    6: "cleaning",
-    7: "burning_off",
-    8: "manual",
-    9: STATE_PROBLEM,       # "problem" - from homeassistant.const
-    10: "unsealing",
-    11: "chimney",
-    12: "stabilization",
-    13: "no_transmission",
-}
-```
+| Value | HA State            | Display (EN)       | Display (PL)          | Cloud Key              |
+| :---: | :------------------ | :----------------- | :-------------------- | :--------------------- |
+|   0   | `off`               | Off                | Wyłączony             | `modeTurnOff`          |
+|   1   | `stop`              | Stopped            | Zatrzymany            | `modeStop`             |
+|   2   | `fire_up`           | Fire up            | Rozpalanie            | `modeKindle`           |
+|   3   | `operation`         | Operation          | Praca                 | `modeWork`             |
+|   4   | `supervision`       | Supervision        | Nadzór                | `modeSupervision`      |
+|   5   | `paused`            | Paused             | Postój                | `modeHalt`             |
+|   6   | `cleaning`          | Cleaning           | Czyszczenie           | `modeCleaning`         |
+|   7   | `burning_off`       | Burning off        | Wygaszanie            | `modeExtinction`       |
+|   8   | `alarm`             | Alarm              | Alarm                 | `modeAlarm`            |
+|   9   | `manual`            | Manual             | Ręczny                | `modeManual`           |
+|  10   | `unsealing`         | Unsealing          | Rozszczelnienie       | `modeUnsealing`        |
+|  11   | `other`             | Other              | Inny                  | `modeOther`            |
+|  12   | `stabilization`     | Stabilization      | Stabilizacja          | `modeStabilization`    |
+|  13   | `purge`             | Purge              | Przedmuch             | `modePurge`            |
+|  14   | `check_flame`       | Check flame        | Sprawdzanie płomienia | `modeCheckFlame`       |
+|  15   | `flame_losing`      | Flame extinguished | Płomień zgaszony      | `modeFlameLosing`      |
+|  16   | `prevention`        | Prevention         | Zapobieganie          | `modePrevention`       |
+|  17   | `work_grate`        | Work grate         | Praca - ruszt         | `modeWorkGrate`        |
+|  18   | `supervision_grate` | Supervision grate  | Nadzór - ruszt        | `modeSupervisionGrate` |
+|  19   | `calibration`       | Calibration        | Kalibracja            | `modeCalibration`      |
+|  20   | `maintain`          | Maintain           | Podtrzymanie          | `modeMaintain`         |
+|  21   | `afterburning`      | Afterburning       | Dopalanie             | `modeAfterburning`     |
+|  22   | `chimney_sweep`     | Chimney-sweep      | Kominiarz             | `modeChimneySwep`      |
+|  23   | `heating`           | Heating            | Podgrzewanie          | `modeHeats`            |
+|  24   | `open_door`         | Open door          | Otwarte drzwi         | `modeOpenDoor`         |
+|  25   | `cooling`           | Cooling            | Chłodzenie            | `modeCooling`          |
+|  26   | `safe`              | Safe               | Bezpieczny            | `modeSafe`             |
 
 #### Value Processing
-
-Both `mode` and `transmission` sensors use this mapping:
 
 ```python
 ENTITY_VALUE_PROCESSOR = {
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
-    "transmission": lambda x: OPERATION_MODE_NAMES.get(x, STATE_UNKNOWN),
+    "transmission": lambda x: SENSOR_MODE_MAPPING.get(x, STATE_UNKNOWN),
+    "statusCO": lambda x: SENSOR_STATUS_CO_MAPPING.get(x, STATE_UNKNOWN),
 }
 ```
+
+`SENSOR_MODE_MAPPING` is an alias of `SENSOR_STATUS_CO_MAPPING`.
 
 ### Temperature Readings
 
