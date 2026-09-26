@@ -1,14 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [v1.3.3] - 2026-09-26
+
+Stable release of `1.3.3-beta.1`.
 
 ### Added
 
 - **German translation (`de`)** ([#250](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/250), thanks [@UlrichBoehm](https://github.com/UlrichBoehm)): full coverage of entities, services, config/options flows, repairs and system health. `scripts/check_translations.py` now also checks `de.json`.
-
-## [v1.3.3] - 2026-09-26
-
-Stable release of `1.3.3-beta.1`.
 
 ### ⚠️ Breaking: `mode` / `transmission` state names
 
@@ -26,7 +24,7 @@ The `mode` and `transmission` sensors now use the official ecoNET `Mode{}` table
 
 ### Fixed
 
-- **Boiler `mode` / `transmission` states match the ecoNET Mode table ([#247](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/247))**: `mode: 1` is **Stop**, not Fire up. `mode` and `transmission` now reuse `SENSOR_STATUS_CO_MAPPING` (official cloud `Mode{}`), the same table as `statusCO`. Mode `6` stays **Cleaning** ([#208](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/208)). Values 14–26 (e.g. *Check flame*, *Calibration*, *Afterburning*) are now recognized instead of showing *Unknown*.
+- **Boiler `mode` / `transmission` states match the ecoNET Mode table ([#247](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/247), [#244](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/244), [#249](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/249))**: `mode: 1` is **Stop**, not Fire up. `mode` and `transmission` now reuse `SENSOR_STATUS_CO_MAPPING` (official cloud `Mode{}`), the same table as `statusCO`. Mode `6` stays **Cleaning** ([#208](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/208)). Values 14–26 (e.g. *Check flame*, *Calibration*, *Afterburning*) are now recognized instead of showing *Unknown*.
 
 ### Tests
 

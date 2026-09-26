@@ -215,7 +215,8 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ### What's New in v1.3.3
 
-- **⚠️ Boiler mode mapping (#247)**: `mode: 1` is **Stop**, not Fire up. `mode` / `transmission` now use the official ecoNET `Mode{}` table (same as `statusCO`). Mode `6` stays **Cleaning**. Several state names changed (e.g. `work` → `operation`), so update automations that compare them — see [Migration](docs/MIGRATION.md#upgrading-from-v132-to-v133--mode--transmission-state-names).
+- **🇩🇪 German translation (#250)**: full German UI, thanks to @UlrichBoehm.
+- **⚠️ Boiler mode mapping (#247, #244, #249)**: `mode: 1` is **Stop**, not Fire up. `mode` / `transmission` now use the official ecoNET `Mode{}` table (same as `statusCO`). Mode `6` stays **Cleaning**. Several state names changed (e.g. `work` → `operation`), so update automations that compare them — see [Migration](docs/MIGRATION.md#upgrading-from-v132-to-v133--mode--transmission-state-names).
 
 ### What's New in v1.3.2
 
