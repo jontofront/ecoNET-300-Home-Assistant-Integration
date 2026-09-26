@@ -1,0 +1,1430 @@
+{
+  "services": {
+    "reset_fuel_meter": {
+      "name": "Brennstoffzähler zurücksetzen",
+      "description": "Setzt den Brennstoffverbrauchszähler auf Null zurück."
+    },
+    "calibrate_fuel_meter": {
+      "name": "Brennstoffzähler kalibrieren",
+      "description": "Setzt den Brennstoffverbrauchszähler auf einen bestimmten Wert.",
+      "fields": {
+        "value": {
+          "name": "Wert",
+          "description": "Der Wert, auf den der Zähler gesetzt werden soll (in kg)."
+        }
+      }
+    },
+    "get_schedule": {
+      "name": "Zeitplan abrufen",
+      "description": "Ruft einen decodierten Heizungszeitplan vom Gerät ab.",
+      "fields": {
+        "schedule_type": {
+          "name": "Zeitplantyp",
+          "description": "Abzurufender Zeitplan (z. B. water_heater, boiler_work, mixer_1)."
+        },
+        "weekday": {
+          "name": "Wochentag",
+          "description": "Wochentag. Gibt alle Tage zurück, wenn nicht angegeben."
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "parameter_locked": {
+      "message": "Wert kann nicht geändert werden: {lock_reason}"
+    },
+    "boiler_control_failed": {
+      "message": "Steuerung des Heizkessels fehlgeschlagen: {error}"
+    },
+    "switch_turn_on_failed": {
+      "message": "Einschalten des Schalters fehlgeschlagen: {error}"
+    },
+    "switch_turn_off_failed": {
+      "message": "Ausschalten des Schalters fehlgeschlagen: {error}"
+    },
+    "heater_mode_change_failed": {
+      "message": "Ändern des Heizmodus auf {mode} fehlgeschlagen"
+    },
+    "select_change_failed": {
+      "message": "Ändern der Auswahloption fehlgeschlagen: {error}"
+    },
+    "number_set_failed": {
+      "message": "Setzen des Werts fehlgeschlagen: {error}"
+    },
+    "api_communication_error": {
+      "message": "Fehler bei der Kommunikation mit dem Gerät: {error}"
+    },
+    "device_unavailable": {
+      "message": "Gerät ist nicht verfügbar: {error}"
+    }
+  },
+  "issues": {
+    "connection_failed": {
+      "title": "Verbindung zum ecoNET300-Gerät fehlgeschlagen",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Verbindungseinstellungen aktualisieren",
+            "description": "Verbindung zu Ihrem ecoNET300-Gerät unter **{host}** konnte nach {failures} aufeinanderfolgenden Versuchen nicht hergestellt werden.\n\nAktualisieren Sie Ihre Verbindungseinstellungen, um die Verbindung wiederherzustellen.",
+            "data": {
+              "host": "Host",
+              "username": "Benutzername",
+              "password": "Passwort"
+            }
+          }
+        }
+      }
+    }
+  },
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "Host",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "reconfigure": {
+        "title": "ecoNET300 neu konfigurieren",
+        "description": "Aktualisieren Sie die Verbindungseinstellungen für Ihr ecoNET300-Gerät. Dies ist nützlich, wenn sich die IP-Adresse Ihres Geräts geändert hat.",
+        "data": {
+          "host": "Host",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Authentifizierung",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Gerät ist bereits konfiguriert",
+      "reconfigure_failed": "Neukonfiguration fehlgeschlagen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "connection_settings": "Verbindungseinstellungen",
+          "custom_entities": "Benutzerdefinierte Entitäten",
+          "device_settings": "Geräteeinstellungen",
+          "diagnostics": "Diagnosebericht erstellen",
+          "polling_settings": "Abrufeinstellungen"
+        }
+      },
+      "device_settings": {
+        "title": "Geräteeinstellungen",
+        "description": "Wählen Sie, wie Entitäten zu Geräten gruppiert werden. „Getrennt“ behält separate Geräte pro Komponente (Heizkessel, Mischer, Lambda, ecoSTER usw.) bei. „Einzeln“ fasst alles zu einem Gerät zusammen.",
+        "data": {
+          "device_grouping": "Gerätegruppierung"
+        },
+        "data_description": {
+          "device_grouping": "Getrennt (separate Geräte) oder Einzeln (ein zusammengeführtes Gerät). Die Entitäts-IDs bleiben in beiden Fällen unverändert."
+        }
+      },
+      "polling_settings": {
+        "data": {
+          "poll_reg_params": "Abrufintervall für regParams (Sekunden) – Live-Sensorwerte",
+          "poll_sys_params": "Abrufintervall für sysParams (Sekunden) – Steuerungs-Metadaten",
+          "poll_edit_params": "Abrufintervall für editParams (Sekunden, 0 zum Deaktivieren) – Katalog/Werte der bearbeitbaren Parameter"
+        }
+      },
+      "connection_settings": {
+        "title": "Verbindungseinstellungen",
+        "description": "Aktualisieren Sie Ihre ecoNET300-Verbindungseinstellungen",
+        "data": {
+          "host": "Host",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "diagnostics": {
+        "title": "Diagnosebericht erstellen",
+        "description": "Untersucht das Gerät, schreibt einen bereinigten JSON-Bericht in die homeassistant.log (Markierung: ECONET300_DIAGNOSTICS_REPORT) und erstellt eine dauerhafte Benachrichtigung mit einer kurzen Zusammenfassung. Verwenden Sie dies, um einem GitHub-Issue einen vollständigen Bericht beizufügen."
+      },
+      "custom_entities": {
+        "title": "Benutzerdefinierte Entitäten",
+        "description": "Wählen Sie den API-Endpunkt aus, um nach benutzerdefinierten Entitäten zu suchen.",
+        "data": {
+          "endpoint": "API-Endpunkt"
+        }
+      },
+      "select_params": {
+        "title": "Parameter auswählen",
+        "description": "Wählen Sie Parameter aus, die als Entitäten bereitgestellt werden sollen. Bereits zugeordnete statische Parameter sind ausgeschlossen.",
+        "data": {
+          "selected_params": "Verfügbare Parameter"
+        }
+      },
+      "configure_entity": {
+        "title": "Entität konfigurieren",
+        "description": "Entität für {key} aus {source} konfigurieren.",
+        "data": {
+          "name": "Entitätsname",
+          "component": "Gerätegruppe",
+          "entity_type": "Entitätstyp",
+          "entity_category": "Entitätskategorie"
+        }
+      },
+      "configure_sensor": {
+        "title": "Sensor konfigurieren",
+        "description": "Sensoreigenschaften für „{name}“ konfigurieren.",
+        "data": {
+          "native_unit": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "precision": "Anzeigepräzision"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Authentifizierung",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "no_unmapped_params": "Keine nicht zugeordneten Parameter für den ausgewählten Endpunkt verfügbar."
+    }
+  },
+  "entity": {
+    "switch": {
+      "boiler_control": {
+        "name": "Heizkessel Ein/Aus"
+      },
+      "buffer_support": {
+        "name": "Pufferunterstützung"
+      }
+    },
+    "select": {
+      "heater_mode": {
+        "name": "Heizmodus"
+      },
+      "parametr_a_fuzzylogic": {
+        "name": "Parameter A FuzzyLogic"
+      },
+      "exchanger": {
+        "name": "Wärmetauscher"
+      },
+      "mixer1_support": {
+        "name": "Mischer 1 Unterstützung"
+      },
+      "off_by_thermostat": {
+        "name": "Aus durch Thermostat"
+      },
+      "thermostat_lock": {
+        "name": "Thermostatsperre"
+      },
+      "boiler_pump_lock": {
+        "name": "Kesselpumpensperre"
+      },
+      "output_h1": {
+        "name": "Ausgang H1"
+      },
+      "output_h2_and_h3": {
+        "name": "Ausgang H2 und H3"
+      },
+      "alarms": {
+        "name": "Alarme"
+      },
+      "alarm_active": {
+        "name": "Alarm aktiv"
+      }
+    },
+    "event": {
+      "boiler_alarm": {
+        "name": "Alarm",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "alarm_triggered": "Alarm ausgelöst",
+              "alarm_cleared": "Alarm zurückgesetzt"
+            }
+          }
+        }
+      }
+    },
+    "number": {
+      "parametr_b_fuzzylogic": {
+        "name": "Parameter B FuzzyLogic"
+      },
+      "parametr_c_fuzzylogic": {
+        "name": "Parameter C FuzzyLogic"
+      },
+      "minimum_airflow_output": {
+        "name": "Minimale Luftstromleistung"
+      },
+      "min_boiler_temperature": {
+        "name": "Min. Kesseltemperatur"
+      },
+      "max_boiler_temperature": {
+        "name": "Max. Kesseltemperatur"
+      },
+      "minimum_huw_temperature": {
+        "name": "Minimale Warmwassertemperatur"
+      },
+      "maximum_huw_temperature": {
+        "name": "Maximale Warmwassertemperatur"
+      },
+      "ch_pump_activation_temperature": {
+        "name": "Aktivierungstemperatur der Heizungspumpe"
+      },
+      "ch_pump_standstill_when_loading_huw": {
+        "name": "Stillstand der Heizungspumpe beim Laden des Warmwassers"
+      },
+      "boiler_inc_by_huw_mixer": {
+        "name": "Kesselerhöhung durch Warmwasser, Mischer"
+      },
+      "extending_huw_pump_operation_time": {
+        "name": "Verlängerung der Betriebszeit der Warmwasserpumpe"
+      },
+      "min_mixer1_temp": {
+        "name": "Min. Temperatur Mischer 1"
+      },
+      "max_mixer1_temp": {
+        "name": "Max. Temperatur Mischer 1"
+      },
+      "proportional_range": {
+        "name": "Proportionalbereich"
+      },
+      "integration_time_constant": {
+        "name": "Integrationszeitkonstante"
+      },
+      "valve_full_opening_time": {
+        "name": "Vollöffnungszeit des Ventils"
+      },
+      "mixer1_input_dead_zone": {
+        "name": "Totzone Eingang Mischer 1"
+      },
+      "boiler_cooling_temperature": {
+        "name": "Kesselkühltemperatur"
+      },
+      "poker_cycle_time": {
+        "name": "Rührwerk-Zykluszeit"
+      },
+      "no_fuel_detection_time": {
+        "name": "Erkennungszeit für Brennstoffmangel"
+      },
+      "feeder_operat_time_2": {
+        "name": "Förderbetriebszeit 2"
+      },
+      "feeder_interval_2": {
+        "name": "Förderintervall 2"
+      },
+      "reserve_boiler": {
+        "name": "Reservekessel"
+      },
+      "maxburner_temp": {
+        "name": "Max. Brennertemperatur"
+      },
+      "extempwno_fuel": {
+        "name": "Außentemp. ohne Brennstoff"
+      }
+    },
+    "binary_sensor": {
+      "health_online": {
+        "name": "Live-Abfrage"
+      },
+      "lighter_works": {
+        "name": "Zünder"
+      },
+      "pump_co_works": {
+        "name": "Pumpe Heizung"
+      },
+      "fan_works": {
+        "name": "Gebläse"
+      },
+      "feeder_works": {
+        "name": "Förderschnecke"
+      },
+      "additional_feeder": {
+        "name": "Zusätzliche Förderschnecke"
+      },
+      "pump_fireplace_works": {
+        "name": "Kaminpumpe"
+      },
+      "pump_cwu_works": {
+        "name": "Pumpe Warmwasser"
+      },
+      "mixer_pump1": {
+        "name": "Mischer 1 Pumpe"
+      },
+      "mixer_pump_works1": {
+        "name": "Mischer 1 Pumpe"
+      },
+      "mixer_pump_works2": {
+        "name": "Mischer 2 Pumpe"
+      },
+      "mixer_pump_works3": {
+        "name": "Mischer 3 Pumpe"
+      },
+      "mixer_pump_works4": {
+        "name": "Mischer 4 Pumpe"
+      },
+      "mixer_pump_works5": {
+        "name": "Mischer 5 Pumpe"
+      },
+      "mixer_pump_works6": {
+        "name": "Mischer 6 Pumpe"
+      },
+      "boiler_pump": {
+        "name": "Kesselpumpe"
+      },
+      "main_srv": {
+        "name": "Econet24.com-Server"
+      },
+      "wifi": {
+        "name": "WLAN"
+      },
+      "lan": {
+        "name": "LAN"
+      },
+      "contact_gzc": {
+        "name": "GZC-Kontakt"
+      },
+      "contact_gzc_active": {
+        "name": "GZC-Kontakt aktiv"
+      },
+      "pump_circulation_works": {
+        "name": "Zirkulationspumpe in Betrieb"
+      },
+      "pump_solar_works": {
+        "name": "Solarpumpe in Betrieb"
+      },
+      "alarm_output_works": {
+        "name": "Alarmausgang"
+      },
+      "blow_fan1_active": {
+        "name": "Gebläse 1"
+      },
+      "blow_fan2_active": {
+        "name": "Gebläse 2"
+      },
+      "fan2_exhaust_works": {
+        "name": "Abluftgebläse"
+      },
+      "feeder2_additional_works": {
+        "name": "Zusätzliche Förderschnecke"
+      },
+      "feeder_outer_works": {
+        "name": "Externe Förderschnecke"
+      },
+      "outer_boiler_works": {
+        "name": "Externer Kessel"
+      },
+      "ecoster_contacts1": {
+        "name": "Raumthermostat 1 Kontakte"
+      },
+      "ecoster_contacts2": {
+        "name": "Raumthermostat 2 Kontakte"
+      },
+      "ecoster_contacts3": {
+        "name": "Raumthermostat 3 Kontakte"
+      },
+      "ecoster_contacts4": {
+        "name": "Raumthermostat 4 Kontakte"
+      },
+      "ecoster_contacts5": {
+        "name": "Raumthermostat 5 Kontakte"
+      },
+      "ecoster_contacts6": {
+        "name": "Raumthermostat 6 Kontakte"
+      },
+      "ecoster_contacts7": {
+        "name": "Raumthermostat 7 Kontakte"
+      },
+      "ecoster_contacts8": {
+        "name": "Raumthermostat 8 Kontakte"
+      },
+      "ecoster_day_sched1": {
+        "name": "Raumthermostat 1 Tageszeitplan"
+      },
+      "ecoster_day_sched2": {
+        "name": "Raumthermostat 2 Tageszeitplan"
+      },
+      "ecoster_day_sched3": {
+        "name": "Raumthermostat 3 Tageszeitplan"
+      },
+      "ecoster_day_sched4": {
+        "name": "Raumthermostat 4 Tageszeitplan"
+      },
+      "ecoster_day_sched5": {
+        "name": "Raumthermostat 5 Tageszeitplan"
+      },
+      "ecoster_day_sched6": {
+        "name": "Raumthermostat 6 Tageszeitplan"
+      },
+      "ecoster_day_sched7": {
+        "name": "Raumthermostat 7 Tageszeitplan"
+      },
+      "ecoster_day_sched8": {
+        "name": "Raumthermostat 8 Tageszeitplan"
+      },
+      "fuel_consumption_calc": {
+        "name": "Brennstoffverbrauchsrechner"
+      },
+      "ecosrv_https": {
+        "name": "ecoNET-Server HTTPS"
+      }
+    },
+    "calendar": {
+      "schedule_boiler": {
+        "name": "Kesselzeitplan"
+      },
+      "schedule_boiler_clean": {
+        "name": "Kessel-Reinigungszeitplan"
+      },
+      "schedule_boiler_work": {
+        "name": "Kessel-Arbeitszeitplan"
+      },
+      "schedule_circulation_pump": {
+        "name": "Zirkulationspumpen-Zeitplan"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Wärmetauscher-Reinigungszeitplan"
+      },
+      "schedule_mixer_1": {
+        "name": "Mischer 1 Zeitplan"
+      },
+      "schedule_mixer_2": {
+        "name": "Mischer 2 Zeitplan"
+      },
+      "schedule_mixer_3": {
+        "name": "Mischer 3 Zeitplan"
+      },
+      "schedule_mixer_4": {
+        "name": "Mischer 4 Zeitplan"
+      },
+      "schedule_mixer_5": {
+        "name": "Mischer 5 Zeitplan"
+      },
+      "schedule_mixer_6": {
+        "name": "Mischer 6 Zeitplan"
+      },
+      "schedule_mixer_7": {
+        "name": "Mischer 7 Zeitplan"
+      },
+      "schedule_mixer_8": {
+        "name": "Mischer 8 Zeitplan"
+      },
+      "schedule_mixer_9": {
+        "name": "Mischer 9 Zeitplan"
+      },
+      "schedule_mixer_10": {
+        "name": "Mischer 10 Zeitplan"
+      },
+      "schedule_thermostat_1": {
+        "name": "Thermostat 1 Zeitplan"
+      },
+      "schedule_thermostat_2": {
+        "name": "Thermostat 2 Zeitplan"
+      },
+      "schedule_thermostat_3": {
+        "name": "Thermostat 3 Zeitplan"
+      },
+      "schedule_water_heater": {
+        "name": "Warmwasserbereiter-Zeitplan"
+      },
+      "schedule_water_heater_2": {
+        "name": "Warmwasserbereiter 2 Zeitplan"
+      }
+    },
+    "sensor": {
+      "health_data_age": {
+        "name": "Datenalter"
+      },
+      "health_consecutive_failures": {
+        "name": "Aufeinanderfolgende Fehler"
+      },
+      "health_last_success": {
+        "name": "Letzte erfolgreiche Aktualisierung"
+      },
+      "boiler_power": {
+        "name": "Kesselleistung"
+      },
+      "boiler_power_kw": {
+        "name": "Kesselleistung"
+      },
+      "fuel_level": {
+        "name": "Brennstoffstand"
+      },
+      "fuel_consumption_total": {
+        "name": "Brennstoffverbrauch gesamt"
+      },
+      "fan_power": {
+        "name": "Gebläseleistung"
+      },
+      "lambda_status": {
+        "name": "Lambda-Status",
+        "state": {
+          "stop": "Stopp",
+          "start": "Start",
+          "working": "In Betrieb",
+          "error": "Fehler",
+          "maintenance": "Wartung"
+        }
+      },
+      "lambda_set": {
+        "name": "Lambda Sollwert"
+      },
+      "lambda_level": {
+        "name": "Lambda-Wert"
+      },
+      "parameter_a_lambda": {
+        "name": "Parameter A Lambda"
+      },
+      "parameter_b_lambda": {
+        "name": "Parameter B Lambda"
+      },
+      "parameter_c_lambda": {
+        "name": "Parameter C Lambda"
+      },
+      "100percent_oxygen": {
+        "name": "100 % Sauerstoff"
+      },
+      "50percent_oxygen": {
+        "name": "50 % Sauerstoff"
+      },
+      "30percent_oxygen": {
+        "name": "30 % Sauerstoff"
+      },
+      "fl_oxygen_correction": {
+        "name": "FL-Sauerstoffkorrektur"
+      },
+      "operation_with_lambda_sensor": {
+        "name": "Betrieb mit Lambdasonde"
+      },
+      "fuel_detection_oxygen": {
+        "name": "Brennstofferkennung: Sauerstoff"
+      },
+      "status_co": {
+        "name": "Heizungsstatus",
+        "state": {
+          "off": "Aus",
+          "stop": "Stopp",
+          "fire_up": "Anfeuern",
+          "operation": "Betrieb",
+          "supervision": "Überwachung",
+          "paused": "Pausiert",
+          "cleaning": "Reinigung",
+          "burning_off": "Ausbrennen",
+          "alarm": "Alarm",
+          "manual": "Manuell",
+          "unsealing": "Entsiegeln",
+          "other": "Sonstiges",
+          "stabilization": "Stabilisierung",
+          "purge": "Spülung",
+          "check_flame": "Flammenprüfung",
+          "flame_losing": "Flamme erloschen",
+          "prevention": "Vorbeugung",
+          "work_grate": "Rost in Betrieb",
+          "supervision_grate": "Rostüberwachung",
+          "calibration": "Kalibrierung",
+          "maintain": "Halten",
+          "afterburning": "Nachverbrennung",
+          "chimney_sweep": "Schornsteinfeger",
+          "heating": "Heizen",
+          "open_door": "Tür offen",
+          "cooling": "Kühlen",
+          "safe": "Sicher",
+          "unknown": "Unbekannt"
+        }
+      },
+      "work_at100": {
+        "name": "Betrieb bei 100 %"
+      },
+      "work_at50": {
+        "name": "Betrieb bei 50 %"
+      },
+      "work_at30": {
+        "name": "Betrieb bei 30 %"
+      },
+      "feeder_work": {
+        "name": "Förderbetrieb"
+      },
+      "firing_up_count": {
+        "name": "Anzahl Anfeuerungen"
+      },
+      "mode": {
+        "name": "Modus",
+        "state": {
+          "off": "Aus",
+          "fire_up": "Anfeuern",
+          "operation": "Betrieb",
+          "work": "Betrieb",
+          "supervision": "Überwachung",
+          "paused": "Pausiert",
+          "stop": "Gestoppt",
+          "cleaning": "Reinigung",
+          "burning_off": "Ausbrennen",
+          "manual": "Manuell",
+          "problem": "Alarm",
+          "unsealing": "Entsiegeln",
+          "chimney": "Schornsteinfeger",
+          "stabilization": "Stabilisierung",
+          "no_transmission": "Keine Übertragung",
+          "alarm": "Alarm",
+          "other": "Sonstiges",
+          "purge": "Spülung",
+          "check_flame": "Flammenprüfung",
+          "flame_losing": "Flamme erloschen",
+          "prevention": "Vorbeugung",
+          "work_grate": "Rost in Betrieb",
+          "supervision_grate": "Rostüberwachung",
+          "calibration": "Kalibrierung",
+          "maintain": "Halten",
+          "afterburning": "Nachverbrennung",
+          "chimney_sweep": "Schornsteinfeger",
+          "heating": "Heizen",
+          "open_door": "Tür offen",
+          "cooling": "Kühlen",
+          "safe": "Sicher",
+          "unknown": "Unbekannt"
+        }
+      },
+      "mixer_temp1": {
+        "name": "Mischer 1 Temperatur"
+      },
+      "mixer_temp2": {
+        "name": "Mischer 2 Temperatur"
+      },
+      "mixer_temp3": {
+        "name": "Mischer 3 Temperatur"
+      },
+      "mixer_temp4": {
+        "name": "Mischer 4 Temperatur"
+      },
+      "mixer_temp5": {
+        "name": "Mischer 5 Temperatur"
+      },
+      "mixer_temp6": {
+        "name": "Mischer 6 Temperatur"
+      },
+      "mixer_set_temp1": {
+        "name": "Mischer 1 Zieltemperatur"
+      },
+      "mixer_set_temp2": {
+        "name": "Mischer 2 Zieltemperatur"
+      },
+      "mixer_set_temp3": {
+        "name": "Mischer 3 Zieltemperatur"
+      },
+      "mixer_set_temp4": {
+        "name": "Mischer 4 Zieltemperatur"
+      },
+      "mixer_set_temp5": {
+        "name": "Mischer 5 Zieltemperatur"
+      },
+      "mixer_set_temp6": {
+        "name": "Mischer 6 Zieltemperatur"
+      },
+      "status_cwu": {
+        "name": "Warmwasserbereiter-Status",
+        "state": {
+          "not_set": "Nicht eingestellt",
+          "set": "Eingestellt",
+          "no_temp_set": "Kein Sollwert"
+        }
+      },
+      "quality": {
+        "name": "Signalqualität"
+      },
+      "signal": {
+        "name": "Signalstärke"
+      },
+      "soft_ver": {
+        "name": "Modul ecoNET Version"
+      },
+      "controller_id": {
+        "name": "Reglername"
+      },
+      "module_a_soft_ver": {
+        "name": "Modul A Version"
+      },
+      "module_b_soft_ver": {
+        "name": "Modul B Version"
+      },
+      "module_c_soft_ver": {
+        "name": "Modul C Version"
+      },
+      "module_lambda_soft_ver": {
+        "name": "Modul Lambda Version"
+      },
+      "module_panel_soft_ver": {
+        "name": "Modul Bedienpanel Version"
+      },
+      "module_ecoster_soft_ver": {
+        "name": "Modul ecoSTER Version"
+      },
+      "servo_mixer1": {
+        "name": "Mischer 1 Stellantriebposition"
+      },
+      "temp_co": {
+        "name": "Heizungstemperatur"
+      },
+      "temp_cwu": {
+        "name": "Warmwasserbereitertemperatur"
+      },
+      "temp_cwu_set": {
+        "name": "Warmwasserbereiter Solltemperatur"
+      },
+      "tz_cwu": {
+        "name": "Warmwassertemperatur"
+      },
+      "temp_upper_buffer": {
+        "name": "Obere Puffertemperatur"
+      },
+      "temp_lower_buffer": {
+        "name": "Untere Puffertemperatur"
+      },
+      "temp_flue_gas": {
+        "name": "Abgastemperatur"
+      },
+      "temp_external_sensor": {
+        "name": "Außentemperatur"
+      },
+      "temp_feeder": {
+        "name": "Förderschneckentemperatur"
+      },
+      "temp_co_set": {
+        "name": "Heizungssolltemperatur"
+      },
+      "thermostat": {
+        "name": "Thermostat"
+      },
+      "unseal": {
+        "name": "Entsiegeln"
+      },
+      "weather_control": {
+        "name": "Witterungsgeführte Kesselsteuerung"
+      },
+      "valve_mixer1": {
+        "name": "Mischer 1 Ventil % geöffnet"
+      },
+      "ps": {
+        "name": "PS"
+      },
+      "circuit2thermostat_temp": {
+        "name": "Kreis 2 Thermostat-Temp."
+      },
+      "temp_clutch": {
+        "name": "Kupplungstemp."
+      },
+      "circuit3thermostat_temp": {
+        "name": "Kreis 3 Thermostat-Temp."
+      },
+      "circuit4thermostat_temp": {
+        "name": "Kreis 4 Thermostat-Temp."
+      },
+      "circuit5thermostat_temp": {
+        "name": "Kreis 5 Thermostat-Temp."
+      },
+      "circuit6thermostat_temp": {
+        "name": "Kreis 6 Thermostat-Temp."
+      },
+      "circuit7thermostat_temp": {
+        "name": "Kreis 7 Thermostat-Temp."
+      },
+      "temp_wthr": {
+        "name": "Außentemp. (Wetter)"
+      },
+      "temp_circuit2": {
+        "name": "Kreis 2 Temp."
+      },
+      "temp_circuit3": {
+        "name": "Kreis 3 Temp."
+      },
+      "temp_circuit4": {
+        "name": "Kreis 4 Temp."
+      },
+      "temp_circuit5": {
+        "name": "Kreis 5 Temp."
+      },
+      "temp_circuit6": {
+        "name": "Kreis 6 Temp."
+      },
+      "temp_circuit7": {
+        "name": "Kreis 7 Temp."
+      },
+      "temp_bufor_up": {
+        "name": "Obere Puffertemp."
+      },
+      "temp_bufor_down": {
+        "name": "Untere Puffertemp."
+      },
+      "heating_upper_temp": {
+        "name": "Obere Heizungstemp."
+      },
+      "circuit1thermostat": {
+        "name": "Kreis 1 Isttemp."
+      },
+      "heating_work_state_pump4": {
+        "name": "Heizungsbetriebszustand Pumpe 4"
+      },
+      "flap_valve_states": {
+        "name": "3-Wege-Ventil-Status",
+        "state": {
+          "central_heating": "Heizung",
+          "domestic_hot_water": "Warmwasser",
+          "unknown": "Unbekannt"
+        }
+      },
+      "heat_demanded": {
+        "name": "Wärmebedarf",
+        "state": {
+          "heat": "Wärme",
+          "off": "Aus",
+          "unknown": "Unbekannt"
+        }
+      },
+      "water_pump_running": {
+        "name": "Wasserpumpe",
+        "state": {
+          "on": "Ein",
+          "unknown": "Unbekannt",
+          "off": "Aus"
+        }
+      },
+      "axen_outdoor_temp": {
+        "name": "Wärmepumpe Außentemperatur"
+      },
+      "axen_outgoing_temp": {
+        "name": "Wärmepumpe Vorlauftemperatur"
+      },
+      "axen_return_temp": {
+        "name": "Wärmepumpe Rücklauftemperatur"
+      },
+      "axen_compressor_freq": {
+        "name": "Wärmepumpe Verdichterfrequenz"
+      },
+      "axen_upper_pump": {
+        "name": "Wärmepumpe obere Pumpe"
+      },
+      "axen_work_state": {
+        "name": "Wärmepumpe Betriebszustand"
+      },
+      "heat_source_calc_preset_temp": {
+        "name": "Wärmequelle berechnete Solltemp."
+      },
+      "after_compressor_temp": {
+        "name": "Temp. nach Verdichter"
+      },
+      "before_compressor_temp": {
+        "name": "Temp. vor Verdichter"
+      },
+      "exhaust_gas_temp": {
+        "name": "Abgastemp."
+      },
+      "outdoor_temp": {
+        "name": "Außentemperatur"
+      },
+      "hp_status_work_mode": {
+        "name": "WP Betriebsmodus"
+      },
+      "hp_status_preset_temp": {
+        "name": "WP Solltemperatur"
+      },
+      "hp_status_control": {
+        "name": "WP Regelzustand"
+      },
+      "hp_status_buff_heat_stat": {
+        "name": "WP Pufferheizstatus"
+      },
+      "hp_status_flow_heat_stat": {
+        "name": "WP Vorlaufheizstatus"
+      },
+      "hp_status_hdw_heat_stat": {
+        "name": "WP Warmwasserheizstatus"
+      },
+      "hp_status_uhs_stat": {
+        "name": "WP UHS-Status"
+      },
+      "hp_status_circ_p_stat0": {
+        "name": "WP Zirkulationspumpenstatus 0"
+      },
+      "hp_status_circ_p_stat1": {
+        "name": "WP Zirkulationspumpenstatus 1"
+      },
+      "hp_status_circ_p_stat2": {
+        "name": "WP Zirkulationspumpenstatus 2"
+      },
+      "hp_status_circ_p_stat3": {
+        "name": "WP Zirkulationspumpenstatus 3"
+      },
+      "hp_status_circ_p_stat4": {
+        "name": "WP Zirkulationspumpenstatus 4"
+      },
+      "hp_status_circ_p_stat5": {
+        "name": "WP Zirkulationspumpenstatus 5"
+      },
+      "hp_status_circ_p_stat6": {
+        "name": "WP Zirkulationspumpenstatus 6"
+      },
+      "hp_work_state_set_pump2": {
+        "name": "WP Betriebszustand Sollpumpe 2"
+      },
+      "hp_work_state_set_pump3": {
+        "name": "WP Betriebszustand Sollpumpe 3"
+      },
+      "hp_work_state_set_pump4": {
+        "name": "WP Betriebszustand Sollpumpe 4"
+      },
+      "hp_work_state_set_pump5": {
+        "name": "WP Betriebszustand Sollpumpe 5"
+      },
+      "cooling_power": {
+        "name": "Kühlleistung"
+      },
+      "heating_power": {
+        "name": "Heizleistung"
+      },
+      "electric_power": {
+        "name": "Elektrische Leistung"
+      },
+      "current_flow": {
+        "name": "Aktueller Durchfluss"
+      },
+      "hd_wsetpointcalculate": {
+        "name": "Warmwasser Sollwert Obergrenze"
+      },
+      "bufor_calc_set_temp": {
+        "name": "Puffer berechnete Solltemperatur"
+      },
+      "circuit1_calc_temp": {
+        "name": "Kreis 1 berechnete Temperatur"
+      },
+      "circuit2_calc_temp": {
+        "name": "Kreis 2 berechnete Temperatur"
+      },
+      "circuit4_calc_temp": {
+        "name": "Kreis 4 berechnete Temperatur"
+      },
+      "circuit5_calc_temp": {
+        "name": "Kreis 5 berechnete Temperatur"
+      },
+      "circuit6_calc_temp": {
+        "name": "Kreis 6 berechnete Temperatur"
+      },
+      "circuit7_calc_temp": {
+        "name": "Kreis 7 berechnete Temperatur"
+      },
+      "phn_xcoil_temp": {
+        "name": "Verdampfertemperatur"
+      },
+      "phn_xdischarge_temp": {
+        "name": "Verdichter-Drucktemperatur"
+      },
+      "phn_xsuction_temp": {
+        "name": "Verdichter-Saugtemperatur"
+      },
+      "phn_xinlet_temp": {
+        "name": "Wärmepumpe Wassereintrittstemperatur"
+      },
+      "phn_xoutlet_temp": {
+        "name": "Wärmepumpe Wasseraustrittstemperatur"
+      },
+      "phn_xinlet_temp_pump": {
+        "name": "Wärmepumpe Eintrittstemperatur (Pumpe)"
+      },
+      "phn_xinlet_temp_pump2": {
+        "name": "Wärmepumpe Eintrittstemperatur (Pumpe 2)"
+      },
+      "phn_xinlet_temp_pump3": {
+        "name": "Wärmepumpe Eintrittstemperatur (Pumpe 3)"
+      },
+      "phn_xinlet_temp_pump5": {
+        "name": "Wärmepumpe Eintrittstemperatur (Pumpe 5)"
+      },
+      "phn_xoutlet_temp_pump2": {
+        "name": "Wärmepumpe Austrittstemperatur (Pumpe 2)"
+      },
+      "phn_xoutlet_temp_pump3": {
+        "name": "Wärmepumpe Austrittstemperatur (Pumpe 3)"
+      },
+      "phn_xoutlet_temp_pump4": {
+        "name": "Wärmepumpe Austrittstemperatur (Pumpe 4)"
+      },
+      "phn_xoutlet_temp_pump5": {
+        "name": "Wärmepumpe Austrittstemperatur (Pumpe 5)"
+      },
+      "phn_xreg2045": {
+        "name": "Phoenix interne Eintrittstemperatur"
+      },
+      "phn_xreg2046": {
+        "name": "Phoenix interne Austrittstemperatur"
+      },
+      "phn_xreg2071": {
+        "name": "Verdichterfrequenz"
+      },
+      "phn_xreg2074": {
+        "name": "Gebläsedrehzahl (Phoenix)"
+      },
+      "ssa_state": {
+        "name": "Witterungsausgleich-Status"
+      },
+      "ssa_corr": {
+        "name": "Witterungsausgleich-Korrektur"
+      },
+      "ssa_prev_temp": {
+        "name": "Heizkurve Zieltemp."
+      },
+      "circuit1_comfort_temp": {
+        "name": "Kreis 1 Tagestemperatur"
+      },
+      "circuit1_eco_temp": {
+        "name": "Kreis 1 Nachttemperatur"
+      },
+      "buffer_target_temp": {
+        "name": "Puffer Zieltemperatur"
+      },
+      "circuit2_comfort_temp": {
+        "name": "Kreis 2 Tagestemperatur"
+      },
+      "circuit2_eco_temp": {
+        "name": "Kreis 2 Nachttemperatur"
+      },
+      "circuit3_comfort_temp": {
+        "name": "Kreis 3 Tagestemperatur"
+      },
+      "circuit3_eco_temp": {
+        "name": "Kreis 3 Nachttemperatur"
+      },
+      "circuit4_comfort_temp": {
+        "name": "Kreis 4 Tagestemperatur"
+      },
+      "circuit4_eco_temp": {
+        "name": "Kreis 4 Nachttemperatur"
+      },
+      "circuit5_comfort_temp": {
+        "name": "Kreis 5 Tagestemperatur"
+      },
+      "circuit5_eco_temp": {
+        "name": "Kreis 5 Nachttemperatur"
+      },
+      "circuit6_comfort_temp": {
+        "name": "Kreis 6 Tagestemperatur"
+      },
+      "circuit6_eco_temp": {
+        "name": "Kreis 6 Nachttemperatur"
+      },
+      "circuit7_comfort_temp": {
+        "name": "Kreis 7 Tagestemperatur"
+      },
+      "circuit7_eco_temp": {
+        "name": "Kreis 7 Nachttemperatur"
+      },
+      "target_flow_temp": {
+        "name": "Vorlauf-Solltemp."
+      },
+      "actual_flow_temp": {
+        "name": "Vorlauf-Isttemp."
+      },
+      "actual_return_temp": {
+        "name": "Rücklauf-Isttemp."
+      },
+      "fan_speed": {
+        "name": "Gebläsedrehzahl"
+      },
+      "heat_pump_ambient": {
+        "name": "Wärmepumpe Umgebungstemp."
+      },
+      "actual_dhw_temp": {
+        "name": "Warmwasser-Isttemp."
+      },
+      "circuit1_desired_lwt": {
+        "name": "Kreis 1 gewünschte Vorlauftemperatur (LWT)"
+      },
+      "electrical_power": {
+        "name": "Elektrische Leistung"
+      },
+      "thermal_power": {
+        "name": "Thermische Leistung"
+      },
+      "cop": {
+        "name": "COP"
+      },
+      "scop": {
+        "name": "SCOP"
+      },
+      "flow_rate": {
+        "name": "Durchflussrate"
+      },
+      "periodic_energy_consumption": {
+        "name": "Periodischer Energieverbrauch"
+      },
+      "axenregister64": {
+        "name": "AXEN-Register 64"
+      },
+      "axenregister65": {
+        "name": "AXEN-Register 65"
+      },
+      "fuel_consum": {
+        "name": "Brennstoffverbrauch"
+      },
+      "fuel_stream": {
+        "name": "Brennstofffluss"
+      },
+      "temp_back": {
+        "name": "Rücklauftemperatur"
+      },
+      "transmission": {
+        "name": "Übertragung",
+        "state": {
+          "off": "Aus",
+          "fire_up": "Anfeuern",
+          "operation": "Betrieb",
+          "work": "Betrieb",
+          "supervision": "Überwachung",
+          "paused": "Pausiert",
+          "stop": "Gestoppt",
+          "cleaning": "Reinigung",
+          "burning_off": "Ausbrennen",
+          "manual": "Manuell",
+          "problem": "Alarm",
+          "unsealing": "Entsiegeln",
+          "chimney": "Schornsteinfeger",
+          "stabilization": "Stabilisierung",
+          "no_transmission": "Keine Übertragung",
+          "alarm": "Alarm",
+          "other": "Sonstiges",
+          "purge": "Spülung",
+          "check_flame": "Flammenprüfung",
+          "flame_losing": "Flamme erloschen",
+          "prevention": "Vorbeugung",
+          "work_grate": "Rost in Betrieb",
+          "supervision_grate": "Rostüberwachung",
+          "calibration": "Kalibrierung",
+          "maintain": "Halten",
+          "afterburning": "Nachverbrennung",
+          "chimney_sweep": "Schornsteinfeger",
+          "heating": "Heizen",
+          "open_door": "Tür offen",
+          "cooling": "Kühlen",
+          "safe": "Sicher",
+          "unknown": "Unbekannt"
+        }
+      },
+      "ecoster_temp1": {
+        "name": "Raumtemperatur 1"
+      },
+      "ecoster_temp2": {
+        "name": "Raumtemperatur 2"
+      },
+      "ecoster_temp3": {
+        "name": "Raumtemperatur 3"
+      },
+      "ecoster_temp4": {
+        "name": "Raumtemperatur 4"
+      },
+      "ecoster_temp5": {
+        "name": "Raumtemperatur 5"
+      },
+      "ecoster_temp6": {
+        "name": "Raumtemperatur 6"
+      },
+      "ecoster_temp7": {
+        "name": "Raumtemperatur 7"
+      },
+      "ecoster_temp8": {
+        "name": "Raumtemperatur 8"
+      },
+      "ecoster_mode1": {
+        "name": "Raumthermostat 1 Modus"
+      },
+      "ecoster_mode2": {
+        "name": "Raumthermostat 2 Modus"
+      },
+      "ecoster_mode3": {
+        "name": "Raumthermostat 3 Modus"
+      },
+      "ecoster_mode4": {
+        "name": "Raumthermostat 4 Modus"
+      },
+      "ecoster_mode5": {
+        "name": "Raumthermostat 5 Modus"
+      },
+      "ecoster_mode6": {
+        "name": "Raumthermostat 6 Modus"
+      },
+      "ecoster_mode7": {
+        "name": "Raumthermostat 7 Modus"
+      },
+      "ecoster_mode8": {
+        "name": "Raumthermostat 8 Modus"
+      },
+      "ecoster_set_temp1": {
+        "name": "Raumthermostat 1 Sollwert"
+      },
+      "ecoster_set_temp2": {
+        "name": "Raumthermostat 2 Sollwert"
+      },
+      "ecoster_set_temp3": {
+        "name": "Raumthermostat 3 Sollwert"
+      },
+      "ecoster_set_temp4": {
+        "name": "Raumthermostat 4 Sollwert"
+      },
+      "ecoster_set_temp5": {
+        "name": "Raumthermostat 5 Sollwert"
+      },
+      "ecoster_set_temp6": {
+        "name": "Raumthermostat 6 Sollwert"
+      },
+      "ecoster_set_temp7": {
+        "name": "Raumthermostat 7 Sollwert"
+      },
+      "ecoster_set_temp8": {
+        "name": "Raumthermostat 8 Sollwert"
+      },
+      "t1": {
+        "name": "Kollektortemperatur"
+      },
+      "t2": {
+        "name": "Speichertemperatur"
+      },
+      "t3": {
+        "name": "Speichertemperatur"
+      },
+      "t4": {
+        "name": "Rücklauftemperatur"
+      },
+      "t5": {
+        "name": "Kollektortemperatur – Leistungsmessung"
+      },
+      "t6": {
+        "name": "Temperatursensor"
+      },
+      "tzcwu": {
+        "name": "Warmwassertemperatur"
+      },
+      "p1": {
+        "name": "Pumpe 1 Status"
+      },
+      "p2": {
+        "name": "Pumpe 2 Status"
+      },
+      "h": {
+        "name": "Ausgangsstatus"
+      },
+      "moc_chwilowa": {
+        "name": "Solarkollektorleistung"
+      },
+      "uzysk_ca_kowity": {
+        "name": "Gesamter Solarwärmeertrag"
+      },
+      "ecosrv_addr": {
+        "name": "ecoNET-Serveradresse"
+      },
+      "ecosrv_soft_ver": {
+        "name": "ecoNET-Server Softwareversion"
+      },
+      "router_type": {
+        "name": "Router-Typ"
+      },
+      "protocol_type": {
+        "name": "Protokolltyp"
+      },
+      "prod_logo": {
+        "name": "Produktlogo-ID"
+      },
+      "reg_allowed": {
+        "name": "Registrierung erlaubt"
+      },
+      "reg_img_id": {
+        "name": "Schema-Bild-ID"
+      },
+      "reg_prod": {
+        "name": "Produktcode"
+      },
+      "reg_refresh": {
+        "name": "Aktualisierungsintervall"
+      },
+      "reg_type": {
+        "name": "Registertyp"
+      },
+      "remote_menu": {
+        "name": "Fernmenü"
+      },
+      "tem_co": {
+        "name": "Kesseltemperatur"
+      },
+      "last_alarm": {
+        "name": "Letzter Alarm"
+      },
+      "alarm_count": {
+        "name": "Alarmanzahl"
+      },
+      "schedule_boiler": {
+        "name": "Heizungszeitplan"
+      },
+      "schedule_boiler_clean": {
+        "name": "Reinigungszeitplan"
+      },
+      "schedule_boiler_work": {
+        "name": "Arbeitszeitplan"
+      },
+      "schedule_circulation_pump": {
+        "name": "Zirkulationspumpen-Zeitplan"
+      },
+      "schedule_exchanger_clean": {
+        "name": "Wärmetauscher-Reinigungszeitplan"
+      },
+      "schedule_mixer_1": {
+        "name": "Mischer 1 Zeitplan"
+      },
+      "schedule_mixer_2": {
+        "name": "Mischer 2 Zeitplan"
+      },
+      "schedule_mixer_3": {
+        "name": "Mischer 3 Zeitplan"
+      },
+      "schedule_mixer_4": {
+        "name": "Mischer 4 Zeitplan"
+      },
+      "schedule_mixer_5": {
+        "name": "Mischer 5 Zeitplan"
+      },
+      "schedule_mixer_6": {
+        "name": "Mischer 6 Zeitplan"
+      },
+      "schedule_mixer_7": {
+        "name": "Mischer 7 Zeitplan"
+      },
+      "schedule_mixer_8": {
+        "name": "Mischer 8 Zeitplan"
+      },
+      "schedule_mixer_9": {
+        "name": "Mischer 9 Zeitplan"
+      },
+      "schedule_mixer_10": {
+        "name": "Mischer 10 Zeitplan"
+      },
+      "schedule_thermostat_1": {
+        "name": "Thermostat 1 Zeitplan"
+      },
+      "schedule_thermostat_2": {
+        "name": "Thermostat 2 Zeitplan"
+      },
+      "schedule_thermostat_3": {
+        "name": "Thermostat 3 Zeitplan"
+      },
+      "schedule_water_heater": {
+        "name": "Warmwasserbereiter-Zeitplan"
+      },
+      "schedule_water_heater_2": {
+        "name": "Warmwasserbereiter 2 Zeitplan"
+      }
+    }
+  },
+  "system_health": {
+    "info": {
+      "host": "Host",
+      "controller_model": "Reglermodell",
+      "software_version": "Softwareversion",
+      "hardware_version": "Hardwareversion",
+      "can_reach_device": "Gerät erreichbar"
+    }
+  }
+}

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- **German translation (`de`)** ([#250](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/250), thanks [@UlrichBoehm](https://github.com/UlrichBoehm)): full coverage of entities, services, config/options flows, repairs and system health. `scripts/check_translations.py` now also checks `de.json`.
+
 ## [v1.3.3] - 2026-09-26
 
 Stable release of `1.3.3-beta.1`.
