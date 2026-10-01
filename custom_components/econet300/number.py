@@ -10,12 +10,13 @@ from typing import Any
 
 import aiohttp
 from homeassistant.components.number import (
+    NumberDeviceClass,
     NumberEntity,
     NumberEntityDescription,
     NumberMode,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
+from homeassistant.const import EntityCategory, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -41,6 +42,8 @@ from .const import (
     DEVICE_INFO_MODEL,
     DEVICE_INFO_SERVICE_PARAMETERS_NAME,
     DOMAIN,
+    ECOSTER_SETPOINT_PARAMS,
+    ECOSTER_SETPOINT_PARAMS_ENABLED,
     ENTITY_MAX_VALUE,
     ENTITY_MIN_VALUE,
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
@@ -49,13 +52,19 @@ from .const import (
     MIXER_RELATED_KEYWORDS,
     MIXER_SET_AVAILABILITY_KEY,
     NUMBER_MAP,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
     SENSOR_MIXER_KEY,
     SERVICE_API,
     SERVICE_COORDINATOR,
     UNIT_NAME_TO_HA_UNIT,
 )
-from .entity import EconetEntity, MixerEntity, get_device_info_for_component
+from .entity import (
+    EconetEntity,
+    EcoSterEntity,
+    MixerEntity,
+    get_device_info_for_component,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -1326,6 +1335,7 @@ async def async_setup_entry(
             "Skipping upstream merged number setup for this controllerID; using Local editParams entities"
         )
         entities.extend(_create_edit_param_numbers(coordinator, api))
+        entities.extend(create_ecoster_number_entities(coordinator, api))
         return async_add_entities(entities)
 
     # Always create basic NUMBER_MAP entities first
@@ -1373,6 +1383,7 @@ async def async_setup_entry(
         mixer_count,
     )
     entities.extend(_create_edit_param_numbers(coordinator, api))
+    entities.extend(create_ecoster_number_entities(coordinator, api))
 
     if not entities:
         _LOGGER.warning(
@@ -1498,4 +1509,100 @@ def _create_edit_param_numbers(
             continue
         entities.append(EditParamNumber(coordinator, api, pid))
     _LOGGER.info("Adding %d editable Number entities from editParams", len(entities))
+    return entities
+
+
+# =============================================================================
+# ecoSTER thermostat setpoints (editParams STER_*_{N}, written via newParam)
+# =============================================================================
+class EcoSterNumber(EcoSterEntity, NumberEntity):
+    """ecoSTER thermostat setpoint stored in editParams."""
+
+    entity_description: EconetNumberEntityDescription
+
+    def _lookup_value(self) -> Any:
+        """Return the editParams entry for this setpoint."""
+        edit_params = (self.coordinator.data or {}).get("editParams") or {}
+        return edit_params.get(self.entity_description.key)
+
+    @property
+    def available(self) -> bool:
+        """Return True when data is fresh and the setpoint is in editParams."""
+        return super().available and self._lookup_value() is not None
+
+    def _sync_state(self, value: Any) -> None:
+        """Sync the setpoint from its editParams entry."""
+        raw = value.get("value") if isinstance(value, dict) else None
+        self._attr_native_value = float(raw) if raw is not None else None
+        self.async_write_ha_state()
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Write the new setpoint to the controller."""
+        key = self.entity_description.key
+        # The device accepts "22" and "22.6"; avoid float noise in the URL.
+        send_value: float = round(value, 1)
+        if send_value.is_integer():
+            send_value = int(send_value)
+
+        if not await self.api.set_param(key, send_value):
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="number_set_failed",
+                translation_placeholders={"error": f"{key}={send_value}"},
+            )
+
+        self._attr_native_value = float(send_value)
+        self.async_write_ha_state()
+        self.coordinator.force_edit_params_refresh()
+        await self.coordinator.async_request_refresh()
+
+
+def create_ecoster_number_entity_description(
+    param: str, ecoster_idx: int, entry: dict[str, Any]
+) -> EconetNumberEntityDescription:
+    """Create a number entity description for an ecoSTER setpoint."""
+    return EconetNumberEntityDescription(
+        key=f"{param}_{ecoster_idx}",
+        translation_key=camel_to_snake(param),
+        translation_placeholders={"index": str(ecoster_idx)},
+        device_class=NumberDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_min_value=float(entry["minv"]),
+        native_max_value=float(entry["maxv"]),
+        native_step=float(entry.get("mult") or 0.1),
+        mode=NumberMode.BOX,
+        entity_registry_enabled_default=param in ECOSTER_SETPOINT_PARAMS_ENABLED,
+    )
+
+
+def _is_valid_ecoster_setpoint(entry: Any) -> bool:
+    """Return True for an editable editParams entry with numeric value and limits."""
+    if not isinstance(entry, dict) or not entry.get("edit"):
+        return False
+    return all(
+        isinstance(entry.get(field), (int, float))
+        for field in ("value", "minv", "maxv")
+    )
+
+
+def create_ecoster_number_entities(
+    coordinator: EconetDataCoordinator, api: Econet300Api
+) -> list[EcoSterNumber]:
+    """Create ecoSTER setpoint numbers for each connected panel."""
+    entities: list[EcoSterNumber] = []
+    if not ecoster_exists(coordinator.data):
+        return entities
+
+    edit_params = coordinator.data.get("editParams") or {}
+    for ecoster_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
+        for param in ECOSTER_SETPOINT_PARAMS:
+            entry = edit_params.get(f"{param}_{ecoster_idx}")
+            if not _is_valid_ecoster_setpoint(entry):
+                continue
+            description = create_ecoster_number_entity_description(
+                param, ecoster_idx, entry
+            )
+            entities.append(EcoSterNumber(description, coordinator, api, ecoster_idx))
+
+    _LOGGER.info("Created %d ecoSTER setpoint number entities", len(entities))
     return entities

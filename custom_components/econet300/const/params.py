@@ -36,6 +36,22 @@ NUMBER_MAP = {
     "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
 }
 
+# ecoSTER thermostat setpoints from /econet/editParams. The panel index is
+# appended to the key (e.g. STER_TEMP_DAY_1) and writes go through newParam.
+ECOSTER_SETPOINT_PARAMS: tuple[str, ...] = (
+    "STER_TEMP_ANTIFREEZ",  # Antifreeze setpoint
+    "STER_TEMP_DAY",  # Day setpoint
+    "STER_TEMP_NIGHT",  # Night setpoint
+    "STER_TEMP_SET_PARTY",  # Party mode setpoint
+    "STER_TEMP_SET_SUMMER",  # Holiday mode setpoint
+)
+
+# ecoSTER setpoints enabled by default; the others are created disabled.
+ECOSTER_SETPOINT_PARAMS_ENABLED: set[str] = {
+    "STER_TEMP_DAY",
+    "STER_TEMP_NIGHT",
+}
+
 # =============================================================================
 # SELECT ENTITY MAPPINGS
 # =============================================================================
@@ -210,4 +226,3 @@ CDP_ID_TO_REGPARAMS: dict[str, str] = {
 STATIC_CDP_IDS: set[str] = set(CDP_ID_TO_REGPARAMS.keys()) & {
     k for k, v in CDP_ID_TO_REGPARAMS.items() if v in STATIC_REGPARAMS_KEYS
 }
-

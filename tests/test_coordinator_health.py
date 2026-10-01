@@ -148,25 +148,29 @@ class TestWithHealth:
 
 def _update_ready_coordinator(
     *,
-    poll_edit_params: int,
+    poll_edit_params: int = 300,
     last_data: dict | None = None,
     force_refresh: bool = False,
     edit_last_fetch: float = 0.0,
+    sys_params: dict | None = None,
+    edit_params: dict | None = None,
 ) -> tuple[EconetDataCoordinator, MagicMock]:
-    """Build a coordinator wired for ``_async_update_data`` on an ecoMAX360i.
+    """Build a coordinator wired for ``_async_update_data`` (ecoMAX360i default).
 
-    ecoMAX360i is the only controller that reaches the ``editParams`` fetch
-    branch (``skip_edit_params`` returns False), so the gating logic is
-    exercised here. RM support is forced off to keep the success path minimal.
+    ecoMAX360i always reaches the ``editParams`` fetch branch (``skip_edit_params``
+    returns False), so the polling gate is exercised with it. RM support is
+    forced off to keep the success path minimal.
     """
     coord = object.__new__(EconetDataCoordinator)
     api = MagicMock()
-    api.fetch_sys_params = AsyncMock(return_value={"controllerID": "ecoMAX360i"})
+    api.fetch_sys_params = AsyncMock(
+        return_value=sys_params or {"controllerID": "ecoMAX360i"}
+    )
     api.fetch_reg_params = AsyncMock(return_value={"tempCO": 50})
     api.fetch_reg_params_data = AsyncMock(return_value={})
     api.fetch_param_edit_data = AsyncMock(return_value={})
     api.fetch_edit_params = AsyncMock(
-        return_value={"data": {}, "informationParams": {}}
+        return_value=edit_params or {"data": {}, "informationParams": {}}
     )
     api.probe_rm_support = AsyncMock(return_value=False)
 
@@ -256,6 +260,58 @@ class TestEditParamsPollingGate:
         await coord._async_update_data()
 
         api.fetch_edit_params.assert_not_called()
+
+
+class TestEditParamsControllerGate:
+    """Test which controllers fetch editParams and build the generic catalog."""
+
+    @pytest.mark.asyncio
+    async def test_ecoster_controller_fetches_editparams_without_catalog(
+        self, load_fixture
+    ):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            edit_params=load_fixture("ecoMAX860D3-HB", "editParams.json"),
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert result["editParamCatalog"] == {}
+
+    @pytest.mark.asyncio
+    async def test_controller_without_ecoster_skips_editparams(self, load_fixture):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX810P-L", "sysParams.json"),
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
+        assert result["editParams"] == {}
+        assert result["editParamCatalog"] == {}
+
+    @pytest.mark.asyncio
+    async def test_ecomax360i_builds_generic_catalog(self):
+        coord, api = _update_ready_coordinator(
+            edit_params={
+                "data": {
+                    "1280": {
+                        "edit": True,
+                        "name": "Boiler temp",
+                        "value": 55,
+                        "minv": 40,
+                        "maxv": 80,
+                    }
+                }
+            },
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+        assert "1280" in result["editParamCatalog"]
 
 
 # ============================================================================

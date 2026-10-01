@@ -21,7 +21,11 @@ from homeassistant.helpers.issue_registry import (
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ApiError, AuthError, Econet300Api
-from .common_functions import is_ecomax360i_controller, is_ecosol_controller
+from .common_functions import (
+    is_ecomax360i_controller,
+    is_ecosol_controller,
+    is_ecoster_connected,
+)
 from .const import (
     CONF_DEVICE_GROUPING,
     CONF_POLL_EDIT_PARAMS,
@@ -67,10 +71,16 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
 
 
 def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
-    """Determine whether editParams should be skipped based on controllerID."""
+    """Determine whether editParams should be skipped.
+
+    ecoMAX360i exposes its editable parameters there. Other controllers only
+    need it for the setpoints of a connected ecoSTER panel (``STER_*``).
+    """
     if sys_params is None:
         return True
-    return not is_ecomax360i_controller(sys_params.get("controllerID"))
+    if is_ecomax360i_controller(sys_params.get("controllerID")):
+        return False
+    return not is_ecoster_connected(sys_params)
 
 
 def build_edit_param_catalog(
@@ -353,7 +363,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                             )
                         self._edit_params_force_refresh = False
 
-                edit_catalog = build_edit_param_catalog(edit_params_full)
+                # Only ecoMAX360i gets generic editParams entities; on other
+                # controllers editParams feeds the dedicated ecoSTER numbers.
+                edit_catalog: dict[str, dict[str, Any]] = {}
+                if is_ecomax360i_controller(sys_params.get("controllerID")):
+                    edit_catalog = build_edit_param_catalog(edit_params_full)
                 if not params_edits:
                     params_edits = {
                         pid: info.get("value") for pid, info in edit_catalog.items()

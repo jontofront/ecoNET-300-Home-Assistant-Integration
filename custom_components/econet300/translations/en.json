@@ -321,6 +321,21 @@
       },
       "extempwno_fuel": {
         "name": "Ext. temp w/o fuel"
+      },
+      "ster_temp_day": {
+        "name": "Room thermostat {index} day setpoint"
+      },
+      "ster_temp_night": {
+        "name": "Room thermostat {index} night setpoint"
+      },
+      "ster_temp_set_party": {
+        "name": "Room thermostat {index} party setpoint"
+      },
+      "ster_temp_set_summer": {
+        "name": "Room thermostat {index} holiday setpoint"
+      },
+      "ster_temp_antifreez": {
+        "name": "Room thermostat {index} antifreeze setpoint"
       }
     },
     "binary_sensor": {

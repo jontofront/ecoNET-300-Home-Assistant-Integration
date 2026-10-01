@@ -24,6 +24,7 @@ from custom_components.econet300.const import (
     DEFAULT_SENSORS,
     ECOMAX360I_SENSORS,
     ECOSTER_SENSORS,
+    ECOSTER_SETPOINT_PARAMS,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
@@ -249,6 +250,27 @@ class TestNumberTranslations:
             pytest.skip(
                 f"Some number translations missing ({len(missing)}): {missing[:5]}..."
             )
+
+    @pytest.mark.parametrize(
+        "translation_file",
+        [
+            STRINGS_FILE,
+            *(
+                TRANSLATIONS_DIR / f"{lang}.json"
+                for lang in ("cz", "de", "en", "fr", "pl", "uk")
+            ),
+        ],
+        ids=lambda path: path.name,
+    )
+    def test_ecoster_setpoint_translations(self, translation_file):
+        """Every language names the ecoSTER setpoints with an {index} placeholder."""
+        data = load_json_file(translation_file)
+        number_translations = data.get("entity", {}).get("number", {})
+
+        for param in ECOSTER_SETPOINT_PARAMS:
+            key = camel_to_snake(param)
+            assert key in number_translations, f"{translation_file.name}: {key}"
+            assert "{index}" in number_translations[key]["name"]
 
 
 class TestTranslationQuality:

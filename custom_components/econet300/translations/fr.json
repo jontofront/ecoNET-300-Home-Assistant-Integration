@@ -134,6 +134,23 @@
         "name": "Mode de chauffage"
       }
     },
+    "number": {
+      "ster_temp_day": {
+        "name": "Température de consigne de jour thermostat {index}"
+      },
+      "ster_temp_night": {
+        "name": "Température de consigne de nuit thermostat {index}"
+      },
+      "ster_temp_set_party": {
+        "name": "Température de consigne mode Fête thermostat {index}"
+      },
+      "ster_temp_set_summer": {
+        "name": "Température de consigne mode Vacances thermostat {index}"
+      },
+      "ster_temp_antifreez": {
+        "name": "Température de consigne antigel thermostat {index}"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Allumeur"
