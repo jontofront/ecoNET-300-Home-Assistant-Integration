@@ -18,6 +18,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
+    ecoster_exists,
     get_active_alarm,
     get_entity_component,
     is_ecosol_controller,
@@ -357,12 +358,7 @@ def create_ecoster_binary_sensors(
         )
         return entities
 
-    sys_params = coordinator.data.get("sysParams", {})
-    if sys_params is None:
-        sys_params = {}
-
-    # Check if moduleEcoSTERSoftVer is None
-    if sys_params.get("moduleEcoSTERSoftVer") is None:
+    if not ecoster_exists(coordinator.data):
         _LOGGER.info(
             "moduleEcoSTERSoftVer is None, no ecoSTER binary sensors will be created"
         )

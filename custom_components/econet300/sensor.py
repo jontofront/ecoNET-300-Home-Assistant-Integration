@@ -47,6 +47,7 @@ from .api import Econet300Api
 from .common import EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
+    ecoster_exists,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -1259,12 +1260,7 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         _LOGGER.info("Coordinator data is None, no ecoSTER sensors will be created")
         return entities
 
-    sys_params = coordinator.data.get("sysParams", {})
-    if sys_params is None:
-        sys_params = {}
-
-    # Check if moduleEcoSTERSoftVer is None
-    if sys_params.get("moduleEcoSTERSoftVer") is None:
+    if not ecoster_exists(coordinator.data):
         _LOGGER.info("moduleEcoSTERSoftVer is None, no ecoSTER sensors will be created")
         return entities
 
