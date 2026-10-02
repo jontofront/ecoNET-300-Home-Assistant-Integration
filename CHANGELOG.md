@@ -4,7 +4,7 @@
 
 ### Added
 
-- **ecoSTER setpoint numbers ([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))**: each connected ecoSTER panel gets editable day and night setpoints (`STER_TEMP_DAY_N`, `STER_TEMP_NIGHT_N`) on its own device. Party, holiday and antifreeze setpoints are also created but disabled by default. Values come from `editParams` and writes go through `newParam`. Controllers with an ecoSTER now poll `editParams` (default every 300 s); the generic `editParams` entities stay ecoMAX360i-only.
+- **ecoSTER setpoint numbers ([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))**: each connected ecoSTER panel gets editable day and night setpoints (`STER_TEMP_DAY_N`, `STER_TEMP_NIGHT_N`) on its own device. Party, holiday and antifreeze setpoints are also created but disabled by default. Values come from `editParams` and writes go through `newParam`. Controllers with an ecoSTER now poll `editParams` (default every 300 s) with a single short request; the generic `editParams` entities stay ecoMAX360i-only. If the module does not answer, `editParams` is retried after 1, 3, 9 and 27 minutes and then not requested until the integration is reloaded. Setpoints from a later successful retry are added without a restart.
 
 ### Changed
 

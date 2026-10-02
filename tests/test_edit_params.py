@@ -18,6 +18,7 @@ from homeassistant.const import UnitOfTemperature
 from homeassistant.exceptions import HomeAssistantError
 import pytest
 
+from custom_components.econet300.api import Econet300Api
 from custom_components.econet300.common import build_edit_param_catalog
 from custom_components.econet300.const import DOMAIN
 from custom_components.econet300.number import (
@@ -25,6 +26,7 @@ from custom_components.econet300.number import (
     EditParamNumber,
     _create_edit_param_numbers,
     create_ecoster_number_entities,
+    setup_ecoster_number_entities,
 )
 from custom_components.econet300.select import (
     EditParamSelect,
@@ -267,13 +269,15 @@ class TestCreateEditParamEntities:
 
 
 def _ecoster_coordinator(load_fixture, controller: str = "ecoMAX860D3-HB"):
-    """Build a coordinator mock with sysParams and editParams.data from fixtures."""
+    """Build a coordinator mock with sysParams and editParams from fixtures."""
+    edit_params = load_fixture(controller, "editParams.json")
     coordinator = MagicMock()
     coordinator.single_device_tree = False
     coordinator.async_request_refresh = AsyncMock()
     coordinator.data = {
         "sysParams": load_fixture(controller, "sysParams.json"),
-        "editParams": load_fixture(controller, "editParams.json").get("data", {}),
+        "editParams": edit_params.get("data", {}),
+        "editParamsFull": edit_params,
     }
     return coordinator
 
@@ -343,6 +347,88 @@ class TestCreateEcoSterNumbers:
             "STER_TEMP_NIGHT_1",
             "STER_TEMP_NIGHT_2",
         }
+
+
+class TestFetchEditParams:
+    """Test the regular and short editParams requests."""
+
+    @staticmethod
+    def _api() -> tuple[Econet300Api, MagicMock]:
+        client = MagicMock()
+        client.host = "http://192.168.1.1"
+        client.get = AsyncMock(return_value={"data": {}})
+        client.get_with_short_timeout = AsyncMock(return_value=None)
+        return Econet300Api(client, MagicMock()), client
+
+    @pytest.mark.asyncio
+    async def test_short_request_when_timeout_given(self):
+        api, client = self._api()
+
+        result = await api.fetch_edit_params(timeout_sec=5)
+
+        assert result is None
+        client.get_with_short_timeout.assert_awaited_once_with(
+            "http://192.168.1.1/econet/editParams", timeout_sec=5
+        )
+        client.get.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_regular_request_by_default(self):
+        api, client = self._api()
+
+        result = await api.fetch_edit_params()
+
+        assert result == {"data": {}}
+        client.get.assert_awaited_once_with("http://192.168.1.1/econet/editParams")
+        client.get_with_short_timeout.assert_not_called()
+
+
+class TestSetupEcoSterNumbers:
+    """Test that ecoSTER numbers are also added when editParams arrives later."""
+
+    def test_returns_numbers_when_editparams_loaded(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), MagicMock(), MagicMock()
+        )
+
+        assert len(entities) == 10
+        coordinator.async_add_listener.assert_not_called()
+
+    def test_adds_numbers_once_editparams_arrives(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        loaded = {
+            key: coordinator.data.pop(key) for key in ("editParams", "editParamsFull")
+        }
+        entry = MagicMock()
+        add_entities = MagicMock()
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), entry, add_entities
+        )
+        on_update = coordinator.async_add_listener.call_args.args[0]
+        on_update()
+        coordinator.data.update(loaded)
+        on_update()
+        on_update()
+
+        assert entities == []
+        add_entities.assert_called_once()
+        assert len(add_entities.call_args.args[0]) == 10
+        entry.async_on_unload.assert_called_once_with(
+            coordinator.async_add_listener.return_value
+        )
+
+    def test_no_listener_without_ecoster_panel(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture, "ecoMAX810P-L")
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), MagicMock(), MagicMock()
+        )
+
+        assert entities == []
+        coordinator.async_add_listener.assert_not_called()
 
 
 class TestEcoSterNumber:

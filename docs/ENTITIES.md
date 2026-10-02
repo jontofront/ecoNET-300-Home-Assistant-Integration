@@ -325,6 +325,12 @@ Values and limits (10-35 °C, 0.1 °C step) come from `editParams`; writes use
 Which setpoint is in use depends on the ecoSTER mode (`ecosterModeN`); the value in
 use is shown by the read-only `ecosterSetTempN` sensor.
 
+Not every ecoNET module has the `editParams` endpoint. Until it answers for the
+first time, the integration sends one short request at startup and retries after
+1, 3, 9 and 27 minutes. If all five attempts fail, `editParams` is not requested
+again until the integration is reloaded. If a retry succeeds, the setpoints are
+added without a restart.
+
 ---
 
 ## Alarm and Event Entities (v1.2.3+)

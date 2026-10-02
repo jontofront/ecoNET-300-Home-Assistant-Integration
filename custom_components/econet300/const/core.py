@@ -50,6 +50,14 @@ CONSECUTIVE_FAILURES_THRESHOLD = 5
 # Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
 RM_PROBE_TIMEOUT_SEC = 2
 
+# editParams on controllers other than ecoMAX360i (ecoSTER setpoints): a single
+# short request, so modules without the endpoint cannot stall the update.
+EDIT_PARAMS_SHORT_TIMEOUT_SEC = 5
+# Delays (seconds) between editParams attempts until it answers for the first
+# time: 1, 3, 9 and 27 minutes. After the last one fails, editParams is not
+# requested again until the integration is reloaded.
+EDIT_PARAMS_RETRY_DELAYS_SEC: tuple[int, ...] = (60, 180, 540, 1620)
+
 # Max concurrent HTTP requests to the ecoNET module.
 # The module runs on a TP-Link MR3020 with very limited resources;
 # too many parallel connections cause timeouts (see GitHub issue #210).

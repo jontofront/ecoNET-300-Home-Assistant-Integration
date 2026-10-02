@@ -17,7 +17,7 @@ from homeassistant.components.number import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory, UnitOfTemperature
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -1335,7 +1335,9 @@ async def async_setup_entry(
             "Skipping upstream merged number setup for this controllerID; using Local editParams entities"
         )
         entities.extend(_create_edit_param_numbers(coordinator, api))
-        entities.extend(create_ecoster_number_entities(coordinator, api))
+        entities.extend(
+            setup_ecoster_number_entities(coordinator, api, entry, async_add_entities)
+        )
         return async_add_entities(entities)
 
     # Always create basic NUMBER_MAP entities first
@@ -1383,7 +1385,9 @@ async def async_setup_entry(
         mixer_count,
     )
     entities.extend(_create_edit_param_numbers(coordinator, api))
-    entities.extend(create_ecoster_number_entities(coordinator, api))
+    entities.extend(
+        setup_ecoster_number_entities(coordinator, api, entry, async_add_entities)
+    )
 
     if not entities:
         _LOGGER.warning(
@@ -1605,4 +1609,34 @@ def create_ecoster_number_entities(
             entities.append(EcoSterNumber(description, coordinator, api, ecoster_idx))
 
     _LOGGER.info("Created %d ecoSTER setpoint number entities", len(entities))
+    return entities
+
+
+def setup_ecoster_number_entities(
+    coordinator: EconetDataCoordinator,
+    api: Econet300Api,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> list[EcoSterNumber]:
+    """Return ecoSTER setpoint numbers, or add them once editParams arrives.
+
+    editParams may only answer on a later retry, so the numbers are then added
+    without reloading the integration.
+    """
+    entities = create_ecoster_number_entities(coordinator, api)
+    edit_params_loaded = bool((coordinator.data or {}).get("editParamsFull"))
+    if edit_params_loaded or not ecoster_exists(coordinator.data):
+        return entities
+
+    added = False
+
+    @callback
+    def _add_when_loaded() -> None:
+        nonlocal added
+        if added or not (coordinator.data or {}).get("editParamsFull"):
+            return
+        added = True
+        async_add_entities(create_ecoster_number_entities(coordinator, api))
+
+    entry.async_on_unload(coordinator.async_add_listener(_add_when_loaded))
     return entities

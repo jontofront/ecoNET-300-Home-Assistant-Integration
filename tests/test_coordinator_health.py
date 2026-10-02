@@ -26,6 +26,8 @@ from custom_components.econet300.const import (
     DEFAULT_POLL_EDIT_PARAMS,
     DEFAULT_POLL_REG_PARAMS,
     DEFAULT_POLL_SYS_PARAMS,
+    EDIT_PARAMS_RETRY_DELAYS_SEC,
+    EDIT_PARAMS_SHORT_TIMEOUT_SEC,
     STALE_AFTER_SECONDS,
 )
 from custom_components.econet300.sensor import EconetHealthSensor
@@ -154,6 +156,8 @@ def _update_ready_coordinator(
     edit_last_fetch: float = 0.0,
     sys_params: dict | None = None,
     edit_params: dict | None = None,
+    edit_failures: int = 0,
+    edit_last_attempt: float = 0.0,
 ) -> tuple[EconetDataCoordinator, MagicMock]:
     """Build a coordinator wired for ``_async_update_data`` (ecoMAX360i default).
 
@@ -183,8 +187,9 @@ def _update_ready_coordinator(
     coord._poll_reg_params = 15
     coord._poll_edit_params = poll_edit_params
     coord._edit_params_last_fetch = edit_last_fetch
+    coord._edit_params_last_attempt = edit_last_attempt
     coord._edit_params_force_refresh = force_refresh
-    coord._edit_params_failures = 0
+    coord._edit_params_failures = edit_failures
     coord._consecutive_failures = 0
     coord._last_success_ts = 0.0
     coord._last_failure_ts = 0.0
@@ -276,7 +281,9 @@ class TestEditParamsControllerGate:
 
         result = await coord._async_update_data()
 
-        api.fetch_edit_params.assert_called_once()
+        api.fetch_edit_params.assert_called_once_with(
+            timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
+        )
         assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
         assert result["editParamCatalog"] == {}
 
@@ -310,8 +317,76 @@ class TestEditParamsControllerGate:
 
         result = await coord._async_update_data()
 
-        api.fetch_edit_params.assert_called_once()
+        api.fetch_edit_params.assert_called_once_with(timeout_sec=None)
         assert "1280" in result["editParamCatalog"]
+
+
+class TestEditParamsRetryBackoff:
+    """Test editParams retries before it first answers (non-ecoMAX360i)."""
+
+    @pytest.mark.parametrize(
+        ("failures", "elapsed", "expected"),
+        [
+            (0, 0, True),
+            (1, 59, False),
+            (1, 60, True),
+            (2, 179, False),
+            (2, 180, True),
+            (3, 539, False),
+            (3, 540, True),
+            (4, 1619, False),
+            (4, 1620, True),
+            (5, 10**6, False),
+        ],
+    )
+    def test_retry_delays_are_1_3_9_27_minutes(self, failures, elapsed, expected):
+        now = time.time()
+        coord, _ = _update_ready_coordinator(
+            edit_failures=failures, edit_last_attempt=now - elapsed
+        )
+
+        assert coord._edit_params_fetch_due({}, now, is_ecomax360i=False) is expected
+
+    @pytest.mark.asyncio
+    async def test_stops_after_last_retry(self, load_fixture, caplog):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX850R2-X", "sysParams.json"),
+        )
+        api.fetch_edit_params = AsyncMock(return_value=None)
+        caplog.set_level("INFO")
+
+        for _ in range(10):
+            await coord._async_update_data()
+            # Pretend every retry delay has already passed.
+            coord._edit_params_last_attempt = 0.0
+
+        first_attempt_and_retries = 1 + len(EDIT_PARAMS_RETRY_DELAYS_SEC)
+        assert api.fetch_edit_params.await_count == first_attempt_and_retries
+        assert "not requesting it until the integration is reloaded" in caplog.text
+
+    @pytest.mark.asyncio
+    async def test_answered_endpoint_keeps_polling_after_failures(self, load_fixture):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            last_data={"editParamsFull": {"data": {"STER_TEMP_DAY_1": {}}}},
+            edit_failures=10,
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(
+            timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
+        )
+
+    @pytest.mark.asyncio
+    async def test_ecomax360i_retries_without_backoff(self):
+        coord, api = _update_ready_coordinator(
+            edit_failures=10, edit_last_attempt=time.time()
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(timeout_sec=None)
 
 
 # ============================================================================
