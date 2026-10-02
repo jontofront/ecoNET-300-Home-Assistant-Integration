@@ -8,6 +8,7 @@ Covers PR #234 hardening features:
 - ``polling_settings`` options-flow step (schema defaults + save/reload)
 """
 
+import copy
 from datetime import UTC, datetime
 import time
 from typing import Any, NamedTuple, cast
@@ -26,6 +27,7 @@ from custom_components.econet300.const import (
     DEFAULT_POLL_EDIT_PARAMS,
     DEFAULT_POLL_REG_PARAMS,
     DEFAULT_POLL_SYS_PARAMS,
+    EDIT_PARAMS_CONFIRM_DELAY_SEC,
     EDIT_PARAMS_RETRY_DELAYS_SEC,
     EDIT_PARAMS_SHORT_TIMEOUT_SEC,
     STALE_AFTER_SECONDS,
@@ -190,6 +192,7 @@ def _update_ready_coordinator(
     coord._edit_params_last_attempt = edit_last_attempt
     coord._edit_params_force_refresh = force_refresh
     coord._edit_params_failures = edit_failures
+    coord._edit_params_confirm_at = 0.0
     coord._consecutive_failures = 0
     coord._last_success_ts = 0.0
     coord._last_failure_ts = 0.0
@@ -387,6 +390,53 @@ class TestEditParamsRetryBackoff:
         await coord._async_update_data()
 
         api.fetch_edit_params.assert_called_once_with(timeout_sec=None)
+
+
+class TestEditParamsWriteConfirm:
+    """Test that a written ecoSTER setpoint is not replaced by an early read."""
+
+    def _coordinator(self, load_fixture, **kwargs):
+        edit_params = load_fixture("ecoMAX860D3-HB", "editParams.json")
+        return _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            edit_params=edit_params,
+            last_data={
+                "editParams": copy.deepcopy(edit_params["data"]),
+                "editParamsFull": edit_params,
+            },
+            **kwargs,
+        )
+
+    def test_write_schedules_confirm_read(self, load_fixture):
+        coord, _ = self._coordinator(load_fixture)
+        before = time.time()
+
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+
+        assert coord._edit_params_confirm_at >= before + EDIT_PARAMS_CONFIRM_DELAY_SEC
+
+    @pytest.mark.asyncio
+    async def test_written_value_kept_until_confirm_delay(self, load_fixture):
+        # editParams interval is already due, but the read must wait.
+        coord, api = self._coordinator(load_fixture, edit_last_fetch=0.0)
+
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 26.0
+
+    @pytest.mark.asyncio
+    async def test_editparams_read_again_after_confirm_delay(self, load_fixture):
+        coord, api = self._coordinator(load_fixture, edit_last_fetch=time.time())
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+        coord._edit_params_confirm_at = time.time() - 1
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert coord._edit_params_confirm_at == 0.0
 
 
 # ============================================================================

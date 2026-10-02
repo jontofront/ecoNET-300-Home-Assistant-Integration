@@ -57,6 +57,10 @@ EDIT_PARAMS_SHORT_TIMEOUT_SEC = 5
 # time: 1, 3, 9 and 27 minutes. After the last one fails, editParams is not
 # requested again until the integration is reloaded.
 EDIT_PARAMS_RETRY_DELAYS_SEC: tuple[int, ...] = (60, 180, 540, 1620)
+# After an ecoSTER setpoint is written, editParams is read again after this
+# delay. The controller applies a write within about 20 seconds; an earlier
+# read returns the old value.
+EDIT_PARAMS_CONFIRM_DELAY_SEC = 30
 
 # Max concurrent HTTP requests to the ecoNET module.
 # The module runs on a TP-Link MR3020 with very limited resources;

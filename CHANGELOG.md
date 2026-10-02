@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **ecoSTER setpoint snapped back after a change from HA ([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))**: the old value came back for up to 5 minutes (until the next `editParams` poll), although the write had worked. The written value is now kept, and `editParams` is read again 30 s after the write, when the controller has applied it. Reported by [@fsaidl](https://github.com/fsaidl) while testing `v1.3.4-alpha.1`.
+
 ## [v1.3.4-alpha.1] - 2026-10-02
 
 Pre-release for testing ecoSTER setpoints. Install it through HACS with the

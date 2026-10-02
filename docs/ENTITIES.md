@@ -313,6 +313,9 @@ Created on the **ecoSTER N** device (N = 1-8) for every connected panel when the
 controller reports `moduleEcoSTERSoftVer` and `editParams` contains the parameter.
 Values and limits (10-35 °C, 0.1 °C step) come from `editParams`; writes use
 `../econet/newParam?newParamName=STER_TEMP_DAY_N&newParamValue=22.5`.
+After a change from Home Assistant the entity keeps the new value, and `editParams`
+is read again 30 seconds later to confirm it: the controller needs up to about
+20 seconds to apply a write.
 
 | Entity Key               | Description                           | Default  | Endpoint               |
 | ------------------------ | ------------------------------------- | -------- | ---------------------- |

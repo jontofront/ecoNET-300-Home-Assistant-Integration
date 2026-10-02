@@ -38,6 +38,7 @@ from .const import (
     DEFAULT_POLL_SYS_PARAMS,
     DEVICE_GROUPING_SINGLE,
     DOMAIN,
+    EDIT_PARAMS_CONFIRM_DELAY_SEC,
     EDIT_PARAMS_RETRY_DELAYS_SEC,
     EDIT_PARAMS_SHORT_TIMEOUT_SEC,
     RM_ADDITIONAL_DATASET_KEYS,
@@ -256,6 +257,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         self._sys_params_last_fetch: float = 0.0
         self._edit_params_last_fetch: float = 0.0
         self._edit_params_last_attempt: float = 0.0
+        self._edit_params_confirm_at: float = 0.0
         self._edit_params_force_refresh = True
         self._edit_params_failures = 0
 
@@ -286,6 +288,23 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         """Force editParams refresh on the next coordinator update."""
         self._edit_params_force_refresh = True
 
+    def store_edit_param_write(self, key: str, value: float) -> None:
+        """Keep a written editParams value until editParams is read again.
+
+        The controller applies the write after several seconds, so editParams
+        is read again after EDIT_PARAMS_CONFIRM_DELAY_SEC instead of right away.
+        """
+        entry = ((self.data or {}).get("editParams") or {}).get(key)
+        if isinstance(entry, dict):
+            entry["value"] = value
+        self._edit_params_confirm_at = time.time() + EDIT_PARAMS_CONFIRM_DELAY_SEC
+        _LOGGER.debug(
+            "Stored %s=%s, reading editParams again in %d s",
+            key,
+            value,
+            EDIT_PARAMS_CONFIRM_DELAY_SEC,
+        )
+
     def _edit_params_fetch_due(
         self, edit_params_full: dict[str, Any], now: float, is_ecomax360i: bool
     ) -> bool:
@@ -302,6 +321,10 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 return False
             delay = EDIT_PARAMS_RETRY_DELAYS_SEC[failures - 1]
             return now - self._edit_params_last_attempt >= delay
+
+        if self._edit_params_confirm_at:
+            # A setpoint was just written; an earlier read returns the old value.
+            return now >= self._edit_params_confirm_at
 
         # poll_edit_params <= 0 disables interval polling: only fetch on an
         # explicit force-refresh or once to populate an empty catalog (never
@@ -389,6 +412,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                             )
                             self._edit_params_last_fetch = now
                             self._edit_params_failures = 0
+                            _LOGGER.debug(
+                                "editParams read: %d parameters", len(edit_params_data)
+                            )
                         else:
                             self._edit_params_failures += 1
                     except (ApiError, asyncio.TimeoutError, ClientError) as err:
@@ -398,6 +424,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                             err,
                         )
                     self._edit_params_last_attempt = now
+                    self._edit_params_confirm_at = 0.0
                     self._edit_params_force_refresh = False
                     if not edit_params_full and not is_ecomax360i:
                         self._log_edit_params_retry()

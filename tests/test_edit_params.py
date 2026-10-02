@@ -487,8 +487,10 @@ class TestEcoSterNumber:
         api.set_param.assert_awaited_once_with("STER_TEMP_DAY_2", sent)
         assert type(api.set_param.await_args.args[1]) is type(sent)
         assert number.native_value == float(sent)
-        coordinator.force_edit_params_refresh.assert_called_once()
-        coordinator.async_request_refresh.assert_awaited_once()
+        coordinator.store_edit_param_write.assert_called_once_with(
+            "STER_TEMP_DAY_2", sent
+        )
+        coordinator.async_request_refresh.assert_not_awaited()
 
     @pytest.mark.asyncio
     async def test_set_value_failure_raises(self, load_fixture):
@@ -500,4 +502,4 @@ class TestEcoSterNumber:
         with pytest.raises(HomeAssistantError):
             await number.async_set_native_value(21.5)
 
-        coordinator.async_request_refresh.assert_not_awaited()
+        coordinator.store_edit_param_write.assert_not_called()

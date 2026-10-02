@@ -1555,10 +1555,9 @@ class EcoSterNumber(EcoSterEntity, NumberEntity):
                 translation_placeholders={"error": f"{key}={send_value}"},
             )
 
+        self.coordinator.store_edit_param_write(key, send_value)
         self._attr_native_value = float(send_value)
         self.async_write_ha_state()
-        self.coordinator.force_edit_params_refresh()
-        await self.coordinator.async_request_refresh()
 
 
 def create_ecoster_number_entity_description(
