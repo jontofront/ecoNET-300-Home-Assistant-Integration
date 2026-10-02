@@ -19,6 +19,7 @@ from homeassistant.exceptions import HomeAssistantError
 import pytest
 
 from custom_components.econet300.common import build_edit_param_catalog
+from custom_components.econet300.const import DOMAIN
 from custom_components.econet300.number import (
     EcoSterNumber,
     EditParamNumber,
@@ -362,8 +363,9 @@ class TestEcoSterNumber:
         number = _ecoster_numbers(_ecoster_coordinator(load_fixture))["STER_TEMP_DAY_2"]
 
         assert number.unique_id == "test-uid-STER_TEMP_DAY_2"
-        identifier = next(iter(number.device_info["identifiers"]))[1]
-        assert identifier == "test-uid-ecoster-2"
+        device_info = number.device_info
+        assert device_info is not None
+        assert device_info.get("identifiers") == {(DOMAIN, "test-uid-ecoster-2")}
 
     def test_value_synced_from_editparams(self, load_fixture):
         number = _ecoster_numbers(_ecoster_coordinator(load_fixture))["STER_TEMP_DAY_1"]

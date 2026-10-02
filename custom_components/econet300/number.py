@@ -6,7 +6,7 @@ import logging
 import re
 import time
 import traceback
-from typing import Any
+from typing import Any, TypeGuard
 
 import aiohttp
 from homeassistant.components.number import (
@@ -1575,7 +1575,7 @@ def create_ecoster_number_entity_description(
     )
 
 
-def _is_valid_ecoster_setpoint(entry: Any) -> bool:
+def _is_valid_ecoster_setpoint(entry: Any) -> TypeGuard[dict[str, Any]]:
     """Return True for an editable editParams entry with numeric value and limits."""
     if not isinstance(entry, dict) or not entry.get("edit"):
         return False
