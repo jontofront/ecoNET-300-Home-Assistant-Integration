@@ -271,7 +271,7 @@ class EconetClient:
             try:
                 _LOGGER.debug(
                     "Fetching data with quote fix from URL: %s (Attempt %d)",
-                    url,
+                    _sanitize_url_for_logging(url),
                     attempt,
                 )
 
