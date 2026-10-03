@@ -3,11 +3,13 @@
 Tests data redaction, diagnostic functions availability, and edge cases.
 """
 
+import logging
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
+from custom_components.econet300.api import EconetClient, _sanitize_url_for_logging
 from custom_components.econet300.diagnostics import (
     RAW_PROBE_ENDPOINTS,
     TO_REDACT,
@@ -117,6 +119,56 @@ class TestToRedactList:
     def test_expected_keys_in_to_redact(self, expected_key):
         """Test expected sensitive keys are in TO_REDACT."""
         assert expected_key in TO_REDACT
+
+
+class TestLogUrlRedaction:
+    """Test that passwords in request URLs are hidden in log messages."""
+
+    @pytest.mark.parametrize(
+        ("url", "expected"),
+        [
+            (
+                "http://h/econet/rmParamsData?uid=U&password=secret",
+                "http://h/econet/rmParamsData?uid=U&password=***REDACTED***",
+            ),
+            (
+                "http://h/econet/rmStructure?uid=U&password=secret&lang=en",
+                "http://h/econet/rmStructure?uid=U&password=***REDACTED***&lang=en",
+            ),
+            (
+                "http://h/econet/rmAccess?password=secret",
+                "http://h/econet/rmAccess?password=***REDACTED***",
+            ),
+            (
+                "http://h/econet/rmParamsDescs?uid=U&lang=en",
+                "http://h/econet/rmParamsDescs?uid=U&lang=en",
+            ),
+        ],
+    )
+    def test_sanitize_url_for_logging(self, url, expected):
+        """Test the password value is replaced and other parameters are kept."""
+        assert _sanitize_url_for_logging(url) == expected
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("method", ["get", "get_with_fix_quotes"])
+    async def test_client_debug_log_hides_password(self, method, caplog):
+        """Test request URLs are logged without the password."""
+        response = MagicMock()
+        response.status = 200
+        response.json = AsyncMock(return_value={"data": []})
+        response.text = AsyncMock(return_value='{"data": []}')
+        response.__aenter__.return_value = response
+        response.__aexit__.return_value = False
+        session = MagicMock()
+        session.get = AsyncMock(return_value=response)
+        client = EconetClient("192.168.1.100", "user", "pass", session)
+        url = "http://192.168.1.100/econet/rmParamsData?uid=U&password=secret"
+
+        with caplog.at_level(logging.DEBUG, logger="custom_components.econet300.api"):
+            await getattr(client, method)(url)
+
+        assert "password=***REDACTED***" in caplog.text
+        assert "secret" not in caplog.text
 
 
 class TestExtendedEndpointSnapshots:
