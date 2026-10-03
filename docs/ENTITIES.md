@@ -122,24 +122,36 @@ Read-only values from `editParams.informationParams` (not `regParams`).
 
 ### ecoSTER Room Thermostats
 
-| Entity Key     | Description            | Endpoint              |
-| -------------- | ---------------------- | --------------------- |
-| `ecosterTemp1` | Room temperature 1     | `../econet/regParams` |
-| `ecosterTemp2` | Room temperature 2     | `../econet/regParams` |
-| `ecosterTemp3` | Room temperature 3     | `../econet/regParams` |
-| `ecosterTemp4` | Room temperature 4     | `../econet/regParams` |
-| `ecosterTemp5` | Room temperature 5     | `../econet/regParams` |
-| `ecosterTemp6` | Room temperature 6     | `../econet/regParams` |
-| `ecosterTemp7` | Room temperature 7     | `../econet/regParams` |
-| `ecosterTemp8` | Room temperature 8     | `../econet/regParams` |
-| `ecosterMode1` | Room thermostat 1 mode | `../econet/regParams` |
-| `ecosterMode2` | Room thermostat 2 mode | `../econet/regParams` |
-| `ecosterMode3` | Room thermostat 3 mode | `../econet/regParams` |
-| `ecosterMode4` | Room thermostat 4 mode | `../econet/regParams` |
-| `ecosterMode5` | Room thermostat 5 mode | `../econet/regParams` |
-| `ecosterMode6` | Room thermostat 6 mode | `../econet/regParams` |
-| `ecosterMode7` | Room thermostat 7 mode | `../econet/regParams` |
-| `ecosterMode8` | Room thermostat 8 mode | `../econet/regParams` |
+| Entity Key        | Description                       | Endpoint              |
+| ----------------- | --------------------------------- | --------------------- |
+| `ecosterTemp1`    | Room temperature 1                | `../econet/regParams` |
+| `ecosterTemp2`    | Room temperature 2                | `../econet/regParams` |
+| `ecosterTemp3`    | Room temperature 3                | `../econet/regParams` |
+| `ecosterTemp4`    | Room temperature 4                | `../econet/regParams` |
+| `ecosterTemp5`    | Room temperature 5                | `../econet/regParams` |
+| `ecosterTemp6`    | Room temperature 6                | `../econet/regParams` |
+| `ecosterTemp7`    | Room temperature 7                | `../econet/regParams` |
+| `ecosterTemp8`    | Room temperature 8                | `../econet/regParams` |
+| `ecosterMode1`    | Room thermostat 1 mode            | `../econet/regParams` |
+| `ecosterMode2`    | Room thermostat 2 mode            | `../econet/regParams` |
+| `ecosterMode3`    | Room thermostat 3 mode            | `../econet/regParams` |
+| `ecosterMode4`    | Room thermostat 4 mode            | `../econet/regParams` |
+| `ecosterMode5`    | Room thermostat 5 mode            | `../econet/regParams` |
+| `ecosterMode6`    | Room thermostat 6 mode            | `../econet/regParams` |
+| `ecosterMode7`    | Room thermostat 7 mode            | `../econet/regParams` |
+| `ecosterMode8`    | Room thermostat 8 mode            | `../econet/regParams` |
+| `ecosterSetTemp1` | Room thermostat 1 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp2` | Room thermostat 2 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp3` | Room thermostat 3 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp4` | Room thermostat 4 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp5` | Room thermostat 5 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp6` | Room thermostat 6 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp7` | Room thermostat 7 active setpoint | `../econet/regParams` |
+| `ecosterSetTemp8` | Room thermostat 8 active setpoint | `../econet/regParams` |
+
+The active setpoint is read-only and follows the ecoSTER mode (day, night, party,
+holiday, antifreeze). To change it, use the editable setpoints under
+[ecoSTER Room Thermostat Setpoints](#ecoster-room-thermostat-setpoints).
 
 ### Lambda Sensor Module
 
@@ -297,16 +309,30 @@ Read-only values from `editParams.informationParams` (not `regParams`).
 
 ### ecoSTER Room Thermostat Setpoints
 
-| Entity Key        | Description                | Endpoint              |
-| ----------------- | -------------------------- | --------------------- |
-| `ecosterSetTemp1` | Room thermostat 1 setpoint | `../econet/regParams` |
-| `ecosterSetTemp2` | Room thermostat 2 setpoint | `../econet/regParams` |
-| `ecosterSetTemp3` | Room thermostat 3 setpoint | `../econet/regParams` |
-| `ecosterSetTemp4` | Room thermostat 4 setpoint | `../econet/regParams` |
-| `ecosterSetTemp5` | Room thermostat 5 setpoint | `../econet/regParams` |
-| `ecosterSetTemp6` | Room thermostat 6 setpoint | `../econet/regParams` |
-| `ecosterSetTemp7` | Room thermostat 7 setpoint | `../econet/regParams` |
-| `ecosterSetTemp8` | Room thermostat 8 setpoint | `../econet/regParams` |
+Created on the **ecoSTER N** device (N = 1-8) for every connected panel when the
+controller reports `moduleEcoSTERSoftVer` and `editParams` contains the parameter.
+Values and limits (10-35 °C, 0.1 °C step) come from `editParams`; writes use
+`../econet/newParam?newParamName=STER_TEMP_DAY_N&newParamValue=22.5`.
+After a change from Home Assistant the entity keeps the new value, and `editParams`
+is read again 30 seconds later to confirm it: the controller needs up to about
+20 seconds to apply a write.
+
+| Entity Key               | Description                           | Default  | Endpoint               |
+| ------------------------ | ------------------------------------- | -------- | ---------------------- |
+| `STER_TEMP_DAY_N`        | Room thermostat N day setpoint        | Enabled  | `../econet/editParams` |
+| `STER_TEMP_NIGHT_N`      | Room thermostat N night setpoint      | Enabled  | `../econet/editParams` |
+| `STER_TEMP_SET_PARTY_N`  | Room thermostat N party setpoint      | Disabled | `../econet/editParams` |
+| `STER_TEMP_SET_SUMMER_N` | Room thermostat N holiday setpoint    | Disabled | `../econet/editParams` |
+| `STER_TEMP_ANTIFREEZ_N`  | Room thermostat N antifreeze setpoint | Disabled | `../econet/editParams` |
+
+Which setpoint is in use depends on the ecoSTER mode (`ecosterModeN`); the value in
+use is shown by the read-only `ecosterSetTempN` sensor.
+
+Not every ecoNET module has the `editParams` endpoint. Until it answers for the
+first time, the integration sends one short request at startup and retries after
+1, 3, 9 and 27 minutes. If all five attempts fail, `editParams` is not requested
+again until the integration is reloaded. If a retry succeeds, the setpoints are
+added without a restart.
 
 ---
 

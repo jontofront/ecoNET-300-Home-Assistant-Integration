@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from custom_components.econet300.common_functions import (
+    ecoster_exists,
     find_heater_mode_param,
     find_merged_param_by_key,
     get_active_alarm,
@@ -20,6 +21,7 @@ from custom_components.econet300.common_functions import (
     heater_mode_option_to_value,
     heater_mode_value_to_option,
     is_binary_enum,
+    is_ecoster_connected,
     is_parameter_locked,
     parse_alarm_entry,
     should_be_select_entity,
@@ -376,6 +378,38 @@ class TestLockReasonsFromFixture:
         """Test lambda calibration lock reason."""
         param = {"lock_reason": lock_reasons[5]}
         assert get_lock_reason(param) == "Lambda sensor calibration in progress"
+
+
+class TestEcosterDetection:
+    """Tests for ecoSTER panel detection via moduleEcoSTERSoftVer."""
+
+    @pytest.mark.parametrize(
+        ("fixture_name", "expected"),
+        [
+            ("ecoMAX860D3-HB", True),
+            ("ecoMAX850P-R", True),
+            ("ecoMAX360i", False),
+            ("ecoMAX810P-L", False),
+        ],
+    )
+    def test_detection_from_fixture(self, load_fixture, fixture_name, expected):
+        """Fixture sysParams decide whether an ecoSTER panel is connected."""
+        sys_params = load_fixture(fixture_name, "sysParams.json")
+
+        assert is_ecoster_connected(sys_params) is expected
+        assert ecoster_exists({"sysParams": sys_params}) is expected
+
+    @pytest.mark.parametrize("sys_params", [None, {}, {"moduleEcoSTERSoftVer": None}])
+    def test_not_connected_without_version(self, sys_params):
+        """Missing sysParams or a null ecoSTER version means no panel."""
+        assert is_ecoster_connected(sys_params) is False
+
+    @pytest.mark.parametrize(
+        "coordinator_data", [None, {}, {"sysParams": None}, {"sysParams": {}}]
+    )
+    def test_ecoster_exists_without_sys_params(self, coordinator_data):
+        """Coordinator data without usable sysParams means no panel."""
+        assert ecoster_exists(coordinator_data) is False
 
 
 class TestIsBinaryEnum:

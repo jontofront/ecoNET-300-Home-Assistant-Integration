@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "ecoNET-300-Home-Assistant-Integration"
-version = "1.3.3"
+version = "1.3.4-alpha.2"
 description = "ecoNET300 Home Assistant integration"
 authors = ["Jon <jontofront@gmail.com>"]
 readme = "README.md"
@@ -47,6 +47,8 @@ load-plugins = [
 # too-many-ancestors - it's too strict.
 # wrong-import-order - isort guards this
 # consider-using-f-string - str.format sometimes more readable
+# use-implicit-booleaness-not-comparison - tests assert `== {}` / `== []` to check
+#   the exact return value; `not x` would also accept None
 # ---
 # Pylint CodeStyle plugin
 # consider-using-namedtuple-or-dataclass - too opinionated
@@ -73,6 +75,7 @@ disable = [
     "consider-using-namedtuple-or-dataclass",
     "consider-using-assignment-expr",
     "possibly-used-before-assignment",
+    "use-implicit-booleaness-not-comparison",
 
     # Handled by ruff
     # Ref: <https://github.com/astral-sh/ruff/issues/970>

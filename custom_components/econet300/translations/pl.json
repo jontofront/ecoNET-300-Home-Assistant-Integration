@@ -321,6 +321,21 @@
       },
       "extempwno_fuel": {
         "name": "Temp. zewn. bez paliwa"
+      },
+      "ster_temp_day": {
+        "name": "Temperatura zadana dzienna termostatu {index}"
+      },
+      "ster_temp_night": {
+        "name": "Temperatura zadana nocna termostatu {index}"
+      },
+      "ster_temp_set_party": {
+        "name": "Temperatura zadana „Party” termostatu {index}"
+      },
+      "ster_temp_set_summer": {
+        "name": "Temperatura zadana „Wakacje” termostatu {index}"
+      },
+      "ster_temp_antifreez": {
+        "name": "Temperatura zadana przeciwzamrożeniowa termostatu {index}"
       }
     },
     "binary_sensor": {

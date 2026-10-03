@@ -8,6 +8,7 @@ Covers PR #234 hardening features:
 - ``polling_settings`` options-flow step (schema defaults + save/reload)
 """
 
+import copy
 from datetime import UTC, datetime
 import time
 from typing import Any, NamedTuple, cast
@@ -26,6 +27,9 @@ from custom_components.econet300.const import (
     DEFAULT_POLL_EDIT_PARAMS,
     DEFAULT_POLL_REG_PARAMS,
     DEFAULT_POLL_SYS_PARAMS,
+    EDIT_PARAMS_CONFIRM_DELAY_SEC,
+    EDIT_PARAMS_RETRY_DELAYS_SEC,
+    EDIT_PARAMS_SHORT_TIMEOUT_SEC,
     STALE_AFTER_SECONDS,
 )
 from custom_components.econet300.sensor import EconetHealthSensor
@@ -148,25 +152,31 @@ class TestWithHealth:
 
 def _update_ready_coordinator(
     *,
-    poll_edit_params: int,
+    poll_edit_params: int = 300,
     last_data: dict | None = None,
     force_refresh: bool = False,
     edit_last_fetch: float = 0.0,
+    sys_params: dict | None = None,
+    edit_params: dict | None = None,
+    edit_failures: int = 0,
+    edit_last_attempt: float = 0.0,
 ) -> tuple[EconetDataCoordinator, MagicMock]:
-    """Build a coordinator wired for ``_async_update_data`` on an ecoMAX360i.
+    """Build a coordinator wired for ``_async_update_data`` (ecoMAX360i default).
 
-    ecoMAX360i is the only controller that reaches the ``editParams`` fetch
-    branch (``skip_edit_params`` returns False), so the gating logic is
-    exercised here. RM support is forced off to keep the success path minimal.
+    ecoMAX360i always reaches the ``editParams`` fetch branch (``skip_edit_params``
+    returns False), so the polling gate is exercised with it. RM support is
+    forced off to keep the success path minimal.
     """
     coord = object.__new__(EconetDataCoordinator)
     api = MagicMock()
-    api.fetch_sys_params = AsyncMock(return_value={"controllerID": "ecoMAX360i"})
+    api.fetch_sys_params = AsyncMock(
+        return_value=sys_params or {"controllerID": "ecoMAX360i"}
+    )
     api.fetch_reg_params = AsyncMock(return_value={"tempCO": 50})
     api.fetch_reg_params_data = AsyncMock(return_value={})
     api.fetch_param_edit_data = AsyncMock(return_value={})
     api.fetch_edit_params = AsyncMock(
-        return_value={"data": {}, "informationParams": {}}
+        return_value=edit_params or {"data": {}, "informationParams": {}}
     )
     api.probe_rm_support = AsyncMock(return_value=False)
 
@@ -179,8 +189,10 @@ def _update_ready_coordinator(
     coord._poll_reg_params = 15
     coord._poll_edit_params = poll_edit_params
     coord._edit_params_last_fetch = edit_last_fetch
+    coord._edit_params_last_attempt = edit_last_attempt
     coord._edit_params_force_refresh = force_refresh
-    coord._edit_params_failures = 0
+    coord._edit_params_failures = edit_failures
+    coord._edit_params_confirm_at = 0.0
     coord._consecutive_failures = 0
     coord._last_success_ts = 0.0
     coord._last_failure_ts = 0.0
@@ -256,6 +268,175 @@ class TestEditParamsPollingGate:
         await coord._async_update_data()
 
         api.fetch_edit_params.assert_not_called()
+
+
+class TestEditParamsControllerGate:
+    """Test which controllers fetch editParams and build the generic catalog."""
+
+    @pytest.mark.asyncio
+    async def test_ecoster_controller_fetches_editparams_without_catalog(
+        self, load_fixture
+    ):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            edit_params=load_fixture("ecoMAX860D3-HB", "editParams.json"),
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(
+            timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
+        )
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert result["editParamCatalog"] == {}
+
+    @pytest.mark.asyncio
+    async def test_controller_without_ecoster_skips_editparams(self, load_fixture):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX810P-L", "sysParams.json"),
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
+        assert result["editParams"] == {}
+        assert result["editParamCatalog"] == {}
+
+    @pytest.mark.asyncio
+    async def test_ecomax360i_builds_generic_catalog(self):
+        coord, api = _update_ready_coordinator(
+            edit_params={
+                "data": {
+                    "1280": {
+                        "edit": True,
+                        "name": "Boiler temp",
+                        "value": 55,
+                        "minv": 40,
+                        "maxv": 80,
+                    }
+                }
+            },
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(timeout_sec=None)
+        assert "1280" in result["editParamCatalog"]
+
+
+class TestEditParamsRetryBackoff:
+    """Test editParams retries before it first answers (non-ecoMAX360i)."""
+
+    @pytest.mark.parametrize(
+        ("failures", "elapsed", "expected"),
+        [
+            (0, 0, True),
+            (1, 59, False),
+            (1, 60, True),
+            (2, 179, False),
+            (2, 180, True),
+            (3, 539, False),
+            (3, 540, True),
+            (4, 1619, False),
+            (4, 1620, True),
+            (5, 10**6, False),
+        ],
+    )
+    def test_retry_delays_are_1_3_9_27_minutes(self, failures, elapsed, expected):
+        now = time.time()
+        coord, _ = _update_ready_coordinator(
+            edit_failures=failures, edit_last_attempt=now - elapsed
+        )
+
+        assert coord._edit_params_fetch_due({}, now, is_ecomax360i=False) is expected
+
+    @pytest.mark.asyncio
+    async def test_stops_after_last_retry(self, load_fixture, caplog):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX850R2-X", "sysParams.json"),
+        )
+        api.fetch_edit_params = AsyncMock(return_value=None)
+        caplog.set_level("INFO")
+
+        for _ in range(10):
+            await coord._async_update_data()
+            # Pretend every retry delay has already passed.
+            coord._edit_params_last_attempt = 0.0
+
+        first_attempt_and_retries = 1 + len(EDIT_PARAMS_RETRY_DELAYS_SEC)
+        assert api.fetch_edit_params.await_count == first_attempt_and_retries
+        assert "not requesting it until the integration is reloaded" in caplog.text
+
+    @pytest.mark.asyncio
+    async def test_answered_endpoint_keeps_polling_after_failures(self, load_fixture):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            last_data={"editParamsFull": {"data": {"STER_TEMP_DAY_1": {}}}},
+            edit_failures=10,
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(
+            timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
+        )
+
+    @pytest.mark.asyncio
+    async def test_ecomax360i_retries_without_backoff(self):
+        coord, api = _update_ready_coordinator(
+            edit_failures=10, edit_last_attempt=time.time()
+        )
+
+        await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(timeout_sec=None)
+
+
+class TestEditParamsWriteConfirm:
+    """Test that a written ecoSTER setpoint is not replaced by an early read."""
+
+    def _coordinator(self, load_fixture, **kwargs):
+        edit_params = load_fixture("ecoMAX860D3-HB", "editParams.json")
+        return _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAX860D3-HB", "sysParams.json"),
+            edit_params=edit_params,
+            last_data={
+                "editParams": copy.deepcopy(edit_params["data"]),
+                "editParamsFull": edit_params,
+            },
+            **kwargs,
+        )
+
+    def test_write_schedules_confirm_read(self, load_fixture):
+        coord, _ = self._coordinator(load_fixture)
+        before = time.time()
+
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+
+        assert coord._edit_params_confirm_at >= before + EDIT_PARAMS_CONFIRM_DELAY_SEC
+
+    @pytest.mark.asyncio
+    async def test_written_value_kept_until_confirm_delay(self, load_fixture):
+        # editParams interval is already due, but the read must wait.
+        coord, api = self._coordinator(load_fixture, edit_last_fetch=0.0)
+
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_not_called()
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 26.0
+
+    @pytest.mark.asyncio
+    async def test_editparams_read_again_after_confirm_delay(self, load_fixture):
+        coord, api = self._coordinator(load_fixture, edit_last_fetch=time.time())
+        coord.store_edit_param_write("STER_TEMP_DAY_1", 26.0)
+        coord._edit_params_confirm_at = time.time() - 1
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once()
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert coord._edit_params_confirm_at == 0.0
 
 
 # ============================================================================

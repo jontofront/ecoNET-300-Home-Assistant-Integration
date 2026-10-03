@@ -321,6 +321,21 @@
       },
       "extempwno_fuel": {
         "name": "Außentemp. ohne Brennstoff"
+      },
+      "ster_temp_day": {
+        "name": "Raumthermostat {index} Tagtemperatur"
+      },
+      "ster_temp_night": {
+        "name": "Raumthermostat {index} Nachttemperatur"
+      },
+      "ster_temp_set_party": {
+        "name": "Raumthermostat {index} Party-Temperatur"
+      },
+      "ster_temp_set_summer": {
+        "name": "Raumthermostat {index} Urlaubstemperatur"
+      },
+      "ster_temp_antifreez": {
+        "name": "Raumthermostat {index} Frostschutztemperatur"
       }
     },
     "binary_sensor": {

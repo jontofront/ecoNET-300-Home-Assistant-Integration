@@ -684,13 +684,21 @@ class Econet300Api:
         )
         return sysParams
 
-    async def fetch_edit_params(self) -> dict[str, Any] | list[Any] | None:
-        """Fetch raw JSON from ``/econet/editParams`` (optional; not used by coordinator).
+    async def fetch_edit_params(
+        self, *, timeout_sec: float | None = None
+    ) -> dict[str, Any] | list[Any] | None:
+        """Fetch raw JSON from ``/econet/editParams``.
 
         Some modules expose this endpoint; others return 404 or an error payload.
+        With ``timeout_sec`` a single short request is made (no retries, no error
+        log on 404), for modules that may not have the endpoint.
         """
+        url = f"{self.host}/econet/{API_EDIT_PARAMS_URI}"
+        if timeout_sec is not None:
+            return await self._client.get_with_short_timeout(
+                url, timeout_sec=timeout_sec
+            )
         try:
-            url = f"{self.host}/econet/{API_EDIT_PARAMS_URI}"
             return await self._client.get(url)
         except AuthError:
             return None

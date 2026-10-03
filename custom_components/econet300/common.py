@@ -21,7 +21,11 @@ from homeassistant.helpers.issue_registry import (
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ApiError, AuthError, Econet300Api
-from .common_functions import is_ecomax360i_controller, is_ecosol_controller
+from .common_functions import (
+    is_ecomax360i_controller,
+    is_ecosol_controller,
+    is_ecoster_connected,
+)
 from .const import (
     CONF_DEVICE_GROUPING,
     CONF_POLL_EDIT_PARAMS,
@@ -34,6 +38,9 @@ from .const import (
     DEFAULT_POLL_SYS_PARAMS,
     DEVICE_GROUPING_SINGLE,
     DOMAIN,
+    EDIT_PARAMS_CONFIRM_DELAY_SEC,
+    EDIT_PARAMS_RETRY_DELAYS_SEC,
+    EDIT_PARAMS_SHORT_TIMEOUT_SEC,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
     STALE_AFTER_SECONDS,
@@ -67,10 +74,16 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
 
 
 def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
-    """Determine whether editParams should be skipped based on controllerID."""
+    """Determine whether editParams should be skipped.
+
+    ecoMAX360i exposes its editable parameters there. Other controllers only
+    need it for the setpoints of a connected ecoSTER panel (``STER_*``).
+    """
     if sys_params is None:
         return True
-    return not is_ecomax360i_controller(sys_params.get("controllerID"))
+    if is_ecomax360i_controller(sys_params.get("controllerID")):
+        return False
+    return not is_ecoster_connected(sys_params)
 
 
 def build_edit_param_catalog(
@@ -243,6 +256,8 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         self._last_error: str = ""
         self._sys_params_last_fetch: float = 0.0
         self._edit_params_last_fetch: float = 0.0
+        self._edit_params_last_attempt: float = 0.0
+        self._edit_params_confirm_at: float = 0.0
         self._edit_params_force_refresh = True
         self._edit_params_failures = 0
 
@@ -272,6 +287,68 @@ class EconetDataCoordinator(DataUpdateCoordinator):
     def force_edit_params_refresh(self) -> None:
         """Force editParams refresh on the next coordinator update."""
         self._edit_params_force_refresh = True
+
+    def store_edit_param_write(self, key: str, value: float) -> None:
+        """Keep a written editParams value until editParams is read again.
+
+        The controller applies the write after several seconds, so editParams
+        is read again after EDIT_PARAMS_CONFIRM_DELAY_SEC instead of right away.
+        """
+        entry = ((self.data or {}).get("editParams") or {}).get(key)
+        if isinstance(entry, dict):
+            entry["value"] = value
+        self._edit_params_confirm_at = time.time() + EDIT_PARAMS_CONFIRM_DELAY_SEC
+        _LOGGER.debug(
+            "Stored %s=%s, reading editParams again in %d s",
+            key,
+            value,
+            EDIT_PARAMS_CONFIRM_DELAY_SEC,
+        )
+
+    def _edit_params_fetch_due(
+        self, edit_params_full: dict[str, Any], now: float, is_ecomax360i: bool
+    ) -> bool:
+        """Return True when editParams should be requested in this update.
+
+        On controllers other than ecoMAX360i, attempts before the first answer
+        follow EDIT_PARAMS_RETRY_DELAYS_SEC and stop after the last delay.
+        """
+        if not edit_params_full and not is_ecomax360i:
+            failures = self._edit_params_failures
+            if failures == 0:
+                return True
+            if failures > len(EDIT_PARAMS_RETRY_DELAYS_SEC):
+                return False
+            delay = EDIT_PARAMS_RETRY_DELAYS_SEC[failures - 1]
+            return now - self._edit_params_last_attempt >= delay
+
+        if self._edit_params_confirm_at:
+            # A setpoint was just written; an earlier read returns the old value.
+            return now >= self._edit_params_confirm_at
+
+        # poll_edit_params <= 0 disables interval polling: only fetch on an
+        # explicit force-refresh or once to populate an empty catalog (never
+        # unconditionally on every cycle).
+        interval_due = (
+            self._poll_edit_params > 0
+            and (now - self._edit_params_last_fetch) >= self._poll_edit_params
+        )
+        return self._edit_params_force_refresh or not edit_params_full or interval_due
+
+    def _log_edit_params_retry(self) -> None:
+        """Log when editParams is retried, or that attempts have stopped."""
+        failures = self._edit_params_failures
+        if failures > len(EDIT_PARAMS_RETRY_DELAYS_SEC):
+            _LOGGER.info(
+                "editParams not available after %d attempts, "
+                "not requesting it until the integration is reloaded",
+                failures,
+            )
+            return
+        _LOGGER.debug(
+            "editParams not available, retrying in %d s",
+            EDIT_PARAMS_RETRY_DELAYS_SEC[failures - 1],
+        )
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API endpoint."""
@@ -314,46 +391,49 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 edit_params_data = last_data.get("editParams") or {}
                 information_params = last_data.get("informationParams") or {}
 
+                is_ecomax360i = is_ecomax360i_controller(sys_params.get("controllerID"))
                 if skip_edit_params(sys_params):
                     edit_params_full = {}
                     edit_params_data = {}
                     information_params = {}
-                else:
-                    # poll_edit_params <= 0 disables interval polling: only fetch
-                    # on an explicit force-refresh or once to populate an empty
-                    # catalog (never unconditionally on every cycle).
-                    interval_due = (
-                        self._poll_edit_params > 0
-                        and (now - self._edit_params_last_fetch)
-                        >= self._poll_edit_params
+                elif self._edit_params_fetch_due(edit_params_full, now, is_ecomax360i):
+                    # Other controllers only need editParams for ecoSTER setpoints,
+                    # so a module without the endpoint must not stall the update.
+                    timeout_sec = (
+                        None if is_ecomax360i else EDIT_PARAMS_SHORT_TIMEOUT_SEC
                     )
-                    should_fetch_edit = (
-                        self._edit_params_force_refresh
-                        or not edit_params_full
-                        or interval_due
-                    )
-                    if should_fetch_edit:
-                        try:
-                            raw = await self._api.fetch_edit_params()
-                            if isinstance(raw, dict) and raw:
-                                edit_params_full = copy.deepcopy(raw)
-                                edit_params_data = edit_params_full.get("data") or {}
-                                information_params = (
-                                    edit_params_full.get("informationParams") or {}
-                                )
-                                self._edit_params_last_fetch = now
-                                self._edit_params_failures = 0
-                            else:
-                                self._edit_params_failures += 1
-                        except (ApiError, asyncio.TimeoutError, ClientError) as err:
-                            self._edit_params_failures += 1
-                            _LOGGER.warning(
-                                "Failed to refresh editParams, keeping last data: %s",
-                                err,
+                    try:
+                        raw = await self._api.fetch_edit_params(timeout_sec=timeout_sec)
+                        if isinstance(raw, dict) and raw:
+                            edit_params_full = copy.deepcopy(raw)
+                            edit_params_data = edit_params_full.get("data") or {}
+                            information_params = (
+                                edit_params_full.get("informationParams") or {}
                             )
-                        self._edit_params_force_refresh = False
+                            self._edit_params_last_fetch = now
+                            self._edit_params_failures = 0
+                            _LOGGER.debug(
+                                "editParams read: %d parameters", len(edit_params_data)
+                            )
+                        else:
+                            self._edit_params_failures += 1
+                    except (ApiError, asyncio.TimeoutError, ClientError) as err:
+                        self._edit_params_failures += 1
+                        _LOGGER.warning(
+                            "Failed to refresh editParams, keeping last data: %s",
+                            err,
+                        )
+                    self._edit_params_last_attempt = now
+                    self._edit_params_confirm_at = 0.0
+                    self._edit_params_force_refresh = False
+                    if not edit_params_full and not is_ecomax360i:
+                        self._log_edit_params_retry()
 
-                edit_catalog = build_edit_param_catalog(edit_params_full)
+                # Only ecoMAX360i gets generic editParams entities; on other
+                # controllers editParams feeds the dedicated ecoSTER numbers.
+                edit_catalog: dict[str, dict[str, Any]] = {}
+                if is_ecomax360i:
+                    edit_catalog = build_edit_param_catalog(edit_params_full)
                 if not params_edits:
                     params_edits = {
                         pid: info.get("value") for pid, info in edit_catalog.items()

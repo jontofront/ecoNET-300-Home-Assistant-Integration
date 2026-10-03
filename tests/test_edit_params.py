@@ -4,15 +4,29 @@ Covers PR #234:
 - ``build_edit_param_catalog`` (number/switch/select detection, skips, limits)
 - ``_create_edit_param_numbers`` / ``_create_edit_param_selects`` /
   ``_create_edit_param_switches`` entity factories.
+
+Covers issue #236:
+- ``create_ecoster_number_entities`` / ``EcoSterNumber`` (ecoSTER setpoints
+  ``STER_*_{N}`` read from editParams and written via newParam).
 """
 
 from typing import cast
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
+from homeassistant.components.number import NumberDeviceClass
+from homeassistant.const import UnitOfTemperature
+from homeassistant.exceptions import HomeAssistantError
+import pytest
+
+from custom_components.econet300.api import Econet300Api
 from custom_components.econet300.common import build_edit_param_catalog
+from custom_components.econet300.const import DOMAIN
 from custom_components.econet300.number import (
+    EcoSterNumber,
     EditParamNumber,
     _create_edit_param_numbers,
+    create_ecoster_number_entities,
+    setup_ecoster_number_entities,
 )
 from custom_components.econet300.select import (
     EditParamSelect,
@@ -247,3 +261,245 @@ class TestCreateEditParamEntities:
         select = cast("EditParamSelect", select)
 
         assert select.current_option is None
+
+
+# ============================================================================
+# ecoSTER setpoint numbers (issue #236)
+# ============================================================================
+
+
+def _ecoster_coordinator(load_fixture, controller: str = "ecoMAX860D3-HB"):
+    """Build a coordinator mock with sysParams and editParams from fixtures."""
+    edit_params = load_fixture(controller, "editParams.json")
+    coordinator = MagicMock()
+    coordinator.single_device_tree = False
+    coordinator.async_request_refresh = AsyncMock()
+    coordinator.data = {
+        "sysParams": load_fixture(controller, "sysParams.json"),
+        "editParams": edit_params.get("data", {}),
+        "editParamsFull": edit_params,
+    }
+    return coordinator
+
+
+def _ecoster_numbers(coordinator, api=None) -> dict[str, EcoSterNumber]:
+    """Create ecoSTER numbers and index them by entity key."""
+    entities = create_ecoster_number_entities(coordinator, api or _make_api())
+    return {e.entity_description.key: e for e in entities}
+
+
+class TestCreateEcoSterNumbers:
+    """Test which ecoSTER setpoint numbers are created from editParams."""
+
+    def test_two_panels_from_ecomax860d3_fixture(self, load_fixture):
+        numbers = _ecoster_numbers(_ecoster_coordinator(load_fixture))
+
+        params = (
+            "STER_TEMP_ANTIFREEZ",
+            "STER_TEMP_DAY",
+            "STER_TEMP_NIGHT",
+            "STER_TEMP_SET_PARTY",
+            "STER_TEMP_SET_SUMMER",
+        )
+        expected = {f"{param}_{idx}" for param in params for idx in (1, 2)}
+        assert set(numbers) == expected
+
+    def test_single_panel_from_ecomax850p_fixture(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture, "ecoMAX850P-R")
+        numbers = _ecoster_numbers(coordinator)
+
+        assert "STER_TEMP_DAY_1" in numbers
+        assert not any(key.endswith("_2") for key in numbers)
+
+    def test_no_numbers_without_ecoster_panel(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        coordinator.data["sysParams"]["moduleEcoSTERSoftVer"] = None
+
+        assert _ecoster_numbers(coordinator) == {}
+
+    def test_no_numbers_without_coordinator_data(self):
+        coordinator = MagicMock()
+        coordinator.data = None
+
+        assert _ecoster_numbers(coordinator) == {}
+
+    def test_skips_invalid_entries(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        edit_params = coordinator.data["editParams"]
+        edit_params["STER_TEMP_DAY_1"]["edit"] = False
+        del edit_params["STER_TEMP_NIGHT_1"]["maxv"]
+        edit_params["STER_TEMP_DAY_2"]["value"] = None
+
+        numbers = _ecoster_numbers(coordinator)
+
+        assert "STER_TEMP_DAY_1" not in numbers
+        assert "STER_TEMP_NIGHT_1" not in numbers
+        assert "STER_TEMP_DAY_2" not in numbers
+        assert "STER_TEMP_NIGHT_2" in numbers
+
+    def test_only_day_and_night_enabled_by_default(self, load_fixture):
+        numbers = _ecoster_numbers(_ecoster_coordinator(load_fixture))
+
+        enabled = {k for k, e in numbers.items() if e.entity_registry_enabled_default}
+        assert enabled == {
+            "STER_TEMP_DAY_1",
+            "STER_TEMP_DAY_2",
+            "STER_TEMP_NIGHT_1",
+            "STER_TEMP_NIGHT_2",
+        }
+
+
+class TestFetchEditParams:
+    """Test the regular and short editParams requests."""
+
+    @staticmethod
+    def _api() -> tuple[Econet300Api, MagicMock]:
+        client = MagicMock()
+        client.host = "http://192.168.1.1"
+        client.get = AsyncMock(return_value={"data": {}})
+        client.get_with_short_timeout = AsyncMock(return_value=None)
+        return Econet300Api(client, MagicMock()), client
+
+    @pytest.mark.asyncio
+    async def test_short_request_when_timeout_given(self):
+        api, client = self._api()
+
+        result = await api.fetch_edit_params(timeout_sec=5)
+
+        assert result is None
+        client.get_with_short_timeout.assert_awaited_once_with(
+            "http://192.168.1.1/econet/editParams", timeout_sec=5
+        )
+        client.get.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_regular_request_by_default(self):
+        api, client = self._api()
+
+        result = await api.fetch_edit_params()
+
+        assert result == {"data": {}}
+        client.get.assert_awaited_once_with("http://192.168.1.1/econet/editParams")
+        client.get_with_short_timeout.assert_not_called()
+
+
+class TestSetupEcoSterNumbers:
+    """Test that ecoSTER numbers are also added when editParams arrives later."""
+
+    def test_returns_numbers_when_editparams_loaded(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), MagicMock(), MagicMock()
+        )
+
+        assert len(entities) == 10
+        coordinator.async_add_listener.assert_not_called()
+
+    def test_adds_numbers_once_editparams_arrives(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        loaded = {
+            key: coordinator.data.pop(key) for key in ("editParams", "editParamsFull")
+        }
+        entry = MagicMock()
+        add_entities = MagicMock()
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), entry, add_entities
+        )
+        on_update = coordinator.async_add_listener.call_args.args[0]
+        on_update()
+        coordinator.data.update(loaded)
+        on_update()
+        on_update()
+
+        assert entities == []
+        add_entities.assert_called_once()
+        assert len(add_entities.call_args.args[0]) == 10
+        entry.async_on_unload.assert_called_once_with(
+            coordinator.async_add_listener.return_value
+        )
+
+    def test_no_listener_without_ecoster_panel(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture, "ecoMAX810P-L")
+
+        entities = setup_ecoster_number_entities(
+            coordinator, _make_api(), MagicMock(), MagicMock()
+        )
+
+        assert entities == []
+        coordinator.async_add_listener.assert_not_called()
+
+
+class TestEcoSterNumber:
+    """Test EcoSterNumber state, metadata and writes."""
+
+    def test_description_from_editparams_entry(self, load_fixture):
+        number = _ecoster_numbers(_ecoster_coordinator(load_fixture))["STER_TEMP_DAY_2"]
+
+        assert number.native_min_value == 10.0
+        assert number.native_max_value == 35.0
+        assert number.native_step == 0.1
+        assert number.device_class == NumberDeviceClass.TEMPERATURE
+        assert number.native_unit_of_measurement == UnitOfTemperature.CELSIUS
+        assert number.translation_key == "ster_temp_day"
+        assert number.translation_placeholders == {"index": "2"}
+
+    def test_unique_id_and_ecoster_device(self, load_fixture):
+        number = _ecoster_numbers(_ecoster_coordinator(load_fixture))["STER_TEMP_DAY_2"]
+
+        assert number.unique_id == "test-uid-STER_TEMP_DAY_2"
+        device_info = number.device_info
+        assert device_info is not None
+        assert device_info.get("identifiers") == {(DOMAIN, "test-uid-ecoster-2")}
+
+    def test_value_synced_from_editparams(self, load_fixture):
+        number = _ecoster_numbers(_ecoster_coordinator(load_fixture))["STER_TEMP_DAY_1"]
+
+        with patch.object(number, "async_write_ha_state"):
+            number._sync_state(number._lookup_value())
+
+        assert number.native_value == 23.1
+
+    def test_unavailable_when_entry_disappears(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        number = _ecoster_numbers(coordinator)["STER_TEMP_DAY_1"]
+        assert number.available is True
+
+        del coordinator.data["editParams"]["STER_TEMP_DAY_1"]
+
+        assert number.available is False
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("requested", "sent"),
+        [(22.6, 22.6), (22.0, 22), (22.649999999, 22.6)],
+    )
+    async def test_set_value_writes_via_set_param(self, load_fixture, requested, sent):
+        coordinator = _ecoster_coordinator(load_fixture)
+        api = _make_api()
+        api.set_param = AsyncMock(return_value=True)
+        number = _ecoster_numbers(coordinator, api)["STER_TEMP_DAY_2"]
+
+        with patch.object(number, "async_write_ha_state"):
+            await number.async_set_native_value(requested)
+
+        api.set_param.assert_awaited_once_with("STER_TEMP_DAY_2", sent)
+        assert type(api.set_param.await_args.args[1]) is type(sent)
+        assert number.native_value == float(sent)
+        coordinator.store_edit_param_write.assert_called_once_with(
+            "STER_TEMP_DAY_2", sent
+        )
+        coordinator.async_request_refresh.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    async def test_set_value_failure_raises(self, load_fixture):
+        coordinator = _ecoster_coordinator(load_fixture)
+        api = _make_api()
+        api.set_param = AsyncMock(return_value=False)
+        number = _ecoster_numbers(coordinator, api)["STER_TEMP_DAY_1"]
+
+        with pytest.raises(HomeAssistantError):
+            await number.async_set_native_value(21.5)
+
+        coordinator.store_edit_param_write.assert_not_called()

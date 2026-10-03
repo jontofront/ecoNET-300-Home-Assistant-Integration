@@ -143,6 +143,23 @@
         "name": "Auto"
       }
     },
+    "number": {
+      "ster_temp_day": {
+        "name": "Zadaná denní teplota pokojového termostatu {index}"
+      },
+      "ster_temp_night": {
+        "name": "Zadaná noční teplota pokojového termostatu {index}"
+      },
+      "ster_temp_set_party": {
+        "name": "Zadaná teplota Párty pokojového termostatu {index}"
+      },
+      "ster_temp_set_summer": {
+        "name": "Zadaná teplota Dovolená pokojového termostatu {index}"
+      },
+      "ster_temp_antifreez": {
+        "name": "Zadaná teplota protizámrz pokojového termostatu {index}"
+      }
+    },
     "binary_sensor": {
       "lighter_works": {
         "name": "Zapalovač"

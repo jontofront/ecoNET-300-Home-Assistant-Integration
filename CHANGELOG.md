@@ -1,5 +1,32 @@
 # Changelog
 
+## [Unreleased]
+
+## [v1.3.4-alpha.2] - 2026-10-02
+
+Second pre-release for testing ecoSTER setpoints.
+
+### Fixed
+
+- **ecoSTER setpoint snapped back after a change from HA ([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))**: the old value came back for up to 5 minutes (until the next `editParams` poll), although the write had worked. The written value is now kept, and `editParams` is read again 30 s after the write, when the controller has applied it. Reported by [@fsaidl](https://github.com/fsaidl) while testing `v1.3.4-alpha.1`.
+
+## [v1.3.4-alpha.1] - 2026-10-02
+
+Pre-release for testing ecoSTER setpoints. Install it through HACS with the
+repository's pre-release switch enabled.
+
+### Added
+
+- **ecoSTER setpoint numbers ([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))**: each connected ecoSTER panel gets editable day and night setpoints (`STER_TEMP_DAY_N`, `STER_TEMP_NIGHT_N`) on its own device. Party, holiday and antifreeze setpoints are also created but disabled by default. Values come from `editParams` and writes go through `newParam`. Controllers with an ecoSTER now poll `editParams` (default every 300 s) with a single short request; the generic `editParams` entities stay ecoMAX360i-only. If the module does not answer, `editParams` is retried after 1, 3, 9 and 27 minutes and then not requested until the integration is reloaded. Setpoints from a later successful retry are added without a restart.
+
+### Changed
+
+- **ecoSTER detection** is shared through `ecoster_exists()` / `is_ecoster_connected()` instead of separate `moduleEcoSTERSoftVer` checks in the sensor and binary sensor platforms.
+
+### Docs
+
+- `docs/ENTITIES.md`: `ecosterSetTemp1-8` are listed as read-only sensors (active setpoint), not number entities.
+
 ## [v1.3.3] - 2026-09-26
 
 Stable release of `1.3.3-beta.1`.

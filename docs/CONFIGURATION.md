@@ -22,7 +22,7 @@ Use **Polling settings** when you want to change how often Home Assistant reads 
 | ------ | ------- | ----- | ----------- |
 | `regParams` polling interval | 15 seconds | 5-300 seconds | Live sensor values, such as temperatures, pumps, fans, and statuses. |
 | `sysParams` polling interval | 300 seconds | 10-3600 seconds | Controller metadata and system information. |
-| `editParams` polling interval | 300 seconds | 0-3600 seconds | Editable parameter catalog and values. Use `0` to disable periodic polling. |
+| `editParams` polling interval | 300 seconds | 0-3600 seconds | Editable parameters (ecoMAX360i) and ecoSTER setpoints. Use `0` to disable periodic polling. See [ecoSTER setpoints](ENTITIES.md#ecoster-room-thermostat-setpoints) for modules without `editParams`. |
 
 For better graph granularity, reduce the **regParams polling interval**. This controls the live sensor values shown in Home Assistant history graphs.
 
