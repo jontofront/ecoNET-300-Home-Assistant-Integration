@@ -8,6 +8,7 @@ import pytest
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 from homeassistant.const import UnitOfEnergy
 
+from custom_components.econet300.binary_sensor import create_ecoster_binary_sensors
 from custom_components.econet300.common_functions import (
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -18,11 +19,16 @@ from custom_components.econet300.const import (
     ECOMAX360I_SENSORS,
     ECOSOL_CONTROLLER_MAP_REFERENCE_KEY,
     ECOSOL_SENSORS,
+    ECOSTER_BINARY_SENSOR_KEY_PREFIXES,
+    ECOSTER_BINARY_SENSORS,
+    ECOSTER_SENSOR_KEY_PREFIXES,
+    ECOSTER_SENSORS,
     EDIT_PARAMS_DATA_SENSOR_MAP,
     ENTITY_SENSOR_DEVICE_CLASS_MAP,
     ENTITY_UNIT_MAP,
     ENTITY_VALUE_PROCESSOR,
     INFORMATION_PARAMS_SENSOR_MAP,
+    NUMBER_OF_AVAILABLE_ECOSTERS,
     SENSITIVE_PARAM_KEYS,
     SENSOR_ENUM_OPTIONS,
     SENSOR_MAP_KEY,
@@ -38,6 +44,7 @@ from custom_components.econet300.sensor import (
     _controller_sensor_key_candidates,
     can_add_mixer,
     create_controller_sensors,
+    create_ecoster_sensors,
     create_sensor_entity_description,
 )
 
@@ -523,6 +530,66 @@ class TestSensorMappingLogic:
         keys = {e.entity_description.key for e in entities}
 
         assert keys.isdisjoint(lambda_keys)
+
+
+class TestEcosterEntityCreation:
+    """Test ecoSTER sensor and binary sensor creation from fixtures."""
+
+    @staticmethod
+    def _coordinator(load_fixture, fixture_name: str) -> Mock:
+        """Return a coordinator mock with the fixture regParams and sysParams."""
+        reg_raw = load_fixture(fixture_name, "regParams.json")
+        coordinator = Mock()
+        coordinator.data = {
+            "regParams": reg_raw.get("curr") or reg_raw,
+            "sysParams": load_fixture(fixture_name, "sysParams.json"),
+        }
+        return coordinator
+
+    def test_entities_per_panel_on_ecomax860d3_hb(self, load_fixture) -> None:
+        """Test each ecoSTER entity is created with its key and panel index."""
+        coordinator = self._coordinator(load_fixture, "ecoMAX860D3-HB")
+
+        sensors = create_ecoster_sensors(coordinator, Mock())
+        binary_sensors = create_ecoster_binary_sensors(coordinator, Mock())
+
+        assert {(e.entity_description.key, e._idx) for e in sensors} == {
+            ("ecoSterTemp1", 1),
+            ("ecoSterSetTemp1", 1),
+            ("ecoSterMode1", 1),
+            ("ecoSterTemp2", 2),
+            ("ecoSterSetTemp2", 2),
+            ("ecoSterMode2", 2),
+            ("ecoSterMode3", 3),
+        }
+        assert {(e.entity_description.key, e._idx) for e in binary_sensors} == {
+            ("ecoSterContacts1", 1),
+            ("ecoSterDaySched1", 1),
+            ("ecoSterContacts2", 2),
+            ("ecoSterDaySched2", 2),
+            ("ecoSterContacts3", 3),
+            ("ecoSterDaySched3", 3),
+        }
+
+    def test_no_entities_without_ecoster(self, load_fixture) -> None:
+        """Test controllers without an ecoSTER panel get no ecoSTER entities."""
+        coordinator = self._coordinator(load_fixture, "ecoMAX810P-L")
+
+        assert create_ecoster_sensors(coordinator, Mock()) == []
+        assert create_ecoster_binary_sensors(coordinator, Mock()) == []
+
+    @pytest.mark.parametrize(
+        ("prefixes", "keys"),
+        [
+            (ECOSTER_SENSOR_KEY_PREFIXES, ECOSTER_SENSORS),
+            (ECOSTER_BINARY_SENSOR_KEY_PREFIXES, ECOSTER_BINARY_SENSORS),
+        ],
+    )
+    def test_key_prefixes_match_ecoster_key_sets(self, prefixes, keys) -> None:
+        """Test the key prefixes give exactly the ecoSTER key sets."""
+        indexes = range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1)
+
+        assert {f"{prefix}{idx}" for prefix in prefixes for idx in indexes} == keys
 
 
 class TestAlarmCountSensor:
