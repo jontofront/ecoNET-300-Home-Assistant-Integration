@@ -44,6 +44,7 @@ from .const import (
     SERVICE_FUEL_SENSOR,
     SERVICE_GET_SCHEDULE,
 )
+from .entity import ecoster_device_identifier
 from .mem_cache import MemCache
 from .sensor import FuelConsumptionTotalSensor
 
@@ -145,7 +146,7 @@ def _cleanup_ghost_devices(
     for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
         ghost_identifiers.add((DOMAIN, f"default-uid-mixer-{i}"))
     for i in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
-        ghost_identifiers.add((DOMAIN, f"default-uid-ecoster-{i}"))
+        ghost_identifiers.add((DOMAIN, ecoster_device_identifier("default-uid", i)))
 
     removed = 0
     for ghost_id in ghost_identifiers:
@@ -361,7 +362,8 @@ async def async_remove_config_entry_device(
     uid = entry_data[SERVICE_API].uid
     coordinator_data = entry_data[SERVICE_COORDINATOR].data
     for ecoster_num in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
-        if (DOMAIN, f"{uid}-ecoster-{ecoster_num}") in device_entry.identifiers:
+        identifier = ecoster_device_identifier(uid, ecoster_num)
+        if (DOMAIN, identifier) in device_entry.identifiers:
             return not ecoster_panel_exists(coordinator_data, ecoster_num)
 
     return False
