@@ -533,6 +533,25 @@ class TestSensorMappingLogic:
         assert keys.isdisjoint(lambda_keys)
 
 
+ALL_FIXTURE_NAMES = sorted(
+    path.name
+    for path in (Path(__file__).parent / "fixtures").iterdir()
+    if path.is_dir()
+)
+
+# Fixtures not listed here have no ecoSTER panel connected.
+ECOSTER_CONNECTED_SLOTS: dict[str, set[int]] = {
+    "SControl MK1": {1, 2},
+    "SControl_EM892": {1},
+    "ecoMAX850P-R": {1},
+    "ecoMAX850R2-X": {1, 2},
+    "ecoMAX860D3-HB": {1, 2},
+    "ecoMAX860P3-O": {1},
+    "ecoMAX920P1-O": {1},
+    "ecoMAX920P1-T": {1},
+}
+
+
 class TestEcosterEntityCreation:
     """Test ecoSTER sensor and binary sensor creation from fixtures."""
 
@@ -569,23 +588,14 @@ class TestEcosterEntityCreation:
             ("ecoSterDaySched2", 2),
         }
 
-    @pytest.mark.parametrize(
-        "fixture_name",
-        [
-            "ecoMAX850P-R",
-            "ecoMAX850R2-X",
-            "ecoMAX860D3-HB",
-            "ecoMAX860P3-O",
-            "ecoMAX920P1-O",
-            "ecoMAX920P1-T",
-            "SControl MK1",
-            "SControl_EM892",
-        ],
-    )
-    def test_empty_slots_get_no_entities(self, load_fixture, fixture_name) -> None:
-        """Test only slots with a connected panel get ecoSTER entities."""
+    @pytest.mark.parametrize("fixture_name", ALL_FIXTURE_NAMES)
+    def test_entities_only_for_connected_slots(
+        self, load_fixture, fixture_name
+    ) -> None:
+        """Test every fixture gets ecoSTER entities only for connected slots."""
         coordinator = self._coordinator(load_fixture, fixture_name)
-        connected_slots = {
+        expected_slots = ECOSTER_CONNECTED_SLOTS.get(fixture_name, set())
+        panel_slots = {
             slot
             for slot in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1)
             if ecoster_panel_exists(coordinator.data, slot)
@@ -594,16 +604,9 @@ class TestEcosterEntityCreation:
         sensors = create_ecoster_sensors(coordinator, Mock())
         binary_sensors = create_ecoster_binary_sensors(coordinator, Mock())
 
-        assert connected_slots
-        assert {e._idx for e in sensors} == connected_slots
-        assert {e._idx for e in binary_sensors} == connected_slots
-
-    def test_no_entities_without_ecoster(self, load_fixture) -> None:
-        """Test controllers without an ecoSTER panel get no ecoSTER entities."""
-        coordinator = self._coordinator(load_fixture, "ecoMAX810P-L")
-
-        assert create_ecoster_sensors(coordinator, Mock()) == []
-        assert create_ecoster_binary_sensors(coordinator, Mock()) == []
+        assert panel_slots == expected_slots
+        assert {e._idx for e in sensors} == expected_slots
+        assert {e._idx for e in binary_sensors} == expected_slots
 
     @pytest.mark.parametrize(
         ("prefixes", "keys"),

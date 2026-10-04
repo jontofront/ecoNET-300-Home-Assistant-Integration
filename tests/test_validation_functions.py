@@ -29,7 +29,6 @@ from custom_components.econet300.common_functions import (
     should_be_switch_entity,
     validate_parameter_data,
 )
-from custom_components.econet300.const import NUMBER_OF_AVAILABLE_ECOSTERS
 from custom_components.econet300.event import BoilerAlarmEvent
 
 
@@ -413,34 +412,12 @@ class TestEcosterDetection:
         """Coordinator data without usable sysParams means no panel."""
         assert ecoster_exists(coordinator_data) is False
 
-    @pytest.mark.parametrize(
-        ("fixture_name", "connected_slots"),
-        [
-            ("ecoMAX810P-L", set()),
-            ("ecoMAX850P-R", {1}),
-            ("ecoMAX850R2-X", {1, 2}),
-            ("ecoMAX860D3-HB", {1, 2}),
-            ("ecoMAX860P3-O", {1}),
-            ("ecoMAX920P1-O", {1}),
-            ("ecoMAX920P1-T", {1}),
-            ("SControl MK1", {1, 2}),
-            ("SControl_EM892", {1}),
-        ],
-    )
-    def test_panel_slots_from_fixture(
-        self, load_fixture, fixture_name, connected_slots
-    ):
-        """Only slots reporting a room temperature hold an ecoSTER panel."""
-        reg_raw = load_fixture(fixture_name, "regParams.json")
-        coordinator_data = {"regParams": reg_raw.get("curr") or reg_raw}
+    def test_panel_exists_with_room_temperature(self):
+        """A slot reporting a room temperature holds an ecoSTER panel."""
+        coordinator_data = {"regParams": {"ecoSterTemp2": 21.5}}
 
-        slots = {
-            slot
-            for slot in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1)
-            if ecoster_panel_exists(coordinator_data, slot)
-        }
-
-        assert slots == connected_slots
+        assert ecoster_panel_exists(coordinator_data, 2) is True
+        assert ecoster_panel_exists(coordinator_data, 1) is False
 
     @pytest.mark.parametrize(
         "coordinator_data",
