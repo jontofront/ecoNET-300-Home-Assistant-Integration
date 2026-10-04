@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **Empty ecoSTER slots created extra *ecoSTER N* devices ([#256](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/256))**: the controller reports every supported slot in `regParams`, so an empty slot (no room temperature, mode `255`) got a mode sensor plus contacts and day schedule binary sensors on its own device. ecoSTER entities are now created only for slots with a room temperature. The leftover device can be deleted from its device page (**⋮ → Delete**); devices of connected panels cannot be deleted. No reinstall is needed, see the [Migration guide](docs/MIGRATION.md#upgrading-from-v133-to-v134--empty-ecoster-slots). Reported by [@fsaidl](https://github.com/fsaidl).
+
+### Changed
+
+- **ecoSTER sensor creation** loops over key prefixes instead of repeating one block per key ([#258](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/258)).
+
 ## [v1.3.4-alpha.2] - 2026-10-02
 
 Second pre-release for testing ecoSTER setpoints.
