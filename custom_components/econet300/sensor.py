@@ -48,6 +48,7 @@ from .common import EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
     ecoster_exists,
+    ecoster_panel_exists,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -1268,6 +1269,8 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
     reg_params = coordinator.data.get("regParams") or {}
 
     for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
+        if not ecoster_panel_exists(coordinator.data, thermostat_idx):
+            continue
         for prefix in ECOSTER_SENSOR_KEY_PREFIXES:
             key = f"{prefix}{thermostat_idx}"
             if reg_params.get(key) is None:

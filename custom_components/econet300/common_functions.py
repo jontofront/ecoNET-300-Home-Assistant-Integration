@@ -428,6 +428,27 @@ def ecoster_exists(coordinator_data: dict | None) -> bool:
     return is_ecoster_connected(coordinator_data.get("sysParams"))
 
 
+def ecoster_panel_exists(coordinator_data: dict | None, ecoster_num: int) -> bool:
+    """Check if an ecoSTER panel is connected to the given slot.
+
+    regParams reports every slot the controller supports. An empty slot has a
+    null room temperature (and mode 255), while its other values are leftovers.
+
+    Args:
+        coordinator_data: Coordinator data dict containing regParams
+        ecoster_num: ecoSTER slot number (1-8)
+
+    Returns:
+        True if the slot reports a room temperature, False otherwise
+
+    """
+    if not coordinator_data:
+        return False
+
+    reg_params = coordinator_data.get("regParams") or {}
+    return reg_params.get(f"ecoSterTemp{ecoster_num}") is not None
+
+
 def is_ecoster_related(param: dict) -> bool:
     """Check if a parameter is related to ecoSTER panel.
 

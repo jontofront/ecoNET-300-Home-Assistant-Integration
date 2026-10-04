@@ -10,6 +10,7 @@ from homeassistant.const import UnitOfEnergy
 
 from custom_components.econet300.binary_sensor import create_ecoster_binary_sensors
 from custom_components.econet300.common_functions import (
+    ecoster_panel_exists,
     is_ecomax360i_controller,
     is_ecosol_controller,
 )
@@ -547,7 +548,7 @@ class TestEcosterEntityCreation:
         return coordinator
 
     def test_entities_per_panel_on_ecomax860d3_hb(self, load_fixture) -> None:
-        """Test each ecoSTER entity is created with its key and panel index."""
+        """Test each connected panel gets its entities and empty slot 3 none."""
         coordinator = self._coordinator(load_fixture, "ecoMAX860D3-HB")
 
         sensors = create_ecoster_sensors(coordinator, Mock())
@@ -560,16 +561,42 @@ class TestEcosterEntityCreation:
             ("ecoSterTemp2", 2),
             ("ecoSterSetTemp2", 2),
             ("ecoSterMode2", 2),
-            ("ecoSterMode3", 3),
         }
         assert {(e.entity_description.key, e._idx) for e in binary_sensors} == {
             ("ecoSterContacts1", 1),
             ("ecoSterDaySched1", 1),
             ("ecoSterContacts2", 2),
             ("ecoSterDaySched2", 2),
-            ("ecoSterContacts3", 3),
-            ("ecoSterDaySched3", 3),
         }
+
+    @pytest.mark.parametrize(
+        "fixture_name",
+        [
+            "ecoMAX850P-R",
+            "ecoMAX850R2-X",
+            "ecoMAX860D3-HB",
+            "ecoMAX860P3-O",
+            "ecoMAX920P1-O",
+            "ecoMAX920P1-T",
+            "SControl MK1",
+            "SControl_EM892",
+        ],
+    )
+    def test_empty_slots_get_no_entities(self, load_fixture, fixture_name) -> None:
+        """Test only slots with a connected panel get ecoSTER entities."""
+        coordinator = self._coordinator(load_fixture, fixture_name)
+        connected_slots = {
+            slot
+            for slot in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1)
+            if ecoster_panel_exists(coordinator.data, slot)
+        }
+
+        sensors = create_ecoster_sensors(coordinator, Mock())
+        binary_sensors = create_ecoster_binary_sensors(coordinator, Mock())
+
+        assert connected_slots
+        assert {e._idx for e in sensors} == connected_slots
+        assert {e._idx for e in binary_sensors} == connected_slots
 
     def test_no_entities_without_ecoster(self, load_fixture) -> None:
         """Test controllers without an ecoSTER panel get no ecoSTER entities."""

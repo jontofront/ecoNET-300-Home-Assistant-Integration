@@ -28,6 +28,7 @@ from .common import AuthError, EconetDataCoordinator
 from .common_functions import (
     decode_ecomax_schedule_day,
     decode_ecomax_schedule_metadata,
+    ecoster_panel_exists,
     summarize_schedule_slots,
 )
 from .const import (
@@ -347,6 +348,23 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id, None)
 
     return unload_ok
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, config_entry: ConfigEntry, device_entry: dr.DeviceEntry
+) -> bool:
+    """Allow deleting an ecoSTER device only when its slot has no panel."""
+    entry_data = hass.data.get(DOMAIN, {}).get(config_entry.entry_id)
+    if not entry_data:
+        return False
+
+    uid = entry_data[SERVICE_API].uid
+    coordinator_data = entry_data[SERVICE_COORDINATOR].data
+    for ecoster_num in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
+        if (DOMAIN, f"{uid}-ecoster-{ecoster_num}") in device_entry.identifiers:
+            return not ecoster_panel_exists(coordinator_data, ecoster_num)
+
+    return False
 
 
 async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
