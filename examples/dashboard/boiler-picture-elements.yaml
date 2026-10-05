@@ -1,0 +1,135 @@
+type: picture-elements
+image: /local/boiler/boiler-schema.svg?v=1
+elements:
+  # Replace entity IDs below with the entities created in your Home Assistant.
+  # Entity IDs may differ depending on your device name and existing entities.
+
+  # Boiler / heating temperature
+  - type: state-label
+    entity: sensor.plum_econet300_heating_temperature
+    style:
+      left: 26.25%
+      top: 54.8%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Boiler / heating target temperature
+  - type: state-label
+    entity: sensor.plum_econet300_heating_target_temperature
+    style:
+      left: 26.25%
+      top: 61.9%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Flue gas temperature
+  - type: state-label
+    entity: sensor.plum_econet300_flue_gas_temperature
+    style:
+      left: 29.4%
+      top: 26.2%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Mixer 1 temperature
+  - type: state-label
+    entity: sensor.mixer_device1_mixer_1_temperature
+    style:
+      left: 59.4%
+      top: 28.6%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Mixer 1 target temperature
+  - type: state-label
+    entity: sensor.mixer_device1_mixer_target_temperature
+    style:
+      left: 59.4%
+      top: 34.5%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Mixer 1 pump
+  - type: state-icon
+    entity: binary_sensor.plum_econet300_mixer_1_pump
+    icon: mdi:pump
+    state_color: true
+    style:
+      left: 65%
+      top: 44%
+      transform: translate(-50%, -50%)
+      --mdc-icon-size: 17px
+
+  # Outside temperature
+  - type: state-label
+    entity: sensor.plum_econet300_outside_temperature
+    style:
+      left: 48.75%
+      top: 9.5%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Domestic hot water temperature
+  - type: state-label
+    entity: sensor.plum_econet300_water_heater_temperature
+    style:
+      left: 82.75%
+      top: 53.6%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Domestic hot water target temperature
+  - type: state-label
+    entity: sensor.plum_econet300_water_heater_set_temperature
+    style:
+      left: 82.75%
+      top: 60.7%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
+
+  # Domestic hot water pump
+  - type: state-icon
+    entity: binary_sensor.plum_econet300_pump_cwu
+    icon: mdi:pump
+    state_color: true
+    style:
+      left: 75%
+      top: 76.2%
+      transform: translate(-50%, -50%)
+      --mdc-icon-size: 17px
+
+  # Return temperature
+  - type: state-label
+    entity: sensor.plum_econet300_return_temperature
+    style:
+      left: 26.25%
+      top: 88.1%
+      transform: translate(-50%, -50%)
+      color: white
+      font-size: 10px
+      font-weight: 700
+      line-height: 1
