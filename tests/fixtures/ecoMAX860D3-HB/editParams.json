@@ -1,5 +1,5 @@
 {
-  "editableParamsVer": 114,
+  "editableParamsVer": 23,
   "remoteMenu": true,
   "data": {
     "STER_CORRECTION_1": {
@@ -83,7 +83,7 @@
       "pos": 4
     },
     "STER_TEMP_DAY_1": {
-      "value": 23.1,
+      "value": 25.0,
       "maxv": 35.0,
       "minv": 10.0,
       "edit": true,
@@ -93,7 +93,7 @@
       "pos": 2
     },
     "STER_TEMP_DAY_2": {
-      "value": 22.2,
+      "value": 20.0,
       "maxv": 35.0,
       "minv": 10.0,
       "edit": true,
@@ -133,7 +133,7 @@
       "pos": 5
     },
     "STER_TEMP_SET_PARTY_2": {
-      "value": 22.0,
+      "value": 21.0,
       "maxv": 35.0,
       "minv": 10.0,
       "edit": true,

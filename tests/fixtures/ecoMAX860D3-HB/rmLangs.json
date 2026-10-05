@@ -5,12 +5,12 @@
     "version": "FED4D8A"
   },
   {
+    "default": true,
     "code": "en",
     "name": "English",
     "version": "83891541"
   },
   {
-    "default": true,
     "code": "pl",
     "name": "Polski",
     "version": "D9C3374A"

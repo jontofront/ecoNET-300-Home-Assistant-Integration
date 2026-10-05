@@ -1,702 +1,702 @@
 {
   "currentDataParams": {
     "216": {
-      "special": 0,
-      "name": "Czas przegrzania kotła",
-      "unit": 4
+      "unit": 4,
+      "name": "Overheat time",
+      "special": 0
     },
     "217": {
-      "special": 0,
-      "name": "Ilość uzupełnień paliwa",
-      "unit": 0
+      "unit": 0,
+      "name": "Refill count",
+      "special": 0
     },
     "214": {
-      "special": 0,
-      "name": "Czas pracy",
-      "unit": 4
+      "unit": 4,
+      "name": "Work mode time",
+      "special": 0
     },
     "215": {
-      "special": 0,
-      "name": "Czas postoju",
-      "unit": 4
+      "unit": 4,
+      "name": "Stop mode time",
+      "special": 0
     },
     "210": {
-      "special": 0,
-      "name": "Bieżąca moc kotła",
-      "unit": 5
+      "unit": 5,
+      "name": "Current boiler power",
+      "special": 0
     },
     "218": {
-      "special": 0,
-      "name": "Ilość rozpaleń",
-      "unit": 0
+      "unit": 0,
+      "name": "Firing-up count",
+      "special": 0
     },
     "133": {
-      "special": 1,
-      "name": "UWAGA!\\nBrak paliwa.",
-      "unit": 31
+      "unit": 31,
+      "name": "CAUTION!\\nNo fuel.",
+      "special": 1
     },
     "132": {
-      "special": 1,
-      "name": "UWAGA!\\nNieudana próba ładowania zasobnika.",
-      "unit": 31
+      "unit": 31,
+      "name": "CAUTION!\\nUnsuccessful attempt to load the tank.",
+      "special": 1
     },
     "131": {
-      "special": 1,
-      "name": "UWAGA!\\nNiski poziom paliwa.",
-      "unit": 31
+      "unit": 31,
+      "name": "CAUTION!\\nLow fuel level.",
+      "special": 1
     },
     "130": {
-      "special": 1,
-      "name": "Strumień paliwa",
-      "unit": 9
+      "unit": 9,
+      "name": "Fuel stream",
+      "special": 1
     },
     "137": {
-      "special": 1,
-      "name": "UWAGA!\\nOtwarte drzwiczki kotła.",
-      "unit": 31
+      "unit": 31,
+      "name": "CAUTION!\\nThe boiler door open.",
+      "special": 1
     },
     "136": {
-      "special": 1,
-      "name": "UWAGA!\\nUszkodzony system podajnika.",
-      "unit": 31
+      "unit": 31,
+      "name": "CAUTION!\\nFeeder system failure.",
+      "special": 1
     },
     "135": {
-      "special": 1,
-      "name": "Błąd sondy ecoLAMBDA.",
-      "unit": 31
+      "unit": 31,
+      "name": "Lambda error.",
+      "special": 1
     },
     "134": {
-      "special": 1,
-      "name": "Trwa kalibracja sondy ecoLAMBDA.",
-      "unit": 31
+      "unit": 31,
+      "name": "Lambda sensor calibration in progress.",
+      "special": 1
     },
     "139": {
-      "special": 1,
-      "name": "Maksymalna temperatura spalin.",
-      "unit": 31
+      "unit": 31,
+      "name": "Max flue gas temp exceed.",
+      "special": 1
     },
     "138": {
-      "special": 1,
-      "name": "UWAGA!\\nWyczyść wymiennik.",
-      "unit": 31
+      "unit": 31,
+      "name": "Exchanger cleaned",
+      "special": 1
     },
     "1547": {
-      "special": 1,
-      "name": "Pompa mieszacza 2",
-      "unit": 31
+      "unit": 31,
+      "name": "Pump mixer 2",
+      "special": 1
     },
     "1544": {
-      "special": 1,
-      "name": "Pompa mieszacza 1",
-      "unit": 31
+      "unit": 31,
+      "name": "Pump mixer 1",
+      "special": 1
     },
     "1542": {
-      "special": 1,
-      "name": "Pompa CWU",
-      "unit": 31
+      "unit": 31,
+      "name": "HUW pump",
+      "special": 1
     },
     "1543": {
-      "special": 1,
-      "name": "Pompa cyrkulacyjna",
-      "unit": 31
+      "unit": 31,
+      "name": "Circulating pump",
+      "special": 1
     },
     "1540": {
-      "special": 1,
-      "name": "Podajnik zewnętrzny",
-      "unit": 31
+      "unit": 31,
+      "name": "External feeder",
+      "special": 1
     },
     "1541": {
-      "special": 1,
-      "name": "Pompa kotła",
-      "unit": 31
+      "unit": 31,
+      "name": "Boiler pump",
+      "special": 1
     },
     "4": {
-      "special": 1,
-      "name": "Kocioł rezerwowy",
-      "unit": 31
+      "unit": 31,
+      "name": "Reserve boiler",
+      "special": 1
     },
     "1793": {
-      "special": 1,
-      "name": "Moc kotła",
-      "unit": 7
+      "unit": 7,
+      "name": "Burner output",
+      "special": 1
     },
     "1792": {
-      "special": 7,
+      "unit": 31,
       "name": "",
-      "unit": 31
+      "special": 7
     },
     "1795": {
-      "special": 0,
-      "name": "Moc nadmuchu",
-      "unit": 5
+      "unit": 5,
+      "name": "Fan output",
+      "special": 0
     },
     "1026": {
-      "special": 1,
-      "name": "Temperatura palnika",
-      "unit": 1
+      "unit": 1,
+      "name": "Burner temperature",
+      "special": 1
     },
     "126": {
-      "special": 0,
-      "name": "Moc wyciągu",
-      "unit": 5
+      "unit": 5,
+      "name": "Exhaust fan output",
+      "special": 0
     },
     "2": {
-      "special": 1,
-      "name": "Rotacyjne oczyszczanie",
-      "unit": 31
+      "unit": 31,
+      "name": "Rotary cleaning",
+      "special": 1
     },
     "1550": {
-      "special": 1,
-      "name": "Pompa mieszacza 3",
-      "unit": 31
+      "unit": 31,
+      "name": "Pump mixer 3",
+      "special": 1
     },
     "1553": {
-      "special": 1,
-      "name": "Pompa mieszacza 4",
-      "unit": 31
+      "unit": 31,
+      "name": "Pump mixer 4",
+      "special": 1
     },
     "50": {
-      "special": 1,
-      "name": "Temperatura bufora środkowa",
-      "unit": 1
+      "unit": 1,
+      "name": "Middle buffer temperature",
+      "special": 1
     },
     "195": {
-      "special": 1,
+      "unit": 5,
       "name": "SAV",
-      "unit": 5
+      "special": 1
     },
     "194": {
-      "special": 1,
-      "name": "Tlen",
-      "unit": 5
+      "unit": 5,
+      "name": "Oxygen",
+      "special": 1
     },
     "191": {
-      "special": 2,
-      "name": "Tlen",
-      "unit": 31
+      "unit": 31,
+      "name": "Oxygen",
+      "special": 2
     },
     "190": {
-      "special": 3,
-      "name": "Zawór mieszacza 4",
-      "unit": 31
-    },
-    "142": {
-      "special": 1,
-      "name": "Przegrzanie kotła.",
-      "unit": 31
-    },
-    "143": {
-      "special": 1,
-      "name": "Moc wentylatora 100% - Podgląd",
-      "unit": 31
-    },
-    "141": {
-      "special": 1,
-      "name": "Podtrzymanie gorącego żaru od systemu detekcji paliwa.",
-      "unit": 31
-    },
-    "3": {
-      "special": 1,
-      "name": "Wyjście alarmowe",
-      "unit": 31
-    },
-    "245": {
-      "special": 0,
-      "name": "Brama:",
-      "unit": 0
-    },
-    "244": {
-      "special": 0,
-      "name": "Maska:",
-      "unit": 0
-    },
-    "247": {
-      "special": 6,
-      "name": "Zabezpieczenie:",
-      "unit": 31
-    },
-    "246": {
-      "special": 5,
-      "name": "Serwer:",
-      "unit": 31
-    },
-    "241": {
-      "special": 0,
-      "name": "Brama:",
-      "unit": 0
-    },
-    "240": {
-      "special": 0,
-      "name": "Maska:",
-      "unit": 0
-    },
-    "243": {
-      "special": 0,
-      "name": "IP:",
-      "unit": 0
-    },
-    "242": {
-      "special": 5,
-      "name": "Serwer:",
-      "unit": 31
-    },
-    "249": {
-      "special": 5,
-      "name": "Status WiFi:",
-      "unit": 31
-    },
-    "248": {
-      "special": 0,
-      "name": "Siła sygnału:",
-      "unit": 5
-    },
-    "38": {
-      "special": 1,
-      "name": "Płomień",
-      "unit": 5
-    },
-    "1537": {
-      "special": 1,
-      "name": "Wyciąg",
-      "unit": 31
-    },
-    "1536": {
-      "special": 1,
-      "name": "Nadmuch",
-      "unit": 31
-    },
-    "1539": {
-      "special": 1,
-      "name": "Podajnik 2",
-      "unit": 31
-    },
-    "1538": {
-      "special": 1,
-      "name": "Podajnik",
-      "unit": 31
-    },
-    "179": {
-      "special": 0,
-      "name": "Zawór mieszacza 1",
-      "unit": 5
-    },
-    "252": {
-      "special": 0,
-      "name": "Poziom naładowania bufora",
-      "unit": 5
-    },
-    "251": {
-      "special": 0,
-      "name": "SSID:",
-      "unit": 0
-    },
-    "182": {
-      "special": 0,
-      "name": "Zawór mieszacza 4",
-      "unit": 5
-    },
-    "183": {
-      "special": 4,
-      "name": "Siłownik mieszacza 1",
-      "unit": 31
-    },
-    "180": {
-      "special": 0,
-      "name": "Zawór mieszacza 2",
-      "unit": 5
-    },
-    "181": {
-      "special": 0,
-      "name": "Zawór mieszacza 3",
-      "unit": 5
-    },
-    "186": {
-      "special": 4,
-      "name": "Siłownik mieszacza 4",
-      "unit": 31
-    },
-    "187": {
-      "special": 3,
-      "name": "Zawór mieszacza 1",
-      "unit": 31
-    },
-    "184": {
-      "special": 4,
-      "name": "Siłownik mieszacza 2",
-      "unit": 31
-    },
-    "185": {
-      "special": 4,
-      "name": "Siłownik mieszacza 3",
-      "unit": 31
-    },
-    "1032": {
-      "special": 1,
-      "name": "Temp. mieszacza 2",
-      "unit": 1
-    },
-    "1033": {
-      "special": 1,
-      "name": "Temp. mieszacza 3",
-      "unit": 1
-    },
-    "1030": {
-      "special": 1,
-      "name": "Temperatura spalin",
-      "unit": 1
-    },
-    "189": {
-      "special": 3,
-      "name": "Zawór mieszacza 3",
-      "unit": 31
-    },
-    "1034": {
-      "special": 1,
-      "name": "Temp. mieszacza 4",
-      "unit": 1
-    },
-    "160": {
-      "special": 1,
-      "name": "Term. pok. mieszacza 3",
-      "unit": 31
-    },
-    "161": {
-      "special": 1,
-      "name": "Term. pok. mieszacza 4",
-      "unit": 31
-    },
-    "1025": {
-      "special": 1,
-      "name": "Temperatura CWU",
-      "unit": 1
-    },
-    "1024": {
-      "special": 1,
-      "name": "Temperatura kotła",
-      "unit": 1
-    },
-    "1027": {
-      "special": 1,
-      "name": "Temperatura pogodowa",
-      "unit": 1
-    },
-    "1031": {
-      "special": 1,
-      "name": "Temp. mieszacza 1",
-      "unit": 1
-    },
-    "188": {
-      "special": 3,
-      "name": "Zawór mieszacza 2",
-      "unit": 31
-    },
-    "1029": {
-      "special": 1,
-      "name": "Temperatura bufora dolna",
-      "unit": 1
-    },
-    "1028": {
-      "special": 1,
-      "name": "Temperatura bufora górna",
-      "unit": 1
-    },
-    "154": {
-      "special": 1,
-      "name": "Poziom paliwa",
-      "unit": 31
-    },
-    "157": {
-      "special": 1,
-      "name": "Termostat kotła",
-      "unit": 31
-    },
-    "159": {
-      "special": 1,
-      "name": "Term. pok. mieszacza 2",
-      "unit": 31
-    },
-    "158": {
-      "special": 1,
-      "name": "Term. pok. mieszacza 1",
-      "unit": 31
-    },
-    "239": {
-      "special": 0,
-      "name": "IP:",
-      "unit": 0
-    },
-    "1": {
-      "special": 1,
-      "name": "Zapalarka",
-      "unit": 31
-    },
-    "1290": {
-      "special": 0,
-      "name": "Temp. zadana mieszacza 4",
-      "unit": 1
-    },
-    "203": {
-      "special": 0,
-      "name": "Czas pracy na mocy 100%",
-      "unit": 4
+      "unit": 31,
+      "name": "Valve mixer 4",
+      "special": 3
     },
     "205": {
-      "special": 0,
-      "name": "Czas pracy na mocy 30%",
-      "unit": 4
+      "unit": 4,
+      "name": "Work at 30%",
+      "special": 0
     },
     "204": {
-      "special": 0,
-      "name": "Czas pracy na mocy 50%",
-      "unit": 4
-    },
-    "140": {
-      "special": 1,
-      "name": "Brak paliwa od temperatury spalin.",
-      "unit": 31
+      "unit": 4,
+      "name": "Work at 50%",
+      "special": 0
     },
     "206": {
-      "special": 0,
-      "name": "Czas pracy podajnika",
-      "unit": 4
+      "unit": 4,
+      "name": "Feeder work",
+      "special": 0
+    },
+    "3": {
+      "unit": 31,
+      "name": "Emergency exit",
+      "special": 1
+    },
+    "245": {
+      "unit": 0,
+      "name": "Gateway:",
+      "special": 0
+    },
+    "244": {
+      "unit": 0,
+      "name": "Mask:",
+      "special": 0
+    },
+    "247": {
+      "unit": 31,
+      "name": "Encryption:",
+      "special": 6
+    },
+    "246": {
+      "unit": 31,
+      "name": "Server:",
+      "special": 5
+    },
+    "241": {
+      "unit": 0,
+      "name": "Gateway:",
+      "special": 0
+    },
+    "240": {
+      "unit": 0,
+      "name": "Mask:",
+      "special": 0
+    },
+    "243": {
+      "unit": 0,
+      "name": "IP:",
+      "special": 0
+    },
+    "242": {
+      "unit": 31,
+      "name": "Server:",
+      "special": 5
+    },
+    "249": {
+      "unit": 31,
+      "name": "Wifi status:",
+      "special": 5
+    },
+    "248": {
+      "unit": 5,
+      "name": "Signal strenght:",
+      "special": 0
+    },
+    "38": {
+      "unit": 5,
+      "name": "Flame",
+      "special": 1
+    },
+    "1537": {
+      "unit": 31,
+      "name": "Exhaust fan",
+      "special": 1
+    },
+    "1536": {
+      "unit": 31,
+      "name": "Fan",
+      "special": 1
+    },
+    "1539": {
+      "unit": 31,
+      "name": "Feeder 2",
+      "special": 1
+    },
+    "1538": {
+      "unit": 31,
+      "name": "Feeder",
+      "special": 1
+    },
+    "179": {
+      "unit": 5,
+      "name": "Valve mixer 1",
+      "special": 0
+    },
+    "252": {
+      "unit": 5,
+      "name": "Buffer charge level",
+      "special": 0
+    },
+    "251": {
+      "unit": 0,
+      "name": "SSID:",
+      "special": 0
+    },
+    "182": {
+      "unit": 5,
+      "name": "Valve mixer 4",
+      "special": 0
+    },
+    "183": {
+      "unit": 31,
+      "name": "Servo mixer 1",
+      "special": 4
+    },
+    "180": {
+      "unit": 5,
+      "name": "Valve mixer 2",
+      "special": 0
+    },
+    "181": {
+      "unit": 5,
+      "name": "Valve mixer 3",
+      "special": 0
+    },
+    "186": {
+      "unit": 31,
+      "name": "Servo mixer 4",
+      "special": 4
+    },
+    "187": {
+      "unit": 31,
+      "name": "Valve mixer 1",
+      "special": 3
+    },
+    "184": {
+      "unit": 31,
+      "name": "Servo mixer 2",
+      "special": 4
+    },
+    "185": {
+      "unit": 31,
+      "name": "Servo mixer 3",
+      "special": 4
+    },
+    "1032": {
+      "unit": 1,
+      "name": "Temp. mixer 2",
+      "special": 1
+    },
+    "1033": {
+      "unit": 1,
+      "name": "Temp. mixer 3",
+      "special": 1
+    },
+    "1030": {
+      "unit": 1,
+      "name": "Emission temperature",
+      "special": 1
+    },
+    "189": {
+      "unit": 31,
+      "name": "Valve mixer 3",
+      "special": 3
+    },
+    "1034": {
+      "unit": 1,
+      "name": "Temp. mixer 4",
+      "special": 1
+    },
+    "160": {
+      "unit": 31,
+      "name": "Room thermostat mixer 3",
+      "special": 1
+    },
+    "161": {
+      "unit": 31,
+      "name": "Room thermostat mixer 4",
+      "special": 1
+    },
+    "1025": {
+      "unit": 1,
+      "name": "HUW temperature",
+      "special": 1
+    },
+    "1024": {
+      "unit": 1,
+      "name": "Boiler temperature",
+      "special": 1
+    },
+    "1027": {
+      "unit": 1,
+      "name": "Weather temperature",
+      "special": 1
+    },
+    "1031": {
+      "unit": 1,
+      "name": "Temp. mixer 1",
+      "special": 1
+    },
+    "188": {
+      "unit": 31,
+      "name": "Valve mixer 2",
+      "special": 3
+    },
+    "1029": {
+      "unit": 1,
+      "name": "Lower buffer temperature",
+      "special": 1
+    },
+    "1028": {
+      "unit": 1,
+      "name": "Upper buffer temperature",
+      "special": 1
+    },
+    "154": {
+      "unit": 31,
+      "name": "Fuel level",
+      "special": 1
+    },
+    "157": {
+      "unit": 31,
+      "name": "Boiler thermostat",
+      "special": 1
+    },
+    "159": {
+      "unit": 31,
+      "name": "Room thermostat mixer 2",
+      "special": 1
+    },
+    "158": {
+      "unit": 31,
+      "name": "Room thermostat mixer 1",
+      "special": 1
+    },
+    "239": {
+      "unit": 0,
+      "name": "IP:",
+      "special": 0
+    },
+    "1": {
+      "unit": 31,
+      "name": "Lighter",
+      "special": 1
+    },
+    "1290": {
+      "unit": 1,
+      "name": "Preset temp. mixer 4",
+      "special": 0
+    },
+    "203": {
+      "unit": 4,
+      "name": "Work at 100%",
+      "special": 0
+    },
+    "142": {
+      "unit": 31,
+      "name": "Boiler overheat.",
+      "special": 1
+    },
+    "143": {
+      "unit": 31,
+      "name": "100% fan output - preview.",
+      "special": 1
+    },
+    "140": {
+      "unit": 31,
+      "name": "No fuel from flue gas temperature.",
+      "special": 1
+    },
+    "141": {
+      "unit": 31,
+      "name": "Hot embers maintenance from fuel detection system.",
+      "special": 1
     },
     "209": {
-      "special": 0,
-      "name": "Ilość resetów",
-      "unit": 0
+      "unit": 0,
+      "name": "Number of resets",
+      "special": 0
     },
     "208": {
-      "special": 0,
-      "name": "Ilość rozpaleń",
-      "unit": 0
+      "unit": 0,
+      "name": "Firing-up count",
+      "special": 0
     },
     "1287": {
-      "special": 0,
-      "name": "Temp. zadana mieszacza 1",
-      "unit": 1
+      "unit": 1,
+      "name": "Preset temp. mixer 1",
+      "special": 0
     },
     "1281": {
-      "special": 0,
-      "name": "Temperatura zadana CWU",
-      "unit": 1
+      "unit": 1,
+      "name": "HUW preset temperature",
+      "special": 0
     },
     "1280": {
-      "special": 0,
-      "name": "Temperatura zadana kotła",
-      "unit": 1
+      "unit": 1,
+      "name": "Maximum boiler temperature",
+      "special": 0
     },
     "1289": {
-      "special": 0,
-      "name": "Temp. zadana mieszacza 3",
-      "unit": 1
+      "unit": 1,
+      "name": "Preset temp. mixer 3",
+      "special": 0
     },
     "1288": {
-      "special": 0,
-      "name": "Temp. zadana mieszacza 2",
-      "unit": 1
+      "unit": 1,
+      "name": "Preset temp. mixer 2",
+      "special": 0
     }
   },
   "paramsNames": [
-    "Maksymalna moc kotła",
-    "Pośrednia moc kotła",
-    "Minimalna moc kotła",
-    "Moc maksymalna - nadmuch",
-    "Moc pośrednia - nadmuch",
-    "Moc minimalna - nadmuch",
-    "Moc maksymalna - wyciąg",
-    "Moc pośrednia - wyciąg",
-    "Moc minimalna - wyciąg",
-    "Histereza kotła",
-    "Czas cyklu w trybie PRACA",
-    "Minimalna moc kotła FL",
-    "Maksymalna moc kotła FL",
+    "MAX boiler output",
+    "MED boiler power",
+    "MIN boiler output",
+    "MAX fan output",
+    "MED fan output",
+    "MIN fan output",
+    "MAX exhaust fan output",
+    "MED exhaust fan output",
+    "MIN exhaust fan output",
+    "Boiler hysteresis",
+    "Feeding cycle time",
+    "Minimal boiler output FL",
+    "Maximal boiler output FL",
     "Parametr A FuzzyLogic",
     "Parametr B FuzzyLogic",
     "Parametr C FuzzyLogic",
-    "Nadmuch rozpalania 1",
-    "Wyciąg rozpalania 1",
-    "Czas testu zapłonu",
-    "Czas rozpalania",
-    "Dawka paliwa",
-    "Czas rozgrzewania",
-    "Detekcja płomienia",
-    "Czas pracy z mocą minimalną",
-    "Czas rozżarzania",
-    "Nadmuch po rozpaleniu",
-    "Wyciąg po rozpaleniu",
-    "Pulsacja wentylatora",
-    "Czas nadzoru",
-    "Moc kotła w trybie Nadzór",
-    "Czas cyklu",
-    "Moc nadmuchu",
-    "Moc wyciągu",
-    "Minimalna moc nadmuchu",
-    "Maksymalny czas wygaszania",
-    "Minimalny czas wygaszania",
-    "Parametr A Lambda",
-    "Parametr B Lambda",
-    "Parametr C Lambda",
-    "Zakres korekcji nadmuchu",
-    "Moc maksymalna - tlen",
-    "Moc pośrednia - tlen",
-    "Moc minimalna - tlen",
-    "Wydajność podajnika",
-    "Kaloryczność paliwa",
-    "Pojemność zbiornika",
-    "Cykl rotacyjnego oczyszczania",
-    "Intensywność czyszczenia",
-    "Temperatura zadana kotła",
-    "Min. temperatura zadana kotła",
-    "Maks. temperatura zadana kotła",
-    "Temperatura zadana CWU",
-    "Min. temperatura zadana CWU",
-    "Maks. temperatura zadana CWU",
-    "Tryb pracy pompy CWU",
-    "Histereza zasobnika CWU",
-    "Dezynfekcja CWU",
-    "ŹRÓDŁO CWU",
-    "Tryb LATO/ZIMA",
-    "Temperatura włączenia trybu LATO",
-    "Temperatura wyłączenia trybu LATO",
-    "Temperatura załączenia pompy CO",
-    "Podwyższenie temp. kotła od CWU i miesz.",
-    "Wydłużenie pracy CWU",
-    "Pompa CO",
-    "Temperatura przeciwzamrożeniowa",
-    "Start pompy kotła (temp. spalin)",
-    "Temperatura zadana mieszacza 1",
-    "Temperatura zadana mieszacza 2",
-    "Temperatura zadana mieszacza 3",
-    "Temperatura zadana mieszacza 4",
-    "Minimalna temperatura mieszacza 1",
-    "Minimalna temperatura mieszacza 2",
-    "Minimalna temperatura mieszacza 3",
-    "Minimalna temperatura mieszacza 4",
-    "Maksymalna temperatura mieszacza 1",
-    "Maksymalna temperatura mieszacza 2",
-    "Maksymalna temperatura mieszacza 3",
-    "Maksymalna temperatura mieszacza 4",
-    "Termostat pokojowy mieszacza 1",
-    "Termostat pokojowy mieszacza 2",
-    "Termostat pokojowy mieszacza 3",
-    "Termostat pokojowy mieszacza 4",
-    "Sterowanie pogodowe mieszacza 1",
-    "Sterowanie pogodowe mieszacza 2",
-    "Sterowanie pogodowe mieszacza 3",
-    "Sterowanie pogodowe mieszacza 4",
-    "Krzywa grzewcza mieszacza 1",
-    "Krzywa grzewcza mieszacza 2",
-    "Krzywa grzewcza mieszacza 3",
-    "Krzywa grzewcza mieszacza 4",
-    "Obsługa mieszacza 1",
-    "Obsługa mieszacza 2",
-    "Obsługa mieszacza 3",
-    "Obsługa mieszacza 4",
-    "Zakres proporcjonalności",
-    "Zakres proporcjonalności",
-    "Zakres proporcjonalności",
-    "Zakres proporcjonalności",
-    "Stała czasu całkowania",
-    "Stała czasu całkowania",
-    "Stała czasu całkowania",
-    "Stała czasu całkowania",
-    "Wyłączenie pompy od termostatu",
-    "Wyłączenie pompy od termostatu",
-    "Wyłączenie pompy od termostatu",
-    "Wyłączenie pompy od termostatu",
-    "Czas otwarcia zaworu",
-    "Czas otwarcia zaworu",
-    "Czas otwarcia zaworu",
-    "Czas otwarcia zaworu",
-    "Temperatura schładzania kotła",
-    "Wybór termostatu",
-    "Wybór termostatu",
-    "Wybór termostatu",
-    "Wybór termostatu",
-    "Czas postoju pompy cyrkulacyjnej",
-    "Czas pracy pompy cyrkulacyjnej",
-    "Temperatura startu pompy cyrkulacyjnej",
-    "Przesunięcie równoległe krzywej",
-    "Przesunięcie równoległe krzywej",
-    "Przesunięcie równoległe krzywej",
-    "Przesunięcie równoległe krzywej",
-    "Współczynnik temperatury pokojowej",
-    "Współczynnik temperatury pokojowej",
-    "Współczynnik temperatury pokojowej",
-    "Współczynnik temperatury pokojowej",
-    "Współczynnik temperatury pokojowej",
-    "Nadmuch czyszczenia",
-    "Wyciąg czyszczenia",
-    "Czyszczenie palnika",
-    "Moc przedmuchu",
-    "Moc wyciągu w wygaszaniu",
-    "Temperatura rozpoczęcia ładowania",
-    "Temperatura zakończenia ładowania",
-    "Poziom alarmowy",
-    "Czas detekcji braku paliwa",
-    "Czas pracy podajnika zew.",
-    "Kocioł rezerwowy",
-    "Wybór paliwa",
-    "Maksymalna temperatura palnika",
-    "Wydłużenie pracy podajnika 2",
-    "Czas czyszczenia Rozpalanie",
-    "Czas czyszczenia wygaszanie",
-    "Czas przedmuchu",
-    "Przerwa przedmuchu",
-    "Start przedmuchu",
-    "Stop przedmuchu",
-    "Praca z sondą Lambda",
-    "Korekta czujnika",
-    "Producent",
-    "Przerwa czyszczenia wymiennika",
-    "Czas czyszczenia wymiennika",
-    "Palnik pelletowy",
-    "Tryb pracy",
-    "Tryb pracy zgazowywania drewna",
-    "Ustawienia mocy kotła",
-    "Automatyczne podtrzymanie żaru",
-    "Rozszerzenie operacji",
-    "Aktywacja czujnika drzwi",
-    "Moc wentylatora wyc. przy rozpalaniu",
-    "Moc went. wyc. przy podtrzymaniu żaru",
-    "Temperatura spalin końca rozpalania",
-    "Czas podtrzymania",
-    "Maksymalny czas uzupełniania paliwa",
-    "Czas rozpalania",
-    "Praca awaryjna",
-    "Moc wentylatora w pracy awaryjnej",
-    "Minimalna zadana temperatura kotła",
-    "Histereza przegrzania kotła",
-    "Warstwa gorącego żaru",
-    "Minimalny czas pracy",
-    "Temperatura spalin dla braku paliwa",
-    "Czas interwału podtrzymania żaru",
-    "Czas przedmuchu podczas podtrzymania",
-    "Czas podglądu",
-    "Maksymalny wzrost temp. spalin",
-    "Maksymalny spadek temp. spalin",
-    "Styk AHS normalnie otwarty",
-    "Aktywacja rozproszenia ciepła bufora",
-    "Temperatura rozproszenia ciepła ",
-    "Histereza startu odzysku ciepła",
-    "Histereza stopu odzysku ciepła",
-    "Temperatura startu sys. hydraulicznego",
-    "Histereza systemu hydraulicznego",
-    "Spaliny - Maks. moc kotła",
-    "Spaliny - Min. moc kotła",
-    "Minimalna moc wentylatora wyciągowego",
-    "Maksymalna moc wentylatora wyciągowego",
-    "Automatyczna aktywacja palnika",
-    "Automatyczna aktywacja palnika",
-    "Opóźnienie startu palnika pelletowego",
-    "Wyjście H",
-    "Wybierz paliwo",
-    "PODKŁAD otwarcie przepustnicy",
-    "Tlen - Suche twarde drewno",
-    "Tlen - Wilgotne twarde drewno",
-    "Tlen - Suche miękkie drewno",
-    "Tlen - Wilgotne miękkie drewno",
-    "Korekcja temp. kotła"
+    "Firing-up airflow 1",
+    "FIRE UP exhaust fan output",
+    "Ignition test time",
+    "Firing-up time",
+    "Fuel dose",
+    "Heating up time",
+    "Flame detection",
+    " Worktime with minimal power",
+    "Incandescence time.",
+    "Blowing after firing up",
+    "Exhaust fan output after firing up",
+    "Firing up pulsation",
+    "Supervision time",
+    "Boiler output in Supervision mode",
+    "Cycle time",
+    "Fan output",
+    "Exhaust fan output in Supervision",
+    "Minimum fan output",
+    "Maximum time of burning off",
+    "Minimum time of burning off",
+    "Parameter A Lambda",
+    "Parameter B Lambda",
+    "Parameter C Lambda",
+    "Airflow correction range",
+    "MAX Oxygen",
+    "MED oxygen",
+    "MIN oxygen",
+    "Feeder efficiency",
+    "Fuel calorific",
+    "Capacity of tank",
+    "Rotary cleaning cycle",
+    "Cleaning intensity",
+    "Maximum boiler temperature",
+    "Min. Preset boiler temperature",
+    "Max. Preset bolier temperatrure",
+    "HUW preset temperature",
+    "Min. HUW preset temp",
+    "Max. HUW preset temperature",
+    "HUW pump mode",
+    "HUW cont. hysteresis",
+    "HUW disinfection",
+    "HUW source",
+    "SUMMER mode",
+    "SUMMER mode act. temperature",
+    "SUMMER mode deact. temperature",
+    "Boiler pump start temp (water)",
+    "Boiler inc. by HUW, Mixer",
+    "Extending HUW pump operation time",
+    "Pump support",
+    "Anti-freeze temperature",
+    "Boiler pump start temp (flue gas)",
+    "Preset mixer 1 temperature",
+    "Preset mixer 2 temperature",
+    "Preset mixer 3 temperature",
+    "Preset mixer 4 temperature",
+    "Min. mixer 1 temp.",
+    "Min. mixer 2 temp.",
+    "Min. mixer 3 temp.",
+    "Min. mixer 4 temp.",
+    "Max. mixer 1 temp.",
+    "Max. mixer 2 temp.",
+    "Max. mixer 3 temp.",
+    "Max. mixer 4 temp.",
+    "Room thermostat mixer 1",
+    "Room thermostat mixer 2",
+    "Room thermostat mixer 3",
+    "Room thermostat mixer 4",
+    "Mixer 1 weather control",
+    "Mixer 2 weather control",
+    "Mixer 3 weather control",
+    "Mixer 4 weather control",
+    "Heating curve. mixer 1",
+    "Heating curve. mixer 2",
+    "Heating curve. mixer 3",
+    "Heating curve. mixer 4",
+    "Mixer 1 support",
+    "Mixer 2 support",
+    "Mixer 3 support",
+    "Mixer 4 support",
+    "Proportional range",
+    "Proportional range",
+    "Proportional range",
+    "Proportional range",
+    "Integration time constant",
+    "Integration time constant",
+    "Integration time constant",
+    "Integration time constant",
+    "Off by thermostat",
+    "Off by thermostat",
+    "Off by thermostat",
+    "Off by thermostat",
+    "Valve full opening time",
+    "Valve full opening time",
+    "Valve full opening time",
+    "Valve full opening time",
+    "Boiler cooling temperature",
+    "Thermostat select.",
+    "Thermostat select.",
+    "Thermostat select.",
+    "Thermostat select.",
+    "Circulating pump standstill time",
+    "Circulating pump operation time",
+    "Temperature circulating pump activation",
+    "Curve shift",
+    "Curve shift",
+    "Curve shift",
+    "Curve shift",
+    "Room  temp. factor",
+    "Room  temp. factor",
+    "Room  temp. factor",
+    "Room  temp. factor",
+    "Room  temp. factor",
+    "Cleaning blowing",
+    "Exhaust fan in cleaning",
+    "Burner cleaning",
+    "Air flush intensity",
+    "Exhaust fan power in burning off",
+    "Loading start temperature",
+    "Loading end temperature",
+    "Alarm level",
+    "Fuel shortage detection time",
+    "Operation time of external feeder",
+    "Reserve boiler",
+    "Fuel type",
+    "Maximum burner temperature",
+    "Feeder 2 extended operation",
+    "Cleaning time FIRE-UP",
+    "Cleaning time BURNING OFF",
+    "Blowing time",
+    "Blowing pause",
+    "Blowing start",
+    "Blowing stop",
+    "Operation with Lambda sensor",
+    "Weather temerature correction",
+    "Manufacturer",
+    "Exchanger cleaning pause",
+    "Exchanger cleaning time",
+    "Pellet burner",
+    "Work mode",
+    "Wood gasification mode",
+    "Preset boiler output",
+    "Auto embers maintenance",
+    "Operation extension",
+    "Door sensor activation",
+    "Firing up exhaust fan power",
+    "Embers maintenance exhaust fan power",
+    "Fire-up flue gas end temperature",
+    "Maintenance time",
+    "Max. refill time",
+    "Fire-up time",
+    "Emergency work",
+    "Emergency work fan speed",
+    "Preset boiler temperature lower",
+    "Boiler overheat histeresis",
+    "Hot embers layer size",
+    "Minimal OPERATION time",
+    "No fuel flue gas temp",
+    "Embers maintenance interval time",
+    "Air flush time in maintenance",
+    "Preview time",
+    "Flue gas max increase",
+    "Flue gas max decrease",
+    "AHS contact normal open",
+    "Buffer heat dissipation activate",
+    "Heat dissipation temperature",
+    "Heat recovery hysteresis start",
+    "Heat recovery hysteresis stop",
+    "Hydraulic system start temperature",
+    "Hydraulic system hysteresis",
+    "Flue gas - Max. Boiler Power",
+    "Flue gas - Min. Boiler Power",
+    "MIN exhaust fan power",
+    "MAX exhaust fan power",
+    "Auto pellet burner activation",
+    "Burner auto activation",
+    "Start of the burner delay",
+    "Output H",
+    "Select fuel type",
+    "REFILL valve opening",
+    "Oxygen - Dry hard wood",
+    "Oxygen - Moist hard wood",
+    "Oxygen - Dry soft wood",
+    "Oxygen - Moist soft wood",
+    "Boiler temp. correction"
   ],
   "paramsData": [
     {
@@ -1312,7 +1312,7 @@
       "offset": 0
     },
     {
-      "value": 24,
+      "value": 30,
       "maxv": 55,
       "minv": 20,
       "edit": true,
@@ -2507,12 +2507,12 @@
       "version": "FED4D8A"
     },
     {
+      "default": true,
       "code": "en",
       "name": "English",
       "version": "83891541"
     },
     {
-      "default": true,
       "code": "pl",
       "name": "Polski",
       "version": "D9C3374A"
@@ -2544,206 +2544,206 @@
     }
   ],
   "paramsDescs": [
-    "Maksymalna moc kotła.",
-    "Pośrednia moc kotła.",
-    "Minimalna moc kotła.",
-    "Moc nadmuchu przy pracy palnika z mocą maksymalną.",
-    "Moc nadmuchu przy pracy palnika z mocą pośrednią.",
-    "Moc nadmuchu przy pracy palnika z mocą minimalną.",
-    "Moc wyciągu przy pracy palnika z mocą maksymalną.",
-    "Moc wyciągu przy pracy palnika z mocą pośrednią.",
-    "Moc wyciągu przy pracy palnika z mocą minimalną.",
-    "Jeśli temperatura kotła spadnie poniżej temperatury zadanej kotła o wartość histerezy kotła to następuje automatyczne rozpalenie palnika.",
-    "Czas całego cyklu podawania paliwa w PRACY. CZAS CYKLU W TYBIE PRACA = CZAS PODAWANIA PRACA + CZAS POSTOJU PODAJNIKA.",
-    "Minimalna moc z jaką może pracować palnik przy pracy w trybie Fuzzy Logic.",
-    "Maksymalna moc z jaką może pracować palnik przy pracy w trybie Fuzzy Logic.",
-    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Zwiększenie wartości zwiększa szybkość przyrostu mocy kotła. Zbyt duża wartość może spowodować niestabilność utrzymywania temperatury zadanej kotła.",
-    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Zwiększenie wartości zmniejsza szybkość przyrostu mocy kotła. Zbyt mała wartość może spowodować niestabilność utrzymywania temperatury zadanej kotła.",
-    "Parametr związany z automatyczną modulacją mocy kotła przy stabilizacji temperatury zadanej kotła. Nie zaleca się zmian wartości tego parametru.",
-    "Moc wstępnego nadmuchu podczas rozpalania. Zbyt duża wartość wydłuża proces rozpalania lub powoduje nieudaną próbę rozpalenia.",
-    "Moc wstępnego wyciągu podczas rozpalania. Zbyt duża wartość wydłuża proces rozpalania lub powoduje nieudaną próbę rozpalenia.",
-    "Czas sprawdzania czy palenisko jest już rozpalone. Pracuje tylko wentylator. Jeśli płomień ma wystarczającą jasność to następuje przejście do trybu PRACA z pominięciem trybu ROZPALANIA.",
-    "Czas pojedyńczej próby rozpalania. Po tym czasie regulator przechodzi do kolejnej próby rozpalenia. Po nieudanych wszystkich próbach rozpalania zgłaszany jest alarm: \"Nieudana próba rozpalenia\".",
-    "Masa dawki paliwa przy rozpalaniu. Dotyczy pierwszej próby rozpalenia. W kolejnych próbach dawka paliwa jest mniejsza.",
-    "Czas rozgrzewania zapalarki przed załączeniem wentylatora. Nie powinien być zbyt długi aby nie uszkodzić grzałki. Po tym czasie grzałka pracuje nadal, aż do chwili zdetektowania płomienia.",
-    "Próg detekcji płomienia w % światła, przy którym regulator uznaje, że palenisko jest już rozpalone. Wykorzystywany jest również do detekcji braku paliwa.",
-    "Czas pracy z mocą minimalną.",
-    "Czas rozżarzania po rozpaleniu.",
-    "Nadmuch po rozpaleniu.",
-    "Wyciąg po rozpaleniu.",
-    "Pulsacja wentylatora w rozpalaniu",
-    "Jest to czas maksymalnego przebywania regulatora w trybie NADZÓR. Po tym czasie od chwili przejścia regulatora do trybu NADZÓR następuje automatyczne wygaszenie palnika.CZAS NADZORU= 0 tryb jest całkowicie wyłączany.CZAS NADZORU= 255 tryb nie jest wyłączany.",
-    "Moc kotła w trybie Nadzór.",
-    "Czas cyklu pracy w nadzorze",
-    "Moc nadmuchu w trybie nadzoru.",
-    "Moc wyciągu w trybie nadzoru.",
-    "Minimalna moc nadmuchu jaką może ustawić użytkownik. Wykorzystana jest jedynie do ograniczenia dostępnego zakresu mocy wentylatora. Powinna być możliwie mała lecz taka, aby wentylator obracał się wolno i swobodnie.",
-    "Po tym czasie nastąpi przejście do trybu POSTÓJ pomimo, że czujnik płomienia wskazuje na obecność płomienia.",
-    "Wygaszanie będzie trwało co najmniej przez ten czas pomimo, że czujnik płomienia wskazuje już brak płomienia.",
-    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
-    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
-    "Ma wpływ na szybkość wyregulowania ilości tlenu w spalinach do wartości zadanej oraz na stabilność utrzymywania zawartości tlenu w spalinach. Nie zaleca się zmian tego parametru.",
-    "Określa dopuszczalny zakres zmienności mocy nadmuchu przy pracy z wykorzystaniem sondy Lambda.",
-    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą maksymalną.",
-    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą pośrednią.",
-    "Zadana wartość tlenu w spalinach przy pracy palnika z mocą minimalną.",
-    "Prędkość podawania paliwa przez podajnik główny w kg/h.",
-    "Kaloryczność paliwa w kWh/kg. Dla pelletu około 4,9 kWh/kg. Dla węgla około 6,5kWh/kg",
-    "Pojemność zbiornika paliwa do wyliczania poziomu paliwa. Wprowadzenie właściwej wartości zwalnia użytkownika z konieczności przeprowadzenia kalibracji poziomu paliwa. Po przeprowadzonej kalibracji poziomu paliwa regulator nie korzysta z wartości POJEMNOŚĆ ZBIORNIKA.",
-    "Czas cyklu rotacyjnego oczyszczania.",
-    "Intensywność czyszczenia.",
-    "Temperatura zadana kotła przy wyłączonym sterowaniu pogodowym. Może być automatycznie zmieniona przez regulator na przykład gdy temperatura zadana kotła jest niższa od temperatury zadanej CWU.",
-    "Minimalna temperatura zadana kotła jaką może ustawić użytkownik w menu użytkownika oraz minimalna jaką może automatycznie zadać regulator, np. z obniżeń nocnych, sterowania pogodowego itp.",
-    "Maksymalna temperatura zadana kotła jaką może ustawić użytkownik w menu użytkownika oraz maksymalna jaką może automatycznie zadać regulator, np. ze sterowania pogodowego itp.",
-    "Temperatura do jakiej zostanie nagrzany zasobnik ciepłej wody użytkowej. Uwaga: zbyt duża temperatura może spowodwoać oparzenie użytkownika gorącą wodą!",
-    "Jest to parametr za pomocą którego można ograniczyć użytkownikowi ustawienie zbyt niskiej temperatury zadanej CWU.",
-    "Parametr określa do jakiej maksymalnej temperatury zostanie nagrzany zasobnik CWU podczas zrzucania nadmiaru ciepła z kotła w stanach alarmowych. Ustawienie zbyt dużęj wartości może doprowadzić do ryzyka poparzenia użytkowników ciepłą wodą użytkową. ",
-    "Umożliwia wybór trybu pracy ciepłej wody użytkowej. BEZ PRIORYTETU - równoległa praca pompy CWU oraz pomp centralnego ogrzewania, PRIORYTET - pracuje tylko pompa CWU, LATO - przygotowanie tylko ciepłej wody użytkowej CWU (ogrzewanie budynku jest wyłączone).",
-    "Parametr określa po jakim spadku temperatury zmierzonej przez czujnik CWU w stosunku do temperatury zadanej CWU nastąpi załączenie pompy CWU (CWU = ciepła woda użytkowa).",
-    "Po włączeniu tego parametru raz w tygodniu w poniedziałek o godzinie 2:00 ciepła woda użytkowa zostanie nagrzana do 70˚C w celu dezynfekcji zasobnika CWU. Uwaga: ryzyko poparzenia gorącą wodą!",
-    "Określa źródło energii dla CWU",
-    "Tryb LATO oznacza wyłączenie centalnego ogrzewania przy pozostawieniu grzania CWU. Automatycznie aktywowanie trybu realizowane jest na podstawie wskazań czujnika temperatury pogodowej.",
-    "Temperatura zewnętrzna powyżej której nastąpi włączenie trybu pracy LATO jeśli automatyczna detekcja trybu LATO jest włączona. ",
-    "Temperatura zewnętrzna poniżej której nastąpi wyłaczenie trybu pracy LATO jeśli automatyczna detekcja trybu LATO jest włączona.",
-    "Parametr decyduje o temperaturze przy której załączy się pompa kotła CO. Zabezpiecza to kocioł przed roszeniem na skutek wychładzania go zimną wodą powracającą z instalacji. ",
-    "Parametr określa o ile stopni musi być wyższa temperatura zadana kotła, aby załadować zasobnik CWU, bufor oraz obieg mieszacza. Podwyższenie temperatury zadanej kotła realizowane jest jedynie wówczas, gdy temperatura zadana kotła jest niższa od pozostałych temperatur zadanych.",
-    "Umożliwia odbiór ciepła z kotła przez zasobnik CWU bezpośrenio po załadowaniu zasobnika CWU. W celu schłodzenia kotła pracę pompy CWU można wydłużyć o czas wydłużenia pracy pompy CWU.",
-    "Pompa CO",
-    "Temperatura przeciwzamrożeniowa",
-    "Parametr określa temperaturę spalin dla której zostanie włączona pompa kotła. Temperatura kotła muzi zostać również osiągnięta.",
-    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
-    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
-    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
-    "Temperatura zadana dla regulowanego obiegu grzewczego przy wyłączonym sterowaniu pogodowym. Przy włączonym sterowaniu pogodowym dla obniegu grzewczego mieszacza parametr nie jest uwzględniany przez regulator.",
-    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
-    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
-    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
-    "Parametr umożliwia ograniczenie użytkownikowi możliwości ustawienia zbyt niskiej temperatury zadanej obiegu mieszacza. Automatyczna zmiana temperatury zadanej np. obniżenie czasowe nie spowoduje obniżenia wartości temperatury zadanej poniżej wartości ustawionej w tym parametrze.",
-    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
-    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
-    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
-    "Ogranicza ustawienie zbyt wysokiej temperatury zadanej mieszacza przez użytkownika i przez regulator. Dla OBSŁUGA MIESZACZA = WŁĄCZONY PODŁOGA określa wartość maksymalnej temperatury w obiegu grzewczym powyżej której pompa mieszacza zostanie wyłączona.",
-    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
-    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
-    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
-    "Obniżenie temperatury zadanej w obiegu mieszacza po rozwarciu styków termostatu pokojowego (temperatura zadana w pokoju jest osiągnięta).",
-    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
-    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
-    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
-    "Gdy sterowanie pogodowe jest włączone to temperatura zadana jest wyliczana na podstawie krzywej grzewczej i wskazań temperatury czujnika pogodowego.",
-    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
-    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
-    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
-    "Krzywa grzewcza odzwierciedla charakterystykę cieplną budynku. Zalecane nastawy dla obiegu mieszacza: 0,2 - 0,6",
-    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
-    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
-    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
-    "WYŁĄCZONA = siłownik mieszacza i pompa nie pracują, WŁĄCZONA CO = obieg mieszacza zasila instalację grzejnikową, WŁĄCZONA PODŁOGA = obieg mieszacza zasila instalację podłogową, TYLKO POMPA = siłownik jest wyłączony, pompa wyłącza się po osiągnięciu temperatury zadanej.",
-    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im większa wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt wysoka wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Im mniejsza wartość tym szybsze jest dochodzenie temperatury mieszacza do wartości zadanej. Zbyt mała wartość parametru powoduje przeregulowanie temperatury i zbędne ruchy siłownika.",
-    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
-    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
-    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
-    "Ustawienie parametru na wartość TAK powoduje zamknięcie siłownika mieszacza i wyłącznie pompy mieszacza po rozwarciu styków termostatu pokojowego (pomieszczenie nagrzane). ",
-    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
-    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
-    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
-    "Należy wprowadzić czas pełnego otwarcia zaworu odczytany z tabliczki znamionowej siłownika zaworu, np. 140s.",
-    "Powyżej tej temperatury regulator włącza pompę CWU i otwiera obiegi mieszaczy w celu schłodzenia kotła. Regulator wyłączy pompę CWU jeśli temperatura tej wody przekroczy wartość maksymalną. Regulator nie otworzy obiegu mieszacza gdy OBSŁUGA MIESZACZA = włączony podłoga.",
-    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
-    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
-    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
-    "Parametr umożliwia wybór termostatu pokojowego dla regulowanego obiegu grzewczego. WYŁĄCZONY - wyłącza obsługę termostatu, UNIWERSALNY - oznacza standardowy termostat, ecoSTER1,2,3 - sygnał termostatu jest pobierany z panelu ecoSTER200.",
-    "Określa czas przerwy pomiędzy załączeniami pompy cyrkulacyjnej. Parametr dostępny po podłączeniu dodatkowego modułu C. ",
-    "Określa czas pracy po czasie postoju pompy cyrkulacyjnej. Parametr dostępny po podłączeniu dodatkowego modułu C. ",
-    "Temperatura startu pompy cyrkulacyjnej",
-    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
-    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
-    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
-    "Umożliwia korektę - zwiększenie/zmniejszenie temperatury w regulowanym obiegu grzewczym przy włączonym sterowaniu pogodowym gdy krzywa grzewcza nie pasuje dokładnie do charakterystyki budynku.",
-    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
-    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
-    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
-    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
-    "Współczynnik korygujący temperaturę zadaną w obiegu grzewczym w oparciu o wskazania czujnika temperatury w pokoju. Im większa wartość tym większa korekta temperatury w obiegu grzewczym. Musi być podłączony panel pokojowy ecoSTER.",
-    "Nadmuch czyszczenia",
-    "Wyciąg czyszczenia",
-    "Jest to czas ciągłej pracy palnika po którym nastąpi automatyczne wygaszenie, wyczyszczenie i ponowne rozpalenie palnika.",
-    "Moc nadmuchu podczas wygaszania.",
-    "Moc wyciągu podczas wygaszania.",
-    "Parametr definiuje temperaturę górną bufora poniżej której rozpoczyna się proces ładowania bufora. Proces ładowania bufora zostaje zakończony z chwilą w której temperatura dolna bufora osiągnie wartość zdefiniowaną w parametrze TEMPERATURA ZAKOŃCZENIA ŁADOWANIA BUFORA.",
-    "Parametr definiuje temperaturę dolną bufora powyżej której zakończy się proces ładowania bufora. Proces ładowania bufora rozpocznie się ponownie z chwilą w której temperatura górna bufora spadnie poniżej temperatury TEMPERATURA ROZPOCZĘCIA ŁADOWANIA BUFORA.",
-    "Próg poziomu paliwa przy którym zostanie wyświetlony monit: NISKI POZIOM PALIWA!",
-    "Czas odliczany jest po spadku jasności płomienia poniżej wartości parametru \"Detekcja płomienia\". Po odliczeniu tego czasu regulator przechodzi do próby rozpalania palnika a po nieudanych 3 próbach wystawia alarm \"Nieudana próba rozpalenia”.",
-    "Czas pracy podajnika dodatkowego (zewnętrznego).",
-    "Określa temperaturę kotła pelletowego poniżej której zostanie włączony kocioł rezerwowy (na przykład gazowy). Nastawa na wartość \"0\" powoduje wyłączenie sterowania kotłem rezerwowym i przełączenie styku 39-40 na obsługę alarmów.",
-    "Parametr umożliwia zmianę paliwa. Dla danego paliwa zostaną wczytane nowe nastawy w menu: MODULACJA MOCY.",
-    "Określa maksymalną temperaturę palnika przy której zostanie wystawiony alarm przekroczenia maksymalnej temperatury palnika.",
-    "Wydłużenie pracy podajnika 2.",
-    "Czas czyszczenia Rozpalanie.",
-    "Czas czyszczenia wygaszanie.",
-    "Czas trwania przedmuchów przy dopalaniu paliwa w WYGASZANIU.",
-    "Przerwa między przedmuchami przy dopalaniu paliwa w WYGASZANIU.",
-    "Jasność płomienia przy której następuje start przedmuchów przy dopalaniu paliwa w WYGASZANIU.",
-    "Jasność płomienia przy której przedmuchy zostają zakończone przy dopalaniu paliwa w WYGASZANIU. ",
-    "Włącza lub wyłącza obsługę sondy Lambda.",
-    "Korekta czujnika pogodowego.",
-    "Producent",
-    "Przerwa czyszczenia wymiennika",
-    "Czas czyszczenia wymiennika",
-    "Sterowanie palnikiem pelletowym",
-    "Wybierz tryb pracy",
-    "Wybierz tryb pracy zgazowywania drewna",
-    "Ustawienie mocy kotła. Może być ustawione pomiędzy 50%  a 150%. Sterownik zawsze utrzymuje ustawioną moc kotła jako pierwszy warunek. Gdy ustawiona moc kotła jest za wysoka i kocioł jest bliski swojej maksymalnej temperatury, sterownik automatycznie obniży moc kotła.",
-    "Włączenie lub wyłączenie mechanizmu detekcji paliwa. Jeśli funkcjonalność jest aktywna, w kotle pozostanie warstwa gorącego żaru.",
-    "Rozszerzenie operacji gdy system detekcji paliwa jest aktywny i jest niski poziom paliwa w kotle",
-    "Aktywacja czujnika otwarcia drzwi kotła. Gdy jest włączona, wentylator wyciągowy załącza się automatycznie po otwarciu drzwiczek. ",
-    "Moc wentylatora wyciągowego w trakcie rozpalania",
-    "Moc wentylatora wyciągowego podczas podtrzymania żaru",
-    "Temperatura spalin na podstawie której zostaje stwierdzone rozpalenie kotła i koniec trybu rozpalania",
-    "Przez ten czas sterownik będzie uruchamiał wentylator wyciągowy aby podtrzymać warstwę żaru w palenisku. Funkcjonalność pracuje zgodnie z parametrami: Moc went. wyc. przy podtrzymaniu żaru, Czas przedmuchu podczas podtrzymania.",
-    "Maksymalny czas uzupełniania paliwa gdy czujnik otwarcia drzwiczek nie jest aktywny",
-    "Czas po którym sterownik przełączy tryb z rozpalania na pracę w przypadku gdy zadana temperatura spalin dla zakończenia rozpalania nie jest osiągnięta",
-    "Tryb pracy awaryjnej",
-    "Tryb pracy awaryjnej jest wykorzystywany gdy uszkodzony jest czujnik temperatury spalin. Należy przebywać przy kotle podczas działania trybu awaryjnego i monitorować temperature wody kotła.",
-    "Minimalna zadana temperatura kotła",
-    "Histereza przegrzania kotła",
-    "Gdy jest ustawione 100%  dla warstwy gorącego żaru wentylator wyciągowy wyłączy się natychmiast po zgłoszeniu braku paliwa przez mechanizm. Dla mniejszych wartości będzie utrzymywał mniejszą warstwę żaru. Rozszerzenie operacji zawsze musi byc włączone.",
-    "Przez ten czas mechanizm detekcji paliwa jest nieaktywny",
-    "Gdy temperatura spalin spadnie poniżej tej wartości pojawi się komunikat o braku paliwa i wentylator wyciagowy zostanie wyłączony.",
-    "Czas interwału podtrzymania żaru-  to czas co jaki jest załączany wentylator w trzybie podtrzymania żaru",
-    "Czas pracy wentylatora w trakcie przedmuchu w trybie konserwacji",
-    "Czas podglądu komory kotła. Gdy drzwi kotła zostaną zamkniete przed zakońćzeniem trybu podglądu, kocioł powróci do trybu pracy i będzie go kontynuował. ",
-    "Maksymalny wzrost temp. spalin",
-    "Maksymalny spadek temp. spalin",
-    "Gdy On - styk normalnie otwarty\\nGdy Off - styk normalnie zamknięty",
-    "Aktywacja rozproszenia ciepła bufora",
-    "Po osiągnieciu tej temperatury uruchamiają się pompy mieszaczy i CWU aż do wychłodzenia bufora",
-    "Parametr określa różnicę temperatur pomiędzy buforem a kotłem, przy jakiej uruchomi się pompa kotła. Gdy wartość parametru wynosi OFF, funkcja ochrony przed wychłodzeniem bufora jest wyłączona.",
-    "Parametr określa różnicę temperatur pomiędzy buforem a kotłem, przy jakiej wyłączy się pompa kotła. Gdy wartość parametru wynosi OFF, funkcja ochrony przed wychłodzeniem bufora jest wyłączona.",
-    "Temperatura startu sys. hydraulicznego",
-    "Histereza systemu hydraulicznego",
-    "Temperatura spalin - Maks. moc kotła",
-    "Temperatura spalin - Min. moc kotła",
-    "Minimalna moc wentylatora wyciągowego w zgazowywaniu drewna.",
-    "Maksymalna moc wentylatora wyciągowego w zgazowywaniu drewna.",
-    "Automatyczna aktywacja palnika pelletowego po zakończeniu spalania drewna. Po zakońćzeniu spalania drewna sterownik odlicza czas po którym załączy palnik pelletowy ",
-    "Automatyczna aktywacja palnika pelletowego po zakończeniu spalania drewna po czasie opóźnienia.",
-    "Ustawienie czasu po jakim wystartuje palnik pelletowy. Dobrze jest ustawić opóźnienie takie, aby utrzymywał się żar w komorze kotła.",
-    "Wybierz tryb pracy wyjścia H",
-    "Wybierz rodzaj paliwa jaki jest obecnie używany",
-    "Otwarcie przepustnicy podczas uzupełniania paliwa",
-    "Tlen - Suche twarde drewno",
-    "Tlen - Wilgotne twarde drewno",
-    "Tlen - Suche miękkie drewno",
-    "Tlen - Wilgotne miękkie drewno",
-    "Korekcja temp. kotła"
+    "Maximum boiler output in pellet mode.",
+    "Medium boiler output in pellet mode",
+    "Minimal boiler output in pellet mode",
+    "Fan output for maximal burner output",
+    "Fan output for medium burner output",
+    "Fan output for minimal burner output",
+    "Exhaust fan output when pellet burner is working on maximal output",
+    "Exhaust fan output when pellet burner is working on medium output",
+    "Exhaust fan output when pellet burner is working on minimal output",
+    "If the boiler temperature drops below the present boiler temperature by the boiler hysteresis value, then the automatic burner firing up of the burner will take place.",
+    "Whole feeding cycle time OPERATION.  Cycle time OPERATION=FEEDING TIME OPERATION+FEEDER STANDSTILL TIME.",
+    "Mimimal output at witch the burner can operate in Fuzzy Logic mode (output modulation).",
+    "Maximum output at witch the burner can operate in Fuzzy Logic mode (output modulation).",
+    "Param. related to aut. modul. of boiler output at remote stab. of boiler. Increas. the value acceler. the speed of boiler output increase. Too hogh value causes instab. to maintain pres. boiler temp.",
+    "Param. related to aut. modul. of boiler output at remot. stab. of boiler. Increas. the value acceler. the speed of boiler output increase. Too low value causes instab. to maintain pres. boiler temp.",
+    "Param. related to aut. modul. of boiler output at remote stab. of boiler. It is not recommended to change this parameter.",
+    "Preliminary blowing-up power during firing-up. Too highy value extends the firing-up process or makes failed attempt firing-up.",
+    "Exhaust fan output during FIRE UP mode. High output may cause unsuccessfull atemp for fire up.",
+    "Process of checking whether the furnace is already burning. Only the fan is running. If the flame is of sufficient brightness, the machine proceeds to OPERATION mode bypassing the FIRE UP mode.",
+    "Time of a signle attempt to fire up. After this time, controller proceeds to another attempt to fire up. After the failure of all attempts to fire up, the alarm: \"Failed to fire up\" is reported.",
+    "Fuel dose during firing up. Concerns first testing firing up. Next tests fuel dose is reduced.",
+    "Igniter heating up time before activating the fan. It should not be too long in order to not damage the igniter. After this time the igniter works still, until detecting flame.",
+    "Threshold of flame detection in % of light, when the controller decides that the furnace is already heated. It is also used for detection of fuel shortage.",
+    " Worktime with minimal power.",
+    "Incandescence time after firing-up.",
+    "Fan power after successful FIRE UP.",
+    "Exhaust fan output after firing up. High output may cause that burner will burn off.",
+    "Firing up pulsation",
+    " Time of maximum stay the regulator in the SUPERVISION. After this time from the moment of passing the controller in to the SUPERVISION burner is automatically burned off. SUPERVISION TIME=0 the mode is completely switched off.",
+    "Boiler output in Supervision mode.",
+    "Feeder cycle time in supervision.",
+    "Airflow output in supervision mode.",
+    "Exhaust fan output in supervision mode",
+    "Min. airflow output that the user can set. It is used only to reduce the aval. pow. range of the cont. It should be as small as possible but allow the fan to rotate slowly and freely.",
+    "After this time there is transition into PAUSE mode, even though flame sensor indicates flame.",
+    "Burning off will last at least this time, even though the flame sensor indicates no flame.",
+    "Affects the adjustment speed of oxygen value present in exhaust to present oxygen value; it also affects the stability to keep the oxygen in exhaust. It is not recommended to change this value.",
+    "Affects the adjustment speed of oxygen value present in exhaust to present oxygen value; it also affects the stability to keep the oxygen in exhaust. It is not recommended to change this value.",
+    "Affects the adjustment speed of oxygen value present in exhaust to present oxygen value; it also affects the stability to keep the oxygen in exhaust. It is not recommended to change this value.",
+    "Defines the acceptable airflow range variation during the operation using Lambda sensor.",
+    "Present oxygen value in exhaust when the burner runs at maximum output.",
+    "Present oxygen value in exhaust when the burner runs at medium output.",
+    "Present oxygen value when the burner runs at minimal output.",
+    "Fuel feeding speed of main feeder in kg/h.",
+    "Fuel caloric value in kWh/kg. For wood pellet about 4,8 - 5,0 kWh/kg. ",
+    "Fuel tank capacity until meausuring fuel level. Inputting correct value frees the user from necessity of conducting fuel level calibration. After the fuel level calibration, the controller does not use the FUEL HOPPER CAPACITY parameter.",
+    "Rotary cleaning cycle",
+    "Cleaning intensity.",
+    "Maximum boiler temperature. At first the boiler keeps preset boiler power and then it modulates the output in order to not overheat the boiler above temp set in this parameter.",
+    "Min. present boiler temperature that can be set by the user in menu and min. temperature that can be set by the controller, for example, from night time decreases, weather control, etc.",
+    "Max. present boiler temperature that can be set by the user in menu and max. temperature that can be set by the controller, for example, form weather control, etc.",
+    "Temperature, to which the HUW tank will be heated. Note: too high temperature may cause scalding from hot tap water!",
+    "It is a parameter which can be used to limit the user's ability to set to low HUW preset temperature.",
+    "This param. determ. the max. temp. to which the HUW feed. will be heated while discharg. exceed. boiler heat in alarm states. Setting too high value can lead to the risk of scladning from hot water.",
+    "Allows for the select. of oper. mode of HUW. NO PRIORITY - parallel operation of HUW pump and cent. heat. pumps, PRIORITY - only HUW pump operates, SUMMER - prep. only HUW (building heating disabled).",
+    "This parameter defines after what temperature drop measured by HUW sensor, the HUW pump will be activated (HUW = hot tap water), when compared with HUW preset temperature.",
+    "Once this parameter is enabled every week, on Monday, at 2:00, hot tap water will be heated to 70°C in order to disinfect the HUW tank. Note: risk of scalding form hot water!",
+    "Determines the energy source for the domestic hot water system",
+    "SUMMER mode means deactivation of central heating while leaving HUW heating. Automatic activation of the mode is executed on basis of indications of weather temperature sensor.",
+    "External temperature, above which the SUMMER mode will be activated, if the automatic detection of the SUMMER mode is on.",
+    "External temperature, below which the SUMMER mode will be deactivated, if the automatic detection of the SUMMER mode is on.",
+    "Param. determines the temp. of water at which the boiler pump will be activated. The temperature for boiler pump activation by flue gas must be also reached.",
+    "Par. det. by how many deg. pres. boiler temp. must be higher to load the HUW feed., buffer, and mix. circuit. Increas. pres. b. temp. is achieved only when pres. b. temp. is low. than other pres temp.",
+    "Allows for removal of heat from boiler by HUW feed. directly after the HUW feed. is load. In order to cool the boiler, the oper. of HUW pump can be extended by a period of extended oper. of HUW pump.",
+    "Pump support",
+    "Anti-freeze temperature",
+    "Param. determines the temp. of flue gas at which the boiler pump will be activated. The temperature for boiler pump activation by boiler temp must be also reached.",
+    "Preset temperature for controlled heating circuit when the weather control is ooff. When the weather control is on, the parameter is not included by the controller for the heating circuit of the mixer.",
+    "Preset temperature for controlled heating circuit when the weather control is ooff. When the weather control is on, the parameter is not included by the controller for the heating circuit of the mixer.",
+    "Preset temperature for controlled heating circuit when the weather control is ooff. When the weather control is on, the parameter is not included by the controller for the heating circuit of the mixer.",
+    "Preset temperature for controlled heating circuit when the weather control is ooff. When the weather control is on, the parameter is not included by the controller for the heating circuit of the mixer.",
+    "Limits possibility of setting too low a preset mixer temperature by the user and by the controller.",
+    "Limits possibility of setting too low a preset mixer temperature by the user and by the controller.",
+    "Limits possibility of setting too low a preset mixer temperature by the user and by the controller.",
+    "Limits possibility of setting too low a preset mixer temperature by the user and by the controller.",
+    "Limits possibility of setting too high a preset mixer temperature by the user and by the controller. For MIXER SERVICE = FLOOR ON determines value of maximum temperature in heating circuit above which mixer pump will be switched off.",
+    "Limits possibility of setting too high a preset mixer temperature by the user and by the controller. For MIXER SERVICE = FLOOR ON determines value of maximum temperature in heating circuit above which mixer pump will be switched off.",
+    "Limits possibility of setting too high a preset mixer temperature by the user and by the controller. For MIXER SERVICE = FLOOR ON determines value of maximum temperature in heating circuit above which mixer pump will be switched off.",
+    "Limits possibility of setting too high a preset mixer temperature by the user and by the controller. For MIXER SERVICE = FLOOR ON determines value of maximum temperature in heating circuit above which mixer pump will be switched off.",
+    "Reduction of preset temperature in mixer after opening the connections of room thermostat (preset temperature in room is achieved).  ",
+    "Reduction of preset temperature in mixer after opening the connections of room thermostat (preset temperature in room is achieved).  ",
+    "Reduction of preset temperature in mixer after opening the connections of room thermostat (preset temperature in room is achieved).  ",
+    "Reduction of preset temperature in mixer after opening the connections of room thermostat (preset temperature in room is achieved).  ",
+    "When weather control is on, present boiler temperature is calculated based on the heating curve and weather sensor readings.",
+    "When weather control is on, present boiler temperature is calculated based on the heating curve and weather sensor readings.",
+    "When weather control is on, present boiler temperature is calculated based on the heating curve and weather sensor readings.",
+    "When weather control is on, present boiler temperature is calculated based on the heating curve and weather sensor readings.",
+    "Heating curve reflects the thermal characteristics of the building. Recommended settings are described in controller manual.",
+    "Heating curve reflects the thermal characteristics of the building. Recommended settings are described in controller manual.",
+    "Heating curve reflects the thermal characteristics of the building. Recommended settings are described in controller manual.",
+    "Heating curve reflects the thermal characteristics of the building. Recommended settings are described in controller manual.",
+    "OFF=mixer actuator & pump are off. CH ON=mixer circ. supplies radiator syst. FLOOR ON=mixer circ. supplies floor instal.. PUMP ONLY=actuator is off, pump turns off, when present temp. is reached.",
+    "OFF=mixer actuator & pump are off. CH ON=mixer circ. supplies radiator syst. FLOOR ON=mixer circ. supplies floor instal.. PUMP ONLY=actuator is off, pump turns off, when present temp. is reached.",
+    "OFF=mixer actuator & pump are off. CH ON=mixer circ. supplies radiator syst. FLOOR ON=mixer circ. supplies floor instal.. PUMP ONLY=actuator is off, pump turns off, when present temp. is reached.",
+    "OFF=mixer actuator & pump are off. CH ON=mixer circ. supplies radiator syst. FLOOR ON=mixer circ. supplies floor instal.. PUMP ONLY=actuator is off, pump turns off, when present temp. is reached.",
+    "The higher the value, the faster the mixer reaches the present temperature. Too high parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The higher the value, the faster the mixer reaches the present temperature. Too high parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The higher the value, the faster the mixer reaches the present temperature. Too high parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The higher the value, the faster the mixer reaches the present temperature. Too high parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The lower the value, the faster the mixer reaches the present temperature. Too low parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The lower the value, the faster the mixer reaches the present temperature. Too low parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The lower the value, the faster the mixer reaches the present temperature. Too low parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "The lower the value, the faster the mixer reaches the present temperature. Too low parameter value causes temperature overshoot and unnecessary movements of the actuator.",
+    "Setting parameter on YES value closes the mixer actuator and turns off the mixer pump when the contacts of the room thermostat are open (heated room).",
+    "Setting parameter on YES value closes the mixer actuator and turns off the mixer pump when the contacts of the room thermostat are open (heated room).",
+    "Setting parameter on YES value closes the mixer actuator and turns off the mixer pump when the contacts of the room thermostat are open (heated room).",
+    "Setting parameter on YES value closes the mixer actuator and turns off the mixer pump when the contacts of the room thermostat are open (heated room).",
+    "Read the valve full opening time form the nameplate of the valve actuator and enter it, e.g. 140s.",
+    "Read the valve full opening time form the nameplate of the valve actuator and enter it, e.g. 140s.",
+    "Read the valve full opening time form the nameplate of the valve actuator and enter it, e.g. 140s.",
+    "Read the valve full opening time form the nameplate of the valve actuator and enter it, e.g. 140s.",
+    "Above this temp., cont. enabl. HUW p. & opens mix. circ. to cool boiler. Cont. turns off HUW p., if temp. of this water exceeds max. value. Cont. wcn't open the mix. circ. when MIX CONT = floor on.",
+    "Param. allows for room therm. select. for control. heating circuit. OFF - turns off therm. oper., UNIVERSAL - refers to stand. therm., ecoSTER 1,2,3 - therm. signal is retrieved form ecoSTER panel.",
+    "Param. allows for room therm. select. for control. heating circuit. OFF - turns off therm. oper., UNIVERSAL - refers to stand. therm., ecoSTER 1,2,3 - therm. signal is retrieved form ecoSTER panel.",
+    "Param. allows for room therm. select. for control. heating circuit. OFF - turns off therm. oper., UNIVERSAL - refers to stand. therm., ecoSTER 1,2,3 - therm. signal is retrieved form ecoSTER panel.",
+    "Param. allows for room therm. select. for control. heating circuit. OFF - turns off therm. oper., UNIVERSAL - refers to stand. therm., ecoSTER 1,2,3 - therm. signal is retrieved form ecoSTER panel.",
+    "Determines the intervals between activations of circulating pump. Parameter available after connection of extra C module.",
+    "Determines the operating time of circulating pump. Parameter available after connection of extra C module.",
+    "Temperature circulating pump activation",
+    "Allows for correction -  temperature increase/decrease in the controlled heating circuit when the weather control is on and when the heating curve does not match the building characteristics.",
+    "Allows for correction -  temperature increase/decrease in the controlled heating circuit when the weather control is on and when the heating curve does not match the building characteristics.",
+    "Allows for correction -  temperature increase/decrease in the controlled heating circuit when the weather control is on and when the heating curve does not match the building characteristics.",
+    "Allows for correction -  temperature increase/decrease in the controlled heating circuit when the weather control is on and when the heating curve does not match the building characteristics.",
+    "Correct. factor for pres. temp. in the heat. circ. based on the read. of room temp. sensor. The higher the value, the higher the temp. correct. in the heat. circuit. ecoSTER room p. must be connected.",
+    "Correct. factor for pres. temp. in the heat. circ. based on the read. of room temp. sensor. The higher the value, the higher the temp. correct. in the heat. circuit. ecoSTER room p. must be connected.",
+    "Correct. factor for pres. temp. in the heat. circ. based on the read. of room temp. sensor. The higher the value, the higher the temp. correct. in the heat. circuit. ecoSTER room p. must be connected.",
+    "Correct. factor for pres. temp. in the heat. circ. based on the read. of room temp. sensor. The higher the value, the higher the temp. correct. in the heat. circuit. ecoSTER room p. must be connected.",
+    "Correct. factor for pres. temp. in the heat. circ. based on the read. of room temp. sensor. The higher the value, the higher the temp. correct. in the heat. circuit. ecoSTER room p. must be connected.",
+    "Fan output durin CLEANING mode.",
+    "Exhaust fan in cleaning mode. Recommended setting 100%.",
+    "It is a time of continous operation of burner, after which the burner will be automatically burned off, cleaned, and fired up again.",
+    "Fan output during burning off.",
+    "Exhaust fan power in burning off. Recommended setting 100%.",
+    "Param. defines buffor max. temp., below which the process of buffer loading will start. Process of buffer loading ends, when the buffer min. temp. reaches the temp. of BUFFER LOADING END TEMP. param.",
+    "Param. defines buffer min. temp., above which the process of buffor loading will end. Process of buffer loading starts again, when the buffer max. temp. falls below the BUFFER LOADING START TEMP.",
+    "Fuel threshold value in which the following warning will be displayed: LOW FUEL LEVEL!",
+    "The time is counted after decrease in brightness of flame below value of \"Flame detection\". After deducting this time the controller goes into burner firing up , and after 3 failed attempts issues alarm \"Failed firing up attempt\".",
+    "Operation time of additional feeder (external) to fill the silo by the boiler from big silo (bunker)",
+    "Defines the temp. of pellet boiler below which reserve boiler is activated (e.g. gas boiler). Setting to \"0\" value turnes off control of reserve boiler and switches 46-47 contact to alarm control.",
+    "This parameter allows  to change the fuel. For a given fuel will be loaded the new settings in the menu:OUTPUT MODULATION.",
+    "Determines maximum burner temperature with which exceeding maximum burner temperature alarm will be issued.",
+    "Feeder 2 extended operation.",
+    "Cleaning time before FIRE UP mode. It allows to get out the residual ashes and unburned pellets from the combustion chamber before FIRE UP.",
+    "Cleaning time burning off. It allows to clean completely the burner combustion chamber from ashes and unburned pellets.",
+    "Air flushes time during fuel burnout BURNING OFF.",
+    "Pause between blowings while burning up fuel in BURNING OFF.",
+    "Flame brightness by which blowings start while burning up fuel in BURNING OFF.",
+    "Flame brightness by which blowings stop by burning up fuel in BURNING OFF.",
+    "Turns off and on the operation of Lambda sensor.",
+    "Weather temerature correction",
+    "Manufacturer",
+    "Exchanger cleaning pause",
+    "Exchanger cleaning time",
+    "Pellet burner control",
+    "Select work mode",
+    "Select wood gasification mode",
+    "Preset boiler output. It can be set from 50% to 150%. The controller always keeps preset boiler output as a first conditions. When the preset boiler output is too high, and boiler temp is near to the Maximum boiler temp, controller automaticaly lower the boiler output.",
+    "Turns ON/OFF the mechanism for residual fuel detection. If the function if activated, tehre will always be a layer of hot embers in the boiler.",
+    "Operation extension when fuel detection mechanism is active and there is low fuel in the boiler.",
+    "Activating door sensor contact. When it is ON, the exhaust fan will start automatically after opening the door handle for FIRE UP or REFILL mode.",
+    "Exhaust fan power during FIRE UP mode",
+    "Exhaust fan power during embers layer maintenance",
+    "When this temperature is reached, the controller will switch from FIRE UP to OPERATION mode",
+    "For this time, the controller will start the exhaust fan in order to maintain the layer of embers. It will work according to parameters: Air flush time in maintennace, Embers maintenance fan power.",
+    "Max. refill time when door sensor is disactivated.",
+    "Time after which the controller switch from FIRE UP to OPERATION mode despite the Fire-up flue gas end temperature is not reached.",
+    "Emergency work mode",
+    "Exhaust fan power during emergency mode. Emergency mode can be activated when the flue gas temp sensor is damaged. TI is obligatory to be by the boiler during the emergency mode and check the flue gas and water temp.",
+    "Preset boiler temperature lower",
+    "Boiler overheat histeresis",
+    "When set 100% for the embers layer size, then the exhaust fan will turn off immediately after low fuel detection from the detection mechanism. When set lower value, the exhaust fan will extend its operation and the ember layer size will be smaller. Operation extension must be ON. ",
+    "For this time the fueld detection mechanism is deactivated.",
+    "When the flue gas temperature drops below this value, then the controller will switch OFF the exhaust fan and shows a message: No fuel from flue gas temperature.",
+    "Interval for switch ON the exhaust fan during the embers maintenance mode",
+    "Exhaust fan operation time in embers maintenance mode",
+    "Time of preview to the boiler chamber. When the doors are closed during the preview time, then the operation time counter is not restarted. When the preview time exceed, then controller switch to REFILL mode and restart the counters.",
+    "Flue gas max increase",
+    "Flue gas max decrease",
+    "If On - AHS contact is normal open\\nIf Off AHS contact is normal close",
+    "Buffer heat dissipation activate",
+    "After exceeding this temperature the mixer and HUW pumps will start in order to cool down the buffer.",
+    "These parameters determine the temperature differences between the buffer and boiler, at which the boiler pump will be switched off/on. Parameter Heat recov. stop hyst. = OFF setting, the buffer cooling protection function will be switched off.",
+    "These parameters determine the temperature differences between the buffer and boiler, at which the boiler pump will be switched off/on. Parameter Heat recov. stop hyst. = OFF setting, the buffer cooling protection function will be switched off.",
+    "Hydraulic system start temperature",
+    "Hydraulic system hysteresis",
+    "Flue gas temp - Max. Boiler Power",
+    "Flue gas temp - Min. Boiler Power",
+    "Minimal exhaust fan power in wood mode.",
+    "Maximal exhaust fan power in wood mode",
+    "Automatic pellet burner activation when the wood combustion ends and the temperature in the buffer if lower then preset value. The burner starts delay time must be also reached to start the pellet burner",
+    "Automatic burner activation when wood burning is finished. The time of delay must be reached to start the pellet burner.",
+    "You can set a delay for the pellet burner start. It is good to set a delay in order to keep hot embers in the boiler chamber.",
+    "Select H output work mode",
+    "Choose what type of fuel are you using now.",
+    "REFILL valve opening",
+    "Oxygen - Dry hard wood",
+    "Oxygen - Moist hard wood",
+    "Oxygen - Dry soft wood",
+    "Oxygen - Moist soft wood",
+    "Boiler temp. correction"
   ],
   "paramsEnums": [
     {
@@ -2762,14 +2762,14 @@
         "STOP",
         "START",
         "",
-        "Kalibracja"
+        "Calibration"
       ],
       "first": 0
     },
     {
       "values": [
         "",
-        "Kalibracja"
+        "Calibration"
       ],
       "first": 0
     },
@@ -2783,8 +2783,8 @@
     },
     {
       "values": [
-        "Rozłączony",
-        "Połączony"
+        "Disconnected",
+        "Connected"
       ],
       "first": 0
     },
@@ -2800,45 +2800,45 @@
     },
     {
       "values": [
-        "WYŁĄCZONY",
-        "ROZPALANIE",
-        "PRACA",
-        "NADZÓR",
-        "WYGASZANIE",
-        "POSTÓJ",
-        "RĘCZNE",
+        "TURNED OFF",
+        "FIRE UP",
+        "OPERATION",
+        "SUPERVISION",
+        "BURNING OFF",
+        "STOP",
+        "MANUAL",
         "ALARM",
-        "CZYSZCZENIE",
-        "URUCHAMIANIE",
-        "BRAK TRANSMISJI",
-        "PODGLĄD",
-        "UZUPEŁNIENIE PALIWA",
-        "PRACA AWARYJNA"
+        "CLEANING",
+        "ACTIVACTION",
+        "NO TRANSMISSION",
+        "PREVIEW",
+        "FIRE-UP - REFILL",
+        "EMERGENCY MODE"
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłączony",
-        "Priorytet",
-        "Bez priorytetu"
+        "Off",
+        "Priority",
+        "No priority"
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłączona",
-        "Włączona"
+        "Off",
+        "On"
       ],
       "first": 0
     },
     {
       "values": [
-        "Zima",
-        "Lato",
+        "Winter",
+        "Summer",
         "Auto",
-        "Zima",
-        "Lato"
+        "Winter",
+        "Summer"
       ],
       "first": 0
     },
@@ -2846,84 +2846,84 @@
       "values": [
         "OFF",
         "ON",
-        "Wymiennik"
+        "Exchanger"
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłączona",
-        "Włączona CO",
-        "Włącz.podłog.",
-        "Tylko pompa"
+        "Off",
+        "CH on",
+        "Floor on",
+        "Pump only"
       ],
       "first": 0
     },
     {
       "values": [
-        "Nie",
-        "Tak"
+        "No",
+        "Yes"
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłączony",
-        "Uniwersalny",
+        "Off",
+        "Universal",
         "ecoSTER T1",
         "ecoSTER T2",
         "ecoSTER T3",
-        "Wyłączony",
-        "Uniwersalny",
+        "Off",
+        "Universal",
         "ecoSTER T2",
         "ecoSTER T3",
-        "Wyłączony",
-        "Uniwersalny",
+        "Off",
+        "Universal",
         "ecoSTER T3",
-        "Wyłączony",
-        "Uniwersalny",
+        "Off",
+        "Universal",
         "ecoSTER T1",
         "ecoSTER T3",
-        "Wyłączony",
+        "Off",
         "ecoSTER T1",
         "ecoSTER T2",
         "ecoSTER T3",
-        "Wyłączony",
+        "Off",
         "ecoSTER T2",
         "ecoSTER T3",
-        "Wyłączony",
+        "Off",
         "ecoSTER T3",
-        "Wyłączony",
+        "Off",
         "ecoSTER T1",
         "ecoSTER T3",
-        "Uniwersalny",
-        "Uniwersalny",
-        "Uniwersalny",
-        "Wyłączony",
-        "Wyłączony",
-        "Wyłączony"
+        "Universal",
+        "Universal",
+        "Universal",
+        "Off",
+        "Off",
+        "Off"
       ],
       "first": 0
     },
     {
       "values": [
-        "Poziom paliwa 100%",
-        "Poziom paliwa 0%",
+        "Fuel level 100%",
+        "Fuel level 0%",
         ""
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłącz",
-        "Włącz"
+        "Off",
+        "On"
       ],
       "first": 0
     },
     {
       "values": [
-        "Wyłącz",
-        "Włącz"
+        "Off",
+        "On"
       ],
       "first": 0
     },
@@ -2954,8 +2954,8 @@
     },
     {
       "values": [
-        "Kocioł",
-        "Bufor"
+        "Boiler",
+        "Buffer"
       ],
       "first": 0
     },
@@ -2969,46 +2969,46 @@
     {
       "values": [
         "STOP",
-        "PRACA",
-        "UZUPEŁNIENIE PALIWA"
+        "RUN",
+        "REFILL"
       ],
       "first": 0
     },
     {
       "values": [
-        "ZGAZOWYWANIE DREWNA",
-        "PELLET"
+        "WOOD GASIFICATION",
+        "PELLET BURNER"
       ],
       "first": 0
     },
     {
       "values": [
         "Off",
-        "Kocioł",
+        "Boiler",
         "Alarm"
       ],
       "first": 0
     },
     {
       "values": [
-        "Suche twarde drewno",
-        "Wilgotne twarde drewno",
-        "Suche miękkie drewno",
-        "Wilgotne miękkie drewno"
+        "Dry hard wood",
+        "Moist hard wood",
+        "Dry soft wood",
+        "Moist soft wood"
       ],
       "first": 0
     }
   ],
   "alarmsNames": {
-    "18": "Przegrzanie kotła, rozwarty styk STB.",
-    "44": "Moduł Pelletowy jest odłączony.",
-    "52": "Uszkodzony system sterowania podajnikiem.",
-    "1": "Uszkodzenie czujnika temperatury kotła.",
-    "0": "Brak zasilania.",
-    "3": "Uszkodzenie czujnika temperatury palnika.",
-    "2": "Przekroczono maksymalną temperaturę kotła.",
-    "4": "Przegrzanie palnika.",
-    "7": "Nieudana próba rozpalenia kotła.",
-    "255": "Alarm trwa!"
+    "18": "Maximum boiler temperature exceeded. STB activated.",
+    "44": "Pellet burner module disconnected.",
+    "52": "Feeder relay error.",
+    "1": "Boiler temperature sensor damage.",
+    "0": "Power outage.",
+    "3": "Burner temperature sensore damage.",
+    "2": "Maximum boiler temperature exceeded.",
+    "4": "Overheating of the burner.",
+    "7": "Unsuccessful boiler firing-up attempt.",
+    "255": "Alarm continues!"
   }
 }

@@ -15,14 +15,14 @@
       "STOP",
       "START",
       "",
-      "Kalibracja"
+      "Calibration"
     ],
     "first": 0
   },
   {
     "values": [
       "",
-      "Kalibracja"
+      "Calibration"
     ],
     "first": 0
   },
@@ -36,8 +36,8 @@
   },
   {
     "values": [
-      "Rozłączony",
-      "Połączony"
+      "Disconnected",
+      "Connected"
     ],
     "first": 0
   },
@@ -53,45 +53,45 @@
   },
   {
     "values": [
-      "WYŁĄCZONY",
-      "ROZPALANIE",
-      "PRACA",
-      "NADZÓR",
-      "WYGASZANIE",
-      "POSTÓJ",
-      "RĘCZNE",
+      "TURNED OFF",
+      "FIRE UP",
+      "OPERATION",
+      "SUPERVISION",
+      "BURNING OFF",
+      "STOP",
+      "MANUAL",
       "ALARM",
-      "CZYSZCZENIE",
-      "URUCHAMIANIE",
-      "BRAK TRANSMISJI",
-      "PODGLĄD",
-      "UZUPEŁNIENIE PALIWA",
-      "PRACA AWARYJNA"
+      "CLEANING",
+      "ACTIVACTION",
+      "NO TRANSMISSION",
+      "PREVIEW",
+      "FIRE-UP - REFILL",
+      "EMERGENCY MODE"
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłączony",
-      "Priorytet",
-      "Bez priorytetu"
+      "Off",
+      "Priority",
+      "No priority"
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłączona",
-      "Włączona"
+      "Off",
+      "On"
     ],
     "first": 0
   },
   {
     "values": [
-      "Zima",
-      "Lato",
+      "Winter",
+      "Summer",
       "Auto",
-      "Zima",
-      "Lato"
+      "Winter",
+      "Summer"
     ],
     "first": 0
   },
@@ -99,84 +99,84 @@
     "values": [
       "OFF",
       "ON",
-      "Wymiennik"
+      "Exchanger"
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłączona",
-      "Włączona CO",
-      "Włącz.podłog.",
-      "Tylko pompa"
+      "Off",
+      "CH on",
+      "Floor on",
+      "Pump only"
     ],
     "first": 0
   },
   {
     "values": [
-      "Nie",
-      "Tak"
+      "No",
+      "Yes"
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłączony",
-      "Uniwersalny",
+      "Off",
+      "Universal",
       "ecoSTER T1",
       "ecoSTER T2",
       "ecoSTER T3",
-      "Wyłączony",
-      "Uniwersalny",
+      "Off",
+      "Universal",
       "ecoSTER T2",
       "ecoSTER T3",
-      "Wyłączony",
-      "Uniwersalny",
+      "Off",
+      "Universal",
       "ecoSTER T3",
-      "Wyłączony",
-      "Uniwersalny",
+      "Off",
+      "Universal",
       "ecoSTER T1",
       "ecoSTER T3",
-      "Wyłączony",
+      "Off",
       "ecoSTER T1",
       "ecoSTER T2",
       "ecoSTER T3",
-      "Wyłączony",
+      "Off",
       "ecoSTER T2",
       "ecoSTER T3",
-      "Wyłączony",
+      "Off",
       "ecoSTER T3",
-      "Wyłączony",
+      "Off",
       "ecoSTER T1",
       "ecoSTER T3",
-      "Uniwersalny",
-      "Uniwersalny",
-      "Uniwersalny",
-      "Wyłączony",
-      "Wyłączony",
-      "Wyłączony"
+      "Universal",
+      "Universal",
+      "Universal",
+      "Off",
+      "Off",
+      "Off"
     ],
     "first": 0
   },
   {
     "values": [
-      "Poziom paliwa 100%",
-      "Poziom paliwa 0%",
+      "Fuel level 100%",
+      "Fuel level 0%",
       ""
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłącz",
-      "Włącz"
+      "Off",
+      "On"
     ],
     "first": 0
   },
   {
     "values": [
-      "Wyłącz",
-      "Włącz"
+      "Off",
+      "On"
     ],
     "first": 0
   },
@@ -207,8 +207,8 @@
   },
   {
     "values": [
-      "Kocioł",
-      "Bufor"
+      "Boiler",
+      "Buffer"
     ],
     "first": 0
   },
@@ -222,32 +222,32 @@
   {
     "values": [
       "STOP",
-      "PRACA",
-      "UZUPEŁNIENIE PALIWA"
+      "RUN",
+      "REFILL"
     ],
     "first": 0
   },
   {
     "values": [
-      "ZGAZOWYWANIE DREWNA",
-      "PELLET"
+      "WOOD GASIFICATION",
+      "PELLET BURNER"
     ],
     "first": 0
   },
   {
     "values": [
       "Off",
-      "Kocioł",
+      "Boiler",
       "Alarm"
     ],
     "first": 0
   },
   {
     "values": [
-      "Suche twarde drewno",
-      "Wilgotne twarde drewno",
-      "Suche miękkie drewno",
-      "Wilgotne miękkie drewno"
+      "Dry hard wood",
+      "Moist hard wood",
+      "Dry soft wood",
+      "Moist soft wood"
     ],
     "first": 0
   }

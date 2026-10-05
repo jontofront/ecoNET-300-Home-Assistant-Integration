@@ -1,497 +1,497 @@
 {
   "216": {
-    "special": 0,
-    "name": "Czas przegrzania kotła",
-    "unit": 4
+    "unit": 4,
+    "name": "Overheat time",
+    "special": 0
   },
   "217": {
-    "special": 0,
-    "name": "Ilość uzupełnień paliwa",
-    "unit": 0
+    "unit": 0,
+    "name": "Refill count",
+    "special": 0
   },
   "214": {
-    "special": 0,
-    "name": "Czas pracy",
-    "unit": 4
+    "unit": 4,
+    "name": "Work mode time",
+    "special": 0
   },
   "215": {
-    "special": 0,
-    "name": "Czas postoju",
-    "unit": 4
+    "unit": 4,
+    "name": "Stop mode time",
+    "special": 0
   },
   "210": {
-    "special": 0,
-    "name": "Bieżąca moc kotła",
-    "unit": 5
+    "unit": 5,
+    "name": "Current boiler power",
+    "special": 0
   },
   "218": {
-    "special": 0,
-    "name": "Ilość rozpaleń",
-    "unit": 0
+    "unit": 0,
+    "name": "Firing-up count",
+    "special": 0
   },
   "133": {
-    "special": 1,
-    "name": "UWAGA!\\nBrak paliwa.",
-    "unit": 31
+    "unit": 31,
+    "name": "CAUTION!\\nNo fuel.",
+    "special": 1
   },
   "132": {
-    "special": 1,
-    "name": "UWAGA!\\nNieudana próba ładowania zasobnika.",
-    "unit": 31
+    "unit": 31,
+    "name": "CAUTION!\\nUnsuccessful attempt to load the tank.",
+    "special": 1
   },
   "131": {
-    "special": 1,
-    "name": "UWAGA!\\nNiski poziom paliwa.",
-    "unit": 31
+    "unit": 31,
+    "name": "CAUTION!\\nLow fuel level.",
+    "special": 1
   },
   "130": {
-    "special": 1,
-    "name": "Strumień paliwa",
-    "unit": 9
+    "unit": 9,
+    "name": "Fuel stream",
+    "special": 1
   },
   "137": {
-    "special": 1,
-    "name": "UWAGA!\\nOtwarte drzwiczki kotła.",
-    "unit": 31
+    "unit": 31,
+    "name": "CAUTION!\\nThe boiler door open.",
+    "special": 1
   },
   "136": {
-    "special": 1,
-    "name": "UWAGA!\\nUszkodzony system podajnika.",
-    "unit": 31
+    "unit": 31,
+    "name": "CAUTION!\\nFeeder system failure.",
+    "special": 1
   },
   "135": {
-    "special": 1,
-    "name": "Błąd sondy ecoLAMBDA.",
-    "unit": 31
+    "unit": 31,
+    "name": "Lambda error.",
+    "special": 1
   },
   "134": {
-    "special": 1,
-    "name": "Trwa kalibracja sondy ecoLAMBDA.",
-    "unit": 31
+    "unit": 31,
+    "name": "Lambda sensor calibration in progress.",
+    "special": 1
   },
   "139": {
-    "special": 1,
-    "name": "Maksymalna temperatura spalin.",
-    "unit": 31
+    "unit": 31,
+    "name": "Max flue gas temp exceed.",
+    "special": 1
   },
   "138": {
-    "special": 1,
-    "name": "UWAGA!\\nWyczyść wymiennik.",
-    "unit": 31
+    "unit": 31,
+    "name": "Exchanger cleaned",
+    "special": 1
   },
   "1547": {
-    "special": 1,
-    "name": "Pompa mieszacza 2",
-    "unit": 31
+    "unit": 31,
+    "name": "Pump mixer 2",
+    "special": 1
   },
   "1544": {
-    "special": 1,
-    "name": "Pompa mieszacza 1",
-    "unit": 31
+    "unit": 31,
+    "name": "Pump mixer 1",
+    "special": 1
   },
   "1542": {
-    "special": 1,
-    "name": "Pompa CWU",
-    "unit": 31
+    "unit": 31,
+    "name": "HUW pump",
+    "special": 1
   },
   "1543": {
-    "special": 1,
-    "name": "Pompa cyrkulacyjna",
-    "unit": 31
+    "unit": 31,
+    "name": "Circulating pump",
+    "special": 1
   },
   "1540": {
-    "special": 1,
-    "name": "Podajnik zewnętrzny",
-    "unit": 31
+    "unit": 31,
+    "name": "External feeder",
+    "special": 1
   },
   "1541": {
-    "special": 1,
-    "name": "Pompa kotła",
-    "unit": 31
+    "unit": 31,
+    "name": "Boiler pump",
+    "special": 1
   },
   "4": {
-    "special": 1,
-    "name": "Kocioł rezerwowy",
-    "unit": 31
+    "unit": 31,
+    "name": "Reserve boiler",
+    "special": 1
   },
   "1793": {
-    "special": 1,
-    "name": "Moc kotła",
-    "unit": 7
+    "unit": 7,
+    "name": "Burner output",
+    "special": 1
   },
   "1792": {
-    "special": 7,
+    "unit": 31,
     "name": "",
-    "unit": 31
+    "special": 7
   },
   "1795": {
-    "special": 0,
-    "name": "Moc nadmuchu",
-    "unit": 5
+    "unit": 5,
+    "name": "Fan output",
+    "special": 0
   },
   "1026": {
-    "special": 1,
-    "name": "Temperatura palnika",
-    "unit": 1
+    "unit": 1,
+    "name": "Burner temperature",
+    "special": 1
   },
   "126": {
-    "special": 0,
-    "name": "Moc wyciągu",
-    "unit": 5
+    "unit": 5,
+    "name": "Exhaust fan output",
+    "special": 0
   },
   "2": {
-    "special": 1,
-    "name": "Rotacyjne oczyszczanie",
-    "unit": 31
+    "unit": 31,
+    "name": "Rotary cleaning",
+    "special": 1
   },
   "1550": {
-    "special": 1,
-    "name": "Pompa mieszacza 3",
-    "unit": 31
+    "unit": 31,
+    "name": "Pump mixer 3",
+    "special": 1
   },
   "1553": {
-    "special": 1,
-    "name": "Pompa mieszacza 4",
-    "unit": 31
+    "unit": 31,
+    "name": "Pump mixer 4",
+    "special": 1
   },
   "50": {
-    "special": 1,
-    "name": "Temperatura bufora środkowa",
-    "unit": 1
+    "unit": 1,
+    "name": "Middle buffer temperature",
+    "special": 1
   },
   "195": {
-    "special": 1,
+    "unit": 5,
     "name": "SAV",
-    "unit": 5
+    "special": 1
   },
   "194": {
-    "special": 1,
-    "name": "Tlen",
-    "unit": 5
+    "unit": 5,
+    "name": "Oxygen",
+    "special": 1
   },
   "191": {
-    "special": 2,
-    "name": "Tlen",
-    "unit": 31
+    "unit": 31,
+    "name": "Oxygen",
+    "special": 2
   },
   "190": {
-    "special": 3,
-    "name": "Zawór mieszacza 4",
-    "unit": 31
-  },
-  "142": {
-    "special": 1,
-    "name": "Przegrzanie kotła.",
-    "unit": 31
-  },
-  "143": {
-    "special": 1,
-    "name": "Moc wentylatora 100% - Podgląd",
-    "unit": 31
-  },
-  "141": {
-    "special": 1,
-    "name": "Podtrzymanie gorącego żaru od systemu detekcji paliwa.",
-    "unit": 31
-  },
-  "3": {
-    "special": 1,
-    "name": "Wyjście alarmowe",
-    "unit": 31
-  },
-  "245": {
-    "special": 0,
-    "name": "Brama:",
-    "unit": 0
-  },
-  "244": {
-    "special": 0,
-    "name": "Maska:",
-    "unit": 0
-  },
-  "247": {
-    "special": 6,
-    "name": "Zabezpieczenie:",
-    "unit": 31
-  },
-  "246": {
-    "special": 5,
-    "name": "Serwer:",
-    "unit": 31
-  },
-  "241": {
-    "special": 0,
-    "name": "Brama:",
-    "unit": 0
-  },
-  "240": {
-    "special": 0,
-    "name": "Maska:",
-    "unit": 0
-  },
-  "243": {
-    "special": 0,
-    "name": "IP:",
-    "unit": 0
-  },
-  "242": {
-    "special": 5,
-    "name": "Serwer:",
-    "unit": 31
-  },
-  "249": {
-    "special": 5,
-    "name": "Status WiFi:",
-    "unit": 31
-  },
-  "248": {
-    "special": 0,
-    "name": "Siła sygnału:",
-    "unit": 5
-  },
-  "38": {
-    "special": 1,
-    "name": "Płomień",
-    "unit": 5
-  },
-  "1537": {
-    "special": 1,
-    "name": "Wyciąg",
-    "unit": 31
-  },
-  "1536": {
-    "special": 1,
-    "name": "Nadmuch",
-    "unit": 31
-  },
-  "1539": {
-    "special": 1,
-    "name": "Podajnik 2",
-    "unit": 31
-  },
-  "1538": {
-    "special": 1,
-    "name": "Podajnik",
-    "unit": 31
-  },
-  "179": {
-    "special": 0,
-    "name": "Zawór mieszacza 1",
-    "unit": 5
-  },
-  "252": {
-    "special": 0,
-    "name": "Poziom naładowania bufora",
-    "unit": 5
-  },
-  "251": {
-    "special": 0,
-    "name": "SSID:",
-    "unit": 0
-  },
-  "182": {
-    "special": 0,
-    "name": "Zawór mieszacza 4",
-    "unit": 5
-  },
-  "183": {
-    "special": 4,
-    "name": "Siłownik mieszacza 1",
-    "unit": 31
-  },
-  "180": {
-    "special": 0,
-    "name": "Zawór mieszacza 2",
-    "unit": 5
-  },
-  "181": {
-    "special": 0,
-    "name": "Zawór mieszacza 3",
-    "unit": 5
-  },
-  "186": {
-    "special": 4,
-    "name": "Siłownik mieszacza 4",
-    "unit": 31
-  },
-  "187": {
-    "special": 3,
-    "name": "Zawór mieszacza 1",
-    "unit": 31
-  },
-  "184": {
-    "special": 4,
-    "name": "Siłownik mieszacza 2",
-    "unit": 31
-  },
-  "185": {
-    "special": 4,
-    "name": "Siłownik mieszacza 3",
-    "unit": 31
-  },
-  "1032": {
-    "special": 1,
-    "name": "Temp. mieszacza 2",
-    "unit": 1
-  },
-  "1033": {
-    "special": 1,
-    "name": "Temp. mieszacza 3",
-    "unit": 1
-  },
-  "1030": {
-    "special": 1,
-    "name": "Temperatura spalin",
-    "unit": 1
-  },
-  "189": {
-    "special": 3,
-    "name": "Zawór mieszacza 3",
-    "unit": 31
-  },
-  "1034": {
-    "special": 1,
-    "name": "Temp. mieszacza 4",
-    "unit": 1
-  },
-  "160": {
-    "special": 1,
-    "name": "Term. pok. mieszacza 3",
-    "unit": 31
-  },
-  "161": {
-    "special": 1,
-    "name": "Term. pok. mieszacza 4",
-    "unit": 31
-  },
-  "1025": {
-    "special": 1,
-    "name": "Temperatura CWU",
-    "unit": 1
-  },
-  "1024": {
-    "special": 1,
-    "name": "Temperatura kotła",
-    "unit": 1
-  },
-  "1027": {
-    "special": 1,
-    "name": "Temperatura pogodowa",
-    "unit": 1
-  },
-  "1031": {
-    "special": 1,
-    "name": "Temp. mieszacza 1",
-    "unit": 1
-  },
-  "188": {
-    "special": 3,
-    "name": "Zawór mieszacza 2",
-    "unit": 31
-  },
-  "1029": {
-    "special": 1,
-    "name": "Temperatura bufora dolna",
-    "unit": 1
-  },
-  "1028": {
-    "special": 1,
-    "name": "Temperatura bufora górna",
-    "unit": 1
-  },
-  "154": {
-    "special": 1,
-    "name": "Poziom paliwa",
-    "unit": 31
-  },
-  "157": {
-    "special": 1,
-    "name": "Termostat kotła",
-    "unit": 31
-  },
-  "159": {
-    "special": 1,
-    "name": "Term. pok. mieszacza 2",
-    "unit": 31
-  },
-  "158": {
-    "special": 1,
-    "name": "Term. pok. mieszacza 1",
-    "unit": 31
-  },
-  "239": {
-    "special": 0,
-    "name": "IP:",
-    "unit": 0
-  },
-  "1": {
-    "special": 1,
-    "name": "Zapalarka",
-    "unit": 31
-  },
-  "1290": {
-    "special": 0,
-    "name": "Temp. zadana mieszacza 4",
-    "unit": 1
-  },
-  "203": {
-    "special": 0,
-    "name": "Czas pracy na mocy 100%",
-    "unit": 4
+    "unit": 31,
+    "name": "Valve mixer 4",
+    "special": 3
   },
   "205": {
-    "special": 0,
-    "name": "Czas pracy na mocy 30%",
-    "unit": 4
+    "unit": 4,
+    "name": "Work at 30%",
+    "special": 0
   },
   "204": {
-    "special": 0,
-    "name": "Czas pracy na mocy 50%",
-    "unit": 4
-  },
-  "140": {
-    "special": 1,
-    "name": "Brak paliwa od temperatury spalin.",
-    "unit": 31
+    "unit": 4,
+    "name": "Work at 50%",
+    "special": 0
   },
   "206": {
-    "special": 0,
-    "name": "Czas pracy podajnika",
-    "unit": 4
+    "unit": 4,
+    "name": "Feeder work",
+    "special": 0
+  },
+  "3": {
+    "unit": 31,
+    "name": "Emergency exit",
+    "special": 1
+  },
+  "245": {
+    "unit": 0,
+    "name": "Gateway:",
+    "special": 0
+  },
+  "244": {
+    "unit": 0,
+    "name": "Mask:",
+    "special": 0
+  },
+  "247": {
+    "unit": 31,
+    "name": "Encryption:",
+    "special": 6
+  },
+  "246": {
+    "unit": 31,
+    "name": "Server:",
+    "special": 5
+  },
+  "241": {
+    "unit": 0,
+    "name": "Gateway:",
+    "special": 0
+  },
+  "240": {
+    "unit": 0,
+    "name": "Mask:",
+    "special": 0
+  },
+  "243": {
+    "unit": 0,
+    "name": "IP:",
+    "special": 0
+  },
+  "242": {
+    "unit": 31,
+    "name": "Server:",
+    "special": 5
+  },
+  "249": {
+    "unit": 31,
+    "name": "Wifi status:",
+    "special": 5
+  },
+  "248": {
+    "unit": 5,
+    "name": "Signal strenght:",
+    "special": 0
+  },
+  "38": {
+    "unit": 5,
+    "name": "Flame",
+    "special": 1
+  },
+  "1537": {
+    "unit": 31,
+    "name": "Exhaust fan",
+    "special": 1
+  },
+  "1536": {
+    "unit": 31,
+    "name": "Fan",
+    "special": 1
+  },
+  "1539": {
+    "unit": 31,
+    "name": "Feeder 2",
+    "special": 1
+  },
+  "1538": {
+    "unit": 31,
+    "name": "Feeder",
+    "special": 1
+  },
+  "179": {
+    "unit": 5,
+    "name": "Valve mixer 1",
+    "special": 0
+  },
+  "252": {
+    "unit": 5,
+    "name": "Buffer charge level",
+    "special": 0
+  },
+  "251": {
+    "unit": 0,
+    "name": "SSID:",
+    "special": 0
+  },
+  "182": {
+    "unit": 5,
+    "name": "Valve mixer 4",
+    "special": 0
+  },
+  "183": {
+    "unit": 31,
+    "name": "Servo mixer 1",
+    "special": 4
+  },
+  "180": {
+    "unit": 5,
+    "name": "Valve mixer 2",
+    "special": 0
+  },
+  "181": {
+    "unit": 5,
+    "name": "Valve mixer 3",
+    "special": 0
+  },
+  "186": {
+    "unit": 31,
+    "name": "Servo mixer 4",
+    "special": 4
+  },
+  "187": {
+    "unit": 31,
+    "name": "Valve mixer 1",
+    "special": 3
+  },
+  "184": {
+    "unit": 31,
+    "name": "Servo mixer 2",
+    "special": 4
+  },
+  "185": {
+    "unit": 31,
+    "name": "Servo mixer 3",
+    "special": 4
+  },
+  "1032": {
+    "unit": 1,
+    "name": "Temp. mixer 2",
+    "special": 1
+  },
+  "1033": {
+    "unit": 1,
+    "name": "Temp. mixer 3",
+    "special": 1
+  },
+  "1030": {
+    "unit": 1,
+    "name": "Emission temperature",
+    "special": 1
+  },
+  "189": {
+    "unit": 31,
+    "name": "Valve mixer 3",
+    "special": 3
+  },
+  "1034": {
+    "unit": 1,
+    "name": "Temp. mixer 4",
+    "special": 1
+  },
+  "160": {
+    "unit": 31,
+    "name": "Room thermostat mixer 3",
+    "special": 1
+  },
+  "161": {
+    "unit": 31,
+    "name": "Room thermostat mixer 4",
+    "special": 1
+  },
+  "1025": {
+    "unit": 1,
+    "name": "HUW temperature",
+    "special": 1
+  },
+  "1024": {
+    "unit": 1,
+    "name": "Boiler temperature",
+    "special": 1
+  },
+  "1027": {
+    "unit": 1,
+    "name": "Weather temperature",
+    "special": 1
+  },
+  "1031": {
+    "unit": 1,
+    "name": "Temp. mixer 1",
+    "special": 1
+  },
+  "188": {
+    "unit": 31,
+    "name": "Valve mixer 2",
+    "special": 3
+  },
+  "1029": {
+    "unit": 1,
+    "name": "Lower buffer temperature",
+    "special": 1
+  },
+  "1028": {
+    "unit": 1,
+    "name": "Upper buffer temperature",
+    "special": 1
+  },
+  "154": {
+    "unit": 31,
+    "name": "Fuel level",
+    "special": 1
+  },
+  "157": {
+    "unit": 31,
+    "name": "Boiler thermostat",
+    "special": 1
+  },
+  "159": {
+    "unit": 31,
+    "name": "Room thermostat mixer 2",
+    "special": 1
+  },
+  "158": {
+    "unit": 31,
+    "name": "Room thermostat mixer 1",
+    "special": 1
+  },
+  "239": {
+    "unit": 0,
+    "name": "IP:",
+    "special": 0
+  },
+  "1": {
+    "unit": 31,
+    "name": "Lighter",
+    "special": 1
+  },
+  "1290": {
+    "unit": 1,
+    "name": "Preset temp. mixer 4",
+    "special": 0
+  },
+  "203": {
+    "unit": 4,
+    "name": "Work at 100%",
+    "special": 0
+  },
+  "142": {
+    "unit": 31,
+    "name": "Boiler overheat.",
+    "special": 1
+  },
+  "143": {
+    "unit": 31,
+    "name": "100% fan output - preview.",
+    "special": 1
+  },
+  "140": {
+    "unit": 31,
+    "name": "No fuel from flue gas temperature.",
+    "special": 1
+  },
+  "141": {
+    "unit": 31,
+    "name": "Hot embers maintenance from fuel detection system.",
+    "special": 1
   },
   "209": {
-    "special": 0,
-    "name": "Ilość resetów",
-    "unit": 0
+    "unit": 0,
+    "name": "Number of resets",
+    "special": 0
   },
   "208": {
-    "special": 0,
-    "name": "Ilość rozpaleń",
-    "unit": 0
+    "unit": 0,
+    "name": "Firing-up count",
+    "special": 0
   },
   "1287": {
-    "special": 0,
-    "name": "Temp. zadana mieszacza 1",
-    "unit": 1
+    "unit": 1,
+    "name": "Preset temp. mixer 1",
+    "special": 0
   },
   "1281": {
-    "special": 0,
-    "name": "Temperatura zadana CWU",
-    "unit": 1
+    "unit": 1,
+    "name": "HUW preset temperature",
+    "special": 0
   },
   "1280": {
-    "special": 0,
-    "name": "Temperatura zadana kotła",
-    "unit": 1
+    "unit": 1,
+    "name": "Maximum boiler temperature",
+    "special": 0
   },
   "1289": {
-    "special": 0,
-    "name": "Temp. zadana mieszacza 3",
-    "unit": 1
+    "unit": 1,
+    "name": "Preset temp. mixer 3",
+    "special": 0
   },
   "1288": {
-    "special": 0,
-    "name": "Temp. zadana mieszacza 2",
-    "unit": 1
+    "unit": 1,
+    "name": "Preset temp. mixer 2",
+    "special": 0
   }
 }

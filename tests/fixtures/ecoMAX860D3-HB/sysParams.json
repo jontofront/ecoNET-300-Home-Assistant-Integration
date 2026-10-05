@@ -8,7 +8,7 @@
   "moduleASoftVer": "4.34.46.K1",
   "eth0": "**REDACTED**",
   "tilesET": null,
-  "etPasswords": {},
+  "etPasswords": "**REDACTED**",
   "encryption": "psk2",
   "schemaID": 29,
   "wlan0": "**REDACTED**",
@@ -264,9 +264,9 @@
         ],
         [
           0,
-          -3,
-          -3,
-          -3
+          -1,
+          -1,
+          -1
         ]
       ],
       "mixer2TZ": [
@@ -456,9 +456,9 @@
         ],
         [
           0,
-          -5,
-          -5,
-          -5
+          -6,
+          -6,
+          -6
         ]
       ],
       "mixer1TZ": [
@@ -532,7 +532,7 @@
   "prodLogo": 48,
   "fuelConsumptionCalc": true,
   "regImgID": 2,
-  "settingsVer": 57,
+  "settingsVer": 34,
   "signal": 0,
   "logFl": 0,
   "etConfDesc": null,
@@ -590,6 +590,72 @@
   "wifi": false,
   "panelVer": null,
   "alarms": [
+    {
+      "toDate": "2026-09-27 11:27:56",
+      "code": 0,
+      "fromDate": "2026-09-27 11:27:31",
+      "service": false
+    },
+    {
+      "toDate": "2026-09-03 14:43:42",
+      "code": 0,
+      "fromDate": "2026-09-03 14:04:19",
+      "service": false
+    },
+    {
+      "toDate": "2026-09-03 14:03:18",
+      "code": 0,
+      "fromDate": "2026-09-03 14:01:03",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-01 11:18:34",
+      "code": 18,
+      "fromDate": "2026-08-01 11:12:44",
+      "service": false
+    },
+    {
+      "toDate": "2026-08-01 11:12:20",
+      "code": 0,
+      "fromDate": "2026-07-31 21:20:57",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-18 13:48:39",
+      "code": 0,
+      "fromDate": "2026-07-18 13:42:00",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-08 08:25:32",
+      "code": 0,
+      "fromDate": "2026-07-08 07:48:42",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-04 14:48:51",
+      "code": 0,
+      "fromDate": "2026-07-04 14:44:41",
+      "service": false
+    },
+    {
+      "toDate": "2026-07-01 00:57:58",
+      "code": 0,
+      "fromDate": "2026-07-01 00:52:37",
+      "service": false
+    },
+    {
+      "toDate": "2026-06-13 23:24:23",
+      "code": 0,
+      "fromDate": "2026-06-13 21:03:19",
+      "service": false
+    },
+    {
+      "toDate": "2026-06-13 21:03:09",
+      "code": 0,
+      "fromDate": "2026-06-13 21:02:51",
+      "service": false
+    },
     {
       "toDate": "2026-03-22 12:48:46",
       "code": 0,
@@ -1123,75 +1189,9 @@
       "code": 0,
       "fromDate": "2024-07-29 11:18:58",
       "service": false
-    },
-    {
-      "toDate": "2024-07-29 10:48:51",
-      "code": 0,
-      "fromDate": "2024-07-29 10:41:04",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-29 07:37:47",
-      "code": 0,
-      "fromDate": "2024-07-29 07:13:51",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-28 17:45:09",
-      "code": 0,
-      "fromDate": "2024-07-28 17:42:02",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-28 17:40:41",
-      "code": 0,
-      "fromDate": "2024-07-28 17:37:08",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-28 17:32:42",
-      "code": 0,
-      "fromDate": "2024-07-28 17:31:24",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-28 17:29:08",
-      "code": 0,
-      "fromDate": "2024-07-27 10:19:45",
-      "service": false
-    },
-    {
-      "toDate": "2024-07-27 10:18:34",
-      "code": 0,
-      "fromDate": "2024-07-26 16:16:35",
-      "service": false
-    },
-    {
-      "toDate": "2045-02-03 15:35:08",
-      "code": 0,
-      "fromDate": "2045-02-03 14:54:57",
-      "service": false
-    },
-    {
-      "toDate": "2045-02-03 14:42:34",
-      "code": 0,
-      "fromDate": "2045-02-03 14:42:14",
-      "service": false
-    },
-    {
-      "toDate": "2045-02-03 14:31:18",
-      "code": 0,
-      "fromDate": "2045-02-03 13:53:41",
-      "service": false
-    },
-    {
-      "toDate": "2045-02-03 13:50:12",
-      "code": 0,
-      "fromDate": "2000-01-01 00:00:00",
-      "service": false
     }
   ],
-  "login": "admin",
+  "login": "**REDACTED**",
   "moduleBSoftVer": "1.31.16",
   "etConfVer": null
 }

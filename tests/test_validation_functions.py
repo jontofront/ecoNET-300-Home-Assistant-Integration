@@ -56,7 +56,7 @@ class TestHeaterModeHelpers:
         param = find_heater_mode_param(merged)
         assert param is not None
         assert param["number"] == 58
-        assert param["name"] == "Tryb LATO/ZIMA"
+        assert param["name"] == "SUMMER mode"
 
     def test_find_heater_mode_param_none_when_missing(self):
         """Return None when no mergedData is provided."""
@@ -71,11 +71,11 @@ class TestHeaterModeHelpers:
         assert get_heater_mode_options(param) == ["Winter", "Summer", "Auto"]
 
     def test_get_heater_mode_options_860d3_hb_trims_auto(self):
-        """860D3-HB has maxv=1, so Auto is trimmed leaving Zima/Lato."""
+        """860D3-HB has maxv=1, so Auto is trimmed leaving Winter/Summer."""
         merged = _load_merged_data("ecoMAX860D3-HB")
         param = find_heater_mode_param(merged)
         assert param is not None
-        assert get_heater_mode_options(param) == ["Zima", "Lato"]
+        assert get_heater_mode_options(param) == ["Winter", "Summer"]
 
     def test_value_option_round_trip_810p_l(self):
         """Numeric value <-> option round-trips for 810P-L."""
@@ -91,7 +91,7 @@ class TestHeaterModeHelpers:
         merged = _load_merged_data("ecoMAX860D3-HB")
         param = find_heater_mode_param(merged)
         assert param is not None
-        for value, option in ((0, "Zima"), (1, "Lato")):
+        for value, option in ((0, "Winter"), (1, "Summer")):
             assert heater_mode_value_to_option(param, value) == option
             assert heater_mode_option_to_value(param, option) == value
 
