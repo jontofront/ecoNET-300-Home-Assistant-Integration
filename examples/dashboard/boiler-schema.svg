@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" role="img" aria-labelledby="title desc">
+  <title id="title">Generic boiler heating schematic for Home Assistant</title>
+  <desc id="desc">A neutral schematic showing a boiler, mixer heating loop, DHW tank, pumps, flow and return pipes.</desc>
+  <defs>
+    <linearGradient id="boilerFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3f4a59"/>
+      <stop offset="100%" stop-color="#232a33"/>
+    </linearGradient>
+    <linearGradient id="tankFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#425466"/>
+      <stop offset="100%" stop-color="#27323d"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="420" rx="18" fill="#151a21"/>
+
+  <!-- Outside sensor -->
+  <g transform="translate(390 40)">
+    <circle r="23" fill="#252d37" stroke="#7b8794" stroke-width="2"/>
+    <path d="M-4 -11 v17 a9 9 0 1 0 8 0 v-17 a4 4 0 0 0 -8 0z" fill="none" stroke="#d7dde5" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Boiler -->
+  <g filter="url(#shadow)">
+    <rect x="115" y="155" width="190" height="175" rx="14" fill="url(#boilerFill)" stroke="#6f7d8a" stroke-width="2"/>
+    <rect x="135" y="180" width="150" height="96" rx="10" fill="#1c222a" stroke="#4c5966" stroke-width="1.5"/>
+    <path d="M210 205 c-14 18 -18 31 -18 41 a18 18 0 0 0 36 0 c0-10-4-23-18-41z" fill="#ff8a3d"/>
+    <path d="M210 220 c-8 10 -10 18 -10 24 a10 10 0 0 0 20 0 c0-6-2-14-10-24z" fill="#ffd166"/>
+    <text x="210" y="307" text-anchor="middle" fill="#c9d2dc" font-size="16" font-family="sans-serif" font-weight="700">BOILER</text>
+  </g>
+
+  <!-- Chimney -->
+  <path d="M235 155 V92 H285" fill="none" stroke="#8d98a5" stroke-width="12" stroke-linecap="round"/>
+  <rect x="276" y="60" width="18" height="44" rx="3" fill="#7d8894"/>
+  <path d="M268 60 h34" stroke="#aeb8c3" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Heating supply / mixer -->
+  <path d="M305 190 H470" fill="none" stroke="#e65757" stroke-width="12" stroke-linecap="round"/>
+  <path d="M470 190 H650 V120" fill="none" stroke="#e65757" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M650 120 H710" fill="none" stroke="#e65757" stroke-width="12" stroke-linecap="round"/>
+
+  <g transform="translate(520 185)">
+    <circle r="22" fill="#26303a" stroke="#9aa6b2" stroke-width="2"/>
+    <path d="M-7 -10 L12 0 L-7 10 Z" fill="#d9e2eb"/>
+  </g>
+
+  <g transform="translate(470 188)">
+    <circle r="19" fill="#2c3540" stroke="#9aa6b2" stroke-width="2"/>
+    <path d="M-9 -9 L9 9 M9 -9 L-9 9" stroke="#d9e2eb" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Heating loop -->
+  <g stroke="#7d8894" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M585 93 H710"/>
+    <path d="M585 108 H710"/>
+    <path d="M585 123 H710"/>
+    <path d="M585 138 H710"/>
+  </g>
+  <text x="648" y="79" text-anchor="middle" fill="#b9c3cd" font-size="15" font-family="sans-serif" font-weight="700">MIX 1</text>
+
+  <!-- DHW tank -->
+  <g filter="url(#shadow)">
+    <rect x="610" y="155" width="125" height="175" rx="26" fill="url(#tankFill)" stroke="#6f7d8a" stroke-width="2"/>
+    <path d="M620 214 H725" stroke="#e65757" stroke-width="9"/>
+    <path d="M620 272 H725" stroke="#4c8fe3" stroke-width="9"/>
+    <path d="M636 236 C700 212 700 288 636 264" fill="none" stroke="#aeb8c3" stroke-width="5"/>
+    <text x="672" y="307" text-anchor="middle" fill="#c9d2dc" font-size="16" font-family="sans-serif" font-weight="700">DHW</text>
+  </g>
+
+  <!-- DHW branch -->
+  <path d="M555 190 H610" fill="none" stroke="#e65757" stroke-width="12" stroke-linecap="round"/>
+  <path d="M610 315 H555 V360" fill="none" stroke="#4c8fe3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(600 320)">
+    <circle r="21" fill="#26303a" stroke="#9aa6b2" stroke-width="2"/>
+    <path d="M-7 -10 L12 0 L-7 10 Z" fill="#d9e2eb"/>
+  </g>
+
+  <!-- Return -->
+  <path d="M710 340 H520 V360 H305" fill="none" stroke="#4c8fe3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M305 360 H210 V330" fill="none" stroke="#4c8fe3" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Small captions -->
+  <text x="390" y="82" text-anchor="middle" fill="#7f8b97" font-size="12" font-family="sans-serif">OUTSIDE</text>
+  <text x="238" y="126" text-anchor="middle" fill="#7f8b97" font-size="12" font-family="sans-serif">FLUE</text>
+</svg>
