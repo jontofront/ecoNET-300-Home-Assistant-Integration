@@ -152,6 +152,7 @@ Related usage guides:
 - **[Heating Schedules](docs/SCHEDULES.md)** — display weekly schedules as calendar entities
 - **[Alarms & Events](docs/ALARMS_AND_EVENTS.md)** — alarm monitoring and push notifications
 - **[Fuel Consumption](docs/FUEL_CONSUMPTION.md)** — track total fuel usage with the Riemann Sum helper
+- **[Boiler Dashboard Example](examples/dashboard/README.md)** — ready-to-use `picture-elements` boiler and DHW dashboard example
 
 ---
 
@@ -176,10 +177,11 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 | [Configuration](docs/CONFIGURATION.md) | Configure menu, polling, device grouping, custom entities |
 | [Migration](docs/MIGRATION.md) | Upgrading between versions |
 | [Entities](docs/ENTITIES.md) | Complete entity reference |
-| [Heating Schedules](docs/SCHEDULES.md) | Display schedules as calendar entities |
+| [Heating Schedules](docs/SCHEDULES.md) | Display weekly schedules as calendar entities |
 | [Alarms & Events](docs/ALARMS_AND_EVENTS.md) | Alarm monitoring and automations |
 | [Fuel Consumption](docs/FUEL_CONSUMPTION.md) | Track total fuel usage |
 | [Boiler Control](docs/BOILER_CONTROL_README.md) | Boiler ON/OFF switch behavior |
+| [Boiler Dashboard Example](examples/dashboard/README.md) | `picture-elements` boiler, mixer and DHW dashboard example |
 | [Diagnostics](docs/DIAGNOSTICS.md) | Diagnostics and troubleshooting |
 
 ### Reference & API
