@@ -10,6 +10,7 @@ from custom_components.econet300 import (
     DOMAIN,
     SERVICE_API,
     SERVICE_COORDINATOR,
+    async_remove_config_entry_device,
     async_remove_entry,
     async_setup_entry,
     async_unload_entry,
@@ -150,3 +151,49 @@ class TestIntegrationSetup:
                 DOMAIN,
                 f"connection_failed_{mock_config_entry.entry_id}",
             )
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("identifier", "expected"),
+        [
+            ("test_uid-ecoster-3", True),
+            ("test_uid-ecoster-1", False),
+            ("test_uid", False),
+            ("other_uid-ecoster-3", False),
+        ],
+    )
+    async def test_remove_device_only_for_empty_ecoster_slot(
+        self, hass: HomeAssistant, mock_config_entry, identifier, expected
+    ):
+        """Test only an ecoSTER device on an empty slot can be deleted."""
+        api = MagicMock(spec=Econet300Api)
+        api.uid = "test_uid"
+        coordinator = MagicMock(spec=EconetDataCoordinator)
+        coordinator.data = {"regParams": {"ecoSterTemp1": 21.5, "ecoSterTemp3": None}}
+        hass.data[DOMAIN] = {
+            mock_config_entry.entry_id: {
+                SERVICE_API: api,
+                SERVICE_COORDINATOR: coordinator,
+            }
+        }
+        device_entry = MagicMock(identifiers={(DOMAIN, identifier)})
+
+        result = await async_remove_config_entry_device(
+            hass, mock_config_entry, device_entry
+        )
+
+        assert result is expected
+
+    @pytest.mark.asyncio
+    async def test_remove_device_rejected_when_entry_not_loaded(
+        self, hass: HomeAssistant, mock_config_entry
+    ):
+        """Test no device can be deleted while the entry has no runtime data."""
+        hass.data[DOMAIN] = {}
+        device_entry = MagicMock(identifiers={(DOMAIN, "test_uid-ecoster-3")})
+
+        result = await async_remove_config_entry_device(
+            hass, mock_config_entry, device_entry
+        )
+
+        assert result is False

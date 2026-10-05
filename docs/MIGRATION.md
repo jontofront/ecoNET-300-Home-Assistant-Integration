@@ -8,12 +8,35 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |
 | v1.3.2       | v1.3.3        | Automations only   | `mode` / `transmission` state names (#247) |
 | v1.3.1       | v1.3.2        | No                 | New energy sensor after HA restart         |
 | v1.2.x       | v1.3.0     | No (cleanup only)  | Delete leftover *Unavailable* entities    |
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
 | v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.3.3 to v1.3.4 — empty ecoSTER slots
+
+No reinstall or config migration is required, and entity IDs of connected ecoSTER
+panels do not change. Earlier versions also created entities for empty ecoSTER
+slots ([#256](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/256)):
+a mode sensor plus contacts and day schedule binary sensors on an extra
+*ecoSTER N* device. These entities are no longer created and stay behind as
+*Unavailable*.
+
+### Cleanup steps (recommended)
+
+1. Update the integration (HACS) and **restart Home Assistant**.
+2. Open **Settings → Devices & Services → ecoNET300 → Devices** and open the empty
+   *ecoSTER N* device.
+3. Choose **⋮ → Delete**. Its leftover entities are removed with it. Devices of
+   connected panels cannot be deleted.
+4. With the **Single** device setting there is no *ecoSTER N* device; delete the
+   *Unavailable* ecoSTER entities of the empty slot from the **Entities** tab
+   instead.
 
 ---
 

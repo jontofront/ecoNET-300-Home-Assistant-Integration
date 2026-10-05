@@ -122,6 +122,10 @@ Read-only values from `editParams.informationParams` (not `regParams`).
 
 ### ecoSTER Room Thermostats
 
+Created on the **ecoSTER N** device only for slots with a connected panel, that is
+when `ecosterTempN` has a value. The controller also reports empty slots (null
+temperature, mode `255`); they get no entities and no device.
+
 | Entity Key        | Description                       | Endpoint              |
 | ----------------- | --------------------------------- | --------------------- |
 | `ecosterTemp1`    | Room temperature 1                | `../econet/regParams` |
@@ -258,6 +262,9 @@ holiday, antifreeze). To change it, use the editable setpoints under
 | `contactGZCActive` | GZC contact active | `../econet/regParams` |
 
 ### ecoSTER Room Thermostats
+
+Created only for slots with a connected panel, like the
+[ecoSTER sensors](#ecoster-room-thermostats).
 
 | Entity Key         | Description                    | Endpoint              |
 | ------------------ | ------------------------------ | --------------------- |

@@ -48,6 +48,7 @@ from .common import EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
     ecoster_exists,
+    ecoster_panel_exists,
     get_latest_alarm,
     is_ecomax360i_controller,
     is_ecosol_controller,
@@ -66,6 +67,7 @@ from .const import (
     DOMAIN,
     ECOMAX360I_SENSORS,
     ECOSOL_SENSORS,
+    ECOSTER_SENSOR_KEY_PREFIXES,
     EDIT_PARAMS_DATA_SENSOR_MAP,
     ENTITY_CATEGORY,
     ENTITY_PRECISION,
@@ -1264,53 +1266,24 @@ def create_ecoster_sensors(coordinator: EconetDataCoordinator, api: Econet300Api
         _LOGGER.info("moduleEcoSTERSoftVer is None, no ecoSTER sensors will be created")
         return entities
 
-    coordinator_data = coordinator.data.get("regParams", {})
-    if coordinator_data is None:
-        coordinator_data = {}
+    reg_params = coordinator.data.get("regParams") or {}
 
-    # Create ecoSTER sensors for each thermostat (1-8)
     for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
-        # Create temperature sensor
-        temp_key = f"ecoSterTemp{thermostat_idx}"
-        if temp_key in coordinator_data and coordinator_data.get(temp_key) is not None:
+        if not ecoster_panel_exists(coordinator.data, thermostat_idx):
+            continue
+        for prefix in ECOSTER_SENSOR_KEY_PREFIXES:
+            key = f"{prefix}{thermostat_idx}"
+            if reg_params.get(key) is None:
+                continue
             entities.append(
                 EcoSterSensor(
-                    create_ecoster_sensor_entity_description(temp_key),
+                    create_ecoster_sensor_entity_description(key),
                     coordinator,
                     api,
                     thermostat_idx,
                 )
             )
-            _LOGGER.debug("Created ecoSTER temperature sensor: %s", temp_key)
-
-        # Create setpoint sensor
-        set_temp_key = f"ecoSterSetTemp{thermostat_idx}"
-        if (
-            set_temp_key in coordinator_data
-            and coordinator_data.get(set_temp_key) is not None
-        ):
-            entities.append(
-                EcoSterSensor(
-                    create_ecoster_sensor_entity_description(set_temp_key),
-                    coordinator,
-                    api,
-                    thermostat_idx,
-                )
-            )
-            _LOGGER.debug("Created ecoSTER setpoint sensor: %s", set_temp_key)
-
-        # Create mode sensor
-        mode_key = f"ecoSterMode{thermostat_idx}"
-        if mode_key in coordinator_data and coordinator_data.get(mode_key) is not None:
-            entities.append(
-                EcoSterSensor(
-                    create_ecoster_sensor_entity_description(mode_key),
-                    coordinator,
-                    api,
-                    thermostat_idx,
-                )
-            )
-            _LOGGER.debug("Created ecoSTER mode sensor: %s", mode_key)
+            _LOGGER.debug("Created ecoSTER sensor: %s", key)
 
     _LOGGER.info("Created %d ecoSTER sensors", len(entities))
     return entities

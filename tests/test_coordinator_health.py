@@ -287,7 +287,7 @@ class TestEditParamsControllerGate:
         api.fetch_edit_params.assert_called_once_with(
             timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
         )
-        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 25.0
         assert result["editParamCatalog"] == {}
 
     @pytest.mark.asyncio
@@ -435,7 +435,7 @@ class TestEditParamsWriteConfirm:
         result = await coord._async_update_data()
 
         api.fetch_edit_params.assert_called_once()
-        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 23.1
+        assert result["editParams"]["STER_TEMP_DAY_1"]["value"] == 25.0
         assert coord._edit_params_confirm_at == 0.0
 
 

@@ -206,6 +206,13 @@ ECOSTER_SENSORS = {
     "ecoSterMode8",
 }
 
+# Key prefixes of the ecoSTER sensors; the panel index is appended (ecoSterTemp1).
+ECOSTER_SENSOR_KEY_PREFIXES: tuple[str, ...] = (
+    "ecoSterMode",
+    "ecoSterSetTemp",
+    "ecoSterTemp",
+)
+
 # Lambda sensor module
 LAMBDA_SENSORS = {
     "lambdaStatus",
@@ -350,6 +357,12 @@ ECOSTER_BINARY_SENSORS = {
     "ecoSterDaySched7",
     "ecoSterDaySched8",
 }
+
+# Key prefixes of the ecoSTER binary sensors; the panel index is appended.
+ECOSTER_BINARY_SENSOR_KEY_PREFIXES: tuple[str, ...] = (
+    "ecoSterContacts",
+    "ecoSterDaySched",
+)
 
 # ecoSOL solar collector binary sensors (all ecoSOL [n] models)
 ECOSOL_BINARY_SENSORS = {

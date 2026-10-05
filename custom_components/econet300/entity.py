@@ -339,6 +339,11 @@ class LambdaEntity(EconetEntity):
         )
 
 
+def ecoster_device_identifier(uid: str, ecoster_num: int) -> str:
+    """Return the device registry identifier of an ecoSTER panel device."""
+    return f"{uid}-ecoster-{ecoster_num}"
+
+
 class EcoSterEntity(EconetEntity):
     """Represents EcoSterEntity."""
 
@@ -362,7 +367,7 @@ class EcoSterEntity(EconetEntity):
             return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
-            identifier=f"{self.api.uid}-ecoster-{self._idx}",
+            identifier=ecoster_device_identifier(self.api.uid, self._idx),
             name=f"{DEVICE_INFO_ECOSTER_NAME} {self._idx}",
             parent_device_id=self.api.uid,
             include_model_id=True,

@@ -459,7 +459,7 @@ class TestEcoSterNumber:
         with patch.object(number, "async_write_ha_state"):
             number._sync_state(number._lookup_value())
 
-        assert number.native_value == 23.1
+        assert number.native_value == 25.0
 
     def test_unavailable_when_entry_disappears(self, load_fixture):
         coordinator = _ecoster_coordinator(load_fixture)

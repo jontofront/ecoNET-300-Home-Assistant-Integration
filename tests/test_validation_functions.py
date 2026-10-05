@@ -8,6 +8,7 @@ import pytest
 
 from custom_components.econet300.common_functions import (
     ecoster_exists,
+    ecoster_panel_exists,
     find_heater_mode_param,
     find_merged_param_by_key,
     get_active_alarm,
@@ -55,7 +56,7 @@ class TestHeaterModeHelpers:
         param = find_heater_mode_param(merged)
         assert param is not None
         assert param["number"] == 58
-        assert param["name"] == "Tryb LATO/ZIMA"
+        assert param["name"] == "SUMMER mode"
 
     def test_find_heater_mode_param_none_when_missing(self):
         """Return None when no mergedData is provided."""
@@ -70,11 +71,11 @@ class TestHeaterModeHelpers:
         assert get_heater_mode_options(param) == ["Winter", "Summer", "Auto"]
 
     def test_get_heater_mode_options_860d3_hb_trims_auto(self):
-        """860D3-HB has maxv=1, so Auto is trimmed leaving Zima/Lato."""
+        """860D3-HB has maxv=1, so Auto is trimmed leaving Winter/Summer."""
         merged = _load_merged_data("ecoMAX860D3-HB")
         param = find_heater_mode_param(merged)
         assert param is not None
-        assert get_heater_mode_options(param) == ["Zima", "Lato"]
+        assert get_heater_mode_options(param) == ["Winter", "Summer"]
 
     def test_value_option_round_trip_810p_l(self):
         """Numeric value <-> option round-trips for 810P-L."""
@@ -90,7 +91,7 @@ class TestHeaterModeHelpers:
         merged = _load_merged_data("ecoMAX860D3-HB")
         param = find_heater_mode_param(merged)
         assert param is not None
-        for value, option in ((0, "Zima"), (1, "Lato")):
+        for value, option in ((0, "Winter"), (1, "Summer")):
             assert heater_mode_value_to_option(param, value) == option
             assert heater_mode_option_to_value(param, option) == value
 
@@ -410,6 +411,26 @@ class TestEcosterDetection:
     def test_ecoster_exists_without_sys_params(self, coordinator_data):
         """Coordinator data without usable sysParams means no panel."""
         assert ecoster_exists(coordinator_data) is False
+
+    def test_panel_exists_with_room_temperature(self):
+        """A slot reporting a room temperature holds an ecoSTER panel."""
+        coordinator_data = {"regParams": {"ecoSterTemp2": 21.5}}
+
+        assert ecoster_panel_exists(coordinator_data, 2) is True
+        assert ecoster_panel_exists(coordinator_data, 1) is False
+
+    @pytest.mark.parametrize(
+        "coordinator_data",
+        [
+            None,
+            {},
+            {"regParams": None},
+            {"regParams": {"ecoSterTemp1": None, "ecoSterMode1": 255}},
+        ],
+    )
+    def test_panel_missing_without_room_temperature(self, coordinator_data):
+        """A slot without a room temperature holds no ecoSTER panel."""
+        assert ecoster_panel_exists(coordinator_data, 1) is False
 
 
 class TestIsBinaryEnum:

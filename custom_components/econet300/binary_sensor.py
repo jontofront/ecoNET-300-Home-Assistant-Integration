@@ -19,6 +19,7 @@ from .common import Econet300Api, EconetDataCoordinator
 from .common_functions import (
     camel_to_snake,
     ecoster_exists,
+    ecoster_panel_exists,
     get_active_alarm,
     get_entity_component,
     is_ecosol_controller,
@@ -29,6 +30,7 @@ from .const import (
     CONF_CUSTOM_ENTITIES,
     DOMAIN,
     ECOSOL_BINARY_SENSORS,
+    ECOSTER_BINARY_SENSOR_KEY_PREFIXES,
     ENTITY_BINARY_DEVICE_CLASS_MAP,
     ENTITY_CATEGORY,
     MIXER_PUMP_BINARY_SENSOR_KEYS,
@@ -364,41 +366,24 @@ def create_ecoster_binary_sensors(
         )
         return entities
 
-    coordinator_data = coordinator.data.get("regParams", {})
+    reg_params = coordinator.data.get("regParams") or {}
 
-    # Create ecoSTER binary sensors for each thermostat (1-8)
     for thermostat_idx in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
-        # Create contacts sensor
-        contacts_key = f"ecoSterContacts{thermostat_idx}"
-        if (
-            contacts_key in coordinator_data
-            and coordinator_data.get(contacts_key) is not None
-        ):
+        if not ecoster_panel_exists(coordinator.data, thermostat_idx):
+            continue
+        for prefix in ECOSTER_BINARY_SENSOR_KEY_PREFIXES:
+            key = f"{prefix}{thermostat_idx}"
+            if reg_params.get(key) is None:
+                continue
             entities.append(
                 EcoSterBinarySensor(
-                    create_binary_entity_description(contacts_key),
+                    create_binary_entity_description(key),
                     coordinator,
                     api,
                     thermostat_idx,
                 )
             )
-            _LOGGER.debug("Created ecoSTER contacts sensor: %s", contacts_key)
-
-        # Create day schedule sensor
-        day_sched_key = f"ecoSterDaySched{thermostat_idx}"
-        if (
-            day_sched_key in coordinator_data
-            and coordinator_data.get(day_sched_key) is not None
-        ):
-            entities.append(
-                EcoSterBinarySensor(
-                    create_binary_entity_description(day_sched_key),
-                    coordinator,
-                    api,
-                    thermostat_idx,
-                )
-            )
-            _LOGGER.debug("Created ecoSTER day schedule sensor: %s", day_sched_key)
+            _LOGGER.debug("Created ecoSTER binary sensor: %s", key)
 
     _LOGGER.info("Created %d ecoSTER binary sensors", len(entities))
     return entities

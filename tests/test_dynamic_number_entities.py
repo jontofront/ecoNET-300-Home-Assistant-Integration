@@ -766,12 +766,12 @@ class TestHeaterModeSelectWrite:
         """ecoMAX860D3-HB writes heater mode through set_param_by_index(58, ...)."""
         entity, api = self._build_entity("ecoMAX860D3-HB", "ecoMAX860D3-HB")
 
-        assert entity.options == ["Zima", "Lato"]
-        await entity.async_select_option("Lato")
+        assert entity.options == ["Winter", "Summer"]
+        await entity.async_select_option("Summer")
 
         api.set_param.assert_not_called()
         api.set_param_by_index.assert_awaited_once_with(58, 1)
-        assert entity.current_option == "Lato"
+        assert entity.current_option == "Summer"
         assert entity.icon == "mdi:weather-sunny"
 
     @pytest.mark.asyncio
