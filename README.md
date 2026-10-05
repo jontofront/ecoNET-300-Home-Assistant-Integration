@@ -213,6 +213,11 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.4
+
+- **🌡️ ecoSTER setpoints (#236)**: change the day and night temperature of each ecoSTER room panel from Home Assistant. Party, holiday and antifreeze setpoints are available too (disabled by default).
+- **No extra ecoSTER devices (#256)**: empty panel slots no longer get an *ecoSTER N* device. A leftover one can be deleted from its device page — see [Migration](docs/MIGRATION.md#upgrading-from-v133-to-v134--empty-ecoster-slots).
+
 ### What's New in v1.3.3
 
 - **🇩🇪 German translation (#250)**: full German UI, thanks to @UlrichBoehm.
@@ -281,4 +286,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-09-26 for v1.3.3._
+_This README was last updated on 2026-10-05 for v1.3.4._

@@ -27,6 +27,10 @@ a mode sensor plus contacts and day schedule binary sensors on an extra
 *ecoSTER N* device. These entities are no longer created and stay behind as
 *Unavailable*.
 
+The new ecoSTER day and night setpoints
+([#236](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/236))
+appear on each connected *ecoSTER N* device automatically; no action is needed.
+
 ### Cleanup steps (recommended)
 
 1. Update the integration (HACS) and **restart Home Assistant**.
