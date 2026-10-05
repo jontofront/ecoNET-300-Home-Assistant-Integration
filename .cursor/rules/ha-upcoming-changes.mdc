@@ -1,0 +1,46 @@
+---
+description: Check Home Assistant deprecations and announced API changes before writing code
+globs:
+alwaysApply: true
+---
+
+# 🔭 Check Upcoming Home Assistant Changes Before Coding
+
+Home Assistant announces API changes on its developer blog months before the old
+way stops working. Write new code the new way right away, so it doesn't need a
+refactor later.
+
+## Before planning or writing code that uses an HA API
+
+1. Read the developer blog posts of the last ~6 months that touch the APIs you
+   use: <https://developers.home-assistant.io/blog/>. Typical areas: device and
+   entity registry, `DeviceInfo`, entity base classes, config flow and entries,
+   coordinator, services.
+2. Check the symbol on the HA core `dev` branch
+   (`homeassistant/helpers/*.py`) for `report_usage`, `deprecated` or
+   `breaks_in_ha_version`.
+3. Compare the HA version that introduced the new API with our minimum HA version
+   (`requirements.txt`, `pyproject.toml`, `hacs.json`).
+4. Name the checked posts in the plan.
+
+## Decide
+
+| Situation | Action |
+| --- | --- |
+| The new API exists in our minimum HA version | Use only the new API |
+| The new API is newer than our minimum | Ask the user: raise the minimum or add a version check |
+| The change is only announced for a future version | Keep the code easy to switch and tell the user |
+
+- Never write new code with an API that is already deprecated.
+- Existing code that uses a deprecated API: tell the user and propose a separate
+  issue and PR. Ask before refactoring components, and don't mix it into an
+  unrelated fix.
+- A deprecation warning in the HA log (`Detected that custom integration
+  'econet300' ...`) is a bug: open an issue with the removal version.
+
+## Example
+
+HA 2026.8 deprecated `DeviceInfo["via_device"]` in favour of `via_device_id`
+(stops working in 2027.8). HA 2026.9 added child devices (`parent_device_id`) for
+logical parts of one product. New device code uses `via_device_id` or child
+devices, never `via_device`.

@@ -11,6 +11,7 @@ alwaysApply: true
 ### 1. ALWAYS READ THESE RULES FIRST
 
 - `.cursor/rules/home-assistant-standards.mdc` - HA integration standards
+- `.cursor/rules/ha-upcoming-changes.mdc` - **Check HA deprecations before coding** 🆕
 - `.cursor/rules/econet300-specific.mdc` - Device-specific guidelines
 - `.cursor/rules/python-standards.mdc` - Python coding standards
 - `.cursor/rules/translation-requirements.mdc` - Translation requirements
@@ -23,6 +24,8 @@ alwaysApply: true
 ### 2. ALWAYS FOLLOW HA DOCUMENTATION
 
 - Reference: <https://developers.home-assistant.io/docs/development_index>
+- Check the [developer blog](https://developers.home-assistant.io/blog/) for deprecations and
+  announced changes before coding (see `ha-upcoming-changes.mdc`)
 - Use proper entity lifecycle patterns
 - Follow HA integration development guidelines
 
