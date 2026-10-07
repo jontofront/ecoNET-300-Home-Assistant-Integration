@@ -44,7 +44,7 @@ from .const import (
     SERVICE_FUEL_SENSOR,
     SERVICE_GET_SCHEDULE,
 )
-from .entity import ecoster_device_identifier
+from .entity import ecoster_device_identifier, mixer_device_identifier
 from .mem_cache import MemCache
 from .sensor import FuelConsumptionTotalSensor
 
@@ -144,7 +144,7 @@ def _cleanup_ghost_devices(
         (DOMAIN, "default-uid-solar"),
     }
     for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
-        ghost_identifiers.add((DOMAIN, f"default-uid-mixer-{i}"))
+        ghost_identifiers.add((DOMAIN, mixer_device_identifier("default-uid", i)))
     for i in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
         ghost_identifiers.add((DOMAIN, ecoster_device_identifier("default-uid", i)))
 

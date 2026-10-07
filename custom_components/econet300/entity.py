@@ -282,6 +282,11 @@ class EconetEntity(CoordinatorEntity[EconetDataCoordinator]):
         # Base implementation does nothing - child classes handle state updates
 
 
+def mixer_device_identifier(uid: str, mixer_num: int) -> str:
+    """Return the device registry identifier of a mixer device."""
+    return f"{uid}-mixer-{mixer_num}"
+
+
 class MixerEntity(EconetEntity):
     """Represents MixerEntity."""
 
@@ -305,7 +310,7 @@ class MixerEntity(EconetEntity):
             return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
-            identifier=f"{self.api.uid}-mixer-{self._idx}",
+            identifier=mixer_device_identifier(self.api.uid, self._idx),
             name=f"{DEVICE_INFO_MIXER_NAME}{self._idx}",
             parent_device_id=self.api.uid,
             include_model_id=True,
@@ -427,7 +432,7 @@ def get_device_info_for_component(
         idx = mixer_idx or int(component.split("_")[1])
         return _create_base_device_info(
             api,
-            f"{api.uid}-mixer-{idx}",
+            mixer_device_identifier(api.uid, idx),
             f"{DEVICE_INFO_MIXER_NAME}{idx}",
             parent_device_id=api.uid,
             include_model_id=True,
