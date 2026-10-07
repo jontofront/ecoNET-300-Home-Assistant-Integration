@@ -1827,7 +1827,7 @@ class Econet300Api:
 
         # Check for special unit indices that typically indicate enums
         unit_index = param.get("unit")
-        if unit_index in [31]:  # Known enum unit indices
+        if unit_index == 31:  # Known enum unit index
             return True
 
         # Check for decimal multiplier - indicates numeric parameter, not enum
