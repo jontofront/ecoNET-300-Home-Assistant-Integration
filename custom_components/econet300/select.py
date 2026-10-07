@@ -246,9 +246,7 @@ class EconetSelect(EconetEntity, SelectEntity):
 
     async def async_added_to_hass(self):
         """Handle added to hass - read heater_mode state from regParamsData."""
-        _LOGGER.debug(
-            "async_added_to_hass called for: %s", self.entity_description.key
-        )
+        _LOGGER.debug("async_added_to_hass called for: %s", self.entity_description.key)
         await super().async_added_to_hass()
 
         if self.entity_description.key == "heater_mode":

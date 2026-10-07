@@ -40,4 +40,3 @@ SCHEDULE_WEEKDAYS: list[str] = [
     "friday",
     "saturday",
 ]
-

@@ -963,9 +963,9 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         suggested_display_precision=suggested_display_precision,
         process_val=ENTITY_VALUE_PROCESSOR.get(
             key,
-            lambda x: x
-            if isinstance(x, (int, float, str, bool)) or x is None
-            else str(x),
+            lambda x: (
+                x if isinstance(x, (int, float, str, bool)) or x is None else str(x)
+            ),
         ),
         component=component,
     )
