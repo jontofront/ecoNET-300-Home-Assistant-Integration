@@ -771,10 +771,14 @@ class EconetOptionsFlowHandler(OptionsFlow):
         lines.extend(
             [
                 "",
-                f"Full redacted JSON written to homeassistant.log — search for "
-                f"'{DIAGNOSTICS_LOG_MARKER}'.",
-                "Attach the matching log block (or use Settings → Devices "
-                "& Services → ecoNET300 → Download diagnostics) to your GitHub issue.",
+                (
+                    f"Full redacted JSON written to homeassistant.log — search for "
+                    f"'{DIAGNOSTICS_LOG_MARKER}'."
+                ),
+                (
+                    "Attach the matching log block (or use Settings → Devices "
+                    "& Services → ecoNET300 → Download diagnostics) to your GitHub issue."
+                ),
             ]
         )
         return "\n".join(lines)

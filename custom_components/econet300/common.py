@@ -243,6 +243,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass,
             _LOGGER,
+            config_entry=config_entry,
             name=f"{DOMAIN}_data_coordinator",
             update_interval=timedelta(seconds=max(5, self._poll_reg_params)),
         )

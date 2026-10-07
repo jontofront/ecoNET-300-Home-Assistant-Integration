@@ -963,9 +963,9 @@ def create_sensor_entity_description(key: str) -> EconetSensorEntityDescription:
         suggested_display_precision=suggested_display_precision,
         process_val=ENTITY_VALUE_PROCESSOR.get(
             key,
-            lambda x: x
-            if isinstance(x, (int, float, str, bool)) or x is None
-            else str(x),
+            lambda x: (
+                x if isinstance(x, (int, float, str, bool)) or x is None else str(x)
+            ),
         ),
         component=component,
     )
@@ -1071,7 +1071,7 @@ def create_controller_sensors(
     else:
         _LOGGER.info(
             "Using default sensor mapping for controllerID: %s",
-            controller_id if controller_id else "None",
+            controller_id or "None",
         )
 
     # Always filter out ecoSTER sensors from controller sensors since they are created as separate devices

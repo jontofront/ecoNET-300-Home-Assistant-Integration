@@ -212,9 +212,6 @@
       "lan": {
         "name": "LAN"
       },
-      "lambda_status": {
-        "name": "Lambda senzor"
-      },
       "contact_gzc": {
         "name": "GZC kontakt"
       },
@@ -304,9 +301,6 @@
       },
       "ecosrv_https": {
         "name": "Server ecoNET HTTPS"
-      },
-      "alarms": {
-        "name": "Alarmy"
       },
       "alarm_active": {
         "name": "Alarm aktivní"

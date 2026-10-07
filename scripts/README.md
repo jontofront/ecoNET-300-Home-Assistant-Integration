@@ -32,10 +32,10 @@ The script generates:
 ## 🔍 Translation Management Scripts
 
 ### `check_translations.py`
-Validates translation files for consistency and completeness.
-- Checks for missing translations
-- Validates translation key formats
-- Ensures consistency across language files
+Validates translation files for consistency and completeness. CI runs it on every pull request.
+- Fails when `en.json`, `pl.json` or `de.json` misses an entity key from `strings.json`
+- Fails when any language has an entity key that `strings.json` does not have
+- Only reports the number of missing keys for the partial `cz.json`, `fr.json` and `uk.json`
 
 ### `language_finder.py`
 **NEW: Optimized language discovery tool** that combines fast and comprehensive discovery.

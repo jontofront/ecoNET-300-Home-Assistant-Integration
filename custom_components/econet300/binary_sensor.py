@@ -269,7 +269,7 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
     else:
         _LOGGER.info(
             "ControllerID '%s' not found in mapping, using default binary sensor mapping",
-            controller_id if controller_id else "None",
+            controller_id or "None",
         )
 
     # Always filter out ecoSTER binary sensors from controller binary sensors since they are created as separate devices
@@ -278,7 +278,7 @@ def create_binary_sensors(coordinator: EconetDataCoordinator, api: Econet300Api)
 
     _LOGGER.info(
         "Using binary sensor keys for controllerID '%s': %s",
-        controller_id if controller_id else "None (default)",
+        controller_id or "None (default)",
         binary_sensor_keys,
     )
 

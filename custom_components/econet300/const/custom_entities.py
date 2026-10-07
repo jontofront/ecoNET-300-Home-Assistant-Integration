@@ -46,4 +46,3 @@ CUSTOM_SENSOR_PRECISION_OPTIONS: dict[int | None, str] = {
     2: "0.00",
     3: "0.000",
 }
-

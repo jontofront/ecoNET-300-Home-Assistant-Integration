@@ -14,7 +14,7 @@ update the matching documentation. Code and docs must never drift apart.
 
 | Change | Update |
 | ------ | ------ |
-| New/changed entity, sensor, switch, select, number | `docs/ENTITIES.md` + translations (`strings.json`, `en.json`, `pl.json`) |
+| New/changed entity, sensor, switch, select, number | `docs/ENTITIES.md` + translations (`strings.json`, `en.json`, `pl.json`, `de.json`) |
 | Alarms / events behavior | `docs/ALARMS_AND_EVENTS.md` |
 | Schedules / calendar behavior | `docs/SCHEDULES.md` |
 | Config flow / options / polling / device grouping | `docs/CONFIGURATION.md` |

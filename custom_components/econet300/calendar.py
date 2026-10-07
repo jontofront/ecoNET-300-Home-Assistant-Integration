@@ -153,15 +153,25 @@ class EconetScheduleCalendar(EconetEntity, CalendarEntity):
                 )
                 end_dt = datetime.datetime.combine(
                     check_date,
-                    end_time if end_time != datetime.time(0, 0) else datetime.time(0, 0),
+                    end_time
+                    if end_time != datetime.time(0, 0)
+                    else datetime.time(0, 0),
                     tzinfo=now.tzinfo,
                 )
                 if end_time == datetime.time(0, 0):
                     end_dt += datetime.timedelta(days=1)
 
-                if day_offset == 0 and end_dt.time() == datetime.time(0, 0) and end_dt.date() <= today:
+                if (
+                    day_offset == 0
+                    and end_dt.time() == datetime.time(0, 0)
+                    and end_dt.date() <= today
+                ):
                     pass
-                elif day_offset == 0 and end_time != datetime.time(0, 0) and end_time <= current_time:
+                elif (
+                    day_offset == 0
+                    and end_time != datetime.time(0, 0)
+                    and end_time <= current_time
+                ):
                     continue
 
                 if start_dt <= now < end_dt or start_dt > now:
@@ -247,9 +257,7 @@ def create_schedule_calendars(
 
     for friendly_name, api_key, component in iter_device_schedules(coordinator.data):
         entities.append(
-            EconetScheduleCalendar(
-                coordinator, api, friendly_name, api_key, component
-            )
+            EconetScheduleCalendar(coordinator, api, friendly_name, api_key, component)
         )
 
     _LOGGER.info("Created %d schedule calendar entities", len(entities))

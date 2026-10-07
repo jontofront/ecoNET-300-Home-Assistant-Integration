@@ -225,12 +225,6 @@
       },
       "output_h2_and_h3": {
         "name": "Output H2 and H3"
-      },
-      "alarms": {
-        "name": "Alarms"
-      },
-      "alarm_active": {
-        "name": "Alarm Active"
       }
     },
     "event": {
@@ -482,6 +476,9 @@
       },
       "ecosrv_https": {
         "name": "ecoNET server HTTPS"
+      },
+      "alarm_active": {
+        "name": "Alarm active"
       }
     },
     "calendar": {
