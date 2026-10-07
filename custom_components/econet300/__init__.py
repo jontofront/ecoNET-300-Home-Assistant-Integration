@@ -44,7 +44,12 @@ from .const import (
     SERVICE_FUEL_SENSOR,
     SERVICE_GET_SCHEDULE,
 )
-from .entity import ecoster_device_identifier, mixer_device_identifier
+from .entity import (
+    HA_SUPPORTS_VIA_DEVICE_ID,
+    _main_device_info,
+    ecoster_device_identifier,
+    mixer_device_identifier,
+)
 from .mem_cache import MemCache
 from .sensor import FuelConsumptionTotalSensor
 
@@ -113,6 +118,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     else:
         _cleanup_ghost_devices(hass, entry, api.uid)
 
+        # Component devices link to this device by its registry id, so it must
+        # exist before the platforms add their entities.
+        controller_device = dr.async_get(hass).async_get_or_create(
+            config_entry_id=entry.entry_id, **_main_device_info(api)
+        )
+        coordinator.controller_device_id = controller_device.id
+
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
         # Register services if not already registered
@@ -151,7 +163,12 @@ def _cleanup_ghost_devices(
     removed = 0
     for ghost_id in ghost_identifiers:
         try:
-            device = device_reg.async_get_device(identifiers={ghost_id})
+            if HA_SUPPORTS_VIA_DEVICE_ID:
+                device = device_reg.async_get_device_by_identifier(
+                    ghost_id, entry.entry_id
+                )
+            else:
+                device = device_reg.async_get_device(identifiers={ghost_id})
         except (AttributeError, TypeError):
             continue
         if device is not None:

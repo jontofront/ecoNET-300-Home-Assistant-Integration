@@ -10,6 +10,7 @@ from custom_components.econet300 import (
     DOMAIN,
     SERVICE_API,
     SERVICE_COORDINATOR,
+    _cleanup_ghost_devices,
     async_remove_config_entry_device,
     async_remove_entry,
     async_setup_entry,
@@ -35,11 +36,29 @@ class TestIntegrationSetup:
         mock_coordinator = MagicMock(spec=EconetDataCoordinator)
         mock_coordinator.async_config_entry_first_refresh = AsyncMock()
 
+        device_registry = MagicMock()
+        device_registry.async_get_device.return_value = None
+        device_registry.async_get_device_by_identifier.return_value = None
+
+        # Platforms link their devices to the controller device by its
+        # registry id, so it must exist before they are set up.
+        def check_controller_device_registered(*_args):
+            device_registry.async_get_or_create.assert_called_once()
+            return True
+
+        hass.config_entries.async_forward_entry_setups.side_effect = (
+            check_controller_device_registered
+        )
+
         with (
             patch("custom_components.econet300.make_api", return_value=mock_api),
             patch(
                 "custom_components.econet300.EconetDataCoordinator",
                 return_value=mock_coordinator,
+            ),
+            patch(
+                "custom_components.econet300.dr.async_get",
+                return_value=device_registry,
             ),
         ):
             result = await async_setup_entry(hass, mock_config_entry)
@@ -49,6 +68,56 @@ class TestIntegrationSetup:
             assert mock_config_entry.entry_id in hass.data[DOMAIN]
             assert SERVICE_API in hass.data[DOMAIN][mock_config_entry.entry_id]
             assert SERVICE_COORDINATOR in hass.data[DOMAIN][mock_config_entry.entry_id]
+
+        create_kwargs = device_registry.async_get_or_create.call_args.kwargs
+        assert create_kwargs["config_entry_id"] == mock_config_entry.entry_id
+        assert create_kwargs["identifiers"] == {(DOMAIN, "test_uid")}
+        assert (
+            mock_coordinator.controller_device_id
+            == device_registry.async_get_or_create.return_value.id
+        )
+        hass.config_entries.async_forward_entry_setups.assert_awaited_once()
+
+    @pytest.mark.parametrize("supports_via_device_id", [True, False])
+    def test_cleanup_ghost_devices_removes_default_uid_devices(
+        self, mock_config_entry, supports_via_device_id
+    ):
+        """Test devices left by a failed init with the default uid are removed."""
+        ghost_identifier = (DOMAIN, "default-uid-mixer-2")
+        ghost_device = MagicMock(id="ghost-device-id")
+
+        def get_device_by_identifier(identifier, _config_entry_id):
+            return ghost_device if identifier == ghost_identifier else None
+
+        def get_device(identifiers):
+            return ghost_device if ghost_identifier in identifiers else None
+
+        device_registry = MagicMock()
+        device_registry.async_get_device_by_identifier.side_effect = (
+            get_device_by_identifier
+        )
+        device_registry.async_get_device.side_effect = get_device
+
+        with (
+            patch(
+                "custom_components.econet300.dr.async_get",
+                return_value=device_registry,
+            ),
+            patch(
+                "custom_components.econet300.HA_SUPPORTS_VIA_DEVICE_ID",
+                supports_via_device_id,
+            ),
+        ):
+            _cleanup_ghost_devices(MagicMock(), mock_config_entry, "test_uid")
+
+        device_registry.async_remove_device.assert_called_once_with("ghost-device-id")
+        if supports_via_device_id:
+            device_registry.async_get_device_by_identifier.assert_any_call(
+                ghost_identifier, mock_config_entry.entry_id
+            )
+            device_registry.async_get_device.assert_not_called()
+        else:
+            device_registry.async_get_device_by_identifier.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_async_setup_entry_auth_error(

@@ -218,6 +218,9 @@ def build_edit_param_catalog(
 class EconetDataCoordinator(DataUpdateCoordinator):
     """Econet data coordinator to handle data updates."""
 
+    # Set by async_setup_entry() once the controller device is registered.
+    controller_device_id: str | None = None
+
     def __init__(
         self,
         hass,

@@ -244,6 +244,7 @@ class EconetDynamicSwitch(EconetEntity, SwitchEntity):
             self._component,
             self.api,
             single_device=self.coordinator.single_device_tree,
+            via_device_id=self.coordinator.controller_device_id,
         )
 
     @property

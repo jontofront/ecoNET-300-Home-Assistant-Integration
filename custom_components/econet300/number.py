@@ -38,8 +38,6 @@ from .common_functions import (
 )
 from .const import (
     DEVICE_INFO_ADVANCED_PARAMETERS_NAME,
-    DEVICE_INFO_MANUFACTURER,
-    DEVICE_INFO_MODEL,
     DEVICE_INFO_SERVICE_PARAMETERS_NAME,
     DOMAIN,
     ECOSTER_SETPOINT_PARAMS,
@@ -63,6 +61,7 @@ from .entity import (
     EconetEntity,
     EcoSterEntity,
     MixerEntity,
+    _create_base_device_info,
     get_device_info_for_component,
 )
 
@@ -239,6 +238,7 @@ class EconetNumber(EconetEntity, NumberEntity):
                 component,
                 self.api,
                 single_device=self.coordinator.single_device_tree,
+                via_device_id=self.coordinator.controller_device_id,
             )
         # Fall back to parent class device_info (main boiler device)
         return super().device_info
@@ -596,12 +596,11 @@ class ServiceParameterNumber(EconetNumber):
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return device info for service parameters."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, f"{self.api.uid}-service-parameters")},
+        return _create_base_device_info(
+            api=self.api,
+            identifier=f"{self.api.uid}-service-parameters",
             name=DEVICE_INFO_SERVICE_PARAMETERS_NAME,
-            manufacturer=DEVICE_INFO_MANUFACTURER,
-            model=DEVICE_INFO_MODEL,
-            via_device=(DOMAIN, self.api.uid),
+            via_device_id=self.coordinator.controller_device_id,
         )
 
 
@@ -614,12 +613,11 @@ class AdvancedParameterNumber(EconetNumber):
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return device info for advanced parameters."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, f"{self.api.uid}-advanced-parameters")},
+        return _create_base_device_info(
+            api=self.api,
+            identifier=f"{self.api.uid}-advanced-parameters",
             name=DEVICE_INFO_ADVANCED_PARAMETERS_NAME,
-            manufacturer=DEVICE_INFO_MANUFACTURER,
-            model=DEVICE_INFO_MODEL,
-            via_device=(DOMAIN, self.api.uid),
+            via_device_id=self.coordinator.controller_device_id,
         )
 
 
