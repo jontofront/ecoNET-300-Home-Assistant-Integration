@@ -2,15 +2,25 @@
 
 ## [Unreleased]
 
+## [v1.3.5-beta.1] - 2026-10-07
+
 ### Fixed
 
+- **`via_device` deprecation warning on Home Assistant 2026.8 or newer ([#264](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/264))**: mixer, ecoSTER, lambda, hot water, buffer, solar, service parameter and advanced parameter devices now link to the *PLUM ecoNET300* controller device by its registry id (`via_device_id`), because Home Assistant 2027.8 stops accepting `via_device`. The controller device is registered before the platforms add their entities, so the link always points to an existing device. Older Home Assistant versions keep using `via_device`. Device and entity IDs do not change.
 - **Alarm active binary sensor was named *Problem***: its English, Polish and German names were in the select section of the translation files, so Home Assistant fell back to the device class name. It is now named *Alarm active* (*Alarm aktywny*, *Alarm aktiv*). Existing entity IDs do not change.
+
+### Changed
+
+- **Mixer device identifier** is built by one helper, `mixer_device_identifier()`, for the mixer device, the component device lookup and the ghost device cleanup ([#259](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/259)). The identifier is unchanged.
+- **Service and advanced parameter devices** use the shared device info helper, so they now show the configuration URL and software version like the other ecoNET300 devices.
+- **Ghost device cleanup** uses `async_get_device_by_identifier()` on Home Assistant 2026.8 or newer; later versions deprecate `async_get_device()`.
 
 ### Tests
 
 - **CI runs on `master`** for every push and pull request, against the oldest supported Home Assistant (2025.6.3 on Python 3.13) and the latest one (Python 3.14).
 - **Translation check**: CI fails when `en.json`, `pl.json` or `de.json` misses an entity key, or when any language has a key that `strings.json` does not have. Missing keys in `cz.json`, `fr.json` and `uk.json` are only reported.
 - **Ruff 0.16.10** is pinned for pre-commit, `requirements_test.txt` and CI.
+- **Device links** are tested with and without `via_device_id` support, including the service and advanced parameter devices. Tests also check that the controller device is registered before the platforms and that the ghost device cleanup works with both registry lookups.
 
 ## [v1.3.4] - 2026-10-05
 
