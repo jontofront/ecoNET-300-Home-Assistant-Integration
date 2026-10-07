@@ -147,8 +147,9 @@ class TestEconetScheduleCalendar:
         cal = self._make_calendar(coordinator, api)
         assert cal.entity_description.translation_key == "schedule_boiler"
 
+    @pytest.mark.asyncio
     @patch("custom_components.econet300.calendar.dt_util")
-    def test_async_get_events(self, mock_dt_util, coordinator, api):
+    async def test_async_get_events(self, mock_dt_util, coordinator, api):
         """async_get_events returns events within the date range."""
         tz = datetime.timezone.utc
         mock_dt_util.get_default_time_zone.return_value = tz
@@ -160,11 +161,7 @@ class TestEconetScheduleCalendar:
         end = datetime.datetime(2026, 6, 30, 0, 0, tzinfo=tz)
 
         hass = MagicMock()
-        import asyncio
-
-        events = asyncio.get_event_loop().run_until_complete(
-            cal.async_get_events(hass, start, end)
-        )
+        events = await cal.async_get_events(hass, start, end)
         assert isinstance(events, list)
 
     def test_extra_state_attributes_default(self, coordinator, api):
