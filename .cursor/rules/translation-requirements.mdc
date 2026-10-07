@@ -25,6 +25,12 @@ When adding new entities, sensors, binary sensors, switches, or any user-facing 
 1. **`custom_components/econet300/strings.json`** - Base English strings
 2. **`custom_components/econet300/translations/en.json`** - English translations  
 3. **`custom_components/econet300/translations/pl.json`** - Polish translations
+4. **`custom_components/econet300/translations/de.json`** - German translations
+
+CI runs `scripts/check_translations.py`: a key missing from `en.json`, `pl.json` or
+`de.json`, or a key that `strings.json` does not have, fails the build. `cz.json`,
+`fr.json` and `uk.json` are partial; missing keys there are only reported (Home
+Assistant shows English), but add them for new entities when you can.
 
 ### 🔍 Translation Key Format
 
@@ -73,7 +79,7 @@ When adding new entities, sensors, binary sensors, switches, or any user-facing 
 1. **Check cloud reference** for existing translations
 2. **Use official translations** when available
 3. **Create consistent naming** following established patterns
-4. **Update all three files** (strings.json, en.json, pl.json)
+4. **Update all required files** (strings.json, en.json, pl.json, de.json)
 5. **Test the changes** in Home Assistant
 
 ### ⚠️ Common Mistakes to Avoid

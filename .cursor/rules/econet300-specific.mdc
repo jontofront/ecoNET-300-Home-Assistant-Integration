@@ -217,8 +217,9 @@ The migration guide includes:
   - `custom_components/econet300/strings.json` (English base strings)
   - `custom_components/econet300/translations/en.json` (English translations)
   - `custom_components/econet300/translations/pl.json` (Polish translations)
+  - `custom_components/econet300/translations/de.json` (German translations)
 - **Translation keys must match** the entity keys in camel_to_snake format
-- **Check all three files** before committing any entity changes
+- **Check all required files** before committing any entity changes
 - **Use consistent naming** across all translation files
 - **Test translations** by restarting Home Assistant after changes
 

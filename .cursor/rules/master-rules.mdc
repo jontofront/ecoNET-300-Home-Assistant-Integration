@@ -31,7 +31,7 @@ alwaysApply: true
 
 ### 3. ALWAYS CHECK TRANSLATIONS
 
-- Update `strings.json`, `en.json`, and `pl.json` for new entities
+- Update `strings.json`, `en.json`, `pl.json`, and `de.json` for new entities (CI fails otherwise)
 - Use camel_to_snake format for translation keys
 - Test translations after changes
 
