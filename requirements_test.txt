@@ -9,7 +9,7 @@ async_interrupt>=1.2.0
 voluptuous>=0.15.0
 
 # Code quality tools
-ruff>=0.14.0
+ruff==0.16.10
 codespell>=2.3.0
 autotyping>=24.3.0
 
