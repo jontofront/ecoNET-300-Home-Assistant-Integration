@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **HACS logged `Could not save ZIP file` on every download**: `hacs.json` had a `filename` entry, which HACS uses for cards and themes. For this integration HACS tried to save the downloaded archive under that path, failed, and fell back to downloading the files one by one. The entry is removed, so HACS now installs the archive without the error.
+
 ## [v1.3.5-beta.1] - 2026-10-07
 
 ### Fixed
