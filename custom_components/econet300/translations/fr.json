@@ -203,9 +203,6 @@
       "lan": {
         "name": "LAN"
       },
-      "lambda_status": {
-        "name": "Sonde Lambda"
-      },
       "contact_gzc": {
         "name": "Contact GZC"
       },
@@ -295,9 +292,6 @@
       },
       "ecosrv_https": {
         "name": "Serveur ecoNET HTTPS"
-      },
-      "alarms": {
-        "name": "Alarmes"
       },
       "alarm_active": {
         "name": "Alarme active"
