@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **Alarm active binary sensor was named *Problem***: its English, Polish and German names were in the select section of the translation files, so Home Assistant fell back to the device class name. It is now named *Alarm active* (*Alarm aktywny*, *Alarm aktiv*). Existing entity IDs do not change.
+
+### Tests
+
+- **CI runs on `master`** for every push and pull request, against the oldest supported Home Assistant (2025.6.3 on Python 3.13) and the latest one (Python 3.14).
+- **Translation check**: CI fails when `en.json`, `pl.json` or `de.json` misses an entity key, or when any language has a key that `strings.json` does not have. Missing keys in `cz.json`, `fr.json` and `uk.json` are only reported.
+- **Ruff 0.16.10** is pinned for pre-commit, `requirements_test.txt` and CI.
+
 ## [v1.3.4] - 2026-10-05
 
 Stable release consolidating the `1.3.4-alpha.1` … `1.3.4-alpha.3` pre-releases.
