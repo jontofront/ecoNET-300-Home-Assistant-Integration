@@ -164,7 +164,7 @@ def _cleanup_ghost_devices(
     for ghost_id in ghost_identifiers:
         try:
             if HA_SUPPORTS_VIA_DEVICE_ID:
-                device = device_reg.async_get_device_by_identifier(
+                device = device_reg.async_get_device_by_identifier(  # type: ignore[attr-defined]
                     ghost_id, entry.entry_id
                 )
             else:

@@ -36,7 +36,9 @@ _LOGGER = logging.getLogger(__name__)
 # Home Assistant 2026.8 added DeviceInfo "via_device_id" and
 # DeviceRegistry.async_get_device_by_identifier(); "via_device" and
 # async_get_device() stop working in 2027.8.
-HA_SUPPORTS_VIA_DEVICE_ID = (MAJOR_VERSION, MINOR_VERSION) >= (2026, 8)
+HA_SUPPORTS_VIA_DEVICE_ID = MAJOR_VERSION > 2026 or (
+    MAJOR_VERSION == 2026 and MINOR_VERSION >= 8
+)
 
 
 def _create_base_device_info(
@@ -74,7 +76,7 @@ def _create_base_device_info(
     # Add optional fields only when they have values
     if via_device_id:
         if HA_SUPPORTS_VIA_DEVICE_ID:
-            info["via_device_id"] = via_device_id
+            info["via_device_id"] = via_device_id  # type: ignore[typeddict-unknown-key]
         else:
             info["via_device"] = (DOMAIN, api.uid)
     if include_model_id:

@@ -46,9 +46,7 @@ class TestIntegrationSetup:
             device_registry.async_get_or_create.assert_called_once()
             return True
 
-        hass.config_entries.async_forward_entry_setups.side_effect = (
-            check_controller_device_registered
-        )
+        forward_entry_setups = AsyncMock(side_effect=check_controller_device_registered)
 
         with (
             patch("custom_components.econet300.make_api", return_value=mock_api),
@@ -59,6 +57,11 @@ class TestIntegrationSetup:
             patch(
                 "custom_components.econet300.dr.async_get",
                 return_value=device_registry,
+            ),
+            patch.object(
+                hass.config_entries,
+                "async_forward_entry_setups",
+                forward_entry_setups,
             ),
         ):
             result = await async_setup_entry(hass, mock_config_entry)
@@ -76,7 +79,7 @@ class TestIntegrationSetup:
             mock_coordinator.controller_device_id
             == device_registry.async_get_or_create.return_value.id
         )
-        hass.config_entries.async_forward_entry_setups.assert_awaited_once()
+        forward_entry_setups.assert_awaited_once()
 
     @pytest.mark.parametrize("supports_via_device_id", [True, False])
     def test_cleanup_ghost_devices_removes_default_uid_devices(
