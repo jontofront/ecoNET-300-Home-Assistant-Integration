@@ -569,7 +569,9 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 DOMAIN,
                 f"connection_failed_{self._config_entry.entry_id}",
                 is_fixable=True,
-                is_persistent=True,
+                # A restart resets the failure counter, so a stored issue would
+                # never be deleted by _on_successful_update().
+                is_persistent=False,
                 severity=IssueSeverity.ERROR,
                 translation_key="connection_failed",
                 translation_placeholders={
