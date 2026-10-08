@@ -2,8 +2,11 @@
 
 ## [Unreleased]
 
+## [v1.3.5-beta.2] - 2026-10-08
+
 ### Fixed
 
+- **Repair *Connection to ecoNET300 device failed* stayed after a restart**: the issue was stored across Home Assistant restarts, but only a recovery after failures deletes it, and a restart resets the failure counter. So once the connection worked again after a restart, the issue never went away. It is no longer stored: after a restart it is created again only if 5 updates in a row fail.
 - **HACS logged `Could not save ZIP file` on every download**: `hacs.json` had a `filename` entry, which HACS uses for cards and themes. For this integration HACS tried to save the downloaded archive under that path, failed, and fell back to downloading the files one by one. The entry is removed, so HACS now installs the archive without the error.
 
 ## [v1.3.5-beta.1] - 2026-10-07
