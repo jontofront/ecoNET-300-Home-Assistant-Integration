@@ -82,11 +82,19 @@ class TestIntegrationSetup:
         forward_entry_setups.assert_awaited_once()
 
     @pytest.mark.parametrize("supports_via_device_id", [True, False])
-    def test_cleanup_ghost_devices_removes_default_uid_devices(
-        self, mock_config_entry, supports_via_device_id
+    @pytest.mark.parametrize(
+        "ghost_identifier",
+        [
+            (DOMAIN, "default-uid-mixer-2"),
+            (DOMAIN, None),
+            (DOMAIN, "None-huw"),
+        ],
+        ids=["default_uid_mixer", "none_uid_controller", "none_uid_huw"],
+    )
+    def test_cleanup_ghost_devices_removes_ghost_uid_devices(
+        self, mock_config_entry, supports_via_device_id, ghost_identifier
     ):
-        """Test devices left by a failed init with the default uid are removed."""
-        ghost_identifier = (DOMAIN, "default-uid-mixer-2")
+        """Test devices left by an init without a real uid are removed."""
         ghost_device = MagicMock(id="ghost-device-id")
 
         def get_device_by_identifier(identifier, _config_entry_id):
@@ -269,3 +277,34 @@ class TestIntegrationSetup:
         )
 
         assert result is False
+
+
+class TestApiInit:
+    """Test that the API only starts with a real device uid."""
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "sys_params",
+        [{"controllerID": "ecoMAX810P-L"}, {"uid": None}, {"uid": ""}],
+        ids=["missing", "none", "empty"],
+    )
+    async def test_init_rejects_sys_params_without_uid(self, sys_params):
+        """Test a missing or empty uid stops the setup, so it is retried."""
+        api = Econet300Api(MagicMock(), MagicMock())
+
+        with (
+            patch.object(api, "fetch_sys_params", AsyncMock(return_value=sys_params)),
+            pytest.raises(ValueError, match="uid"),
+        ):
+            await api.init()
+
+    @pytest.mark.asyncio
+    async def test_init_sets_uid_from_sys_params(self):
+        """Test the uid from sysParams becomes the device uid."""
+        api = Econet300Api(MagicMock(), MagicMock())
+        sys_params = {"uid": "7VCPMB4ZJ8DHH208002Z0", "controllerID": "ecoMAX810P-L"}
+
+        with patch.object(api, "fetch_sys_params", AsyncMock(return_value=sys_params)):
+            await api.init()
+
+        assert api.uid == "7VCPMB4ZJ8DHH208002Z0"

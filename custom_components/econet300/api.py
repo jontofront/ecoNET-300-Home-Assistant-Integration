@@ -47,6 +47,7 @@ from .const import (
     CACHE_KEY_STATIC_METADATA,
     CACHE_STATIC_METADATA_TTL,
     CONTROL_PARAMS,
+    DEFAULT_UID,
     MAX_CONCURRENT_API_REQUESTS,
     NUMBER_MAP,
     RM_PROBE_TIMEOUT_SEC,
@@ -352,7 +353,7 @@ class Econet300Api:
         """Initialize the Econet300Api object with a client, cache, and default values for uid, sw_revision, and hw_version."""
         self._client = client
         self._cache = cache
-        self._uid = "default-uid"
+        self._uid = DEFAULT_UID
         self._model_id = "default-model-id"
         self._sw_revision = "default-sw-revision"
         self._hw_version = "default-hw-version"
@@ -405,10 +406,11 @@ class Econet300Api:
                 "Failed to fetch system parameters - device offline or unreachable"
             )
 
-        # UID is mandatory - without it, entities register under a ghost device
-        if API_SYS_PARAMS_PARAM_UID not in sys_params:
+        # UID is mandatory - without it, entities register under a ghost device.
+        # A module that is still starting can report "uid": null.
+        if not sys_params.get(API_SYS_PARAMS_PARAM_UID):
             raise ValueError(
-                "System parameters missing 'uid' - cannot establish device identity"
+                "System parameters have no 'uid' - cannot establish device identity"
             )
 
         # Set system parameters by HA device properties

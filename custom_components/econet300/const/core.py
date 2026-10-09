@@ -109,6 +109,21 @@ DEVICE_INFO_SOLAR_NAME = "Solar"
 DEVICE_INFO_SERVICE_PARAMETERS_NAME = "Service Parameters"
 DEVICE_INFO_ADVANCED_PARAMETERS_NAME = "Advanced Parameters"
 
+# Device uid before api.init() reads the real one from sysParams.
+DEFAULT_UID = "default-uid"
+# Uids that older versions set the integration up with when sysParams had no
+# real uid ("uid": null gives None). Their devices are removed on setup.
+GHOST_UIDS: tuple[str | None, ...] = (DEFAULT_UID, None)
+# Device identifiers are "<uid>-<suffix>" for these devices.
+GHOST_DEVICE_SUFFIXES = (
+    "advanced-parameters",
+    "buffer",
+    "huw",
+    "lambda",
+    "service-parameters",
+    "solar",
+)
+
 CONF_ENTRY_TITLE = "ecoNET300"
 CONF_ENTRY_DESCRIPTION = "PLUM Econet300"
 

@@ -34,6 +34,8 @@ from .common_functions import (
 from .const import (
     DEVICE_CLASS_FUEL_METER,
     DOMAIN,
+    GHOST_DEVICE_SUFFIXES,
+    GHOST_UIDS,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
     SCHEDULE_TYPE_MAP,
@@ -133,13 +135,29 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return True
 
 
+def _ghost_device_identifiers() -> set[tuple[str, str | None]]:
+    """Return the identifiers of every device a ghost uid could have created."""
+    identifiers: set[tuple[str, str | None]] = set()
+    for ghost_uid in GHOST_UIDS:
+        identifiers.add((DOMAIN, ghost_uid))
+        uid_text = str(ghost_uid)
+        for suffix in GHOST_DEVICE_SUFFIXES:
+            identifiers.add((DOMAIN, f"{uid_text}-{suffix}"))
+        for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
+            identifiers.add((DOMAIN, mixer_device_identifier(uid_text, i)))
+        for i in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
+            identifiers.add((DOMAIN, ecoster_device_identifier(uid_text, i)))
+    return identifiers
+
+
 def _cleanup_ghost_devices(
     hass: HomeAssistant, entry: ConfigEntry, real_uid: str
 ) -> None:
-    """Remove orphaned devices created by failed API inits with default-uid.
+    """Remove orphaned devices created by API inits without a real uid.
 
-    When api.init() previously failed silently, entities registered under
-    devices with identifier (DOMAIN, "default-uid"). These ghost devices
+    Older versions set up the integration with the default uid when
+    api.init() failed, or with uid None when sysParams reported
+    "uid": null. Entities then registered under ghost devices, which
     persist in the device registry even after the API recovers.
     """
     try:
@@ -148,17 +166,7 @@ def _cleanup_ghost_devices(
         _LOGGER.debug("Device registry not available, skipping ghost cleanup")
         return
 
-    ghost_identifiers: set[tuple[str, str]] = {
-        (DOMAIN, "default-uid"),
-        (DOMAIN, "default-uid-huw"),
-        (DOMAIN, "default-uid-buffer"),
-        (DOMAIN, "default-uid-lambda"),
-        (DOMAIN, "default-uid-solar"),
-    }
-    for i in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1):
-        ghost_identifiers.add((DOMAIN, mixer_device_identifier("default-uid", i)))
-    for i in range(1, NUMBER_OF_AVAILABLE_ECOSTERS + 1):
-        ghost_identifiers.add((DOMAIN, ecoster_device_identifier("default-uid", i)))
+    ghost_identifiers = _ghost_device_identifiers()
 
     removed = 0
     for ghost_id in ghost_identifiers:
@@ -168,7 +176,8 @@ def _cleanup_ghost_devices(
                     ghost_id, entry.entry_id
                 )
             else:
-                device = device_reg.async_get_device(identifiers={ghost_id})
+                # The registry stores the None uid as is, the type hint allows str only.
+                device = device_reg.async_get_device(identifiers={ghost_id})  # type: ignore[arg-type]
         except (AttributeError, TypeError):
             continue
         if device is not None:
