@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [v1.3.5-beta.3] - 2026-10-09
+
+### Fixed
+
+- **Second *PLUM ecoNET300* device with unavailable `_2` entities**: an ecoNET300 module that is still starting can answer `sysParams` with `"uid": null`. The integration then started without a device uid, so the controller entities were registered again (unique IDs `None-...`, entity IDs with `_2`) on a second *PLUM ecoNET300* device without an area. The integration now waits until the module reports its uid, and on setup it removes devices left by a uid of `None`, together with their entities. Your real devices and entities are not touched.
+
 ## [v1.3.5-beta.2] - 2026-10-08
 
 ### Fixed
