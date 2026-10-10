@@ -215,7 +215,7 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
-### What's New in v1.3.5-beta.3
+### What's New in v1.3.5
 
 - **Ready for Home Assistant 2027.8 (#264)**: mixers, ecoSTER panels and the other sub-devices link to the *PLUM ecoNET300* controller with `via_device_id`, so the `via_device` deprecation warning on Home Assistant 2026.8 or newer is gone. Older Home Assistant versions work as before.
 - **Alarm active**: the binary sensor was shown as *Problem* in English, Polish and German.
@@ -296,4 +296,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-10-09 for v1.3.5-beta.3._
+_This README was last updated on 2026-10-10 for v1.3.5._
