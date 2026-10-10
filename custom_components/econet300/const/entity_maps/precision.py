@@ -93,6 +93,9 @@ ENTITY_PRECISION = {
     "PeriodicEnergyConsumption": 1,
     "AXENREGISTER64": 1,
     "AXENREGISTER65": 0,
+    # Electric / induction boiler energy counters
+    "periodicEnergy": 1,
+    "totalEnergy": 1,
     # Heat pump compressor temperature precision
     "afterCompressorTemp": 1,
     "beforeCompressorTemp": 1,

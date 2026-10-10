@@ -167,27 +167,14 @@ This mapping ensures that parameters display with the correct unit symbols, prov
 }
 ```
 
-## 🚀 API Methods
+## 🚀 API Method
 
-The merging is implemented through these step-by-step methods:
+The merging is implemented by `fetch_merged_rm_data()` in `api.py`:
 
-### **1. `fetch_merged_rm_data_with_names()`**
-
-- **Merges**: `rmParamsData` + `rmParamsNames`
-- **Result**: Parameters with metadata and human-readable names
-- **Version**: `1.0-names`
-
-### **2. `fetch_merged_rm_data_with_names_and_descs()`**
-
-- **Merges**: Previous + `rmParamsDescs`
-- **Result**: Parameters with names and descriptions
-- **Version**: `1.0-names-descs`
-
-### **3. `fetch_merged_rm_data()`**
-
-- **Merges**: Previous + `rmStructure` + `rmParamsEnums` + `rmParamsUnitsNames`
-- **Result**: Complete unified data structure with parameter numbers and units
-- **Version**: `1.0-names-descs-structure-units`
+- **Merges**: `rmParamsData` + `rmParamsNames` + `rmParamsDescs` + `rmStructure` + `rmParamsEnums` +
+  `rmParamsUnitsNames` + `rmLocksNames`
+- **Result**: Complete unified data structure with names, descriptions, parameter numbers, units, enums and locks
+- **Version**: `1.0-names-descs-structure-units-indexed-enums-locks-cleaned`
 
 ## 🔄 Data Generation
 

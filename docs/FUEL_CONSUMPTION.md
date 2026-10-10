@@ -32,7 +32,7 @@ The `sensor.econet300_fuel_consumption_total` sensor automatically tracks **tota
 | Property         | Value                      |
 | ---------------- | -------------------------- |
 | **Unit**         | kg                         |
-| **State Class**  | TOTAL_INCREASING           |
+| **State Class**  | TOTAL                      |
 | **Device Class** | econet300\_\_fuel_meter    |
 | **Persistence**  | Yes (survives HA restarts) |
 
@@ -40,7 +40,7 @@ This sensor:
 
 - Automatically integrates the fuel stream rate over time
 - Persists across Home Assistant restarts
-- Uses `TOTAL_INCREASING` state class for long-term statistics
+- Uses the `TOTAL` state class for long-term statistics; a reset sets `last_reset`
 - Can be reset or calibrated using service actions
 
 ### Fuel Level Sensor
@@ -143,18 +143,28 @@ This creates separate daily/weekly/monthly counters while keeping the total inta
 
 ---
 
-## Statistics and History
+## Consumption per Day, Week or Month
 
-With `state_class: TOTAL_INCREASING`, Home Assistant automatically tracks:
+A history graph of `sensor.econet300_fuel_consumption_total` shows the running total, and
+`sensor.econet300_fuel_stream` shows the current rate. Neither shows how many kg were burned in a
+given period. Use a **Statistics graph** card with the **Change** statistic for that: Home Assistant
+keeps long-term statistics for the total sensor (`state_class: TOTAL`), and *Change* is the amount
+added in each period.
 
-- **Sum**: Total accumulated consumption
-- **Sum Increase**: Consumption added in each period
+```yaml
+type: statistics-graph
+title: Fuel consumption per day
+entities:
+  - sensor.econet300_fuel_consumption_total
+stat_types:
+  - change
+period: day
+chart_type: bar
+days_to_show: 30
+```
 
-View statistics in:
-
-- **Developer Tools > Statistics**
-- **Energy Dashboard** (with custom cards)
-- **History graphs**
+Use `period: week` or `period: month` for longer periods. The statistics are also visible in
+**Developer Tools > Statistics**.
 
 ---
 

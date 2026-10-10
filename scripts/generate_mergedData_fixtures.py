@@ -591,7 +591,7 @@ def generate_merged_data(fixtures_root: Path, device_folder: str) -> dict | None
     print("\n[MERGING DATA - Following api.py fetch_merged_rm_data()]")
     print("=" * 60)
 
-    # Step 1: Merge parameter data with names (fetch_merged_rm_data_with_names)
+    # Step 1: Merge parameter data with names.
     print("Step 1: Merging rmParamsData + rmParamsNames...")
     merged_params = []
     for i, param in enumerate(params_data):
@@ -611,7 +611,7 @@ def generate_merged_data(fixtures_root: Path, device_folder: str) -> dict | None
 
     print(f"  - Merged {len(merged_params)} parameters with names")
 
-    # Step 2: Add descriptions (fetch_merged_rm_data_with_names_and_descs)
+    # Step 2: Add descriptions.
     print("Step 2: Adding descriptions from rmParamsDescs...")
     for i, param in enumerate(merged_params):
         if i < len(params_descs) and isinstance(params_descs, list):

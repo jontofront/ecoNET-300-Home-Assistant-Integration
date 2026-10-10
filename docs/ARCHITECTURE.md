@@ -234,7 +234,7 @@ classDiagram
     class EconetClient {
         -_host: str
         -_session: ClientSession
-        -_auth: BasicAuth
+        -_headers: dict
         +get(url): dict
     }
 

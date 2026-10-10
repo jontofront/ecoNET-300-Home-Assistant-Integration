@@ -144,6 +144,9 @@ ENTITY_SENSOR_DEVICE_CLASS_MAP: dict[str, _SensorDeviceClass | None] = {
     "PeriodicEnergyConsumption": _SensorDeviceClass.ENERGY,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
+    # Electric / induction boiler energy counters (regParams)
+    "periodicEnergy": _SensorDeviceClass.ENERGY,
+    "totalEnergy": _SensorDeviceClass.ENERGY,
     # Phoenix / extended heat-pump device classes (decomposed from EXTRA_SENSORS)
     "BuforCalcSetTemp": _SensorDeviceClass.TEMPERATURE,
     "Circuit1CalcTemp": _SensorDeviceClass.TEMPERATURE,

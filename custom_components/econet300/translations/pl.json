@@ -1257,6 +1257,12 @@
       "periodic_energy_consumption": {
         "name": "Okresowe zużycie energii"
       },
+      "periodic_energy": {
+        "name": "Zużycie energii (okres)"
+      },
+      "total_energy": {
+        "name": "Zużycie energii (łącznie)"
+      },
       "axenregister64": {
         "name": "Rejestr AXEN 64"
       },

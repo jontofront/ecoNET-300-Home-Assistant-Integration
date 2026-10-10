@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "ecoNET-300-Home-Assistant-Integration"
-version = "1.3.5"
+version = "1.3.6-beta.3"
 description = "ecoNET300 Home Assistant integration"
 authors = ["Jon <jontofront@gmail.com>"]
 readme = "README.md"
@@ -556,28 +556,29 @@ split-on-trailing-comma = false
 max-complexity = 25
 
 [tool.pymarkdown]
-# Markdownlint configuration for ecoNET-300 project
-# See: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+# pymarkdown configuration for ecoNET-300 project, read by `pymarkdown scan`.
+# Keys are plugins.<rule>.<setting>, markdownlint names like MD013 are ignored.
+# See: https://pymarkdown.readthedocs.io/en/latest/plugins/
 
 # Line length - allow longer lines for changelog content
-MD013.line_length = 120
-MD013.code_blocks = false
-MD013.tables = false
+plugins.md013.line_length = 120
+plugins.md013.code_blocks = false
+plugins.md013.tables = false
 
 # Disable duplicate heading check for changelog files
-MD024 = false
+plugins.md024.enabled = false
 
 # Allow multiple consecutive blank lines in changelog
-MD012.maximum = 3
+plugins.md012.maximum = 3
 
 # Allow emphasis in headers (for **bold** text)
-MD036.punctuation = ".,;:!"
+plugins.md036.punctuation = ".,;:!"
 
 # Allow inline HTML if needed
-MD033 = false
+plugins.md033.enabled = false
 
 # Allow bare URLs
-MD034 = false
+plugins.md034.enabled = false
 
 # Allow trailing punctuation in headers
-MD026.punctuation = ".,;:!"
+plugins.md026.punctuation = ".,;:!"
