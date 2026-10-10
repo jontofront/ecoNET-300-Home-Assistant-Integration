@@ -78,12 +78,17 @@ The states `work`, `problem`, `chimney`, and `no_transmission` no longer exist.
 
 ## Upgrading from v1.2.x to v1.3.0
 
-No configuration migration is required — your setup keeps working. v1.3.0 does change **how a few entities are provided**, so some old entities are left behind as **Unavailable** and should be deleted manually.
+No configuration migration is required — your setup keeps working. v1.3.0 does change
+**how a few entities are provided**, so some old entities are left behind as **Unavailable**
+and should be deleted manually.
 
 ### What changed
 
-- **Heating schedules are now Calendar entities.** The old text sensors — *Heating schedule*, *Mixer N schedule*, *Water heater schedule* (`sensor.*_schedule`) — are replaced by native Home Assistant **Calendar** entities.
-- **A few duplicate boiler-output sensors were removed** in favor of running-state binary sensors (e.g. *Alarm output*, *Blower fan 1/2*, *Outer boiler*).
+- **Heating schedules are now Calendar entities.** The old text sensors — *Heating schedule*,
+  *Mixer N schedule*, *Water heater schedule* (`sensor.*_schedule`) — are replaced by native
+  Home Assistant **Calendar** entities.
+- **A few duplicate boiler-output sensors were removed** in favor of running-state binary sensors
+  (e.g. *Alarm output*, *Blower fan 1/2*, *Outer boiler*).
 - **Registration/config values** (*Product code*, *Register type*, *Remote menu*, etc.) moved into the **Diagnostic** category.
 
 ### Cleanup steps (recommended)
@@ -93,9 +98,11 @@ Home Assistant never auto-deletes entities on upgrade, so the replaced ones rema
 1. Update the integration (HACS) and **restart Home Assistant**.
 2. Go to **Settings → Devices & Services → ecoNET300 → Entities**.
 3. Filter by **Unavailable**.
-4. Delete the old `sensor.*_schedule` entities and any leftover *Unavailable* boiler-output sensors. They will **not** come back — the new Calendar and binary-sensor entities take their place.
+4. Delete the old `sensor.*_schedule` entities and any leftover *Unavailable* boiler-output sensors.
+   They will **not** come back — the new Calendar and binary-sensor entities take their place.
 
-> Deleting is safe: it only removes the orphaned registry entry. Update any automations/dashboards that referenced the old schedule sensors to use the new Calendar entities.
+> Deleting is safe: it only removes the orphaned registry entry. Update any automations/dashboards
+> that referenced the old schedule sensors to use the new Calendar entities.
 
 ---
 
@@ -317,11 +324,14 @@ Entity IDs should remain stable between versions. If you notice changes:
 
 ### ecoSOL 301 / ecoSOL 500: critical sensors unavailable
 
-If **temperatures and pump values** became **unavailable** after upgrading from v1.1.16 to v1.2.x ([issue #219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)):
+If **temperatures and pump values** became **unavailable** after upgrading from v1.1.16 to v1.2.x
+([issue #219](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/219)):
 
-1. **Update** the integration to a release that includes the ecoSOL sensor mapping fix (uses register keys `T1`, `P1`, etc., from `regParams`).
+1. **Update** the integration to a release that includes the ecoSOL sensor mapping fix
+   (uses register keys `T1`, `P1`, etc., from `regParams`).
 2. **Restart** Home Assistant.
-3. **Optional**: In **Settings → Devices → ecoNET300 → Entities**, delete orphaned or duplicate `sensor` entities that still reference boiler-only keys if the UI shows duplicates after the fix.
+3. **Optional**: In **Settings → Devices → ecoNET300 → Entities**, delete orphaned or duplicate
+   `sensor` entities that still reference boiler-only keys if the UI shows duplicates after the fix.
 
 ### Connection Issues After Upgrade
 
@@ -337,7 +347,10 @@ If the 165+ dynamic entities don't appear:
 1. **Check controller support**: Not all controllers support the RM/mergedData API
 2. **Supported controllers**: ecoMAX810P-L, ecoMAX850R2-X, ecoMAX860P2-N, ecoMAX860P3-V
 3. **Unsupported controllers**: ecoSOL500, ecoSOL, SControl MK1, ecoMAX360i (limited support)
-4. **Legacy-only modules**: Some ecoNET300 module firmware (e.g. v3.2.3879 on ecoMAX860D3-HB) only exposes sysParams, regParams, regParamsData. The integration auto-detects this (2s probe) and runs with legacy entities only; you will see "RM endpoint not available (legacy-only module)" in the logs. This is expected and the integration works normally with fewer entities.
+4. **Legacy-only modules**: Some ecoNET300 module firmware (e.g. v3.2.3879 on ecoMAX860D3-HB)
+   only exposes sysParams, regParams, regParamsData. The integration auto-detects this (2s probe)
+   and runs with legacy entities only; you will see "RM endpoint not available (legacy-only module)"
+   in the logs. This is expected and the integration works normally with fewer entities.
 5. **Review logs**: Search for "mergedData" or "RM endpoint" in Home Assistant logs
 
 ### Getting Help

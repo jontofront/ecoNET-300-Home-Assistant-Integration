@@ -1,3 +1,4 @@
+<!-- pyml disable md013 -->
 # ecoNET-300 Home Assistant Integration
 
 [![Code Formatter](https://img.shields.io/badge/Code%20Formatter-Ruff-000000?style=for-the-badge&logo=python)](https://github.com/astral-sh/ruff)
@@ -84,9 +85,9 @@ The integration supports **7 languages** with comprehensive translations:
 1. Install and configure [HACS](https://hacs.xyz/).
 2. Add this repository as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories/) using:
 
-```text
-https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration
-```
+   ```text
+   https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration
+   ```
 
 3. In HACS, search for **"ecoNET300"**, install the integration.
 4. Restart Home Assistant.
@@ -296,4 +297,4 @@ If you encounter any issues or have questions:
 
 ---
 
-_This README was last updated on 2026-10-10 for v1.3.5._
+*This README was last updated on 2026-10-10 for v1.3.5.*
