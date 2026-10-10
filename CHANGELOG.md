@@ -3,6 +3,18 @@
 
 ## [Unreleased]
 
+## [v1.3.6-beta.2] - 2026-10-10
+
+### Fixed
+
+- **Log flooded while the device is offline ([#255](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/255))**: every failed update (every 15 s by default) logged an `ERROR` such as `API error: sysParams endpoint returned no usable data`, plus up to five `Timeout error, retry` warnings and `Failed to fetch data ... after 5 attempts`. Now the log shows one `info` line when the module stops answering (`Device <host> is unavailable: <reason>`) and one when it answers again (`Device <host> is available again after <N> failed updates`), as the Home Assistant *log-when-unavailable* rule asks. The failed updates in between, and the request retries, are logged at `debug` level. The *Connection to ecoNET300 device failed* repair after 5 failed updates is unchanged.
+- **Single `regParams` answer without data counted as a failure ([#255](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/255))**: the module sometimes answers `regParams` without `curr`. The integration now asks once more after 1 second, so such an answer no longer marks the device offline.
+- **`Service authentication successful` logged on every update**: with a service password the message was written at `info` level every poll. It is now at `debug` level.
+
+### Docs
+
+- `docs/CONFIGURATION.md`: what happens and what is logged when the device is offline.
+
 ## [v1.3.6-beta.1] - 2026-10-10
 
 ### Fixed

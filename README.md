@@ -216,9 +216,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
-### What's New in v1.3.6-beta.1
+### What's New in v1.3.6-beta.2
 
 - **Ready for aiohttp 4.0 (#267)**: the integration logs in to the ecoNET300 module without aiohttp's deprecated `BasicAuth`, so it keeps working when Home Assistant updates aiohttp. Nothing changes for you.
+- **Quiet log when the device is offline (#255)**: one line when the module stops answering and one when it is back, instead of an error every 15 seconds. See [When the device is offline](docs/CONFIGURATION.md#when-the-device-is-offline).
 
 ### What's New in v1.3.5
 
@@ -301,4 +302,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-10-10 for v1.3.6-beta.1.*
+*This README was last updated on 2026-10-10 for v1.3.6-beta.2.*

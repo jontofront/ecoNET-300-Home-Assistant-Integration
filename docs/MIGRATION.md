@@ -8,7 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
-| v1.3.5       | v1.3.6-beta.1 | No                 | Login ready for aiohttp 4.0 (#267)         |
+| v1.3.5       | v1.3.6-beta.2 | No                 | aiohttp 4.0 login (#267), quiet log (#255) |
 | v1.3.4       | v1.3.5        | No                 | Fixes `via_device` log warning (#264)      |
 | v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |
 | v1.3.2       | v1.3.3        | Automations only   | `mode` / `transmission` state names (#247) |
