@@ -189,10 +189,10 @@ class EconetClient:
                     return data
 
             except TimeoutError:
-                _LOGGER.warning("Timeout error, retry(%i/%i)", attempt, max_attempts)
+                _LOGGER.debug("Timeout error, retry(%i/%i)", attempt, max_attempts)
                 await asyncio.sleep(1)
             attempt += 1
-        _LOGGER.error(
+        _LOGGER.debug(
             "Failed to fetch data from %s after %d attempts",
             _sanitize_url_for_logging(url),
             max_attempts,
@@ -343,10 +343,10 @@ class EconetClient:
                     return data
 
             except TimeoutError:
-                _LOGGER.warning("Timeout error, retry(%i/%i)", attempt, max_attempts)
+                _LOGGER.debug("Timeout error, retry(%i/%i)", attempt, max_attempts)
                 await asyncio.sleep(1)
             attempt += 1
-        _LOGGER.error(
+        _LOGGER.debug(
             "Failed to fetch data from %s after %d attempts",
             _sanitize_url_for_logging(url),
             max_attempts,
@@ -722,14 +722,14 @@ class Econet300Api:
             data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
             if data is None:
-                _LOGGER.info("Data fetched by API for endpoint: %s is None", endpoint)
+                _LOGGER.debug("Data fetched by API for endpoint: %s is None", endpoint)
                 return None
 
             if data_key is None:
                 return data
 
             if data_key not in data:
-                _LOGGER.info(
+                _LOGGER.debug(
                     "Data for key: %s does not exist in endpoint: %s",
                     data_key,
                     endpoint,
@@ -738,13 +738,13 @@ class Econet300Api:
 
             return data[data_key]
         except aiohttp.ClientError as e:
-            _LOGGER.warning(
+            _LOGGER.debug(
                 "Client error while fetching %s (device offline?): %s",
                 endpoint,
                 e,
             )
         except asyncio.TimeoutError as e:
-            _LOGGER.warning(
+            _LOGGER.debug(
                 "Timeout while fetching %s (device offline?): %s",
                 endpoint,
                 e,
@@ -840,7 +840,7 @@ class Econet300Api:
                         data = await response.json()
                         access = data.get("access", False)
                         if access:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Service authentication successful (access level: %s)",
                                 data.get("index", data.get("level", "unknown")),
                             )

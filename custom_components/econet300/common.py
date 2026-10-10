@@ -41,6 +41,7 @@ from .const import (
     EDIT_PARAMS_CONFIRM_DELAY_SEC,
     EDIT_PARAMS_RETRY_DELAYS_SEC,
     EDIT_PARAMS_SHORT_TIMEOUT_SEC,
+    REG_PARAMS_RETRY_DELAY_SEC,
     RM_ADDITIONAL_DATASET_KEYS,
     RM_CORE_DATASET_KEYS,
     STALE_AFTER_SECONDS,
@@ -383,9 +384,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     if not isinstance(params_edits, dict):
                         params_edits = {}
 
-                reg_params = await self._api.fetch_reg_params()
-                if not isinstance(reg_params, dict) or not reg_params:
-                    raise ApiError("regParams endpoint returned no usable data")  # noqa: TRY301 — reuse the ApiError keep-last-data path
+                reg_params = await self._fetch_reg_params()
 
                 reg_params_data = await self._api.fetch_reg_params_data()
                 if not isinstance(reg_params_data, dict):
@@ -488,27 +487,36 @@ class EconetDataCoordinator(DataUpdateCoordinator):
             _LOGGER.error("Authentication error: %s", err)
             raise ConfigEntryAuthFailed from err
         except ApiError as err:
-            _LOGGER.error("API error: %s", err)
             self._on_failed_update(err)
             if last_data:
                 return self._with_health(last_data, online=False)
             raise UpdateFailed(f"Error communicating with API: {err}") from err
         except asyncio.TimeoutError as err:
-            _LOGGER.warning(
-                "Update timed out after %ds (device slow or overloaded?): %s",
-                timeout,
-                err,
-            )
-            self._on_failed_update(err)
+            self._on_failed_update(err, reason=f"update timed out after {timeout}s")
             if last_data:
                 return self._with_health(last_data, online=False)
             raise UpdateFailed(f"Update timed out after {timeout}s: {err}") from err
         except ClientError as err:
-            _LOGGER.warning("Connection failed (device offline?): %s", err)
             self._on_failed_update(err)
             if last_data:
                 return self._with_health(last_data, online=False)
             raise UpdateFailed(f"Connection failed: {err}") from err
+
+    async def _fetch_reg_params(self) -> dict[str, Any]:
+        """Fetch regParams, asking once more when the answer has no data."""
+        reg_params = await self._api.fetch_reg_params()
+        if isinstance(reg_params, dict) and reg_params:
+            return reg_params
+
+        _LOGGER.debug(
+            "regParams returned no usable data, asking again in %ds",
+            REG_PARAMS_RETRY_DELAY_SEC,
+        )
+        await asyncio.sleep(REG_PARAMS_RETRY_DELAY_SEC)
+        reg_params = await self._api.fetch_reg_params()
+        if not isinstance(reg_params, dict) or not reg_params:
+            raise ApiError("regParams endpoint returned no usable data")
+        return reg_params
 
     def _with_health(
         self, payload: dict[str, Any], *, online: bool, copy_payload: bool = True
@@ -546,24 +554,45 @@ class EconetDataCoordinator(DataUpdateCoordinator):
     def _on_successful_update(self) -> None:
         """Handle successful data update."""
         if self._consecutive_failures > 0:
-            _LOGGER.debug(
-                "Connection restored after %d failures", self._consecutive_failures
+            _LOGGER.info(
+                "Device %s is available again after %d failed updates",
+                self._config_entry.data.get("host", "unknown"),
+                self._consecutive_failures,
             )
             self._consecutive_failures = 0
             async_delete_issue(
                 self.hass, DOMAIN, f"connection_failed_{self._config_entry.entry_id}"
             )
 
-    def _on_failed_update(self, err: Exception | None = None) -> None:
-        """Handle failed data update."""
+    def _on_failed_update(
+        self, err: Exception | None = None, reason: str | None = None
+    ) -> None:
+        """Handle failed data update.
+
+        Logs once when the device becomes unavailable, at info level as the
+        log-when-unavailable quality scale rule asks. Later failures in a row
+        are logged at debug level; the repair issue tells the user when the
+        device stays unavailable.
+        """
         self._consecutive_failures += 1
         self._last_failure_ts = time.time()
-        if err is not None:
+        if reason is not None:
+            self._last_error = reason
+        elif err is not None:
             self._last_error = str(err) or err.__class__.__name__
-        _LOGGER.debug("Consecutive connection failures: %d", self._consecutive_failures)
+
+        host = self._config_entry.data.get("host", "unknown")
+        if self._consecutive_failures == 1:
+            _LOGGER.info("Device %s is unavailable: %s", host, self._last_error)
+        else:
+            _LOGGER.debug(
+                "Device %s still unavailable after %d failed updates: %s",
+                host,
+                self._consecutive_failures,
+                self._last_error,
+            )
 
         if self._consecutive_failures >= CONSECUTIVE_FAILURES_THRESHOLD:
-            host = self._config_entry.data.get("host", "unknown")
             async_create_issue(
                 self.hass,
                 DOMAIN,

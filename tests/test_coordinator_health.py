@@ -495,6 +495,90 @@ class TestFailureBookkeeping:
         assert coord._consecutive_failures == 0
         delete.assert_called_once()
 
+    def test_unavailable_is_logged_once_at_info(self, caplog):
+        """Test only the first failure in a row is logged above debug level."""
+        coord = _bare_coordinator(consecutive_failures=0)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        caplog.set_level("DEBUG", logger="custom_components.econet300.common")
+
+        with patch("custom_components.econet300.common.async_create_issue"):
+            for _ in range(3):
+                coord._on_failed_update(ValueError("connection refused"))
+
+        above_debug = [r for r in caplog.records if r.levelname != "DEBUG"]
+        assert [(r.levelname, r.getMessage()) for r in above_debug] == [
+            ("INFO", "Device 10.10.1.77 is unavailable: connection refused")
+        ]
+
+    def test_available_again_is_logged_at_info(self, caplog):
+        """Test the recovery after failures is logged once at info level."""
+        coord = _bare_coordinator(consecutive_failures=3)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        caplog.set_level("INFO", logger="custom_components.econet300.common")
+
+        with patch("custom_components.econet300.common.async_delete_issue"):
+            coord._on_successful_update()
+            coord._on_successful_update()
+
+        assert [r.getMessage() for r in caplog.records] == [
+            "Device 10.10.1.77 is available again after 3 failed updates"
+        ]
+
+    def test_failed_update_reason_replaces_error_text(self):
+        """Test a timeout is recorded with a readable reason."""
+        coord = _bare_coordinator(consecutive_failures=0)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1")
+
+        with patch("custom_components.econet300.common.async_create_issue"):
+            coord._on_failed_update(TimeoutError(), reason="update timed out after 30s")
+
+        assert coord._last_error == "update timed out after 30s"
+
+
+class TestRegParamsRetry:
+    """Test regParams is asked once more when the module answers without data."""
+
+    LAST_DATA: dict[str, Any] = {
+        "sysParams": {"controllerID": "ecoMAX360i"},
+        "regParams": {"tempCO": 40},
+    }
+
+    @pytest.mark.asyncio
+    async def test_second_answer_is_used(self):
+        """Test one answer without data does not fail the update (#255)."""
+        coord, api = _update_ready_coordinator()
+        api.fetch_reg_params = AsyncMock(side_effect=[None, {"tempCO": 50}])
+
+        with patch(
+            "custom_components.econet300.common.asyncio.sleep", AsyncMock()
+        ) as sleep:
+            data = await coord._async_update_data()
+
+        assert api.fetch_reg_params.await_count == 2
+        sleep.assert_awaited_once()
+        assert data["regParams"] == {"tempCO": 50}
+        assert data["_health"]["online"] is True
+        assert coord._consecutive_failures == 0
+
+    @pytest.mark.asyncio
+    async def test_two_answers_without_data_keep_last_data(self):
+        """Test the update fails and keeps the last data after the retry."""
+        coord, api = _update_ready_coordinator(last_data=copy.deepcopy(self.LAST_DATA))
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        api.fetch_reg_params = AsyncMock(return_value={})
+
+        with patch("custom_components.econet300.common.asyncio.sleep", AsyncMock()):
+            data = await coord._async_update_data()
+
+        assert api.fetch_reg_params.await_count == 2
+        assert data["regParams"] == {"tempCO": 40}
+        assert data["_health"]["online"] is False
+        assert coord._consecutive_failures == 1
+        assert coord._last_error == "regParams endpoint returned no usable data"
+
 
 # ============================================================================
 # EconetOnlineBinarySensor

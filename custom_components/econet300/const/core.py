@@ -47,6 +47,10 @@ SENSITIVE_PARAM_KEYS = frozenset(
 # Number of consecutive failures before creating a repair issue
 CONSECUTIVE_FAILURES_THRESHOLD = 5
 
+# The module sometimes answers regParams without data (#255); it is asked once
+# more after this delay before the update counts as failed.
+REG_PARAMS_RETRY_DELAY_SEC = 1
+
 # Timeout in seconds for probing RM endpoint support (legacy-only modules return 404)
 RM_PROBE_TIMEOUT_SEC = 2
 
