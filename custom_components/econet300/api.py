@@ -1,6 +1,7 @@
 """Econet300 API class describing methods of getting and setting data."""
 
 import asyncio
+import base64
 from datetime import datetime
 from http import HTTPStatus
 import json
@@ -9,7 +10,7 @@ import re
 from typing import Any
 
 import aiohttp
-from aiohttp import BasicAuth, ClientSession, ClientTimeout
+from aiohttp import ClientSession, ClientTimeout, hdrs
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -71,6 +72,17 @@ def _sanitize_url_for_logging(url: str) -> str:
     return re.sub(r"([&?])password=[^&]*", r"\1password=***REDACTED***", url)
 
 
+def _basic_auth_header(username: str, password: str) -> str:
+    """Return the value of the HTTP Basic Authorization header.
+
+    Encodes with latin-1 like aiohttp's deprecated BasicAuth, so the header
+    sent to the module stays the same.
+    """
+    credentials = f"{username}:{password}".encode("latin-1")
+    token = base64.b64encode(credentials).decode("ascii")
+    return f"Basic {token}"
+
+
 class AuthError(Exception):
     """Raised when authentication fails."""
 
@@ -110,7 +122,7 @@ class EconetClient:
 
         self._host = host
         self._session = session
-        self._auth = BasicAuth(username, password)
+        self._headers = {hdrs.AUTHORIZATION: _basic_auth_header(username, password)}
         self._model_id = "default-model-id"
         self._sw_revision = "default-sw-revision"
         # Throttle concurrent requests to avoid overwhelming the ecoNET module
@@ -138,7 +150,7 @@ class EconetClient:
                 async with (
                     self._semaphore,
                     await self._session.get(
-                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                        url, headers=self._headers, timeout=ClientTimeout(total=15)
                     ) as resp,
                 ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
@@ -198,7 +210,7 @@ class EconetClient:
             async with (
                 self._semaphore,
                 await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                    url, headers=self._headers, timeout=ClientTimeout(total=timeout_sec)
                 ) as resp,
             ):
                 if resp.status in (HTTPStatus.UNAUTHORIZED, HTTPStatus.NOT_FOUND):
@@ -231,7 +243,7 @@ class EconetClient:
             async with (
                 self._semaphore,
                 await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                    url, headers=self._headers, timeout=ClientTimeout(total=timeout_sec)
                 ) as resp,
             ):
                 status = resp.status
@@ -279,7 +291,7 @@ class EconetClient:
                 async with (
                     self._semaphore,
                     await self._session.get(
-                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                        url, headers=self._headers, timeout=ClientTimeout(total=15)
                     ) as resp,
                 ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
@@ -826,7 +838,7 @@ class Econet300Api:
                 async with self._client._session.get(  # noqa: SLF001  # Accessing private member for service auth
                     url,
                     params={"password": password},
-                    auth=self._client._auth,  # noqa: SLF001  # Accessing private member for service auth
+                    headers=self._client._headers,  # noqa: SLF001  # Accessing private member for service auth
                 ) as response:
                     if response.status == HTTPStatus.OK:
                         data = await response.json()
