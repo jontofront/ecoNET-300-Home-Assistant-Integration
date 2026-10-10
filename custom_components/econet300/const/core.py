@@ -235,7 +235,6 @@ API_RM_STRUCTURE_URI = "rmStructure"
 
 # RM endpoints for current data
 API_RM_CURRENT_DATA_PARAMS_URI = "rmCurrentDataParams"
-API_RM_CURRENT_DATA_PARAMS_EDITS_URI = "rmCurrentDataParamsEdits"
 
 # RM endpoints for system information
 API_RM_LANGS_URI = "rmLangs"
