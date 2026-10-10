@@ -216,10 +216,12 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
-### What's New in v1.3.6-beta.2
+### What's New in v1.3.6-beta.3
 
 - **Ready for aiohttp 4.0 (#267)**: the integration logs in to the ecoNET300 module without aiohttp's deprecated `BasicAuth`, so it keeps working when Home Assistant updates aiohttp. Nothing changes for you.
 - **Quiet log when the device is offline (#255)**: one line when the module stops answering and one when it is back, instead of an error every 15 seconds. See [When the device is offline](docs/CONFIGURATION.md#when-the-device-is-offline).
+- **Electric boilers in the Energy Dashboard (#237)**: `totalEnergy` and `periodicEnergy` are kWh energy sensors, and the weather temperature shows *unknown* instead of 999 when the outdoor sensor is not connected. See [Electric and induction boilers](docs/ENTITIES.md#electric-and-induction-boilers).
+- **Fuel consumption per day (#203)**: [how to chart the kg burned per day, week or month](docs/FUEL_CONSUMPTION.md#consumption-per-day-week-or-month).
 
 ### What's New in v1.3.5
 
@@ -302,4 +304,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-10-10 for v1.3.6-beta.2.*
+*This README was last updated on 2026-10-10 for v1.3.6-beta.3.*

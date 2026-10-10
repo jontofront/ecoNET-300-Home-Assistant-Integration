@@ -3,6 +3,21 @@
 
 ## [Unreleased]
 
+## [v1.3.6-beta.3] - 2026-10-10
+
+### Added
+
+- **Electric and induction boilers in the Energy Dashboard ([#237](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/237))**: `totalEnergy` (*Energy consumption (total)*) and `periodicEnergy` (*Energy consumption (period)*) from `regParams` were plain numbers without a unit. They are now energy sensors in kWh with `total_increasing`, so they can be added to the Energy Dashboard. Names in English, Polish, German, Czech, French and Ukrainian.
+
+### Fixed
+
+- **Weather temperature showed 999 ([#237](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/237))**: the controller reports `TempWthr = 999` when the outdoor sensor is not connected. The sensor now shows *unknown* instead of 999 °C, so graphs and statistics are not spoiled.
+
+### Docs
+
+- `docs/ENTITIES.md`: new section *Electric and Induction Boilers*.
+- `docs/FUEL_CONSUMPTION.md` ([#203](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/discussions/203)): how to chart the fuel burned per day, week or month with a Statistics graph card; the fuel total sensor uses the `TOTAL` state class (the page said `TOTAL_INCREASING`).
+
 ## [v1.3.6-beta.2] - 2026-10-10
 
 ### Fixed
