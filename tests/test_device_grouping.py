@@ -4,10 +4,15 @@ Covers:
 - ``EconetDataCoordinator.single_device_tree`` reading the option.
 - ``get_device_info_for_component`` split vs single behaviour.
 - Per-component entity ``device_info`` honouring the coordinator flag.
+- Component devices connected through the controller device, with
+  ``via_device_id`` (Home Assistant 2026.8+) and ``via_device`` (older).
 """
 
+from collections.abc import Iterator
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 from custom_components.econet300.common import EconetDataCoordinator
 from custom_components.econet300.const import (
@@ -29,6 +34,33 @@ from custom_components.econet300.entity import (
 )
 from custom_components.econet300.calendar import EconetScheduleCalendar
 from custom_components.econet300.common_functions import schedule_component
+from custom_components.econet300.number import (
+    AdvancedParameterNumber,
+    ServiceParameterNumber,
+)
+
+CONTROLLER_DEVICE_ID = "controller-device-id"
+
+
+@pytest.fixture(params=[True, False], ids=["via_device_id", "via_device"])
+def supports_via_device_id(request: pytest.FixtureRequest) -> Iterator[bool]:
+    """Run the test as on Home Assistant 2026.8+ and as on an older version."""
+    with patch(
+        "custom_components.econet300.entity.HA_SUPPORTS_VIA_DEVICE_ID", request.param
+    ):
+        yield request.param
+
+
+def _assert_connected_via_controller(
+    info: Any, api: MagicMock, supports_via_device_id: bool
+) -> None:
+    """Assert the device links to the controller device."""
+    if supports_via_device_id:
+        assert info.get("via_device_id") == CONTROLLER_DEVICE_ID
+        assert "via_device" not in info
+    else:
+        assert info.get("via_device") == (DOMAIN, api.uid)
+        assert "via_device_id" not in info
 
 
 def _make_api() -> MagicMock:
@@ -46,6 +78,7 @@ def _coordinator(single: bool) -> MagicMock:
     """Mock coordinator exposing the single_device_tree flag."""
     coord = MagicMock(spec=EconetDataCoordinator)
     coord.single_device_tree = single
+    coord.controller_device_id = CONTROLLER_DEVICE_ID
     return coord
 
 
@@ -87,38 +120,50 @@ def test_coordinator_reads_option_from_options() -> None:
 # ---------------------------------------------------------------------------
 # get_device_info_for_component
 # ---------------------------------------------------------------------------
-def test_component_split_produces_distinct_devices() -> None:
-    """Split mode yields per-component identifiers with via_device parent."""
+def test_component_split_produces_distinct_devices(
+    supports_via_device_id: bool,
+) -> None:
+    """Split mode yields per-component devices connected via the controller."""
     api = _make_api()
+    expected_identifiers = {
+        COMPONENT_HUW: f"{api.uid}-huw",
+        COMPONENT_LAMBDA: f"{api.uid}-lambda",
+        COMPONENT_BUFFER: f"{api.uid}-buffer",
+        COMPONENT_SOLAR: f"{api.uid}-solar",
+    }
 
-    huw = get_device_info_for_component(COMPONENT_HUW, api, single_device=False)
-    lam = get_device_info_for_component(COMPONENT_LAMBDA, api, single_device=False)
-    buf = get_device_info_for_component(COMPONENT_BUFFER, api, single_device=False)
-    sol = get_device_info_for_component(COMPONENT_SOLAR, api, single_device=False)
-
-    assert _identifier(huw) == f"{api.uid}-huw"
-    assert _identifier(lam) == f"{api.uid}-lambda"
-    assert _identifier(buf) == f"{api.uid}-buffer"
-    assert _identifier(sol) == f"{api.uid}-solar"
-    for info in (huw, lam, buf, sol):
-        assert info.get("via_device") == (DOMAIN, api.uid)
+    for component, identifier in expected_identifiers.items():
+        info = get_device_info_for_component(
+            component, api, via_device_id=CONTROLLER_DEVICE_ID
+        )
+        assert _identifier(info) == identifier
+        _assert_connected_via_controller(info, api, supports_via_device_id)
 
 
-def test_component_split_mixer_has_index_and_parent() -> None:
-    """Mixer split device uses the indexed identifier and parent link."""
+def test_component_split_mixer_has_index_and_parent(
+    supports_via_device_id: bool,
+) -> None:
+    """Mixer split device uses the indexed identifier and the controller link."""
     api = _make_api()
-    info = get_device_info_for_component("mixer_2", api, single_device=False)
+    info = get_device_info_for_component(
+        "mixer_2", api, via_device_id=CONTROLLER_DEVICE_ID
+    )
     assert _identifier(info) == f"{api.uid}-mixer-2"
-    assert info.get("via_device") == (DOMAIN, api.uid)
+    _assert_connected_via_controller(info, api, supports_via_device_id)
 
 
-def test_component_single_merges_into_one_device() -> None:
+def test_component_single_merges_into_one_device(
+    supports_via_device_id: bool,
+) -> None:
     """Single mode returns the main device identifier for every component."""
     api = _make_api()
     for component in (COMPONENT_HUW, COMPONENT_LAMBDA, COMPONENT_SOLAR, "mixer_3"):
-        info = get_device_info_for_component(component, api, single_device=True)
+        info = get_device_info_for_component(
+            component, api, single_device=True, via_device_id=CONTROLLER_DEVICE_ID
+        )
         assert _identifier(info) == api.uid
         assert "via_device" not in info
+        assert "via_device_id" not in info
 
 
 # ---------------------------------------------------------------------------
@@ -133,14 +178,16 @@ def test_econet_entity_split_uses_controller_device() -> None:
     assert _identifier(_entity_device_info(EconetEntity, entity)) == api.uid
 
 
-def test_mixer_entity_split_vs_single() -> None:
+def test_mixer_entity_split_vs_single(supports_via_device_id: bool) -> None:
     """MixerEntity returns its own device when split, main when single."""
     api = _make_api()
     split = object.__new__(MixerEntity)
     split.api = api
     split._idx = 1
     split.coordinator = _coordinator(single=False)
-    assert _identifier(_entity_device_info(MixerEntity, split)) == f"{api.uid}-mixer-1"
+    split_info = _entity_device_info(MixerEntity, split)
+    assert _identifier(split_info) == f"{api.uid}-mixer-1"
+    _assert_connected_via_controller(split_info, api, supports_via_device_id)
 
     single = object.__new__(MixerEntity)
     single.api = api
@@ -149,13 +196,15 @@ def test_mixer_entity_split_vs_single() -> None:
     assert _identifier(_entity_device_info(MixerEntity, single)) == api.uid
 
 
-def test_lambda_entity_split_vs_single() -> None:
+def test_lambda_entity_split_vs_single(supports_via_device_id: bool) -> None:
     """LambdaEntity returns its own device when split, main when single."""
     api = _make_api()
     split = object.__new__(LambdaEntity)
     split.api = api
     split.coordinator = _coordinator(single=False)
-    assert _identifier(_entity_device_info(LambdaEntity, split)) == f"{api.uid}-lambda"
+    split_info = _entity_device_info(LambdaEntity, split)
+    assert _identifier(split_info) == f"{api.uid}-lambda"
+    _assert_connected_via_controller(split_info, api, supports_via_device_id)
 
     single = object.__new__(LambdaEntity)
     single.api = api
@@ -163,22 +212,44 @@ def test_lambda_entity_split_vs_single() -> None:
     assert _identifier(_entity_device_info(LambdaEntity, single)) == api.uid
 
 
-def test_ecoster_entity_split_vs_single() -> None:
+def test_ecoster_entity_split_vs_single(supports_via_device_id: bool) -> None:
     """EcoSterEntity returns its own device when split, main when single."""
     api = _make_api()
     split = object.__new__(EcoSterEntity)
     split.api = api
     split._idx = 2
     split.coordinator = _coordinator(single=False)
-    assert (
-        _identifier(_entity_device_info(EcoSterEntity, split)) == f"{api.uid}-ecoster-2"
-    )
+    split_info = _entity_device_info(EcoSterEntity, split)
+    assert _identifier(split_info) == f"{api.uid}-ecoster-2"
+    _assert_connected_via_controller(split_info, api, supports_via_device_id)
 
     single = object.__new__(EcoSterEntity)
     single.api = api
     single._idx = 2
     single.coordinator = _coordinator(single=True)
     assert _identifier(_entity_device_info(EcoSterEntity, single)) == api.uid
+
+
+@pytest.mark.parametrize(
+    ("entity_class", "suffix"),
+    [
+        (ServiceParameterNumber, "service-parameters"),
+        (AdvancedParameterNumber, "advanced-parameters"),
+    ],
+)
+def test_parameter_device_connects_via_controller(
+    supports_via_device_id: bool, entity_class: type, suffix: str
+) -> None:
+    """Service and advanced parameter devices share the controller details."""
+    api = _make_api()
+    entity = object.__new__(entity_class)
+    entity.api = api
+    entity.coordinator = _coordinator(single=False)
+    info = _entity_device_info(entity_class, entity)
+    assert _identifier(info) == f"{api.uid}-{suffix}"
+    assert info["configuration_url"] == api.host
+    assert info["sw_version"] == api.sw_rev
+    _assert_connected_via_controller(info, api, supports_via_device_id)
 
 
 # ---------------------------------------------------------------------------

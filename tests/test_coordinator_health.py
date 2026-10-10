@@ -472,6 +472,7 @@ class TestFailureBookkeeping:
 
         assert coord._consecutive_failures == CONSECUTIVE_FAILURES_THRESHOLD
         create.assert_called_once()
+        assert create.call_args.kwargs["is_persistent"] is False
 
     def test_failed_update_uses_class_name_when_message_empty(self):
         coord = _bare_coordinator(consecutive_failures=0)

@@ -3,6 +3,7 @@
 import logging
 from typing import Any
 
+from homeassistant.const import MAJOR_VERSION, MINOR_VERSION
 from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import EntityDescription
@@ -32,12 +33,19 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# Home Assistant 2026.8 added DeviceInfo "via_device_id" and
+# DeviceRegistry.async_get_device_by_identifier(); "via_device" and
+# async_get_device() stop working in 2027.8.
+HA_SUPPORTS_VIA_DEVICE_ID = MAJOR_VERSION > 2026 or (
+    MAJOR_VERSION == 2026 and MINOR_VERSION >= 8
+)
+
 
 def _create_base_device_info(
     api: Econet300Api,
     identifier: str,
     name: str,
-    parent_device_id: str | None = None,
+    via_device_id: str | None = None,
     include_model_id: bool = False,
     include_hw_version: bool = False,
 ) -> DeviceInfo:
@@ -47,7 +55,8 @@ def _create_base_device_info(
         api: Econet300Api instance
         identifier: Unique device identifier
         name: Device display name
-        parent_device_id: Parent device identifier for via_device
+        via_device_id: Device registry id of the controller device this
+            device is connected through
         include_model_id: Whether to include model_id
         include_hw_version: Whether to include hw_version
 
@@ -65,8 +74,11 @@ def _create_base_device_info(
         sw_version=api.sw_rev,
     )
     # Add optional fields only when they have values
-    if parent_device_id:
-        info["via_device"] = (DOMAIN, parent_device_id)
+    if via_device_id:
+        if HA_SUPPORTS_VIA_DEVICE_ID:
+            info["via_device_id"] = via_device_id  # type: ignore[typeddict-unknown-key]
+        else:
+            info["via_device"] = (DOMAIN, api.uid)
     if include_model_id:
         info["model_id"] = api.model_id
     if include_hw_version:
@@ -282,6 +294,11 @@ class EconetEntity(CoordinatorEntity[EconetDataCoordinator]):
         # Base implementation does nothing - child classes handle state updates
 
 
+def mixer_device_identifier(uid: str, mixer_num: int) -> str:
+    """Return the device registry identifier of a mixer device."""
+    return f"{uid}-mixer-{mixer_num}"
+
+
 class MixerEntity(EconetEntity):
     """Represents MixerEntity."""
 
@@ -305,9 +322,9 @@ class MixerEntity(EconetEntity):
             return _main_device_info(self.api)
         return _create_base_device_info(
             api=self.api,
-            identifier=f"{self.api.uid}-mixer-{self._idx}",
+            identifier=mixer_device_identifier(self.api.uid, self._idx),
             name=f"{DEVICE_INFO_MIXER_NAME}{self._idx}",
-            parent_device_id=self.api.uid,
+            via_device_id=self.coordinator.controller_device_id,
             include_model_id=True,
         )
 
@@ -335,7 +352,7 @@ class LambdaEntity(EconetEntity):
             api=self.api,
             identifier=f"{self.api.uid}-lambda",
             name=DEVICE_INFO_LAMBDA_NAME,
-            parent_device_id=self.api.uid,
+            via_device_id=self.coordinator.controller_device_id,
         )
 
 
@@ -369,7 +386,7 @@ class EcoSterEntity(EconetEntity):
             api=self.api,
             identifier=ecoster_device_identifier(self.api.uid, self._idx),
             name=f"{DEVICE_INFO_ECOSTER_NAME} {self._idx}",
-            parent_device_id=self.api.uid,
+            via_device_id=self.coordinator.controller_device_id,
             include_model_id=True,
         )
 
@@ -406,6 +423,7 @@ def get_device_info_for_component(
     api: Econet300Api,
     mixer_idx: int | None = None,
     single_device: bool = False,
+    via_device_id: str | None = None,
 ) -> DeviceInfo:
     """Return DeviceInfo for a specific component.
 
@@ -414,6 +432,8 @@ def get_device_info_for_component(
         api: Econet300Api instance for device information
         mixer_idx: Optional mixer index (1-4) for mixer components
         single_device: When True, merge all entities under one main device.
+        via_device_id: Device registry id of the controller device that
+            component devices are connected through.
 
     Returns:
         DeviceInfo for the specified component
@@ -427,9 +447,9 @@ def get_device_info_for_component(
         idx = mixer_idx or int(component.split("_")[1])
         return _create_base_device_info(
             api,
-            f"{api.uid}-mixer-{idx}",
+            mixer_device_identifier(api.uid, idx),
             f"{DEVICE_INFO_MIXER_NAME}{idx}",
-            parent_device_id=api.uid,
+            via_device_id=via_device_id,
             include_model_id=True,
         )
 
@@ -437,13 +457,13 @@ def get_device_info_for_component(
     config = _COMPONENT_CONFIG.get(component, _COMPONENT_CONFIG[COMPONENT_BOILER])
     suffix = config.get("suffix", "")
     identifier = f"{api.uid}{suffix}" if suffix else api.uid
-    parent = api.uid if suffix else None
+    component_via_device_id = via_device_id if suffix else None
 
     return _create_base_device_info(
         api,
         identifier,
         config["name"],
-        parent_device_id=parent,
+        via_device_id=component_via_device_id,
         include_model_id=config.get("include_model_id", False),
         include_hw_version=config.get("include_hw_version", False),
     )

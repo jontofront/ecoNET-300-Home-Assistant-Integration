@@ -8,6 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.4       | v1.3.5        | No                 | Fixes `via_device` log warning (#264)      |
 | v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |
 | v1.3.2       | v1.3.3        | Automations only   | `mode` / `transmission` state names (#247) |
 | v1.3.1       | v1.3.2        | No                 | New energy sensor after HA restart         |
@@ -259,7 +260,9 @@ New in v1.2.x: Automatic detection of connection problems.
 2. Go to **Settings → System → Repairs**
 3. Click on the ecoNET300 repair issue
 4. Update connection settings if needed
-5. Repair auto-resolves when connection is restored
+5. Repair auto-resolves when connection is restored. It is not kept across a
+   Home Assistant restart; if the connection still fails, it is created again
+   after 5 failed updates
 
 ---
 

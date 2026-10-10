@@ -2,15 +2,32 @@
 
 ## [Unreleased]
 
+## [v1.3.5] - 2026-10-10
+
+Stable release consolidating the `1.3.5-beta.1` … `1.3.5-beta.3` pre-releases.
+Thanks to [@fsaidl](https://github.com/fsaidl) for testing the pre-releases.
+
 ### Fixed
 
+- **`via_device` deprecation warning on Home Assistant 2026.8 or newer ([#264](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/264))**: mixer, ecoSTER, lambda, hot water, buffer, solar, service parameter and advanced parameter devices now link to the *PLUM ecoNET300* controller device by its registry id (`via_device_id`), because Home Assistant 2027.8 stops accepting `via_device`. The controller device is registered before the platforms add their entities, so the link always points to an existing device. Older Home Assistant versions keep using `via_device`. Device and entity IDs do not change.
+- **Second *PLUM ecoNET300* device with unavailable `_2` entities**: an ecoNET300 module that is still starting can answer `sysParams` with `"uid": null`. The integration then started without a device uid, so the controller entities were registered again (unique IDs `None-...`, entity IDs with `_2`) on a second *PLUM ecoNET300* device without an area. The integration now waits until the module reports its uid, and on setup it removes devices left by a uid of `None`, together with their entities. Your real devices and entities are not touched.
+- **Repair *Connection to ecoNET300 device failed* stayed after a restart**: the issue was stored across Home Assistant restarts, but only a recovery after failures deletes it, and a restart resets the failure counter. So once the connection worked again after a restart, the issue never went away. It is no longer stored: after a restart it is created again only if 5 updates in a row fail.
+- **HACS logged `Could not save ZIP file` on every download**: `hacs.json` had a `filename` entry, which HACS uses for cards and themes. For this integration HACS tried to save the downloaded archive under that path, failed, and fell back to downloading the files one by one. The entry is removed, so HACS now installs the archive without the error.
 - **Alarm active binary sensor was named *Problem***: its English, Polish and German names were in the select section of the translation files, so Home Assistant fell back to the device class name. It is now named *Alarm active* (*Alarm aktywny*, *Alarm aktiv*). Existing entity IDs do not change.
+
+### Changed
+
+- **Mixer device identifier** is built by one helper, `mixer_device_identifier()`, for the mixer device, the component device lookup and the ghost device cleanup ([#259](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/259)). The identifier is unchanged.
+- **Service and advanced parameter devices** use the shared device info helper, so they now show the configuration URL and software version like the other ecoNET300 devices.
+- **Ghost device cleanup** uses `async_get_device_by_identifier()` on Home Assistant 2026.8 or newer; later versions deprecate `async_get_device()`.
 
 ### Tests
 
 - **CI runs on `master`** for every push and pull request, against the oldest supported Home Assistant (2025.6.3 on Python 3.13) and the latest one (Python 3.14).
 - **Translation check**: CI fails when `en.json`, `pl.json` or `de.json` misses an entity key, or when any language has a key that `strings.json` does not have. Missing keys in `cz.json`, `fr.json` and `uk.json` are only reported.
 - **Ruff 0.16.10** is pinned for pre-commit, `requirements_test.txt` and CI.
+- **Device links** are tested with and without `via_device_id` support, including the service and advanced parameter devices. Tests also check that the controller device is registered before the platforms and that the ghost device cleanup works with both registry lookups.
+- **Device uid**: `api.init()` rejects a missing, `None` or empty uid, and the ghost device cleanup removes devices of the `None` uid.
 
 ## [v1.3.4] - 2026-10-05
 
