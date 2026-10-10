@@ -3,6 +3,24 @@
 
 ## [Unreleased]
 
+## [v1.3.6-beta.1] - 2026-10-10
+
+### Fixed
+
+- **Login ready for aiohttp 4.0 ([#267](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/267))**: requests to the ecoNET300 module send an `Authorization` header built by the integration instead of aiohttp's `BasicAuth`, which is deprecated and removed in aiohttp 4.0. Without this change the integration could not log in once Home Assistant ships aiohttp 4.0. The header is the same as before, so nothing changes for the module or your settings.
+
+### Changed
+
+- **Unused code removed from `api.py`**: `fetch_rm_current_data_params_edits()`, `fetch_merged_rm_data_with_names()` and `fetch_merged_rm_data_with_names_and_descs()` were never called, `fetch_merged_rm_data()` does the whole merge. Also removed: a quote replacement in `get_with_fix_quotes()` that replaced a character with itself, and `API_RM_CURRENT_DATA_PARAMS_EDITS_URI`, which had the same value as `API_EDITABLE_PARAMS_LIMITS_URI`.
+
+### Docs
+
+- **pymarkdown reads the project settings ([#268](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/268))**: `[tool.pymarkdown]` in `pyproject.toml` uses pymarkdown's `plugins.<rule>.<setting>` keys, so line length 120 and the disabled rules now apply. `README.md` and `CHANGELOG.md` turn the line length rule off for their one-line bullets; long lines in `docs/MIGRATION.md` are wrapped.
+
+### Tests
+
+- **Authorization header**: matches the header `BasicAuth` built, for ASCII and latin-1 credentials, and is sent by every request method, including the service password request (`rmAccess`).
+
 ## [v1.3.5] - 2026-10-10
 
 Stable release consolidating the `1.3.5-beta.1` … `1.3.5-beta.3` pre-releases.

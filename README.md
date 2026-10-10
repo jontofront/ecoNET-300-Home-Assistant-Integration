@@ -216,6 +216,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.6-beta.1
+
+- **Ready for aiohttp 4.0 (#267)**: the integration logs in to the ecoNET300 module without aiohttp's deprecated `BasicAuth`, so it keeps working when Home Assistant updates aiohttp. Nothing changes for you.
+
 ### What's New in v1.3.5
 
 - **Ready for Home Assistant 2027.8 (#264)**: mixers, ecoSTER panels and the other sub-devices link to the *PLUM ecoNET300* controller with `via_device_id`, so the `via_device` deprecation warning on Home Assistant 2026.8 or newer is gone. Older Home Assistant versions work as before.
@@ -297,4 +301,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-10-10 for v1.3.5.*
+*This README was last updated on 2026-10-10 for v1.3.6-beta.1.*
