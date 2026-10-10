@@ -17,6 +17,9 @@ from .value_maps import (
 
 NO_CWU_TEMP_SET_STATUS_CODE = 128
 
+# The controller reports this value when the temperature sensor is not connected.
+TEMP_NOT_CONNECTED_VALUE = 999
+
 ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS: Final[tuple[str, ...]] = (
     "ActualDHWTemp",
     "ActualFlowTemp",
@@ -69,8 +72,20 @@ def _numeric_or_none(value: Any) -> float | None:
         return None
 
 
+def _temperature_or_none(value: Any) -> float | None:
+    """Return a temperature, or None when the sensor is not connected."""
+    numeric = _numeric_or_none(value)
+    if numeric == TEMP_NOT_CONNECTED_VALUE:
+        return None
+    return numeric
+
+
 ENTITY_VALUE_PROCESSOR = {
     **dict.fromkeys(ECOMAX360I_NUMERIC_SENSOR_PROCESSOR_KEYS, _numeric_or_none),
+    # Electric / induction boiler energy counters (regParams).
+    "periodicEnergy": _numeric_or_none,
+    "totalEnergy": _numeric_or_none,
+    "TempWthr": _temperature_or_none,
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, _STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, _STATE_UNKNOWN),
     "statusCWU": lambda x: SENSOR_STATUS_CWU_MAPPING.get(x, _STATE_UNKNOWN),

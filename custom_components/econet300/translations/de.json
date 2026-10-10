@@ -1166,6 +1166,12 @@
       "periodic_energy_consumption": {
         "name": "Periodischer Energieverbrauch"
       },
+      "periodic_energy": {
+        "name": "Energieverbrauch (Zeitraum)"
+      },
+      "total_energy": {
+        "name": "Energieverbrauch (gesamt)"
+      },
       "axenregister64": {
         "name": "AXEN-Register 64"
       },

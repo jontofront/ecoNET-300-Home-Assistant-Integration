@@ -743,6 +743,24 @@ class TestEditParamsSensorMaps:
         assert processor("12119.5") == 12119.5
         assert processor("off") is None
 
+    @pytest.mark.parametrize("key", ["totalEnergy", "periodicEnergy"])
+    def test_electric_boiler_energy_is_energy_dashboard_ready(self, key: str) -> None:
+        """Electric boiler energy counters (#237) suit the Energy Dashboard."""
+        description = create_sensor_entity_description(key)
+        assert description.native_unit_of_measurement == UnitOfEnergy.KILO_WATT_HOUR
+        assert description.device_class == SensorDeviceClass.ENERGY
+        assert description.state_class == SensorStateClass.TOTAL_INCREASING
+        assert description.process_val("1234.5") == 1234.5
+        assert description.process_val(None) is None
+
+    def test_weather_temp_not_connected_is_unknown(self) -> None:
+        """TempWthr 999 means the outdoor sensor is not connected (#237)."""
+        process = create_sensor_entity_description("TempWthr").process_val
+        assert process(999) is None
+        assert process(999.0) is None
+        assert process(18.4) == 18.4
+        assert process(-12) == -12
+
     def test_edit_params_keys_in_ecomax360i_sensors(self) -> None:
         """All editParams.data sensor keys should be in ECOMAX360I_SENSORS."""
         for key in EDIT_PARAMS_DATA_SENSOR_MAP:

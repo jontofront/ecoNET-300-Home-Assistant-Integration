@@ -120,6 +120,19 @@ Read-only values from `editParams.informationParams` (not `regParams`).
 | ----------------------------- | --------------------------------------------------- | ------------------------------ | ---- | ------------------ |
 | `PeriodicEnergyConsumption`   | Periodic electrical energy (resettable on the unit) | `informationParams` 204        | Wh   | `total_increasing` |
 
+### Electric and Induction Boilers
+
+Energy counters that electric boilers (for example PEREKO Pi) send in `regParams`. Both work in the
+**Energy Dashboard** (Settings → Dashboards → Energy → add the sensor as a consumer).
+
+| Entity Key       | Description                                 | Endpoint              | Unit | State class        |
+| ---------------- | ------------------------------------------- | --------------------- | ---- | ------------------ |
+| `totalEnergy`    | Energy consumption (total)                  | `../econet/regParams` | kWh  | `total_increasing` |
+| `periodicEnergy` | Energy consumption (period, resettable)     | `../econet/regParams` | kWh  | `total_increasing` |
+
+`TempWthr` (weather temperature) shows **unknown** when the controller reports `999`, which means the
+outdoor sensor is not connected.
+
 ### ecoSTER Room Thermostats
 
 Created on the **ecoSTER N** device only for slots with a connected panel, that is

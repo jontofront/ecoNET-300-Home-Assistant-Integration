@@ -335,6 +335,12 @@
       "periodic_energy_consumption": {
         "name": "Periodická spotřeba energie"
       },
+      "periodic_energy": {
+        "name": "Spotřeba energie (období)"
+      },
+      "total_energy": {
+        "name": "Spotřeba energie (celkem)"
+      },
       "fan_power": {
         "name": "Výkon ventilátoru"
       },
