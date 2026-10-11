@@ -614,13 +614,16 @@ class EconetDataCoordinator(DataUpdateCoordinator):
         rm_data: dict[str, Any] = {}
 
         try:
-            core_tasks = [
+            # Calls go straight into gather. Holding the coroutines in a list
+            # and awaiting them on the next line leaks them ("was never awaited")
+            # when this update is cancelled while the module is offline.
+            core_results = await asyncio.gather(
                 self._api.fetch_rm_current_data_params(),
                 self._api.fetch_rm_params_names(),
                 self._api.fetch_rm_params_data(),
                 self._api.fetch_rm_langs(),
-            ]
-            core_results = await asyncio.gather(*core_tasks, return_exceptions=True)
+                return_exceptions=True,
+            )
 
             for index, key in enumerate(RM_CORE_DATASET_KEYS):
                 result = core_results[index]
@@ -631,13 +634,11 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     _LOGGER.warning("Failed to fetch %s: %s", key, result)
 
             if rm_data.get("currentDataParams"):
-                additional_tasks = [
+                additional_results = await asyncio.gather(
                     self._api.fetch_rm_params_descs(),
                     self._api.fetch_rm_params_enums(),
                     self._api.fetch_rm_alarms_names(),
-                ]
-                additional_results = await asyncio.gather(
-                    *additional_tasks, return_exceptions=True
+                    return_exceptions=True,
                 )
 
                 for index, key in enumerate(RM_ADDITIONAL_DATASET_KEYS):

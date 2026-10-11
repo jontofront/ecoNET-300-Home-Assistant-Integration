@@ -8,11 +8,13 @@ Covers PR #234 hardening features:
 - ``polling_settings`` options-flow step (schema defaults + save/reload)
 """
 
+import asyncio
 import copy
 from datetime import UTC, datetime
 import time
 from typing import Any, NamedTuple, cast
 from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
+import warnings
 
 import pytest
 
@@ -536,6 +538,68 @@ class TestFailureBookkeeping:
             coord._on_failed_update(TimeoutError(), reason="update timed out after 30s")
 
         assert coord._last_error == "update timed out after 30s"
+
+
+class TestRmEndpointFetch:
+    """Test the parallel RM endpoint fetch does not leak coroutines."""
+
+    @staticmethod
+    def _coordinator_with_api(api: MagicMock) -> EconetDataCoordinator:
+        coord = object.__new__(EconetDataCoordinator)
+        coord._api = api
+        return coord
+
+    @pytest.mark.asyncio
+    async def test_results_follow_endpoint_order(self) -> None:
+        """Test each RM answer is stored under its dataset key."""
+        api = MagicMock()
+        api.fetch_rm_current_data_params = AsyncMock(return_value={"current": 1})
+        api.fetch_rm_params_names = AsyncMock(return_value={"names": 1})
+        api.fetch_rm_params_data = AsyncMock(side_effect=TimeoutError("slow"))
+        api.fetch_rm_langs = AsyncMock(return_value=None)
+        api.fetch_rm_params_descs = AsyncMock(return_value={"descs": 1})
+        api.fetch_rm_params_enums = AsyncMock(return_value=None)
+        api.fetch_rm_alarms_names = AsyncMock(side_effect=TimeoutError("slow"))
+        coord = self._coordinator_with_api(api)
+
+        result = await coord._fetch_rm_endpoint_data()
+
+        assert result["currentDataParams"] == {"current": 1}
+        assert result["paramsNames"] == {"names": 1}
+        assert result["paramsData"] == {}
+        assert result["langs"] == {}
+        assert result["paramsDescs"] == {"descs": 1}
+        assert result["paramsEnums"] == {}
+        assert result["alarmsNames"] == {}
+
+    @pytest.mark.asyncio
+    async def test_cancel_does_not_warn_about_unawaited_coroutines(self) -> None:
+        """Test cancelling an offline update does not leak RM coroutines."""
+
+        async def hang() -> None:
+            await asyncio.sleep(30)
+
+        api = MagicMock()
+        for name in (
+            "fetch_rm_current_data_params",
+            "fetch_rm_params_names",
+            "fetch_rm_params_data",
+            "fetch_rm_langs",
+        ):
+            setattr(api, name, hang)
+        coord = self._coordinator_with_api(api)
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", RuntimeWarning)
+            task = asyncio.create_task(coord._fetch_rm_endpoint_data())
+            await asyncio.sleep(0)
+            task.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await task
+            await asyncio.sleep(0)
+
+        leaked = [item for item in caught if "never awaited" in str(item.message)]
+        assert leaked == []
 
 
 class TestRegParamsRetry:
