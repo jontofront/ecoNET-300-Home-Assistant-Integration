@@ -326,6 +326,12 @@
       "periodic_energy_consumption": {
         "name": "Періодичне споживання енергії"
       },
+      "periodic_energy": {
+        "name": "Споживання енергії (період)"
+      },
+      "total_energy": {
+        "name": "Споживання енергії (загалом)"
+      },
       "fan_power": {
         "name": "Потужність вентилятора"
       },

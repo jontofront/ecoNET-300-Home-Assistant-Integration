@@ -9,7 +9,12 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from custom_components.econet300.api import EconetClient, _sanitize_url_for_logging
+from custom_components.econet300.api import (
+    Econet300Api,
+    EconetClient,
+    _basic_auth_header,
+    _sanitize_url_for_logging,
+)
 from custom_components.econet300.diagnostics import (
     RAW_PROBE_ENDPOINTS,
     TO_REDACT,
@@ -20,6 +25,19 @@ from custom_components.econet300.diagnostics import (
     async_get_config_entry_diagnostics,
     async_get_device_diagnostics,
 )
+
+
+def _mock_session() -> MagicMock:
+    """Return a session whose get() answers 200 with an empty data list."""
+    response = MagicMock()
+    response.status = 200
+    response.json = AsyncMock(return_value={"data": []})
+    response.text = AsyncMock(return_value='{"data": []}')
+    response.__aenter__.return_value = response
+    response.__aexit__.return_value = False
+    session = MagicMock()
+    session.get = AsyncMock(return_value=response)
+    return session
 
 
 class TestDataRedaction:
@@ -153,15 +171,7 @@ class TestLogUrlRedaction:
     @pytest.mark.parametrize("method", ["get", "get_with_fix_quotes"])
     async def test_client_debug_log_hides_password(self, method, caplog):
         """Test request URLs are logged without the password."""
-        response = MagicMock()
-        response.status = 200
-        response.json = AsyncMock(return_value={"data": []})
-        response.text = AsyncMock(return_value='{"data": []}')
-        response.__aenter__.return_value = response
-        response.__aexit__.return_value = False
-        session = MagicMock()
-        session.get = AsyncMock(return_value=response)
-        client = EconetClient("192.168.1.100", "user", "pass", session)
+        client = EconetClient("192.168.1.100", "user", "pass", _mock_session())
         url = "http://192.168.1.100/econet/rmParamsData?uid=U&password=secret"
 
         with caplog.at_level(logging.DEBUG, logger="custom_components.econet300.api"):
@@ -169,6 +179,51 @@ class TestLogUrlRedaction:
 
         assert "password=***REDACTED***" in caplog.text
         assert "secret" not in caplog.text
+
+
+class TestClientAuth:
+    """Test every request sends the Basic Authorization header."""
+
+    @pytest.mark.parametrize(
+        ("username", "password", "expected"),
+        [
+            ("admin", "admin", "Basic YWRtaW46YWRtaW4="),
+            ("user", "pässwörd", "Basic dXNlcjpw5HNzd/ZyZA=="),
+        ],
+        ids=["ascii", "latin1"],
+    )
+    def test_basic_auth_header(self, username, password, expected):
+        """Test the header matches the one aiohttp's BasicAuth built."""
+        assert _basic_auth_header(username, password) == expected
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "method", ["get", "get_with_short_timeout", "probe_raw", "get_with_fix_quotes"]
+    )
+    async def test_request_sends_authorization_header(self, method):
+        """Test the credentials go in the headers, not in the deprecated auth."""
+        session = _mock_session()
+        client = EconetClient("192.168.1.100", "admin", "admin", session)
+
+        await getattr(client, method)("http://192.168.1.100/econet/sysParams")
+
+        kwargs = session.get.call_args.kwargs
+        assert kwargs["headers"] == {"Authorization": "Basic YWRtaW46YWRtaW4="}
+        assert "auth" not in kwargs
+
+    @pytest.mark.asyncio
+    async def test_service_authentication_sends_authorization_header(self):
+        """Test the rmAccess request also sends the Authorization header."""
+        session = _mock_session()
+        session.get = MagicMock(return_value=session.get.return_value)
+        client = EconetClient("192.168.1.100", "admin", "admin", session)
+        api = Econet300Api(client, MagicMock())
+
+        await api._authenticate_service("0000")
+
+        kwargs = session.get.call_args.kwargs
+        assert kwargs["headers"] == {"Authorization": "Basic YWRtaW46YWRtaW4="}
+        assert "auth" not in kwargs
 
 
 class TestExtendedEndpointSnapshots:

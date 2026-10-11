@@ -51,4 +51,6 @@ update the matching documentation. Code and docs must never drift apart.
 - [ ] `README.md` links/table updated if docs were added
 - [ ] Internal links resolve
 - [ ] Markdown passes **pymarkdown** (config in `pyproject.toml` `[tool.pymarkdown]`:
-      `MD013` line length 120, `MD033`/`MD024` disabled). Run `python -m pymarkdown scan <file>`.
+      `MD013` line length 120, `MD033`/`MD024` disabled). Run `python -m pymarkdown scan <file>`
+      from the repo root. `README.md` and `CHANGELOG.md` keep one-line bullets, so they turn
+      `MD013` off with `<!-- pyml disable md013 -->` on the first line.

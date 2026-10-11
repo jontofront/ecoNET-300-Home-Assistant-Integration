@@ -8,11 +8,13 @@ Covers PR #234 hardening features:
 - ``polling_settings`` options-flow step (schema defaults + save/reload)
 """
 
+import asyncio
 import copy
 from datetime import UTC, datetime
 import time
 from typing import Any, NamedTuple, cast
 from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
+import warnings
 
 import pytest
 
@@ -494,6 +496,152 @@ class TestFailureBookkeeping:
 
         assert coord._consecutive_failures == 0
         delete.assert_called_once()
+
+    def test_unavailable_is_logged_once_at_info(self, caplog):
+        """Test only the first failure in a row is logged above debug level."""
+        coord = _bare_coordinator(consecutive_failures=0)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        caplog.set_level("DEBUG", logger="custom_components.econet300.common")
+
+        with patch("custom_components.econet300.common.async_create_issue"):
+            for _ in range(3):
+                coord._on_failed_update(ValueError("connection refused"))
+
+        above_debug = [r for r in caplog.records if r.levelname != "DEBUG"]
+        assert [(r.levelname, r.getMessage()) for r in above_debug] == [
+            ("INFO", "Device 10.10.1.77 is unavailable: connection refused")
+        ]
+
+    def test_available_again_is_logged_at_info(self, caplog):
+        """Test the recovery after failures is logged once at info level."""
+        coord = _bare_coordinator(consecutive_failures=3)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        caplog.set_level("INFO", logger="custom_components.econet300.common")
+
+        with patch("custom_components.econet300.common.async_delete_issue"):
+            coord._on_successful_update()
+            coord._on_successful_update()
+
+        assert [r.getMessage() for r in caplog.records] == [
+            "Device 10.10.1.77 is available again after 3 failed updates"
+        ]
+
+    def test_failed_update_reason_replaces_error_text(self):
+        """Test a timeout is recorded with a readable reason."""
+        coord = _bare_coordinator(consecutive_failures=0)
+        coord.hass = MagicMock()
+        coord._config_entry = MagicMock(entry_id="e1")
+
+        with patch("custom_components.econet300.common.async_create_issue"):
+            coord._on_failed_update(TimeoutError(), reason="update timed out after 30s")
+
+        assert coord._last_error == "update timed out after 30s"
+
+
+class TestRmEndpointFetch:
+    """Test the parallel RM endpoint fetch does not leak coroutines."""
+
+    @staticmethod
+    def _coordinator_with_api(api: MagicMock) -> EconetDataCoordinator:
+        coord = object.__new__(EconetDataCoordinator)
+        coord._api = api
+        return coord
+
+    @pytest.mark.asyncio
+    async def test_results_follow_endpoint_order(self) -> None:
+        """Test each RM answer is stored under its dataset key."""
+        api = MagicMock()
+        api.fetch_rm_current_data_params = AsyncMock(return_value={"current": 1})
+        api.fetch_rm_params_names = AsyncMock(return_value={"names": 1})
+        api.fetch_rm_params_data = AsyncMock(side_effect=TimeoutError("slow"))
+        api.fetch_rm_langs = AsyncMock(return_value=None)
+        api.fetch_rm_params_descs = AsyncMock(return_value={"descs": 1})
+        api.fetch_rm_params_enums = AsyncMock(return_value=None)
+        api.fetch_rm_alarms_names = AsyncMock(side_effect=TimeoutError("slow"))
+        coord = self._coordinator_with_api(api)
+
+        result = await coord._fetch_rm_endpoint_data()
+
+        assert result["currentDataParams"] == {"current": 1}
+        assert result["paramsNames"] == {"names": 1}
+        assert result["paramsData"] == {}
+        assert result["langs"] == {}
+        assert result["paramsDescs"] == {"descs": 1}
+        assert result["paramsEnums"] == {}
+        assert result["alarmsNames"] == {}
+
+    @pytest.mark.asyncio
+    async def test_cancel_does_not_warn_about_unawaited_coroutines(self) -> None:
+        """Test cancelling an offline update does not leak RM coroutines."""
+
+        async def hang() -> None:
+            await asyncio.sleep(30)
+
+        api = MagicMock()
+        for name in (
+            "fetch_rm_current_data_params",
+            "fetch_rm_params_names",
+            "fetch_rm_params_data",
+            "fetch_rm_langs",
+        ):
+            setattr(api, name, hang)
+        coord = self._coordinator_with_api(api)
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", RuntimeWarning)
+            task = asyncio.create_task(coord._fetch_rm_endpoint_data())
+            await asyncio.sleep(0)
+            task.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await task
+            await asyncio.sleep(0)
+
+        leaked = [item for item in caught if "never awaited" in str(item.message)]
+        assert leaked == []
+
+
+class TestRegParamsRetry:
+    """Test regParams is asked once more when the module answers without data."""
+
+    LAST_DATA: dict[str, Any] = {
+        "sysParams": {"controllerID": "ecoMAX360i"},
+        "regParams": {"tempCO": 40},
+    }
+
+    @pytest.mark.asyncio
+    async def test_second_answer_is_used(self):
+        """Test one answer without data does not fail the update (#255)."""
+        coord, api = _update_ready_coordinator()
+        api.fetch_reg_params = AsyncMock(side_effect=[None, {"tempCO": 50}])
+
+        with patch(
+            "custom_components.econet300.common.asyncio.sleep", AsyncMock()
+        ) as sleep:
+            data = await coord._async_update_data()
+
+        assert api.fetch_reg_params.await_count == 2
+        sleep.assert_awaited_once()
+        assert data["regParams"] == {"tempCO": 50}
+        assert data["_health"]["online"] is True
+        assert coord._consecutive_failures == 0
+
+    @pytest.mark.asyncio
+    async def test_two_answers_without_data_keep_last_data(self):
+        """Test the update fails and keeps the last data after the retry."""
+        coord, api = _update_ready_coordinator(last_data=copy.deepcopy(self.LAST_DATA))
+        coord._config_entry = MagicMock(entry_id="e1", data={"host": "10.10.1.77"})
+        api.fetch_reg_params = AsyncMock(return_value={})
+
+        with patch("custom_components.econet300.common.asyncio.sleep", AsyncMock()):
+            data = await coord._async_update_data()
+
+        assert api.fetch_reg_params.await_count == 2
+        assert data["regParams"] == {"tempCO": 40}
+        assert data["_health"]["online"] is False
+        assert coord._consecutive_failures == 1
+        assert coord._last_error == "regParams endpoint returned no usable data"
 
 
 # ============================================================================

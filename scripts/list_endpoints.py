@@ -10,12 +10,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "custom_components"))
 try:
     from econet300.const import (  # type: ignore[import-untyped]
         API_EDIT_PARAMS_URI,
+        API_EDITABLE_PARAMS_LIMITS_URI,
         API_NEW_PARAM_URI,
         API_REG_PARAMS_DATA_URI,
         API_REG_PARAMS_URI,
         API_RM_ALARMS_NAMES_URI,
         API_RM_CURR_NEW_PARAM_URI,
-        API_RM_CURRENT_DATA_PARAMS_EDITS_URI,
         API_RM_CURRENT_DATA_PARAMS_URI,
         API_RM_EXISTING_LANGS_URI,
         API_RM_LANGS_URI,
@@ -58,7 +58,7 @@ def main():
         ("Save Parameter by Key", API_RM_CURR_NEW_PARAM_URI),
         ("Save Parameter by Index", API_RM_NEW_PARAM_URI),
         ("Legacy Parameter Edit", API_NEW_PARAM_URI),
-        ("Editable Parameters Limits", API_RM_CURRENT_DATA_PARAMS_EDITS_URI),
+        ("Editable Parameters Limits", API_EDITABLE_PARAMS_LIMITS_URI),
     ]
 
     for name, endpoint in edit_endpoints:
@@ -75,7 +75,6 @@ def main():
         ("Parameter Units", API_RM_PARAMS_UNITS_NAMES_URI),
         ("Menu Structure", API_RM_STRUCTURE_URI),
         ("Current Parameters", API_RM_CURRENT_DATA_PARAMS_URI),
-        ("Editable Parameters", API_RM_CURRENT_DATA_PARAMS_EDITS_URI),
         ("Languages", API_RM_LANGS_URI),
         ("Existing Languages", API_RM_EXISTING_LANGS_URI),
         ("Lock Names", API_RM_LOCKS_NAMES_URI),

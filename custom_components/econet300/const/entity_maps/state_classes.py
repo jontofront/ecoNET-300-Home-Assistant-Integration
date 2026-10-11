@@ -54,6 +54,10 @@ STATE_CLASS_MAP: dict[str, _SensorStateClass | None] = {
     "PeriodicEnergyConsumption": _SensorStateClass.TOTAL_INCREASING,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
+    # Electric / induction boiler energy counters. periodicEnergy can be reset on
+    # the controller; TOTAL_INCREASING treats a drop as a new cycle.
+    "periodicEnergy": _SensorStateClass.TOTAL_INCREASING,
+    "totalEnergy": _SensorStateClass.TOTAL_INCREASING,
     # ecoMAX360i heat pump status sensors (not measurements)
     "HPStatusWorkMode": None,
     "HPStatusControl": None,

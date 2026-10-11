@@ -38,6 +38,22 @@ Use **Connection Settings** to update the local device connection details withou
 
 These are local device credentials, not econet24.com cloud credentials.
 
+## When the Device Is Offline
+
+When the ecoNET300 module does not answer, for example after a power cut or a network problem:
+
+- The log shows one line when the module stops answering, `Device <host> is unavailable: <reason>`, and one
+  when it answers again, `Device <host> is available again after <N> failed updates`. Both are at `info` level,
+  as the Home Assistant [log-when-unavailable](https://developers.home-assistant.io/docs/core/integration-quality-scale/rules/log-when-unavailable)
+  rule asks. The failed updates in between are logged at `debug` level only.
+- Entities keep their last values for 10 minutes, so a short outage does not interrupt graphs. After that they
+  become **Unavailable**. The diagnostic *Live polling* binary sensor and the *Consecutive failures* and
+  *Data age* sensors show the connection state right away.
+- After 5 failed updates in a row, **Settings → System → Repairs** shows *Connection to ecoNET300 device failed*.
+  It disappears when the module answers again.
+- If the module answers `regParams` without data, the integration asks once more after 1 second before the
+  update counts as failed.
+
 ## Device Settings
 
 Use **Device settings** to choose how Home Assistant groups entities:

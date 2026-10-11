@@ -158,6 +158,9 @@ ENTITY_UNIT_MAP = {
     "PeriodicEnergyConsumption": _UnitOfEnergy.WATT_HOUR,
     "AXENREGISTER64": None,
     "AXENREGISTER65": None,
+    # Electric / induction boiler energy counters (regParams, kWh)
+    "periodicEnergy": _UnitOfEnergy.KILO_WATT_HOUR,
+    "totalEnergy": _UnitOfEnergy.KILO_WATT_HOUR,
     # Phoenix / extended heat-pump units (decomposed from EXTRA_SENSORS)
     "BuforCalcSetTemp": _UnitOfTemperature.CELSIUS,
     "Circuit1CalcTemp": _UnitOfTemperature.CELSIUS,

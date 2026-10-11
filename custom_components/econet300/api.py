@@ -1,6 +1,7 @@
 """Econet300 API class describing methods of getting and setting data."""
 
 import asyncio
+import base64
 from datetime import datetime
 from http import HTTPStatus
 import json
@@ -9,7 +10,7 @@ import re
 from typing import Any
 
 import aiohttp
-from aiohttp import BasicAuth, ClientSession, ClientTimeout
+from aiohttp import ClientSession, ClientTimeout, hdrs
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -26,7 +27,6 @@ from .const import (
     API_RM_ACCESS_URI,
     API_RM_ALARMS_NAMES_URI,
     API_RM_CURR_NEW_PARAM_URI,
-    API_RM_CURRENT_DATA_PARAMS_EDITS_URI,
     API_RM_CURRENT_DATA_PARAMS_URI,
     API_RM_DATA_KEY,
     API_RM_EXISTING_LANGS_URI,
@@ -71,6 +71,17 @@ def _sanitize_url_for_logging(url: str) -> str:
     return re.sub(r"([&?])password=[^&]*", r"\1password=***REDACTED***", url)
 
 
+def _basic_auth_header(username: str, password: str) -> str:
+    """Return the value of the HTTP Basic Authorization header.
+
+    Encodes with latin-1 like aiohttp's deprecated BasicAuth, so the header
+    sent to the module stays the same.
+    """
+    credentials = f"{username}:{password}".encode("latin-1")
+    token = base64.b64encode(credentials).decode("ascii")
+    return f"Basic {token}"
+
+
 class AuthError(Exception):
     """Raised when authentication fails."""
 
@@ -110,7 +121,7 @@ class EconetClient:
 
         self._host = host
         self._session = session
-        self._auth = BasicAuth(username, password)
+        self._headers = {hdrs.AUTHORIZATION: _basic_auth_header(username, password)}
         self._model_id = "default-model-id"
         self._sw_revision = "default-sw-revision"
         # Throttle concurrent requests to avoid overwhelming the ecoNET module
@@ -138,7 +149,7 @@ class EconetClient:
                 async with (
                     self._semaphore,
                     await self._session.get(
-                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                        url, headers=self._headers, timeout=ClientTimeout(total=15)
                     ) as resp,
                 ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
@@ -178,10 +189,10 @@ class EconetClient:
                     return data
 
             except TimeoutError:
-                _LOGGER.warning("Timeout error, retry(%i/%i)", attempt, max_attempts)
+                _LOGGER.debug("Timeout error, retry(%i/%i)", attempt, max_attempts)
                 await asyncio.sleep(1)
             attempt += 1
-        _LOGGER.error(
+        _LOGGER.debug(
             "Failed to fetch data from %s after %d attempts",
             _sanitize_url_for_logging(url),
             max_attempts,
@@ -198,7 +209,7 @@ class EconetClient:
             async with (
                 self._semaphore,
                 await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                    url, headers=self._headers, timeout=ClientTimeout(total=timeout_sec)
                 ) as resp,
             ):
                 if resp.status in (HTTPStatus.UNAUTHORIZED, HTTPStatus.NOT_FOUND):
@@ -231,7 +242,7 @@ class EconetClient:
             async with (
                 self._semaphore,
                 await self._session.get(
-                    url, auth=self._auth, timeout=ClientTimeout(total=timeout_sec)
+                    url, headers=self._headers, timeout=ClientTimeout(total=timeout_sec)
                 ) as resp,
             ):
                 status = resp.status
@@ -279,7 +290,7 @@ class EconetClient:
                 async with (
                     self._semaphore,
                     await self._session.get(
-                        url, auth=self._auth, timeout=ClientTimeout(total=15)
+                        url, headers=self._headers, timeout=ClientTimeout(total=15)
                     ) as resp,
                 ):
                     _LOGGER.debug("Received response with status: %s", resp.status)
@@ -311,9 +322,6 @@ class EconetClient:
                     # Pattern: look for "" that are inside strings (not at string boundaries)
                     fixed_text = re.sub(r'""([^"]+)""', r'"\1"', raw_text)
 
-                    # Also fix curly/smart quotes to straight quotes
-                    fixed_text = fixed_text.replace('"', '"').replace('"', '"')
-
                     try:
                         data = json.loads(fixed_text)
                     except json.JSONDecodeError as e:
@@ -335,10 +343,10 @@ class EconetClient:
                     return data
 
             except TimeoutError:
-                _LOGGER.warning("Timeout error, retry(%i/%i)", attempt, max_attempts)
+                _LOGGER.debug("Timeout error, retry(%i/%i)", attempt, max_attempts)
                 await asyncio.sleep(1)
             attempt += 1
-        _LOGGER.error(
+        _LOGGER.debug(
             "Failed to fetch data from %s after %d attempts",
             _sanitize_url_for_logging(url),
             max_attempts,
@@ -714,14 +722,14 @@ class Econet300Api:
             data = await self._client.get(f"{self.host}/econet/{endpoint}")
 
             if data is None:
-                _LOGGER.info("Data fetched by API for endpoint: %s is None", endpoint)
+                _LOGGER.debug("Data fetched by API for endpoint: %s is None", endpoint)
                 return None
 
             if data_key is None:
                 return data
 
             if data_key not in data:
-                _LOGGER.info(
+                _LOGGER.debug(
                     "Data for key: %s does not exist in endpoint: %s",
                     data_key,
                     endpoint,
@@ -730,13 +738,13 @@ class Econet300Api:
 
             return data[data_key]
         except aiohttp.ClientError as e:
-            _LOGGER.warning(
+            _LOGGER.debug(
                 "Client error while fetching %s (device offline?): %s",
                 endpoint,
                 e,
             )
         except asyncio.TimeoutError as e:
-            _LOGGER.warning(
+            _LOGGER.debug(
                 "Timeout while fetching %s (device offline?): %s",
                 endpoint,
                 e,
@@ -826,13 +834,13 @@ class Econet300Api:
                 async with self._client._session.get(  # noqa: SLF001  # Accessing private member for service auth
                     url,
                     params={"password": password},
-                    auth=self._client._auth,  # noqa: SLF001  # Accessing private member for service auth
+                    headers=self._client._headers,  # noqa: SLF001  # Accessing private member for service auth
                 ) as response:
                     if response.status == HTTPStatus.OK:
                         data = await response.json()
                         access = data.get("access", False)
                         if access:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Service authentication successful (access level: %s)",
                                 data.get("index", data.get("level", "unknown")),
                             )
@@ -1199,53 +1207,6 @@ class Econet300Api:
             _LOGGER.error("Error fetching current data params: %s", e)
             return None
 
-    async def fetch_rm_current_data_params_edits(self) -> dict[str, Any] | None:
-        """Fetch editable parameter data from rmCurrentDataParamsEdits endpoint.
-
-        This endpoint provides information about which parameters can be edited
-        and their current values. Used for number entities and controls.
-
-        Returns:
-            Dictionary containing editable parameter data.
-            None if the request fails.
-
-        Example:
-            {
-                "currentDataParamsEditsVer": 1,
-                "data": {
-                    "1280": {
-                        "max": 68,
-                        "type": 4,
-                        "value": 40,
-                        "min": 27
-                    },
-                    "2048": {
-                        "max": 2,
-                        "type": 4,
-                        "value": 0,
-                        "min": 0
-                    }
-                }
-            }
-
-        """
-        try:
-            url = f"{self.host}/econet/{API_RM_CURRENT_DATA_PARAMS_EDITS_URI}?uid={self.uid}"
-            _LOGGER.debug("Fetching current data params edits from: %s", url)
-
-            data = await self._client.get(url)
-            if data is None:
-                _LOGGER.warning(
-                    "Failed to fetch current data params edits from rmCurrentDataParamsEdits"
-                )
-                return None
-
-            return data.get(API_RM_DATA_KEY, {})
-
-        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-            _LOGGER.error("Error fetching current data params edits: %s", e)
-            return None
-
     async def fetch_rm_langs(self) -> dict[str, Any] | None:
         """Fetch available languages from rmLangs endpoint.
 
@@ -1375,189 +1336,10 @@ class Econet300Api:
             return None
 
     # =============================================================================
-    # STEP-BY-STEP UNIFIED RM DATA METHODS
+    # UNIFIED RM DATA (mergedData)
     # =============================================================================
-    # These methods demonstrate how to merge rm... endpoint data step by step,
-    # starting with the most fundamental endpoint (rmParamsData) as the foundation.
-
-    async def fetch_merged_rm_data_with_names(
-        self, lang: str = "en", password: str | None = None
-    ) -> dict[str, Any] | None:
-        """Merge rmParamsData with rmParamsNames.
-
-        This is the first step in creating a unified data structure.
-        We start with rmParamsData as the foundation and merge in parameter names.
-
-        Args:
-            lang: Language code (e.g., 'en', 'pl', 'fr'). Defaults to 'en'.
-            password: Optional service password hash for authenticated access.
-
-        Returns:
-            Dictionary containing merged parameter data with names.
-            None if the request fails.
-
-        Example:
-            {
-                "version": "1.0-names",                    # Merged data version
-                "timestamp": "2024-01-15T10:30:00Z",       # Generation timestamp
-                "device": {                                # Device information
-                    "uid": "example-device-uid",         # Device unique identifier
-                    "controllerId": "ecoMAX810P-L",        # Controller type
-                    "language": "en"                       # Language used
-                },
-                "parameters": [                            # Merged parameter array
-                    {
-                        "value": 60,                       # Current parameter value
-                        "maxv": 100,                       # Maximum allowed value
-                        "minv": 15,                        # Minimum allowed value
-                        "edit": true,                      # Whether parameter can be edited
-                        "unit": 5,                         # Unit index (maps to rmParamsUnitsNames)
-                        "mult": 1,                          # Multiplier for value conversion
-                        "offset": 0,                        # Offset for value conversion
-                        "name": "100% Blow-in output",     # Human-readable name (from rmParamsNames)
-                        "index": 0                          # Array index position
-                    }
-                ],
-                "metadata": {                              # Data statistics
-                    "totalParameters": 1,                   # Total number of parameters
-                    "namedParameters": 1,                   # Parameters with names
-                    "editableParameters": 1                 # Parameters that can be edited
-                },
-                "sourceEndpoints": {                        # Source endpoint information
-                    "rmParamsData": "Parameter metadata (values, min/max, units, edit flags)",
-                    "rmParamsNames": "Human-readable parameter names"
-                }
-            }
-
-        """
-        try:
-            # Fetch core data in parallel
-            # Pass password to rmParamsData for potential service params
-            tasks = [
-                self.fetch_rm_params_data(password=password),
-                self.fetch_rm_params_names(lang),
-            ]
-
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-
-            params_data: list[dict[str, Any]] = []
-            params_names: list[str] = []
-
-            if (
-                not isinstance(results[0], Exception)
-                and results[0] is not None
-                and isinstance(results[0], list)
-            ):
-                params_data = results[0]  # type: ignore[assignment]
-            if (
-                not isinstance(results[1], Exception)
-                and results[1] is not None
-                and isinstance(results[1], list)
-            ):
-                params_names = results[1]  # type: ignore[assignment]
-
-            if not params_data:
-                _LOGGER.warning("No parameter data available")
-                return None
-
-            # Merge parameter data with names
-            merged_params: list[dict[str, Any]] = []
-            for i, param in enumerate(params_data):
-                if isinstance(param, dict):
-                    merged_param = param.copy()  # Start with original parameter data
-
-                    # Add name if available
-                    if i < len(params_names) and isinstance(params_names, list):
-                        merged_param["name"] = params_names[i]  # type: ignore[index]
-                    else:
-                        merged_param["name"] = f"Parameter {i}"
-
-                    # Add index for reference
-                    merged_param["index"] = i
-
-                    merged_params.append(merged_param)
-
-            unified_data = {
-                "version": "1.0-names",
-                "timestamp": datetime.now().isoformat(),
-                "device": {
-                    "uid": self.uid,
-                    "controllerId": self.model_id,
-                    "language": lang,
-                },
-                "parameters": merged_params,
-                "metadata": {
-                    "totalParameters": len(merged_params),
-                    "namedParameters": len([p for p in merged_params if "name" in p]),
-                    "editableParameters": len(
-                        [p for p in merged_params if p.get("edit", False)]
-                    ),
-                },
-            }
-
-            _LOGGER.debug(
-                "Merged %d parameters with names from rmParamsData + rmParamsNames",
-                len(merged_params),
-            )
-        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-            _LOGGER.error("Error merging rmParamsData with rmParamsNames: %s", e)
-            return None
-        else:
-            return unified_data
-
-    async def fetch_merged_rm_data_with_names_and_descs(
-        self, lang: str = "en", password: str | None = None
-    ) -> dict[str, Any] | None:
-        """Merge rmParamsData with rmParamsNames and rmParamsDescs.
-
-        This step adds parameter descriptions to the existing merged structure.
-
-        Args:
-            lang: Language code (e.g., 'en', 'pl', 'fr'). Defaults to 'en'.
-            password: Optional service password hash for authenticated access.
-
-        Returns:
-            Dictionary containing merged parameter data with names and descriptions.
-            None if the request fails.
-
-        """
-        try:
-            # Get step 1 data (pass password for service authentication)
-            step1_data = await self.fetch_merged_rm_data_with_names(
-                lang, password=password
-            )
-            if not step1_data:
-                return None
-
-            # Fetch descriptions
-            params_descs = await self.fetch_rm_params_descs(lang)
-            if isinstance(params_descs, Exception):
-                params_descs = []
-
-            # Merge descriptions
-            for i, param in enumerate(step1_data["parameters"]):
-                if isinstance(params_descs, list) and i < len(params_descs):
-                    param["description"] = params_descs[i]
-                else:
-                    param["description"] = ""
-
-            # Update metadata
-            step1_data["version"] = "1.0-names-descs"
-            step1_data["metadata"]["describedParameters"] = len(
-                [p for p in step1_data["parameters"] if p.get("description")]
-            )
-
-            _LOGGER.debug(
-                "Added descriptions to %d parameters from rmParamsDescs",
-                len(step1_data["parameters"]),
-            )
-        except (aiohttp.ClientError, asyncio.TimeoutError, ValueError) as e:
-            _LOGGER.error(
-                "Error merging rmParamsData with rmParamsNames and rmParamsDescs: %s", e
-            )
-            return None
-        else:
-            return step1_data
+    # fetch_merged_rm_data() merges the rm... endpoints into one structure, with
+    # rmParamsData as the foundation.
 
     async def _get_or_fetch_static_metadata(
         self, lang: str, service_password: str | None
