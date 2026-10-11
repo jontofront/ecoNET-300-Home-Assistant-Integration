@@ -3,7 +3,11 @@
 
 ## [Unreleased]
 
-## [v1.3.6-beta.3] - 2026-10-10
+## [v1.3.6] - 2026-10-11
+
+Stable release consolidating the `1.3.6-beta.1` … `1.3.6-beta.3` pre-releases.
+Thanks to [@fsaidl](https://github.com/fsaidl) for testing the pre-releases on an
+ecoMAX860D3-HB with two ecoSTER panels.
 
 ### Added
 
@@ -11,30 +15,12 @@
 
 ### Fixed
 
-- **Weather temperature showed 999 ([#237](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/237))**: the controller reports `TempWthr = 999` when the outdoor sensor is not connected. The sensor now shows *unknown* instead of 999 °C, so graphs and statistics are not spoiled.
-
-### Docs
-
-- `docs/ENTITIES.md`: new section *Electric and Induction Boilers*.
-- `docs/FUEL_CONSUMPTION.md` ([#203](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/discussions/203)): how to chart the fuel burned per day, week or month with a Statistics graph card; the fuel total sensor uses the `TOTAL` state class (the page said `TOTAL_INCREASING`).
-
-## [v1.3.6-beta.2] - 2026-10-10
-
-### Fixed
-
+- **Login ready for aiohttp 4.0 ([#267](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/267))**: requests to the ecoNET300 module send an `Authorization` header built by the integration instead of aiohttp's `BasicAuth`, which is deprecated and removed in aiohttp 4.0. Without this change the integration could not log in once Home Assistant ships aiohttp 4.0. The header is the same as before, so nothing changes for the module or your settings.
 - **Log flooded while the device is offline ([#255](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/255))**: every failed update (every 15 s by default) logged an `ERROR` such as `API error: sysParams endpoint returned no usable data`, plus up to five `Timeout error, retry` warnings and `Failed to fetch data ... after 5 attempts`. Now the log shows one `info` line when the module stops answering (`Device <host> is unavailable: <reason>`) and one when it answers again (`Device <host> is available again after <N> failed updates`), as the Home Assistant *log-when-unavailable* rule asks. The failed updates in between, and the request retries, are logged at `debug` level. The *Connection to ecoNET300 device failed* repair after 5 failed updates is unchanged.
 - **Single `regParams` answer without data counted as a failure ([#255](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/255))**: the module sometimes answers `regParams` without `curr`. The integration now asks once more after 1 second, so such an answer no longer marks the device offline.
+- **`was never awaited` while the module is offline**: cancelling an update left the RM menu requests unawaited, so the log showed `RuntimeWarning: coroutine 'Econet300Api.fetch_rm_current_data_params' was never awaited` on every poll. Those requests are now started inside `asyncio.gather`, so a cancelled update does not leave them behind. Found by [@fsaidl](https://github.com/fsaidl) while testing the pre-release.
+- **Weather temperature showed 999 ([#237](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/237))**: the controller reports `TempWthr = 999` when the outdoor sensor is not connected. The sensor now shows *unknown* instead of 999 °C, so graphs and statistics are not spoiled.
 - **`Service authentication successful` logged on every update**: with a service password the message was written at `info` level every poll. It is now at `debug` level.
-
-### Docs
-
-- `docs/CONFIGURATION.md`: what happens and what is logged when the device is offline.
-
-## [v1.3.6-beta.1] - 2026-10-10
-
-### Fixed
-
-- **Login ready for aiohttp 4.0 ([#267](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/267))**: requests to the ecoNET300 module send an `Authorization` header built by the integration instead of aiohttp's `BasicAuth`, which is deprecated and removed in aiohttp 4.0. Without this change the integration could not log in once Home Assistant ships aiohttp 4.0. The header is the same as before, so nothing changes for the module or your settings.
 
 ### Changed
 
@@ -43,6 +29,9 @@
 ### Docs
 
 - **pymarkdown reads the project settings ([#268](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/268))**: `[tool.pymarkdown]` in `pyproject.toml` uses pymarkdown's `plugins.<rule>.<setting>` keys, so line length 120 and the disabled rules now apply. `README.md` and `CHANGELOG.md` turn the line length rule off for their one-line bullets; long lines in `docs/MIGRATION.md` are wrapped.
+- `docs/CONFIGURATION.md`: what happens and what is logged when the device is offline.
+- `docs/ENTITIES.md`: new section *Electric and Induction Boilers*.
+- `docs/FUEL_CONSUMPTION.md` ([#203](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/discussions/203)): how to chart the fuel burned per day, week or month with a Statistics graph card; the fuel total sensor uses the `TOTAL` state class (the page said `TOTAL_INCREASING`).
 
 ### Tests
 
