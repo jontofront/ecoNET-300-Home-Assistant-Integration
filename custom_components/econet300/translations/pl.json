@@ -1434,6 +1434,16 @@
       "schedule_water_heater_2": {
         "name": "Harmonogram podgrzewacza wody 2"
       }
+    },
+    "water_heater": {
+      "dhw": {
+        "name": "C.W.U."
+      }
+    },
+    "button": {
+      "dhw_boost": {
+        "name": "Nagrzanie C.W.U."
+      }
     }
   },
   "system_health": {

@@ -1434,6 +1434,16 @@
       "schedule_water_heater_2": {
         "name": "Water heater 2 schedule"
       }
+    },
+    "water_heater": {
+      "dhw": {
+        "name": "DHW"
+      }
+    },
+    "button": {
+      "dhw_boost": {
+        "name": "DHW boost"
+      }
     }
   },
   "system_health": {
