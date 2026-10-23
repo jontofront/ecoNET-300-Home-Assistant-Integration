@@ -25,10 +25,11 @@ from .entity import _main_device_info
 DHW_SETPOINT_PARAM = "103"
 DHW_MODE_PARAM = "119"
 DHW_BOOST_PARAM = "115"  # HDWStartOneLoading, momentary one-shot trigger
-# ecoMAX360i mapping: 0=off observed live, 2=schedule observed live (both from
-# Matt's controller). 1=on inferred from vendor enum 101:['off','on','schedule']
-# in docs/cloud_translations/js_files/dev_set3.js:1 and corroborated by
-# LeeNuss' sensors-inputs-ecomax360i branch (DHW_WORK_MODE_VALUES).
+# ecoMAX360i mapping: 0=off, 1=on, 2=schedule. 0 and 2 observed live; 1=on
+# confirmed by the user against the controller. Also corroborated by the
+# vendor enum 101:['off','on','schedule'] in
+# docs/cloud_translations/js_files/dev_set3.js and by LeeNuss'
+# sensors-inputs-ecomax360i branch (DHW_WORK_MODE_VALUES).
 DHW_MODES = {0: "off", 1: "on", 2: "schedule"}
 
 
