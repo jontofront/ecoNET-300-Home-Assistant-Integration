@@ -34,6 +34,7 @@ from .common_functions import (
     get_validated_entity_component,
     is_ecoster_related,
     mixer_exists,
+    round_to_step,
     validate_parameter_data,
 )
 from .const import (
@@ -1472,22 +1473,10 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     async def async_set_native_value(self, value: float) -> None:
         """Write the new numeric value back to the controller."""
-        # Round to the nearest step to avoid noisy writes
-        step = self.native_step or 1.0
-        if step and step > 0:
-            value = round(value / step) * step
-
-        send_value: Any = value
-        # Many firmwares expect integer strings even for temperature setpoints.
-        try:
-            fv = float(value)
-            if fv.is_integer():
-                send_value = int(fv)
-        except (TypeError, ValueError):
-            pass
+        send_value = round_to_step(value, self.native_step or 1.0)
         ok = await self._api.set_param(self._pid, send_value)
         if not ok:
-            raise HomeAssistantError(f"Failed to set param {self._pid} to {value}")
+            raise HomeAssistantError(f"Failed to set param {self._pid} to {send_value}")
 
         # Force a fresh editParams refresh on next update so values reflect quickly
         self.coordinator.force_edit_params_refresh()

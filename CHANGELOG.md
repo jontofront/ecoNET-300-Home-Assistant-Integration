@@ -3,6 +3,16 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **ecoMAX360i setpoints rounded to whole degrees ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: Comfort and Eco setpoints of the heating circuits accept 0.1 °C in the ecoNET app, but Home Assistant only allowed 1 °C steps and sent 21.5 °C as 22 °C. The step comes from the `editableParams` menu entries of `editParams`. Those entries are keyed by menu item, and the parameter id is their first element, but the integration looked them up by parameter id, so it missed the step and guessed 1 °C from whole-number values like `21.0`. It now finds them by parameter id and uses their min, max and step like the ecoNET app does. Values are rounded to the step before they are sent, so 21.5 is not sent as `21.500000000000004`.
+- **ecoMAX360i entities with limits of another parameter ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: the same lookup gave some parameters the min, max and step of an unrelated parameter, for example *BuforSetTempDownHist* 0-100 in 0.1 steps. These limits are gone.
+- **ecoMAX360i entity types ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: the circuit hysteresis (*CircuitNDownHist*) and the SmartGrid room heating and cooling adjustments are now numbers with 0.1 steps instead of selects with whole numbers. *Korekta_temperatury* (temperature correction) is a number from -5 to 5 °C instead of a switch. The old select and switch entities stay behind as *Unavailable*; see [MIGRATION.md](docs/MIGRATION.md).
+
+### Tests
+
+- **editParams limits**: `editableParams` entries are matched by parameter id; Comfort, Eco and hysteresis parameters of the ecoMAX360i fixtures get a 0.1 step; writes of 21.5, 21.0 and 21.56 send `21.5`, `21` and `21.6`.
+
 ## [v1.3.6] - 2026-10-11
 
 Stable release consolidating the `1.3.6-beta.1` … `1.3.6-beta.3` pre-releases.

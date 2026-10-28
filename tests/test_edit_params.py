@@ -117,13 +117,90 @@ class TestBuildEditParamCatalog:
     def test_limits_from_editable_params_list(self):
         raw = {
             "data": {"30": {"edit": True, "name": "Setting", "value": 50}},
-            "editableParams": {"30": [0, 0, 0, 10, 90, 5]},
+            "editableParams": {"5018": [30, 0, True, 10, 90, 5]},
         }
         item = build_edit_param_catalog(raw)["30"]
         assert item["min"] == 10
         assert item["max"] == 90
         assert item["step"] == 5
         assert item["kind"] == "number"
+
+    def test_editable_params_matched_by_param_id_not_by_key(self):
+        """Issue #273: the key is a menu item; the param id is the first element."""
+        raw = {
+            "data": {
+                "30": {"edit": True, "name": "Setting", "value": 50},
+                "40": {"edit": True, "name": "Other", "value": 2.5},
+            },
+            "editableParams": {"30": [40, 0, True, 0, 4, 0.1]},
+        }
+        catalog = build_edit_param_catalog(raw)
+
+        assert catalog["30"]["min"] is None
+        assert catalog["30"]["step"] == 1.0
+        assert catalog["40"]["min"] == 0
+        assert catalog["40"]["max"] == 4
+        assert catalog["40"]["step"] == 0.1
+
+    def test_editable_params_step_overrides_whole_number_guess(self):
+        """Issue #273: a value of 21.0 must not force a 1 °C step."""
+        raw = {
+            "data": {
+                "238": {
+                    "edit": True,
+                    "name": "Circuit1ComfortTemp",
+                    "value": 21.0,
+                    "minv": 10,
+                    "maxv": 35,
+                    "mult": 1,
+                }
+            },
+            "editableParams": {"31": [238, 1, False, 10.0, 35.0, 0.1]},
+        }
+        item = build_edit_param_catalog(raw)["238"]
+        assert item["kind"] == "number"
+        assert item["step"] == 0.1
+
+    def test_editable_params_without_limits_keep_data_limits(self):
+        raw = {
+            "data": {
+                "103": {
+                    "edit": True,
+                    "name": "HDWTSetPoint",
+                    "value": 45,
+                    "unit": 1,
+                    "minv": 20,
+                    "maxv": 55,
+                }
+            },
+            "editableParams": {"103": [103, 1, True]},
+        }
+        item = build_edit_param_catalog(raw)["103"]
+        assert item["min"] == 20
+        assert item["max"] == 55
+        assert item["step"] == 1.0
+
+    @pytest.mark.parametrize("controller", ["ecoMAX360i", "ecoMAX360-cf8"])
+    def test_circuit_setpoints_use_tenth_degree_step(self, load_fixture, controller):
+        """Issue #273: Comfort/Eco setpoints and hysteresis accept 0.1 °C."""
+        catalog = build_edit_param_catalog(load_fixture(controller, "editParams.json"))
+
+        for pid in ("238", "239", "240", "288", "289", "290", "946", "947"):
+            assert catalog[pid]["kind"] == "number", catalog[pid]["name"]
+            assert catalog[pid]["step"] == 0.1, catalog[pid]["name"]
+        assert catalog["238"]["min"] == 10
+        assert catalog["238"]["max"] == 35
+
+    def test_temperature_correction_is_number_from_fixture(self, load_fixture):
+        """Korekta_temperatury has only menu limits (-5..5 °C), it is not a switch."""
+        catalog = build_edit_param_catalog(
+            load_fixture("ecoMAX360i", "editParams.json")
+        )
+        item = catalog["10413"]
+
+        assert item["kind"] == "number"
+        assert item["expose_number"] is False
+        assert (item["min"], item["max"], item["step"]) == (-5, 5, 0.1)
 
     def test_zero_one_without_limits_exposes_number(self):
         raw = {"data": {"40": {"edit": True, "name": "Flag", "value": 0}}}
@@ -261,6 +338,35 @@ class TestCreateEditParamEntities:
         select = cast("EditParamSelect", select)
 
         assert select.current_option is None
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("requested", "sent"),
+        [(21.5, 21.5), (20.3, 20.3), (21.0, 21), (21.04, 21), (21.56, 21.6)],
+    )
+    async def test_number_write_rounds_to_tenth_step(self, requested, sent):
+        """Issue #273: 21.5 is sent as 21.5, not rounded to 22 or float noise."""
+        catalog = {
+            "238": {
+                "name": "Circuit1ComfortTemp",
+                "unit": "°C",
+                "min": 10.0,
+                "max": 35.0,
+                "step": 0.1,
+                "value": 21.0,
+                "kind": "number",
+            }
+        }
+        coordinator = _coordinator(catalog)
+        coordinator.async_request_refresh = AsyncMock()
+        api = _make_api()
+        api.set_param = AsyncMock(return_value=True)
+        number = EditParamNumber(coordinator, api, "238")
+
+        await number.async_set_native_value(requested)
+
+        api.set_param.assert_awaited_once_with("238", sent)
+        assert type(api.set_param.await_args.args[1]) is type(sent)
 
 
 # ============================================================================

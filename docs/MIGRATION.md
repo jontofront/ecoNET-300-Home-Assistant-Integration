@@ -8,6 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.6       | next release  | No (cleanup only)  | ecoMAX360i 0.1 °C setpoints (#273)         |
 | v1.3.5       | v1.3.6        | No                 | Login (#267), log (#255), energy (#237)    |
 | v1.3.4       | v1.3.5        | No                 | Fixes `via_device` log warning (#264)      |
 | v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |
@@ -17,6 +18,33 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
 | v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.3.6 — ecoMAX360i 0.1 °C setpoints
+
+Only ecoMAX360i is affected. No reinstall or config migration is required.
+Comfort and Eco setpoints of the heating circuits now accept 0.1 °C steps
+([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273));
+their entity IDs do not change.
+
+Three kinds of parameters move to another entity type, so a new entity appears
+and the old one stays behind as *Unavailable*:
+
+| Parameter                                    | Before                   | Now                       |
+| -------------------------------------------- | ------------------------ | ------------------------- |
+| *CircuitNDownHist* (circuit hysteresis)      | select, whole numbers    | number, 0-5 in 0.1 steps  |
+| *SmartGridIncreaseForRoomHeatingCircuit1*    | select, whole numbers    | number, 0-10 in 0.1 steps |
+| *SmartGridDecreaseForRoomCoolingCircuit2*    | select, whole numbers    | number, 0-10 in 0.1 steps |
+| *Korekta_temperatury* (temperature correct.) | switch plus number 0-10  | number, -5 to 5 °C        |
+
+### Cleanup steps (recommended)
+
+1. Update the integration (HACS) and **restart Home Assistant**.
+2. Open **Settings → Devices & Services → Entities** and search for `DownHist`,
+   `SmartGrid` and `Korekta`.
+3. Select the *Unavailable* select and switch entities and delete them.
+4. Point automations and dashboards that used them to the new `number.*` entities.
 
 ---
 
