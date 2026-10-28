@@ -8,7 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
-| v1.3.6       | next release  | No (cleanup only)  | ecoMAX360i 0.1 °C setpoints (#273)         |
+| v1.3.6       | v1.3.7-beta.1 | No (cleanup only)  | ecoMAX360i 0.1 °C setpoints (#273)         |
 | v1.3.5       | v1.3.6        | No                 | Login (#267), log (#255), energy (#237)    |
 | v1.3.4       | v1.3.5        | No                 | Fixes `via_device` log warning (#264)      |
 | v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |

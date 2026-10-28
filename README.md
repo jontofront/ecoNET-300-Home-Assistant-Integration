@@ -216,6 +216,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.7-beta.1
+
+- **ecoMAX360i setpoints in 0.1 °C steps ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: Comfort and Eco setpoints of the heating circuits accept 21.5 °C like the ecoNET app, instead of being rounded to 22 °C. Circuit hysteresis and *Korekta_temperatury* become number entities; delete the old *Unavailable* ones as described in [MIGRATION.md](docs/MIGRATION.md#upgrading-from-v136--ecomax360i-01-c-setpoints).
+
 ### What's New in v1.3.6
 
 - **Ready for aiohttp 4.0 ([#267](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/267))**: the integration logs in to the ecoNET300 module without aiohttp's deprecated `BasicAuth`, so it keeps working when Home Assistant updates aiohttp. Nothing changes for you.
@@ -304,4 +308,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-10-11 for v1.3.6.*
+*This README was last updated on 2026-10-28 for v1.3.7-beta.1.*
