@@ -1434,6 +1434,16 @@
       "schedule_water_heater_2": {
         "name": "Warmwasserbereiter 2 Zeitplan"
       }
+    },
+    "water_heater": {
+      "dhw": {
+        "name": "Warmwasser"
+      }
+    },
+    "button": {
+      "dhw_boost": {
+        "name": "Warmwasser-Boost"
+      }
     }
   },
   "system_health": {
