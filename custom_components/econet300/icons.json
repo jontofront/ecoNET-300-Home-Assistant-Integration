@@ -90,7 +90,6 @@
           "off": "mdi:lan-disconnect"
         }
       },
-
       "contact_gzc": {
         "default": "mdi:connection",
         "state": {
@@ -350,7 +349,6 @@
           "off": "mdi:pump"
         }
       },
-
       "mixer_pump1": {
         "default": "mdi:pump",
         "state": {
@@ -501,7 +499,6 @@
       "lambda_set": {
         "default": "mdi:gauge"
       },
-
       "work_at100": {
         "default": "mdi:counter"
       },
@@ -1441,6 +1438,16 @@
       },
       "schedule_water_heater_2": {
         "default": "mdi:calendar-clock"
+      }
+    },
+    "water_heater": {
+      "dhw": {
+        "default": "mdi:heat-pump"
+      }
+    },
+    "button": {
+      "dhw_boost": {
+        "default": "mdi:heat-pump-outline"
       }
     }
   }

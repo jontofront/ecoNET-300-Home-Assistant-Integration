@@ -73,6 +73,26 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 | `tempCWUSet` | Water heater set temperature | `../econet/regParams` |
 | `statusCWU`  | Water heater status          | `../econet/regParams` |
 
+### Water Heater and DHW Boost (ecoMAX360i)
+
+On ecoMAX360i heat-pump controllers the integration creates a native water heater
+entity combining the controller's own DHW data, plus a momentary boost button.
+
+| Entity      | Platform       | Description                                              |
+| ----------- | -------------- | -------------------------------------------------------- |
+| `DHW`       | `water_heater` | Cylinder temperature, target and mode (params 103, 119)  |
+| `DHW boost` | `button`       | One-shot DHW loading (`HDWStartOneLoading`, param 115)   |
+
+Both entities are created only when the controller reports an ecoMAX360i with
+the `gm3_pomp` protocol and writable DHW setpoint metadata. Other controllers
+keep `tempCWU` and `tempCWUSet`. On ecoMAX360i the generic editParams entities
+for parameters 103, 115 and 119 are not created, because the water heater and
+the boost button already control them.
+
+Writes are checked against the controller's own `min`/`max` before they are
+sent. The new target or mode stays on the entity until the controller confirms
+it.
+
 ### Temperature Sensors
 
 | Entity Key           | Description              | Endpoint              |
