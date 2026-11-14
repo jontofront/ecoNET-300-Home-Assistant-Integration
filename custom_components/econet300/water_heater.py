@@ -25,6 +25,11 @@ from .entity import _main_device_info
 DHW_SETPOINT_PARAM = "103"
 DHW_MODE_PARAM = "119"
 DHW_BOOST_PARAM = "115"  # HDWStartOneLoading, momentary one-shot trigger
+# Generic editParams entities for these ids are hidden while the water heater
+# platform is active, so the same setpoint is not exposed twice.
+DHW_OWNED_EDIT_PARAM_IDS = frozenset(
+    {DHW_SETPOINT_PARAM, DHW_MODE_PARAM, DHW_BOOST_PARAM}
+)
 # ecoMAX360i mapping: 0=off, 1=on, 2=schedule. 0 and 2 observed live; 1=on
 # confirmed by the user against the controller. Also corroborated by the
 # vendor enum 101:['off','on','schedule'] in
@@ -76,6 +81,25 @@ def _dhw_platform_supported(data: dict[str, Any]) -> bool:
         and sys_params.get("protocolType") == "gm3_pomp"
         and _valid_setpoint(data)
     )
+
+
+def edit_param_owned_by_dhw(data: dict[str, Any] | None, pid: str) -> bool:
+    """Return True when the water heater platform already controls this id."""
+    if str(pid) not in DHW_OWNED_EDIT_PARAM_IDS:
+        return False
+    return _dhw_platform_supported(data or {})
+
+
+def _keep_written_value(entity: CoordinatorEntity, param: str, value: int) -> None:
+    """Show a write immediately and reread editParams only after it can apply.
+
+    The controller applies a newParam write after several seconds. Reading
+    editParams at once returns the previous value, so the entity would jump
+    back. ``store_edit_param_write`` keeps the new value and delays that read.
+    """
+    entity.coordinator.store_edit_param_write(param, value)
+    if entity.hass is not None:
+        entity.async_write_ha_state()
 
 
 class EconetWaterHeater(CoordinatorEntity[EconetDataCoordinator], WaterHeaterEntity):
@@ -151,8 +175,7 @@ class EconetWaterHeater(CoordinatorEntity[EconetDataCoordinator], WaterHeaterEnt
         )
         if not await self._api.set_param(DHW_MODE_PARAM, value):
             raise HomeAssistantError("Controller rejected the DHW mode")
-        self.coordinator.force_edit_params_refresh()
-        await self.coordinator.async_request_refresh()
+        _keep_written_value(self, DHW_MODE_PARAM, value)
 
     @property
     def min_temp(self) -> float:
@@ -194,8 +217,7 @@ class EconetWaterHeater(CoordinatorEntity[EconetDataCoordinator], WaterHeaterEnt
             )
         if not await self._api.set_param(DHW_SETPOINT_PARAM, int(value)):
             raise HomeAssistantError("Controller rejected the DHW target")
-        self.coordinator.force_edit_params_refresh()
-        await self.coordinator.async_request_refresh()
+        _keep_written_value(self, DHW_SETPOINT_PARAM, int(value))
 
 
 # Older HA releases consume the legacy names; do not override deprecated
@@ -249,8 +271,7 @@ class EconetDhwBoostButton(CoordinatorEntity[EconetDataCoordinator], ButtonEntit
             raise HomeAssistantError("DHW boost is unavailable or unsupported")
         if not await self._api.set_param(DHW_BOOST_PARAM, 1):
             raise HomeAssistantError("Controller rejected the DHW boost")
-        self.coordinator.force_edit_params_refresh()
-        await self.coordinator.async_request_refresh()
+        _keep_written_value(self, DHW_BOOST_PARAM, 1)
 
 
 async def async_setup_entry(

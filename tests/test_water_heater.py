@@ -25,6 +25,13 @@ def make_coordinator():
     coordinator.single_device_tree = False
     coordinator.controller_device_id = None
     coordinator.async_request_refresh = AsyncMock()
+
+    def store(key, value):
+        entry = coordinator.data["editParams"].get(key)
+        if isinstance(entry, dict):
+            entry["value"] = value
+
+    coordinator.store_edit_param_write = store
     return coordinator
 
 
@@ -70,9 +77,8 @@ async def test_valid_target_writes_only_setpoint():
     entity = EconetWaterHeater(coordinator, api)
     await entity.async_set_temperature(temperature=55)
     api.set_param.assert_awaited_once_with("103", 55)
-    coordinator.force_edit_params_refresh.assert_called_once()
-    coordinator.async_request_refresh.assert_awaited_once()
-    assert entity.native_target_temperature == 50
+    coordinator.async_request_refresh.assert_not_awaited()
+    assert entity.native_target_temperature == 55
 
 
 @pytest.mark.asyncio
@@ -191,8 +197,8 @@ async def test_mode_write_is_dhw_only(mode, value):
     e = EconetWaterHeater(c, api)
     await e.async_set_operation_mode(mode)
     api.set_param.assert_awaited_once_with("119", value)
-    c.force_edit_params_refresh.assert_called_once()
-    c.async_request_refresh.assert_awaited_once()
+    c.async_request_refresh.assert_not_awaited()
+    assert e.current_operation == mode
 
 
 @pytest.mark.asyncio
@@ -267,8 +273,8 @@ async def test_dhw_boost_press_writes_param_115():
     e = EconetDhwBoostButton(c, api)
     await e.async_press()
     api.set_param.assert_awaited_once_with("115", 1)
-    c.force_edit_params_refresh.assert_called_once()
-    c.async_request_refresh.assert_awaited_once()
+    c.async_request_refresh.assert_not_awaited()
+    assert c.data["editParams"]["115"]["value"] == 1
 
 
 @pytest.mark.asyncio
@@ -296,3 +302,44 @@ async def test_unsafe_boost_press_rejected(change):
     with pytest.raises(HomeAssistantError):
         await e.async_press()
     api.set_param.assert_not_awaited()
+
+
+def _owns_edit_param(unique_id: str, pid: str) -> bool:
+    """Return True when a generic editParams unique id is for this parameter."""
+    return unique_id.endswith(f"-edit_{pid}") or f"-edit_{pid}_" in unique_id
+
+
+def _edit_param_unique_ids(coordinator) -> set[str]:
+    """Return unique ids of generic editParams entities for this coordinator."""
+    from custom_components.econet300.common import build_edit_param_catalog
+    from custom_components.econet300.number import _create_edit_param_numbers
+    from custom_components.econet300.select import _create_edit_param_selects
+    from custom_components.econet300.switch import _create_edit_param_switches
+
+    fixture = Path(__file__).parent / "fixtures" / "ecoMAX360-cf8" / "editParams.json"
+    raw = json.loads(fixture.read_text(encoding="utf-8"))
+    coordinator.data["editParamCatalog"] = build_edit_param_catalog(raw)
+    api = MagicMock(uid="test-controller")
+    entities = [
+        *_create_edit_param_numbers(coordinator, api),
+        *_create_edit_param_switches(coordinator, api),
+        *_create_edit_param_selects(coordinator, api),
+    ]
+    return {entity.unique_id for entity in entities}
+
+
+def test_water_heater_hides_duplicate_edit_params():
+    """Params 103, 115 and 119 belong to the water heater, not generic entities."""
+    unique_ids = _edit_param_unique_ids(make_coordinator())
+    assert unique_ids
+    for pid in ("103", "115", "119"):
+        assert not any(_owns_edit_param(uid, pid) for uid in unique_ids)
+
+
+def test_other_controllers_keep_generic_dhw_params():
+    """Pellet and other controllers still expose editParams id 103."""
+    coordinator = make_coordinator()
+    coordinator.data["sysParams"]["controllerID"] = "ecoMAX810P-L"
+    coordinator.data["sysParams"]["protocolType"] = "em"
+    unique_ids = _edit_param_unique_ids(coordinator)
+    assert any(_owns_edit_param(uid, "103") for uid in unique_ids)

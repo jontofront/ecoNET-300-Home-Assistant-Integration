@@ -34,6 +34,7 @@ from .const import (
     SERVICE_COORDINATOR,
 )
 from .entity import EconetEntity, get_device_info_for_component
+from .water_heater import edit_param_owned_by_dhw
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -639,7 +640,10 @@ def _create_edit_param_switches(
         "editParamCatalog", {}
     ) or {}
     entities: list[SwitchEntity] = []
+    data = coordinator.data or {}
     for pid, info in catalog.items():
+        if edit_param_owned_by_dhw(data, pid):
+            continue
         if info.get("kind") != "switch":
             continue
         entities.append(EditParamSwitch(coordinator, api, pid))

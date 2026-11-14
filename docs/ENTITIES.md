@@ -78,15 +78,20 @@ These sensors are retrieved from the `../econet/regParams` and `../econet/sysPar
 On ecoMAX360i heat-pump controllers the integration creates a native water heater
 entity combining the controller's own DHW data, plus a momentary boost button.
 
-| Entity              | Platform     | Description                                              |
-| ------------------- | ------------ | -------------------------------------------------------- |
-| `DHW`               | `water_heater` | Cylinder temperature, target setpoint (param 103) and DHW work mode (param 119: off/on/schedule) |
-| `DHW boost`         | `button`     | Triggers one-shot DHW loading (`HDWStartOneLoading`, param 115) |
+| Entity      | Platform       | Description                                              |
+| ----------- | -------------- | -------------------------------------------------------- |
+| `DHW`       | `water_heater` | Cylinder temperature, target and mode (params 103, 119)  |
+| `DHW boost` | `button`       | One-shot DHW loading (`HDWStartOneLoading`, param 115)   |
 
 Both entities are created only when the controller reports an ecoMAX360i with
-`gm3_pomp` protocol and writable DHW setpoint metadata; other controllers are
-unaffected. Writes are validated against the controller's own `min`/`max`
-metadata before being sent.
+the `gm3_pomp` protocol and writable DHW setpoint metadata. Other controllers
+keep `tempCWU` and `tempCWUSet`. On ecoMAX360i the generic editParams entities
+for parameters 103, 115 and 119 are not created, because the water heater and
+the boost button already control them.
+
+Writes are checked against the controller's own `min`/`max` before they are
+sent. The new target or mode stays on the entity until the controller confirms
+it.
 
 ### Temperature Sensors
 
