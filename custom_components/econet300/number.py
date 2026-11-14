@@ -64,6 +64,7 @@ from .entity import (
     _create_base_device_info,
     get_device_info_for_component,
 )
+from .water_heater import edit_param_owned_by_dhw
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -1506,7 +1507,10 @@ def _create_edit_param_numbers(
         "editParamCatalog", {}
     ) or {}
     entities: list[NumberEntity] = []
+    data = coordinator.data or {}
     for pid, info in catalog.items():
+        if edit_param_owned_by_dhw(data, pid):
+            continue
         if info.get("kind") != "number" and not info.get("expose_number"):
             continue
         entities.append(EditParamNumber(coordinator, api, pid))

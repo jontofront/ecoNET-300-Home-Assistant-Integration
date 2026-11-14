@@ -64,7 +64,9 @@ PLATFORMS: list[Platform] = [
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
+    Platform.BUTTON,
     Platform.SWITCH,
+    Platform.WATER_HEATER,
 ]
 
 # Service names
