@@ -3,6 +3,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Native water heater entity and DHW boost button for ecoMAX360i heat pumps**: the controller's DHW temperature, target setpoint and work mode (*Off / On / Schedule*) are combined into a proper `water_heater` entity, and a *DHW boost* button triggers the controller's one-shot DHW loading (`HDWStartOneLoading`). Both are created only on ecoMAX360i controllers with the `gm3_pomp` protocol and writable DHW metadata; writes are validated against the controller's own limits and rejected when data is stale or parameters are locked. Names in English, Polish and German.
+
 ## [v1.3.6] - 2026-10-11
 
 Stable release consolidating the `1.3.6-beta.1` … `1.3.6-beta.3` pre-releases.
