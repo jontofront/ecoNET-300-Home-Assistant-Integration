@@ -367,6 +367,20 @@ def should_be_switch_entity(param: dict) -> bool:
     return is_binary_enum(enum_values)
 
 
+def round_to_step(value: float, step: float) -> int | float:
+    """Round a value to the nearest step, ready to send to the controller.
+
+    Whole numbers become ``int`` because some firmwares ignore ``"21.0"``.
+    Rounding to the step's decimals keeps 21.5 from being sent as
+    21.500000000000004.
+    """
+    step_decimals = len(f"{step:f}".rstrip("0").partition(".")[2])
+    rounded = round(round(value / step) * step, step_decimals)
+    if rounded.is_integer():
+        return int(rounded)
+    return rounded
+
+
 def mixer_exists(coordinator_data: dict | None, mixer_num: int) -> bool:
     """Check if a mixer exists by verifying regParams data.
 

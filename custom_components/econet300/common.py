@@ -87,12 +87,45 @@ def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
     return not is_ecoster_connected(sys_params)
 
 
+def _index_menu_limits(
+    editable_params: dict[str, Any],
+) -> dict[str, tuple[float, float, float]]:
+    """Return ``(min, max, step)`` per parameter id from ``editableParams``.
+
+    ``editableParams`` is keyed by menu item, not by parameter id. Each item is
+    ``[param_id, unit, visible]``, optionally followed by ``min, max, step``.
+    The ecoNET app prefers these limits over ``minv``/``maxv``/``mult`` in
+    ``data``. A parameter can sit in several menus, all with the same limits.
+    """
+    limits: dict[str, tuple[float, float, float]] = {}
+    for item in editable_params.values():
+        if not isinstance(item, list) or len(item) < 6:
+            continue
+        try:
+            native_min, native_max, native_step = (float(v) for v in item[3:6])
+        except (TypeError, ValueError):
+            continue
+        if native_max > native_min and native_step > 0:
+            limits.setdefault(str(item[0]), (native_min, native_max, native_step))
+    return limits
+
+
+def _guess_step(*numbers: float | None) -> float:
+    """Return 0.1 if any of the numbers has decimals, otherwise 1.0."""
+    has_decimals = any(
+        number is not None and not float(number).is_integer() for number in numbers
+    )
+    return 0.1 if has_decimals else 1.0
+
+
 def build_edit_param_catalog(
     edit_params: dict[str, Any] | None,
 ) -> dict[str, dict[str, Any]]:
     """Build a normalized writable-parameter catalog from /econet/editParams."""
     data = (edit_params or {}).get("data", {}) or {}
-    editable_params = (edit_params or {}).get("editableParams", {}) or {}
+    menu_limits = _index_menu_limits(
+        (edit_params or {}).get("editableParams", {}) or {}
+    )
     catalog: dict[str, dict[str, Any]] = {}
 
     for pid, entry in data.items():
@@ -130,32 +163,13 @@ def build_edit_param_catalog(
                 native_max = float(maxv)
                 has_explicit_limits = True
 
-            ep = editable_params.get(str(pid)) or editable_params.get(pid)
-            if (
-                (native_min is None or native_max is None)
-                and isinstance(ep, list)
-                and len(ep) >= 6
-            ):
-                try:
-                    native_min = float(ep[3])
-                    native_max = float(ep[4])
-                    native_step = float(ep[5])
-                    has_explicit_limits = True
-                except (TypeError, ValueError):
-                    pass
+            menu = menu_limits.get(str(pid))
+            if menu is not None:
+                native_min, native_max, native_step = menu
+                has_explicit_limits = True
 
             if native_step is None:
-                is_intish = True
-                for item in (value, native_min, native_max):
-                    if item is None:
-                        continue
-                    try:
-                        if not float(item).is_integer():
-                            is_intish = False
-                            break
-                    except (TypeError, ValueError):
-                        pass
-                native_step = 1.0 if is_intish else 0.1
+                native_step = _guess_step(value, native_min, native_max)
 
             if native_min is not None and native_max is not None:
                 try:

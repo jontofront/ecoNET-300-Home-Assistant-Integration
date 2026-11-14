@@ -9,6 +9,8 @@ Complete reference for all entities provided by the ecoNET300 Home Assistant Int
 | Sensors        | 50+   | Temperature, status, system info  |
 | Binary Sensors | 25+   | Pumps, fans, connections, alarms  |
 | Events         | 1     | Boiler alarm triggered / cleared  |
+| Water Heater   | 1     | DHW on ecoMAX360i                 |
+| Buttons        | 1     | DHW boost on ecoMAX360i           |
 | Switches       | 1     | Boiler ON/OFF control             |
 | Select         | 1     | Heater mode (Winter/Summer/Auto)  |
 | Number         | 15+   | Temperature setpoints             |
