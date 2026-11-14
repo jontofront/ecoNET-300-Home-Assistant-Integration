@@ -3,17 +3,26 @@
 
 ## [Unreleased]
 
+## [v1.3.7] - 2026-11-14
+
+Stable release. It includes the `1.3.7-beta.1` setpoint fix and the ecoMAX360i
+water heater. Thanks to [@rizsher](https://github.com/rizsher) for testing the
+0.1 °C setpoints and to [@mattsavin](https://github.com/mattsavin) for the
+water heater.
+
 ### Added
 
-- **Native water heater entity and DHW boost button for ecoMAX360i heat pumps**: the controller's DHW temperature, target setpoint and work mode (*Off / On / Schedule*) are combined into a proper `water_heater` entity, and a *DHW boost* button triggers the controller's one-shot DHW loading (`HDWStartOneLoading`). Both are created only on ecoMAX360i controllers with the `gm3_pomp` protocol and writable DHW metadata; writes are validated against the controller's own limits and rejected when data is stale or parameters are locked. A new target or mode stays on the entity until the controller confirms it, instead of jumping back to the previous value. The generic editParams entities for parameters 103, 115 and 119 are not created alongside it. Other controllers are unchanged. Names in English, Polish and German. Thanks to [@mattsavin](https://github.com/mattsavin).
-
-## [v1.3.7-beta.1] - 2026-10-28
+- **Native water heater entity and DHW boost button for ecoMAX360i heat pumps ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274))**: the controller's DHW temperature, target setpoint and work mode (*Off / On / Schedule*) are combined into a proper `water_heater` entity, and a *DHW boost* button triggers the controller's one-shot DHW loading (`HDWStartOneLoading`). Both are created only on ecoMAX360i controllers with the `gm3_pomp` protocol and writable DHW metadata; writes are validated against the controller's own limits and rejected when data is stale or parameters are locked. A new target or mode stays on the entity until the controller confirms it, instead of jumping back to the previous value. The generic editParams entities for parameters 103, 115 and 119 are not created alongside it. Other controllers are unchanged. Names in English, Polish and German.
 
 ### Fixed
 
 - **ecoMAX360i setpoints rounded to whole degrees ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: Comfort and Eco setpoints of the heating circuits accept 0.1 °C in the ecoNET app, but Home Assistant only allowed 1 °C steps and sent 21.5 °C as 22 °C. The step comes from the `editableParams` menu entries of `editParams`. Those entries are keyed by menu item, and the parameter id is their first element, but the integration looked them up by parameter id, so it missed the step and guessed 1 °C from whole-number values like `21.0`. It now finds them by parameter id and uses their min, max and step like the ecoNET app does. Values are rounded to the step before they are sent, so 21.5 is not sent as `21.500000000000004`.
 - **ecoMAX360i entities with limits of another parameter ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: the same lookup gave some parameters the min, max and step of an unrelated parameter, for example *BuforSetTempDownHist* 0-100 in 0.1 steps. These limits are gone.
 - **ecoMAX360i entity types ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: the circuit hysteresis (*CircuitNDownHist*) and the SmartGrid room heating and cooling adjustments are now numbers with 0.1 steps instead of selects with whole numbers. *Korekta_temperatury* (temperature correction) is a number from -5 to 5 °C instead of a switch. The old select and switch entities stay behind as *Unavailable*; see [MIGRATION.md](docs/MIGRATION.md).
+
+### Changed
+
+- **Home Assistant 2026.11 Marketplace**: HACS now ships with Home Assistant as **Settings → Marketplace**. This repository, `hacs.json` and updates stay the same. Home Assistant 2026.10 and older still use HACS. The manifest lists the categories Heating, Heat pumps and Water heaters so the Marketplace can file the integration. Empty unused `homekit`, `ssdp` and `zeroconf` keys are removed. You still add the integration yourself.
 
 ### Tests
 

@@ -80,17 +80,20 @@ The integration supports **7 languages** with comprehensive translations:
 
 ## 🚀 Installation
 
-### HACS (Recommended)
+### Marketplace or HACS
 
-1. Install and configure [HACS](https://hacs.xyz/).
-2. Add this repository as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories/) using:
+From Home Assistant **2026.11**, HACS is built in. Open **Settings → Marketplace**.
+On **2026.10 and older**, install [HACS](https://hacs.xyz/) first. The repository
+is the same either way.
+
+1. Add this repository as a custom repository, category **Integration**:
 
    ```text
    https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration
    ```
 
-3. In HACS, search for **"ecoNET300"**, install the integration.
-4. Restart Home Assistant.
+2. Search for **ecoNET300** and install it.
+3. Restart Home Assistant.
 
 ### Manual Installation
 
@@ -218,9 +221,11 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
-### What's New in v1.3.7-beta.1
+### What's New in v1.3.7
 
+- **ecoMAX360i DHW water heater ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274))**: a water heater for the cylinder temperature, the target and Off / On / Schedule, plus a **DHW boost** button. Only ecoMAX360i heat pumps. Other controllers keep `tempCWU` and `tempCWUSet`. See [Water heater and DHW boost](docs/ENTITIES.md#water-heater-and-dhw-boost-ecomax360i).
 - **ecoMAX360i setpoints in 0.1 °C steps ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273))**: Comfort and Eco setpoints of the heating circuits accept 21.5 °C like the ecoNET app, instead of being rounded to 22 °C. Circuit hysteresis and *Korekta_temperatury* become number entities; delete the old *Unavailable* ones as described in [MIGRATION.md](docs/MIGRATION.md#upgrading-from-v136--ecomax360i-01-c-setpoints).
+- **Home Assistant 2026.11**: install and update from **Settings → Marketplace**. Older Home Assistant still uses HACS. Same repository.
 
 ### What's New in v1.3.6
 
@@ -310,4 +315,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-10-28 for v1.3.7-beta.1.*
+*This README was last updated on 2026-11-14 for v1.3.7.*

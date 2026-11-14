@@ -8,7 +8,8 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
-| v1.3.6       | v1.3.7-beta.1 | No (cleanup only)  | ecoMAX360i 0.1 °C setpoints (#273)         |
+| v1.3.6       | v1.3.7        | No (cleanup only)  | 0.1 °C setpoints (#273), DHW (#274)        |
+| v1.3.7-beta.1| v1.3.7        | No (cleanup only)  | Adds the ecoMAX360i DHW water heater       |
 | v1.3.5       | v1.3.6        | No                 | Login (#267), log (#255), energy (#237)    |
 | v1.3.4       | v1.3.5        | No                 | Fixes `via_device` log warning (#264)      |
 | v1.3.3       | v1.3.4        | No (cleanup only)  | Delete empty *ecoSTER N* devices (#256)    |
@@ -23,7 +24,8 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 ## Upgrading from v1.3.6 — ecoMAX360i 0.1 °C setpoints
 
-Only ecoMAX360i is affected. No reinstall or config migration is required.
+v1.3.7 is the stable release of this change. Only ecoMAX360i is affected.
+No reinstall or config migration is required.
 Comfort and Eco setpoints of the heating circuits now accept 0.1 °C steps
 ([#273](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/273));
 their entity IDs do not change.
@@ -40,11 +42,17 @@ and the old one stays behind as *Unavailable*:
 
 ### Cleanup steps (recommended)
 
-1. Update the integration (HACS) and **restart Home Assistant**.
+1. Update the integration from **Settings → Marketplace** (Home Assistant 2026.11
+   or newer) or from HACS, then **restart Home Assistant**.
 2. Open **Settings → Devices & Services → Entities** and search for `DownHist`,
    `SmartGrid` and `Korekta`.
 3. Select the *Unavailable* select and switch entities and delete them.
 4. Point automations and dashboards that used them to the new `number.*` entities.
+
+On an ecoMAX360i, v1.3.7 also adds a **DHW** water heater and a **DHW boost**
+button ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274)).
+The old editParams entities for parameters 103, 115 and 119 stay behind as
+*Unavailable* and can be deleted. Other controllers do not get these entities.
 
 ---
 
@@ -168,9 +176,10 @@ Before upgrading, download your current diagnostics:
 
 #### Step 2: Update the Integration
 
-**Via HACS (Recommended):**
+**Via Marketplace or HACS:**
 
-1. Open HACS in Home Assistant
+1. On Home Assistant 2026.11 or newer, open **Settings → Marketplace**.
+   On older versions, open **HACS**.
 2. Go to **Integrations**
 3. Find **ecoNET300**
 4. Click **Update** (or reinstall if needed)
