@@ -8,6 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.7       | v1.3.8        | No                 | ecoMAX360i DHW entities are back (#279)    |
 | v1.3.6       | v1.3.7        | No (cleanup only)  | 0.1 °C setpoints (#273), DHW (#274)        |
 | v1.3.7-beta.1| v1.3.7        | No (cleanup only)  | Adds the ecoMAX360i DHW water heater       |
 | v1.3.5       | v1.3.6        | No                 | Login (#267), log (#255), energy (#237)    |
@@ -19,6 +20,36 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
 | v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.3.7 — ecoMAX360i DHW entities
+
+Only ecoMAX360i is affected. No reinstall or config migration is required.
+v1.3.7 added a **DHW** water heater and a **DHW boost** button
+([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274))
+and stopped creating the editParams entities for parameters 103, 115 and 119,
+which control the same settings. Automations and dashboards that used them broke
+([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279)).
+
+v1.3.8 creates them again next to the water heater:
+
+- Entities that are still in Home Assistant come back enabled, with the same
+  entity IDs and history.
+- If you deleted them, check under **Settings → Devices & Services → Entities**
+  that they are enabled.
+- On new installs they are disabled by default.
+
+To use the new entities instead:
+
+| Old entity                 | New entity and action                      |
+| -------------------------- | ------------------------------------------ |
+| `HDWTSetPoint (103)`       | **DHW**: `water_heater.set_temperature`    |
+| `HDWusermode (119)`        | **DHW**: `water_heater.set_operation_mode` |
+| `HDWStartOneLoading (115)` | **DHW boost**: `button.press`              |
+
+The DHW modes are `off`, `on` and `schedule`. The target temperature is the
+`temperature` attribute of the water heater, in whole degrees.
 
 ---
 
@@ -51,24 +82,10 @@ and the old one stays behind as *Unavailable*:
 
 On an ecoMAX360i, v1.3.7 also adds a **DHW** water heater and a **DHW boost**
 button ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274)).
-They control the same settings as the editParams entities for parameters 103,
-115 and 119, which v1.3.7 no longer creates. Do not delete those *Unavailable*
-entities if automations or dashboards use them: the next release creates them
-again with the same entity IDs
-([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279)).
-On new installs they are disabled by default. Other controllers do not get the
-new entities.
-
-To use the new entities instead:
-
-| Old entity                 | New entity and action                      |
-| -------------------------- | ------------------------------------------ |
-| `HDWTSetPoint (103)`       | **DHW**: `water_heater.set_temperature`    |
-| `HDWusermode (119)`        | **DHW**: `water_heater.set_operation_mode` |
-| `HDWStartOneLoading (115)` | **DHW boost**: `button.press`              |
-
-The DHW modes are `off`, `on` and `schedule`. The target temperature is the
-`temperature` attribute of the water heater, in whole degrees.
+Do not delete the editParams entities for parameters 103, 115 and 119 if
+automations use them; see
+[Upgrading from v1.3.7](#upgrading-from-v137--ecomax360i-dhw-entities).
+Other controllers do not get the new entities.
 
 ---
 

@@ -3,6 +3,11 @@
 
 ## [Unreleased]
 
+## [v1.3.8] - 2026-11-15
+
+Bug fix release for the ecoMAX360i water heater added in 1.3.7. Thanks to
+[@rizsher](https://github.com/rizsher) for reporting it.
+
 ### Fixed
 
 - **ecoMAX360i DHW setpoint entity gone after 1.3.7 ([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279))**: when 1.3.7 added the **DHW** water heater, it stopped creating the generic `HDWTSetPoint (103)`, `HDWusermode (119)` and `HDWStartOneLoading (115)` entities, so automations and dashboards that used them broke. They are created again next to the water heater, with the same entity IDs and history. On new installs they are disabled by default, because the water heater and the **DHW boost** button control the same parameters. Other controllers are unchanged.

@@ -221,6 +221,10 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.8
+
+- **ecoMAX360i DHW setpoint is back ([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279))**: `HDWTSetPoint (103)`, `HDWusermode (119)` and `HDWStartOneLoading (115)` are created again next to the **DHW** water heater, so automations and dashboards that used them work again. On new installs they are disabled by default. See [MIGRATION.md](docs/MIGRATION.md#upgrading-from-v137--ecomax360i-dhw-entities).
+
 ### What's New in v1.3.7
 
 - **ecoMAX360i DHW water heater ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274))**: a water heater for the cylinder temperature, the target and Off / On / Schedule, plus a **DHW boost** button. Only ecoMAX360i heat pumps. Other controllers keep `tempCWU` and `tempCWUSet`. See [Water heater and DHW boost](docs/ENTITIES.md#water-heater-and-dhw-boost-ecomax360i).
@@ -315,4 +319,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-11-14 for v1.3.7.*
+*This README was last updated on 2026-11-15 for v1.3.8.*
