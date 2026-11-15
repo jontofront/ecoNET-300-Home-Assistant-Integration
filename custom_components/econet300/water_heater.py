@@ -25,8 +25,9 @@ from .entity import _main_device_info
 DHW_SETPOINT_PARAM = "103"
 DHW_MODE_PARAM = "119"
 DHW_BOOST_PARAM = "115"  # HDWStartOneLoading, momentary one-shot trigger
-# Generic editParams entities for these ids are hidden while the water heater
-# platform is active, so the same setpoint is not exposed twice.
+# While the water heater platform is active, the generic editParams entities
+# for these ids are only disabled by default: the entity registry keeps
+# existing entries enabled, so automations that use them keep working.
 DHW_OWNED_EDIT_PARAM_IDS = frozenset(
     {DHW_SETPOINT_PARAM, DHW_MODE_PARAM, DHW_BOOST_PARAM}
 )

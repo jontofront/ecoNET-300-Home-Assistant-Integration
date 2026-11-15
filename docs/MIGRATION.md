@@ -51,8 +51,24 @@ and the old one stays behind as *Unavailable*:
 
 On an ecoMAX360i, v1.3.7 also adds a **DHW** water heater and a **DHW boost**
 button ([#274](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/pull/274)).
-The old editParams entities for parameters 103, 115 and 119 stay behind as
-*Unavailable* and can be deleted. Other controllers do not get these entities.
+They control the same settings as the editParams entities for parameters 103,
+115 and 119, which v1.3.7 no longer creates. Do not delete those *Unavailable*
+entities if automations or dashboards use them: the next release creates them
+again with the same entity IDs
+([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279)).
+On new installs they are disabled by default. Other controllers do not get the
+new entities.
+
+To use the new entities instead:
+
+| Old entity                 | New entity and action                      |
+| -------------------------- | ------------------------------------------ |
+| `HDWTSetPoint (103)`       | **DHW**: `water_heater.set_temperature`    |
+| `HDWusermode (119)`        | **DHW**: `water_heater.set_operation_mode` |
+| `HDWStartOneLoading (115)` | **DHW boost**: `button.press`              |
+
+The DHW modes are `off`, `on` and `schedule`. The target temperature is the
+`temperature` attribute of the water heater, in whole degrees.
 
 ---
 

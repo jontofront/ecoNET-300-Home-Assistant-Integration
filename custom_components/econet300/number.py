@@ -1423,6 +1423,9 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         self._attr_name = f"{pname} ({self._pid})"
         if self._use_number_suffix:
             self._attr_name = f"{self._attr_name} value"
+        self._attr_entity_registry_enabled_default = not edit_param_owned_by_dhw(
+            coordinator.data, self._pid
+        )
 
         self._attr_device_info = _device_info(api)
         self._attr_native_unit_of_measurement = info.get("unit")
@@ -1496,10 +1499,7 @@ def _create_edit_param_numbers(
         "editParamCatalog", {}
     ) or {}
     entities: list[NumberEntity] = []
-    data = coordinator.data or {}
     for pid, info in catalog.items():
-        if edit_param_owned_by_dhw(data, pid):
-            continue
         if info.get("kind") != "number" and not info.get("expose_number"):
             continue
         entities.append(EditParamNumber(coordinator, api, pid))
