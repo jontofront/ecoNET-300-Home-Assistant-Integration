@@ -304,13 +304,16 @@ async def test_unsafe_boost_press_rejected(change):
     api.set_param.assert_not_awaited()
 
 
-def _owns_edit_param(unique_id: str, pid: str) -> bool:
-    """Return True when a generic editParams unique id is for this parameter."""
-    return unique_id.endswith(f"-edit_{pid}") or f"-edit_{pid}_" in unique_id
+DHW_EDIT_PARAM_UNIQUE_IDS = {
+    "test-controller-edit_103",
+    "test-controller-edit_115",
+    "test-controller-edit_115_value",
+    "test-controller-edit_119",
+}
 
 
-def _edit_param_unique_ids(coordinator) -> set[str]:
-    """Return unique ids of generic editParams entities for this coordinator."""
+def _edit_param_enabled_defaults(coordinator) -> dict[str, bool]:
+    """Map generic editParams unique ids to their enabled-by-default flag."""
     from custom_components.econet300.common import build_edit_param_catalog
     from custom_components.econet300.number import _create_edit_param_numbers
     from custom_components.econet300.select import _create_edit_param_selects
@@ -325,21 +328,33 @@ def _edit_param_unique_ids(coordinator) -> set[str]:
         *_create_edit_param_switches(coordinator, api),
         *_create_edit_param_selects(coordinator, api),
     ]
-    return {entity.unique_id for entity in entities}
+    return {
+        entity.unique_id: entity.entity_registry_enabled_default for entity in entities
+    }
 
 
-def test_water_heater_hides_duplicate_edit_params():
-    """Params 103, 115 and 119 belong to the water heater, not generic entities."""
-    unique_ids = _edit_param_unique_ids(make_coordinator())
-    assert unique_ids
-    for pid in ("103", "115", "119"):
-        assert not any(_owns_edit_param(uid, pid) for uid in unique_ids)
+def test_water_heater_keeps_dhw_edit_params_disabled_by_default():
+    """Params 103, 115 and 119 stay for existing automations (#279).
+
+    The water heater controls them, so new installs get them disabled.
+    """
+    enabled = _edit_param_enabled_defaults(make_coordinator())
+    assert enabled.keys() >= DHW_EDIT_PARAM_UNIQUE_IDS
+    assert not any(enabled[uid] for uid in DHW_EDIT_PARAM_UNIQUE_IDS)
+    other_params = [
+        is_enabled
+        for uid, is_enabled in enabled.items()
+        if uid not in DHW_EDIT_PARAM_UNIQUE_IDS
+    ]
+    assert other_params
+    assert all(other_params)
 
 
-def test_other_controllers_keep_generic_dhw_params():
-    """Pellet and other controllers still expose editParams id 103."""
+def test_other_controllers_keep_generic_dhw_params_enabled():
+    """Pellet and other controllers keep editParams 103, 115 and 119 enabled."""
     coordinator = make_coordinator()
     coordinator.data["sysParams"]["controllerID"] = "ecoMAX810P-L"
     coordinator.data["sysParams"]["protocolType"] = "em"
-    unique_ids = _edit_param_unique_ids(coordinator)
-    assert any(_owns_edit_param(uid, "103") for uid in unique_ids)
+    enabled = _edit_param_enabled_defaults(coordinator)
+    assert enabled.keys() >= DHW_EDIT_PARAM_UNIQUE_IDS
+    assert all(enabled[uid] for uid in DHW_EDIT_PARAM_UNIQUE_IDS)

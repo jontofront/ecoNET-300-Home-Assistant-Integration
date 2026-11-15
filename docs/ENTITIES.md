@@ -88,8 +88,9 @@ entity combining the controller's own DHW data, plus a momentary boost button.
 Both entities are created only when the controller reports an ecoMAX360i with
 the `gm3_pomp` protocol and writable DHW setpoint metadata. Other controllers
 keep `tempCWU` and `tempCWUSet`. On ecoMAX360i the generic editParams entities
-for parameters 103, 115 and 119 are not created, because the water heater and
-the boost button already control them.
+for parameters 103, 115 and 119 are disabled by default, because the water
+heater and the boost button control the same parameters. Entities that already
+exist stay enabled, so automations that use them keep working.
 
 Writes are checked against the controller's own `min`/`max` before they are
 sent. The new target or mode stays on the entity until the controller confirms

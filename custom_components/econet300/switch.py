@@ -582,6 +582,9 @@ class EditParamSwitch(CoordinatorEntity[EconetDataCoordinator], SwitchEntity):
         info = (coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
         pname = info.get("name", f"Param {self._pid}")
         self._attr_name = f"{pname} ({self._pid})"
+        self._attr_entity_registry_enabled_default = not edit_param_owned_by_dhw(
+            coordinator.data, self._pid
+        )
 
         self._attr_device_info = _device_info(api)
 
@@ -640,10 +643,7 @@ def _create_edit_param_switches(
         "editParamCatalog", {}
     ) or {}
     entities: list[SwitchEntity] = []
-    data = coordinator.data or {}
     for pid, info in catalog.items():
-        if edit_param_owned_by_dhw(data, pid):
-            continue
         if info.get("kind") != "switch":
             continue
         entities.append(EditParamSwitch(coordinator, api, pid))
