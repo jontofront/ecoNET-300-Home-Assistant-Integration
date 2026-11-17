@@ -228,6 +228,11 @@ All documentation lives in the [`docs/`](docs/) folder. Start here:
 
 ## 📋 Versions
 
+### What's New in v1.3.9
+
+- **Signal strength statistics ([#275](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/275))**: the Wi-Fi signal is read as a number again, so its long-term statistics continue. If Home Assistant shows the repair *The entity no longer has a state class*, do not delete the statistics; it should go away after the update and a restart.
+- **Firmware 3.23 warning ([#269](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/269))**: do not update the ecoNET300 module to firmware 3.23, see the warning at the top.
+
 ### What's New in v1.3.8
 
 - **ecoMAX360i DHW setpoint is back ([#279](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/279))**: `HDWTSetPoint (103)`, `HDWusermode (119)` and `HDWStartOneLoading (115)` are created again next to the **DHW** water heater, so automations and dashboards that used them work again. On new installs they are disabled by default. See [MIGRATION.md](docs/MIGRATION.md#upgrading-from-v137--ecomax360i-dhw-entities).
@@ -326,4 +331,4 @@ If you encounter any issues or have questions:
 
 ---
 
-*This README was last updated on 2026-11-15 for v1.3.8.*
+*This README was last updated on 2026-11-17 for v1.3.9.*
