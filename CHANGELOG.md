@@ -3,6 +3,10 @@
 
 ## [Unreleased]
 
+### Docs
+
+- **Warning about ecoNET300 firmware 3.23 ([#269](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/269))**: the README asks users not to update the ecoNET300 module to firmware 3.23. It removes most of the local API, so the integration cannot work with it.
+
 ## [v1.3.8] - 2026-11-15
 
 Bug fix release for the ecoMAX360i water heater added in 1.3.7. Thanks to
