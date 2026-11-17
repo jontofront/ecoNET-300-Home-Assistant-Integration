@@ -41,6 +41,7 @@ from custom_components.econet300.const import (
 from custom_components.econet300.entity import EconetEntity
 from custom_components.econet300.sensor import (
     AlarmCountSensor,
+    EconetSensor,
     EconetSensorEntityDescription,
     _controller_sensor_key_candidates,
     can_add_mixer,
@@ -752,6 +753,26 @@ class TestEditParamsSensorMaps:
         assert description.state_class == SensorStateClass.TOTAL_INCREASING
         assert description.process_val("1234.5") == 1234.5
         assert description.process_val(None) is None
+
+    def test_wifi_signal_string_keeps_measurement(self) -> None:
+        """The Wi-Fi signal arrives as a string like "-79" (#275).
+
+        A string value makes _sync_state drop the state class at runtime, so
+        Home Assistant stops the long-term statistics of the sensor.
+        """
+        description = create_sensor_entity_description("signal")
+        assert description.process_val("-79") == -79
+        assert description.process_val("") is None
+        assert description.process_val(0) == 0
+
+        sensor = object.__new__(EconetSensor)
+        sensor.entity_description = description
+        sensor._raw_value = None
+        sensor.async_write_ha_state = Mock()
+        sensor._sync_state("-79")
+        assert sensor._attr_native_value == -79
+        assert sensor._attr_state_class == SensorStateClass.MEASUREMENT
+        assert sensor._attr_suggested_display_precision == 0
 
     def test_weather_temp_not_connected_is_unknown(self) -> None:
         """TempWthr 999 means the outdoor sensor is not connected (#237)."""

@@ -85,6 +85,8 @@ ENTITY_VALUE_PROCESSOR = {
     # Electric / induction boiler energy counters (regParams).
     "periodicEnergy": _numeric_or_none,
     "totalEnergy": _numeric_or_none,
+    # sysParams reports the Wi-Fi signal as a string, for example "-79".
+    "signal": _numeric_or_none,
     "TempWthr": _temperature_or_none,
     "mode": lambda x: SENSOR_MODE_MAPPING.get(x, _STATE_UNKNOWN),
     "lambdaStatus": lambda x: SENSOR_LAMBDA_STATUS_MAPPING.get(x, _STATE_UNKNOWN),

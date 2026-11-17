@@ -19,6 +19,7 @@ ENTITY_PRECISION = {
     "tempCWU": 1,
     "tempFlueGas": 1,
     "fanPower": 0,
+    "signal": 0,
     "statusCO": None,
     "statusCWU": None,
     "thermostat": None,
