@@ -3,6 +3,15 @@
 
 ## [Unreleased]
 
+## [v1.3.9] - 2026-11-17
+
+Bug fix release. Thanks to [@philgyford](https://github.com/philgyford) for
+reporting it.
+
+### Fixed
+
+- **Signal strength without long-term statistics ([#275](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/275))**: the ecoNET300 module reports the Wi-Fi signal as text, for example `"-79"`. Since 1.3.0 the sensor dropped its state class for text values, so Home Assistant stopped the long-term statistics and showed the repair *The entity no longer has a state class*. The value is now read as a number in whole dBm and the statistics continue. Do not delete the old statistics.
+
 ### Docs
 
 - **Warning about ecoNET300 firmware 3.23 ([#269](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/269))**: the README asks users not to update the ecoNET300 module to firmware 3.23. It removes most of the local API, so the integration cannot work with it.

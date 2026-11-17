@@ -8,6 +8,7 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 
 | From Version | To Version    | Migration Required | Notes                                      |
 | ------------ | ------------- | ------------------ | ------------------------------------------ |
+| v1.3.8       | v1.3.9        | No                 | Signal strength statistics again (#275)    |
 | v1.3.7       | v1.3.8        | No                 | ecoMAX360i DHW entities are back (#279)    |
 | v1.3.6       | v1.3.7        | No (cleanup only)  | 0.1 °C setpoints (#273), DHW (#274)        |
 | v1.3.7-beta.1| v1.3.7        | No (cleanup only)  | Adds the ecoMAX360i DHW water heater       |
@@ -20,6 +21,20 @@ This guide helps you upgrade between versions of the ecoNET-300 Home Assistant I
 | v1.1.15      | v1.2.x     | No                 | Auto-discovery of new entities            |
 | v1.1.x       | v1.1.15    | No                 | Direct upgrade                            |
 | v0.3.3       | v1.x       | Recommended        | Re-add integration for full features      |
+
+---
+
+## Upgrading from v1.3.8 — signal strength statistics
+
+No reinstall or config migration is required. Since v1.3.0 the **Signal
+strength** sensor had no state class, because the module reports the Wi-Fi
+signal as text
+([#275](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/275)).
+v1.3.9 reads it as a number again, so its long-term statistics continue.
+
+If **Settings → Repairs** shows *The entity no longer has a state class* for
+this sensor, do not delete the statistics. Restart Home Assistant after the
+update; the repair should go away. If it stays, select *Ignore*.
 
 ---
 
