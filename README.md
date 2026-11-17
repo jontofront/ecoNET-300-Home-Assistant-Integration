@@ -9,6 +9,13 @@
 [![Stability](https://img.shields.io/badge/Stability-Stable-2ecc71?style=for-the-badge)](https://guidelines.denpa.pro/stability#stable)
 [![Hassfest](https://img.shields.io/badge/Hassfest-Validated-brightgreen?style=for-the-badge&logo=homeassistant)](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/actions/workflows/hassfest.yaml)
 
+> [!WARNING]
+> **Do not update the ecoNET300 module to firmware 3.23.** Firmware 3.23.x (for example 3.23.5108) removes most of the module's local API: it no longer reports temperatures, the controller menu or editable settings, and it does not accept changes. This integration cannot work with it ([#269](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/269)).
+>
+> - Your version is shown as *Firmware* on the **PLUM ecoNET300** device page in Home Assistant, for example `3.2.3886`.
+> - If econet24 offers to update the ecoNET300 software to 3.23, do not install it. Plum service has also updated some modules remotely.
+> - Already on 3.23? Follow [#269](https://github.com/jontofront/ecoNET-300-Home-Assistant-Integration/issues/269) for the current status.
+
 **Note:** This repository is a fork of the original [pblxptr/ecoNET-300-Home-Assistant-Integration](https://github.com/pblxptr/ecoNET-300-Home-Assistant-Integration). Most of the work was done by [@pblxpt](https://github.com/pblxpt), and we are very grateful for their efforts. Additionally, I maintained and supported this code up to version v0.3.3.
 
 <div align="center">
