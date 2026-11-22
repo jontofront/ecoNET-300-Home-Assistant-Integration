@@ -88,6 +88,8 @@ The diagnostics system automatically redacts sensitive information to protect yo
   - Device UIDs (e.g., `7VCPMB4ZJ8DHH208002Z0`)
   - Device identifiers in registry
   - Unique device identifiers
+  - UIDs and serial numbers outside these keys, for example in the `informationParams`
+    of `editParams` on heat pump controllers
 
 - **Authentication Information**
 
@@ -99,7 +101,11 @@ The diagnostics system automatically redacts sensitive information to protect yo
 
   - WiFi SSIDs
   - Network interface IP addresses (`wlan0`, `eth0`)
+  - Every IPv4 address in the data, for example the module and gateway addresses in
+    `regParamsData` or `informationParams`
   - Internal network details
+  - A value stored under a sensitive key (such as the UID or SSID) is also redacted
+    wherever else the same value appears
 
 - **Other Sensitive Data**
   - Any other configuration data that could compromise security

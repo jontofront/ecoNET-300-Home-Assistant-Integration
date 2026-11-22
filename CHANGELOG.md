@@ -3,6 +3,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **Module UID and IP addresses in diagnostics**: diagnostics only hid values under known keys such as `uid` or `eth0`. Heat pump controllers (ecoMAX360i, ecoTRONIC) also show the module UID or serial number, the IP address and the gateway in the `informationParams` of `editParams`, under plain menu numbers, and ecoMAX controllers list the network addresses in `regParamsData`. Diagnostics now also hide every IPv4 address, every UID-like value and any value that already appears under a sensitive key.
+
 ## [v1.3.9] - 2026-11-17
 
 Bug fix release. Thanks to [@philgyford](https://github.com/philgyford) for

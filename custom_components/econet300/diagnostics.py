@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Awaitable
+import re
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -18,22 +19,75 @@ from .const import DOMAIN, SENSITIVE_PARAM_KEYS, SERVICE_API, SERVICE_COORDINATO
 # sensor-creation filter so sensitive keys can never leak via either path.
 TO_REDACT = sorted(SENSITIVE_PARAM_KEYS)
 
+REDACTED = "**REDACTED**"
+IPV4_ADDRESS = re.compile(r"\d{1,3}(?:\.\d{1,3}){3}")
+MIN_DEVICE_ID_LENGTH = 20
 
-def _redact_data(data: Any, to_redact: list[str]) -> Any:
-    """Redact sensitive data from a dictionary or list."""
+# Shorter values under sensitive keys (for example "0") also occur as ordinary
+# values elsewhere, so they are only redacted under their own key.
+MIN_SECRET_VALUE_LENGTH = 4
+
+
+def _looks_like_device_id(value: str) -> bool:
+    """Return True for a UID or serial number: upper-case letters and digits."""
+    if len(value) < MIN_DEVICE_ID_LENGTH:
+        return False
+    if not value.isalnum() or not value.isupper():
+        return False
+    return any(char.isdigit() for char in value)
+
+
+def _is_sensitive_value(value: str, secrets: set[str]) -> bool:
+    """Return True for a known secret, an IPv4 address or a device ID."""
+    if value in secrets:
+        return True
+    if IPV4_ADDRESS.fullmatch(value):
+        return True
+    return _looks_like_device_id(value)
+
+
+def _collect_secret_values(data: Any, to_redact: list[str]) -> set[str]:
+    """Return the strings stored under sensitive keys anywhere in the data."""
+    secrets: set[str] = set()
+    if isinstance(data, dict):
+        for key, value in data.items():
+            is_secret_string = key in to_redact and isinstance(value, str)
+            if is_secret_string and len(value) >= MIN_SECRET_VALUE_LENGTH:
+                secrets.add(value)
+            else:
+                secrets |= _collect_secret_values(value, to_redact)
+    elif isinstance(data, list):
+        for item in data:
+            secrets |= _collect_secret_values(item, to_redact)
+    return secrets
+
+
+def _redact_values(data: Any, to_redact: list[str], secrets: set[str]) -> Any:
+    """Redact sensitive keys and sensitive values under any key."""
     if isinstance(data, dict):
         redacted: dict[str, Any] = {}
         for key, value in data.items():
             if key in to_redact:
-                redacted[key] = "**REDACTED**"
-            elif isinstance(value, (dict, list)):
-                redacted[key] = _redact_data(value, to_redact)
+                redacted[key] = REDACTED
             else:
-                redacted[key] = value
+                redacted[key] = _redact_values(value, to_redact, secrets)
         return redacted
     if isinstance(data, list):
-        return [_redact_data(item, to_redact) for item in data]
+        return [_redact_values(item, to_redact, secrets) for item in data]
+    if isinstance(data, str) and _is_sensitive_value(data, secrets):
+        return REDACTED
     return data
+
+
+def _redact_data(data: Any, to_redact: list[str]) -> Any:
+    """Redact sensitive data from a dictionary or list.
+
+    Values are also redacted where they are not under a sensitive key: the
+    editParams ``informationParams`` of heat pump controllers show a UID or
+    serial number, the IP address and the gateway under plain menu numbers.
+    """
+    secrets = _collect_secret_values(data, to_redact)
+    return _redact_values(data, to_redact, secrets)
 
 
 def _snapshot_extended_fetch_result(value: Any, error: BaseException | None) -> Any:

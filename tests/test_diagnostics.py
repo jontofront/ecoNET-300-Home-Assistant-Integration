@@ -96,6 +96,64 @@ class TestDataRedaction:
         assert redacted["data"]["temperature"] == 25.5
         assert redacted["data"]["status"] == "online"
 
+    def test_uid_redacted_in_information_params(self):
+        """The module UID shown in editParams informationParams is redacted too."""
+        fake_uid = "TESTUID0000000000000001"
+        test_data = {
+            "sys_params": {"uid": fake_uid},
+            "extended_endpoints": {
+                "edit_params": {
+                    "informationParams": {
+                        "215": [True, [[fake_uid, 0, 0]]],
+                        "61": [True, [["47.5", 1, 0]]],
+                    }
+                }
+            },
+        }
+        redacted = _redact_data(test_data, TO_REDACT)
+
+        info = redacted["extended_endpoints"]["edit_params"]["informationParams"]
+        assert redacted["sys_params"]["uid"] == "**REDACTED**"
+        assert info["215"] == [True, [["**REDACTED**", 0, 0]]]
+        assert info["61"] == [True, [["47.5", 1, 0]]]
+
+    def test_ip_addresses_redacted_outside_sensitive_keys(self):
+        """IPv4 values are redacted wherever they appear; versions stay."""
+        test_data = {
+            "informationParams": {"230": [True, [["192.168.20.100", 0, 0]]]},
+            "reg_params_data": {"165": "10.10.1.1", "166": "255.255.255.0"},
+            "softVer": "3.2.3881",
+        }
+        redacted = _redact_data(test_data, TO_REDACT)
+
+        assert redacted["informationParams"]["230"] == [True, [["**REDACTED**", 0, 0]]]
+        assert redacted["reg_params_data"] == {
+            "165": "**REDACTED**",
+            "166": "**REDACTED**",
+        }
+        assert redacted["softVer"] == "3.2.3881"
+
+    def test_serial_number_redacted_without_known_uid(self):
+        """UID-like serial numbers are redacted; names and zero strings stay."""
+        test_data = {
+            "informationParams": {"154": [True, [["SERIAL0000000000000001", 0, 0]]]},
+            "funcdata": {"Alarmy_i_monity": {"value": "00000000000000000000000000"}},
+            "data": {"1281": {"name": "EPowerWorldRegisters144"}},
+        }
+        redacted = _redact_data(test_data, TO_REDACT)
+
+        assert redacted["informationParams"]["154"] == [True, [["**REDACTED**", 0, 0]]]
+        assert redacted["funcdata"] == test_data["funcdata"]
+        assert redacted["data"] == test_data["data"]
+
+    def test_short_secret_value_not_redacted_elsewhere(self):
+        """A short value under a sensitive key does not hide equal values."""
+        test_data = {"key": "0", "data": {"mode": "0"}}
+        redacted = _redact_data(test_data, TO_REDACT)
+
+        assert redacted["key"] == "**REDACTED**"
+        assert redacted["data"]["mode"] == "0"
+
 
 class TestEdgeCases:
     """Test edge cases and error handling."""
