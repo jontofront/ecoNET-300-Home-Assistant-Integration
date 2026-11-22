@@ -1,0 +1,315 @@
+{
+  "regProd": 94,
+  "regAllowed": null,
+  "ecosrvPort": "443",
+  "mainSrv": true,
+  "modulePanelSoftVer": "S003.66_2.66",
+  "ecosrvSoftVer": "3.2.3881",
+  "moduleASoftVer": "S006.88",
+  "eth0": "**REDACTED**",
+  "tilesET": [
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_pump"
+    },
+    {
+      "edname": "BHTsp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "CWUTsp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "H1Psp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M1PspC",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M2Psp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M3Psp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M1_Tsp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M2_Tsp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": "M3_Tsp",
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "WS1",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "Contr2WorkState",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "Contr3WorkState",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "Contr4WorkState",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "Contr5WorkState",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "Contr6WorkState",
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "erDefAl",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "DeltadzManEr",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "LPManEraAlAftCom",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "DeltaManEr",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "pres1HourCounter",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "erDefAl",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "PhaseCoun",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "pres2HourCounter",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "LSEHAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "LSEHAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "LOPMOPAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "LOPMOPAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "OverAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": "VAlarmClear",
+      "type": "tile_pump"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": null,
+      "type": "tile_temp"
+    },
+    {
+      "edname": "envManualErase",
+      "type": "tile_pump"
+    }
+  ],
+  "etPasswords": "**REDACTED**",
+  "encryption": "none",
+  "schemaID": 1,
+  "wlan0": "**REDACTED**",
+  "remoteMenu": false,
+  "regType": 0,
+  "schema": {},
+  "regRefresh": 5,
+  "tiles": null,
+  "protocolType": "gm3_pomp",
+  "controllerID": "ecoTRONIC100",
+  "moduleEcoSTERSoftVer": null,
+  "schedules": {},
+  "econetConfVer": "1.00",
+  "password": "**REDACTED**",
+  "prodLogo": 94,
+  "fuelConsumptionCalc": false,
+  "regImgID": 0,
+  "settingsVer": 40152,
+  "signal": "",
+  "logFl": 0,
+  "etConfDesc": {
+    "lang": "",
+    "client": "94",
+    "regname": "ecoTRONIC100"
+  },
+  "history": [
+    "Overheat",
+    "M1_Thc",
+    "BHSETT",
+    "VPer",
+    "Contr5CompOn",
+    "LPTsc",
+    "LPTbackc",
+    "LPTcbeforeComp",
+    "M2_Thc",
+    "Contr6CompOn",
+    "Contr3CompOn",
+    "Contr4CompOn",
+    "dzTemp",
+    "cOnOff1",
+    "Temp",
+    "H1Thc",
+    "CWUTc",
+    "BHThc",
+    "WTTc",
+    "Pres1DelAlarm",
+    "Pres2DelAlarm",
+    "LPTcafterComp",
+    "dzbTemp",
+    "work_flag",
+    "Contr2CompOn",
+    "M3_Thc",
+    "Pres1",
+    "LPDefTempExchangeCurrent"
+  ],
+  "uid": "**REDACTED**",
+  "routerType": "mr3020-v3",
+  "etNewConfTrans": true,
+  "ecosrvAddr": "econet24.com",
+  "softVer": "3.2.3881",
+  "quality": 0,
+  "moduleCSoftVer": null,
+  "lan": true,
+  "moduleLambdaSoftVer": null,
+  "panelsNames": [],
+  "modulesVers": [
+    [
+      "lbModuleAVerCurr",
+      "S006.88",
+      1
+    ],
+    [
+      "lbPanelVer_100Curr",
+      "S003.66",
+      100
+    ]
+  ],
+  "key": "**REDACTED**",
+  "servicePassword": "**REDACTED**",
+  "ssid": "**REDACTED**",
+  "wifi": false,
+  "panelVer": "S003.66_2.66",
+  "alarms": [],
+  "login": "**REDACTED**",
+  "moduleBSoftVer": null,
+  "etConfVer": "S003.66_2.66"
+}
