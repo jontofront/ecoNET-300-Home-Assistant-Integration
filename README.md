@@ -60,6 +60,7 @@ The integration supports **7 languages** with comprehensive translations:
 
 - **ecoMAX810P-L TOUCH** controller from [Plum Sp. z o.o.](https://www.plum.pl/)
 - **ecoMAX850R2-X** pellet boiler controller
+- **ecoMAXX800R3** pellet boiler controller (`em` protocol, setpoints via `editParams`)
 - **ecoMAX360** boiler controller
 - **ecoMAX860P2-N** boiler controller
 - **ecoMAX860P3-V** boiler controller

@@ -23,6 +23,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import ApiError, AuthError, Econet300Api
 from .common_functions import (
     is_ecomax360i_controller,
+    is_ecomax_em_controller,
     is_ecosol_controller,
     is_ecoster_connected,
 )
@@ -38,6 +39,7 @@ from .const import (
     DEFAULT_POLL_SYS_PARAMS,
     DEVICE_GROUPING_SINGLE,
     DOMAIN,
+    EDIT_PARAM_TEMPERATURE_SETPOINTS,
     EDIT_PARAMS_CONFIRM_DELAY_SEC,
     EDIT_PARAMS_RETRY_DELAYS_SEC,
     EDIT_PARAMS_SHORT_TIMEOUT_SEC,
@@ -77,12 +79,16 @@ def skip_params_edits(sys_params: dict[str, Any] | None) -> bool:
 def skip_edit_params(sys_params: dict[str, Any] | None) -> bool:
     """Determine whether editParams should be skipped.
 
-    ecoMAX360i exposes its editable parameters there. Other controllers only
-    need it for the setpoints of a connected ecoSTER panel (``STER_*``).
+    ecoMAX360i exposes its editable parameters there. Legacy ``em`` ecoMAX
+    controllers (ecoMAXX800R3, ecoMAX850P-R, ...) use it for their writable
+    temperature setpoints. Other controllers only need it for the setpoints of
+    a connected ecoSTER panel (``STER_*``).
     """
     if sys_params is None:
         return True
     if is_ecomax360i_controller(sys_params.get("controllerID")):
+        return False
+    if is_ecomax_em_controller(sys_params):
         return False
     return not is_ecoster_connected(sys_params)
 
@@ -120,8 +126,15 @@ def _guess_step(*numbers: float | None) -> float:
 
 def build_edit_param_catalog(
     edit_params: dict[str, Any] | None,
+    *,
+    include_keys: set[str] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Build a normalized writable-parameter catalog from /econet/editParams."""
+    """Build a normalized writable-parameter catalog from /econet/editParams.
+
+    ``include_keys`` limits the catalog to the given parameter ids. Legacy
+    ``em`` ecoMAX controllers only expose temperature setpoints as user
+    controls, while ecoMAX360i uses the full catalog.
+    """
     data = (edit_params or {}).get("data", {}) or {}
     menu_limits = _index_menu_limits(
         (edit_params or {}).get("editableParams", {}) or {}
@@ -129,11 +142,18 @@ def build_edit_param_catalog(
     catalog: dict[str, dict[str, Any]] = {}
 
     for pid, entry in data.items():
+        pid_key = str(pid)
+        if include_keys is not None and pid_key not in include_keys:
+            continue
         try:
             if not isinstance(entry, dict):
                 continue
             editable = bool(entry.get("edit"))
-            name = entry.get("name") or f"Param {pid}"
+            name = (
+                EDIT_PARAM_TEMPERATURE_SETPOINTS.get(pid_key)
+                or entry.get("name")
+                or f"Param {pid}"
+            )
             value = entry.get("value")
 
             if not editable:
@@ -144,7 +164,13 @@ def build_edit_param_catalog(
             unit_code = entry.get("unit", 0)
             unit = None
             lname = str(name).lower()
-            if unit_code == 1 or "temp" in lname or "setpoint" in lname:
+            is_temperature = (
+                unit_code == 1
+                or pid_key in EDIT_PARAM_TEMPERATURE_SETPOINTS
+                or "temp" in lname
+                or "setpoint" in lname
+            )
+            if is_temperature:
                 unit = "°C"
 
             minv = entry.get("minv")
@@ -163,13 +189,17 @@ def build_edit_param_catalog(
                 native_max = float(maxv)
                 has_explicit_limits = True
 
-            menu = menu_limits.get(str(pid))
+            menu = menu_limits.get(pid_key)
             if menu is not None:
                 native_min, native_max, native_step = menu
                 has_explicit_limits = True
 
             if native_step is None:
-                native_step = _guess_step(value, native_min, native_max)
+                mult = entry.get("mult")
+                if isinstance(mult, (int, float)) and 0 < mult < 1:
+                    native_step = float(mult)
+                else:
+                    native_step = _guess_step(value, native_min, native_max)
 
             if native_min is not None and native_max is not None:
                 try:
@@ -182,7 +212,8 @@ def build_edit_param_catalog(
             kind = "number"
             options: list[str] | None = None
             expose_number = False
-            if native_min is not None and native_max is not None:
+            # Temperature parameters stay numbers: a 20 °C range is not an enum.
+            if not is_temperature and native_min is not None and native_max is not None:
                 if (
                     has_explicit_limits
                     and native_min == 0
@@ -202,14 +233,14 @@ def build_edit_param_catalog(
                         options = [
                             str(v) for v in range(int(native_min), int(native_max) + 1)
                         ]
-            elif value in (0, 1):
+            elif not is_temperature and value in (0, 1):
                 kind = "switch"
                 expose_number = True
                 native_min = 0.0
                 native_max = max(10.0, float(value))
                 native_step = 1.0
 
-            catalog[str(pid)] = {
+            catalog[pid_key] = {
                 "id": str(pid),
                 "name": str(name),
                 "value": float(value) if isinstance(value, float) else int(value),
@@ -409,6 +440,7 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 information_params = last_data.get("informationParams") or {}
 
                 is_ecomax360i = is_ecomax360i_controller(sys_params.get("controllerID"))
+                is_ecomax_em = is_ecomax_em_controller(sys_params)
                 if skip_edit_params(sys_params):
                     edit_params_full = {}
                     edit_params_data = {}
@@ -446,16 +478,6 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                     if not edit_params_full and not is_ecomax360i:
                         self._log_edit_params_retry()
 
-                # Only ecoMAX360i gets generic editParams entities; on other
-                # controllers editParams feeds the dedicated ecoSTER numbers.
-                edit_catalog: dict[str, dict[str, Any]] = {}
-                if is_ecomax360i:
-                    edit_catalog = build_edit_param_catalog(edit_params_full)
-                if not params_edits:
-                    params_edits = {
-                        pid: info.get("value") for pid, info in edit_catalog.items()
-                    }
-
                 if self._rm_supported is None:
                     self._rm_supported = await self._api.probe_rm_support()
                     if not self._rm_supported:
@@ -476,6 +498,29 @@ class EconetDataCoordinator(DataUpdateCoordinator):
                 else:
                     rm_data = {}
                     merged_data = None
+
+                # ecoMAX360i gets the full generic editParams catalog. Legacy
+                # ``em`` ecoMAX controllers without RM/mergedData get only the
+                # temperature setpoints, which are their only writable controls.
+                # On controllers with mergedData the dynamic entities already
+                # provide those parameters.
+                edit_catalog: dict[str, dict[str, Any]] = {}
+                merged_parameters = (
+                    (merged_data or {}).get("parameters") or {}
+                    if isinstance(merged_data, dict)
+                    else {}
+                )
+                if is_ecomax360i:
+                    edit_catalog = build_edit_param_catalog(edit_params_full)
+                elif is_ecomax_em and not merged_parameters:
+                    edit_catalog = build_edit_param_catalog(
+                        edit_params_full,
+                        include_keys=set(EDIT_PARAM_TEMPERATURE_SETPOINTS),
+                    )
+                if not params_edits:
+                    params_edits = {
+                        pid: info.get("value") for pid, info in edit_catalog.items()
+                    }
 
                 self._last_success_ts = now
                 self._last_error = ""

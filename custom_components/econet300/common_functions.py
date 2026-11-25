@@ -60,6 +60,24 @@ def is_ecomax360i_controller(controller_id: str | None) -> bool:
     return controller_id.strip() == "ecoMAX360i"
 
 
+def is_ecomax_em_controller(sys_params: dict[str, Any] | None) -> bool:
+    """Return True for ecoMAX-family controllers using the ``em`` protocol.
+
+    These controllers (ecoMAXX800R3, ecoMAX850P-R, ecoMAX860P3-O, ...) expose
+    their writable setpoints through ``editParams`` and ``newParam`` instead of
+    the static ``paramsEdits`` / RM endpoints. ecoMAX360i is excluded: it uses
+    the ``gm3_pomp`` protocol and has its own handling.
+    """
+    if not sys_params:
+        return False
+    if str(sys_params.get("protocolType") or "").lower() != "em":
+        return False
+    controller_id = sys_params.get("controllerID")
+    if not isinstance(controller_id, str):
+        return False
+    return controller_id.strip().lower().startswith("ecomax")
+
+
 def camel_to_snake(key: str) -> str:
     """Convert camel case return from API to snake case to match translations keys structure."""
     # Handle special cases first
