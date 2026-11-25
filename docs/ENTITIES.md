@@ -339,6 +339,21 @@ Created only for slots with a connected panel, like the
 | `tempCOSet`  | Central heating temperature setpoint | `../econet/regParams` |
 | `tempCWUSet` | Hot water temperature setpoint       | `../econet/regParams` |
 
+On legacy `em` ecoMAX controllers without RM/`mergedData` support (for example
+**ecoMAXX800R3** and **ecoMAX850P-R**), the writable temperature setpoints are
+read from `../econet/editParams` and written through
+`../econet/newParam?newParamName=...`. Only temperature setpoints are exposed:
+
+| editParams key   | Entity                         | Write endpoint                                |
+| ---------------- | ------------------------------ | --------------------------------------------- |
+| `CO_TEMP_SET`    | Boiler temperature setpoint    | `../econet/newParam?newParamName=CO_TEMP_SET` |
+| `CWU_SET_TEMP`   | Hot water temperature setpoint | `../econet/newParam?newParamName=CWU_SET_TEMP` |
+| `MIX_SET_TEMP_N` | Mixer N temperature setpoint   | `../econet/newParam?newParamName=MIX_SET_TEMP_N` |
+
+The read-only `tempCOSet` / `tempCWUSet` sensors remain available. Mixer
+setpoints keep their existing **Mixer N** device but use the same named
+`newParam` write when the controller does not support `rmCurrNewParam`.
+
 ### Mixer Temperature Setpoints
 
 | Entity Key      | Description                | Endpoint              |

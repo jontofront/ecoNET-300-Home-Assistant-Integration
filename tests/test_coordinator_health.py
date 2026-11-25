@@ -293,9 +293,11 @@ class TestEditParamsControllerGate:
         assert result["editParamCatalog"] == {}
 
     @pytest.mark.asyncio
-    async def test_controller_without_ecoster_skips_editparams(self, load_fixture):
+    async def test_non_ecomax_controller_without_ecoster_skips_editparams(
+        self, load_fixture
+    ):
         coord, api = _update_ready_coordinator(
-            sys_params=load_fixture("ecoMAX810P-L", "sysParams.json"),
+            sys_params=load_fixture("ecoSOL", "sysParams.json"),
         )
 
         result = await coord._async_update_data()
@@ -303,6 +305,30 @@ class TestEditParamsControllerGate:
         api.fetch_edit_params.assert_not_called()
         assert result["editParams"] == {}
         assert result["editParamCatalog"] == {}
+
+    @pytest.mark.asyncio
+    async def test_em_ecomax_without_ecoster_builds_setpoint_catalog(
+        self, load_fixture
+    ):
+        coord, api = _update_ready_coordinator(
+            sys_params=load_fixture("ecoMAXX800R3", "sysParams.json"),
+            edit_params=load_fixture("ecoMAXX800R3", "editParams.json"),
+        )
+
+        result = await coord._async_update_data()
+
+        api.fetch_edit_params.assert_called_once_with(
+            timeout_sec=EDIT_PARAMS_SHORT_TIMEOUT_SEC
+        )
+        assert set(result["editParamCatalog"]) == {
+            "CO_TEMP_SET",
+            "CWU_SET_TEMP",
+            "MIX_SET_TEMP_2",
+            "MIX_SET_TEMP_3",
+        }
+        assert result["editParamCatalog"]["CO_TEMP_SET"]["name"] == (
+            "Boiler temperature setpoint"
+        )
 
     @pytest.mark.asyncio
     async def test_ecomax360i_builds_generic_catalog(self):

@@ -43,6 +43,7 @@ from .const import (
     DOMAIN,
     ECOSTER_SETPOINT_PARAMS,
     ECOSTER_SETPOINT_PARAMS_ENABLED,
+    EDIT_PARAM_TEMPERATURE_SETPOINTS,
     ENTITY_MAX_VALUE,
     ENTITY_MIN_VALUE,
     ENTITY_NUMBER_SENSOR_DEVICE_CLASS_MAP,
@@ -50,6 +51,7 @@ from .const import (
     ENTITY_UNIT_MAP,
     MIXER_RELATED_KEYWORDS,
     MIXER_SET_AVAILABILITY_KEY,
+    MIXER_SETPOINT_EDIT_PARAM_KEYS,
     NUMBER_MAP,
     NUMBER_OF_AVAILABLE_ECOSTERS,
     NUMBER_OF_AVAILABLE_MIXERS,
@@ -350,10 +352,10 @@ class MixerNumber(MixerEntity, NumberEntity):
     def entity_registry_enabled_default(self) -> bool:
         """Return if entity should be enabled by default.
 
-        CONFIG category entities are disabled by default.
-        Other entities (DIAGNOSTIC or no category) are enabled.
+        Mixer setpoints are user controls, not service configuration, so they
+        are enabled even though they live in the Configuration section.
         """
-        return self.entity_description.entity_category != EntityCategory.CONFIG
+        return True
 
     def __init__(
         self,
@@ -454,6 +456,18 @@ class MixerNumber(MixerEntity, NumberEntity):
             self._attr_native_max_value,
         )
 
+    def _edit_param_setpoint_key(self) -> str | None:
+        """Return the editParams key backing this mixer setpoint, if available."""
+        return MIXER_SETPOINT_EDIT_PARAM_KEYS.get(self._idx)
+
+    def _edit_param_setpoint_entry(self) -> dict | None:
+        """Return the editParams entry for this mixer setpoint, if available."""
+        key = self._edit_param_setpoint_key()
+        if not key:
+            return None
+        entry = ((self.coordinator.data or {}).get("editParams") or {}).get(key)
+        return entry if isinstance(entry, dict) else None
+
     async def async_set_limits_values(self):
         """Async Sync number limits."""
         # Dynamic mixer entities (with param_id) already have limits from mergedData
@@ -464,6 +478,32 @@ class MixerNumber(MixerEntity, NumberEntity):
                 self.entity_description.key,
                 param_id,
             )
+            return
+
+        # Legacy em controllers expose mixer limits in editParams, not in the
+        # paramsEdits endpoint.
+        edit_entry = self._edit_param_setpoint_entry()
+        if edit_entry is not None:
+            minv = edit_entry.get("minv")
+            maxv = edit_entry.get("maxv")
+            if (
+                isinstance(minv, (int, float))
+                and isinstance(maxv, (int, float))
+                and maxv > minv
+            ):
+                self._attr_native_min_value = float(minv)
+                self._attr_native_max_value = float(maxv)
+            mult = edit_entry.get("mult")
+            if isinstance(mult, (int, float)) and mult > 0:
+                self._attr_native_step = float(mult)
+            _LOGGER.debug(
+                "Applied editParams mixer limits for %s: min=%s, max=%s, step=%s",
+                self.entity_description.key,
+                self._attr_native_min_value,
+                self._attr_native_max_value,
+                self._attr_native_step,
+            )
+            self.async_write_ha_state()
             return
 
         number_limits = await self.api.get_param_limits(self.entity_description.key)
@@ -569,19 +609,25 @@ class MixerNumber(MixerEntity, NumberEntity):
             )
             return
 
-        if not await self.api.set_param(self.entity_description.key, int(value)):
+        # Legacy em controllers reject rmCurrNewParam (the static key path).
+        # Their mixer setpoints are writable through the named editParams key.
+        edit_key = self._edit_param_setpoint_key()
+        write_key = (
+            edit_key
+            if edit_key and self._edit_param_setpoint_entry() is not None
+            else self.entity_description.key
+        )
+        if not await self.api.set_param(write_key, int(value)):
             _LOGGER.warning(
                 "Setting mixer value failed: %s=%s (device rejected the write, "
                 "parameter may be locked)",
-                self.entity_description.key,
+                write_key,
                 int(value),
             )
             raise HomeAssistantError(
                 translation_domain=DOMAIN,
                 translation_key="number_set_failed",
-                translation_placeholders={
-                    "error": f"{self.entity_description.key}={int(value)}"
-                },
+                translation_placeholders={"error": f"{write_key}={int(value)}"},
             )
 
         self._attr_native_value = value
@@ -1420,7 +1466,12 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         self._use_number_suffix = bool(
             info.get("expose_number") and info.get("kind") != "number"
         )
-        self._attr_name = f"{pname} ({self._pid})"
+        # Known temperature setpoints get a clean name; generic parameters keep
+        # the parameter id so they stay distinguishable.
+        if self._pid in EDIT_PARAM_TEMPERATURE_SETPOINTS:
+            self._attr_name = pname
+        else:
+            self._attr_name = f"{pname} ({self._pid})"
         if self._use_number_suffix:
             self._attr_name = f"{self._attr_name} value"
         self._attr_entity_registry_enabled_default = not edit_param_owned_by_dhw(
@@ -1429,6 +1480,8 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
         self._attr_device_info = _device_info(api)
         self._attr_native_unit_of_measurement = info.get("unit")
+        if info.get("unit") == UnitOfTemperature.CELSIUS:
+            self._attr_device_class = NumberDeviceClass.TEMPERATURE
         # number-minmax-fallback
         min_value = info.get("min")
         max_value = info.get("max")
@@ -1456,11 +1509,19 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
 
     @property
     def native_value(self) -> float | None:
-        """Return the current numeric value of the parameter."""
-        info = (
-            (self.coordinator.data or {}).get("editParamCatalog", {}).get(self._pid, {})
-        )
-        val = info.get("value")
+        """Return the current numeric value of the parameter.
+
+        ``editParams`` is preferred over the catalog so a value written with
+        ``store_edit_param_write`` stays visible until the controller confirms
+        it in a later editParams read.
+        """
+        data = self.coordinator.data or {}
+        entry = (data.get("editParams") or {}).get(self._pid)
+        if isinstance(entry, dict):
+            val = entry.get("value")
+        else:
+            info = (data.get("editParamCatalog") or {}).get(self._pid, {})
+            val = info.get("value")
         try:
             return None if val is None else float(val)
         except (TypeError, ValueError):
@@ -1482,14 +1543,37 @@ class EditParamNumber(CoordinatorEntity[EconetDataCoordinator], NumberEntity):
         if not ok:
             raise HomeAssistantError(f"Failed to set param {self._pid} to {send_value}")
 
-        # Force a fresh editParams refresh on next update so values reflect quickly
+        # The controller may apply a newParam write after a few seconds. Keep
+        # the requested value visible until editParams is read again.
+        self.coordinator.store_edit_param_write(self._pid, send_value)
         self.coordinator.force_edit_params_refresh()
+        if self.hass is not None:
+            self.async_write_ha_state()
         await self.coordinator.async_request_refresh()
 
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return the main ecoNET300 device info for this entity."""
         return self._attr_device_info
+
+
+_STATIC_SETPOINT_EDIT_KEYS = {
+    "CO_TEMP_SET": "1280",
+    "CWU_SET_TEMP": "1281",
+}
+
+
+def _has_dedicated_mixer_setpoint(coordinator: EconetDataCoordinator, pid: str) -> bool:
+    """Return True when a MixerNumber entity already controls MIX_SET_TEMP_N."""
+    match = re.fullmatch(r"MIX_SET_TEMP_(\d+)", pid)
+    if not match:
+        return False
+    mixer_num = int(match.group(1))
+    reg_params = (coordinator.data or {}).get("regParams") or {}
+    return (
+        reg_params.get(f"mixerTemp{mixer_num}") is not None
+        and reg_params.get(f"mixerSetTemp{mixer_num}") is not None
+    )
 
 
 def _create_edit_param_numbers(
@@ -1501,6 +1585,13 @@ def _create_edit_param_numbers(
     entities: list[NumberEntity] = []
     for pid, info in catalog.items():
         if info.get("kind") != "number" and not info.get("expose_number"):
+            continue
+        # Do not duplicate the static setpoint entity when paramsEdits provides it.
+        static_key = _STATIC_SETPOINT_EDIT_KEYS.get(pid)
+        if static_key and can_add(static_key, coordinator):
+            continue
+        # MixerNumber already owns the setpoint when the mixer is present.
+        if _has_dedicated_mixer_setpoint(coordinator, pid):
             continue
         entities.append(EditParamNumber(coordinator, api, pid))
     _LOGGER.info("Adding %d editable Number entities from editParams", len(entities))

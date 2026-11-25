@@ -19,13 +19,22 @@ from homeassistant.exceptions import HomeAssistantError
 import pytest
 
 from custom_components.econet300.api import Econet300Api
-from custom_components.econet300.common import build_edit_param_catalog
-from custom_components.econet300.const import DOMAIN
+from custom_components.econet300.common import (
+    build_edit_param_catalog,
+    skip_edit_params,
+)
+from custom_components.econet300.common_functions import is_ecomax_em_controller
+from custom_components.econet300.const import (
+    DOMAIN,
+    EDIT_PARAM_TEMPERATURE_SETPOINTS,
+)
 from custom_components.econet300.number import (
     EcoSterNumber,
     EditParamNumber,
+    MixerNumber,
     _create_edit_param_numbers,
     create_ecoster_number_entities,
+    create_number_entity_description,
     setup_ecoster_number_entities,
 )
 from custom_components.econet300.select import (
@@ -220,6 +229,73 @@ class TestBuildEditParamCatalog:
         raw = {"data": {"70": "not-a-dict"}}
         assert build_edit_param_catalog(raw) == {}
 
+    def test_em_controller_setpoint_catalog_from_fixture(self, load_fixture):
+        """ecoMAXX800R3 exposes only temperature setpoints via editParams."""
+        catalog = build_edit_param_catalog(
+            load_fixture("ecoMAXX800R3", "editParams.json"),
+            include_keys=set(EDIT_PARAM_TEMPERATURE_SETPOINTS),
+        )
+
+        assert set(catalog) == {
+            "CO_TEMP_SET",
+            "CWU_SET_TEMP",
+            "MIX_SET_TEMP_2",
+            "MIX_SET_TEMP_3",
+        }
+        assert catalog["CO_TEMP_SET"] == {
+            "id": "CO_TEMP_SET",
+            "name": "Boiler temperature setpoint",
+            "value": 65,
+            "editable": True,
+            "unit": "°C",
+            "unit_code": 1,
+            "min": 50.0,
+            "max": 85.0,
+            "step": 1.0,
+            "kind": "number",
+            "options": [],
+            "expose_number": False,
+        }
+        assert catalog["CWU_SET_TEMP"]["name"] == "Hot water temperature setpoint"
+        assert catalog["MIX_SET_TEMP_2"]["name"] == "Mixer 2 temperature setpoint"
+        assert catalog["MIX_SET_TEMP_3"]["name"] == "Mixer 3 temperature setpoint"
+        assert all(item["kind"] == "number" for item in catalog.values())
+
+    def test_temperature_parameters_stay_numbers(self):
+        """A 20 °C range must not turn a temperature setpoint into a select."""
+        raw = {
+            "data": {
+                "CO_TEMP_SET": {
+                    "edit": True,
+                    "value": 65,
+                    "unit": 1,
+                    "minv": 65,
+                    "maxv": 85,
+                }
+            }
+        }
+
+        item = build_edit_param_catalog(raw)["CO_TEMP_SET"]
+
+        assert item["kind"] == "number"
+        assert item["options"] == []
+
+
+class TestEmControllerSupport:
+    """Detection of legacy em ecoMAX controllers that use editParams writes."""
+
+    def test_ecomaxx800r3_is_em_ecomax(self, load_fixture):
+        sys_params = load_fixture("ecoMAXX800R3", "sysParams.json")
+
+        assert is_ecomax_em_controller(sys_params) is True
+        assert skip_edit_params(sys_params) is False
+
+    def test_ecosol_is_not_em_ecomax(self, load_fixture):
+        sys_params = load_fixture("ecoSOL", "sysParams.json")
+
+        assert is_ecomax_em_controller(sys_params) is False
+        assert skip_edit_params(sys_params) is True
+
 
 # ============================================================================
 # entity factories
@@ -367,6 +443,127 @@ class TestCreateEditParamEntities:
 
         api.set_param.assert_awaited_once_with("238", sent)
         assert type(api.set_param.await_args.args[1]) is type(sent)
+
+
+# ============================================================================
+# Legacy em ecoMAX setpoints (ecoMAXX800R3)
+# ============================================================================
+
+
+def _em_coordinator(load_fixture, *, include_mixers: bool = True) -> MagicMock:
+    """Build a coordinator mock for the ecoMAXX800R3 editParams setpoints."""
+    raw = load_fixture("ecoMAXX800R3", "editParams.json")
+    catalog = build_edit_param_catalog(
+        raw,
+        include_keys=set(EDIT_PARAM_TEMPERATURE_SETPOINTS),
+    )
+    coordinator = MagicMock()
+    coordinator.data = {
+        "sysParams": load_fixture("ecoMAXX800R3", "sysParams.json"),
+        "regParams": (
+            load_fixture("ecoMAXX800R3", "regParams.json") if include_mixers else {}
+        ),
+        "paramsEdits": {},
+        "editParams": raw.get("data", {}),
+        "editParamCatalog": catalog,
+        "mergedData": None,
+    }
+    coordinator.async_request_refresh = AsyncMock()
+    return coordinator
+
+
+class TestEmSetpointEntities:
+    """Setpoint-only entities for legacy em ecoMAX controllers."""
+
+    def test_boiler_and_dhw_are_created_without_generic_mixer_duplicates(
+        self, load_fixture
+    ):
+        coordinator = _em_coordinator(load_fixture)
+        api = _make_api()
+
+        entities = _create_edit_param_numbers(coordinator, api)
+        numbers = cast("list[EditParamNumber]", entities)
+
+        assert {e._pid for e in numbers} == {"CO_TEMP_SET", "CWU_SET_TEMP"}
+        by_pid = {e._pid: e for e in numbers}
+        assert by_pid["CO_TEMP_SET"].name == "Boiler temperature setpoint"
+        assert by_pid["CWU_SET_TEMP"].name == "Hot water temperature setpoint"
+        assert by_pid["CO_TEMP_SET"].native_min_value == 50
+        assert by_pid["CO_TEMP_SET"].native_max_value == 85
+        assert by_pid["CO_TEMP_SET"].native_step == 1
+        assert by_pid["CO_TEMP_SET"].native_unit_of_measurement == "°C"
+
+    def test_mixer_setpoint_created_when_no_mixer_entity_exists(self, load_fixture):
+        coordinator = _em_coordinator(load_fixture, include_mixers=False)
+
+        numbers = cast(
+            "list[EditParamNumber]",
+            _create_edit_param_numbers(coordinator, _make_api()),
+        )
+
+        assert {e._pid for e in numbers} == {
+            "CO_TEMP_SET",
+            "CWU_SET_TEMP",
+            "MIX_SET_TEMP_2",
+            "MIX_SET_TEMP_3",
+        }
+
+    def test_native_value_prefers_pending_edit_params_write(self, load_fixture):
+        """A written value stays visible until editParams is read again."""
+        coordinator = _em_coordinator(load_fixture)
+        coordinator.data["editParams"]["CO_TEMP_SET"]["value"] = 70
+        number = EditParamNumber(coordinator, _make_api(), "CO_TEMP_SET")
+
+        assert number.native_value == 70
+
+    @pytest.mark.asyncio
+    async def test_boiler_setpoint_write_uses_named_param(self, load_fixture):
+        coordinator = _em_coordinator(load_fixture)
+        api = _make_api()
+        api.set_param = AsyncMock(return_value=True)
+        number = EditParamNumber(coordinator, api, "CO_TEMP_SET")
+
+        await number.async_set_native_value(66)
+
+        api.set_param.assert_awaited_once_with("CO_TEMP_SET", 66)
+        coordinator.store_edit_param_write.assert_called_once_with("CO_TEMP_SET", 66)
+
+    def test_mixer_setpoint_is_enabled_by_default(self, load_fixture):
+        coordinator = _em_coordinator(load_fixture)
+        description = create_number_entity_description("mixerSetTemp2", None)
+        mixer = MixerNumber(description, coordinator, _make_api(), 2)
+
+        assert mixer.entity_registry_enabled_default is True
+
+    @pytest.mark.asyncio
+    async def test_mixer_setpoint_write_uses_edit_params_key(self, load_fixture):
+        coordinator = _em_coordinator(load_fixture)
+        api = _make_api()
+        api.set_param = AsyncMock(return_value=True)
+        description = create_number_entity_description("mixerSetTemp2", None)
+        mixer = MixerNumber(description, coordinator, api, 2)
+        mixer._attr_native_value = 40
+        mixer.async_write_ha_state = MagicMock()
+
+        await mixer.async_set_native_value(42)
+
+        api.set_param.assert_awaited_once_with("MIX_SET_TEMP_2", 42)
+
+    @pytest.mark.asyncio
+    async def test_mixer_limits_come_from_edit_params(self, load_fixture):
+        coordinator = _em_coordinator(load_fixture)
+        api = _make_api()
+        api.get_param_limits = AsyncMock(return_value=None)
+        description = create_number_entity_description("mixerSetTemp2", None)
+        mixer = MixerNumber(description, coordinator, api, 2)
+        mixer.async_write_ha_state = MagicMock()
+
+        await mixer.async_set_limits_values()
+
+        assert mixer.native_min_value == 15
+        assert mixer.native_max_value == 55
+        assert mixer.native_step == 1
+        api.get_param_limits.assert_not_awaited()
 
 
 # ============================================================================

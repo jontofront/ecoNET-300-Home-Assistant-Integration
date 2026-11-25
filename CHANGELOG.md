@@ -3,8 +3,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- **ecoMAXX800R3 temperature setpoints**: legacy `em`-protocol ecoMAX controllers without RM/`mergedData` support now get writable boiler, hot-water and mixer setpoint numbers from `/econet/editParams`. The values are written through `/econet/newParam?newParamName=...`; the unsupported static `rmCurrNewParam` path is not used. Only temperature setpoints are exposed, not service parameters. Mixer setpoints keep their existing **Mixer N** device and now use the same named write path when the controller does not support `rmCurrNewParam`.
+
 ### Fixed
 
+- **Mixer setpoints disabled by default**: mixer temperature setpoints are user controls, but were registered disabled because they use the Configuration category. They are now enabled by default for new entities. Existing entities keep their registry state and can be enabled manually once.
 - **Module UID and IP addresses in diagnostics**: diagnostics only hid values under known keys such as `uid` or `eth0`. Heat pump controllers (ecoMAX360i, ecoTRONIC) also show the module UID or serial number, the IP address and the gateway in the `informationParams` of `editParams`, under plain menu numbers, and ecoMAX controllers list the network addresses in `regParamsData`. Diagnostics now also hide every IPv4 address, every UID-like value and any value that already appears under a sensitive key.
 
 ## [v1.3.9] - 2026-11-17

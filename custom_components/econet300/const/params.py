@@ -19,7 +19,11 @@ from .controllers import (
     ECOSTER_SENSORS,
     LAMBDA_SENSORS,
 )
-from .core import MIXER_PUMP_BINARY_SENSOR_KEYS, SENSOR_MIXER_KEY
+from .core import (
+    MIXER_PUMP_BINARY_SENSOR_KEYS,
+    NUMBER_OF_AVAILABLE_MIXERS,
+    SENSOR_MIXER_KEY,
+)
 
 # =============================================================================
 # NUMBER ENTITY MAPPINGS
@@ -34,6 +38,24 @@ NUMBER_MAP = {
     "1291": "mixerSetTemp5",  # Mixer 5 temperature setpoint
     "1292": "mixerSetTemp6",  # Mixer 6 temperature setpoint
     "55": "heaterMode",  # Heater mode (Summer/Winter/Auto)
+}
+
+# Temperature setpoints exposed through /econet/editParams on legacy ``em``
+# ecoMAX controllers (ecoMAXX800R3, ecoMAX850P-R, ...). These controllers have
+# no static paramsEdits or RM support, so the named keys below are the only
+# writable path for boiler, hot-water and mixer temperatures.
+EDIT_PARAM_TEMPERATURE_SETPOINTS: dict[str, str] = {
+    "CO_TEMP_SET": "Boiler temperature setpoint",
+    "CWU_SET_TEMP": "Hot water temperature setpoint",
+    **{
+        f"MIX_SET_TEMP_{idx}": f"Mixer {idx} temperature setpoint"
+        for idx in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
+    },
+}
+
+# Keys that map a mixer number to its editParams setpoint.
+MIXER_SETPOINT_EDIT_PARAM_KEYS: dict[int, str] = {
+    idx: f"MIX_SET_TEMP_{idx}" for idx in range(1, NUMBER_OF_AVAILABLE_MIXERS + 1)
 }
 
 # ecoSTER thermostat setpoints from /econet/editParams. The panel index is
